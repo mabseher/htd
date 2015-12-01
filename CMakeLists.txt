@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.1)
 
+project(htd)
+
 include(CPack)
 include(CTest)
 include(CheckIncludeFileCXX)
 include(WriteCompilerDetectionHeader)
-
-project(htd)
 
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING

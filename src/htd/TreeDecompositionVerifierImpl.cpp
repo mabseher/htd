@@ -1,0 +1,305 @@
+/* 
+ * File:   TreeDecompositionVerifierImpl.cpp
+ *
+ * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
+ * 
+ * Copyright 2015, Michael Abseher
+ *    E-Mail: <abseher@dbai.tuwien.ac.at>
+ * 
+ * This file is part of htd.
+ * 
+ * htd is free software: you can redistribute it and/or modify it under 
+ * the terms of the GNU General Public License as published by the Free 
+ * Software Foundation, either version 3 of the License, or (at your 
+ * option) any later version.
+ * 
+ * htd is distributed in the hope that it will be useful, but WITHOUT 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public 
+ * License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with htd.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef HTD_HTD_TREEDECOMPOSITIONVERIFIERIMPL_CPP
+#define	HTD_HTD_TREEDECOMPOSITIONVERIFIERIMPL_CPP
+
+#include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
+#include <htd/IHypergraph.hpp>
+#include <htd/ILabeledTree.hpp>
+#include <htd/TreeDecompositionVerifierImpl.hpp>
+#include <htd/VertexContainerLabel.hpp>
+
+#include <map>
+#include <algorithm>
+#include <unordered_map>
+
+htd::TreeDecompositionVerifierImpl::TreeDecompositionVerifierImpl(void)
+{
+    
+}
+
+htd::TreeDecompositionVerifierImpl::~TreeDecompositionVerifierImpl()
+{
+    
+}
+
+bool htd::TreeDecompositionVerifierImpl::verify(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
+{
+    return verifyVertexExistence(graph, decomposition) && verifyHyperEdgeCoverage(graph, decomposition) && verifyConnectednessCriterion(graph, decomposition);
+}
+
+//Ensure that every vertex of the original graph is contained in at least one node of the tree decomposition.
+bool htd::TreeDecompositionVerifierImpl::verifyVertexExistence(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
+{
+    htd::vertex_container result;
+    
+    getViolationsVertexExistence(graph, decomposition, result);
+    
+    return result.empty();
+}
+
+//Ensure that the vertices of an edge in the input graph occur jointly in at least on of the tree decomposition.
+bool htd::TreeDecompositionVerifierImpl::verifyHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
+{
+    htd::hyperedge_container result;
+    
+    getViolationsHyperEdgeCoverage(graph, decomposition, result);
+    
+    return result.empty();
+}
+
+//Ensure for each vertex of the input graph that the bags containing the specific vertex are connected.
+bool htd::TreeDecompositionVerifierImpl::verifyConnectednessCriterion(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
+{
+    htd::vertex_container result;
+    
+    getViolationsConnectednessCriterion(graph, decomposition, result);
+    
+    return result.empty();
+}
+
+void htd::TreeDecompositionVerifierImpl::getViolationsVertexExistence(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::vertex_container & output) const
+{
+    bool ret = false;
+    
+    htd::vertex_container nodes;
+    
+    htd::vertex_container vertices;
+    
+    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> labels;
+    
+    graph.getVertices(vertices);
+    
+    decomposition.getVertices(nodes);
+    
+    std::unordered_set<htd::vertex_t> missingVertices(vertices.begin(), vertices.end());
+    
+    for (auto it1 = nodes.begin(); !ret && it1 != nodes.end(); it1++)
+    {
+        htd::vertex_t node = *it1;
+
+        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::bag_label_name, node)))->container();
+
+        for (auto it2 = label.begin(); !ret && it2 != label.end(); it2++)
+        {
+            missingVertices.erase(*it2);
+            
+            ret = missingVertices.empty();
+        }
+    }
+    
+    ret = missingVertices.empty();
+    
+    if (!ret)
+    {
+        std::copy(missingVertices.begin(), missingVertices.end(), std::back_inserter(output));
+        
+        std::sort(output.begin(), output.end());
+    }
+}
+            
+void htd::TreeDecompositionVerifierImpl::getViolationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::hyperedge_container & output) const
+{
+    bool ret = false;
+    
+    htd::vertex_container nodes;
+    
+    htd::hyperedge_container edges;
+    
+    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> labels;
+    
+    graph.getHyperedges(edges);
+        
+    decomposition.getVertices(nodes);
+    
+    std::size_t edgeCount = edges.size();
+    
+    std::unordered_set<htd::vertex_t> missingEdges(edgeCount);
+    
+    for (htd::index_t index = 0; index < edgeCount; index++)
+    {
+        missingEdges.insert(index);
+    }
+    
+    std::vector<htd::index_t> coveredEdges;
+        
+    for (auto it1 = nodes.begin(); !ret && it1 != nodes.end(); it1++)
+    {
+        htd::vertex_t node = *it1;
+
+        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::bag_label_name, node)))->container();
+
+        for (auto it2 = missingEdges.begin(); !ret && it2 != missingEdges.end(); it2++)
+        {
+            auto& edge = edges[*it2];
+        
+            if (std::includes(label.begin(), label.end(), edge.begin(), edge.end()))
+            {
+                coveredEdges.push_back(*it2);
+            }
+        }
+        
+        for (htd::index_t coveredEdge : coveredEdges)
+        {
+            missingEdges.erase(coveredEdge);
+        }
+        
+        ret = missingEdges.empty();
+        
+        coveredEdges.clear();
+    }
+    
+    if (!ret)
+    {
+        for (htd::index_t missingEdge : missingEdges)
+        {
+            output.push_back(edges[missingEdge]);
+        }
+        
+        std::sort(output.begin(), output.end());
+    }
+}
+
+void htd::TreeDecompositionVerifierImpl::getViolationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::vertex_container & output) const
+{
+    bool ok = false;
+    
+    htd::edge_container edges;
+    
+    htd::vertex_container nodes;
+    
+    htd::vertex_container vertices;
+    
+    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> containers;
+    
+    graph.getVertices(vertices);
+        
+    decomposition.getEdges(edges);
+    
+    decomposition.getVertices(nodes);
+    
+    for (htd::vertex_t node : nodes)
+    {
+        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::bag_label_name, node)))->container();
+
+        for (htd::vertex_t vertex : label)
+        {
+            containers[vertex].push_back(node);
+        }
+    }
+    
+    for (htd::vertex_t vertex : vertices)
+    {
+        ok = false;
+        
+        auto& currentContainers = containers[vertex];
+        
+        if (currentContainers.size() > 1)
+        {
+            htd::vertex_container reachableVertices;
+            getReachableVertices(currentContainers[0], decomposition, containers[vertex], reachableVertices);
+
+            ok = reachableVertices.size() == currentContainers.size();
+        }
+        else
+        {
+            ok = true;
+        }
+        
+        if (!ok)
+        {
+            output.push_back(vertex);
+        }
+    }
+}
+
+void htd::TreeDecompositionVerifierImpl::getReachableVertices(htd::vertex_t start, const htd::ILabeledTree & decomposition, const htd::vertex_container & filter, htd::vertex_container & output) const
+{
+    std::size_t size = decomposition.vertexCount();
+    
+    if (size > 0)
+    {
+        htd::edge_container edges;
+        
+        std::map<htd::index_t, htd::vertex_container> neighbors;
+        
+        decomposition.getEdges(edges);
+        
+        for (auto& edge : edges)
+        {
+            if (std::binary_search(filter.begin(), filter.end(), edge.first) && std::binary_search(filter.begin(), filter.end(), edge.second))
+            {
+                auto& currentNeighborhood1 = neighbors[edge.first];
+                auto& currentNeighborhood2 = neighbors[edge.second];
+                
+                if (!std::binary_search(currentNeighborhood1.begin(), currentNeighborhood1.end(), edge.second))
+                {
+                    currentNeighborhood1.push_back(edge.second);
+                }
+                
+                if (!std::binary_search(currentNeighborhood2.begin(), currentNeighborhood2.end(), edge.first))
+                {
+                    currentNeighborhood2.push_back(edge.first);
+                }
+            }
+        }
+        
+        edges.clear();
+        
+        std::vector<htd::vertex_t> newVertices;
+        std::vector<htd::vertex_t> tmpVertices;
+
+        std::set<htd::vertex_t> result;
+        
+        result.insert(start);
+
+        newVertices.push_back(start);
+
+        while (newVertices.size() > 0) 
+        {
+            std::swap(tmpVertices, newVertices);
+
+            newVertices.clear();
+
+            for (auto vertex : tmpVertices)
+            {
+                for (htd::vertex_t neighbor : neighbors[vertex])
+                {
+                    if (result.find(neighbor) == result.end())
+                    {
+                        result.insert(neighbor);
+
+                        newVertices.push_back(neighbor);
+                    }
+                }
+            }
+        }
+        
+        std::copy(result.begin(), result.end(), std::back_inserter(output));
+    }
+}
+
+#endif /* HTD_HTD_TREEDECOMPOSITIONVERIFIERIMPL_CPP */

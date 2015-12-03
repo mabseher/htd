@@ -607,7 +607,7 @@ std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::vector<ht
 {
     std::size_t ret = 0;
     
-    htd::vertex_t vertex = htd::unknown_vertex;
+    htd::vertex_t vertex = htd::Vertex::UNKNOWN;
     
     DEBUGGING_CODE_LEVEL2(
     std::cout << "COMPUTE EDGE COUNT:" << std::endl << "   ";

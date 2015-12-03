@@ -142,7 +142,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
         {
             std::vector<htd::index_t> indices(size);
 
-            //std::vector<htd::vertex_t> vertexLabels(size, htd::unknown_vertex);
+            //std::vector<htd::vertex_t> vertexLabels(size, htd::Vertex::UNKNOWN);
 
             std::vector<htd::vertex_container> buckets(size);
 
@@ -345,7 +345,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                 while (unreachableVertices.size() > 0)
                 {
                     std::size_t bestOverlap = 0;
-                    htd::vertex_t bestBucket = htd::unknown_vertex;
+                    htd::vertex_t bestBucket = htd::Vertex::UNKNOWN;
                     htd::vertex_t currentBucket = unreachableVertices[0];
 
                     auto& currentBucketContent = buckets[currentBucket - htd::first_vertex];
@@ -379,7 +379,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                         }
                     }
 
-                    if (bestBucket == htd::unknown_vertex)
+                    if (bestBucket == htd::Vertex::UNKNOWN)
                     {
                         bestBucket = root;
                     }
@@ -421,7 +421,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
 htd::vertex_t htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex(const htd::hyperedge_t & edge, const std::vector<htd::index_t> & vertexIndices) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     if (edge.size() > 0)
     {
@@ -457,8 +457,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::getReachableVertices(htd:
 
     if (size > 0)
     {
-        htd::vertex_t vertex = htd::unknown_vertex;
-        htd::index_t vertexIndex = htd::unknown_index;
+        htd::vertex_t vertex = htd::Vertex::UNKNOWN;
 
         htd::vertex_container newVertices;
         htd::vertex_container tmpVertices;
@@ -483,7 +482,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::getReachableVertices(htd:
 
                 for (htd::vertex_t neighbor : neighbors[vertex - htd::first_vertex])
                 {
-                    vertexIndex = vertexIndices[neighbor - htd::first_vertex];
+                    htd::index_t vertexIndex = vertexIndices[neighbor - htd::first_vertex];
 
                     if (!reachableVertices[vertexIndex])
                     {
@@ -519,7 +518,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 {
     htd::IMutableTreeDecomposition * ret = htd::getDefaultTreeDecomposition();
 
-    if (root != htd::unknown_vertex)
+    if (root != htd::Vertex::UNKNOWN)
     {
         htd::index_t currentIndex = 0;
 
@@ -531,9 +530,9 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         std::stack<std::tuple<htd::vertex_t, htd::index_t, htd::vertex_t>> parentStack;
 
-        while (parentStack.size() > 0 || currentNode != htd::unknown_vertex)
+        while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
         {
-            if (currentNode != htd::unknown_vertex)
+            if (currentNode != htd::Vertex::UNKNOWN)
             {
                 const std::vector<htd::vertex_t>& currentNeighborhood = neighbors[currentNode - htd::first_vertex];
 
@@ -558,12 +557,12 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                     }
                     else
                     {
-                        currentNode = htd::unknown_vertex;
+                        currentNode = htd::Vertex::UNKNOWN;
                     }
                 }
                 else
                 {
-                    currentNode = htd::unknown_vertex;
+                    currentNode = htd::Vertex::UNKNOWN;
                 }
             }
             else
@@ -590,7 +589,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
 
         htd::index_t currentIndex = 0;
 
-        htd::vertex_t oldNode = htd::unknown_vertex;
+        htd::vertex_t oldNode = htd::Vertex::UNKNOWN;
 
         htd::vertex_t currentNode = decomposition.root();
 
@@ -598,9 +597,9 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
 
         htd::vertex_container unneededVertices;
                 
-        while (parentStack.size() > 0 || currentNode != htd::unknown_vertex)
+        while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
         {
-            if (currentNode != htd::unknown_vertex)
+            if (currentNode != htd::Vertex::UNKNOWN)
             {
                 childrenCount = decomposition.childrenCount(currentNode);
 
@@ -635,7 +634,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
                 }
                 else
                 {
-                    currentNode = htd::unknown_vertex;
+                    currentNode = htd::Vertex::UNKNOWN;
                 }
             }
             else

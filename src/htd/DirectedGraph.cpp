@@ -89,12 +89,12 @@ std::size_t htd::DirectedGraph::edgeCount(htd::vertex_t vertex) const
 
 bool htd::DirectedGraph::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::unknown_vertex && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
+    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
 htd::vertex_t htd::DirectedGraph::vertex(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
     if (index < size_ - deletions_.size())
     {
@@ -386,7 +386,7 @@ void htd::DirectedGraph::getNeighbors(htd::vertex_t vertex, vertex_container & o
 
 htd::vertex_t htd::DirectedGraph::neighbor(htd::vertex_t vertex, htd::id_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
     if (isVertex(vertex))
     {
@@ -491,7 +491,7 @@ void htd::DirectedGraph::getOutgoingNeighbors(htd::vertex_t vertex, htd::vertex_
 
 htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     if (isVertex(vertex))
     {
@@ -521,7 +521,7 @@ htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t vertex, htd::in
 htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t vertex, htd::index_t index) const
 {
 
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     if (isVertex(vertex))
     {
@@ -593,7 +593,7 @@ void htd::DirectedGraph::getIsolatedVertices(htd::vertex_container & output) con
 
 htd::vertex_t htd::DirectedGraph::isolatedVertex(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container result;
 

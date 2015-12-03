@@ -87,12 +87,12 @@ std::size_t htd::Hypergraph::edgeCount(htd::vertex_t vertex) const
 
 bool htd::Hypergraph::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::unknown_vertex && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
+    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
 htd::vertex_t htd::Hypergraph::vertex(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
     if (index < vertexCount())
     {
@@ -286,7 +286,7 @@ void htd::Hypergraph::getNeighbors(htd::vertex_t vertex, htd::vertex_container &
 
 htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     if (isVertex(vertex))
     {
@@ -360,7 +360,7 @@ void htd::Hypergraph::getIsolatedVertices(htd::vertex_container & output) const
 
 htd::vertex_t htd::Hypergraph::isolatedVertex(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container result;
 

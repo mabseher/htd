@@ -42,7 +42,7 @@
 #include <iostream>
 
 htd::TreeDecomposition::TreeDecomposition(void)
-    : size_(0), root_(htd::unknown_vertex), next_vertex_(htd::first_vertex), nodes_(), deletions_(), labelings_()
+    : size_(0), root_(htd::Vertex::UNKNOWN), next_vertex_(htd::first_vertex), nodes_(), deletions_(), labelings_()
 {
     
 }
@@ -120,7 +120,7 @@ htd::TreeDecomposition::TreeDecomposition(const htd::TreeDecomposition & origina
 
 htd::TreeDecomposition::~TreeDecomposition()
 {
-    if (root_ != htd::unknown_vertex)
+    if (root_ != htd::Vertex::UNKNOWN)
     {
         for (auto it = nodes_.begin(); it != nodes_.end(); it++)
         {
@@ -172,12 +172,12 @@ std::size_t htd::TreeDecomposition::edgeCount(htd::vertex_t vertex) const
 
 bool htd::TreeDecomposition::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::unknown_vertex && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
+    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
 htd::vertex_t htd::TreeDecomposition::vertex(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
     if (index < size_ - deletions_.size())
     {
@@ -213,7 +213,7 @@ bool htd::TreeDecomposition::isNeighbor(htd::vertex_t vertex1, htd::vertex_t ver
         {
             auto& children = node->children;
             
-            if (node->parent != htd::unknown_vertex)
+            if (node->parent != htd::Vertex::UNKNOWN)
             {
                 if (node->parent == vertex2)
                 {
@@ -265,7 +265,7 @@ std::size_t htd::TreeDecomposition::neighborCount(htd::vertex_t vertex) const
         {
             auto& children = node->children;
             
-            if (node->parent != htd::unknown_vertex)
+            if (node->parent != htd::Vertex::UNKNOWN)
             {
                 ret++;
             }
@@ -287,7 +287,7 @@ void htd::TreeDecomposition::getNeighbors(htd::vertex_t vertex, htd::vertex_cont
         {
             auto& children = node->children;
             
-            if (node->parent != htd::unknown_vertex)
+            if (node->parent != htd::Vertex::UNKNOWN)
             {
                 output.push_back(node->parent);
             }
@@ -302,7 +302,7 @@ void htd::TreeDecomposition::getNeighbors(htd::vertex_t vertex, htd::vertex_cont
 
 htd::vertex_t htd::TreeDecomposition::neighbor(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
     if (isVertex(vertex))
     {
@@ -314,7 +314,7 @@ htd::vertex_t htd::TreeDecomposition::neighbor(htd::vertex_t vertex, htd::index_
             
             auto& children = node->children;
             
-            if (node->parent != htd::unknown_vertex)
+            if (node->parent != htd::Vertex::UNKNOWN)
             {
                 if (currentIndex == index)
                 {
@@ -400,7 +400,7 @@ void htd::TreeDecomposition::getEdges(htd::edge_container & output, htd::vertex_
         {
             auto& children = node->children;
             
-            if (node->parent != htd::unknown_vertex)
+            if (node->parent != htd::Vertex::UNKNOWN)
             {
                 output.push_back(edge_t(node->parent, node->id));
             }
@@ -484,7 +484,7 @@ void htd::TreeDecomposition::getHyperedges(htd::hyperedge_container& output, htd
         {
             auto& children = node->children;
             
-            if (node->parent != htd::unknown_vertex)
+            if (node->parent != htd::Vertex::UNKNOWN)
             {
                 htd::hyperedge_t hyperedge;
 
@@ -567,7 +567,7 @@ bool htd::TreeDecomposition::isRoot(htd::vertex_t vertex) const
 
 htd::vertex_t htd::TreeDecomposition::parent(htd::vertex_t vertex) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
     if (isVertex(vertex))
     {
@@ -640,7 +640,7 @@ void htd::TreeDecomposition::getChildren(htd::vertex_t vertex, htd::vertex_conta
 
 htd::vertex_t htd::TreeDecomposition::child(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
     if (isVertex(vertex))
     {
@@ -705,7 +705,7 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
         {
             auto& children = node->children;
             
-            if (node->parent != htd::unknown_vertex)
+            if (node->parent != htd::Vertex::UNKNOWN)
             {
                 auto& parent = nodes_[node->parent  - htd::first_vertex];
             
@@ -735,7 +735,7 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
                         /*
                         std::size_t bestOverlap = 0;
                         
-                        htd::vertex_t bestChoice = htd::unknown_vertex;
+                        htd::vertex_t bestChoice = htd::Vertex::UNKNOWN;
                         
                         auto& parentLabel = vertex_labels[node->id];
 
@@ -769,7 +769,7 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
                         
                         std::cout << "BEST CHOICE: " << bestChoice << std::endl;
                         
-                        if (bestChoice == htd::unknown_vertex)
+                        if (bestChoice == htd::Vertex::UNKNOWN)
                         {
                             bestChoice = node->children[0];
                         }
@@ -824,7 +824,7 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
                     {
                         root_ = node->children[0];
                         
-                        nodes_[root_ - htd::first_vertex]->parent = htd::unknown_vertex;
+                        nodes_[root_ - htd::first_vertex]->parent = htd::Vertex::UNKNOWN;
                         
                         deleteNode(node);
                     
@@ -834,7 +834,7 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
                     {
                         std::size_t bestOverlap = 0;
                         
-                        htd::vertex_t bestChoice = htd::unknown_vertex;
+                        htd::vertex_t bestChoice = htd::Vertex::UNKNOWN;
 
                         auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_[htd::bag_label_name]);
 
@@ -859,14 +859,14 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
                             }
                         }
                         
-                        if (bestChoice == htd::unknown_vertex)
+                        if (bestChoice == htd::Vertex::UNKNOWN)
                         {
                             bestChoice = node->children[0];
                         }
                         
                         root_ = bestChoice;
                         
-                        nodes_[root_ - htd::first_vertex]->parent = htd::unknown_vertex;
+                        nodes_[root_ - htd::first_vertex]->parent = htd::Vertex::UNKNOWN;
 
                         for (auto child : children)
                         {
@@ -898,14 +898,14 @@ void htd::TreeDecomposition::removeSubtree(htd::vertex_t subtreeRoot)
 
 htd::vertex_t htd::TreeDecomposition::insertRoot(void)
 {
-    if (root_ == htd::unknown_vertex)
+    if (root_ == htd::Vertex::UNKNOWN)
     {
         root_ = htd::first_vertex;
 
         next_vertex_ = root_ + 1;
         
         nodes_.clear();
-        nodes_.push_back(new TreeNode(1, htd::unknown_vertex));
+        nodes_.push_back(new TreeNode(1, htd::Vertex::UNKNOWN));
 
         for (auto& labeling : labelings_)
         {
@@ -920,9 +920,9 @@ htd::vertex_t htd::TreeDecomposition::insertRoot(void)
 
 void htd::TreeDecomposition::removeRoot(void)
 {
-    if (root_ != htd::unknown_vertex)
+    if (root_ != htd::Vertex::UNKNOWN)
     {
-        root_ = htd::unknown_vertex;
+        root_ = htd::Vertex::UNKNOWN;
     
         for (auto it = nodes_.begin(); it != nodes_.end(); it++)
         {
@@ -947,7 +947,7 @@ void htd::TreeDecomposition::removeRoot(void)
 
 htd::vertex_t htd::TreeDecomposition::addChild(htd::vertex_t vertex)
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
     if (isVertex(vertex))
     {
@@ -1003,7 +1003,7 @@ void htd::TreeDecomposition::removeChild(htd::vertex_t vertex, htd::vertex_t chi
 
 htd::vertex_t htd::TreeDecomposition::addIntermediateParent(htd::vertex_t vertex)
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     if (isVertex(vertex))
     {
@@ -1117,7 +1117,7 @@ htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::TreeDecomp
 {
     if (this != &other)
     {
-        if (this->root_ != htd::unknown_vertex)
+        if (this->root_ != htd::Vertex::UNKNOWN)
         {
             removeRoot();
         }
@@ -1178,7 +1178,7 @@ void htd::TreeDecomposition::getLeafNodes(htd::vertex_container & output) const
 
 htd::vertex_t htd::TreeDecomposition::leafNode(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container leafNodeContainer;
 
@@ -1251,7 +1251,7 @@ void htd::TreeDecomposition::getJoinNodes(htd::vertex_container & output) const
 
 htd::vertex_t htd::TreeDecomposition::joinNode(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container joinNodeContainer;
 
@@ -1340,7 +1340,7 @@ void htd::TreeDecomposition::getForgetNodes(htd::vertex_container & output) cons
 
 htd::vertex_t htd::TreeDecomposition::forgetNode(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container forgetNodeContainer;
 
@@ -1437,7 +1437,7 @@ void htd::TreeDecomposition::getIntroduceNodes(htd::vertex_container & output) c
 
 htd::vertex_t htd::TreeDecomposition::introduceNode(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container introduceNodeContainer;
 
@@ -1591,7 +1591,7 @@ void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::ver
 
 htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container forgottenVerticesContainer;
 
@@ -1611,7 +1611,7 @@ htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd:
 
 htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container forgottenVerticesContainer;
 
@@ -1745,7 +1745,7 @@ void htd::TreeDecomposition::getIntroducedVertices(htd::vertex_t vertex, htd::ve
 
 htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container introducedVerticesContainer;
 
@@ -1765,7 +1765,7 @@ htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd
 
 htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container introducedVerticesContainer;
 
@@ -1899,7 +1899,7 @@ void htd::TreeDecomposition::getRememberedVertices(htd::vertex_t vertex, htd::ve
 
 htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container rememberedVerticesContainer;
 
@@ -1919,7 +1919,7 @@ htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd
 
 htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container rememberedVerticesContainer;
 
@@ -2131,7 +2131,7 @@ void htd::TreeDecomposition::deleteNode(TreeNode * node)
         
         htd::id_t nodeIdentifier = node->id;
                 
-        if (parent != htd::unknown_vertex)
+        if (parent != htd::Vertex::UNKNOWN)
         {
             auto& children = nodes_[parent - htd::first_vertex]->children;
 

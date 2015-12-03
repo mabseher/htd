@@ -83,7 +83,7 @@ namespace htd
 
                 htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (locatedVertex != htd::unknown_vertex)
+                if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
                     ret = htd::Hypergraph::edgeCount(locatedVertex);
                 }
@@ -139,7 +139,7 @@ namespace htd
                 htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
                 htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
 
-                if (locatedVertex1 != htd::unknown_vertex && locatedVertex2 != htd::unknown_vertex)
+                if (locatedVertex1 != htd::Vertex::UNKNOWN && locatedVertex2 != htd::Vertex::UNKNOWN)
                 {
                     ret = htd::Hypergraph::isConnected(locatedVertex1, locatedVertex2);
                 }
@@ -154,7 +154,7 @@ namespace htd
                 htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
                 htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
 
-                if (locatedVertex1 != htd::unknown_vertex && locatedVertex2 != htd::unknown_vertex)
+                if (locatedVertex1 != htd::Vertex::UNKNOWN && locatedVertex2 != htd::Vertex::UNKNOWN)
                 {
                     ret = htd::Hypergraph::isNeighbor(locatedVertex1, locatedVertex2);
                 }
@@ -168,7 +168,7 @@ namespace htd
 
                 htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (locatedVertex != htd::unknown_vertex)
+                if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
                     ret = htd::Hypergraph::neighborCount(locatedVertex);
                 }
@@ -180,7 +180,7 @@ namespace htd
             {
                 htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (locatedVertex != htd::unknown_vertex)
+                if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
                     htd::Hypergraph::getNeighbors(locatedVertex, output);
                 }
@@ -192,7 +192,7 @@ namespace htd
 
                 htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (locatedVertex != htd::unknown_vertex)
+                if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
                     ret = htd::Hypergraph::neighbor(locatedVertex, index);
                 }
@@ -210,7 +210,7 @@ namespace htd
 
                 htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (locatedVertex != htd::unknown_vertex)
+                if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
                     ret = htd::Hypergraph::isIsolatedVertex(locatedVertex);
                 }
@@ -222,7 +222,7 @@ namespace htd
             {
                 htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (locatedVertex != htd::unknown_vertex)
+                if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
                     htd::Hypergraph::getHyperedges(output, locatedVertex);
                 }
@@ -232,7 +232,7 @@ namespace htd
             {
                 htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (locatedVertex == htd::unknown_vertex)
+                if (locatedVertex == htd::Vertex::UNKNOWN)
                 {
                     throw std::out_of_range("htd::vertex_t htd::LabeledHypergraph::hyperedge(htd::index_t, const VertexLabelType &)");
                 }
@@ -244,7 +244,7 @@ namespace htd
             {
                 htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (locatedVertex != htd::unknown_vertex)
+                if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
                     throw std::logic_error("htd::vertex_t htd::LabeledHypergraph::addVertex(const VertexLabelType &)");
                 }
@@ -267,7 +267,7 @@ namespace htd
             {
                 htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (locatedVertex != htd::unknown_vertex)
+                if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
                     labelings_.removeLabels(locatedVertex);
 
@@ -286,7 +286,7 @@ namespace htd
             {
                 htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (locatedVertex != htd::unknown_vertex)
+                if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
                     labelings_.removeLabels(locatedVertex);
 
@@ -298,14 +298,14 @@ namespace htd
             {
                 htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
 
-                if (locatedVertex1 == htd::unknown_vertex)
+                if (locatedVertex1 == htd::Vertex::UNKNOWN)
                 {
                     locatedVertex1 = addVertex(vertexLabel1);
                 }
 
                 htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
 
-                if (locatedVertex2 == htd::unknown_vertex)
+                if (locatedVertex2 == htd::Vertex::UNKNOWN)
                 {
                     locatedVertex2 = addVertex(vertexLabel2);
                 }
@@ -333,14 +333,14 @@ namespace htd
             {
                 htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
 
-                if (locatedVertex1 == htd::unknown_vertex)
+                if (locatedVertex1 == htd::Vertex::UNKNOWN)
                 {
                     locatedVertex1 = addVertex(vertexLabel1);
                 }
 
                 htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
 
-                if (locatedVertex2 == htd::unknown_vertex)
+                if (locatedVertex2 == htd::Vertex::UNKNOWN)
                 {
                     locatedVertex2 = addVertex(vertexLabel2);
                 }
@@ -454,7 +454,7 @@ namespace htd
                 htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
                 htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
 
-                if (locatedVertex1 != htd::unknown_vertex && locatedVertex2 != htd::unknown_vertex)
+                if (locatedVertex1 != htd::Vertex::UNKNOWN && locatedVertex2 != htd::Vertex::UNKNOWN)
                 {
                     htd::Hypergraph::removeEdge(locatedVertex1, locatedVertex2);
                 }
@@ -774,7 +774,7 @@ namespace htd
 
             htd::vertex_t vertex(const VertexLabelType & vertexLabel) const
             {
-                htd::vertex_t ret = htd::unknown_vertex;
+                htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
                 if (labelings_.isLabelingName(htd::name_label_name))
                 {

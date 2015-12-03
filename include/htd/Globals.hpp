@@ -25,30 +25,22 @@
 #ifndef HTD_HTD_GLOBALS_HPP
 #define HTD_HTD_GLOBALS_HPP
 
+#include <htd/CompilerDetection.hpp>
+#include <htd/Id.hpp>
+#include <htd/Vertex.hpp>
+
 #include <cstdlib>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include <htd/CompilerDetection.hpp>
-
 namespace htd
 {
-    /**
-     *  Datatype for IDs.
-     */
-    typedef std::size_t id_t;
-    
     /**
      *  Datatype for indices.
      */
     typedef std::size_t index_t;
-    
-    /**
-     *  Datatype for vertices.
-     */
-    typedef std::size_t vertex_t;
-    
+
     /**
      *  Datatype for edges.
      */
@@ -82,27 +74,7 @@ namespace htd
     /**
      *  Constant for first index.
      */
-    const htd::index_t first_index = (htd::index_t)1;
-
-    /**
-     *  Constant for first index.
-     */
     const htd::vertex_t first_vertex = (htd::vertex_t)1;
-
-    /**
-     *  Constant for unknown identifiers.
-     */
-    const htd::id_t unknown_id = (htd::id_t)0;
-    
-    /**
-     *  Constant for unknown indices.
-     */
-    const htd::index_t unknown_index = (htd::index_t)0;
-    
-    /**
-     *  Constant for unknown vertices.
-     */
-    const htd::vertex_t unknown_vertex = (htd::vertex_t)0;
 
     /**
      *  Constant for the name of the bag label.

@@ -42,6 +42,7 @@
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
 #include <htd/IBidirectionalGraphLabeling.hpp>
+#include <htd/Id.hpp>
 #include <htd/IDirectedGraph.hpp>
 #include <htd/IGraph.hpp>
 #include <htd/IGraphDecompositionAlgorithm.hpp>
@@ -86,6 +87,7 @@
 #include <htd/SetCoverAlgorithm.hpp>
 #include <htd/TreeDecomposition.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
+#include <htd/Vertex.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
 #endif /* HTD_HTD_MAIN_HPP */

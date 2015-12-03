@@ -89,12 +89,12 @@ std::size_t htd::Graph::edgeCount(htd::vertex_t vertex) const
 
 bool htd::Graph::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::unknown_vertex && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
+    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
 htd::vertex_t htd::Graph::vertex(htd::id_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
     if (index < vertexCount())
     {
@@ -250,7 +250,7 @@ void htd::Graph::getNeighbors(htd::vertex_t vertex, htd::vertex_container & outp
 
 htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::id_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
     if (isVertex(vertex))
     {
@@ -310,7 +310,7 @@ void htd::Graph::getIsolatedVertices(htd::vertex_container & output) const
 
 htd::vertex_t htd::Graph::isolatedVertex(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::unknown_vertex;
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
     htd::vertex_container result;
 

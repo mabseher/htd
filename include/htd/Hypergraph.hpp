@@ -27,8 +27,8 @@
 
 #include <htd/IMutableHypergraph.hpp>
 
-#include <set>
 #include <vector>
+#include <unordered_set>
 
 namespace htd
 {
@@ -39,7 +39,7 @@ namespace htd
             
             Hypergraph(std::size_t size);
             
-            ~Hypergraph();
+            virtual ~Hypergraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 

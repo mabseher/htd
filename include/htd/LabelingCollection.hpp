@@ -49,13 +49,15 @@ namespace htd
 
             std::string labelName(htd::index_t index) const HTD_OVERRIDE;
 
-            bool isLabelingName(std::string labelName) const HTD_OVERRIDE;
+            bool isLabelingName(const std::string & labelName) const HTD_OVERRIDE;
 
-            const htd::IGraphLabeling * labeling(std::string labelName) const HTD_OVERRIDE;
+            htd::IGraphLabeling * labeling(const std::string & labelName) HTD_OVERRIDE;
 
-            void setLabeling(std::string labelName, htd::IGraphLabeling * labeling) HTD_OVERRIDE;
+            const htd::IGraphLabeling * labeling(const std::string & labelName) const HTD_OVERRIDE;
 
-            void removeLabeling(std::string labelName) HTD_OVERRIDE;
+            void setLabeling(const std::string & labelName, htd::IGraphLabeling * labeling) HTD_OVERRIDE;
+
+            void removeLabeling(const std::string & labelName) HTD_OVERRIDE;
 
             void removeLabels(htd::vertex_t vertex) HTD_OVERRIDE;
 

@@ -64,35 +64,55 @@ std::string htd::LabelingCollection::labelName(htd::index_t index) const
         throw std::out_of_range("std::string htd::LabelingCollection::labelName(htd::index_t) const");
     }
 
-    return labelNames_.at(index);
+    return labelNames_[index];
 }
 
-const htd::IGraphLabeling * htd::LabelingCollection::labeling(std::string labelName) const
+htd::IGraphLabeling * htd::LabelingCollection::labeling(const std::string & labelName)
 {
     if (content_.find(labelName) == content_.end())
     {
-        throw std::out_of_range("const htd::IGraphLabeling * htd::LabelingCollection::label(std::string) const");
+        throw std::out_of_range("htd::IGraphLabeling * htd::LabelingCollection::label(const std::string &)");
     }
 
     return content_.at(labelName);
 }
 
-bool htd::LabelingCollection::isLabelingName(std::string labelName) const
+const htd::IGraphLabeling * htd::LabelingCollection::labeling(const std::string & labelName) const
 {
-    return content_.find(labelName) == content_.end();
+    if (content_.find(labelName) == content_.end())
+    {
+        throw std::out_of_range("const htd::IGraphLabeling * htd::LabelingCollection::label(const std::string &) const");
+    }
+
+    return content_.at(labelName);
 }
 
-void htd::LabelingCollection::setLabeling(std::string labelName, htd::IGraphLabeling * labeling)
+bool htd::LabelingCollection::isLabelingName(const std::string & labelName) const
+{
+    return content_.find(labelName) != content_.end();
+}
+
+void htd::LabelingCollection::setLabeling(const std::string & labelName, htd::IGraphLabeling * labeling)
 {
     auto position = content_.find(labelName);
 
     if (position == content_.end())
     {
         content_[labelName] = labeling;
+
+        labelNames_.push_back(labelName);
+
+        std::sort(labelNames_.begin(), labelNames_.end());
+    }
+    else
+    {
+        delete position->second;
+
+        content_[labelName] = labeling;
     }
 }
 
-void htd::LabelingCollection::removeLabeling(std::string labelName)
+void htd::LabelingCollection::removeLabeling(const std::string & labelName)
 {
     auto position = content_.find(labelName);
 

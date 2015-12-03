@@ -43,13 +43,15 @@ namespace htd
 
             virtual std::string labelName(htd::index_t index) const = 0;
 
-            virtual bool isLabelingName(std::string labelName) const = 0;
+            virtual bool isLabelingName(const std::string & labelName) const = 0;
 
-            virtual const htd::IGraphLabeling * labeling(std::string labelName) const = 0;
+            virtual htd::IGraphLabeling * labeling(const std::string & labelName) = 0;
 
-            virtual void setLabeling(std::string labelName, htd::IGraphLabeling * labeling) = 0;
+            virtual const htd::IGraphLabeling * labeling(const std::string & labelName) const = 0;
 
-            virtual void removeLabeling(std::string labelName) = 0;
+            virtual void setLabeling(const std::string & labelName, htd::IGraphLabeling * labeling) = 0;
+
+            virtual void removeLabeling(const std::string & labelName) = 0;
 
             virtual void removeLabels(htd::vertex_t vertex) = 0;
 

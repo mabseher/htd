@@ -1,5 +1,5 @@
 /* 
- * File:   MinFillOrderingAlgorithmImpl.hpp
+ * File:   MinFillOrderingAlgorithm.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MINFILLORDERINGALGORITHMIMPL_HPP
-#define	HTD_HTD_MINFILLORDERINGALGORITHMIMPL_HPP
+#ifndef HTD_HTD_MINFILLORDERINGALGORITHM_HPP
+#define	HTD_HTD_MINFILLORDERINGALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
@@ -35,17 +35,17 @@
 
 namespace htd
 {
-    class MinFillOrderingAlgorithmImpl : public htd::IOrderingAlgorithm
+    class MinFillOrderingAlgorithm : public htd::IOrderingAlgorithm
     {
         public:
-            MinFillOrderingAlgorithmImpl(void);
+            MinFillOrderingAlgorithm(void);
             
-            ~MinFillOrderingAlgorithmImpl();
+            ~MinFillOrderingAlgorithm();
             
             void computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const HTD_OVERRIDE;
 
         protected:
-            MinFillOrderingAlgorithmImpl & operator=(const MinFillOrderingAlgorithmImpl &) { return *this; }
+            MinFillOrderingAlgorithm & operator=(const MinFillOrderingAlgorithm &) { return *this; }
 
         private:
             std::size_t computeEdgeCount(const std::vector<htd::vertex_container> & availableNeighborhoods, const htd::vertex_container & vertices) const;
@@ -64,4 +64,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_MINFILLORDERINGALGORITHMIMPL_HPP */
+#endif /* HTD_HTD_MINFILLORDERINGALGORITHM_HPP */

@@ -1,5 +1,5 @@
 /* 
- * File:   MutableLabeledHypergraphImpl.hpp
+ * File:   LabeledHypergraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,13 +22,18 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MUTABLELABELEDHYPERGRAPHIMPL_HPP
-#define	HTD_HTD_MUTABLELABELEDHYPERGRAPHIMPL_HPP
+#ifndef HTD_HTD_LABELEDHYPERGRAPH_HPP
+#define	HTD_HTD_LABELEDHYPERGRAPH_HPP
 
-#include <htd/MutableHypergraphImpl.hpp>
+#include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
+#include <htd/Hypergraph.hpp>
 #include <htd/ILabeledHypergraph.hpp>
+#include <htd/GraphLabeling.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/Label.hpp>
+#include <htd/ILabelingCollection.hpp>
+#include <htd/LabelingCollection.hpp>
 
 #include <set>
 #include <vector>
@@ -37,236 +42,259 @@
 namespace htd
 {
     template<typename VertexLabelType, typename HyperedgeLabelType>
-    class MutableLabeledHypergraphImpl : public htd::MutableHypergraphImpl
+    class LabeledHypergraph : public htd::Hypergraph, public virtual htd::ILabeledHypergraph
     {
         public:
-            MutableLabeledHypergraphImpl<VertexLabelType, HyperedgeLabelType>(void) : MutableHypergraphImpl(), labeling_()
+            LabeledHypergraph<VertexLabelType, HyperedgeLabelType>(void) : Hypergraph(), labelings_()
             {
-
+                labelings_.setLabeling(htd::name_label_name, new htd::BidirectionalGraphLabeling());
             }
             
-            MutableLabeledHypergraphImpl<VertexLabelType, HyperedgeLabelType>(std::size_t size) : MutableHypergraphImpl(size), labeling_()
+            LabeledHypergraph<VertexLabelType, HyperedgeLabelType>(std::size_t size) : Hypergraph(size), labelings_()
             {
-
+                labelings_.setLabeling(htd::name_label_name, new htd::BidirectionalGraphLabeling());
             }
             
-            ~MutableLabeledHypergraphImpl<VertexLabelType, HyperedgeLabelType>()
+            ~LabeledHypergraph<VertexLabelType, HyperedgeLabelType>()
             {
 
             }
 
-            std::size_t edgeCount(VertexLabelType vertex) const
+            std::size_t edgeCount(const VertexLabelType & vertexLabel) const
             {
                 std::size_t ret = 0;
 
-                Label<VertexLabelType> label(vertex);
+                htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (labeling_.isVertexLabel(label))
+                if (locatedVertex != htd::unknown_vertex)
                 {
-                    ret = htd::MutableHypergraphImpl::edgeCount(labeling_.getVertex(label));
-                }
-
-                return ret;
-            }
-
-            bool isVertex(VertexLabelType vertex) const
-            {
-                bool ret = false;
-
-                Label<VertexLabelType> label(vertex);
-
-                if (labeling_.isVertexLabel(label))
-                {
-                    ret = htd::MutableHypergraphImpl::isVertex(labeling_.getVertex(label));
-                }
-
-                return ret;
-            }
-
-            bool isConnected(VertexLabelType vertex1, VertexLabelType vertex2) const
-            {
-                bool ret = false;
-
-                Label<VertexLabelType> label1(vertex1);
-                Label<VertexLabelType> label2(vertex2);
-
-                if (labeling_.isVertexLabel(label1) && labeling_.isVertexLabel(label2))
-                {
-                    ret = htd::MutableHypergraphImpl::isConnected(labeling_.getVertex(label1), labeling_.getVertex(label2));
-                }
-
-                return ret;
-            }
-
-            bool isNeighbor(VertexLabelType vertex1, VertexLabelType vertex2) const
-            {
-                bool ret = false;
-
-                Label<VertexLabelType> label1(vertex1);
-                Label<VertexLabelType> label2(vertex2);
-
-                if (labeling_.isVertexLabel(label1) && labeling_.isVertexLabel(label2))
-                {
-                    ret = htd::MutableHypergraphImpl::isNeighbor(labeling_.getVertex(label1), labeling_.getVertex(label2));
-                }
-
-                return ret;
-            }
-            
-            std::size_t neighborCount(VertexLabelType vertex) const
-            {
-                std::size_t ret = 0;
-
-                Label<VertexLabelType> label(vertex);
-
-                if (labeling_.isVertexLabel(label))
-                {
-                    ret = htd::MutableHypergraphImpl::neighborCount(labeling_.getVertex(label));
-                }
-
-                return ret;
-            }
-            
-            void getNeighbors(VertexLabelType vertex, htd::vertex_container & output) const
-            {
-                Label<VertexLabelType> label(vertex);
-
-                if (labeling_.isVertexLabel(label))
-                {
-                    htd::MutableHypergraphImpl::getNeighbors(labeling_.getVertex(label), output);
-                }
-            }
-
-            htd::vertex_t neighbor(VertexLabelType vertex, htd::index_t index) const
-            {
-                htd::vertex_t ret = 0;
-
-                Label<VertexLabelType> label(vertex);
-
-                if (labeling_.isVertexLabel(label))
-                {
-                    ret = htd::MutableHypergraphImpl::neighbor(labeling_.getVertex(label), index);
+                    ret = htd::Hypergraph::edgeCount(locatedVertex);
                 }
                 else
                 {
-                    throw std::out_of_range("htd::vertex_t htd::MutableLabeledHypergraphImpl::neighbor(VertexLabelType, htd::index_t)");
+                    throw std::logic_error("std::size_t htd::LabeledHypergraph::edgeCount(const VertexLabelType &) const");
                 }
 
                 return ret;
             }
 
-            bool isIsolatedVertex(VertexLabelType vertex) const
+            bool isVertex(const VertexLabelType & vertexLabel) const
             {
                 bool ret = false;
 
-                Label<VertexLabelType> label(vertex);
-
-                if (labeling_.isVertexLabel(label))
+                if (labelings_.isLabelingName(htd::name_label_name))
                 {
-                    ret = htd::MutableHypergraphImpl::isIsolatedVertex(labeling_.getVertex(label));
+                    auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                    if (labeling != nullptr)
+                    {
+                        Label<VertexLabelType> label(vertexLabel);
+
+                        ret = labeling->isVertexLabel(label);
+                    }
                 }
 
                 return ret;
             }
 
-            void getHyperedges(htd::hyperedge_container & output, VertexLabelType vertex) const
+            bool isHyperedge(const HyperedgeLabelType & edgeLabel) const
             {
-                Label<VertexLabelType> label(vertex);
+                bool ret = false;
 
-                if (labeling_.isVertexLabel(label))
+                if (labelings_.isLabelingName(htd::name_label_name))
                 {
-                    htd::MutableHypergraphImpl::getHyperedges(output, labeling_.getVertex(label));
+                    auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                    if (labeling != nullptr)
+                    {
+                        Label<VertexLabelType> label(edgeLabel);
+
+                        ret = labeling->isHyperedgeLabel(label);
+                    }
+                }
+
+                return ret;
+            }
+            bool isConnected(const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2) const
+            {
+                bool ret = false;
+
+                htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
+                htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
+
+                if (locatedVertex1 != htd::unknown_vertex && locatedVertex2 != htd::unknown_vertex)
+                {
+                    ret = htd::Hypergraph::isConnected(locatedVertex1, locatedVertex2);
+                }
+
+                return ret;
+            }
+
+            bool isNeighbor(const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2) const
+            {
+                bool ret = false;
+
+                htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
+                htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
+
+                if (locatedVertex1 != htd::unknown_vertex && locatedVertex2 != htd::unknown_vertex)
+                {
+                    ret = htd::Hypergraph::isNeighbor(locatedVertex1, locatedVertex2);
+                }
+
+                return ret;
+            }
+            
+            std::size_t neighborCount(const VertexLabelType & vertexLabel) const
+            {
+                std::size_t ret = 0;
+
+                htd::vertex_t locatedVertex = vertex(vertexLabel);
+
+                if (locatedVertex != htd::unknown_vertex)
+                {
+                    ret = htd::Hypergraph::neighborCount(locatedVertex);
+                }
+
+                return ret;
+            }
+            
+            void getNeighbors(const VertexLabelType & vertexLabel, htd::vertex_container & output) const
+            {
+                htd::vertex_t locatedVertex = vertex(vertexLabel);
+
+                if (locatedVertex != htd::unknown_vertex)
+                {
+                    htd::Hypergraph::getNeighbors(locatedVertex, output);
                 }
             }
 
-            const htd::hyperedge_t & hyperedge(htd::index_t index, VertexLabelType vertex) const
+            htd::vertex_t neighbor(const VertexLabelType & vertexLabel, htd::index_t index) const
             {
-                Label<VertexLabelType> label(vertex);
+                htd::vertex_t ret = 0;
 
-                if (!labeling_.isVertexLabel(label))
+                htd::vertex_t locatedVertex = vertex(vertexLabel);
+
+                if (locatedVertex != htd::unknown_vertex)
                 {
-                    throw std::out_of_range("htd::vertex_t htd::MutableLabeledHypergraphImpl::hyperedge(htd::index_t, VertexLabelType)");
+                    ret = htd::Hypergraph::neighbor(locatedVertex, index);
+                }
+                else
+                {
+                    throw std::out_of_range("htd::vertex_t htd::LabeledHypergraph::neighbor(const VertexLabelType &, htd::index_t)");
                 }
 
-                return htd::MutableHypergraphImpl::hyperedge(index, labeling_.getVertex(label));
+                return ret;
             }
 
-            htd::vertex_t addVertex(VertexLabelType vertex)
+            bool isIsolatedVertex(const VertexLabelType & vertexLabel) const
             {
-                if (labeling_.isVertexLabel(vertex))
+                bool ret = false;
+
+                htd::vertex_t locatedVertex = vertex(vertexLabel);
+
+                if (locatedVertex != htd::unknown_vertex)
                 {
-                    throw std::out_of_range("htd::vertex_t htd::MutableLabeledHypergraphImpl::addVertex(VertexLabelType)");
+                    ret = htd::Hypergraph::isIsolatedVertex(locatedVertex);
                 }
 
-                htd::vertex_t ret = htd::MutableHypergraphImpl::addVertex();
+                return ret;
+            }
 
-                labeling_.setLabel(ret, vertex);
+            void getHyperedges(htd::hyperedge_container & output, const VertexLabelType & vertexLabel) const
+            {
+                htd::vertex_t locatedVertex = vertex(vertexLabel);
+
+                if (locatedVertex != htd::unknown_vertex)
+                {
+                    htd::Hypergraph::getHyperedges(output, locatedVertex);
+                }
+            }
+
+            const htd::hyperedge_t & hyperedge(htd::index_t index, const VertexLabelType & vertexLabel) const
+            {
+                htd::vertex_t locatedVertex = vertex(vertexLabel);
+
+                if (locatedVertex == htd::unknown_vertex)
+                {
+                    throw std::out_of_range("htd::vertex_t htd::LabeledHypergraph::hyperedge(htd::index_t, const VertexLabelType &)");
+                }
+
+                return htd::Hypergraph::hyperedge(index, locatedVertex);
+            }
+
+            htd::vertex_t addVertex(const VertexLabelType & vertexLabel)
+            {
+                htd::vertex_t locatedVertex = vertex(vertexLabel);
+
+                if (locatedVertex != htd::unknown_vertex)
+                {
+                    throw std::logic_error("htd::vertex_t htd::LabeledHypergraph::addVertex(const VertexLabelType &)");
+                }
+
+                htd::vertex_t ret = htd::Hypergraph::addVertex();
+
+                setVertexName(ret, vertexLabel);
 
                 return ret;
             }
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE
             {
-                if (labeling_.hasLabel(vertex))
-                {
-                    labeling_.removeLabel(vertex);
-                }
+                labelings_.removeLabels(vertex);
 
-                htd::MutableHypergraphImpl::removeVertex(vertex);
+                htd::Hypergraph::removeVertex(vertex);
             }
 
-            void removeVertex(VertexLabelType vertex)
+            void removeVertex(const VertexLabelType & vertexLabel)
             {
-                Label<VertexLabelType> label(vertex);
+                htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (labeling_.isVertexLabel(label))
+                if (locatedVertex != htd::unknown_vertex)
                 {
-                    htd::vertex_t selectedVertex = labeling_.getVertex(label);
+                    labelings_.removeLabels(locatedVertex);
 
-                    labeling_.removeLabel(vertex);
-
-                    htd::MutableHypergraphImpl::removeVertex(selectedVertex);
+                    htd::Hypergraph::removeVertex(locatedVertex);
                 }
             }
 
             void removeVertex(htd::vertex_t vertex, bool addNeighborHyperedge) HTD_OVERRIDE
             {
-                if (labeling_.hasLabel(vertex))
-                {
-                    labeling_.removeLabel(vertex);
-                }
+                labelings_.removeLabels(vertex);
 
-                htd::MutableHypergraphImpl::removeVertex(vertex, addNeighborHyperedge);
+                htd::Hypergraph::removeVertex(vertex, addNeighborHyperedge);
             }
 
-            void removeVertex(VertexLabelType vertex, bool addNeighborHyperedge)
+            void removeVertex(const VertexLabelType & vertexLabel, bool addNeighborHyperedge)
             {
-                Label<VertexLabelType> label(vertex);
+                htd::vertex_t locatedVertex = vertex(vertexLabel);
 
-                if (labeling_.isVertexLabel(label))
+                if (locatedVertex != htd::unknown_vertex)
                 {
-                    htd::vertex_t selectedVertex = labeling_.getVertex(label);
+                    labelings_.removeLabels(locatedVertex);
 
-                    labeling_.removeLabel(vertex);
-
-                    htd::MutableHypergraphImpl::removeVertex(selectedVertex, addNeighborHyperedge);
+                    htd::Hypergraph::removeVertex(locatedVertex, addNeighborHyperedge);
                 }
             }
 
-            void addEdge(VertexLabelType vertex1, VertexLabelType vertex2)
+            void addEdge(const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2)
             {
-                Label<VertexLabelType> label1(vertex1);
-                Label<VertexLabelType> label2(vertex2);
+                htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
+                htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
 
-                if (labeling_.isVertexLabel(label1) && labeling_.isVertexLabel(label2))
+                if (locatedVertex1 != htd::unknown_vertex && locatedVertex2 != htd::unknown_vertex)
                 {
-                    htd::MutableHypergraphImpl::addEdge(labeling_.getVertex(label1), labeling_.getVertex(label2));
+                    htd::Hypergraph::addEdge(locatedVertex1, locatedVertex2);
+                }
+                else
+                {
+                    throw std::logic_error("std::size_t htd::LabeledHypergraph::addEdge(const VertexLabelType &, const VertexLabelType &)");
                 }
             }
 
             void addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2, const HyperedgeLabelType & label)
             {
-                htd::MutableHypergraphImpl::addEdge(vertex1, vertex2);
+                htd::Hypergraph::addEdge(vertex1, vertex2);
 
                 htd::hyperedge_t hyperedge;
 
@@ -277,17 +305,20 @@ namespace htd
 
                 hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
 
-                labeling_.setLabel(hyperedge, label->clone());
+                setHyperedgeName(hyperedge, label);
             }
 
-            void addEdge(VertexLabelType vertex1, VertexLabelType vertex2, const HyperedgeLabelType & label)
+            void addEdge(const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2, const HyperedgeLabelType & label)
             {
-                Label<VertexLabelType> label1(vertex1);
-                Label<VertexLabelType> label2(vertex2);
+                Label<VertexLabelType> label1(vertexLabel1);
+                Label<VertexLabelType> label2(vertexLabel2);
 
-                if (labeling_.isVertexLabel(label1) && labeling_.isVertexLabel(label2))
+                htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
+                htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
+
+                if (locatedVertex1 != htd::unknown_vertex && locatedVertex2 != htd::unknown_vertex)
                 {
-                    addEdge(labeling_.getVertex(label1), labeling_.getVertex(label2));
+                    addEdge(locatedVertex1, locatedVertex2);
                 }
             }
 
@@ -299,12 +330,12 @@ namespace htd
 
                 for (auto it = begin; ok && it != end; it++)
                 {
-                    if (!isVertex(*it) || !labeling_.isVertexLabel(*it))
+                    if (!isVertex(*it))
                     {
                         addVertex(*it);
                     }
 
-                    hyperedge.push_back(labeling_.getVertex(*it));
+                    hyperedge.push_back(vertex(*it));
                 }
 
                 if (ok)
@@ -313,17 +344,17 @@ namespace htd
 
                     hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
 
-                    htd::MutableHypergraphImpl::addEdge(hyperedge);
+                    htd::Hypergraph::addEdge(hyperedge);
                 }
             }
 
             void addEdge(htd::vertex_container::const_iterator begin, htd::vertex_container::const_iterator end, const HyperedgeLabelType & label)
             {
-                htd::MutableHypergraphImpl::addEdge(begin, end);
+                htd::Hypergraph::addEdge(begin, end);
 
                 htd::hyperedge_t hyperedge(begin, end);
 
-                labeling_.setLabel(hyperedge, label->clone());
+                setHyperedgeName(hyperedge, label);
             }
 
             void addEdge(typename std::vector<VertexLabelType>::const_iterator begin, typename std::vector<VertexLabelType>::const_iterator end, const HyperedgeLabelType & label)
@@ -334,12 +365,12 @@ namespace htd
 
                 for (auto it = begin; ok && it != end; it++)
                 {
-                    if (!isVertex(*it) || !labeling_.isVertexLabel(*it))
+                    if (!isVertex(*it))
                     {
                         addVertex(*it);
                     }
 
-                    hyperedge.push_back(labeling_.getVertex(*it));
+                    hyperedge.push_back(vertex(*it));
                 }
 
                 if (ok)
@@ -348,9 +379,9 @@ namespace htd
 
                     hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
 
-                    htd::MutableHypergraphImpl::addEdge(hyperedge);
+                    htd::Hypergraph::addEdge(hyperedge);
 
-                    labeling_.setLabel(hyperedge, label->clone());
+                    setHyperedgeName(hyperedge, label);
                 }
             }
 
@@ -391,14 +422,14 @@ namespace htd
                 //TODO Implement
             }
             
-            void removeEdge(VertexLabelType vertex1, VertexLabelType vertex2)
+            void removeEdge(const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2)
             {
-                Label<VertexLabelType> label1(vertex1);
-                Label<VertexLabelType> label2(vertex2);
+                htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
+                htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
 
-                if (labeling_.isVertexLabel(label1) && labeling_.isVertexLabel(label2))
+                if (locatedVertex1 != htd::unknown_vertex && locatedVertex2 != htd::unknown_vertex)
                 {
-                    htd::MutableHypergraphImpl::removeEdge(labeling_.getVertex(label1), labeling_.getVertex(label2));
+                    htd::Hypergraph::removeEdge(locatedVertex1, locatedVertex2);
                 }
             }
             
@@ -410,11 +441,11 @@ namespace htd
 
                 for (auto it = begin; ok && it != end; it++)
                 {
-                    ok = isVertex(*it) && labeling_.isVertexLabel(*it);
+                    ok = isVertex(*it);
 
                     if (ok)
                     {
-                        hyperedge.push_back(labeling_.getVertex(*it));
+                        hyperedge.push_back(vertex(*it));
                     }
                 }
 
@@ -424,9 +455,9 @@ namespace htd
 
                     hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
 
-                    htd::MutableHypergraphImpl::removeEdge(hyperedge);
+                    htd::Hypergraph::removeEdge(hyperedge);
 
-                    labeling_.removeLabel(hyperedge);
+                    labelings_.removeLabels(hyperedge);
                 }
             }
             
@@ -443,11 +474,11 @@ namespace htd
 
                 for (auto & vertex : edge)
                 {
-                    ok = isVertex(vertex) && labeling_.isVertexLabel(vertex);
+                    ok = isVertex(vertex);
 
                     if (ok)
                     {
-                        hyperedge.push_back(labeling_.getVertex(vertex));
+                        hyperedge.push_back(vertex(vertex));
                     }
                 }
 
@@ -457,85 +488,343 @@ namespace htd
 
                     hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
 
-                    htd::MutableHypergraphImpl::removeEdge(hyperedge);
+                    htd::Hypergraph::removeEdge(hyperedge);
 
-                    labeling_.removeLabel(hyperedge);
+                    labelings_.removeLabels(hyperedge);
                 }
             }
 
-            std::size_t vertexLabelCount(void) const
+            std::size_t labelCount(void) const HTD_OVERRIDE
             {
-                return labeling_.vertexLabelCount();
+                return labelings_.labelCount();
             }
 
-            std::size_t hyperedgeLabelCount(void) const
+
+            void getLabelNames(std::vector<std::string> & output) const HTD_OVERRIDE
             {
-                return labeling_.hyperedgeLabelCount();
+                return labelings_.getLabelNames(output);
             }
 
-            bool hasLabel(htd::vertex_t vertex) const
+            std::string labelName(htd::index_t index) const HTD_OVERRIDE
             {
-                return labeling_.hasLabel(vertex);
+                if (index >= labelings_.labelCount())
+                {
+                    throw std::out_of_range("std::string htd::LabeledHypergraph::labelName(htd::index_t) const");
+                }
+
+                return labelings_.labelName(index);
             }
 
-            bool hasLabel(const htd::hyperedge_t & edge) const
+            const htd::ILabel * label(const std::string & labelName, htd::vertex_t vertex) const HTD_OVERRIDE
             {
-                return labeling_.hasLabel(edge);
+                if (!labelings_.isLabelingName(labelName))
+                {
+                    throw std::out_of_range("std::string htd::LabeledHypergraph::labelName(htd::index_t) const");
+                }
+
+                auto labeling = labelings_.labeling(labelName);
+
+                if (labeling->hasLabel(vertex))
+                {
+                    throw std::out_of_range("std::string htd::LabeledHypergraph::labelName(htd::index_t) const");
+                }
+
+                return labeling->label(vertex);
+            }
+
+            htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const HTD_OVERRIDE
+            {
+                if (!labelings_.isLabelingName(labelName))
+                {
+                    throw std::out_of_range("std::string htd::LabeledHypergraph::labelName(htd::index_t) const");
+                }
+
+                return labelings_.labeling(labelName)->clone();
+            }
+
+            bool hasLabel(const std::string & labelName, htd::vertex_t vertex) const
+            {
+                bool ret = false;
+
+                if (labelings_.isLabelingName(labelName))
+                {
+                    auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                    if (labeling != nullptr)
+                    {
+                        ret = labeling->hasLabel(vertex);
+                    }
+                }
+
+                return ret;
+            }
+
+            bool hasLabel(const std::string & labelName, const htd::hyperedge_t & edge) const
+            {
+                bool ret = false;
+
+                if (labelings_.isLabelingName(labelName))
+                {
+                    auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                    if (labeling != nullptr)
+                    {
+                        ret = labeling->hasLabel(edge);
+                    }
+                }
+
+                return ret;
             }
 
             const VertexLabelType & label(htd::vertex_t vertex) const
             {
-                return labeling_.label(vertex);
+                if (!labelings_.isLabelingName(labelName))
+                {
+                    throw std::logic_error("const VertexLabelType & htd::LabeledHypergraph::label(htd::vertex_t) const");
+                }
+
+                auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                if (labeling == nullptr)
+                {
+                    throw std::logic_error("const VertexLabelType & htd::LabeledHypergraph::label(htd::vertex_t) const");
+                }
+
+                if (!labeling->hasLabel(vertex))
+                {
+                    throw std::logic_error("const VertexLabelType & htd::LabeledHypergraph::label(htd::vertex_t) const");
+                }
+
+                auto label = dynamic_cast<htd::Label<VertexLabelType> *>(labeling->label(vertex));
+
+                return *(label->value);
             }
 
             const HyperedgeLabelType & label(const htd::hyperedge_t & edge) const
             {
-                return labeling_.label(edge);
+                if (!labelings_.isLabelingName(labelName))
+                {
+                    throw std::logic_error("const HyperedgeLabelType & htd::LabeledHypergraph::label(const htd::hyperedge_t &) const");
+                }
+
+                auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                if (labeling == nullptr)
+                {
+                    throw std::logic_error("const HyperedgeLabelType & htd::LabeledHypergraph::label(const htd::hyperedge_t &) const");
+                }
+
+                if (!labeling->hasLabel(vertex))
+                {
+                    throw std::logic_error("const HyperedgeLabelType & htd::LabeledHypergraph::label(const htd::hyperedge_t &) const");
+                }
+
+                auto label = dynamic_cast<htd::Label<HyperedgeLabelType> *>(labeling->label(edge));
+
+                return *(label->value);
             }
 
-            void setLabel(htd::vertex_t vertex, const VertexLabelType & label)
+            void setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
             {
-                labeling_.setLabel(vertex, new Label<VertexLabelType>(label));
+                if (labelings_.isLabelingName(labelName))
+                {
+                    labelings_.setLabeling(labelName, new htd::GraphLabeling());
+                }
+
+                auto labeling = dynamic_cast<htd::IGraphLabeling *>(labelings_.labeling(labelName));
+
+                if (labeling != nullptr)
+                {
+                    labeling->setLabel(vertex, label);
+                }
             }
 
-            void setLabel(const htd::hyperedge_t & edge, const HyperedgeLabelType & label)
+            void setLabel(const std::string & labelName, const htd::hyperedge_t & edge, htd::ILabel * label)
             {
-                labeling_.setLabel(edge, new Label<HyperedgeLabelType>(label));
+                if (labelings_.isLabelingName(labelName))
+                {
+                    labelings_.setLabeling(labelName, new htd::GraphLabeling());
+                }
+
+                auto labeling = dynamic_cast<htd::IGraphLabeling *>(labelings_.labeling(labelName));
+
+                if (labeling != nullptr)
+                {
+                    labeling->setLabel(edge, label);
+                }
             }
 
-            void removeLabel(htd::vertex_t vertex)
+            void removeLabel(const std::string & labelName, htd::vertex_t vertex)
             {
-                labeling_.removeLabel(vertex);
+                if (labelings_.isLabelingName(labelName))
+                {
+                    labelings_.setLabeling(labelName, new htd::GraphLabeling());
+                }
+
+                auto labeling = dynamic_cast<htd::IGraphLabeling *>(labelings_.labeling(labelName));
+
+                if (labeling != nullptr)
+                {
+                    labeling->removeLabel(vertex);
+                }
             }
 
-            void removeLabel(const htd::hyperedge_t & edge)
+            void removeLabel(const std::string & labelName, const htd::hyperedge_t & edge)
             {
-                labeling_.removeLabel(edge);
+                if (labelings_.isLabelingName(labelName))
+                {
+                    labelings_.setLabeling(labelName, new htd::GraphLabeling());
+                }
+
+                auto labeling = dynamic_cast<htd::IGraphLabeling *>(labelings_.labeling(labelName));
+
+                if (labeling != nullptr)
+                {
+                    labeling->removeLabel(edge);
+                }
             }
 
-            bool isVertexLabel(const VertexLabelType & label) const
+            bool isVertexName(const VertexLabelType & vertexLabel) const
             {
-                return labeling_.isVertexLabel(label);
+                bool ret = false;
+
+                if (labelings_.isLabelingName(htd::name_label_name))
+                {
+                    auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                    if (labeling != nullptr)
+                    {
+                        Label<VertexLabelType> label(vertexLabel);
+
+                        ret = labeling->isVertexLabel(label);
+                    }
+                }
+
+                return ret;
             }
 
-            bool isHyperedgeLabel(const HyperedgeLabelType & label) const
+            bool isHyperedgeName(const HyperedgeLabelType & edgeLabel) const
             {
-                return labeling_.isHyperedgeLabel(label);
+                bool ret = false;
+
+                if (labelings_.isLabelingName(htd::name_label_name))
+                {
+                    auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                    if (labeling != nullptr)
+                    {
+                        Label<VertexLabelType> label(edgeLabel);
+
+                        ret = labeling->isHyperedgeLabel(label);
+                    }
+                }
+
+                return ret;
             }
 
             htd::vertex_t getVertex(const VertexLabelType & label) const
             {
-                return labeling_.getVertex(label);
+                if (isVertex(label))
+                {
+                    throw std::logic_error("htd::vertex_t htd::LabeledHypergraph::getVertex(const VertexLabelType &) const");
+                }
+
+                return vertex(label);
             }
 
             const htd::hyperedge_t & getHyperedge(const HyperedgeLabelType & label) const
             {
-                return labeling_.getHyperedge(label);
+                if (isHyperedge(label))
+                {
+                    throw std::logic_error("htd::vertex_t htd::LabeledHypergraph::getHyperedge(const HyperedgeLabelType &) const");
+                }
+
+                return hyperedge(label);
             }
 
         private:
-            BidirectionalGraphLabeling labeling_;
+            htd::LabelingCollection labelings_;
+
+            htd::vertex_t vertex(const VertexLabelType & vertexLabel) const
+            {
+                htd::vertex_t ret = htd::unknown_vertex;
+
+                if (labelings_.isLabelingName(htd::name_label_name))
+                {
+                    auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                    if (labeling != nullptr)
+                    {
+                        Label<VertexLabelType> label(vertexLabel);
+
+                        if (labeling->isVertexLabel(label))
+                        {
+                            ret = labeling->getVertex(label);
+                        }
+                    }
+                }
+
+                return ret;
+            }
+
+            const htd::hyperedge_t & hyperedge(const HyperedgeLabelType & edgeLabel) const
+            {
+                if (!labelings_.isLabelingName(htd::name_label_name))
+                {
+                    throw std::logic_error("const htd::hyperedge_t & htd::LabeledHypergraph::hyperedge(const HyperedgeLabelType &) const");
+                }
+
+                auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                if (labeling == nullptr)
+                {
+                    throw std::logic_error("const htd::hyperedge_t & htd::LabeledHypergraph::hyperedge(const HyperedgeLabelType &) const");
+                }
+
+                Label<VertexLabelType> label(edgeLabel);
+
+                if (!labeling->isHyperedgeLabel(label))
+                {
+                    throw std::logic_error("const htd::hyperedge_t & htd::LabeledHypergraph::hyperedge(const HyperedgeLabelType &) const");
+                }
+
+                return labeling->getHyperedge(label);
+            }
+
+            void setVertexName(htd::vertex_t vertex, const VertexLabelType & vertexLabel)
+            {
+                if (labelings_.isLabelingName(htd::name_label_name))
+                {
+                    labelings_.setLabeling(htd::name_label_name, new htd::BidirectionalGraphLabeling());
+                }
+
+                auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                if (labeling != nullptr)
+                {
+                    Label<VertexLabelType> label(vertexLabel);
+
+                    labeling->setLabel(vertex, label);
+                }
+            }
+
+            void setHyperedgeName(const htd::hyperedge_t & edge, const HyperedgeLabelType & edgeLabel)
+            {
+                if (labelings_.isLabelingName(htd::name_label_name))
+                {
+                    labelings_.setLabeling(htd::name_label_name, new htd::BidirectionalGraphLabeling());
+                }
+
+                auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+
+                if (labeling != nullptr)
+                {
+                    Label<HyperedgeLabelType> label(edgeLabel);
+
+                    labeling->setLabel(edge, label);
+                }
+            }
     };
 }
 
-#endif /* HTD_HTD_MUTABLELABELEDHYPERGRAPHIMPL_HPP */
+#endif /* HTD_HTD_LABELEDHYPERGRAPH_HPP */

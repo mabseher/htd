@@ -1,5 +1,5 @@
 /* 
- * File:   HeuristicSetCoverAlgorithmImpl.hpp
+ * File:   HeuristicSetCoverAlgorithm.hpp
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_HEURISTICSETCOVERALGORITHMIMPL_HPP
-#define	HTD_HTD_HEURISTICSETCOVERALGORITHMIMPL_HPP
+#ifndef HTD_HTD_HEURISTICSETCOVERALGORITHM_HPP
+#define	HTD_HTD_HEURISTICSETCOVERALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
@@ -33,17 +33,17 @@
 
 namespace htd
 {
-    class HeuristicSetCoverAlgorithmImpl : public htd::ISetCoverAlgorithm
+    class HeuristicSetCoverAlgorithm : public htd::ISetCoverAlgorithm
     {
         public:
-            HeuristicSetCoverAlgorithmImpl(void);
+            HeuristicSetCoverAlgorithm(void);
             
-            ~HeuristicSetCoverAlgorithmImpl();
+            ~HeuristicSetCoverAlgorithm();
             
             void computeSetCover(const htd::vertex_container& vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::vertex_container> & result) const HTD_OVERRIDE;
 
         protected:
-            HeuristicSetCoverAlgorithmImpl & operator=(const HeuristicSetCoverAlgorithmImpl &) { return *this; }
+            HeuristicSetCoverAlgorithm & operator=(const HeuristicSetCoverAlgorithm &) { return *this; }
 
 
         private:
@@ -92,4 +92,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_HEURISTICSETCOVERALGORITHMIMPL_HPP */
+#endif /* HTD_HTD_HEURISTICSETCOVERALGORITHM_HPP */

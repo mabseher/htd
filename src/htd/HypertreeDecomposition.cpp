@@ -1,5 +1,5 @@
 /* 
- * File:   MutableHypertreeDecompositionImpl.cpp
+ * File:   HypertreeDecomposition.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,35 +22,34 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MUTABLEHYPERTREEDECOMPOSITIONIMPL_CPP
-#define	HTD_HTD_MUTABLEHYPERTREEDECOMPOSITIONIMPL_CPP
+#ifndef HTD_HTD_HYPERTREEDECOMPOSITION_CPP
+#define	HTD_HTD_HYPERTREEDECOMPOSITION_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/MutableHypertreeDecompositionImpl.hpp>
+#include <htd/TreeDecomposition.hpp>
+#include <htd/HypertreeDecomposition.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/HyperedgeContainerLabel.hpp>
 
 #include <algorithm>
 
-htd::MutableHypertreeDecompositionImpl::MutableHypertreeDecompositionImpl(void)
-    : MutableTreeDecompositionImpl()
+htd::HypertreeDecomposition::HypertreeDecomposition(void) : TreeDecomposition()
 {
     
 }
 
-htd::MutableHypertreeDecompositionImpl::MutableHypertreeDecompositionImpl(const htd::ILabeledTree & original)
-    : MutableTreeDecompositionImpl(original)
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::ILabeledTree & original) : TreeDecomposition(original)
 {
 
 }
 
-htd::MutableHypertreeDecompositionImpl::~MutableHypertreeDecompositionImpl()
+htd::HypertreeDecomposition::~HypertreeDecomposition()
 {
 
 }
 
-void htd::MutableHypertreeDecompositionImpl::getEdgeLabel(htd::vertex_t vertex, htd::hyperedge_container & output) const
+void htd::HypertreeDecomposition::getEdgeLabel(htd::vertex_t vertex, htd::hyperedge_container & output) const
 {
     if (isVertex(vertex))
     {
@@ -67,13 +66,13 @@ void htd::MutableHypertreeDecompositionImpl::getEdgeLabel(htd::vertex_t vertex, 
     }
 }
 
-void htd::MutableHypertreeDecompositionImpl::setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & labelContent)
+void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & labelContent)
 {
     HTD_UNUSED(vertex);
     HTD_UNUSED(labelContent);
 
     //TODO Implement
-    throw std::out_of_range("void htd::MutableHypertreeDecompositionImpl::setEdgeLabel(htd::vertex_t, const htd::hyperedge_container &)");
+    throw std::out_of_range("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::hyperedge_container &)");
 }
 
-#endif /* HTD_HTD_MUTABLEHYPERTREEDECOMPOSITIONIMPL_CPP */
+#endif /* HTD_HTD_HYPERTREEDECOMPOSITION_CPP */

@@ -1,5 +1,5 @@
 /* 
- * File:   HypertreeDecompositionAlgorithmImpl.cpp
+ * File:   HypertreeDecompositionAlgorithm.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,15 +22,17 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHMIMPL_CPP
-#define	HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHMIMPL_CPP
+#ifndef HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_CPP
+#define	HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_CPP
 
-#include <htd/HypertreeDecompositionAlgorithmImpl.hpp>
+#include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
+
+#include <htd/HypertreeDecompositionAlgorithm.hpp>
 
 #include <htd/IHypertreeDecomposition.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/IMutableLabeledTree.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
 #include <htd/VertexContainerLabel.hpp>
 #include <htd/HyperedgeContainerLabel.hpp>
@@ -40,23 +42,23 @@
 #include <stack>
 #include <vector>
 
-htd::HypertreeDecompositionAlgorithmImpl::HypertreeDecompositionAlgorithmImpl(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm) : treeDecompositionAlgorithm_(treeDecompositionAlgorithm)
+htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm) : treeDecompositionAlgorithm_(treeDecompositionAlgorithm)
 {
 
 }
 
-htd::HypertreeDecompositionAlgorithmImpl::HypertreeDecompositionAlgorithmImpl(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions) : treeDecompositionAlgorithm_(treeDecompositionAlgorithm)
+htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions) : treeDecompositionAlgorithm_(treeDecompositionAlgorithm)
 {
     //TODO
     HTD_UNUSED(labelingFunctions);
 }
 
-htd::HypertreeDecompositionAlgorithmImpl::~HypertreeDecompositionAlgorithmImpl()
+htd::HypertreeDecompositionAlgorithm::~HypertreeDecompositionAlgorithm()
 {
     
 }
 
-htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithmImpl::computeDecomposition(const htd::IHypergraph & graph) const
+htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
 {
     htd::IMutableHypertreeDecomposition * ret = nullptr;
 
@@ -64,11 +66,11 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithmImpl::compute
 
     if (treeDecomposition != nullptr)
     {
-        ret = htd::getDefaultMutableHypertreeDecompositionImplementation(*treeDecomposition);
+        ret = htd::getDefaultHypertreeDecomposition(*treeDecomposition);
 
         if (ret != nullptr)
         {
-            htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::getDefaultSetCoverAlgorithmImplementation();
+            htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::getDefaultSetCoverAlgorithm();
 
             if (setCoverAlgorithm != nullptr)
             {
@@ -97,7 +99,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithmImpl::compute
     return ret;
 }
 
-htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithmImpl::computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const
+htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const
 {
     va_list arguments;
 
@@ -113,7 +115,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithmImpl::compute
     return computeDecomposition(graph, labelingFunctions);
 }
 
-htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithmImpl::computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     htd::IMutableHypertreeDecomposition * ret = nullptr;
 
@@ -121,11 +123,11 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithmImpl::compute
 
     if (treeDecomposition != nullptr)
     {
-        ret = htd::getDefaultMutableHypertreeDecompositionImplementation(*treeDecomposition);
+        ret = htd::getDefaultHypertreeDecomposition(*treeDecomposition);
 
         if (ret != nullptr)
         {
-            htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::getDefaultSetCoverAlgorithmImplementation();
+            htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::getDefaultSetCoverAlgorithm();
 
             if (setCoverAlgorithm != nullptr)
             {
@@ -166,4 +168,4 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithmImpl::compute
     return ret;
 }
 
-#endif /* HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHMIMPL_CPP */
+#endif /* HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_CPP */

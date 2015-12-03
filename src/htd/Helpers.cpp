@@ -27,7 +27,7 @@
 
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/HypertreeDecompositionAlgorithmImpl.hpp>
+#include <htd/HypertreeDecompositionAlgorithm.hpp>
 #include <htd/IMutableGraph.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
 #include <htd/IMutableHypergraph.hpp>
@@ -37,15 +37,14 @@
 #include <htd/ITreeDecomposition.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
-#include <htd/MutableHypergraphImpl.hpp>
-#include <htd/MutableGraphImpl.hpp>
-#include <htd/MutableDirectedGraphImpl.hpp>
-#include <htd/MutableTreeDecompositionImpl.hpp>
-#include <htd/MutableHypertreeDecompositionImpl.hpp>
+#include <htd/Hypergraph.hpp>
+#include <htd/Graph.hpp>
+#include <htd/DirectedGraph.hpp>
+#include <htd/TreeDecomposition.hpp>
+#include <htd/HypertreeDecomposition.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
-#include <htd/SetCoverAlgorithmImpl.hpp>
-#include <htd/MutableHypergraphImpl.hpp>
-#include <htd/MinFillOrderingAlgorithmImpl.hpp>
+#include <htd/SetCoverAlgorithm.hpp>
+#include <htd/MinFillOrderingAlgorithm.hpp>
 
 void htd::print(bool input)
 {
@@ -65,19 +64,34 @@ void htd::print<std::string>(const std::string & input)
     std::cout << "\"" << input << "\"";
 }
 
-htd::IMutableGraph * htd::getDefaultMutableGraphImplementation(std::size_t size)
+htd::IMutableGraph * htd::getDefaultGraph(void)
 {
-    return new htd::MutableGraphImpl(size);
+    return new htd::Graph();
 }
 
-htd::IMutableHypergraph * htd::getDefaultMutableHypergraphImplementation(std::size_t size)
+htd::IMutableGraph * htd::getDefaultGraph(std::size_t size)
 {
-    return new htd::MutableHypergraphImpl(size);
+    return new htd::Graph(size);
 }
 
-htd::IMutableDirectedGraph * htd::getDefaultMutableDirectedGraphImplementation(std::size_t size)
+htd::IMutableHypergraph * htd::getDefaultHypergraph(void)
 {
-    return new htd::MutableDirectedGraphImpl(size);
+    return new htd::Hypergraph();
+}
+
+htd::IMutableHypergraph * htd::getDefaultHypergraph(std::size_t size)
+{
+    return new htd::Hypergraph(size);
+}
+
+htd::IMutableDirectedGraph * htd::getDefaultDirectedGraph(void)
+{
+    return new htd::DirectedGraph();
+}
+
+htd::IMutableDirectedGraph * htd::getDefaultDirectedGraph(std::size_t size)
+{
+    return new htd::DirectedGraph(size);
 }
 
 htd::ITreeDecompositionAlgorithm * htd::getDefaultTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm)
@@ -85,54 +99,44 @@ htd::ITreeDecompositionAlgorithm * htd::getDefaultTreeDecompositionAlgorithm(con
     return new htd::BucketEliminationTreeDecompositionAlgorithm(orderingAlgorithm);
 }
 
-htd::IMutableLabeledTree * htd::getDefaultMutableLabeledTreeImplementation(void)
+htd::IMutableTreeDecomposition * htd::getDefaultTreeDecomposition(void)
 {
-    return new htd::MutableTreeDecompositionImpl();
-}
-    
-htd::IMutableLabeledTree * htd::getDefaultMutableLabeledTreeImplementation(const htd::ILabeledTree & decomposition)
-{
-    return new htd::MutableTreeDecompositionImpl(decomposition);
+    return new htd::TreeDecomposition();
 }
 
-htd::IMutableTreeDecomposition * htd::getDefaultMutableTreeDecompositionImplementation(void)
+htd::IMutableTreeDecomposition * htd::getDefaultTreeDecomposition(const htd::ITreeDecomposition & decomposition)
 {
-    return new htd::MutableTreeDecompositionImpl();
+    return new htd::TreeDecomposition(decomposition);
 }
 
-htd::IMutableTreeDecomposition * htd::getDefaultMutableTreeDecompositionImplementation(const htd::ITreeDecomposition & decomposition)
+htd::IMutableHypertreeDecomposition * htd::getDefaultHypertreeDecomposition(void)
 {
-    return new htd::MutableTreeDecompositionImpl(decomposition);
+    return new htd::HypertreeDecomposition();
 }
 
-htd::IMutableHypertreeDecomposition * htd::getDefaultMutableHypertreeDecompositionImplementation(void)
+htd::IMutableHypertreeDecomposition * htd::getDefaultHypertreeDecomposition(const htd::ITreeDecomposition & decomposition)
 {
-    return new htd::MutableHypertreeDecompositionImpl();
+    return new htd::HypertreeDecomposition(decomposition);
 }
 
-htd::IMutableHypertreeDecomposition * htd::getDefaultMutableHypertreeDecompositionImplementation(const htd::ITreeDecomposition & decomposition)
+htd::IMutableHypertreeDecomposition * htd::getDefaultHypertreeDecomposition(const htd::IHypertreeDecomposition & decomposition)
 {
-    return new htd::MutableHypertreeDecompositionImpl(decomposition);
-}
-
-htd::IMutableHypertreeDecomposition * htd::getDefaultMutableHypertreeDecompositionImplementation(const htd::IHypertreeDecomposition & decomposition)
-{
-    return new htd::MutableHypertreeDecompositionImpl(decomposition);
+    return new htd::HypertreeDecomposition(decomposition);
 }
 
 htd::IHypertreeDecompositionAlgorithm * htd::getDefaultHypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm)
 {
-    return new htd::HypertreeDecompositionAlgorithmImpl(treeDecompositionAlgorithm);
+    return new htd::HypertreeDecompositionAlgorithm(treeDecompositionAlgorithm);
 }
 
-htd::IOrderingAlgorithm * htd::getDefaultOrderingAlgorithmImplementation(void)
+htd::IOrderingAlgorithm * htd::getDefaultOrderingAlgorithm(void)
 {
-    return new htd::MinFillOrderingAlgorithmImpl();
+    return new htd::MinFillOrderingAlgorithm();
 }
 
-htd::ISetCoverAlgorithm * htd::getDefaultSetCoverAlgorithmImplementation(void)
+htd::ISetCoverAlgorithm * htd::getDefaultSetCoverAlgorithm(void)
 {
-    return new htd::SetCoverAlgorithmImpl();
+    return new htd::SetCoverAlgorithm();
 }
 
 #endif /* HTD_HTD_HELPERS_CPP */

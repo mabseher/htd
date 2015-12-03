@@ -1,5 +1,5 @@
 /* 
- * File:   TreeDecompositionVerifierImpl.cpp
+ * File:   TreeDecompositionVerifier.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,37 +22,37 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_TREEDECOMPOSITIONVERIFIERIMPL_CPP
-#define	HTD_HTD_TREEDECOMPOSITIONVERIFIERIMPL_CPP
+#ifndef HTD_HTD_TREEDECOMPOSITIONVERIFIER_CPP
+#define	HTD_HTD_TREEDECOMPOSITIONVERIFIER_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/IHypergraph.hpp>
 #include <htd/ILabeledTree.hpp>
-#include <htd/TreeDecompositionVerifierImpl.hpp>
+#include <htd/TreeDecompositionVerifier.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
 #include <map>
 #include <algorithm>
 #include <unordered_map>
 
-htd::TreeDecompositionVerifierImpl::TreeDecompositionVerifierImpl(void)
+htd::TreeDecompositionVerifier::TreeDecompositionVerifier(void)
 {
     
 }
 
-htd::TreeDecompositionVerifierImpl::~TreeDecompositionVerifierImpl()
+htd::TreeDecompositionVerifier::~TreeDecompositionVerifier()
 {
     
 }
 
-bool htd::TreeDecompositionVerifierImpl::verify(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
+bool htd::TreeDecompositionVerifier::verify(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
 {
     return verifyVertexExistence(graph, decomposition) && verifyHyperEdgeCoverage(graph, decomposition) && verifyConnectednessCriterion(graph, decomposition);
 }
 
 //Ensure that every vertex of the original graph is contained in at least one node of the tree decomposition.
-bool htd::TreeDecompositionVerifierImpl::verifyVertexExistence(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
+bool htd::TreeDecompositionVerifier::verifyVertexExistence(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
 {
     htd::vertex_container result;
     
@@ -62,7 +62,7 @@ bool htd::TreeDecompositionVerifierImpl::verifyVertexExistence(const htd::IHyper
 }
 
 //Ensure that the vertices of an edge in the input graph occur jointly in at least on of the tree decomposition.
-bool htd::TreeDecompositionVerifierImpl::verifyHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
+bool htd::TreeDecompositionVerifier::verifyHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
 {
     htd::hyperedge_container result;
     
@@ -72,7 +72,7 @@ bool htd::TreeDecompositionVerifierImpl::verifyHyperEdgeCoverage(const htd::IHyp
 }
 
 //Ensure for each vertex of the input graph that the bags containing the specific vertex are connected.
-bool htd::TreeDecompositionVerifierImpl::verifyConnectednessCriterion(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
+bool htd::TreeDecompositionVerifier::verifyConnectednessCriterion(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const
 {
     htd::vertex_container result;
     
@@ -81,7 +81,7 @@ bool htd::TreeDecompositionVerifierImpl::verifyConnectednessCriterion(const htd:
     return result.empty();
 }
 
-void htd::TreeDecompositionVerifierImpl::getViolationsVertexExistence(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::vertex_container & output) const
+void htd::TreeDecompositionVerifier::getViolationsVertexExistence(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::vertex_container & output) const
 {
     bool ret = false;
     
@@ -121,7 +121,7 @@ void htd::TreeDecompositionVerifierImpl::getViolationsVertexExistence(const htd:
     }
 }
             
-void htd::TreeDecompositionVerifierImpl::getViolationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::hyperedge_container & output) const
+void htd::TreeDecompositionVerifier::getViolationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::hyperedge_container & output) const
 {
     bool ret = false;
     
@@ -183,7 +183,7 @@ void htd::TreeDecompositionVerifierImpl::getViolationsHyperEdgeCoverage(const ht
     }
 }
 
-void htd::TreeDecompositionVerifierImpl::getViolationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::vertex_container & output) const
+void htd::TreeDecompositionVerifier::getViolationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::vertex_container & output) const
 {
     bool ok = false;
     
@@ -236,7 +236,7 @@ void htd::TreeDecompositionVerifierImpl::getViolationsConnectednessCriterion(con
     }
 }
 
-void htd::TreeDecompositionVerifierImpl::getReachableVertices(htd::vertex_t start, const htd::ILabeledTree & decomposition, const htd::vertex_container & filter, htd::vertex_container & output) const
+void htd::TreeDecompositionVerifier::getReachableVertices(htd::vertex_t start, const htd::ILabeledTree & decomposition, const htd::vertex_container & filter, htd::vertex_container & output) const
 {
     std::size_t size = decomposition.vertexCount();
     
@@ -302,4 +302,4 @@ void htd::TreeDecompositionVerifierImpl::getReachableVertices(htd::vertex_t star
     }
 }
 
-#endif /* HTD_HTD_TREEDECOMPOSITIONVERIFIERIMPL_CPP */
+#endif /* HTD_HTD_TREEDECOMPOSITIONVERIFIER_CPP */

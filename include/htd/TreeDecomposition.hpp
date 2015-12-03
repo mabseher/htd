@@ -1,5 +1,5 @@
 /* 
- * File:   MutableTreeDecompositionImpl.hpp
+ * File:   TreeDecomposition.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MUTABLETREEDECOMPOSITIONIMPL_HPP
-#define	HTD_HTD_MUTABLETREEDECOMPOSITIONIMPL_HPP
+#ifndef HTD_HTD_TREEDECOMPOSITION_HPP
+#define	HTD_HTD_TREEDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
@@ -37,16 +37,16 @@
 
 namespace htd
 {
-    class MutableTreeDecompositionImpl : public virtual htd::IMutableTreeDecomposition
+    class TreeDecomposition : public virtual htd::IMutableTreeDecomposition
     {
         public:
-            MutableTreeDecompositionImpl(void);
+            TreeDecomposition(void);
             
-            MutableTreeDecompositionImpl(const htd::ILabeledTree& original);
+            TreeDecomposition(const htd::ILabeledTree & original);
             
-            MutableTreeDecompositionImpl(const htd::MutableTreeDecompositionImpl& original);
+            TreeDecomposition(const htd::TreeDecomposition & original);
             
-            ~MutableTreeDecompositionImpl();
+            ~TreeDecomposition();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -102,11 +102,11 @@ namespace htd
 
             std::string labelName(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::ILabel * label(std::string labelName, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::ILabel * label(const std::string & labelName, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void setLabel(std::string labelName, htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
+            void setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
 
-            void removeLabel(std::string labelName, htd::vertex_t vertex) HTD_OVERRIDE;
+            void removeLabel(const std::string & labelName, htd::vertex_t vertex) HTD_OVERRIDE;
 
             htd::vertex_t root(void) const HTD_OVERRIDE;
 
@@ -220,11 +220,11 @@ namespace htd
 
             bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            void swapLabel(std::string labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+            void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
-            htd::IGraphLabeling * cloneLabeling(std::string labelName) const;
+            htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const;
 
-            MutableTreeDecompositionImpl& operator=(const MutableTreeDecompositionImpl& other);
+            TreeDecomposition & operator=(const TreeDecomposition & other);
 
         protected:
 
@@ -254,16 +254,16 @@ namespace htd
 
             std::unordered_map<std::string, htd::IGraphLabeling *> labelings_;
 
-            std::size_t size(htd::MutableTreeDecompositionImpl::TreeNode * start) const;
+            std::size_t size(htd::TreeDecomposition::TreeNode * start) const;
 
             void getChildrenVertexLabelSetUnion(htd::vertex_t vertex, htd::vertex_container & output) const;
 
-            void deleteSubtree(htd::MutableTreeDecompositionImpl::TreeNode * start);
+            void deleteSubtree(htd::TreeDecomposition::TreeNode * start);
 
-            void deleteNode(htd::MutableTreeDecompositionImpl::TreeNode * node);
+            void deleteNode(htd::TreeDecomposition::TreeNode * node);
 
             void copy(const htd::ILabeledTree& original, htd::vertex_t vertex);
     };
 }
 
-#endif /* HTD_HTD_MUTABLETREEDECOMPOSITIONIMPL_HPP */
+#endif /* HTD_HTD_TREEDECOMPOSITION_HPP */

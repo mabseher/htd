@@ -1,5 +1,5 @@
 /* 
- * File:   MutableHypertreeDecompositionImpl.hpp
+ * File:   HypertreeDecomposition.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,12 +22,12 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MUTABLEHYPERTREEDECOMPOSITIONIMPL_HPP
-#define	HTD_HTD_MUTABLEHYPERTREEDECOMPOSITIONIMPL_HPP
+#ifndef HTD_HTD_HYPERTREEDECOMPOSITION_HPP
+#define	HTD_HTD_HYPERTREEDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/MutableTreeDecompositionImpl.hpp>
+#include <htd/TreeDecomposition.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/ILabeledTree.hpp>
 #include <htd/IGraphLabeling.hpp>
@@ -38,14 +38,14 @@
 
 namespace htd
 {
-    class MutableHypertreeDecompositionImpl : public MutableTreeDecompositionImpl, public virtual htd::IMutableHypertreeDecomposition
+    class HypertreeDecomposition : public TreeDecomposition, public virtual htd::IMutableHypertreeDecomposition
     {
         public:
-            MutableHypertreeDecompositionImpl(void);
+            HypertreeDecomposition(void);
             
-            MutableHypertreeDecompositionImpl(const htd::ILabeledTree & original);
+            HypertreeDecomposition(const htd::ILabeledTree & original);
             
-            ~MutableHypertreeDecompositionImpl();
+            ~HypertreeDecomposition();
 
             void getEdgeLabel(htd::vertex_t vertex, htd::hyperedge_container & output) const HTD_OVERRIDE;
 
@@ -53,4 +53,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_MUTABLEHYPERTREEDECOMPOSITIONIMPL_HPP */
+#endif /* HTD_HTD_HYPERTREEDECOMPOSITION_HPP */

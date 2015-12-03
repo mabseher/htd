@@ -36,11 +36,11 @@ namespace htd
         public:
             virtual ~IMutableLabeledTree() = 0;
 
-            virtual void setLabel(std::string labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;
+            virtual void setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;
 
-            virtual void swapLabel(std::string labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+            virtual void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
-            virtual void removeLabel(std::string labelName, htd::vertex_t vertex) = 0;
+            virtual void removeLabel(const std::string & labelName, htd::vertex_t vertex) = 0;
     };
 
     inline htd::IMutableLabeledTree::~IMutableLabeledTree() { }

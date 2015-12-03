@@ -411,7 +411,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
     }
     else
     {
-        ret = htd::getDefaultMutableTreeDecompositionImplementation();
+        ret = htd::getDefaultTreeDecomposition();
 
         ret->insertRoot();
     }
@@ -517,7 +517,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::getUnreachableVertices(ht
 
 htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::createRootedTreeDecomposition(htd::vertex_t root, const std::vector<htd::vertex_container> & neighbors, const std::vector<std::vector<htd::id_t>> & buckets) const
 {
-    htd::IMutableTreeDecomposition * ret = htd::getDefaultMutableTreeDecompositionImplementation();
+    htd::IMutableTreeDecomposition * ret = htd::getDefaultTreeDecomposition();
 
     if (root != htd::unknown_vertex)
     {

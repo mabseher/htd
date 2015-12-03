@@ -1,5 +1,5 @@
 /* 
- * File:   MinDegreeOrderingAlgorithmImpl.cpp
+ * File:   MinDegreeOrderingAlgorithm.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,13 +22,13 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MINDEGREEORDERINGALGORITHMIMPL_CPP
-#define	HTD_HTD_MINDEGREEORDERINGALGORITHMIMPL_CPP
+#ifndef HTD_HTD_MINDEGREEORDERINGALGORITHM_CPP
+#define	HTD_HTD_MINDEGREEORDERINGALGORITHM_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/IHypergraph.hpp>
-#include <htd/MinDegreeOrderingAlgorithmImpl.hpp>
+#include <htd/MinDegreeOrderingAlgorithm.hpp>
 
 #include <cstdlib>
 #include <set>
@@ -38,17 +38,17 @@
 //TODO Remove
 #include <iostream>
 
-htd::MinDegreeOrderingAlgorithmImpl::MinDegreeOrderingAlgorithmImpl(void)
+htd::MinDegreeOrderingAlgorithm::MinDegreeOrderingAlgorithm(void)
 {
     
 }
             
-htd::MinDegreeOrderingAlgorithmImpl::~MinDegreeOrderingAlgorithmImpl()
+htd::MinDegreeOrderingAlgorithm::~MinDegreeOrderingAlgorithm()
 {
     
 }
 
-void htd::MinDegreeOrderingAlgorithmImpl::computeOrdering(const IHypergraph& graph, std::vector<htd::vertex_t>& result) const
+void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t>& result) const
 {
     std::size_t size = graph.vertexCount();
     
@@ -191,10 +191,11 @@ void htd::MinDegreeOrderingAlgorithmImpl::computeOrdering(const IHypergraph& gra
     }
 }
 
-void htd::MinDegreeOrderingAlgorithmImpl::set_union(const std::vector<htd::vertex_t> & set1,
-                                                    const std::vector<htd::vertex_t> & set2,
-                                                    htd::vertex_t ignoredVertex,
-                                                    std::vector<htd::vertex_t> & result) const
+//TODO Refactor
+void htd::MinDegreeOrderingAlgorithm::set_union(const std::vector<htd::vertex_t> & set1,
+                                                const std::vector<htd::vertex_t> & set2,
+                                                htd::vertex_t ignoredVertex,
+                                                std::vector<htd::vertex_t> & result) const
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();
@@ -272,4 +273,4 @@ void htd::MinDegreeOrderingAlgorithmImpl::set_union(const std::vector<htd::verte
     }
 }
 
-#endif /* HTD_HTD_MINDEGREEORDERINGALGORITHMIMPL_CPP */
+#endif /* HTD_HTD_MINDEGREEORDERINGALGORITHM_CPP */

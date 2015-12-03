@@ -1,5 +1,5 @@
 /* 
- * File:   HeuristicSetCoverAlgorithmImpl.cpp
+ * File:   HeuristicSetCoverAlgorithm.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,36 +22,36 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_HEURISTICSETCOVERALGORITHMIMPL_CPP
-#define	HTD_HTD_HEURISTICSETCOVERALGORITHMIMPL_CPP
+#ifndef HTD_HTD_HEURISTICSETCOVERALGORITHM_CPP
+#define	HTD_HTD_HEURISTICSETCOVERALGORITHM_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/HeuristicSetCoverAlgorithmImpl.hpp>
+#include <htd/HeuristicSetCoverAlgorithm.hpp>
 
 #include <cstdlib>
 #include <algorithm>
 #include <unordered_set>
 
-htd::HeuristicSetCoverAlgorithmImpl::HeuristicSetCoverAlgorithmImpl(void)
+htd::HeuristicSetCoverAlgorithm::HeuristicSetCoverAlgorithm(void)
 {
     
 }
             
-htd::HeuristicSetCoverAlgorithmImpl::~HeuristicSetCoverAlgorithmImpl()
+htd::HeuristicSetCoverAlgorithm::~HeuristicSetCoverAlgorithm()
 {
     
 }
 
-void htd::HeuristicSetCoverAlgorithmImpl::computeSetCover(const htd::vertex_container& vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::vertex_container> & result) const
+void htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::vertex_container& vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::vertex_container> & result) const
 {
     std::vector<htd::id_t> relevantContainers;
 
     std::unordered_set<htd::id_t> remainder(vertices.begin(), vertices.end());
 
-    std::vector<htd::HeuristicSetCoverAlgorithmImpl::HistoryEntry> oldNeighborhood;
+    std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> oldNeighborhood;
 
-    std::vector<htd::HeuristicSetCoverAlgorithmImpl::HistoryEntry> newNeighborhood;
+    std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> newNeighborhood;
 
     std::vector<std::vector<htd::id_t>> solutions;
 
@@ -104,7 +104,7 @@ void htd::HeuristicSetCoverAlgorithmImpl::computeSetCover(const htd::vertex_cont
         std::cout << std::endl;
     })
 
-    newNeighborhood.push_back(htd::HeuristicSetCoverAlgorithmImpl::HistoryEntry(std::vector<htd::id_t>(), remainder, relevantContainers));
+    newNeighborhood.push_back(htd::HeuristicSetCoverAlgorithm::HistoryEntry(std::vector<htd::id_t>(), remainder, relevantContainers));
 
     std::size_t oldSolutionCount = 0;
 
@@ -186,7 +186,7 @@ void htd::HeuristicSetCoverAlgorithmImpl::computeSetCover(const htd::vertex_cont
     }
 }
 
-void htd::HeuristicSetCoverAlgorithmImpl::populateNeighborhood(const std::vector<htd::vertex_container>& containers, std::vector<htd::HeuristicSetCoverAlgorithmImpl::HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const std::vector<htd::HeuristicSetCoverAlgorithmImpl::HistoryEntry> & origin) const
+void htd::HeuristicSetCoverAlgorithm::populateNeighborhood(const std::vector<htd::vertex_container>& containers, std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & origin) const
 {
     if (origin.size() > 0)
     {
@@ -219,7 +219,7 @@ void htd::HeuristicSetCoverAlgorithmImpl::populateNeighborhood(const std::vector
     }
 }
 
-void htd::HeuristicSetCoverAlgorithmImpl::populateNeighborhood(const std::vector<htd::vertex_container>& containers, std::vector<htd::HeuristicSetCoverAlgorithmImpl::HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const htd::HeuristicSetCoverAlgorithmImpl::HistoryEntry & individual) const
+void htd::HeuristicSetCoverAlgorithm::populateNeighborhood(const std::vector<htd::vertex_container>& containers, std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const htd::HeuristicSetCoverAlgorithm::HistoryEntry & individual) const
 {
     std::vector<htd::index_t> indices1(individual.availableChoices.size());
     std::vector<htd::index_t> indices2(individual.selection.size());
@@ -249,7 +249,7 @@ void htd::HeuristicSetCoverAlgorithmImpl::populateNeighborhood(const std::vector
 
         auto & selectedContainer = containers[newChoice];
 
-        newNeighborhood.push_back(htd::HeuristicSetCoverAlgorithmImpl::HistoryEntry(individual.selection, individual.remainder, individual.availableChoices));
+        newNeighborhood.push_back(htd::HeuristicSetCoverAlgorithm::HistoryEntry(individual.selection, individual.remainder, individual.availableChoices));
 
         auto & newEntry = newNeighborhood[newNeighborhood.size() - 1];
 
@@ -274,7 +274,7 @@ void htd::HeuristicSetCoverAlgorithmImpl::populateNeighborhood(const std::vector
 
         auto & selectedContainer = containers[oldChoice];
 
-        newNeighborhood.push_back(htd::HeuristicSetCoverAlgorithmImpl::HistoryEntry(individual.selection, individual.remainder, individual.availableChoices));
+        newNeighborhood.push_back(htd::HeuristicSetCoverAlgorithm::HistoryEntry(individual.selection, individual.remainder, individual.availableChoices));
 
         auto & newEntry = newNeighborhood[newNeighborhood.size() - 1];
 
@@ -306,5 +306,4 @@ void htd::HeuristicSetCoverAlgorithmImpl::populateNeighborhood(const std::vector
     }
 }
 
-#endif /* HTD_HTD_HEURISTICSETCOVERALGORITHMIMPL_CPP */
-
+#endif /* HTD_HTD_HEURISTICSETCOVERALGORITHM_CPP */

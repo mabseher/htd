@@ -1,5 +1,5 @@
 /* 
- * File:   TreeDecompositionVerifierImpl.hpp
+ * File:   TreeDecompositionVerifier.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_TREEDECOMPOSITIONVERIFIERIMPL_HPP
-#define	HTD_HTD_TREEDECOMPOSITIONVERIFIERIMPL_HPP
+#ifndef HTD_HTD_TREEDECOMPOSITIONVERIFIER_HPP
+#define	HTD_HTD_TREEDECOMPOSITIONVERIFIER_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
@@ -32,12 +32,12 @@
 
 namespace htd
 {
-    class TreeDecompositionVerifierImpl : public htd::ITreeDecompositionVerifier
+    class TreeDecompositionVerifier : public htd::ITreeDecompositionVerifier
     {
         public:
-            TreeDecompositionVerifierImpl(void);
+            TreeDecompositionVerifier(void);
                         
-            ~TreeDecompositionVerifierImpl();
+            ~TreeDecompositionVerifier();
                         
             bool verify(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const HTD_OVERRIDE;
             
@@ -54,11 +54,11 @@ namespace htd
             void getViolationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::vertex_container & output) const HTD_OVERRIDE;
 
         protected:
-            TreeDecompositionVerifierImpl & operator=(const TreeDecompositionVerifierImpl &) { return *this; }
+            TreeDecompositionVerifier & operator=(const TreeDecompositionVerifier &) { return *this; }
 
         private:
             void getReachableVertices(htd::vertex_t start, const htd::ILabeledTree & decomposition, const htd::vertex_container & filter, htd::vertex_container & output) const;
     };
 }
 
-#endif /* HTD_HTD_TREEDECOMPOSITIONVERIFIERIMPL_HPP */
+#endif /* HTD_HTD_TREEDECOMPOSITIONVERIFIER_HPP */

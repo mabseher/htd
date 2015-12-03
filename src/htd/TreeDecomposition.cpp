@@ -1,5 +1,5 @@
 /* 
- * File:   MutableTreeDecompositionImpl.cpp
+ * File:   TreeDecomposition.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,10 +22,10 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MUTABLETREEDECOMPOSITIONIMPL_CPP
-#define	HTD_HTD_MUTABLETREEDECOMPOSITIONIMPL_CPP
+#ifndef HTD_HTD_TREEDECOMPOSITION_CPP
+#define	HTD_HTD_TREEDECOMPOSITION_CPP
 
-#include <htd/MutableTreeDecompositionImpl.hpp>
+#include <htd/TreeDecomposition.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/VertexContainerLabel.hpp>
 #include <htd/ILabeledTree.hpp>
@@ -41,14 +41,14 @@
 //TODO Remove
 #include <iostream>
 
-htd::MutableTreeDecompositionImpl::MutableTreeDecompositionImpl(void)
+htd::TreeDecomposition::TreeDecomposition(void)
     : size_(0), root_(htd::unknown_vertex), next_vertex_(htd::first_vertex), nodes_(), deletions_(), labelings_()
 {
     
 }
 
 //TODO Ensure correctness when htd::first_vertex does not match for this and original
-htd::MutableTreeDecompositionImpl::MutableTreeDecompositionImpl(const htd::ILabeledTree & original)
+htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original)
     : size_(0), root_(original.root()), next_vertex_(htd::first_vertex), nodes_(), deletions_(), labelings_()
 {
     htd::vertex_container originalNodes;
@@ -104,7 +104,7 @@ htd::MutableTreeDecompositionImpl::MutableTreeDecompositionImpl(const htd::ILabe
     }
 }
 
-htd::MutableTreeDecompositionImpl::MutableTreeDecompositionImpl(const htd::MutableTreeDecompositionImpl & original)
+htd::TreeDecomposition::TreeDecomposition(const htd::TreeDecomposition & original)
     : size_(original.size_), root_(original.root_), next_vertex_(htd::first_vertex), nodes_(), deletions_(original.deletions_), labelings_(original.labelings_)
 {
     nodes_.reserve(original.nodes_.size());
@@ -118,7 +118,7 @@ htd::MutableTreeDecompositionImpl::MutableTreeDecompositionImpl(const htd::Mutab
     }
 }
 
-htd::MutableTreeDecompositionImpl::~MutableTreeDecompositionImpl()
+htd::TreeDecomposition::~TreeDecomposition()
 {
     if (root_ != htd::unknown_vertex)
     {
@@ -144,17 +144,17 @@ htd::MutableTreeDecompositionImpl::~MutableTreeDecompositionImpl()
     labelings_.clear();
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::vertexCount(void) const
+std::size_t htd::TreeDecomposition::vertexCount(void) const
 {
     return size_;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::edgeCount(void) const
+std::size_t htd::TreeDecomposition::edgeCount(void) const
 {
     return size_ > 0 ? size_ - 1 : 0;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::edgeCount(htd::vertex_t vertex) const
+std::size_t htd::TreeDecomposition::edgeCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
 
@@ -164,18 +164,18 @@ std::size_t htd::MutableTreeDecompositionImpl::edgeCount(htd::vertex_t vertex) c
     }
     else
     {
-        throw std::out_of_range("std::size_t htd::MutableTreeDecompositionImpl::edgeCount(htd::vertex_t) const");
+        throw std::out_of_range("std::size_t htd::TreeDecomposition::edgeCount(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isVertex(htd::vertex_t vertex) const
+bool htd::TreeDecomposition::isVertex(htd::vertex_t vertex) const
 {
     return vertex < next_vertex_ && vertex != htd::unknown_vertex && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::vertex(htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::vertex(htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
     
@@ -201,7 +201,7 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::vertex(htd::index_t index) cons
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::TreeDecomposition::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     bool ret = false;
     
@@ -243,17 +243,17 @@ bool htd::MutableTreeDecompositionImpl::isNeighbor(htd::vertex_t vertex1, htd::v
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isConnected(void) const
+bool htd::TreeDecomposition::isConnected(void) const
 {
     return true;
 }
 
-bool htd::MutableTreeDecompositionImpl::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::TreeDecomposition::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     return isVertex(vertex1) && isVertex(vertex2);
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::neighborCount(htd::vertex_t vertex) const
+std::size_t htd::TreeDecomposition::neighborCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
     
@@ -277,7 +277,7 @@ std::size_t htd::MutableTreeDecompositionImpl::neighborCount(htd::vertex_t verte
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::TreeDecomposition::getNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
 {
     if (isVertex(vertex))
     {
@@ -300,7 +300,7 @@ void htd::MutableTreeDecompositionImpl::getNeighbors(htd::vertex_t vertex, htd::
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::neighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::neighbor(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
     
@@ -339,7 +339,7 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::neighbor(htd::vertex_t vertex, 
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getVertices(htd::vertex_container & output) const
+void htd::TreeDecomposition::getVertices(htd::vertex_container & output) const
 {
     for (auto& currentNode : nodes_)
     {
@@ -350,31 +350,31 @@ void htd::MutableTreeDecompositionImpl::getVertices(htd::vertex_container & outp
     }
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::isolatedVertexCount(void) const
+std::size_t htd::TreeDecomposition::isolatedVertexCount(void) const
 {
     return 0;
 }
 
-void htd::MutableTreeDecompositionImpl::getIsolatedVertices(htd::vertex_container& output) const
+void htd::TreeDecomposition::getIsolatedVertices(htd::vertex_container& output) const
 {
     HTD_UNUSED(output);
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::isolatedVertex(htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::isolatedVertex(htd::index_t index) const
 {
     HTD_UNUSED(index);
 
-    throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::isolatedVertex(htd::index_t index) const");
+    throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::isolatedVertex(htd::index_t index) const");
 }
 
-bool htd::MutableTreeDecompositionImpl::isIsolatedVertex(htd::vertex_t vertex) const
+bool htd::TreeDecomposition::isIsolatedVertex(htd::vertex_t vertex) const
 {
     HTD_UNUSED(vertex);
 
     return false;
 }
 
-void htd::MutableTreeDecompositionImpl::getEdges(htd::edge_container & output) const
+void htd::TreeDecomposition::getEdges(htd::edge_container & output) const
 {
     for (auto& currentNode : nodes_)
     {
@@ -390,7 +390,7 @@ void htd::MutableTreeDecompositionImpl::getEdges(htd::edge_container & output) c
     }
 }
 
-void htd::MutableTreeDecompositionImpl::getEdges(htd::edge_container & output, htd::vertex_t vertex) const
+void htd::TreeDecomposition::getEdges(htd::edge_container & output, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -413,7 +413,7 @@ void htd::MutableTreeDecompositionImpl::getEdges(htd::edge_container & output, h
     }
 }
 
-const htd::edge_t & htd::MutableTreeDecompositionImpl::edge(htd::index_t index) const
+const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t index) const
 {
     htd::edge_container result;
 
@@ -425,11 +425,11 @@ const htd::edge_t & htd::MutableTreeDecompositionImpl::edge(htd::index_t index) 
     }
     else
     {
-        throw std::out_of_range("const htd::edge_t & htd::MutableTreeDecompositionImpl::edge(htd::index_t) const");
+        throw std::out_of_range("const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t) const");
     }
 }
 
-const htd::edge_t & htd::MutableTreeDecompositionImpl::edge(htd::index_t index, htd::vertex_t vertex) const
+const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t index, htd::vertex_t vertex) const
 {
     htd::edge_container result;
 
@@ -441,11 +441,11 @@ const htd::edge_t & htd::MutableTreeDecompositionImpl::edge(htd::index_t index, 
     }
     else
     {
-        throw std::out_of_range("const htd::edge_t & htd::MutableTreeDecompositionImpl::edge(htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t, htd::vertex_t) const");
     }
 }
 
-void htd::MutableTreeDecompositionImpl::getHyperedges(htd::hyperedge_container & output) const
+void htd::TreeDecomposition::getHyperedges(htd::hyperedge_container & output) const
 {
     for (auto& currentNode : nodes_)
     {
@@ -474,7 +474,7 @@ void htd::MutableTreeDecompositionImpl::getHyperedges(htd::hyperedge_container &
     }
 }
 
-void htd::MutableTreeDecompositionImpl::getHyperedges(htd::hyperedge_container& output, htd::vertex_t vertex) const
+void htd::TreeDecomposition::getHyperedges(htd::hyperedge_container& output, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -523,7 +523,7 @@ void htd::MutableTreeDecompositionImpl::getHyperedges(htd::hyperedge_container& 
     }
 }
 
-const htd::hyperedge_t & htd::MutableTreeDecompositionImpl::hyperedge(htd::index_t index) const
+const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index) const
 {
     htd::hyperedge_container result;
 
@@ -535,11 +535,11 @@ const htd::hyperedge_t & htd::MutableTreeDecompositionImpl::hyperedge(htd::index
     }
     else
     {
-        throw std::out_of_range("const htd::hyperedge_t & htd::MutableTreeDecompositionImpl::hyperedge(htd::index_t) const");
+        throw std::out_of_range("const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t) const");
     }
 }
 
-const htd::hyperedge_t & htd::MutableTreeDecompositionImpl::hyperedge(htd::index_t index, htd::vertex_t vertex) const
+const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index, htd::vertex_t vertex) const
 {
     htd::hyperedge_container result;
 
@@ -551,21 +551,21 @@ const htd::hyperedge_t & htd::MutableTreeDecompositionImpl::hyperedge(htd::index
     }
     else
     {
-        throw std::out_of_range("const htd::hyperedge_t & htd::MutableTreeDecompositionImpl::hyperedge(htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t, htd::vertex_t) const");
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::root(void) const
+htd::vertex_t htd::TreeDecomposition::root(void) const
 {
     return root_;
 }
 
-bool htd::MutableTreeDecompositionImpl::isRoot(htd::vertex_t vertex) const
+bool htd::TreeDecomposition::isRoot(htd::vertex_t vertex) const
 {
     return root_ == vertex;
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::parent(htd::vertex_t vertex) const
+htd::vertex_t htd::TreeDecomposition::parent(htd::vertex_t vertex) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
     
@@ -582,7 +582,7 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::parent(htd::vertex_t vertex) co
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isParent(htd::vertex_t vertex, htd::vertex_t parent) const
+bool htd::TreeDecomposition::isParent(htd::vertex_t vertex, htd::vertex_t parent) const
 {
     bool ret = false;
 
@@ -597,13 +597,13 @@ bool htd::MutableTreeDecompositionImpl::isParent(htd::vertex_t vertex, htd::vert
     }
     else
     {
-        throw std::out_of_range("bool htd::MutableTreeDecompositionImpl::isParent(htd::vertex_t, htd::vertex_t) const");
+        throw std::out_of_range("bool htd::TreeDecomposition::isParent(htd::vertex_t, htd::vertex_t) const");
     }
 
     return ret;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::childrenCount(htd::vertex_t vertex) const
+std::size_t htd::TreeDecomposition::childrenCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
     
@@ -620,7 +620,7 @@ std::size_t htd::MutableTreeDecompositionImpl::childrenCount(htd::vertex_t verte
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getChildren(htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::TreeDecomposition::getChildren(htd::vertex_t vertex, htd::vertex_container & output) const
 {
     if (isVertex(vertex))
     {
@@ -638,7 +638,7 @@ void htd::MutableTreeDecompositionImpl::getChildren(htd::vertex_t vertex, htd::v
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::child(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::child(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
     
@@ -656,23 +656,23 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::child(htd::vertex_t vertex, htd
             }
             else
             {
-                throw std::out_of_range("bool htd::MutableTreeDecompositionImpl::child(htd::vertex_t, htd::index_t) const");
+                throw std::out_of_range("bool htd::TreeDecomposition::child(htd::vertex_t, htd::index_t) const");
             }
         }
         else
         {
-            throw std::out_of_range("bool htd::MutableTreeDecompositionImpl::child(htd::vertex_t, htd::index_t) const");
+            throw std::out_of_range("bool htd::TreeDecomposition::child(htd::vertex_t, htd::index_t) const");
         }
     }
     else
     {
-        throw std::out_of_range("bool htd::MutableTreeDecompositionImpl::child(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("bool htd::TreeDecomposition::child(htd::vertex_t, htd::index_t) const");
     }
     
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isChild(htd::vertex_t vertex, htd::vertex_t child) const
+bool htd::TreeDecomposition::isChild(htd::vertex_t vertex, htd::vertex_t child) const
 {
     bool ret = false;
 
@@ -689,13 +689,13 @@ bool htd::MutableTreeDecompositionImpl::isChild(htd::vertex_t vertex, htd::verte
     }
     else
     {
-        throw std::out_of_range("bool htd::MutableTreeDecompositionImpl::isChild(htd::vertex_t vertex, htd::vertex_t child) const");
+        throw std::out_of_range("bool htd::TreeDecomposition::isChild(htd::vertex_t vertex, htd::vertex_t child) const");
     }
 
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::removeVertex(htd::vertex_t vertex)
+void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
 {
     if (isVertex(vertex))
     {
@@ -888,7 +888,7 @@ void htd::MutableTreeDecompositionImpl::removeVertex(htd::vertex_t vertex)
     }
 }
 
-void htd::MutableTreeDecompositionImpl::removeSubtree(htd::vertex_t subtreeRoot)
+void htd::TreeDecomposition::removeSubtree(htd::vertex_t subtreeRoot)
 {
     if (isVertex(subtreeRoot))
     {
@@ -896,7 +896,7 @@ void htd::MutableTreeDecompositionImpl::removeSubtree(htd::vertex_t subtreeRoot)
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::insertRoot(void)
+htd::vertex_t htd::TreeDecomposition::insertRoot(void)
 {
     if (root_ == htd::unknown_vertex)
     {
@@ -918,7 +918,7 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::insertRoot(void)
     return root_;
 }
 
-void htd::MutableTreeDecompositionImpl::removeRoot(void)
+void htd::TreeDecomposition::removeRoot(void)
 {
     if (root_ != htd::unknown_vertex)
     {
@@ -945,7 +945,7 @@ void htd::MutableTreeDecompositionImpl::removeRoot(void)
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::addChild(htd::vertex_t vertex)
+htd::vertex_t htd::TreeDecomposition::addChild(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::unknown_vertex;
     
@@ -970,7 +970,7 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::addChild(htd::vertex_t vertex)
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::removeChild(htd::vertex_t vertex, htd::vertex_t child)
+void htd::TreeDecomposition::removeChild(htd::vertex_t vertex, htd::vertex_t child)
 {
     if (isVertex(vertex))
     {
@@ -1001,7 +1001,7 @@ void htd::MutableTreeDecompositionImpl::removeChild(htd::vertex_t vertex, htd::v
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::addIntermediateParent(htd::vertex_t vertex)
+htd::vertex_t htd::TreeDecomposition::addIntermediateParent(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1040,18 +1040,18 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::addIntermediateParent(htd::vert
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::addIntermediateParent(htd::vertex_t)");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::addIntermediateParent(htd::vertex_t)");
     }
 
     return ret;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::labelCount(void) const
+std::size_t htd::TreeDecomposition::labelCount(void) const
 {
     return labelings_.size();
 }
 
-void htd::MutableTreeDecompositionImpl::getLabelNames(std::vector<std::string> & output) const
+void htd::TreeDecomposition::getLabelNames(std::vector<std::string> & output) const
 {
     for (auto& labeling : labelings_)
     {
@@ -1059,11 +1059,11 @@ void htd::MutableTreeDecompositionImpl::getLabelNames(std::vector<std::string> &
     }
 }
 
-std::string htd::MutableTreeDecompositionImpl::labelName(htd::index_t index) const
+std::string htd::TreeDecomposition::labelName(htd::index_t index) const
 {
     if (index >= labelings_.size())
     {
-        throw std::out_of_range("std::string htd::MutableTreeDecompositionImpl::labelName(htd::index_t) const");
+        throw std::out_of_range("std::string htd::TreeDecomposition::labelName(htd::index_t) const");
     }
 
     auto position = labelings_.begin();
@@ -1073,7 +1073,7 @@ std::string htd::MutableTreeDecompositionImpl::labelName(htd::index_t index) con
     return (*position).first;
 }
 
-const htd::ILabel * htd::MutableTreeDecompositionImpl::label(std::string labelName, htd::vertex_t vertex) const
+const htd::ILabel * htd::TreeDecomposition::label(const std::string & labelName, htd::vertex_t vertex) const
 {
     //TODO if (isValidVertex(vertex)) ...
     auto labeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(labelName));
@@ -1081,7 +1081,7 @@ const htd::ILabel * htd::MutableTreeDecompositionImpl::label(std::string labelNa
     return labeling->label(vertex);
 }
 
-void htd::MutableTreeDecompositionImpl::setLabel(std::string labelName, htd::vertex_t vertex, htd::ILabel * label)
+void htd::TreeDecomposition::setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
     if (isVertex(vertex))
     {
@@ -1098,7 +1098,7 @@ void htd::MutableTreeDecompositionImpl::setLabel(std::string labelName, htd::ver
     }
 }
 
-void htd::MutableTreeDecompositionImpl::removeLabel(std::string labelName, htd::vertex_t vertex)
+void htd::TreeDecomposition::removeLabel(const std::string & labelName, htd::vertex_t vertex)
 {
     if (isVertex(vertex))
     {
@@ -1113,7 +1113,7 @@ void htd::MutableTreeDecompositionImpl::removeLabel(std::string labelName, htd::
     }
 }
 
-htd::MutableTreeDecompositionImpl & htd::MutableTreeDecompositionImpl::operator=(const htd::MutableTreeDecompositionImpl & other)
+htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::TreeDecomposition & other)
 {
     if (this != &other)
     {
@@ -1144,7 +1144,7 @@ htd::MutableTreeDecompositionImpl & htd::MutableTreeDecompositionImpl::operator=
     return *this;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::leafNodeCount(void) const
+std::size_t htd::TreeDecomposition::leafNodeCount(void) const
 {
     std::size_t ret = 0;
 
@@ -1162,7 +1162,7 @@ std::size_t htd::MutableTreeDecompositionImpl::leafNodeCount(void) const
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getLeafNodes(htd::vertex_container & output) const
+void htd::TreeDecomposition::getLeafNodes(htd::vertex_container & output) const
 {
     for (auto& node : nodes_)
     {
@@ -1176,7 +1176,7 @@ void htd::MutableTreeDecompositionImpl::getLeafNodes(htd::vertex_container & out
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::leafNode(htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::leafNode(htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1190,13 +1190,13 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::leafNode(htd::index_t index) co
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::leafNode(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::leafNode(htd::index_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isLeafNode(htd::vertex_t vertex) const
+bool htd::TreeDecomposition::isLeafNode(htd::vertex_t vertex) const
 {
     bool ret = false;
 
@@ -1211,13 +1211,13 @@ bool htd::MutableTreeDecompositionImpl::isLeafNode(htd::vertex_t vertex) const
     }
     else
     {
-        throw std::out_of_range("bool htd::MutableTreeDecompositionImpl::isLeafNode(htd::vertex_t) const");
+        throw std::out_of_range("bool htd::TreeDecomposition::isLeafNode(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::joinNodeCount(void) const
+std::size_t htd::TreeDecomposition::joinNodeCount(void) const
 {
     std::size_t ret = 0;
 
@@ -1235,7 +1235,7 @@ std::size_t htd::MutableTreeDecompositionImpl::joinNodeCount(void) const
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getJoinNodes(htd::vertex_container & output) const
+void htd::TreeDecomposition::getJoinNodes(htd::vertex_container & output) const
 {
     for (auto& node : nodes_)
     {
@@ -1249,7 +1249,7 @@ void htd::MutableTreeDecompositionImpl::getJoinNodes(htd::vertex_container & out
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::joinNode(htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::joinNode(htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1263,13 +1263,13 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::joinNode(htd::index_t index) co
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::joinNode(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::joinNode(htd::index_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isJoinNode(htd::vertex_t vertex) const
+bool htd::TreeDecomposition::isJoinNode(htd::vertex_t vertex) const
 {
     bool ret = false;
 
@@ -1284,13 +1284,13 @@ bool htd::MutableTreeDecompositionImpl::isJoinNode(htd::vertex_t vertex) const
     }
     else
     {
-        throw std::out_of_range("bool htd::MutableTreeDecompositionImpl::isJoinNode(htd::vertex_t) const");
+        throw std::out_of_range("bool htd::TreeDecomposition::isJoinNode(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::forgetNodeCount(void) const
+std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
 {
     std::size_t ret = 0;
 
@@ -1316,7 +1316,7 @@ std::size_t htd::MutableTreeDecompositionImpl::forgetNodeCount(void) const
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getForgetNodes(htd::vertex_container & output) const
+void htd::TreeDecomposition::getForgetNodes(htd::vertex_container & output) const
 {
     auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
 
@@ -1338,7 +1338,7 @@ void htd::MutableTreeDecompositionImpl::getForgetNodes(htd::vertex_container & o
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::forgetNode(htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::forgetNode(htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1352,13 +1352,13 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::forgetNode(htd::index_t index) 
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::forgetNode(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgetNode(htd::index_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isForgetNode(htd::vertex_t vertex) const
+bool htd::TreeDecomposition::isForgetNode(htd::vertex_t vertex) const
 {
     bool ret = false;
 
@@ -1381,13 +1381,13 @@ bool htd::MutableTreeDecompositionImpl::isForgetNode(htd::vertex_t vertex) const
     }
     else
     {
-        throw std::out_of_range("bool htd::MutableTreeDecompositionImpl::isForgetNode(htd::vertex_t) const");
+        throw std::out_of_range("bool htd::TreeDecomposition::isForgetNode(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::introduceNodeCount(void) const
+std::size_t htd::TreeDecomposition::introduceNodeCount(void) const
 {
     std::size_t ret = 0;
 
@@ -1413,7 +1413,7 @@ std::size_t htd::MutableTreeDecompositionImpl::introduceNodeCount(void) const
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getIntroduceNodes(htd::vertex_container & output) const
+void htd::TreeDecomposition::getIntroduceNodes(htd::vertex_container & output) const
 {
     auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
 
@@ -1435,7 +1435,7 @@ void htd::MutableTreeDecompositionImpl::getIntroduceNodes(htd::vertex_container 
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::introduceNode(htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::introduceNode(htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1449,13 +1449,13 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::introduceNode(htd::index_t inde
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::introduceNode(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introduceNode(htd::index_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isIntroduceNode(htd::vertex_t vertex) const
+bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t vertex) const
 {
     bool ret = false;
 
@@ -1478,13 +1478,13 @@ bool htd::MutableTreeDecompositionImpl::isIntroduceNode(htd::vertex_t vertex) co
     }
     else
     {
-        throw std::out_of_range("bool htd::MutableTreeDecompositionImpl::isIntroduceNode(htd::vertex_t) const");
+        throw std::out_of_range("bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getBagContent(htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::TreeDecomposition::getBagContent(htd::vertex_t vertex, htd::vertex_container & output) const
 {
     if (isVertex(vertex))
     {
@@ -1501,7 +1501,7 @@ void htd::MutableTreeDecompositionImpl::getBagContent(htd::vertex_t vertex, htd:
     }
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::forgottenVerticesCount(htd::vertex_t vertex) const
+std::size_t htd::TreeDecomposition::forgottenVerticesCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
 
@@ -1526,7 +1526,7 @@ std::size_t htd::MutableTreeDecompositionImpl::forgottenVerticesCount(htd::verte
     return ret;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::forgottenVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const
+std::size_t htd::TreeDecomposition::forgottenVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const
 {
     std::size_t ret = 0;
 
@@ -1549,7 +1549,7 @@ std::size_t htd::MutableTreeDecompositionImpl::forgottenVerticesCount(htd::verte
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output) const
 {
     if (isVertex(vertex))
     {
@@ -1570,7 +1570,7 @@ void htd::MutableTreeDecompositionImpl::getForgottenVertices(htd::vertex_t verte
     }
 }
 
-void htd::MutableTreeDecompositionImpl::getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const
+void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const
 {
     if (isVertex(vertex))
     {
@@ -1589,7 +1589,7 @@ void htd::MutableTreeDecompositionImpl::getForgottenVertices(htd::vertex_t verte
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::forgottenVertex(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1603,13 +1603,13 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::forgottenVertex(htd::vertex_t v
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::forgottenVertex(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t, htd::index_t) const");
     }
 
     return ret;
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::forgottenVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
+htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1623,13 +1623,13 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::forgottenVertex(htd::vertex_t v
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::forgottenVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex) const
+bool htd::TreeDecomposition::isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex) const
 {
     bool ret = false;
 
@@ -1642,7 +1642,7 @@ bool htd::MutableTreeDecompositionImpl::isForgottenVertex(htd::vertex_t vertex, 
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex, htd::vertex_t child) const
+bool htd::TreeDecomposition::isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex, htd::vertex_t child) const
 {
     bool ret = false;
 
@@ -1655,7 +1655,7 @@ bool htd::MutableTreeDecompositionImpl::isForgottenVertex(htd::vertex_t vertex, 
     return ret;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::introducedVerticesCount(htd::vertex_t vertex) const
+std::size_t htd::TreeDecomposition::introducedVerticesCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
 
@@ -1680,7 +1680,7 @@ std::size_t htd::MutableTreeDecompositionImpl::introducedVerticesCount(htd::vert
     return ret;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::introducedVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const
+std::size_t htd::TreeDecomposition::introducedVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const
 {
     std::size_t ret = 0;
 
@@ -1703,7 +1703,7 @@ std::size_t htd::MutableTreeDecompositionImpl::introducedVerticesCount(htd::vert
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getIntroducedVertices(htd::vertex_t vertex, htd::vertex_container& output) const
+void htd::TreeDecomposition::getIntroducedVertices(htd::vertex_t vertex, htd::vertex_container& output) const
 {
     if (isVertex(vertex))
     {
@@ -1724,7 +1724,7 @@ void htd::MutableTreeDecompositionImpl::getIntroducedVertices(htd::vertex_t vert
     }
 }
 
-void htd::MutableTreeDecompositionImpl::getIntroducedVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const
+void htd::TreeDecomposition::getIntroducedVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const
 {
     if (isVertex(vertex))
     {
@@ -1743,7 +1743,7 @@ void htd::MutableTreeDecompositionImpl::getIntroducedVertices(htd::vertex_t vert
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::introducedVertex(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1757,13 +1757,13 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::introducedVertex(htd::vertex_t 
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::introducedVertex(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t, htd::index_t) const");
     }
 
     return ret;
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::introducedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
+htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1777,13 +1777,13 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::introducedVertex(htd::vertex_t 
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::introducedVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex) const
+bool htd::TreeDecomposition::isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex) const
 {
     bool ret = false;
 
@@ -1796,7 +1796,7 @@ bool htd::MutableTreeDecompositionImpl::isIntroducedVertex(htd::vertex_t vertex,
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex, htd::vertex_t child) const
+bool htd::TreeDecomposition::isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex, htd::vertex_t child) const
 {
     bool ret = false;
 
@@ -1809,7 +1809,7 @@ bool htd::MutableTreeDecompositionImpl::isIntroducedVertex(htd::vertex_t vertex,
     return ret;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::rememberedVerticesCount(htd::vertex_t vertex) const
+std::size_t htd::TreeDecomposition::rememberedVerticesCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
 
@@ -1834,7 +1834,7 @@ std::size_t htd::MutableTreeDecompositionImpl::rememberedVerticesCount(htd::vert
     return ret;
 }
 
-std::size_t htd::MutableTreeDecompositionImpl::rememberedVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const
+std::size_t htd::TreeDecomposition::rememberedVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const
 {
     std::size_t ret = 0;
 
@@ -1857,7 +1857,7 @@ std::size_t htd::MutableTreeDecompositionImpl::rememberedVerticesCount(htd::vert
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getRememberedVertices(htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::TreeDecomposition::getRememberedVertices(htd::vertex_t vertex, htd::vertex_container & output) const
 {
     if (isVertex(vertex))
     {
@@ -1878,7 +1878,7 @@ void htd::MutableTreeDecompositionImpl::getRememberedVertices(htd::vertex_t vert
     }
 }
 
-void htd::MutableTreeDecompositionImpl::getRememberedVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const
+void htd::TreeDecomposition::getRememberedVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const
 {
     if (isVertex(vertex))
     {
@@ -1897,7 +1897,7 @@ void htd::MutableTreeDecompositionImpl::getRememberedVertices(htd::vertex_t vert
     }
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::rememberedVertex(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1911,13 +1911,13 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::rememberedVertex(htd::vertex_t 
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::rememberedVertex(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t, htd::index_t) const");
     }
 
     return ret;
 }
 
-htd::vertex_t htd::MutableTreeDecompositionImpl::rememberedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
+htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -1931,13 +1931,13 @@ htd::vertex_t htd::MutableTreeDecompositionImpl::rememberedVertex(htd::vertex_t 
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableTreeDecompositionImpl::rememberedVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex) const
+bool htd::TreeDecomposition::isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex) const
 {
     bool ret = false;
 
@@ -1950,7 +1950,7 @@ bool htd::MutableTreeDecompositionImpl::isRememberedVertex(htd::vertex_t vertex,
     return ret;
 }
 
-bool htd::MutableTreeDecompositionImpl::isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const
+bool htd::TreeDecomposition::isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const
 {
     bool ret = false;
 
@@ -1963,7 +1963,7 @@ bool htd::MutableTreeDecompositionImpl::isRememberedVertex(htd::vertex_t vertex,
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::getChildrenVertexLabelSetUnion(htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex, htd::vertex_container & output) const
 {
     if (isVertex(vertex))
     {
@@ -1989,7 +1989,7 @@ void htd::MutableTreeDecompositionImpl::getChildrenVertexLabelSetUnion(htd::vert
     }
 }
             
-std::size_t htd::MutableTreeDecompositionImpl::size(htd::MutableTreeDecompositionImpl::TreeNode * start) const
+std::size_t htd::TreeDecomposition::size(htd::TreeDecomposition::TreeNode * start) const
 {
     std::size_t ret = 0;
     
@@ -2034,7 +2034,7 @@ std::size_t htd::MutableTreeDecompositionImpl::size(htd::MutableTreeDecompositio
     return ret;
 }
 
-void htd::MutableTreeDecompositionImpl::deleteSubtree(htd::MutableTreeDecompositionImpl::TreeNode * start)
+void htd::TreeDecomposition::deleteSubtree(htd::TreeDecomposition::TreeNode * start)
 {
     if (start != nullptr)
     {
@@ -2123,7 +2123,7 @@ void htd::MutableTreeDecompositionImpl::deleteSubtree(htd::MutableTreeDecomposit
     }
 }
 
-void htd::MutableTreeDecompositionImpl::deleteNode(TreeNode * node)
+void htd::TreeDecomposition::deleteNode(TreeNode * node)
 {
     if (node != nullptr)
     {
@@ -2190,7 +2190,7 @@ void htd::MutableTreeDecompositionImpl::deleteNode(TreeNode * node)
     }
 }
 
-void htd::MutableTreeDecompositionImpl::swapLabel(std::string labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::TreeDecomposition::swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     if (isVertex(vertex1) && isVertex(vertex2))
     {
@@ -2206,7 +2206,7 @@ void htd::MutableTreeDecompositionImpl::swapLabel(std::string labelName, htd::ve
     }
 }
 
-htd::IGraphLabeling * htd::MutableTreeDecompositionImpl::cloneLabeling(std::string labelName) const
+htd::IGraphLabeling * htd::TreeDecomposition::cloneLabeling(const std::string & labelName) const
 {
     htd::IGraphLabeling * ret = nullptr;
 
@@ -2218,10 +2218,10 @@ htd::IGraphLabeling * htd::MutableTreeDecompositionImpl::cloneLabeling(std::stri
     }
     else
     {
-        throw std::out_of_range("htd::IGraphLabeling * htd::MutableTreeDecompositionImpl::cloneLabeling(std::string) const");
+        throw std::out_of_range("htd::IGraphLabeling * htd::TreeDecomposition::cloneLabeling(std::string) const");
     }
 
     return ret;
 }
 
-#endif /* HTD_HTD_MUTABLETREEDECOMPOSITIONIMPL_CPP */
+#endif /* HTD_HTD_TREEDECOMPOSITION_CPP */

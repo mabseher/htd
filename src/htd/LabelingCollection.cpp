@@ -67,38 +67,19 @@ std::string htd::LabelingCollection::labelName(htd::index_t index) const
     return labelNames_.at(index);
 }
 
-const htd::ILabel * htd::LabelingCollection::label(std::string labelName, htd::vertex_t vertex) const
+const htd::IGraphLabeling * htd::LabelingCollection::labeling(std::string labelName) const
 {
     if (content_.find(labelName) == content_.end())
     {
-        throw std::out_of_range("const htd::ILabel * const htd::LabelingCollection::label(std::string) const");
+        throw std::out_of_range("const htd::IGraphLabeling * htd::LabelingCollection::label(std::string) const");
     }
 
-    return content_.at(labelName)->label(vertex);
+    return content_.at(labelName);
 }
 
-void htd::LabelingCollection::setLabel(std::string labelName, htd::vertex_t vertex, htd::ILabel * label)
+bool htd::LabelingCollection::isLabelingName(std::string labelName) const
 {
-    auto position = content_.find(labelName);
-
-    if (position == content_.end())
-    {
-        content_[labelName] = new GraphLabeling();
-    }
-
-    auto labeling = dynamic_cast<htd::IGraphLabeling *>(content_[labelName]);
-
-    labeling->setLabel(vertex, label);
-}
-
-void htd::LabelingCollection::removeLabel(std::string labelName, htd::vertex_t vertex)
-{
-    auto position = content_.find(labelName);
-
-    if (position != content_.end())
-    {
-        position->second->removeLabel(vertex);
-    }
+    return content_.find(labelName) == content_.end();
 }
 
 void htd::LabelingCollection::setLabeling(std::string labelName, htd::IGraphLabeling * labeling)
@@ -124,6 +105,32 @@ void htd::LabelingCollection::removeLabeling(std::string labelName)
         auto position2 = std::find(labelNames_.begin(), labelNames_.end(), labelName);
 
         labelNames_.erase(position2);
+    }
+}
+
+void htd::LabelingCollection::removeLabels(htd::vertex_t vertex)
+{
+    for (std::string labelName : labelNames_)
+    {
+        auto labeling = content_.at(labelName);
+
+        if (labeling->hasLabel(vertex))
+        {
+            labeling->removeLabel(vertex);
+        }
+    }
+}
+
+void htd::LabelingCollection::removeLabels(const htd::hyperedge_t & edge)
+{
+    for (std::string labelName : labelNames_)
+    {
+        auto labeling = content_.at(labelName);
+
+        if (labeling->hasLabel(edge))
+        {
+            labeling->removeLabel(edge);
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 /* 
- * File:   NaturalOrderingAlgorithmImpl.cpp
+ * File:   NaturalOrderingAlgorithm.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,13 +22,13 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_NATURALORDERINGALGORITHMIMPL_CPP
-#define	HTD_HTD_NATURALORDERINGALGORITHMIMPL_CPP
+#ifndef HTD_HTD_NATURALORDERINGALGORITHM_CPP
+#define	HTD_HTD_NATURALORDERINGALGORITHM_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/IGraph.hpp>
 #include <htd/IHypergraph.hpp>
-#include <htd/NaturalOrderingAlgorithmImpl.hpp>
+#include <htd/NaturalOrderingAlgorithm.hpp>
 
 #include <algorithm>
 #include <cstdlib>
@@ -37,17 +37,17 @@
 #include <iterator>
 #include <stdexcept>
 
-htd::NaturalOrderingAlgorithmImpl::NaturalOrderingAlgorithmImpl(void)
+htd::NaturalOrderingAlgorithm::NaturalOrderingAlgorithm(void)
 {
     
 }
             
-htd::NaturalOrderingAlgorithmImpl::~NaturalOrderingAlgorithmImpl()
+htd::NaturalOrderingAlgorithm::~NaturalOrderingAlgorithm()
 {
     
 }
 
-void htd::NaturalOrderingAlgorithmImpl::computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const
+void htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const
 {
     std::vector<htd::vertex_t> ret;
     
@@ -58,4 +58,4 @@ void htd::NaturalOrderingAlgorithmImpl::computeOrdering(const htd::IHypergraph &
     std::copy(ret.begin(), ret.end(), std::back_inserter(result));
 }
 
-#endif /* HTD_HTD_NATURALORDERINGALGORITHMIMPL_CPP */
+#endif /* HTD_HTD_NATURALORDERINGALGORITHM_CPP */

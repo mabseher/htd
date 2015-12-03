@@ -1,5 +1,5 @@
 /* 
- * File:   MinDegreeOrderingAlgorithmImpl.hpp
+ * File:   MinDegreeOrderingAlgorithm.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MINDEGREEORDERINGALGORITHMIMPL_HPP
-#define	HTD_HTD_MINDEGREEORDERINGALGORITHMIMPL_HPP
+#ifndef HTD_HTD_MINDEGREEORDERINGALGORITHM_HPP
+#define	HTD_HTD_MINDEGREEORDERINGALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
@@ -37,17 +37,17 @@
 
 namespace htd
 {
-    class MinDegreeOrderingAlgorithmImpl : public htd::IOrderingAlgorithm
+    class MinDegreeOrderingAlgorithm : public htd::IOrderingAlgorithm
     {
         public:
-            MinDegreeOrderingAlgorithmImpl(void);
+            MinDegreeOrderingAlgorithm(void);
             
-            ~MinDegreeOrderingAlgorithmImpl();
+            ~MinDegreeOrderingAlgorithm();
             
             void computeOrdering(const IHypergraph& graph, std::vector<htd::vertex_t>& result) const HTD_OVERRIDE;
 
         protected:
-            MinDegreeOrderingAlgorithmImpl & operator=(const MinDegreeOrderingAlgorithmImpl &) { return *this; }
+            MinDegreeOrderingAlgorithm & operator=(const MinDegreeOrderingAlgorithm &) { return *this; }
 
         private:
             void set_union(const std::vector<htd::vertex_t> & set1,
@@ -57,4 +57,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_MINDEGREEORDERINGALGORITHMIMPL_HPP */
+#endif /* HTD_HTD_MINDEGREEORDERINGALGORITHM_HPP */

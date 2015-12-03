@@ -1,5 +1,5 @@
 /* 
- * File:   SetCoverAlgorithmImpl.cpp
+ * File:   SetCoverAlgorithm.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,12 +22,12 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_SETCOVERALGORITHMIMPL_CPP
-#define	HTD_HTD_SETCOVERALGORITHMIMPL_CPP
+#ifndef HTD_HTD_SETCOVERALGORITHM_CPP
+#define	HTD_HTD_SETCOVERALGORITHM_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/SetCoverAlgorithmImpl.hpp>
+#include <htd/SetCoverAlgorithm.hpp>
 
 #include <deque>
 #include <iterator>
@@ -35,17 +35,17 @@
 #include <unordered_map>
 #include <vector>
 
-htd::SetCoverAlgorithmImpl::SetCoverAlgorithmImpl(void)
+htd::SetCoverAlgorithm::SetCoverAlgorithm(void)
 {
     
 }
             
-htd::SetCoverAlgorithmImpl::~SetCoverAlgorithmImpl()
+htd::SetCoverAlgorithm::~SetCoverAlgorithm()
 {
     
 }
 
-void htd::SetCoverAlgorithmImpl::computeSetCover(const htd::vertex_container& vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::vertex_container> & result) const
+void htd::SetCoverAlgorithm::computeSetCover(const htd::vertex_container& vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::vertex_container> & result) const
 {
     htd::id_t next = 0;
     
@@ -330,4 +330,4 @@ void htd::SetCoverAlgorithmImpl::computeSetCover(const htd::vertex_container& ve
     }
 }
 
-#endif /* HTD_HTD_SETCOVERALGORITHMIMPL_CPP */
+#endif /* HTD_HTD_SETCOVERALGORITHM_CPP */

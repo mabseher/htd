@@ -1,5 +1,5 @@
 /* 
- * File:   MutableGraphImpl.cpp
+ * File:   Graph.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,12 +22,12 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MUTABLEGRAPHIMPL_CPP
-#define	HTD_HTD_MUTABLEGRAPHIMPL_CPP
+#ifndef HTD_HTD_GRAPH_CPP
+#define	HTD_HTD_GRAPH_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/MutableGraphImpl.hpp>
+#include <htd/Graph.hpp>
 
 #include <algorithm>
 #include <stdexcept>
@@ -35,7 +35,12 @@
 #include <vector>
 #include <set>
 
-htd::MutableGraphImpl::MutableGraphImpl(std::size_t size)
+htd::Graph::Graph(void) : htd::Graph::Graph(0)
+{
+
+}
+
+htd::Graph::Graph(std::size_t size)
     : size_(size),
       next_vertex_(htd::first_vertex + size),
       deletions_(),
@@ -44,17 +49,17 @@ htd::MutableGraphImpl::MutableGraphImpl(std::size_t size)
     
 }
 
-htd::MutableGraphImpl::~MutableGraphImpl()
+htd::Graph::~Graph()
 {
     
 }
 
-std::size_t htd::MutableGraphImpl::vertexCount(void) const
+std::size_t htd::Graph::vertexCount(void) const
 {
     return size_ - deletions_.size();
 }
 
-std::size_t htd::MutableGraphImpl::edgeCount(void) const
+std::size_t htd::Graph::edgeCount(void) const
 {
     std::size_t ret = 0;
     
@@ -66,7 +71,7 @@ std::size_t htd::MutableGraphImpl::edgeCount(void) const
     return ret / 2;
 }
 
-std::size_t htd::MutableGraphImpl::edgeCount(htd::vertex_t vertex) const
+std::size_t htd::Graph::edgeCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
 
@@ -76,18 +81,18 @@ std::size_t htd::MutableGraphImpl::edgeCount(htd::vertex_t vertex) const
     }
     else
     {
-        throw std::out_of_range("std::size_t htd::MutableGraphImpl::edgeCount(htd::vertex_t) const");
+        throw std::out_of_range("std::size_t htd::Graph::edgeCount(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableGraphImpl::isVertex(htd::vertex_t vertex) const
+bool htd::Graph::isVertex(htd::vertex_t vertex) const
 {
     return vertex < next_vertex_ && vertex != htd::unknown_vertex && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
-htd::vertex_t htd::MutableGraphImpl::vertex(htd::id_t index) const
+htd::vertex_t htd::Graph::vertex(htd::id_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
     
@@ -113,12 +118,12 @@ htd::vertex_t htd::MutableGraphImpl::vertex(htd::id_t index) const
     return ret;
 }
             
-bool htd::MutableGraphImpl::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::Graph::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     return std::binary_search(neighborhood_[vertex1].begin(), neighborhood_[vertex1].end(), vertex2);
 }
 
-bool htd::MutableGraphImpl::isConnected(void) const
+bool htd::Graph::isConnected(void) const
 {
     bool ret = true;
     
@@ -175,11 +180,10 @@ bool htd::MutableGraphImpl::isConnected(void) const
     return ret;
 }
 
-bool htd::MutableGraphImpl::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::Graph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     bool ret = false;
 
-    //TODO User isValidVertex in every file
     if (isVertex(vertex1) && isVertex(vertex2))
     {
         if (vertex1 != vertex2)
@@ -224,7 +228,7 @@ bool htd::MutableGraphImpl::isConnected(htd::vertex_t vertex1, htd::vertex_t ver
     return ret;
 }
 
-std::size_t htd::MutableGraphImpl::neighborCount(htd::vertex_t vertex) const
+std::size_t htd::Graph::neighborCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
     
@@ -236,7 +240,7 @@ std::size_t htd::MutableGraphImpl::neighborCount(htd::vertex_t vertex) const
     return ret;
 }
             
-void htd::MutableGraphImpl::getNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::Graph::getNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
 {
     if (isVertex(vertex))
     {
@@ -244,7 +248,7 @@ void htd::MutableGraphImpl::getNeighbors(htd::vertex_t vertex, htd::vertex_conta
     }
 }
 
-htd::vertex_t htd::MutableGraphImpl::neighbor(htd::vertex_t vertex, htd::id_t index) const
+htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::id_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
     
@@ -261,7 +265,7 @@ htd::vertex_t htd::MutableGraphImpl::neighbor(htd::vertex_t vertex, htd::id_t in
     return ret;
 }
 
-void htd::MutableGraphImpl::getVertices(htd::vertex_container & output) const
+void htd::Graph::getVertices(htd::vertex_container & output) const
 {
     for (htd::vertex_t vertex = 0; vertex < size_; vertex++)
     {
@@ -272,7 +276,7 @@ void htd::MutableGraphImpl::getVertices(htd::vertex_container & output) const
     }
 }
 
-std::size_t htd::MutableGraphImpl::isolatedVertexCount(void) const
+std::size_t htd::Graph::isolatedVertexCount(void) const
 {
     std::size_t ret = 0;
 
@@ -290,7 +294,7 @@ std::size_t htd::MutableGraphImpl::isolatedVertexCount(void) const
     return ret;
 }
 
-void htd::MutableGraphImpl::getIsolatedVertices(htd::vertex_container & output) const
+void htd::Graph::getIsolatedVertices(htd::vertex_container & output) const
 {
     for (htd::vertex_t vertex = 0; vertex < size_; vertex++)
     {
@@ -304,7 +308,7 @@ void htd::MutableGraphImpl::getIsolatedVertices(htd::vertex_container & output) 
     }
 }
 
-htd::vertex_t htd::MutableGraphImpl::isolatedVertex(htd::index_t index) const
+htd::vertex_t htd::Graph::isolatedVertex(htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -318,13 +322,13 @@ htd::vertex_t htd::MutableGraphImpl::isolatedVertex(htd::index_t index) const
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableGraphImpl::isolatedVertex(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::Graph::isolatedVertex(htd::index_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableGraphImpl::isIsolatedVertex(htd::vertex_t vertex) const
+bool htd::Graph::isIsolatedVertex(htd::vertex_t vertex) const
 {
     bool ret = false;
 
@@ -336,7 +340,7 @@ bool htd::MutableGraphImpl::isIsolatedVertex(htd::vertex_t vertex) const
     return ret;
 }
 
-void htd::MutableGraphImpl::getEdges(htd::edge_container & output) const
+void htd::Graph::getEdges(htd::edge_container & output) const
 {
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
@@ -347,7 +351,7 @@ void htd::MutableGraphImpl::getEdges(htd::edge_container & output) const
     }
 }
 
-void htd::MutableGraphImpl::getEdges(htd::edge_container & output, htd::vertex_t vertex) const
+void htd::Graph::getEdges(htd::edge_container & output, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -358,24 +362,24 @@ void htd::MutableGraphImpl::getEdges(htd::edge_container & output, htd::vertex_t
     }
 }
 
-const htd::edge_t & htd::MutableGraphImpl::edge(htd::index_t index) const
+const htd::edge_t & htd::Graph::edge(htd::index_t index) const
 {
     HTD_UNUSED(index);
 
     //TODO Implement
-    throw std::out_of_range("NOT IMPLEMENTED");
+    throw std::logic_error("NOT IMPLEMENTED");
 }
 
-const htd::edge_t & htd::MutableGraphImpl::edge(htd::index_t index, htd::vertex_t vertex) const
+const htd::edge_t & htd::Graph::edge(htd::index_t index, htd::vertex_t vertex) const
 {
     HTD_UNUSED(index);
     HTD_UNUSED(vertex);
 
     //TODO Implement
-    throw std::out_of_range("NOT IMPLEMENTED");
+    throw std::logic_error("NOT IMPLEMENTED");
 }
 
-void htd::MutableGraphImpl::getHyperedges(htd::hyperedge_container & output) const
+void htd::Graph::getHyperedges(htd::hyperedge_container & output) const
 {
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
@@ -399,7 +403,7 @@ void htd::MutableGraphImpl::getHyperedges(htd::hyperedge_container & output) con
     }
 }
 
-void htd::MutableGraphImpl::getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const
+void htd::Graph::getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -423,24 +427,24 @@ void htd::MutableGraphImpl::getHyperedges(htd::hyperedge_container & output, htd
     }
 }
 
-const htd::hyperedge_t & htd::MutableGraphImpl::hyperedge(htd::index_t index) const
+const htd::hyperedge_t & htd::Graph::hyperedge(htd::index_t index) const
 {
     HTD_UNUSED(index);
 
     //TODO Implement
-    throw std::out_of_range("NOT IMPLEMENTED");
+    throw std::logic_error("NOT IMPLEMENTED");
 }
 
-const htd::hyperedge_t & htd::MutableGraphImpl::hyperedge(htd::index_t index, htd::vertex_t vertex) const
+const htd::hyperedge_t & htd::Graph::hyperedge(htd::index_t index, htd::vertex_t vertex) const
 {
     HTD_UNUSED(index);
     HTD_UNUSED(vertex);
 
     //TODO Implement
-    throw std::out_of_range("NOT IMPLEMENTED");
+    throw std::logic_error("NOT IMPLEMENTED");
 }
 
-htd::vertex_t htd::MutableGraphImpl::addVertex(void)
+htd::vertex_t htd::Graph::addVertex(void)
 {
     htd::vertex_t ret = next_vertex_;
 
@@ -453,7 +457,7 @@ htd::vertex_t htd::MutableGraphImpl::addVertex(void)
     return ret;
 }
 
-void htd::MutableGraphImpl::removeVertex(htd::vertex_t vertex)
+void htd::Graph::removeVertex(htd::vertex_t vertex)
 {
     if (isVertex(vertex))
     {
@@ -475,7 +479,7 @@ void htd::MutableGraphImpl::removeVertex(htd::vertex_t vertex)
     }
 }
 
-void htd::MutableGraphImpl::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
+void htd::Graph::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
 {
     if (isVertex(vertex))
     {
@@ -538,7 +542,7 @@ void htd::MutableGraphImpl::removeVertex(htd::vertex_t vertex, bool addNeighborC
     }
 }
 
-void htd::MutableGraphImpl::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::Graph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     if (isVertex(vertex1) && isVertex(vertex2))
     {
@@ -559,12 +563,12 @@ void htd::MutableGraphImpl::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2
     }
 }
 
-void htd::MutableGraphImpl::addEdge(const htd::edge_t & edge)
+void htd::Graph::addEdge(const htd::edge_t & edge)
 {
     addEdge(edge.first, edge.second);
 }
 
-void htd::MutableGraphImpl::removeEdge(id_t vertex1, id_t vertex2)
+void htd::Graph::removeEdge(id_t vertex1, id_t vertex2)
 {
     if (isVertex(vertex1) && isVertex(vertex2))
     {
@@ -587,9 +591,9 @@ void htd::MutableGraphImpl::removeEdge(id_t vertex1, id_t vertex2)
     }
 }
 
-void htd::MutableGraphImpl::removeEdge(const htd::edge_t & edge)
+void htd::Graph::removeEdge(const htd::edge_t & edge)
 {
     removeEdge(edge.first, edge.second);
 }
 
-#endif /* HTD_HTD_MUTABLEGRAPHIMPL_CPP */
+#endif /* HTD_HTD_GRAPH_CPP */

@@ -1,5 +1,5 @@
 /* 
- * File:   HypertreeDecompositionAlgorithmImpl.hpp
+ * File:   HypertreeDecompositionAlgorithm.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHMIMPL_HPP
-#define	HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHMIMPL_HPP
+#ifndef HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_HPP
+#define	HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
@@ -37,14 +37,14 @@
 
 namespace htd
 {
-    class HypertreeDecompositionAlgorithmImpl : public htd::IHypertreeDecompositionAlgorithm
+    class HypertreeDecompositionAlgorithm : public htd::IHypertreeDecompositionAlgorithm
     {
         public:
-            HypertreeDecompositionAlgorithmImpl(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm);
+            HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm);
 
-            HypertreeDecompositionAlgorithmImpl(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions);
+            HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions);
 
-            ~HypertreeDecompositionAlgorithmImpl();
+            ~HypertreeDecompositionAlgorithm();
             
             htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE;
 
@@ -53,11 +53,11 @@ namespace htd
             htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const; //TODO HTD_OVERRIDE;
 
         protected:
-            HypertreeDecompositionAlgorithmImpl & operator=(const HypertreeDecompositionAlgorithmImpl &) { return *this; }
+            HypertreeDecompositionAlgorithm & operator=(const HypertreeDecompositionAlgorithm &) { return *this; }
 
         private:
             const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm_;
     };
 }
 
-#endif /* HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHMIMPL_HPP */
+#endif /* HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_HPP */

@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ILabelingCollection.hpp>
-#include <htd/ILabel.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/ILabelCollection.hpp>
 
@@ -50,15 +49,17 @@ namespace htd
 
             std::string labelName(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::ILabel * label(std::string labelName, htd::vertex_t vertex) const HTD_OVERRIDE;
+            bool isLabelingName(std::string labelName) const HTD_OVERRIDE;
 
-            void setLabel(std::string labelName, htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
-
-            void removeLabel(std::string labelName, htd::vertex_t vertex) HTD_OVERRIDE;
+            const htd::IGraphLabeling * labeling(std::string labelName) const HTD_OVERRIDE;
 
             void setLabeling(std::string labelName, htd::IGraphLabeling * labeling) HTD_OVERRIDE;
 
             void removeLabeling(std::string labelName) HTD_OVERRIDE;
+
+            void removeLabels(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            void removeLabels(const htd::hyperedge_t & edge) HTD_OVERRIDE;
 
             htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const HTD_OVERRIDE;
 

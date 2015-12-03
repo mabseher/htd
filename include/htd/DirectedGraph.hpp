@@ -1,5 +1,5 @@
 /* 
- * File:   MutableDirectedGraphImpl.hpp
+ * File:   DirectedGraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MUTABLEDIRECTEDGRAPHIMPL_HPP
-#define	HTD_HTD_MUTABLEDIRECTEDGRAPHIMPL_HPP
+#ifndef HTD_HTD_DIRECTEDGRAPH_HPP
+#define	HTD_HTD_DIRECTEDGRAPH_HPP
 
 #include <htd/IMutableDirectedGraph.hpp>
 
@@ -31,12 +31,14 @@
 
 namespace htd
 {
-    class MutableDirectedGraphImpl : public htd::IMutableDirectedGraph
+    class DirectedGraph : public htd::IMutableDirectedGraph
     {
         public:
-            MutableDirectedGraphImpl(size_t size);
+            DirectedGraph(void);
+
+            DirectedGraph(size_t size);
             
-            ~MutableDirectedGraphImpl();
+            ~DirectedGraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -119,7 +121,7 @@ namespace htd
             void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
 
         protected:
-            MutableDirectedGraphImpl & operator=(const MutableDirectedGraphImpl &) { return *this; }
+            DirectedGraph & operator=(const DirectedGraph &) { return *this; }
 
         private:
             std::size_t size_;
@@ -136,4 +138,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_MUTABLEDIRECTEDGRAPHIMPL_HPP */
+#endif /* HTD_HTD_DIRECTEDGRAPH_HPP */

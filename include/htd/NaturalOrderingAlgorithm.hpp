@@ -1,5 +1,5 @@
 /* 
- * File:   NaturalOrderingAlgorithmImpl.hpp
+ * File:   NaturalOrderingAlgorithm.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_NATURALORDERINGALGORITHMIMPL_HPP
-#define	HTD_HTD_NATURALORDERINGALGORITHMIMPL_HPP
+#ifndef HTD_HTD_ORDERINGALGORITHM_HPP
+#define	HTD_HTD_ORDERINGALGORITHM_HPP
 
 #include <vector>
 
@@ -33,18 +33,18 @@
 
 namespace htd
 {
-    class NaturalOrderingAlgorithmImpl : public htd::IOrderingAlgorithm
+    class NaturalOrderingAlgorithm : public htd::IOrderingAlgorithm
     {
         public:
-            NaturalOrderingAlgorithmImpl(void);
+            NaturalOrderingAlgorithm(void);
             
-            ~NaturalOrderingAlgorithmImpl();
+            ~NaturalOrderingAlgorithm();
             
             void computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const HTD_OVERRIDE;
 
         protected:
-            NaturalOrderingAlgorithmImpl & operator=(const NaturalOrderingAlgorithmImpl &) { return *this; }
+            NaturalOrderingAlgorithm & operator=(const NaturalOrderingAlgorithm &) { return *this; }
     };
 }
 
-#endif /* HTD_HTD_NATURALORDERINGALGORITHMIMPL_HPP */
+#endif /* HTD_HTD_ORDERINGALGORITHM_HPP */

@@ -110,6 +110,11 @@ namespace htd
     const std::string bag_label_name = "Bag";
 
     /**
+     *  Constant for the name of the name label.
+     */
+    const std::string name_label_name = "Name";
+
+    /**
      *  Constant for the name of the edge label.
      */
     const std::string edge_label_name = "Edges";

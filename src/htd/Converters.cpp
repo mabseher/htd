@@ -35,7 +35,7 @@ namespace htd
 {
     htd::IMutableGraph * toMutableGraph(const htd::IGraph & graph)
     {
-        htd::IMutableGraph * ret = htd::getDefaultMutableGraphImplementation(graph.vertexCount());
+        htd::IMutableGraph * ret = htd::getDefaultGraph(graph.vertexCount());
         
         htd::edge_container edges;
         
@@ -51,7 +51,7 @@ namespace htd
     
     htd::IMutableGraph * toMutableGraph(const htd::IHypergraph & graph)
     {
-        htd::IMutableGraph * ret = htd::getDefaultMutableGraphImplementation(graph.vertexCount());
+        htd::IMutableGraph * ret = htd::getDefaultGraph(graph.vertexCount());
         
         htd::hyperedge_container edges;
         

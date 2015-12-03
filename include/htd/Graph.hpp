@@ -1,5 +1,5 @@
 /* 
- * File:   MutableGraphImpl.hpp
+ * File:   Graph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MUTABLEGRAPHIMPL_HPP
-#define	HTD_HTD_MUTABLEGRAPHIMPL_HPP
+#ifndef HTD_HTD_GRAPH_HPP
+#define	HTD_HTD_GRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableGraph.hpp>
@@ -33,12 +33,14 @@
 
 namespace htd
 {
-    class MutableGraphImpl : public IMutableGraph
+    class Graph : public IMutableGraph
     {
         public:
-            MutableGraphImpl(size_t size);
+            Graph(void);
+
+            Graph(size_t size);
             
-            ~MutableGraphImpl();
+            ~Graph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -103,7 +105,7 @@ namespace htd
             void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
 
         protected:
-            MutableGraphImpl & operator=(const MutableGraphImpl &) { return *this; }
+            Graph & operator=(const Graph &) { return *this; }
 
         private:
             std::size_t size_;
@@ -116,4 +118,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_MUTABLEGRAPHIMPL_HPP */
+#endif /* HTD_HTD_GRAPH_HPP */

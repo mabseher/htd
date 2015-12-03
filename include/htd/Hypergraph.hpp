@@ -1,5 +1,5 @@
 /* 
- * File:   MutableHypergraphImpl.hpp
+ * File:   Hypergraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MUTABLEHYPERGRAPHIMPL_HPP
-#define	HTD_HTD_MUTABLEHYPERGRAPHIMPL_HPP
+#ifndef HTD_HTD_HYPERGRAPH_HPP
+#define	HTD_HTD_HYPERGRAPH_HPP
 
 #include <htd/IMutableHypergraph.hpp>
 
@@ -32,14 +32,14 @@
 
 namespace htd
 {
-    class MutableHypergraphImpl : public htd::IMutableHypergraph
+    class Hypergraph : public htd::IMutableHypergraph
     {
         public:
-            MutableHypergraphImpl(void);
+            Hypergraph(void);
             
-            MutableHypergraphImpl(std::size_t size);
+            Hypergraph(std::size_t size);
             
-            ~MutableHypergraphImpl();
+            ~Hypergraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -104,7 +104,7 @@ namespace htd
             void removeEdge(const htd::hyperedge_t & edge) HTD_OVERRIDE;
 
         protected:
-            MutableHypergraphImpl & operator=(const MutableHypergraphImpl &) { return *this; }
+            Hypergraph & operator=(const Hypergraph &) { return *this; }
 
         private:
             std::size_t size_;
@@ -119,4 +119,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_MUTABLEHYPERGRAPHIMPL_HPP */
+#endif /* HTD_HTD_HYPERGRAPH_HPP */

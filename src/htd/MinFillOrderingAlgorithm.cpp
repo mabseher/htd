@@ -1,5 +1,5 @@
 /* 
- * File:   MinFillOrderingAlgorithmImpl.cpp
+ * File:   MinFillOrderingAlgorithm.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,14 +22,14 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MINFILLORDERINGALGORITHMIMPL_CPP
-#define	HTD_HTD_MINFILLORDERINGALGORITHMIMPL_CPP
+#ifndef HTD_HTD_MINFILLORDERINGALGORITHM_CPP
+#define	HTD_HTD_MINFILLORDERINGALGORITHM_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/IGraph.hpp>
 #include <htd/IHypergraph.hpp>
-#include <htd/MinFillOrderingAlgorithmImpl.hpp>
+#include <htd/MinFillOrderingAlgorithm.hpp>
 
 #include <cstdlib>
 #include <set>
@@ -39,17 +39,17 @@
 //TODO Remove
 #include <iostream>
 
-htd::MinFillOrderingAlgorithmImpl::MinFillOrderingAlgorithmImpl(void)
+htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(void)
 {
     
 }
             
-htd::MinFillOrderingAlgorithmImpl::~MinFillOrderingAlgorithmImpl()
+htd::MinFillOrderingAlgorithm::~MinFillOrderingAlgorithm()
 {
     
 }
 
-void htd::MinFillOrderingAlgorithmImpl::computeOrdering(const IHypergraph & graph, std::vector<htd::vertex_t> & result) const
+void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const
 {
     std::size_t size = graph.vertexCount();
     
@@ -603,7 +603,7 @@ void htd::MinFillOrderingAlgorithmImpl::computeOrdering(const IHypergraph & grap
     DEBUGGING_CODE_LEVEL2(std::cout << std::endl;)
 }
 
-std::size_t htd::MinFillOrderingAlgorithmImpl::computeEdgeCount(const std::vector<htd::vertex_container> & availableNeighborhoods, const htd::vertex_container & vertices) const
+std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::vector<htd::vertex_container> & availableNeighborhoods, const htd::vertex_container & vertices) const
 {
     std::size_t ret = 0;
     
@@ -634,10 +634,10 @@ std::size_t htd::MinFillOrderingAlgorithmImpl::computeEdgeCount(const std::vecto
     return ret;
 }
 
-void htd::MinFillOrderingAlgorithmImpl::set_union(const std::vector<htd::vertex_t> & set1,
-                                                  const std::vector<htd::vertex_t> & set2,
-                                                  htd::vertex_t ignoredVertex,
-                                                  std::vector<htd::vertex_t> & result) const
+void htd::MinFillOrderingAlgorithm::set_union(const std::vector<htd::vertex_t> & set1,
+                                              const std::vector<htd::vertex_t> & set2,
+                                              htd::vertex_t ignoredVertex,
+                                              std::vector<htd::vertex_t> & result) const
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();
@@ -715,12 +715,12 @@ void htd::MinFillOrderingAlgorithmImpl::set_union(const std::vector<htd::vertex_
     }
 }
             
-void htd::MinFillOrderingAlgorithmImpl::decompose_sets(const std::vector<htd::vertex_t> & set1,
-                                                       const std::vector<htd::vertex_t> & set2,
-                                                       htd::vertex_t ignoredVertex,
-                                                       std::vector<htd::vertex_t> & resultOnlySet1,
-                                                       std::vector<htd::vertex_t> & resultOnlySet2,
-                                                       std::vector<htd::vertex_t> & resultIntersection) const
+void htd::MinFillOrderingAlgorithm::decompose_sets(const std::vector<htd::vertex_t> & set1,
+                                                   const std::vector<htd::vertex_t> & set2,
+                                                   htd::vertex_t ignoredVertex,
+                                                   std::vector<htd::vertex_t> & resultOnlySet1,
+                                                   std::vector<htd::vertex_t> & resultOnlySet2,
+                                                   std::vector<htd::vertex_t> & resultIntersection) const
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();
@@ -798,4 +798,4 @@ void htd::MinFillOrderingAlgorithmImpl::decompose_sets(const std::vector<htd::ve
     }
 }
 
-#endif /* HTD_HTD_MINFILLORDERINGALGORITHMIMPL_CPP */
+#endif /* HTD_HTD_MINFILLORDERINGALGORITHM_CPP */

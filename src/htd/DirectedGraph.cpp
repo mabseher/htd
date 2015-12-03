@@ -1,5 +1,5 @@
 /* 
- * File:   MutableDirectedGraphImpl.cpp
+ * File:   DirectedGraph.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,11 +22,11 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MUTABLEDIRECTEDGRAPHIMPL_CPP
-#define	HTD_HTD_MUTABLEDIRECTEDGRAPHIMPL_CPP
+#ifndef HTD_HTD_DIRECTEDGRAPH_CPP
+#define	HTD_HTD_DIRECTEDGRAPH_CPP
 
 #include <htd/Helpers.hpp>
-#include <htd/MutableDirectedGraphImpl.hpp>
+#include <htd/DirectedGraph.hpp>
 
 #include <algorithm>
 #include <stdexcept>
@@ -34,7 +34,12 @@
 #include <vector>
 #include <set>
 
-htd::MutableDirectedGraphImpl::MutableDirectedGraphImpl(std::size_t size)
+htd::DirectedGraph::DirectedGraph(void) : htd::DirectedGraph::DirectedGraph(0)
+{
+
+}
+
+htd::DirectedGraph::DirectedGraph(std::size_t size)
     : size_(size),
       next_vertex_(htd::first_vertex + size),
       deletions_(),
@@ -44,17 +49,17 @@ htd::MutableDirectedGraphImpl::MutableDirectedGraphImpl(std::size_t size)
     
 }
 
-htd::MutableDirectedGraphImpl::~MutableDirectedGraphImpl()
+htd::DirectedGraph::~DirectedGraph()
 {
     
 }
 
-std::size_t htd::MutableDirectedGraphImpl::vertexCount(void) const
+std::size_t htd::DirectedGraph::vertexCount(void) const
 {
     return size_ - deletions_.size();
 }
 
-std::size_t htd::MutableDirectedGraphImpl::edgeCount(void) const
+std::size_t htd::DirectedGraph::edgeCount(void) const
 {
     std::size_t ret = 0;
     
@@ -66,7 +71,7 @@ std::size_t htd::MutableDirectedGraphImpl::edgeCount(void) const
     return ret;
 }
 
-std::size_t htd::MutableDirectedGraphImpl::edgeCount(htd::vertex_t vertex) const
+std::size_t htd::DirectedGraph::edgeCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
 
@@ -76,18 +81,18 @@ std::size_t htd::MutableDirectedGraphImpl::edgeCount(htd::vertex_t vertex) const
     }
     else
     {
-        throw std::out_of_range("std::size_t htd::MutableDirectedGraphImpl::edgeCount(htd::vertex_t) const");
+        throw std::out_of_range("std::size_t htd::DirectedGraph::edgeCount(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableDirectedGraphImpl::isVertex(htd::vertex_t vertex) const
+bool htd::DirectedGraph::isVertex(htd::vertex_t vertex) const
 {
     return vertex < next_vertex_ && vertex != htd::unknown_vertex && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
-htd::vertex_t htd::MutableDirectedGraphImpl::vertex(htd::index_t index) const
+htd::vertex_t htd::DirectedGraph::vertex(htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
     
@@ -113,38 +118,38 @@ htd::vertex_t htd::MutableDirectedGraphImpl::vertex(htd::index_t index) const
     return ret;
 }
 
-bool htd::MutableDirectedGraphImpl::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::DirectedGraph::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     if (!isVertex(vertex1) || !isVertex(vertex2))
     {
-        throw std::out_of_range("htd::MutableGraphImpl::isNeighbor(id_t, id_t)");
+        throw std::out_of_range("htd::DirectedGraph::isNeighbor(id_t, id_t)");
     }
     
     return std::binary_search(incomingNeighborhood_[vertex1].begin(), incomingNeighborhood_[vertex1].end(), vertex2) ||
            std::binary_search(outgoingNeighborhood_[vertex1].begin(), outgoingNeighborhood_[vertex1].end(), vertex2);
 }
 
-bool htd::MutableDirectedGraphImpl::isIncomingNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::DirectedGraph::isIncomingNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     if (!isVertex(vertex1) || !isVertex(vertex2))
     {
-        throw std::out_of_range("htd::MutableGraphImpl::isIncomingNeighbor(id_t, id_t)");
+        throw std::out_of_range("htd::DirectedGraph::isIncomingNeighbor(id_t, id_t)");
     }
     
     return std::binary_search(incomingNeighborhood_[vertex1].begin(), incomingNeighborhood_[vertex1].end(), vertex2);
 }
 
-bool htd::MutableDirectedGraphImpl::isOutgoingNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::DirectedGraph::isOutgoingNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     if (!isVertex(vertex1) || !isVertex(vertex2))
     {
-        throw std::out_of_range("htd::MutableGraphImpl::isOutgoingNeighbor(id_t, id_t)");
+        throw std::out_of_range("htd::DirectedGraph::isOutgoingNeighbor(id_t, id_t)");
     }
     
     return std::binary_search(outgoingNeighborhood_[vertex1].begin(), outgoingNeighborhood_[vertex1].end(), vertex2);
 }
 
-bool htd::MutableDirectedGraphImpl::isConnected(void) const
+bool htd::DirectedGraph::isConnected(void) const
 {
     bool ret = true;
     
@@ -211,7 +216,7 @@ bool htd::MutableDirectedGraphImpl::isConnected(void) const
     return ret;
 }
 
-bool htd::MutableDirectedGraphImpl::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::DirectedGraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     bool ret = false;
 
@@ -271,11 +276,11 @@ bool htd::MutableDirectedGraphImpl::isConnected(htd::vertex_t vertex1, htd::vert
     return ret;
 }
 
-bool htd::MutableDirectedGraphImpl::isReachable(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::DirectedGraph::isReachable(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     if (!isVertex(vertex1) || !isVertex(vertex2))
     {
-        throw std::out_of_range("htd::MutableGraphImpl::isConnected(id_t, id_t)");
+        throw std::out_of_range("htd::DirectedGraph::isConnected(id_t, id_t)");
     }
     
     bool ret = false;
@@ -326,13 +331,13 @@ bool htd::MutableDirectedGraphImpl::isReachable(htd::vertex_t vertex1, htd::vert
     return ret;
 }
 
-std::size_t htd::MutableDirectedGraphImpl::neighborCount(htd::vertex_t vertex) const
+std::size_t htd::DirectedGraph::neighborCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
     
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::MutableGraphImpl::getNeighborCount(id_t)");
+        throw std::out_of_range("htd::DirectedGraph::getNeighborCount(id_t)");
     }
     
     ret = htd::compute_set_union_size(incomingNeighborhood_[vertex].begin(), incomingNeighborhood_[vertex].end(),
@@ -341,13 +346,13 @@ std::size_t htd::MutableDirectedGraphImpl::neighborCount(htd::vertex_t vertex) c
     return ret;
 }
 
-std::size_t htd::MutableDirectedGraphImpl::incomingNeighborCount(htd::vertex_t vertex) const
+std::size_t htd::DirectedGraph::incomingNeighborCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
     
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::MutableGraphImpl::getIncomingNeighborCount(id_t)");
+        throw std::out_of_range("htd::DirectedGraph::getIncomingNeighborCount(id_t)");
     }
     
     ret = incomingNeighborhood_[vertex].size();
@@ -355,13 +360,13 @@ std::size_t htd::MutableDirectedGraphImpl::incomingNeighborCount(htd::vertex_t v
     return ret;
 }
 
-std::size_t htd::MutableDirectedGraphImpl::outgoingNeighborCount(htd::vertex_t vertex) const
+std::size_t htd::DirectedGraph::outgoingNeighborCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
     
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::MutableGraphImpl::getOutgoingNeighborCount(id_t)");
+        throw std::out_of_range("htd::DirectedGraph::getOutgoingNeighborCount(id_t)");
     }
     
     ret = outgoingNeighborhood_[vertex].size();
@@ -369,7 +374,7 @@ std::size_t htd::MutableDirectedGraphImpl::outgoingNeighborCount(htd::vertex_t v
     return ret;
 }
             
-void htd::MutableDirectedGraphImpl::getNeighbors(htd::vertex_t vertex, vertex_container & output) const
+void htd::DirectedGraph::getNeighbors(htd::vertex_t vertex, vertex_container & output) const
 {
     if (isVertex(vertex))
     {
@@ -379,7 +384,7 @@ void htd::MutableDirectedGraphImpl::getNeighbors(htd::vertex_t vertex, vertex_co
     }
 }
 
-htd::vertex_t htd::MutableDirectedGraphImpl::neighbor(htd::vertex_t vertex, htd::id_t index) const
+htd::vertex_t htd::DirectedGraph::neighbor(htd::vertex_t vertex, htd::id_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
     
@@ -456,11 +461,11 @@ htd::vertex_t htd::MutableDirectedGraphImpl::neighbor(htd::vertex_t vertex, htd:
     return ret;
 }
 
-void htd::MutableDirectedGraphImpl::getIncomingNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::DirectedGraph::getIncomingNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
 {
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::MutableGraphImpl::getIncomingNeighbors(id_t, vertex_container&)");
+        throw std::out_of_range("htd::DirectedGraph::getIncomingNeighbors(id_t, vertex_container&)");
     }
     
     //TODO Covered by check above?
@@ -470,11 +475,11 @@ void htd::MutableDirectedGraphImpl::getIncomingNeighbors(htd::vertex_t vertex, h
     }
 }
 
-void htd::MutableDirectedGraphImpl::getOutgoingNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::DirectedGraph::getOutgoingNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
 {
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::MutableGraphImpl::getOutgoingNeighbors(id_t, vertex_container&)");
+        throw std::out_of_range("htd::DirectedGraph::getOutgoingNeighbors(id_t, vertex_container&)");
     }
 
     //TODO Covered by check above?
@@ -484,7 +489,7 @@ void htd::MutableDirectedGraphImpl::getOutgoingNeighbors(htd::vertex_t vertex, h
     }
 }
 
-htd::vertex_t htd::MutableDirectedGraphImpl::incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -502,18 +507,18 @@ htd::vertex_t htd::MutableDirectedGraphImpl::incomingNeighbor(htd::vertex_t vert
         }
         else
         {
-            throw std::out_of_range("htd::vertex_t htd::MutableDirectedGraphImpl::incomingNeighbor(htd::vertex_t, htd::index_t) const");
+            throw std::out_of_range("htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t, htd::index_t) const");
         }
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableDirectedGraphImpl::incomingNeighbor(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t, htd::index_t) const");
     }
 
     return ret;
 }
 
-htd::vertex_t htd::MutableDirectedGraphImpl::outgoingNeighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t vertex, htd::index_t index) const
 {
 
     htd::vertex_t ret = htd::unknown_vertex;
@@ -532,18 +537,18 @@ htd::vertex_t htd::MutableDirectedGraphImpl::outgoingNeighbor(htd::vertex_t vert
         }
         else
         {
-            throw std::out_of_range("htd::vertex_t htd::MutableDirectedGraphImpl::outgoingNeighbor(htd::vertex_t, htd::index_t) const");
+            throw std::out_of_range("htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t, htd::index_t) const");
         }
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableDirectedGraphImpl::outgoingNeighbor(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t, htd::index_t) const");
     }
 
     return ret;
 }
 
-void htd::MutableDirectedGraphImpl::getVertices(htd::vertex_container & output) const
+void htd::DirectedGraph::getVertices(htd::vertex_container & output) const
 {
     for (htd::vertex_t vertex = 0; vertex < size_; vertex++)
     {
@@ -554,7 +559,7 @@ void htd::MutableDirectedGraphImpl::getVertices(htd::vertex_container & output) 
     }
 }
 
-std::size_t htd::MutableDirectedGraphImpl::isolatedVertexCount(void) const
+std::size_t htd::DirectedGraph::isolatedVertexCount(void) const
 {
     std::size_t ret = 0;
 
@@ -572,7 +577,7 @@ std::size_t htd::MutableDirectedGraphImpl::isolatedVertexCount(void) const
     return ret;
 }
 
-void htd::MutableDirectedGraphImpl::getIsolatedVertices(htd::vertex_container & output) const
+void htd::DirectedGraph::getIsolatedVertices(htd::vertex_container & output) const
 {
     for (htd::vertex_t vertex = 0; vertex < size_; vertex++)
     {
@@ -586,7 +591,7 @@ void htd::MutableDirectedGraphImpl::getIsolatedVertices(htd::vertex_container & 
     }
 }
 
-htd::vertex_t htd::MutableDirectedGraphImpl::isolatedVertex(htd::index_t index) const
+htd::vertex_t htd::DirectedGraph::isolatedVertex(htd::index_t index) const
 {
     htd::vertex_t ret = htd::unknown_vertex;
 
@@ -600,13 +605,13 @@ htd::vertex_t htd::MutableDirectedGraphImpl::isolatedVertex(htd::index_t index) 
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::MutableDirectedGraphImpl::isolatedVertex(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::DirectedGraph::isolatedVertex(htd::index_t) const");
     }
 
     return ret;
 }
 
-bool htd::MutableDirectedGraphImpl::isIsolatedVertex(htd::vertex_t vertex) const
+bool htd::DirectedGraph::isIsolatedVertex(htd::vertex_t vertex) const
 {
     bool ret = false;
 
@@ -618,7 +623,7 @@ bool htd::MutableDirectedGraphImpl::isIsolatedVertex(htd::vertex_t vertex) const
     return ret;
 }
 
-void htd::MutableDirectedGraphImpl::getEdges(htd::edge_container & output) const
+void htd::DirectedGraph::getEdges(htd::edge_container & output) const
 {
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
@@ -629,7 +634,7 @@ void htd::MutableDirectedGraphImpl::getEdges(htd::edge_container & output) const
     }
 }
 
-void htd::MutableDirectedGraphImpl::getEdges(htd::edge_container & output, htd::vertex_t vertex) const
+void htd::DirectedGraph::getEdges(htd::edge_container & output, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -640,28 +645,28 @@ void htd::MutableDirectedGraphImpl::getEdges(htd::edge_container & output, htd::
     }
     else
     {
-        throw std::out_of_range("htd::MutableGraphImpl::getEdges(htd::edge_container&, id_t)");
+        throw std::out_of_range("htd::DirectedGraph::getEdges(htd::edge_container&, id_t)");
     }
 }
 
-const htd::edge_t & htd::MutableDirectedGraphImpl::edge(htd::index_t index) const
+const htd::edge_t & htd::DirectedGraph::edge(htd::index_t index) const
 {
     HTD_UNUSED(index);
 
     //TODO Implement
-    throw std::out_of_range("const htd::edge_t & htd::MutableDirectedGraphImpl::edge(htd::index_t) const");
+    throw std::out_of_range("const htd::edge_t & htd::DirectedGraph::edge(htd::index_t) const");
 }
 
-const htd::edge_t & htd::MutableDirectedGraphImpl::edge(htd::index_t index, htd::vertex_t vertex) const
+const htd::edge_t & htd::DirectedGraph::edge(htd::index_t index, htd::vertex_t vertex) const
 {
     HTD_UNUSED(index);
     HTD_UNUSED(vertex);
 
     //TODO Implement
-    throw std::out_of_range("const htd::edge_t & htd::MutableDirectedGraphImpl::edge(htd::index_t, htd::vertex_t) const");
+    throw std::out_of_range("const htd::edge_t & htd::DirectedGraph::edge(htd::index_t, htd::vertex_t) const");
 }
 
-void htd::MutableDirectedGraphImpl::getHyperedges(htd::hyperedge_container & output) const
+void htd::DirectedGraph::getHyperedges(htd::hyperedge_container & output) const
 {
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
@@ -685,11 +690,11 @@ void htd::MutableDirectedGraphImpl::getHyperedges(htd::hyperedge_container & out
     }
 }
 
-void htd::MutableDirectedGraphImpl::getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const
+void htd::DirectedGraph::getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::MutableGraphImpl::edges(htd::hyperedge_container&, id_t)");
+        throw std::out_of_range("htd::DirectedGraph::edges(htd::hyperedge_container&, id_t)");
     }
     
     //TODO Covered by check above?
@@ -715,24 +720,24 @@ void htd::MutableDirectedGraphImpl::getHyperedges(htd::hyperedge_container & out
     }
 }
 
-const htd::hyperedge_t & htd::MutableDirectedGraphImpl::hyperedge(htd::index_t index) const
+const htd::hyperedge_t & htd::DirectedGraph::hyperedge(htd::index_t index) const
 {
     HTD_UNUSED(index);
 
     //TODO Implement
-    throw std::out_of_range("const htd::hyperedge_t & htd::MutableDirectedGraphImpl::hyperedge(htd::index_t) const");
+    throw std::out_of_range("const htd::hyperedge_t & htd::DirectedGraph::hyperedge(htd::index_t) const");
 }
 
-const htd::hyperedge_t & htd::MutableDirectedGraphImpl::hyperedge(htd::index_t index, htd::vertex_t vertex) const
+const htd::hyperedge_t & htd::DirectedGraph::hyperedge(htd::index_t index, htd::vertex_t vertex) const
 {
     HTD_UNUSED(index);
     HTD_UNUSED(vertex);
 
     //TODO Implement
-    throw std::out_of_range("const htd::hyperedge_t & htd::MutableDirectedGraphImpl::hyperedge(htd::index_t, htd::vertex_t) const");
+    throw std::out_of_range("const htd::hyperedge_t & htd::DirectedGraph::hyperedge(htd::index_t, htd::vertex_t) const");
 }
 
-htd::vertex_t htd::MutableDirectedGraphImpl::addVertex(void)
+htd::vertex_t htd::DirectedGraph::addVertex(void)
 {
     htd::vertex_t ret = next_vertex_;
 
@@ -747,7 +752,7 @@ htd::vertex_t htd::MutableDirectedGraphImpl::addVertex(void)
     return ret;
 }
 
-void htd::MutableDirectedGraphImpl::removeVertex(htd::vertex_t vertex)
+void htd::DirectedGraph::removeVertex(htd::vertex_t vertex)
 {
     if (isVertex(vertex))
     {
@@ -767,7 +772,7 @@ void htd::MutableDirectedGraphImpl::removeVertex(htd::vertex_t vertex)
     }
 }
 
-void htd::MutableDirectedGraphImpl::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
+void htd::DirectedGraph::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
 {
     if (isVertex(vertex))
     {
@@ -841,7 +846,7 @@ void htd::MutableDirectedGraphImpl::removeVertex(htd::vertex_t vertex, bool addN
     }
 }
 
-void htd::MutableDirectedGraphImpl::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::DirectedGraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     if (isVertex(vertex1) && isVertex(vertex2))
     {
@@ -851,7 +856,7 @@ void htd::MutableDirectedGraphImpl::addEdge(htd::vertex_t vertex1, htd::vertex_t
 }
 
 
-void htd::MutableDirectedGraphImpl::addEdge(const htd::edge_t & edge)
+void htd::DirectedGraph::addEdge(const htd::edge_t & edge)
 {
     if (isVertex(edge.first) && isVertex(edge.second))
     {
@@ -860,7 +865,7 @@ void htd::MutableDirectedGraphImpl::addEdge(const htd::edge_t & edge)
     }
 }
 
-void htd::MutableDirectedGraphImpl::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::DirectedGraph::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     if (isVertex(vertex1) && isVertex(vertex2))
     {
@@ -869,7 +874,7 @@ void htd::MutableDirectedGraphImpl::removeEdge(htd::vertex_t vertex1, htd::verte
     }
 }
 
-void htd::MutableDirectedGraphImpl::removeEdge(const htd::edge_t & edge)
+void htd::DirectedGraph::removeEdge(const htd::edge_t & edge)
 {
     if (isVertex(edge.first) && isVertex(edge.second))
     {
@@ -878,4 +883,4 @@ void htd::MutableDirectedGraphImpl::removeEdge(const htd::edge_t & edge)
     }
 }
 
-#endif /* HTD_HTD_MUTABLEDIRECTEDGRAPHIMPL_CPP */
+#endif /* HTD_HTD_DIRECTEDGRAPH_CPP */

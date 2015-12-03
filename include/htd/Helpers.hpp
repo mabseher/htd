@@ -633,34 +633,36 @@ namespace htd
             std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() / 1000 << "." << std::setw(3) << std::setfill('0') << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() % 1000 << " seconds";
         }
     }
-    
-    htd::IMutableGraph * getDefaultMutableGraphImplementation(std::size_t size);
-    
-    htd::IMutableHypergraph * getDefaultMutableHypergraphImplementation(std::size_t size);
-    
-    htd::IMutableDirectedGraph * getDefaultMutableDirectedGraphImplementation(std::size_t size);
 
-    htd::IMutableLabeledTree * getDefaultMutableLabeledTreeImplementation(void);
-    
-    htd::IMutableLabeledTree * getDefaultMutableLabeledTreeImplementation(const htd::ILabeledTree & decomposition);
+    htd::IMutableGraph * getDefaultGraph(void);
 
-    htd::IMutableTreeDecomposition * getDefaultMutableTreeDecompositionImplementation(void);
+    htd::IMutableGraph * getDefaultGraph(std::size_t size);
 
-    htd::IMutableTreeDecomposition * getDefaultMutableTreeDecompositionImplementation(const htd::ITreeDecomposition & decomposition);
+    htd::IMutableHypergraph * getDefaultHypergraph(void);
 
-    htd::IMutableHypertreeDecomposition * getDefaultMutableHypertreeDecompositionImplementation(void);
+    htd::IMutableHypergraph * getDefaultHypergraph(std::size_t size);
 
-    htd::IMutableHypertreeDecomposition * getDefaultMutableHypertreeDecompositionImplementation(const htd::ITreeDecomposition & decomposition);
+    htd::IMutableDirectedGraph * getDefaultDirectedGraph(void);
 
-    htd::IMutableHypertreeDecomposition * getDefaultMutableHypertreeDecompositionImplementation(const htd::IHypertreeDecomposition & decomposition);
+    htd::IMutableDirectedGraph * getDefaultDirectedGraph(std::size_t size);
+
+    htd::IMutableTreeDecomposition * getDefaultTreeDecomposition(void);
+
+    htd::IMutableTreeDecomposition * getDefaultTreeDecomposition(const htd::ITreeDecomposition & decomposition);
+
+    htd::IMutableHypertreeDecomposition * getDefaultHypertreeDecomposition(void);
+
+    htd::IMutableHypertreeDecomposition * getDefaultHypertreeDecomposition(const htd::ITreeDecomposition & decomposition);
+
+    htd::IMutableHypertreeDecomposition * getDefaultHypertreeDecomposition(const htd::IHypertreeDecomposition & decomposition);
 
     htd::ITreeDecompositionAlgorithm * getDefaultTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm);
 
     htd::IHypertreeDecompositionAlgorithm * getDefaultHypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm);
 
-    htd::IOrderingAlgorithm * getDefaultOrderingAlgorithmImplementation(void);
+    htd::IOrderingAlgorithm * getDefaultOrderingAlgorithm(void);
     
-    htd::ISetCoverAlgorithm * getDefaultSetCoverAlgorithmImplementation(void);
+    htd::ISetCoverAlgorithm * getDefaultSetCoverAlgorithm(void);
     
 }
 

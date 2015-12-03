@@ -26,10 +26,10 @@
 #define	HTD_HTD_ILABELINGCOLLECTION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/ILabel.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/ILabelCollection.hpp>
 
+//TODO Also consider hyperedge labels!
 namespace htd
 {
     class ILabelingCollection
@@ -43,15 +43,17 @@ namespace htd
 
             virtual std::string labelName(htd::index_t index) const = 0;
 
-            virtual const htd::ILabel * label(std::string labelName, htd::vertex_t vertex) const = 0;
+            virtual bool isLabelingName(std::string labelName) const = 0;
 
-            virtual void setLabel(std::string labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;
-
-            virtual void removeLabel(std::string labelName, htd::vertex_t vertex) = 0;
+            virtual const htd::IGraphLabeling * labeling(std::string labelName) const = 0;
 
             virtual void setLabeling(std::string labelName, htd::IGraphLabeling * labeling) = 0;
 
             virtual void removeLabeling(std::string labelName) = 0;
+
+            virtual void removeLabels(htd::vertex_t vertex) = 0;
+
+            virtual void removeLabels(const htd::hyperedge_t & edge) = 0;
 
             virtual htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const = 0;
 

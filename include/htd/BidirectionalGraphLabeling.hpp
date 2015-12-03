@@ -26,6 +26,7 @@
 #define	HTD_HTD_BIDIRECTIONALGRAPHLABELING_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 
 #include <htd/IBidirectionalGraphLabeling.hpp>
 #include <htd/ILabel.hpp>

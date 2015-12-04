@@ -27,6 +27,8 @@
 
 #include <htd/IMutableHypergraph.hpp>
 
+#include <htd/Collection.hpp>
+
 #include <vector>
 #include <unordered_set>
 
@@ -62,8 +64,8 @@ namespace htd
             void getNeighbors(htd::vertex_t vertex, vertex_container& output) const HTD_OVERRIDE;
             
             htd::vertex_t neighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
-            
-            void getVertices(vertex_container& output) const HTD_OVERRIDE;
+
+            htd::Collection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
 
             std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
@@ -110,6 +112,8 @@ namespace htd
             std::size_t size_;
 
             htd::vertex_t next_vertex_;
+
+            htd::vertex_container vertices_;
 
             std::unordered_set<htd::vertex_t> deletions_;
 

@@ -38,6 +38,12 @@ namespace htd
     class Iterator : public virtual IteratorBase<T>
     {
         public:
+            typedef std::ptrdiff_t difference_type;
+            typedef T value_type;
+            typedef const T & reference;
+            typedef const T * pointer;
+            typedef std::forward_iterator_tag iterator_category;
+
             template <class Iter>
             Iterator(Iter iterator) : baseIterator_(new IteratorWrapper<Iter, T>(iterator))
             {

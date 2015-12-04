@@ -76,6 +76,11 @@ bool htd::HyperedgeContainerLabel::operator==(const htd::HyperedgeContainerLabel
     return container_ == other.container();
 }
 
+std::size_t htd::HyperedgeContainerLabel::size(void) const
+{
+    return container_.size();
+}
+
 htd::hyperedge_container & htd::HyperedgeContainerLabel::container(void)
 {
     return container_;

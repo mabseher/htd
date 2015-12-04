@@ -83,13 +83,9 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
     {
         compressDecomposition(*ret);
 
-        htd::vertex_container vertices;
-
-        ret->getVertices(vertices);
-
         for (auto & labelingFunction : labelingFunctions)
         {
-            for (htd::vertex_t vertex : vertices)
+            for (htd::vertex_t vertex : ret->vertices())
             {
                 auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::bag_label_name, vertex)))->container();
 
@@ -585,7 +581,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
 {
     if (decomposition.vertexCount() > 1)
     {
-        std::size_t childrenCount = 0;
+        std::size_t childCount = 0;
 
         htd::index_t currentIndex = 0;
 
@@ -597,13 +593,17 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
 
         htd::vertex_container unneededVertices;
                 
+        std::vector<std::string> labelNames;
+
+        decomposition.getLabelNames(labelNames);
+
         while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
         {
             if (currentNode != htd::Vertex::UNKNOWN)
             {
-                childrenCount = decomposition.childrenCount(currentNode);
+                childCount = decomposition.childCount(currentNode);
 
-                if (currentIndex < childrenCount)
+                if (currentIndex < childCount)
                 {
                     oldNode = currentNode;
 
@@ -650,7 +650,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
         for (htd::vertex_t vertex : unneededVertices)
         {
             /*
-            std::cout << "ELIMINATING VERTEX " << vertex << " (CHILDREN: " << decomposition.childrenCount(vertex) << ")" << std::endl;
+            std::cout << "ELIMINATING VERTEX " << vertex << " (CHILDREN: " << decomposition.childCount(vertex) << ")" << std::endl;
             std::vector<htd::vertex_t> childrenTMP;
             decomposition.getChildren(vertex, childrenTMP);
             for (auto child : childrenTMP)
@@ -664,57 +664,40 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
             }
             */
             
-            if (decomposition.childrenCount(vertex) <= 1)
+            if (decomposition.childCount(vertex) <= 1)
             {
                 decomposition.removeVertex(vertex);
             }
             else
             {
-                //TODO
-                /*
-                std::cout << "UNNEEDED: " << vertex << std::endl;
-                */
-                
                 std::vector<htd::vertex_t> children;
                 decomposition.getChildren(vertex, children);
 
                 auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::bag_label_name, vertex)))->container();
-                
-                //TODO
-                /*
-                std::cout << "   ";
-                htd::print(label, false);
-                std::cout << std::endl;
-                */
-                
+
                 for (htd::vertex_t child : children)
                 {
                     auto childLabel = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::bag_label_name, child)))->container();
 
-                    /*
-                    std::cout << "   ";
-                    htd::print(childLabel, false);
-                    std::cout << std::endl;
-                    */
-                    
                     if (std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
                     {
                         decomposition.removeVertex(vertex);
                     }
-                    //TODO
-                    /*
                     else
                     {
+                        /*
                         if (std::includes(childLabel.begin(), childLabel.end(), label.begin(), label.end()))
                         {
                             std::cout << "SWAP NODES " << child << " AND " << vertex << " (ERASE NODE " << vertex << ")" << std::endl;
                             
-                            decomposition.swapVertexLabel(vertex, child);
+                            //TODO Optimize
+                            for (std::string labelName : )
+                            decomposition.swapLabels(vertex, child);
                             
-                            decomposition.eliminateVertex(child);
+                            decomposition.removeVertex(child);
                         }
+                        */
                     }
-                    */
                 }
             }
         }

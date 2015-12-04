@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/Graph.hpp>
+#include <htd/Collection.hpp>
 
 #include <algorithm>
 #include <stdexcept>
@@ -43,10 +44,14 @@ htd::Graph::Graph(void) : htd::Graph::Graph(0)
 htd::Graph::Graph(std::size_t size)
     : size_(size),
       next_vertex_(htd::first_vertex + size),
+      vertices_(size),
       deletions_(),
       neighborhood_(size, std::vector<htd::vertex_t>())
 {
-    
+    for (std::size_t index = 0; index < size; ++index)
+    {
+        vertices_[index] = index;
+    }
 }
 
 htd::Graph::~Graph()
@@ -265,15 +270,9 @@ htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::id_t index) const
     return ret;
 }
 
-void htd::Graph::getVertices(htd::vertex_container & output) const
+htd::Collection<htd::vertex_t> htd::Graph::vertices(void) const
 {
-    for (htd::vertex_t vertex = 0; vertex < size_; vertex++)
-    {
-        if (isVertex(vertex))
-        {
-            output.push_back(vertex);
-        }
-    }
+    return Collection<htd::vertex_t>(vertices_);
 }
 
 std::size_t htd::Graph::isolatedVertexCount(void) const
@@ -452,6 +451,8 @@ htd::vertex_t htd::Graph::addVertex(void)
 
     next_vertex_++;
 
+    vertices_.push_back(ret);
+
     neighborhood_.push_back(htd::vertex_container());
 
     return ret;
@@ -476,6 +477,8 @@ void htd::Graph::removeVertex(htd::vertex_t vertex)
         neighborhood_[vertex - htd::first_vertex].clear();
 
         deletions_.insert(vertex);
+
+        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
     }
 }
 
@@ -539,6 +542,8 @@ void htd::Graph::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
         neighborhood_[vertex - htd::first_vertex].clear();
 
         deletions_.insert(vertex);
+
+        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
     }
 }
 

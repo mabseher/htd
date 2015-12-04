@@ -70,7 +70,7 @@ namespace htd
 
             bool isNeighbor(htd::vertex_t vertex1, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
-            void getVertices(htd::vertex_container & output) const HTD_OVERRIDE;
+            htd::Collection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
 
             std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
@@ -124,7 +124,7 @@ namespace htd
 
             bool isParent(htd::vertex_t vertex, htd::vertex_t parent) const HTD_OVERRIDE;
 
-            std::size_t childrenCount(htd::vertex_t vertex) const HTD_OVERRIDE;
+            std::size_t childCount(htd::vertex_t vertex) const HTD_OVERRIDE;
             
             void getChildren(htd::vertex_t vertex, htd::vertex_container & output) const HTD_OVERRIDE;
             
@@ -222,6 +222,8 @@ namespace htd
 
             void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
+            std::size_t maximumBagSize(void) const HTD_OVERRIDE;
+
             htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const;
 
             TreeDecomposition & operator=(const TreeDecomposition & other);
@@ -247,6 +249,8 @@ namespace htd
             htd::vertex_t root_;
 
             htd::vertex_t next_vertex_;
+
+            htd::vertex_container vertices_;
 
             std::vector<TreeNode *> nodes_;
 

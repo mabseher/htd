@@ -42,11 +42,15 @@ htd::Hypergraph::Hypergraph(void) : htd::Hypergraph::Hypergraph(0)
 htd::Hypergraph::Hypergraph(std::size_t size)
     : size_(size),
       next_vertex_(htd::first_vertex + size),
+      vertices_(size),
       deletions_(),
       edges_(),
       neighborhood_(size, htd::vertex_container())
 {
-
+    for (std::size_t index = 0; index < size; ++index)
+    {
+        vertices_[index] = index;
+    }
 }
 
 htd::Hypergraph::~Hypergraph()
@@ -306,15 +310,9 @@ htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index
     return ret;
 }
 
-void htd::Hypergraph::getVertices(htd::vertex_container & output) const
+htd::Collection<htd::vertex_t> htd::Hypergraph::vertices(void) const
 {
-    for (std::size_t vertex = htd::first_vertex; vertex < size_ + htd::first_vertex; vertex++)
-    {
-        if (isVertex(vertex))
-        {
-            output.push_back(vertex);
-        }
-    }
+    return Collection<htd::vertex_t>(vertices_);
 }
 
 std::size_t htd::Hypergraph::isolatedVertexCount(void) const
@@ -443,9 +441,11 @@ htd::vertex_t htd::Hypergraph::addVertex(void)
     size_++;
 
     next_vertex_++;
-    
+
     neighborhood_.push_back(htd::vertex_container());
-    
+
+    vertices_.push_back(ret);
+
     return ret;
 }
 
@@ -477,6 +477,8 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex)
         }
         
         deletions_.insert(vertex);
+
+        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
     }
 }
 
@@ -528,6 +530,8 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHypered
         }
 
         deletions_.insert(vertex);
+
+        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
     }
 }
 

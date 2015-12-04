@@ -47,6 +47,8 @@ namespace htd
 
             bool operator==(const VertexContainerLabel & other) const;
 
+            std::size_t size(void) const;
+
             htd::vertex_container & container(void);
 
             const htd::vertex_container & container(void) const;

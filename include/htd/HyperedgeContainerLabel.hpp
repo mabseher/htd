@@ -47,6 +47,8 @@ namespace htd
 
             bool operator==(const HyperedgeContainerLabel & other) const;
 
+            std::size_t size(void) const;
+
             htd::hyperedge_container & container(void);
 
             const htd::hyperedge_container & container(void) const;

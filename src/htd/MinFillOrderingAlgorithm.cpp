@@ -30,11 +30,13 @@
 #include <htd/IGraph.hpp>
 #include <htd/IHypergraph.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
+#include <htd/Collection.hpp>
 
 #include <cstdlib>
 #include <set>
 #include <vector>
 #include <stdexcept>
+#include <iterator>
 
 //TODO Remove
 #include <iostream>
@@ -62,14 +64,14 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
     std::size_t currentDegree = (std::size_t)-1;
         
     std::vector<htd::vertex_t> minDegreePool;
-        
+
     std::unordered_set<htd::vertex_t> pool(size);
-    
+
     std::vector<htd::vertex_t> vertices;
     vertices.reserve(size);
-    
-    graph.getVertices(vertices);
-    
+
+    std::copy(graph.vertices().begin(), graph.vertices().end(), std::back_inserter(vertices));
+
     std::vector<char> updateStatus(size, 0);
     
     std::vector<std::size_t> requiredFillAmount(size, (std::size_t)-1);
@@ -85,7 +87,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
     htd::vertex_container affectedVertices;
     affectedVertices.reserve(size);
 
-    for (htd::vertex_t vertex : vertices)
+    for (htd::vertex_t vertex : graph.vertices())
     {
         auto& currentNeighborhood = neighborhood[vertex - htd::first_vertex];
         

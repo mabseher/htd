@@ -27,6 +27,8 @@
 
 #include <htd/Globals.hpp>
 
+#include <htd/Collection.hpp>
+
 #include <cstdlib>
 
 namespace htd
@@ -38,7 +40,7 @@ namespace htd
 
             virtual std::size_t vertexCount(void) const = 0;
 
-            virtual void getVertices(htd::vertex_container & output) const = 0;
+            virtual htd::Collection<htd::vertex_t> vertices(void) const = 0;
             
             virtual htd::vertex_t vertex(htd::index_t index) const = 0;
 

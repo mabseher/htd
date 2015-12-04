@@ -25,8 +25,10 @@
 #ifndef HTD_HTD_DIRECTEDGRAPH_CPP
 #define	HTD_HTD_DIRECTEDGRAPH_CPP
 
+#include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/DirectedGraph.hpp>
+#include <htd/Collection.hpp>
 
 #include <algorithm>
 #include <stdexcept>
@@ -42,11 +44,15 @@ htd::DirectedGraph::DirectedGraph(void) : htd::DirectedGraph::DirectedGraph(0)
 htd::DirectedGraph::DirectedGraph(std::size_t size)
     : size_(size),
       next_vertex_(htd::first_vertex + size),
+      vertices_(size),
       deletions_(),
       incomingNeighborhood_(size, std::set<htd::vertex_t>()),
       outgoingNeighborhood_(size, std::set<htd::vertex_t>())
 {
-    
+    for (std::size_t index = 0; index < size; ++index)
+    {
+        vertices_[index] = index;
+    }
 }
 
 htd::DirectedGraph::~DirectedGraph()
@@ -548,15 +554,9 @@ htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t vertex, htd::in
     return ret;
 }
 
-void htd::DirectedGraph::getVertices(htd::vertex_container & output) const
+htd::Collection<htd::vertex_t> htd::DirectedGraph::vertices(void) const
 {
-    for (htd::vertex_t vertex = 0; vertex < size_; vertex++)
-    {
-        if (isVertex(vertex))
-        {
-            output.push_back(vertex);
-        }
-    }
+    return Collection<htd::vertex_t>(vertices_);
 }
 
 std::size_t htd::DirectedGraph::isolatedVertexCount(void) const
@@ -745,6 +745,8 @@ htd::vertex_t htd::DirectedGraph::addVertex(void)
 
     next_vertex_++;
 
+    vertices_.push_back(ret);
+
     incomingNeighborhood_.push_back(std::set<htd::vertex_t>());
 
     outgoingNeighborhood_.push_back(std::set<htd::vertex_t>());
@@ -769,6 +771,8 @@ void htd::DirectedGraph::removeVertex(htd::vertex_t vertex)
         outgoingNeighborhood_[vertex].clear();
 
         deletions_.insert(vertex);
+
+        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
     }
 }
 
@@ -843,6 +847,8 @@ void htd::DirectedGraph::removeVertex(htd::vertex_t vertex, bool addNeighborCliq
         outgoingNeighborhood_[vertex].clear();
 
         deletions_.insert(vertex);
+
+        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
     }
 }
 

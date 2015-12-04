@@ -57,12 +57,12 @@ void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & g
     std::size_t minDegree = (std::size_t)-1;
     
     std::unordered_set<htd::vertex_t> pool(size);
-    
+
     std::vector<htd::vertex_t> vertices;
     vertices.reserve(size);
-    
-    graph.getVertices(vertices);
-    
+
+    std::copy(graph.vertices().begin(), graph.vertices().end(), std::back_inserter(vertices));
+
     std::vector<htd::vertex_container> neighborhood(size, htd::vertex_container());
 
     htd::vertex_container newNeighborhood;

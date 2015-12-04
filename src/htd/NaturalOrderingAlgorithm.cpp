@@ -50,9 +50,10 @@ htd::NaturalOrderingAlgorithm::~NaturalOrderingAlgorithm()
 void htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const
 {
     std::vector<htd::vertex_t> ret;
+    ret.reserve(graph.vertexCount());
     
-    graph.getVertices(ret);
-    
+    std::copy(graph.vertices().begin(), graph.vertices().end(), std::back_inserter(ret));
+
     std::sort(ret.begin(), ret.end());
     
     std::copy(ret.begin(), ret.end(), std::back_inserter(result));

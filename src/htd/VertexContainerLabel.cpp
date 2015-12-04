@@ -69,6 +69,11 @@ bool htd::VertexContainerLabel::operator==(const htd::VertexContainerLabel & oth
     return container_ == other.container();
 }
 
+std::size_t htd::VertexContainerLabel::size(void) const
+{
+    return container_.size();
+}
+
 htd::vertex_container & htd::VertexContainerLabel::container(void)
 {
     return container_;

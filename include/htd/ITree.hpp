@@ -52,7 +52,7 @@ namespace htd
 
             virtual bool isParent(htd::vertex_t vertex, htd::vertex_t parent) const = 0;
             
-            virtual std::size_t childrenCount(htd::vertex_t vertex) const = 0;
+            virtual std::size_t childCount(htd::vertex_t vertex) const = 0;
             
             virtual void getChildren(htd::vertex_t vertex, htd::vertex_container & children) const = 0;
             

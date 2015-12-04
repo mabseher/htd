@@ -74,13 +74,9 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
             if (setCoverAlgorithm != nullptr)
             {
-                htd::vertex_container vertices;
-
-                ret->getVertices(vertices);
-
                 htd::HypertreeDecompositionLabelingFunction hypertreeDecompositionLabelingFunction(graph, *setCoverAlgorithm);
 
-                for (htd::vertex_t vertex : vertices)
+                for (htd::vertex_t vertex : ret->vertices())
                 {
                     auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::bag_label_name, vertex)))->container();
 
@@ -131,13 +127,9 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
             if (setCoverAlgorithm != nullptr)
             {
-                htd::vertex_container vertices;
-
-                ret->getVertices(vertices);
-
                 htd::HypertreeDecompositionLabelingFunction hypertreeDecompositionLabelingFunction(graph, *setCoverAlgorithm);
 
-                for (htd::vertex_t vertex : vertices)
+                for (htd::vertex_t vertex : ret->vertices())
                 {
                     auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::bag_label_name, vertex)))->container();
 
@@ -150,7 +142,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
-                    for (htd::vertex_t vertex : vertices)
+                    for (htd::vertex_t vertex : ret->vertices())
                     {
                         auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::bag_label_name, vertex)))->container();
 

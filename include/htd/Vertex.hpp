@@ -45,4 +45,3 @@ namespace htd
 }
 
 #endif /* HTD_HTD_VERTEX_HPP */
-

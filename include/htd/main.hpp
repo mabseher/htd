@@ -27,6 +27,7 @@
 
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
+#include <htd/Collection.hpp>
 #include <htd/CompilerDetection.hpp>
 #include <htd/Converters.hpp>
 #include <htd/DirectedGraph.hpp>

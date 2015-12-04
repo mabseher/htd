@@ -80,7 +80,7 @@ namespace htd
 
             bool isOutgoingNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
-            void getVertices(vertex_container& output) const HTD_OVERRIDE;
+            htd::Collection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
 
             std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
@@ -127,6 +127,8 @@ namespace htd
             std::size_t size_;
 
             htd::vertex_t next_vertex_;
+
+            htd::vertex_container vertices_;
 
             std::set<htd::vertex_t> deletions_;
 

@@ -115,7 +115,7 @@ namespace htd
 
             std::vector<htd::hyperedge_t> edges_;
 
-            std::vector<std::set<htd::vertex_t>> neighborhood_;
+            std::vector<htd::vertex_container> neighborhood_;
     };
 }
 

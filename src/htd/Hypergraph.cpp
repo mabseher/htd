@@ -30,8 +30,9 @@
 #include <htd/Hypergraph.hpp>
 
 #include <algorithm>
+#include <array>
 #include <iterator>
-#include <set>
+#include <vector>
 
 htd::Hypergraph::Hypergraph(void) : htd::Hypergraph::Hypergraph(0)
 {
@@ -43,7 +44,7 @@ htd::Hypergraph::Hypergraph(std::size_t size)
       next_vertex_(htd::first_vertex + size),
       deletions_(),
       edges_(),
-      neighborhood_(size, std::set<htd::vertex_t>())
+      neighborhood_(size, htd::vertex_container())
 {
 
 }
@@ -294,7 +295,11 @@ htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index
 
         if (index < currentNeighborhood.size())
         {
-            ret = *std::next(currentNeighborhood.begin(), index);
+            ret = currentNeighborhood[index];
+        }
+        else
+        {
+            throw std::out_of_range("htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t, htd::index_t) const");
         }
     }
 
@@ -439,7 +444,7 @@ htd::vertex_t htd::Hypergraph::addVertex(void)
 
     next_vertex_++;
     
-    neighborhood_.push_back(std::set<htd::vertex_t>());
+    neighborhood_.push_back(htd::vertex_container());
     
     return ret;
 }
@@ -489,7 +494,7 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHypered
         {
             htd::hyperedge_t newEdge;
 
-            auto position1 = std::find(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
+            auto position1 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
 
             if (position1 != currentNeighborhood.end())
             {
@@ -578,6 +583,24 @@ void htd::Hypergraph::addEdge(const htd::hyperedge_t & edge)
             hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
 
             edges_.push_back(hyperedge);
+
+            std::array<htd::vertex_t, 1> currentVertex;
+
+            for (htd::vertex_t vertex : hyperedge)
+            {
+                currentVertex[0] = vertex;
+
+                auto & currentNeighborhood = neighborhood_[vertex - htd::first_vertex];
+
+                htd::vertex_container newNeighborhood;
+
+                htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(),
+                                        hyperedge.begin(), hyperedge.end(),
+                                        currentVertex.begin(), currentVertex.end(),
+                                        std::back_inserter(newNeighborhood));
+
+                currentNeighborhood.swap(newNeighborhood);
+            }
         }
         else
         {
@@ -631,11 +654,24 @@ void htd::Hypergraph::removeEdge(const htd::hyperedge_t & edge)
         
         if (ok)
         {
-            auto position = std::lower_bound(edges_.begin(), edges_.end(), edge);
+            auto position = std::find(edges_.begin(), edges_.end(), edge);
             
             if (position != edges_.end() && *position == edge)
             {
                 edges_.erase(position);
+
+                for (htd::vertex_t vertex : edge)
+                {
+                    for (auto it = edges_.begin(); it != edges_.end(); it++)
+                    {
+                        htd::hyperedge_t & currentEdge = *it;
+
+                        if (std::lower_bound(currentEdge.begin(), currentEdge.end(), vertex) != currentEdge.end())
+                        {
+                            it = edges_.end();
+                        }
+                    }
+                }
             }
         }
         else

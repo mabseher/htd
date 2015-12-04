@@ -1,5 +1,5 @@
 /* 
- * File:   Id.hpp
+ * File:   IteratorBase.hpp
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,27 +22,36 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_ID_HPP
-#define HTD_HTD_ID_HPP
+#ifndef HTD_HTD_ITERATORBASE_HPP
+#define HTD_HTD_ITERATORBASE_HPP
 
-#include <cstdlib>
+#include <htd/Globals.hpp>
+
+#include <iterator>
 
 namespace htd
 {
-    /**
-     *  Datatype for IDs.
-     */
-    typedef std::size_t id_t;
-
-    struct Id
+    template <typename T>
+    class IteratorBase
     {
         public:
-            static const htd::id_t UNKNOWN = 0;
+            virtual ~IteratorBase<T>() = 0;
 
-        private:
-            Id(void);
+            virtual IteratorBase<T> & operator++(void) = 0;
+
+            virtual const T * operator->(void) const = 0;
+
+            virtual const T & operator*(void) const = 0;
+
+            virtual bool operator==(const IteratorBase<T> & other) const = 0;
+
+            virtual bool operator!=(const IteratorBase<T> & other) const = 0;
+
+            virtual IteratorBase<T> * clone(void) const = 0;
     };
+
+    template <typename T>
+    inline htd::IteratorBase<T>::~IteratorBase() { }
 }
 
-#endif /* HTD_HTD_ID_HPP */
-
+#endif /* HTD_HTD_ITERATORBASE_HPP */

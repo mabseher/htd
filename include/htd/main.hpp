@@ -74,6 +74,9 @@
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionVerifier.hpp>
 #include <htd/InducedSubgraphLabelingFunction.hpp>
+#include <htd/Iterator.hpp>
+#include <htd/IteratorBase.hpp>
+#include <htd/IteratorWrapper.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/Label.hpp>
 #include <htd/LabelCollection.hpp>

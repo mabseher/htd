@@ -40,6 +40,8 @@ namespace htd
     class Collection
     {
         public:
+            typedef T value_type;
+
             Collection(const Iterator<T> & begin, const Iterator<T> & end) : begin_(begin), end_(end)
             {
 
@@ -61,7 +63,17 @@ namespace htd
                 return begin_;
             }
 
+            Iterator<T> begin(void) const
+            {
+                return begin_;
+            }
+
             Iterator<T> end(void)
+            {
+                return end_;
+            }
+
+            Iterator<T> end(void) const
             {
                 return end_;
             }

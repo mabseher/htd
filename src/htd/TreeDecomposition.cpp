@@ -1509,6 +1509,32 @@ htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t 
     return htd::Collection<htd::vertex_t>();
 }
 
+std::size_t htd::TreeDecomposition::minimumBagSize(void) const
+{
+    bool start = true;
+
+    std::size_t ret = 0;
+
+    auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+
+    for (htd::vertex_t vertex : vertices())
+    {
+        if (bagLabeling->hasLabel(vertex))
+        {
+            std::size_t bagSize = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->size();
+
+            if (start || bagSize < ret)
+            {
+                ret = bagSize;
+
+                start = false;
+            }
+        }
+    }
+
+    return ret;
+}
+
 std::size_t htd::TreeDecomposition::maximumBagSize(void) const
 {
     std::size_t ret = 0;

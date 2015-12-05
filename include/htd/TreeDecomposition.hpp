@@ -222,6 +222,8 @@ namespace htd
 
             void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
+            std::size_t minimumBagSize(void) const HTD_OVERRIDE;
+
             std::size_t maximumBagSize(void) const HTD_OVERRIDE;
 
             htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const;

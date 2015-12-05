@@ -109,6 +109,8 @@ namespace htd
 
             virtual bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const = 0;
 
+            virtual std::size_t minimumBagSize(void) const = 0;
+
             virtual std::size_t maximumBagSize(void) const = 0;
     };
 

@@ -47,7 +47,9 @@ namespace htd
             std::size_t edgeCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             bool isVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
-            
+
+            bool isEdge(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+
             htd::vertex_t vertex(htd::index_t index) const HTD_OVERRIDE;
             
             bool isConnected(void) const HTD_OVERRIDE;

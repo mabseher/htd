@@ -29,12 +29,12 @@
 #include <htd/IHypergraph.hpp>
 #include <htd/ILabel.hpp>
 #include <htd/IGraphLabeling.hpp>
+#include <htd/ILabelingCollection.hpp>
 
 #include <string>
 
 namespace htd
 {
-    //TODO Also consider edge labels!
     class ILabeledHypergraph : public virtual htd::IHypergraph
     {
         public:
@@ -47,6 +47,10 @@ namespace htd
             virtual std::string labelName(htd::index_t index) const = 0;
 
             virtual const htd::ILabel * label(const std::string & labelName, htd::vertex_t vertex) const = 0;
+
+            virtual const htd::ILabel * label(const std::string & labelName, const htd::hyperedge_t & edge) const = 0;
+
+            virtual htd::ILabelingCollection * cloneLabelings(void) const = 0;
 
             virtual htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const = 0;
     };

@@ -29,6 +29,7 @@
 #include <htd/ILabelingCollection.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/ILabelCollection.hpp>
+#include <htd/Iterator.hpp>
 
 #include <string>
 #include <unordered_map>
@@ -63,9 +64,25 @@ namespace htd
 
             void removeLabels(const htd::hyperedge_t & edge) HTD_OVERRIDE;
 
+            void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+
+            void swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) HTD_OVERRIDE;
+
             htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             LabelingCollection * clone(void) const HTD_OVERRIDE;
+
+            htd::IGraphLabeling * operator[](const std::string & labelName) HTD_OVERRIDE;
+
+            const htd::IGraphLabeling * operator[](const std::string & labelName) const HTD_OVERRIDE;
+
+            htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) HTD_OVERRIDE;
+
+            const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) const HTD_OVERRIDE;
+
+            htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) HTD_OVERRIDE;
+
+            const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) const HTD_OVERRIDE;
 
         private:
             std::vector<std::string> labelNames_;

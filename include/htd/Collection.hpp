@@ -63,22 +63,22 @@ namespace htd
 
             }
 
-            Iterator<T> begin(void)
+            htd::Iterator<T> begin(void)
             {
                 return begin_;
             }
 
-            Iterator<T> begin(void) const
+            const htd::Iterator<T> begin(void) const
             {
                 return begin_;
             }
 
-            Iterator<T> end(void)
+            htd::Iterator<T> end(void)
             {
                 return end_;
             }
 
-            Iterator<T> end(void) const
+            const htd::Iterator<T> end(void) const
             {
                 return end_;
             }

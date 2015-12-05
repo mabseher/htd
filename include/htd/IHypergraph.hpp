@@ -46,6 +46,8 @@ namespace htd
 
             virtual bool isVertex(htd::vertex_t vertex) const = 0;
 
+            virtual bool isEdge(const htd::hyperedge_t & edge) const = 0;
+
             virtual std::size_t isolatedVertexCount(void) const = 0;
 
             virtual void getIsolatedVertices(htd::vertex_container & output) const = 0;

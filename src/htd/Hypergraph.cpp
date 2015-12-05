@@ -95,6 +95,17 @@ bool htd::Hypergraph::isVertex(htd::vertex_t vertex) const
     return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
+bool htd::Hypergraph::isEdge(const htd::hyperedge_t & edge) const
+{
+    htd::hyperedge_t hyperedge(edge);
+
+    std::sort(hyperedge.begin(), hyperedge.end());
+
+    hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
+
+    return std::find(edges_.begin(), edges_.end(), hyperedge) != edges_.end();
+}
+
 htd::vertex_t htd::Hypergraph::vertex(htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;

@@ -30,6 +30,7 @@
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/ILabeledTree.hpp>
 #include <htd/IGraphLabeling.hpp>
+#include <htd/ILabelingCollection.hpp>
 
 #include <string>
 #include <unordered_map>
@@ -55,7 +56,9 @@ namespace htd
             std::size_t edgeCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             bool isVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
-            
+
+            bool isEdge(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+
             htd::vertex_t vertex(htd::vertex_t index) const HTD_OVERRIDE;
             
             bool isConnected(void) const HTD_OVERRIDE;
@@ -104,9 +107,23 @@ namespace htd
 
             const htd::ILabel * label(const std::string & labelName, htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            const htd::ILabel * label(const std::string & labelName, const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+
             void setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
 
+            void setLabel(const std::string & labelName, const htd::hyperedge_t & edge, htd::ILabel * label) HTD_OVERRIDE;
+
             void removeLabel(const std::string & labelName, htd::vertex_t vertex) HTD_OVERRIDE;
+
+            void removeLabel(const std::string & labelName, const htd::hyperedge_t & edge) HTD_OVERRIDE;
+
+            void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+
+            void swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) HTD_OVERRIDE;
+
+            void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+
+            void swapLabel(const std::string & labelName, const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) HTD_OVERRIDE;
 
             htd::vertex_t root(void) const HTD_OVERRIDE;
 
@@ -220,11 +237,11 @@ namespace htd
 
             bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
-
             std::size_t minimumBagSize(void) const HTD_OVERRIDE;
 
             std::size_t maximumBagSize(void) const HTD_OVERRIDE;
+
+            htd::ILabelingCollection * cloneLabelings(void) const HTD_OVERRIDE;
 
             htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const;
 
@@ -258,7 +275,7 @@ namespace htd
 
             std::unordered_set<htd::vertex_t> deletions_;
 
-            std::unordered_map<std::string, htd::IGraphLabeling *> labelings_;
+            htd::ILabelingCollection * labelings_;
 
             std::size_t size(htd::TreeDecomposition::TreeNode * start) const;
 

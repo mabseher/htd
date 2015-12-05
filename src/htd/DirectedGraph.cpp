@@ -98,6 +98,18 @@ bool htd::DirectedGraph::isVertex(htd::vertex_t vertex) const
     return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
+bool htd::DirectedGraph::isEdge(const htd::hyperedge_t & edge) const
+{
+    bool ret = false;
+
+    if (edge.size() == 2)
+    {
+        ret = isOutgoingNeighbor(edge[0], edge[1]);
+    }
+
+    return ret;
+}
+
 htd::vertex_t htd::DirectedGraph::vertex(htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;

@@ -25,11 +25,14 @@
 #ifndef HTD_HTD_TREEDECOMPOSITION_CPP
 #define	HTD_HTD_TREEDECOMPOSITION_CPP
 
+#include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
+
 #include <htd/TreeDecomposition.hpp>
 #include <htd/GraphLabeling.hpp>
-#include <htd/VertexContainerLabel.hpp>
 #include <htd/ILabeledTree.hpp>
-#include <htd/Helpers.hpp>
+#include <htd/LabelingCollection.hpp>
+#include <htd/VertexContainerLabel.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -42,25 +45,16 @@
 #include <iostream>
 
 htd::TreeDecomposition::TreeDecomposition(void)
-    : size_(0), root_(htd::Vertex::UNKNOWN), next_vertex_(htd::first_vertex), nodes_(), deletions_(), labelings_()
+    : size_(0), root_(htd::Vertex::UNKNOWN), next_vertex_(htd::first_vertex), nodes_(), deletions_(), labelings_(new htd::LabelingCollection())
 {
     
 }
 
 //TODO Ensure correctness when htd::first_vertex does not match for this and original
 htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original)
-    : size_(0), root_(original.root()), next_vertex_(htd::first_vertex), nodes_(), deletions_(), labelings_()
+    : size_(0), root_(original.root()), next_vertex_(htd::first_vertex), nodes_(), deletions_(), labelings_(original.cloneLabelings())
 {
     htd::vertex_t maximumVertex = 0;
-
-    std::vector<std::string> labelNames;
-
-    original.getLabelNames(labelNames);
-
-    for (auto& labelName : labelNames)
-    {
-        labelings_[labelName] = original.cloneLabeling(labelName);
-    }
 
     for (auto & node : original.vertices())
     {
@@ -101,7 +95,7 @@ htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original)
 }
 
 htd::TreeDecomposition::TreeDecomposition(const htd::TreeDecomposition & original)
-    : size_(original.size_), root_(original.root_), next_vertex_(htd::first_vertex), nodes_(), deletions_(original.deletions_), labelings_(original.labelings_)
+    : size_(original.size_), root_(original.root_), next_vertex_(htd::first_vertex), nodes_(), deletions_(original.deletions_), labelings_(original.cloneLabelings())
 {
     nodes_.reserve(original.nodes_.size());
     
@@ -131,17 +125,12 @@ htd::TreeDecomposition::~TreeDecomposition()
         nodes_.clear();
     }
 
-    for (auto& labeling : labelings_)
+    if (labelings_ != nullptr)
     {
-        if (labeling.second != nullptr)
-        {
-            delete labeling.second;
+        delete labelings_;
 
-            labeling.second = nullptr;
-        }
+        labelings_ = nullptr;
     }
-
-    labelings_.clear();
 }
 
 std::size_t htd::TreeDecomposition::vertexCount(void) const
@@ -173,6 +162,18 @@ std::size_t htd::TreeDecomposition::edgeCount(htd::vertex_t vertex) const
 bool htd::TreeDecomposition::isVertex(htd::vertex_t vertex) const
 {
     return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
+}
+
+bool htd::TreeDecomposition::isEdge(const htd::hyperedge_t & edge) const
+{
+    bool ret = false;
+
+    if (edge.size() == 2 && edge[0] != edge[1])
+    {
+        ret = isNeighbor(edge[0], edge[1]);
+    }
+
+    return ret;
 }
 
 htd::vertex_t htd::TreeDecomposition::vertex(htd::index_t index) const
@@ -830,7 +831,7 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
                         
                         htd::vertex_t bestChoice = htd::Vertex::UNKNOWN;
 
-                        auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_[htd::bag_label_name]);
+                        auto bagLabeling = dynamic_cast<htd::GraphLabeling *>((*labelings_)[htd::bag_label_name]);
 
                         if (bagLabeling != nullptr)
                         {
@@ -901,7 +902,7 @@ htd::vertex_t htd::TreeDecomposition::insertRoot(void)
         nodes_.clear();
         nodes_.push_back(new TreeNode(1, htd::Vertex::UNKNOWN));
 
-        for (auto& labeling : labelings_)
+        for (auto& labeling : *labelings_)
         {
             labeling.second->clear();
         }
@@ -940,7 +941,7 @@ void htd::TreeDecomposition::removeRoot(void)
     
     deletions_.clear();
 
-    for (auto& labeling : labelings_)
+    for (auto& labeling : *labelings_)
     {
         labeling.second->clear();
     }
@@ -1051,12 +1052,12 @@ htd::vertex_t htd::TreeDecomposition::addIntermediateParent(htd::vertex_t vertex
 
 std::size_t htd::TreeDecomposition::labelCount(void) const
 {
-    return labelings_.size();
+    return labelings_->labelCount();
 }
 
 void htd::TreeDecomposition::getLabelNames(std::vector<std::string> & output) const
 {
-    for (auto& labeling : labelings_)
+    for (auto& labeling : *labelings_)
     {
         output.push_back(labeling.first);
     }
@@ -1064,12 +1065,12 @@ void htd::TreeDecomposition::getLabelNames(std::vector<std::string> & output) co
 
 std::string htd::TreeDecomposition::labelName(htd::index_t index) const
 {
-    if (index >= labelings_.size())
+    if (index >= labelings_->labelCount())
     {
         throw std::out_of_range("std::string htd::TreeDecomposition::labelName(htd::index_t) const");
     }
 
-    auto position = labelings_.begin();
+    auto position = labelings_->begin();
 
     std::advance(position, index);
 
@@ -1078,26 +1079,73 @@ std::string htd::TreeDecomposition::labelName(htd::index_t index) const
 
 const htd::ILabel * htd::TreeDecomposition::label(const std::string & labelName, htd::vertex_t vertex) const
 {
-    //TODO if (isValidVertex(vertex)) ...
-    auto labeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(labelName));
+    if (!isVertex(vertex))
+    {
+        throw std::out_of_range("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, htd::vertex_t) const");
+    }
+
+    if (!labelings_->isLabelingName(labelName))
+    {
+        throw std::logic_error("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, htd::vertex_t) const");
+    }
+
+    auto labeling = dynamic_cast<htd::IGraphLabeling *>((*labelings_)[labelName]);
+
+    if (labeling == nullptr)
+    {
+        throw std::logic_error("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, htd::vertex_t) const");
+    }
 
     return labeling->label(vertex);
+}
+
+const htd::ILabel * htd::TreeDecomposition::label(const std::string & labelName, const htd::hyperedge_t & edge) const
+{
+    if (!isEdge(edge))
+    {
+        throw std::out_of_range("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, const htd::hyperedge_t &) const");
+    }
+
+    if (!labelings_->isLabelingName(labelName))
+    {
+        throw std::logic_error("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, const htd::hyperedge_t &) const");
+    }
+
+    auto labeling = dynamic_cast<htd::IGraphLabeling *>((*labelings_)[labelName]);
+
+    if (labeling == nullptr)
+    {
+        throw std::logic_error("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, const htd::hyperedge_t &) const");
+    }
+
+    return labeling->label(edge);
 }
 
 void htd::TreeDecomposition::setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
     if (isVertex(vertex))
     {
-        auto labelingPosition = labelings_.find(labelName);
-
-        if (labelingPosition == labelings_.end())
+        if (!labelings_->isLabelingName(labelName))
         {
-            labelings_[labelName] = new htd::GraphLabeling();
+            labelings_->setLabeling(labelName, new htd::GraphLabeling());
         }
 
-        auto labeling = dynamic_cast<htd::GraphLabeling *>(labelings_[labelName]);
+        (*labelings_)[labelName]->setLabel(vertex, label);
+    }
+}
 
-        labeling->setLabel(vertex, label);
+void htd::TreeDecomposition::setLabel(const std::string & labelName, const htd::hyperedge_t & edge, htd::ILabel * label)
+{
+    if (isEdge(edge))
+    {
+        if (!labelings_->isLabelingName(labelName))
+        {
+            labelings_->setLabeling(labelName, new htd::GraphLabeling());
+        }
+
+        auto labeling = dynamic_cast<htd::IGraphLabeling *>((*labelings_)[labelName]);
+
+        labeling->setLabel(edge, label);
     }
 }
 
@@ -1105,13 +1153,24 @@ void htd::TreeDecomposition::removeLabel(const std::string & labelName, htd::ver
 {
     if (isVertex(vertex))
     {
-        auto labelingPosition = labelings_.find(labelName);
-
-        if (labelingPosition != labelings_.end())
+        if (labelings_->isLabelingName(labelName))
         {
-            auto labeling = dynamic_cast<htd::GraphLabeling *>(labelings_[labelName]);
+            auto labeling = dynamic_cast<htd::IGraphLabeling *>((*labelings_)[labelName]);
 
             labeling->removeLabel(vertex);
+        }
+    }
+}
+
+void htd::TreeDecomposition::removeLabel(const std::string & labelName, const htd::hyperedge_t & edge)
+{
+    if (isEdge(edge))
+    {
+        if (labelings_->isLabelingName(labelName))
+        {
+            auto labeling = dynamic_cast<htd::IGraphLabeling *>((*labelings_)[labelName]);
+
+            labeling->removeLabel(edge);
         }
     }
 }
@@ -1297,7 +1356,7 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+    auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
     for (auto& node : nodes_)
     {
@@ -1321,7 +1380,7 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
 
 void htd::TreeDecomposition::getForgetNodes(htd::vertex_container & output) const
 {
-    auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+    auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
     for (auto& node : nodes_)
     {
@@ -1371,9 +1430,9 @@ bool htd::TreeDecomposition::isForgetNode(htd::vertex_t vertex) const
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
-            auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(node->id))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(node->id))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1394,7 +1453,7 @@ std::size_t htd::TreeDecomposition::introduceNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+    auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
     for (auto& node : nodes_)
     {
@@ -1418,7 +1477,7 @@ std::size_t htd::TreeDecomposition::introduceNodeCount(void) const
 
 void htd::TreeDecomposition::getIntroduceNodes(htd::vertex_container & output) const
 {
-    auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+    auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
     for (auto& node : nodes_)
     {
@@ -1468,7 +1527,7 @@ bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t vertex) const
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(node->id))->container();
 
@@ -1495,7 +1554,7 @@ htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t 
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             if (bagLabeling->hasLabel(vertex))
             {
@@ -1515,7 +1574,7 @@ std::size_t htd::TreeDecomposition::minimumBagSize(void) const
 
     std::size_t ret = 0;
 
-    auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+    auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
     for (htd::vertex_t vertex : vertices())
     {
@@ -1539,7 +1598,7 @@ std::size_t htd::TreeDecomposition::maximumBagSize(void) const
 {
     std::size_t ret = 0;
 
-    auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+    auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
     for (htd::vertex_t vertex : vertices())
     {
@@ -1567,7 +1626,7 @@ std::size_t htd::TreeDecomposition::forgottenVerticesCount(htd::vertex_t vertex)
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1592,7 +1651,7 @@ std::size_t htd::TreeDecomposition::forgottenVerticesCount(htd::vertex_t vertex,
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1613,7 +1672,7 @@ void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::ver
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1634,7 +1693,7 @@ void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::ver
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1721,7 +1780,7 @@ std::size_t htd::TreeDecomposition::introducedVerticesCount(htd::vertex_t vertex
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1746,7 +1805,7 @@ std::size_t htd::TreeDecomposition::introducedVerticesCount(htd::vertex_t vertex
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1767,7 +1826,7 @@ void htd::TreeDecomposition::getIntroducedVertices(htd::vertex_t vertex, htd::ve
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1788,7 +1847,7 @@ void htd::TreeDecomposition::getIntroducedVertices(htd::vertex_t vertex, htd::ve
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1875,7 +1934,7 @@ std::size_t htd::TreeDecomposition::rememberedVerticesCount(htd::vertex_t vertex
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1900,7 +1959,7 @@ std::size_t htd::TreeDecomposition::rememberedVerticesCount(htd::vertex_t vertex
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1921,7 +1980,7 @@ void htd::TreeDecomposition::getRememberedVertices(htd::vertex_t vertex, htd::ve
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -1942,7 +2001,7 @@ void htd::TreeDecomposition::getRememberedVertices(htd::vertex_t vertex, htd::ve
 
         if (node != nullptr)
         {
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
@@ -2029,7 +2088,7 @@ void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex
         {
             auto& children = node->children;
 
-            auto bagLabeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(htd::bag_label_name));
+            auto bagLabeling = (*labelings_)[htd::bag_label_name];
 
             for (auto child : children)
             {
@@ -2211,7 +2270,7 @@ void htd::TreeDecomposition::deleteNode(TreeNode * node)
 
                     deletions_.insert(nodeIdentifier);
 
-                    for (auto& labeling : labelings_)
+                    for (auto& labeling : *labelings_)
                     {
                         labeling.second->removeLabel(nodeIdentifier);
                     }
@@ -2233,7 +2292,7 @@ void htd::TreeDecomposition::deleteNode(TreeNode * node)
 
             deletions_.insert(nodeIdentifier);
 
-            for (auto& labeling : labelings_)
+            for (auto& labeling : *labelings_)
             {
                 labeling.second->removeLabel(nodeIdentifier);
             }
@@ -2250,31 +2309,56 @@ void htd::TreeDecomposition::deleteNode(TreeNode * node)
     }
 }
 
+void htd::TreeDecomposition::swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
+{
+    if (isVertex(vertex1) && isVertex(vertex2))
+    {
+        labelings_->swapLabels(vertex1, vertex2);
+    }
+}
+
+void htd::TreeDecomposition::swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2)
+{
+    if (isEdge(edge1) && isEdge(edge2))
+    {
+        labelings_->swapLabels(edge1, edge2);
+    }
+}
+
 void htd::TreeDecomposition::swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     if (isVertex(vertex1) && isVertex(vertex2))
     {
-        auto& node1 = nodes_[vertex1];
-        auto& node2 = nodes_[vertex2];
-
-        auto labeling = dynamic_cast<htd::GraphLabeling *>(labelings_.at(labelName));
-
-        if (node1 != nullptr && node2 != nullptr)
+        if (labelings_->isLabelingName(labelName))
         {
-            labeling->swapLabels(vertex1, vertex2);
+            (*labelings_)[labelName]->swapLabels(vertex1, vertex2);
         }
     }
+}
+
+void htd::TreeDecomposition::swapLabel(const std::string & labelName, const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2)
+{
+    if (isEdge(edge1) && isEdge(edge2))
+    {
+        if (labelings_->isLabelingName(labelName))
+        {
+            (*labelings_)[labelName]->swapLabels(edge1, edge2);
+        }
+    }
+}
+
+htd::ILabelingCollection * htd::TreeDecomposition::cloneLabelings(void) const
+{
+    return labelings_->clone();
 }
 
 htd::IGraphLabeling * htd::TreeDecomposition::cloneLabeling(const std::string & labelName) const
 {
     htd::IGraphLabeling * ret = nullptr;
 
-    auto position = labelings_.find(labelName);
-
-    if (position != labelings_.end())
+    if (labelings_->isLabelingName(labelName))
     {
-        ret = (*position).second->clone();
+        ret = (*labelings_)[labelName]->clone();
     }
     else
     {

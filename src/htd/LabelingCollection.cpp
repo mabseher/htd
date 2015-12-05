@@ -44,7 +44,15 @@ htd::LabelingCollection::LabelingCollection(void) : labelNames_(), content_()
             
 htd::LabelingCollection::~LabelingCollection()
 {
+    for (auto & labeling : content_)
+    {
+        if (labeling.second != nullptr)
+        {
+            delete labeling.second;
 
+            labeling.second = nullptr;
+        }
+    }
 }
 
 std::size_t htd::LabelingCollection::labelCount(void) const
@@ -154,6 +162,22 @@ void htd::LabelingCollection::removeLabels(const htd::hyperedge_t & edge)
     }
 }
 
+void htd::LabelingCollection::swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
+{
+    for (std::string labelName : labelNames_)
+    {
+        content_.at(labelName)->swapLabels(vertex1, vertex2);
+    }
+}
+
+void htd::LabelingCollection::swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2)
+{
+    for (std::string labelName : labelNames_)
+    {
+        content_.at(labelName)->swapLabels(edge1, edge2);
+    }
+}
+
 htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(htd::vertex_t vertex) const
 {
     htd::ILabelCollection * ret = new LabelCollection();
@@ -181,6 +205,38 @@ htd::LabelingCollection * htd::LabelingCollection::clone(void) const
     }
 
     return ret;
+}
+
+htd::IGraphLabeling * htd::LabelingCollection::operator[](const std::string & labelName)
+{
+    return labeling(labelName);
+}
+
+const htd::IGraphLabeling * htd::LabelingCollection::operator[](const std::string & labelName) const
+{
+    return labeling(labelName);
+}
+
+htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::begin(void)
+{
+    return htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.begin());
+}
+
+const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::begin(void) const
+{
+    //TODO Return const htd::IGraphLabeling *
+    return htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.begin());
+}
+
+htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::end(void)
+{
+    return htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.end());
+}
+
+const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::end(void) const
+{
+    //TODO Return const htd::IGraphLabeling *
+    return htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.end());
 }
 
 #endif /* HTD_HTD_LABELINGCOLLECTION_CPP */

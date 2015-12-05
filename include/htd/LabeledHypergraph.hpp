@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/Hypergraph.hpp>
-#include <htd/ILabeledHypergraph.hpp>
+#include <htd/IMutableLabeledHypergraph.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/Label.hpp>
@@ -42,12 +42,13 @@
 namespace htd
 {
     template<typename VertexLabelType, typename HyperedgeLabelType>
-    class LabeledHypergraph : public htd::Hypergraph, public virtual htd::ILabeledHypergraph
+    class LabeledHypergraph : public virtual htd::Hypergraph, public virtual htd::IMutableLabeledHypergraph
     {
         public:
             using htd::Hypergraph::vertexCount;
             using htd::Hypergraph::edgeCount;
             using htd::Hypergraph::isVertex;
+            using htd::Hypergraph::isEdge;
             using htd::Hypergraph::vertex;
             using htd::Hypergraph::isConnected;
             using htd::Hypergraph::isNeighbor;
@@ -114,7 +115,7 @@ namespace htd
                 return ret;
             }
 
-            bool isHyperedge(const HyperedgeLabelType & edgeLabel) const
+            bool isEdge(const HyperedgeLabelType & edgeLabel) const
             {
                 bool ret = false;
 
@@ -124,7 +125,7 @@ namespace htd
 
                     if (labeling != nullptr)
                     {
-                        Label<VertexLabelType> label(edgeLabel);
+                        Label<HyperedgeLabelType> label(edgeLabel);
 
                         ret = labeling->isHyperedgeLabel(label);
                     }
@@ -132,6 +133,37 @@ namespace htd
 
                 return ret;
             }
+
+            void isEdge(typename std::vector<VertexLabelType>::const_iterator begin, typename std::vector<VertexLabelType>::const_iterator end)
+            {
+                bool ok = true;
+
+                htd::hyperedge_t hyperedge;
+
+                for (auto it = begin; ok && it != end; it++)
+                {
+                    if (isVertex(*it))
+                    {
+                        hyperedge.push_back(vertex(*it));
+                    }
+                    else
+                    {
+                        ok = false;
+                    }
+                }
+
+                if (ok)
+                {
+                    std::sort(hyperedge.begin(), hyperedge.end());
+
+                    hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
+
+                    ok = htd::Hypergraph::isEdge(hyperedge);
+                }
+
+                return ok;
+            }
+
             bool isConnected(const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2) const
             {
                 bool ret = false;
@@ -546,17 +578,77 @@ namespace htd
             {
                 if (!labelings_.isLabelingName(labelName))
                 {
-                    throw std::out_of_range("std::string htd::LabeledHypergraph::labelName(htd::index_t) const");
+                    throw std::out_of_range("const htd::ILabel * label(const std::string &, htd::vertex_t) const");
                 }
 
                 auto labeling = labelings_.labeling(labelName);
 
                 if (labeling->hasLabel(vertex))
                 {
-                    throw std::out_of_range("std::string htd::LabeledHypergraph::labelName(htd::index_t) const");
+                    throw std::logic_error("const htd::ILabel * label(const std::string &, htd::vertex_t) const");
                 }
 
                 return labeling->label(vertex);
+            }
+
+            const htd::ILabel * label(const std::string & labelName, const htd::hyperedge_t & edge) const HTD_OVERRIDE
+            {
+                if (!labelings_.isLabelingName(labelName))
+                {
+                    throw std::out_of_range("const htd::ILabel * label(const std::string &, const htd::hyperedge_t &) const");
+                }
+
+                auto labeling = labelings_.labeling(labelName);
+
+                if (labeling->hasLabel(edge))
+                {
+                    throw std::logic_error("const htd::ILabel * label(const std::string &, const htd::hyperedge_t &) const");
+                }
+
+                return labeling->label(edge);
+            }
+
+            void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE
+            {
+                if (isVertex(vertex1) && isVertex(vertex2))
+                {
+                    labelings_.swapLabels(vertex1, vertex2);
+                }
+            }
+
+            void swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) HTD_OVERRIDE
+            {
+                if (isEdge(edge1) && isEdge(edge2))
+                {
+                    labelings_.swapLabels(edge1, edge2);
+                }
+            }
+
+            void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE
+            {
+                if (isVertex(vertex1) && isVertex(vertex2))
+                {
+                    if (labelings_.isLabelingName(labelName))
+                    {
+                        labelings_[labelName]->swapLabels(vertex1, vertex2);
+                    }
+                }
+            }
+
+            void swapLabel(const std::string & labelName, const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) HTD_OVERRIDE
+            {
+                if (isEdge(edge1) && isEdge(edge2))
+                {
+                    if (labelings_.isLabelingName(labelName))
+                    {
+                        labelings_[labelName]->swapLabels(edge1, edge2);
+                    }
+                }
+            }
+
+            htd::ILabelingCollection * cloneLabelings(void) const HTD_OVERRIDE
+            {
+                return labelings_.clone();
             }
 
             htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const HTD_OVERRIDE

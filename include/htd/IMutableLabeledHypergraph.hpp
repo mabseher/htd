@@ -36,11 +36,21 @@ namespace htd
         public:
             virtual ~IMutableLabeledHypergraph() = 0;
 
-            virtual void setLabel(std::string labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;
+            virtual void setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;
 
-            virtual void swapLabel(std::string labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
-	    
-            virtual void removeLabel(std::string labelName, htd::vertex_t vertex) = 0;
+            virtual void setLabel(const std::string & labelName, const htd::hyperedge_t & edge, htd::ILabel * label) = 0;
+
+            virtual void removeLabel(const std::string & labelName, htd::vertex_t vertex) = 0;
+
+            virtual void removeLabel(const std::string & labelName, const htd::hyperedge_t & edge) = 0;
+
+            virtual void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+
+            virtual void swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) = 0;
+
+            virtual void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+
+            virtual void swapLabel(const std::string & labelName, const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) = 0;
     };
 
     inline htd::IMutableLabeledHypergraph::~IMutableLabeledHypergraph() { }

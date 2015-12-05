@@ -28,8 +28,8 @@
 #include <htd/Globals.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/ILabelCollection.hpp>
+#include <htd/Iterator.hpp>
 
-//TODO Also consider hyperedge labels!
 namespace htd
 {
     class ILabelingCollection
@@ -57,9 +57,25 @@ namespace htd
 
             virtual void removeLabels(const htd::hyperedge_t & edge) = 0;
 
+            virtual void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+
+            virtual void swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) = 0;
+
             virtual htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const = 0;
 
             virtual ILabelingCollection * clone(void) const = 0;
+
+            virtual htd::IGraphLabeling * operator[](const std::string & labelName) = 0;
+
+            virtual const htd::IGraphLabeling * operator[](const std::string & labelName) const = 0;
+
+            virtual htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) = 0;
+
+            virtual const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) const = 0;
+
+            virtual htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) = 0;
+
+            virtual const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) const = 0;
     };
 
     inline htd::ILabelingCollection::~ILabelingCollection() { }

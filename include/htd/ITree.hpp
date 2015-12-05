@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IGraph.hpp>
-#include <htd/IHypergraph.hpp>
 
 namespace htd
 {

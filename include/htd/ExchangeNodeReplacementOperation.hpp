@@ -31,7 +31,7 @@
 
 namespace htd
 {
-    class ExchangeNodeReplacementOperation : public htd::ITreeDecompositionManipulationOperation
+    class ExchangeNodeReplacementOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             ExchangeNodeReplacementOperation(void);

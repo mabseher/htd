@@ -32,7 +32,7 @@
 
 namespace htd
 {
-    class TreeDecompositionVerifier : public htd::ITreeDecompositionVerifier
+    class TreeDecompositionVerifier : public virtual htd::ITreeDecompositionVerifier
     {
         public:
             TreeDecompositionVerifier(void);

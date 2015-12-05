@@ -30,7 +30,7 @@
 
 namespace htd
 {
-    class VertexContainerLabel : public htd::ILabel
+    class VertexContainerLabel : public virtual htd::ILabel
     {
         public:
             VertexContainerLabel(void);

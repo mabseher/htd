@@ -35,7 +35,7 @@
 
 namespace htd
 {
-    class LabelCollection : public htd::ILabelCollection
+    class LabelCollection : public virtual htd::ILabelCollection
     {
         public:
             LabelCollection(void);

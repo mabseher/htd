@@ -30,7 +30,7 @@
 
 namespace htd
 {
-    class HyperedgeContainerLabel : public htd::ILabel
+    class HyperedgeContainerLabel : public virtual htd::ILabel
     {
         public:
             HyperedgeContainerLabel(void);

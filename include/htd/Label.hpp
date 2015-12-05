@@ -31,7 +31,7 @@
 namespace htd
 {
     template<typename T>
-    class Label : public htd::ILabel
+    class Label : public virtual htd::ILabel
     {
         public:
         Label(T value) : value_(value)

@@ -34,7 +34,7 @@
 
 namespace htd
 {
-    class InducedSubgraphLabelingFunction : public htd::ILabelingFunction
+    class InducedSubgraphLabelingFunction : public virtual htd::ILabelingFunction
     {
         public:
             InducedSubgraphLabelingFunction(const htd::IHypergraph & graph);

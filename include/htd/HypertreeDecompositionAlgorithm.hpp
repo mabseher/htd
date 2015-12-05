@@ -37,7 +37,7 @@
 
 namespace htd
 {
-    class HypertreeDecompositionAlgorithm : public htd::IHypertreeDecompositionAlgorithm
+    class HypertreeDecompositionAlgorithm : public virtual htd::IHypertreeDecompositionAlgorithm
     {
         public:
             HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm);

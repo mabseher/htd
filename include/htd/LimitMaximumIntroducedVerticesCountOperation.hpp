@@ -31,7 +31,7 @@
 
 namespace htd
 {
-    class LimitMaximumIntroducedVerticesCountOperation : public htd::ITreeDecompositionManipulationOperation
+    class LimitMaximumIntroducedVerticesCountOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             LimitMaximumIntroducedVerticesCountOperation(std::size_t limit);

@@ -35,7 +35,7 @@
 
 namespace htd
 {
-    class MinFillOrderingAlgorithm : public htd::IOrderingAlgorithm
+    class MinFillOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
             MinFillOrderingAlgorithm(void);

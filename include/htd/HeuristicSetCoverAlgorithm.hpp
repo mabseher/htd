@@ -33,7 +33,7 @@
 
 namespace htd
 {
-    class HeuristicSetCoverAlgorithm : public htd::ISetCoverAlgorithm
+    class HeuristicSetCoverAlgorithm : public virtual htd::ISetCoverAlgorithm
     {
         public:
             HeuristicSetCoverAlgorithm(void);

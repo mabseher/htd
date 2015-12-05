@@ -39,7 +39,7 @@
 
 namespace htd
 {
-    class BucketEliminationTreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
+    class BucketEliminationTreeDecompositionAlgorithm : public virtual htd::ITreeDecompositionAlgorithm
     {
         public:
             BucketEliminationTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm);

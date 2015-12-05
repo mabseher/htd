@@ -33,7 +33,7 @@
 
 namespace htd
 {
-    class NaturalOrderingAlgorithm : public htd::IOrderingAlgorithm
+    class NaturalOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
             NaturalOrderingAlgorithm(void);

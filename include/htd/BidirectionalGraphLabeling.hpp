@@ -35,7 +35,7 @@
 
 namespace htd
 {
-    class BidirectionalGraphLabeling : public htd::IBidirectionalGraphLabeling
+    class BidirectionalGraphLabeling : public virtual htd::IBidirectionalGraphLabeling
     {
         public:
             BidirectionalGraphLabeling(void);

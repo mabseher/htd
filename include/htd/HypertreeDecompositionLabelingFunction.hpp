@@ -35,7 +35,7 @@
 
 namespace htd
 {
-    class HypertreeDecompositionLabelingFunction : public htd::ILabelingFunction
+    class HypertreeDecompositionLabelingFunction : public virtual htd::ILabelingFunction
     {
         public:
             HypertreeDecompositionLabelingFunction(const htd::IHypergraph & graph, const htd::ISetCoverAlgorithm & setCoverAlgorithm);

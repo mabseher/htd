@@ -31,7 +31,7 @@
 
 namespace htd
 {
-    class DirectedGraph : public htd::IMutableDirectedGraph
+    class DirectedGraph : public virtual htd::IMutableDirectedGraph
     {
         public:
             DirectedGraph(void);

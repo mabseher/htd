@@ -37,7 +37,7 @@
 
 namespace htd
 {
-    class MinDegreeOrderingAlgorithm : public htd::IOrderingAlgorithm
+    class MinDegreeOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
             MinDegreeOrderingAlgorithm(void);

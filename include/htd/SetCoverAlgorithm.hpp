@@ -32,7 +32,7 @@
 
 namespace htd
 {
-    class SetCoverAlgorithm : public htd::ISetCoverAlgorithm
+    class SetCoverAlgorithm : public virtual htd::ISetCoverAlgorithm
     {
         public:
             SetCoverAlgorithm(void);

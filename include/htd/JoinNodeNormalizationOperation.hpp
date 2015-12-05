@@ -31,7 +31,7 @@
 
 namespace htd
 {
-    class JoinNodeNormalizationOperation : public htd::ITreeDecompositionManipulationOperation
+    class JoinNodeNormalizationOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             JoinNodeNormalizationOperation(void);

@@ -33,7 +33,7 @@
 
 namespace htd
 {
-    class GraphLabeling : public htd::IGraphLabeling
+    class GraphLabeling : public virtual htd::IGraphLabeling
     {
         public:
             GraphLabeling(void);

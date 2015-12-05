@@ -1487,7 +1487,7 @@ bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t vertex) const
     return ret;
 }
 
-void htd::TreeDecomposition::getBagContent(htd::vertex_t vertex, htd::vertex_container & output) const
+htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -1499,12 +1499,14 @@ void htd::TreeDecomposition::getBagContent(htd::vertex_t vertex, htd::vertex_con
 
             if (bagLabeling->hasLabel(vertex))
             {
-                auto& vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
+                auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling->label(vertex))->container();
 
-                std::copy(vertexLabel.begin(), vertexLabel.end(), std::back_inserter(output));
+                return htd::Collection<htd::vertex_t>(vertexLabel);
             }
         }
     }
+
+    return htd::Collection<htd::vertex_t>();
 }
 
 std::size_t htd::TreeDecomposition::maximumBagSize(void) const

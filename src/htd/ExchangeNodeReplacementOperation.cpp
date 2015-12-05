@@ -67,7 +67,9 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
     {
         htd::vertex_container bagContent;
 
-        decomposition.getBagContent(node, bagContent);
+        htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
+
+        std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
         DEBUGGING_CODE(
         std::cout << "EXCHANGE NODE: " << node << std::endl;

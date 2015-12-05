@@ -42,6 +42,11 @@ namespace htd
         public:
             typedef T value_type;
 
+            Collection(void) : begin_(), end_()
+            {
+
+            }
+
             Collection(const Iterator<T> & begin, const Iterator<T> & end) : begin_(begin), end_(end)
             {
 

@@ -44,15 +44,23 @@ namespace htd
             typedef const T * pointer;
             typedef std::forward_iterator_tag iterator_category;
 
+            Iterator(void) : baseIterator_(nullptr)
+            {
+
+            }
+
             template <class Iter>
             Iterator(Iter iterator) : baseIterator_(new IteratorWrapper<Iter, T>(iterator))
             {
 
             }
 
-            Iterator<T>(const Iterator<T> & original) : baseIterator_(original.baseIterator_->clone())
+            Iterator<T>(const Iterator<T> & original) : baseIterator_(nullptr)
             {
-
+                if (original.baseIterator_ != nullptr)
+                {
+                    baseIterator_ = original.baseIterator_->clone();
+                }
             }
 
             virtual ~Iterator()
@@ -74,14 +82,20 @@ namespace htd
                     baseIterator_ = nullptr;
                 }
 
-                baseIterator_ = other.baseIterator_->clone();
+                if (other.baseIterator_ != nullptr)
+                {
+                    baseIterator_ = other.baseIterator_->clone();
+                }
 
                 return *this;
             }
 
             Iterator<T> & operator++(void) HTD_OVERRIDE
             {
-                ++(*baseIterator_);
+                if (baseIterator_!= nullptr)
+                {
+                    ++(*baseIterator_);
+                }
 
                 return *this;
             }
@@ -97,26 +111,49 @@ namespace htd
 
             bool operator==(const IteratorBase<T> & other) const
             {
+                bool ret = false;
+
                 const Iterator<T> * o = dynamic_cast<const Iterator<T> *>(&other);
 
-                return o != nullptr && *baseIterator_ == *(o->baseIterator_);
+                if (o != nullptr)
+                {
+                    if (baseIterator_ == nullptr)
+                    {
+                        ret = o->baseIterator_ == nullptr;
+                    }
+                    else if (o->baseIterator_ != nullptr)
+                    {
+                        ret = *baseIterator_ == *(o->baseIterator_ );
+                    }
+                }
+
+                return ret;
             }
 
             bool operator==(const Iterator<T> & other) const
             {
-                return *baseIterator_ == *(other.baseIterator_);
+                bool ret = false;
+
+                if (baseIterator_ == nullptr)
+                {
+                    ret = other.baseIterator_ == nullptr;
+                }
+                else if (other.baseIterator_ != nullptr)
+                {
+                    ret = *baseIterator_ == *(other.baseIterator_ );
+                }
+
+                return ret;
             }
 
             bool operator!=(const IteratorBase<T> & other) const
             {
-                const Iterator<T> * o = dynamic_cast<const Iterator<T> *>(&other);
-
-                return o != nullptr && *baseIterator_ != *(o->baseIterator_);
+                return !(*this == other);
             }
 
             bool operator!=(const Iterator<T> & other) const
             {
-                return *baseIterator_ != *(other.baseIterator_);
+                return !(*this == other);
             }
 
             const T * operator->(void) const HTD_OVERRIDE
@@ -131,7 +168,18 @@ namespace htd
 
             Iterator<T> * clone(void) const HTD_OVERRIDE
             {
-                return new Iterator<T>(*this);
+                Iterator<T> * ret = nullptr;
+
+                if (baseIterator_ == nullptr)
+                {
+                    return new Iterator<T>();
+                }
+                else
+                {
+                    return new Iterator<T>(*this);
+                }
+
+                return ret;
             }
 
         private:

@@ -32,6 +32,7 @@
 
 //TODO Remove
 #include <iostream>
+#include <iterator>
 #include <htd/Helpers.hpp>
 
 htd::LimitMaximumIntroducedVerticesCountOperation::LimitMaximumIntroducedVerticesCountOperation(std::size_t limit) : limit_(limit)
@@ -54,7 +55,9 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
     {
         htd::vertex_container bagContent;
 
-        decomposition.getBagContent(node, bagContent);
+        htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
+
+        std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
         std::size_t introducedVerticesCount = decomposition.introducedVerticesCount(node);
 

@@ -59,7 +59,7 @@ namespace htd
 
             virtual bool isIntroduceNode(htd::vertex_t vertex) const = 0;
 
-            virtual void getBagContent(htd::vertex_t vertex, htd::vertex_container & output) const = 0;
+            virtual htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
 
             virtual std::size_t forgottenVerticesCount(htd::vertex_t vertex) const = 0;
 

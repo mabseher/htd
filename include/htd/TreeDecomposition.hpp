@@ -170,7 +170,7 @@ namespace htd
 
             bool isIntroduceNode(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void getBagContent(htd::vertex_t vertex, htd::vertex_container & output) const HTD_OVERRIDE;
+            htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             std::size_t forgottenVerticesCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 

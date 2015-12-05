@@ -54,7 +54,9 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
     {
         htd::vertex_container bagContent;
 
-        decomposition.getBagContent(node, bagContent);
+        htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
+
+        std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
         std::size_t forgottenVerticesCount = decomposition.forgottenVerticesCount(node);
 

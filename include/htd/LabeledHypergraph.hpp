@@ -72,7 +72,7 @@ namespace htd
             {
                 labelings_.setLabeling(htd::name_label_name, new htd::BidirectionalGraphLabeling());
             }
-            
+
             ~LabeledHypergraph<VertexLabelType, HyperedgeLabelType>()
             {
 
@@ -942,7 +942,7 @@ namespace htd
 
             LabeledHypergraph<VertexLabelType, HyperedgeLabelType> * clone(void) const
             {
-
+                return new LabeledHypergraph<VertexLabelType, HyperedgeLabelType>(*this);
             }
     };
 }

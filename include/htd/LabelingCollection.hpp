@@ -41,6 +41,10 @@ namespace htd
     {
         public:
             LabelingCollection(void);
+
+            LabelingCollection(const LabelingCollection & original);
+
+            LabelingCollection(const htd::ILabelingCollection & original);
             
             ~LabelingCollection();
 

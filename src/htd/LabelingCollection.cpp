@@ -41,7 +41,28 @@ htd::LabelingCollection::LabelingCollection(void) : labelNames_(), content_()
 {
 
 }
-            
+
+htd::LabelingCollection::LabelingCollection(const LabelingCollection & original)
+{
+    for (std::string labelName : original.labelNames_)
+    {
+        setLabeling(labelName, original.content_.at(labelName)->clone());
+    }
+}
+
+htd::LabelingCollection::LabelingCollection(const htd::ILabelingCollection & original)
+{
+    std::vector<std::string> labelNames;
+
+    //TODO Implement and use iterator!
+    original.getLabelNames(labelNames);
+
+    for (std::string labelName : labelNames)
+    {
+        setLabeling(labelName, original.labeling(labelName)->clone());
+    }
+}
+
 htd::LabelingCollection::~LabelingCollection()
 {
     for (auto & labeling : content_)

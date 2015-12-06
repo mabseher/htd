@@ -99,6 +99,7 @@
 #include <htd/SetCoverAlgorithm.hpp>
 #include <htd/TreeDecomposition.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
+#include <htd/VectorAdapter.hpp>
 #include <htd/Vertex.hpp>
 #include <htd/VertexContainerLabel.hpp>
 

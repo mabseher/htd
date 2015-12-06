@@ -1,5 +1,5 @@
 /* 
- * File:   Collection.hpp
+ * File:   VectorAdapter.hpp
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,68 +22,72 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_COLLECTION_HPP
-#define HTD_HTD_COLLECTION_HPP
+#ifndef HTD_HTD_VECTORADAPTER_HPP
+#define HTD_HTD_VECTORADAPTER_HPP
 
 #include <htd/Globals.hpp>
 
+#include <htd/Collection.hpp>
 #include <htd/Iterator.hpp>
 
-#include <iterator>
+#include <vector>
 
 namespace htd
 {
     template <typename T>
-    class Collection
+    class VectorAdapter : public htd::Collection<T>
     {
         public:
             typedef T value_type;
 
-            Collection(void) : begin_(), end_()
+            VectorAdapter<T>(void) : container_()
             {
 
             }
 
-            Collection(const Iterator<T> & begin, const Iterator<T> & end) : begin_(begin), end_(end)
+            VectorAdapter<T>(const std::vector<T> & collection) : container_(collection)
             {
 
             }
 
-            template <typename CollectionType>
-            Collection(const CollectionType & collection) : begin_(std::begin(collection)), end_(std::end(collection))
+            virtual ~VectorAdapter()
             {
 
             }
 
-            virtual ~Collection()
+            std::vector<T> & container()
             {
+                return container_;
+            }
 
+            const std::vector<T> & container() const
+            {
+                return container_;
             }
 
             htd::Iterator<T> begin(void)
             {
-                return begin_;
+                return htd::Iterator<T>(container_.begin());
             }
 
             const htd::Iterator<T> begin(void) const
             {
-                return begin_;
+                return htd::Iterator<T>(container_.begin());
             }
 
             htd::Iterator<T> end(void)
             {
-                return end_;
+                return htd::Iterator<T>(container_.end());
             }
 
             const htd::Iterator<T> end(void) const
             {
-                return end_;
+                return htd::Iterator<T>(container_.end());
             }
 
         private:
-            Iterator<T> begin_;
-            Iterator<T> end_;
+            std::vector<T> container_;
     };
 }
 
-#endif /* HTD_HTD_COLLECTION_HPP */
+#endif /* HTD_HTD_VECTORADAPTER_HPP */

@@ -6,11 +6,11 @@
 #include <htd/IOrderingAlgorithm.hpp>
 #include <htd/ILabeledTree.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/MutableGraphImpl.hpp>
-#include <htd/MutableHypergraphImpl.hpp>
-#include <htd/MutableDirectedGraphImpl.hpp>
+#include <htd/Graph.hpp>
+#include <htd/Hypergraph.hpp>
+#include <htd/DirectedGraph.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
-#include <htd/MinFillOrderingAlgorithmImpl.hpp>
+#include <htd/MinFillOrderingAlgorithm.hpp>
 #include <htd/ITreeDecomposition.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
 
@@ -32,13 +32,13 @@ int main(){
 
       //bug:
 
-      //segfaults if we set a fixed size
-    htd::MutableHypergraphImpl graph(0);
+    //segfaults if we set a fixed size
+    htd::Hypergraph graph(4);
 
-    graph.addVertex();
-    graph.addVertex();
-    graph.addVertex();
-    graph.addVertex();
+    //graph.addVertex();
+    //graph.addVertex();
+    //graph.addVertex();
+    //graph.addVertex();
 
     graph.addEdge(1,2);
     graph.addEdge(1,3);
@@ -54,44 +54,14 @@ int main(){
 
 
     //htd::MinFillOrderingAlgorithmImpl* o = new htd::MinFillOrderingAlgorithmImpl();
-    htd::IOrderingAlgorithm* o = new htd::MinFillOrderingAlgorithmImpl();
+    htd::IOrderingAlgorithm* o = new htd::MinFillOrderingAlgorithm();
     //htd::IOrderingAlgorithm * o = htd::getDefaultOrderingAlgorithmImplementation();
 
 
     htd::BucketEliminationTreeDecompositionAlgorithm algo(*o);
-    htd::ILabeledTree * decomp = algo.computeDecomposition(graph);
+    htd::ITreeDecomposition * decomp = algo.computeDecomposition(graph);
 
-    /*
-    htd::BucketEliminationTreeDecompositionAlgorithm * dc = 
-      new htd::BucketEliminationTreeDecompositionAlgorithm(*o);
-    
-    htd::ITreeDecomposition * decomp = 
-    dc->computeDecomposition(graph);*/
-
-    /*
-  std::vector<std::string> v;
-  decomp->labelNames(v);
-  std::cout << "names:"<< &v << "\tlen:" << v.size() << std::endl;
-
-  for (auto& e : v){
-    std::cout<< "s:" << e << std::endl;
-  }
-    */
-
-  //void (MutableGraphImpl::*computeOrderding)() = &htd::MinFillOrderingAlgorithmImpl::computeOrdering;
-    /*MinFillOrderingAlgorithmImpl orderingAlgoirthm = new MinFillOrderingAlgorihtmImpl();
-      htd::ITreeDecomposition * decomposition = decompositionAlgorithm.computeDecomposition(graph, orderingAlgorithm);*/
-    
-    //
-    
-    if (decomp != nullptr)
-    {
-        std::cout << std::endl;
-
-        //printTreeDecomposition(*decomposition);
-
-        delete decomp;
-    }
+    std::cout << "width=" << decomp->maximumBagSize() << std::endl;
     
     return 0;
 }

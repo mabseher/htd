@@ -26,11 +26,11 @@ namespace py = boost::python;
 
 #include <stdlib.h>
 
-#include <htd/MinFillOrderingAlgorithmImpl.hpp>
+#include <htd/MinFillOrderingAlgorithm.hpp>
 
 namespace htd {
   void export_MinFillOrderingAlgorithmImpl(){
-    py::class_<htd::MinFillOrderingAlgorithmImpl, std::shared_ptr<htd::MinFillOrderingAlgorithmImpl>>("MinFillOrdering", py::init<>());
+    py::class_<htd::MinFillOrderingAlgorithm, std::shared_ptr<htd::MinFillOrderingAlgorithm>>("MinFillOrdering", py::init<>());
   }
 }
 

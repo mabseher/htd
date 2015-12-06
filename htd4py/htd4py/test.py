@@ -21,26 +21,24 @@
 #  with htd4Py.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-#TODO:
 import sys
-sys.path.append('/home/jfichte/src/htd/tmp')
 
 import htd
-h=htd.Hypergraph(1)
+h=htd.Hypergraph(0)
+h.add_vertex()
 h.add_vertex()
 h.add_vertex()
 h.add_edge(1,2)
 h.add_edge(2,3)
-h.add_edge(1,3)
-print h.num_vertices(), h.num_edges()
+#TODO:
+#catch runtime errors
+#h.add_edge(1,4)
+
+print "vertices=", h.num_vertices(), "edges=", h.num_edges()
 ord = htd.MinFillOrdering()
-#print ord.test()
-print ord
-#print htd.get_it()
-#print htd.get_it()
 be_decomp = htd.TDecompBE(ord)
 print be_decomp
 decomp=be_decomp.decompose(h)
-print decomp.vertices()
 for v in decomp.vertices():
     print decomp.bag_content(v)
+print "width=", decomp.width()

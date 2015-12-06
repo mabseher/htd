@@ -22,6 +22,7 @@
 
 #include <Python.h>
 #include <boost/python.hpp>
+#include <iterator>
 
 namespace py = boost::python;
 #include <htd/ITreeDecomposition.hpp>
@@ -31,32 +32,31 @@ namespace py = boost::python;
 
 namespace htd {
   //TODO: overhead, add iterator
+  //TODO:...
   template<class T>
-  py::list std_vector_to_py_list(std::vector<T> vector) {
-    typename std::vector<T>::iterator iter;
+  py::list std_vector_to_py_list(htd::Collection<T> vector) {
     boost::python::list list;
-    for (iter = vector.begin(); iter != vector.end(); ++iter) {
-      list.append(*iter);
+    for (htd::vertex_t vertex : vector){
+      list.append(vertex);
     }
     return list;
   }
   
   py::list vertices_(htd::ITreeDecomposition &decomposition) {
-    htd::vertex_container vertices;
-    decomposition.getVertices(vertices);
+    htd::Collection<htd::vertex_t> vertices= decomposition.vertices();
     return std_vector_to_py_list(vertices);
   }
 
   //TODO: bagContent -> smartPointer -> iterator
   py::list bags_(htd::ITreeDecomposition &decomposition, htd::vertex_t vertex) {
-    htd::vertex_container bag;
-    decomposition.getBagContent(vertex, bag);
+    htd::Collection<htd::vertex_t> bag = decomposition.bagContent(vertex);
     return std_vector_to_py_list(bag);
   }
 
   void export_ITreeDecomposition(){
     py::class_<htd::ITreeDecomposition, boost::noncopyable>("LTree", py::no_init)
       .def("vertices", &htd::vertices_)
-      .def("bag_content", &htd::bags_);
+      .def("bag_content", &htd::bags_)
+      .def("width", &htd::ITreeDecomposition::maximumBagSize);
   }
 }

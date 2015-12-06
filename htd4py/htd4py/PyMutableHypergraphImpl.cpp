@@ -26,7 +26,7 @@
 #include <unordered_set>
 #include <stdlib.h>
 #include <htd/Globals.hpp>
-#include <htd/MutableHypergraphImpl.hpp>
+#include <htd/Hypergraph.hpp>
 
 #include <PyMutableHypergraphImpl.h>
 
@@ -37,24 +37,24 @@ namespace py = boost::python;
 //  RuntimeError: void htd::MutableHypergraphImpl::addEdge(const htd::hyperedge_t &)
 
 namespace htd {
-  void (htd::MutableHypergraphImpl::*addEdge_)(htd::vertex_t, htd::vertex_t) = &htd::MutableHypergraphImpl::addEdge;
-  std::size_t (htd::MutableHypergraphImpl::*edgeCount_1)(void) const = &htd::MutableHypergraphImpl::edgeCount;
-  std::size_t (htd::MutableHypergraphImpl::*edgeCount_2)(htd::vertex_t) const = &htd::MutableHypergraphImpl::edgeCount;
-  void (htd::MutableHypergraphImpl::*removeEdge_1)(htd::vertex_t, htd::vertex_t) = &htd::MutableHypergraphImpl::removeEdge;
-  void (htd::MutableHypergraphImpl::*removeEdge_2)(const htd::edge_t &) = &htd::MutableHypergraphImpl::removeEdge;
-  void (htd::MutableHypergraphImpl::*removeVertex_1)(htd::vertex_t) = &htd::MutableHypergraphImpl::removeVertex;
-  void (htd::MutableHypergraphImpl::*removeVertex_2)(htd::vertex_t, bool) = &htd::MutableHypergraphImpl::removeVertex;
+  void (htd::Hypergraph::*addEdge_)(htd::vertex_t, htd::vertex_t) = &htd::Hypergraph::addEdge;
+  std::size_t (htd::Hypergraph::*edgeCount_1)(void) const = &htd::Hypergraph::edgeCount;
+  std::size_t (htd::Hypergraph::*edgeCount_2)(htd::vertex_t) const = &htd::Hypergraph::edgeCount;
+  void (htd::Hypergraph::*removeEdge_1)(htd::vertex_t, htd::vertex_t) = &htd::Hypergraph::removeEdge;
+  void (htd::Hypergraph::*removeEdge_2)(const htd::edge_t &) = &htd::Hypergraph::removeEdge;
+  void (htd::Hypergraph::*removeVertex_1)(htd::vertex_t) = &htd::Hypergraph::removeVertex;
+  void (htd::Hypergraph::*removeVertex_2)(htd::vertex_t, bool) = &htd::Hypergraph::removeVertex;
 
   void export_MutableHypergraphImpl(){
-    py::class_<htd::MutableHypergraphImpl>("Hypergraph", py::init<std::size_t>())
+    py::class_<htd::Hypergraph>("Hypergraph", py::init<std::size_t>())
       .def("add_edge", htd::addEdge_)
-      .def("add_vertex", &htd::MutableHypergraphImpl::addVertex)
-      .def("is_vertex", &htd::MutableHypergraphImpl::isVertex)
-      .def("is_isolated_vertex", &htd::MutableHypergraphImpl::isIsolatedVertex)
+      .def("add_vertex", &htd::Hypergraph::addVertex)
+      .def("is_vertex", &htd::Hypergraph::isVertex)
+      .def("is_isolated_vertex", &htd::Hypergraph::isIsolatedVertex)
       .def("num_edges", htd::edgeCount_1)
-      .def("num_neighbors", &htd::MutableHypergraphImpl::neighborCount)
-      .def("num_vertices", &htd::MutableHypergraphImpl::vertexCount)
-      .def("num_isolated_vertices",&htd::MutableHypergraphImpl::isolatedVertexCount)
+      .def("num_neighbors", &htd::Hypergraph::neighborCount)
+      .def("num_vertices", &htd::Hypergraph::vertexCount)
+      .def("num_isolated_vertices",&htd::Hypergraph::isolatedVertexCount)
       .def("remove_edge", htd::removeEdge_1)
       .def("remove_vertex", htd::removeVertex_1);
   }

@@ -27,9 +27,9 @@ namespace py = boost::python;
 #include <htd/ITreeDecomposition.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
-//TODO: change with interface??
-#include <htd/MinFillOrderingAlgorithmImpl.hpp>
-#include <htd/MutableHypergraphImpl.hpp>
+//TODO: change to interface??
+#include <htd/MinFillOrderingAlgorithm.hpp>
+#include <htd/Hypergraph.hpp>
 
 #include <PyMutableHypergraphImpl.h>
 
@@ -38,16 +38,16 @@ namespace htd {
   htd::ITreeDecomposition *(htd::BucketEliminationTreeDecompositionAlgorithm::*decompose)(const htd::IHypergraph &graph)
   const HTD_OVERRIDE = &htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition;
 
-    htd::BucketEliminationTreeDecompositionAlgorithm *algo_init_(const htd::MinFillOrderingAlgorithmImpl *o) {
+    htd::BucketEliminationTreeDecompositionAlgorithm *algo_init_(const htd::MinFillOrderingAlgorithm *o) {
         htd::BucketEliminationTreeDecompositionAlgorithm *algo = new htd::BucketEliminationTreeDecompositionAlgorithm(
                 *o);
         return algo;
     }
 
     htd::ITreeDecomposition *decompose_(htd::BucketEliminationTreeDecompositionAlgorithm &algo,
-                                 htd::MutableHypergraphImpl graph) {
-        htd::ITreeDecomposition *decomposition = algo.computeDecomposition(graph);
-        return decomposition;
+                                 htd::Hypergraph graph) {
+      htd::ITreeDecomposition *decomposition = algo.computeDecomposition(graph);
+      return decomposition;
     }
 
   void export_BucketEliminationTreeDecompositionAlgorithm(){

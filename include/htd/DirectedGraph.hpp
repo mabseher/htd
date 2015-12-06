@@ -122,6 +122,8 @@ namespace htd
             
             void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
 
+            DirectedGraph * clone(void) const HTD_OVERRIDE;
+
         protected:
             DirectedGraph & operator=(const DirectedGraph &) { return *this; }
 

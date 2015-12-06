@@ -58,6 +58,8 @@ namespace htd
             virtual htd::vertex_t child(htd::vertex_t vertex, htd::index_t index) const = 0;
 
             virtual bool isChild(htd::vertex_t vertex, htd::vertex_t child) const = 0;
+
+            virtual ITree * clone(void) const = 0;
     };
 
     inline htd::ITree::~ITree() { }

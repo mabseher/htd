@@ -939,6 +939,11 @@ namespace htd
                     labeling->setLabel(edge, new htd::Label<HyperedgeLabelType>(edgeLabel));
                 }
             }
+
+            LabeledHypergraph<VertexLabelType, HyperedgeLabelType> * clone(void) const
+            {
+
+            }
     };
 }
 

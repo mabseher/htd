@@ -35,6 +35,8 @@ namespace htd
     {
         public:
             virtual ~ILabeledTree() = 0;
+
+            virtual ILabeledTree * clone(void) const = 0;
     };
 
     inline htd::ILabeledTree::~ILabeledTree() { }

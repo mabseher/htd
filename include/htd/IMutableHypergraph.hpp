@@ -33,6 +33,8 @@ namespace htd
     class IMutableHypergraph : public virtual IHypergraph
     {
         public:
+            virtual ~IMutableHypergraph() = 0;
+
             virtual htd::vertex_t addVertex(void) = 0;
 
             virtual void removeVertex(htd::vertex_t vertex) = 0;
@@ -54,7 +56,11 @@ namespace htd
             virtual void removeEdge(const htd::edge_t & edge) = 0;
             
             virtual void removeEdge(const htd::hyperedge_t & edge) = 0;
+
+            virtual IMutableHypergraph * clone(void) const = 0;
     };
+
+    inline htd::IMutableHypergraph::~IMutableHypergraph() { }
 }
 
 #endif /* HTD_HTD_IMUTABLEHYPERGRAPH_HPP */

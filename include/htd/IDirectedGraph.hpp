@@ -52,6 +52,8 @@ namespace htd
             virtual bool isOutgoingNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const = 0;
 
             virtual bool isReachable(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
+
+            virtual IDirectedGraph * clone(void) const = 0;
     };
 
     inline htd::IDirectedGraph::~IDirectedGraph() { }

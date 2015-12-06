@@ -37,6 +37,8 @@ namespace htd
             virtual ~IMutableHypertreeDecomposition() = 0;
 
             virtual void getEdgeLabel(htd::vertex_t vertex, htd::hyperedge_container & output) const = 0;
+
+            virtual IMutableHypertreeDecomposition * clone(void) const = 0;
     };
 
     inline htd::IMutableHypertreeDecomposition::~IMutableHypertreeDecomposition() { }

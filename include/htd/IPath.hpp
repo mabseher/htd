@@ -38,6 +38,8 @@ namespace htd
             virtual htd::vertex_t leafNode(void) const = 0;
 
             virtual htd::vertex_t child(htd::vertex_t vertex) const = 0;
+
+            virtual IPath * clone(void) const = 0;
     };
 
     inline htd::IPath::~IPath() { }

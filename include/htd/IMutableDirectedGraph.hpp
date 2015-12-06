@@ -32,8 +32,13 @@ namespace htd
 {
     class IMutableDirectedGraph : public virtual htd::IDirectedGraph, public virtual htd::IMutableGraph
     {
+        public:
+            virtual ~IMutableDirectedGraph() = 0;
 
+            virtual IMutableDirectedGraph * clone(void) const = 0;
     };
+
+    inline htd::IMutableDirectedGraph::~IMutableDirectedGraph() { }
 }
 
 #endif /* HTD_HTD_IMUTABLEDIRECTEDGRAPH_HPP */

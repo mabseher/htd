@@ -37,6 +37,8 @@ namespace htd
     {
         public:
             virtual ~ILabeledGraph() = 0;
+
+            virtual ILabeledGraph * clone(void) const = 0;
     };
 
     inline htd::ILabeledGraph::~ILabeledGraph() { }

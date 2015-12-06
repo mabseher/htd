@@ -44,6 +44,11 @@ htd::HypertreeDecomposition::HypertreeDecomposition(const htd::ILabeledTree & or
 
 }
 
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::HypertreeDecomposition & original) : TreeDecomposition(original)
+{
+
+}
+
 htd::HypertreeDecomposition::~HypertreeDecomposition()
 {
 
@@ -73,6 +78,11 @@ void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::
 
     //TODO Implement
     throw std::out_of_range("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::hyperedge_container &)");
+}
+
+htd::HypertreeDecomposition * htd::HypertreeDecomposition::clone(void) const
+{
+    return new HypertreeDecomposition(*this);
 }
 
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITION_CPP */

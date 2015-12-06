@@ -2368,4 +2368,9 @@ htd::IGraphLabeling * htd::TreeDecomposition::cloneLabeling(const std::string & 
     return ret;
 }
 
+htd::TreeDecomposition * htd::TreeDecomposition::clone(void) const
+{
+    return new TreeDecomposition(*this);
+}
+
 #endif /* HTD_HTD_TREEDECOMPOSITION_CPP */

@@ -35,6 +35,8 @@ namespace htd
     {
         public:
             virtual ~IMutableTreeDecomposition() = 0;
+
+            virtual IMutableTreeDecomposition * clone(void) const = 0;
     };
 
     inline htd::IMutableTreeDecomposition::~IMutableTreeDecomposition() { }

@@ -35,6 +35,8 @@ namespace htd
     {
         public:
             virtual ~IMutablePathDecomposition() = 0;
+
+            virtual IMutablePathDecomposition * clone(void) const = 0;
     };
 
     inline htd::IMutablePathDecomposition::~IMutablePathDecomposition() { }

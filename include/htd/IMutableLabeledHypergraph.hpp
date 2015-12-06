@@ -51,6 +51,8 @@ namespace htd
             virtual void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
             virtual void swapLabel(const std::string & labelName, const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) = 0;
+
+            virtual IMutableLabeledHypergraph * clone(void) const = 0;
     };
 
     inline htd::IMutableLabeledHypergraph::~IMutableLabeledHypergraph() { }

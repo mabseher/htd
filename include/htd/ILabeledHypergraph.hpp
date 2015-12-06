@@ -53,6 +53,8 @@ namespace htd
             virtual htd::ILabelingCollection * cloneLabelings(void) const = 0;
 
             virtual htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const = 0;
+
+            virtual ILabeledHypergraph * clone(void) const = 0;
     };
 
     inline htd::ILabeledHypergraph::~ILabeledHypergraph() { }

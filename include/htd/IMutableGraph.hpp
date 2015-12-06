@@ -33,6 +33,8 @@ namespace htd
     class IMutableGraph : public virtual htd::IGraph
     {
         public:
+            virtual ~IMutableGraph() = 0;
+
             virtual htd::vertex_t addVertex(void) = 0;
 
             virtual void removeVertex(htd::vertex_t vertex) = 0;
@@ -46,7 +48,11 @@ namespace htd
             virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
             
             virtual void removeEdge(const htd::edge_t & edge) = 0;
+
+            virtual IMutableGraph * clone(void) const = 0;
     };
+
+    inline htd::IMutableGraph::~IMutableGraph() { }
 }
 
 #endif /* HTD_HTD_IMUTABLEGRAPH_HPP */

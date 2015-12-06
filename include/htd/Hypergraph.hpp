@@ -107,6 +107,8 @@ namespace htd
             
             void removeEdge(const htd::hyperedge_t & edge) HTD_OVERRIDE;
 
+            Hypergraph * clone(void) const HTD_OVERRIDE;
+
         protected:
             Hypergraph & operator=(const Hypergraph &) { return *this; }
 

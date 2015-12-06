@@ -247,6 +247,8 @@ namespace htd
 
             TreeDecomposition & operator=(const TreeDecomposition & other);
 
+            TreeDecomposition * clone(void) const HTD_OVERRIDE;
+
         protected:
 
             struct TreeNode

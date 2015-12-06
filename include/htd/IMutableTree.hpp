@@ -48,6 +48,8 @@ namespace htd
             virtual void removeChild(htd::vertex_t vertex, htd::vertex_t child) = 0;
 
             virtual htd::vertex_t addIntermediateParent(htd::vertex_t vertex) = 0;
+
+            virtual IMutableTree * clone(void) const = 0;
     };
 
     inline htd::IMutableTree::~IMutableTree() { }

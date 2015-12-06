@@ -613,4 +613,9 @@ void htd::Graph::removeEdge(const htd::edge_t & edge)
     removeEdge(edge.first, edge.second);
 }
 
+htd::Graph * htd::Graph::clone(void) const
+{
+    return new Graph(*this);
+}
+
 #endif /* HTD_HTD_GRAPH_CPP */

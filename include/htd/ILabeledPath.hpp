@@ -35,6 +35,8 @@ namespace htd
     {
         public:
             virtual ~ILabeledPath() = 0;
+
+            virtual ILabeledPath * clone(void) const = 0;
     };
 
     inline htd::ILabeledPath::~ILabeledPath() { }

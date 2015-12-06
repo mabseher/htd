@@ -104,6 +104,8 @@ namespace htd
             virtual std::size_t minimumBagSize(void) const = 0;
 
             virtual std::size_t maximumBagSize(void) const = 0;
+
+            virtual IPathDecomposition * clone(void) const = 0;
     };
 
     inline htd::IPathDecomposition::~IPathDecomposition() { }

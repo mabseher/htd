@@ -901,4 +901,9 @@ void htd::DirectedGraph::removeEdge(const htd::edge_t & edge)
     }
 }
 
+htd::DirectedGraph * htd::DirectedGraph::clone(void) const
+{
+    return new DirectedGraph(*this);
+}
+
 #endif /* HTD_HTD_DIRECTEDGRAPH_CPP */

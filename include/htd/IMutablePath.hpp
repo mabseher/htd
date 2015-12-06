@@ -38,6 +38,8 @@ namespace htd
             virtual void removeSubpath(htd::vertex_t subpathRoot) = 0;
 
             virtual void removeChild(htd::vertex_t vertex) = 0;
+
+            virtual IMutablePath * clone(void) const = 0;
     };
 
     inline htd::IMutablePath::~IMutablePath() { }

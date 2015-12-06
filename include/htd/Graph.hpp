@@ -106,6 +106,8 @@ namespace htd
             
             void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
 
+            Graph * clone(void) const HTD_OVERRIDE;
+
         protected:
             Graph & operator=(const Graph &) { return *this; }
 

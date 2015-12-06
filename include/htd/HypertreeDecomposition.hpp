@@ -44,12 +44,16 @@ namespace htd
             HypertreeDecomposition(void);
             
             HypertreeDecomposition(const htd::ILabeledTree & original);
-            
+
+            HypertreeDecomposition(const htd::HypertreeDecomposition & original);
+
             ~HypertreeDecomposition();
 
             void getEdgeLabel(htd::vertex_t vertex, htd::hyperedge_container & output) const HTD_OVERRIDE;
 
             void setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & labelContent);
+
+            HypertreeDecomposition * clone(void) const HTD_OVERRIDE;
     };
 }
 

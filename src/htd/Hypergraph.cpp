@@ -696,4 +696,9 @@ void htd::Hypergraph::removeEdge(const htd::hyperedge_t & edge)
     }
 }
 
+htd::Hypergraph * htd::Hypergraph::clone(void) const
+{
+    return new Hypergraph(*this);
+}
+
 #endif /* HTD_HTD_HYPERGRAPH_CPP */

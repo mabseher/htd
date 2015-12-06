@@ -80,6 +80,7 @@ namespace htd
 
             virtual bool isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
 
+            virtual IHypergraph * clone(void) const = 0;
     };
 
     inline htd::IHypergraph::~IHypergraph() { }

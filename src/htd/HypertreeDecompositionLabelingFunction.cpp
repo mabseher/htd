@@ -26,6 +26,7 @@
 #define	HTD_HTD_HYPERTREEDECOMPOSITIONLABELINGFUNCTION_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
 
 #include <htd/ILabel.hpp>
@@ -61,6 +62,13 @@ htd::ILabel * htd::HypertreeDecompositionLabelingFunction::computeLabel(const ht
     setCoverAlgorithm_.computeSetCover(vertices, hyperedges_, label);
 
     return new HyperedgeContainerLabel(label);
+}
+
+htd::ILabel * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::vertex_container & vertices, const htd::ILabelCollection & labels) const
+{
+    HTD_UNUSED(labels);
+
+    return computeLabel(vertices);
 }
 
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITIONLABELINGFUNCTION_CPP */

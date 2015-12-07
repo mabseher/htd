@@ -245,6 +245,10 @@ namespace htd
 
             htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const;
 
+            htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const HTD_OVERRIDE;
+
+            htd::ILabelCollection * exportLabelCollection(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+
             TreeDecomposition & operator=(const TreeDecomposition & other);
 
             TreeDecomposition * clone(void) const HTD_OVERRIDE;

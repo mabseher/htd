@@ -216,6 +216,23 @@ htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(htd::vert
     return ret;
 }
 
+htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(const htd::hyperedge_t & edge) const
+{
+    htd::ILabelCollection * ret = new LabelCollection();
+
+    for (const std::string & labelName : labelNames_)
+    {
+        htd::IGraphLabeling * labeling = content_.at(labelName);
+
+        if (labeling != nullptr && labeling->hasLabel(edge))
+        {
+            ret->setLabel(labelName, labeling->label(edge)->clone());
+        }
+    }
+
+    return ret;
+}
+
 htd::LabelingCollection * htd::LabelingCollection::clone(void) const
 {
     htd::LabelingCollection * ret = new htd::LabelingCollection();

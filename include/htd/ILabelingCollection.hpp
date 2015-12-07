@@ -63,6 +63,8 @@ namespace htd
 
             virtual htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const = 0;
 
+            virtual htd::ILabelCollection * exportLabelCollection(const htd::hyperedge_t & edge) const = 0;
+
             virtual ILabelingCollection * clone(void) const = 0;
 
             virtual htd::IGraphLabeling * operator[](const std::string & labelName) = 0;

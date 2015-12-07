@@ -26,6 +26,7 @@
 #define	HTD_HTD_INDUCEDSUBGRAPHLABELINGFUNCTION_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/InducedSubgraphLabelingFunction.hpp>
 
 #include <htd/ILabel.hpp>
@@ -67,6 +68,13 @@ htd::ILabel * htd::InducedSubgraphLabelingFunction::computeLabel(const htd::vert
     }
 
     return new HyperedgeContainerLabel(label);
+}
+
+htd::ILabel * htd::InducedSubgraphLabelingFunction::computeLabel(const htd::vertex_container & vertices, const htd::ILabelCollection & labels) const
+{
+    HTD_UNUSED(labels);
+
+    return computeLabel(vertices);
 }
 
 #endif /* HTD_HTD_INDUCEDSUBGRAPHLABELINGFUNCTION_CPP */

@@ -841,6 +841,26 @@ namespace htd
                 return ret;
             }
 
+            htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const HTD_OVERRIDE
+            {
+                if (!isVertex(vertex))
+                {
+                    throw std::logic_error("htd::ILabelCollection * htd::LabeledHypergraph::exportLabelCollection(htd::vertex_t) const");
+                }
+
+                return labelings_.exportLabelCollection(vertex);
+            }
+
+            htd::ILabelCollection * exportLabelCollection(const htd::hyperedge_t & edge) const HTD_OVERRIDE
+            {
+                if (!isEdge(edge))
+                {
+                    throw std::logic_error("htd::ILabelCollection * htd::LabeledHypergraph::exportLabelCollection(const htd::hyperedge_t &) const");
+                }
+
+                return labelings_.exportLabelCollection(edge);
+            }
+
             htd::vertex_t getVertex(const VertexLabelType & label) const
             {
                 if (isVertex(label))

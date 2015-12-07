@@ -43,7 +43,9 @@ namespace htd
 	    
             std::string name() const HTD_OVERRIDE;
 	        
-            htd::ILabel * computeLabel(const htd::vertex_container & vertices) const HTD_OVERRIDE;
+            htd::ILabel * computeLabel(const htd::vertex_container & vertices) const;
+
+            htd::ILabel * computeLabel(const htd::vertex_container & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE;
 
         private:
             const htd::IHypergraph & graph_;

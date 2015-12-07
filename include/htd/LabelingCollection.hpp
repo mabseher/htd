@@ -74,6 +74,8 @@ namespace htd
 
             htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            htd::ILabelCollection * exportLabelCollection(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+
             LabelingCollection * clone(void) const HTD_OVERRIDE;
 
             htd::IGraphLabeling * operator[](const std::string & labelName) HTD_OVERRIDE;

@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/ILabel.hpp>
 #include <htd/IHypergraph.hpp>
+#include <htd/ILabelCollection.hpp>
 #include <htd/ILabelingFunction.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
 
@@ -44,7 +45,9 @@ namespace htd
 	    
             std::string name() const HTD_OVERRIDE;
 	        
-            htd::ILabel * computeLabel(const htd::vertex_container & vertices) const HTD_OVERRIDE;
+            htd::ILabel * computeLabel(const htd::vertex_container & vertices) const;
+
+            htd::ILabel * computeLabel(const htd::vertex_container & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE;
 
         private:
             const htd::IHypergraph & graph_;

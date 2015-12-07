@@ -2368,6 +2368,26 @@ htd::IGraphLabeling * htd::TreeDecomposition::cloneLabeling(const std::string & 
     return ret;
 }
 
+htd::ILabelCollection * htd::TreeDecomposition::exportLabelCollection(htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("htd::ILabelCollection * htd::TreeDecomposition::exportLabelCollection(htd::vertex_t) const");
+    }
+
+    return labelings_->exportLabelCollection(vertex);
+}
+
+htd::ILabelCollection * htd::TreeDecomposition::exportLabelCollection(const htd::hyperedge_t & edge) const
+{
+    if (!isEdge(edge))
+    {
+        throw std::logic_error("htd::ILabelCollection * htd::TreeDecomposition::exportLabelCollection(const htd::hyperedge_t &) const");
+    }
+
+    return labelings_->exportLabelCollection(edge);
+}
+
 htd::TreeDecomposition * htd::TreeDecomposition::clone(void) const
 {
     return new TreeDecomposition(*this);

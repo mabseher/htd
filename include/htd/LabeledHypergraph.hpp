@@ -588,7 +588,7 @@ namespace htd
 
                 auto labeling = labelings_.labeling(labelName);
 
-                if (labeling->hasLabel(vertex))
+                if (!labeling->hasLabel(vertex))
                 {
                     throw std::logic_error("const htd::ILabel * label(const std::string &, htd::vertex_t) const");
                 }
@@ -605,7 +605,7 @@ namespace htd
 
                 auto labeling = labelings_.labeling(labelName);
 
-                if (labeling->hasLabel(edge))
+                if (!labeling->hasLabel(edge))
                 {
                     throw std::logic_error("const htd::ILabel * label(const std::string &, const htd::hyperedge_t &) const");
                 }
@@ -700,7 +700,7 @@ namespace htd
                 return ret;
             }
 
-            const VertexLabelType & label(htd::vertex_t vertex) const
+            const VertexLabelType & name(htd::vertex_t vertex) const
             {
                 if (!labelings_.isLabelingName(labelName))
                 {
@@ -724,7 +724,7 @@ namespace htd
                 return *(label->value);
             }
 
-            const HyperedgeLabelType & label(const htd::hyperedge_t & edge) const
+            const HyperedgeLabelType & name(const htd::hyperedge_t & edge) const
             {
                 if (!labelings_.isLabelingName(labelName))
                 {

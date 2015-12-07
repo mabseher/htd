@@ -62,21 +62,21 @@ std::string htd::LabelCollection::labelName(htd::index_t index) const
     return labelNames_.at(index);
 }
 
-const htd::ILabel * htd::LabelCollection::label(std::string labelName) const
+const htd::ILabel * htd::LabelCollection::label(const std::string & labelName) const
 {
     if (content_.find(labelName) == content_.end())
     {
-        throw std::out_of_range("const htd::ILabel * const htd::LabelCollection::label(std::string) const");
+        throw std::out_of_range("const htd::ILabel * const htd::LabelCollection::label(const std::string &) const");
     }
 
     return content_.at(labelName);
 }
 
-void htd::LabelCollection::setLabel(std::string labelName, htd::ILabel * label)
+void htd::LabelCollection::setLabel(const std::string & labelName, htd::ILabel * label)
 {
     if (content_.find(labelName) != content_.end())
     {
-        throw std::out_of_range("void htd::LabelCollection::setLabel(std::string, htd::ILabel *)");
+        throw std::out_of_range("void htd::LabelCollection::setLabel(const std::string &, htd::ILabel *)");
     }
 
     auto position = std::lower_bound(labelNames_.begin(), labelNames_.end(), labelName);
@@ -86,7 +86,7 @@ void htd::LabelCollection::setLabel(std::string labelName, htd::ILabel * label)
     content_[labelName] = label;
 }
 
-void htd::LabelCollection::removeLabel(std::string labelName)
+void htd::LabelCollection::removeLabel(const std::string & labelName)
 {
     auto position = content_.find(labelName);
 
@@ -106,7 +106,7 @@ htd::LabelCollection * htd::LabelCollection::clone(void) const
 {
     htd::LabelCollection * ret = new htd::LabelCollection();
 
-    for (std::string labelName : labelNames_)
+    for (const std::string & labelName : labelNames_)
     {
         ret->setLabel(labelName, content_.at(labelName)->clone());
     }

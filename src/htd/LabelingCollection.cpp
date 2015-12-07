@@ -44,7 +44,7 @@ htd::LabelingCollection::LabelingCollection(void) : labelNames_(), content_()
 
 htd::LabelingCollection::LabelingCollection(const LabelingCollection & original)
 {
-    for (std::string labelName : original.labelNames_)
+    for (const std::string & labelName : original.labelNames_)
     {
         setLabeling(labelName, original.content_.at(labelName)->clone());
     }
@@ -57,7 +57,7 @@ htd::LabelingCollection::LabelingCollection(const htd::ILabelingCollection & ori
     //TODO Implement and use iterator!
     original.getLabelNames(labelNames);
 
-    for (std::string labelName : labelNames)
+    for (const std::string & labelName : labelNames)
     {
         setLabeling(labelName, original.labeling(labelName)->clone());
     }
@@ -159,7 +159,7 @@ void htd::LabelingCollection::removeLabeling(const std::string & labelName)
 
 void htd::LabelingCollection::removeLabels(htd::vertex_t vertex)
 {
-    for (std::string labelName : labelNames_)
+    for (const std::string & labelName : labelNames_)
     {
         auto labeling = content_.at(labelName);
 
@@ -172,7 +172,7 @@ void htd::LabelingCollection::removeLabels(htd::vertex_t vertex)
 
 void htd::LabelingCollection::removeLabels(const htd::hyperedge_t & edge)
 {
-    for (std::string labelName : labelNames_)
+    for (const std::string & labelName : labelNames_)
     {
         auto labeling = content_.at(labelName);
 
@@ -185,7 +185,7 @@ void htd::LabelingCollection::removeLabels(const htd::hyperedge_t & edge)
 
 void htd::LabelingCollection::swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    for (std::string labelName : labelNames_)
+    for (const std::string & labelName : labelNames_)
     {
         content_.at(labelName)->swapLabels(vertex1, vertex2);
     }
@@ -193,7 +193,7 @@ void htd::LabelingCollection::swapLabels(htd::vertex_t vertex1, htd::vertex_t ve
 
 void htd::LabelingCollection::swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2)
 {
-    for (std::string labelName : labelNames_)
+    for (const std::string & labelName : labelNames_)
     {
         content_.at(labelName)->swapLabels(edge1, edge2);
     }
@@ -203,7 +203,7 @@ htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(htd::vert
 {
     htd::ILabelCollection * ret = new LabelCollection();
 
-    for (std::string labelName : labelNames_)
+    for (const std::string & labelName : labelNames_)
     {
         IGraphLabeling * labeling = content_.at(labelName);
 
@@ -220,7 +220,7 @@ htd::LabelingCollection * htd::LabelingCollection::clone(void) const
 {
     htd::LabelingCollection * ret = new htd::LabelingCollection();
 
-    for (std::string labelName : labelNames_)
+    for (const std::string & labelName : labelNames_)
     {
         ret->setLabeling(labelName, content_.at(labelName)->clone());
     }
@@ -245,7 +245,6 @@ htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::Labeling
 
 const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::begin(void) const
 {
-    //TODO Return const htd::IGraphLabeling *
     return htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.begin());
 }
 
@@ -256,7 +255,6 @@ htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::Labeling
 
 const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::end(void) const
 {
-    //TODO Return const htd::IGraphLabeling *
     return htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.end());
 }
 

@@ -41,11 +41,11 @@ namespace htd
 
             virtual std::string labelName(htd::index_t index) const = 0;
 
-            virtual const htd::ILabel * label(std::string labelName) const = 0;
+            virtual const htd::ILabel * label(const std::string & labelName) const = 0;
 
-            virtual void setLabel(std::string labelName, htd::ILabel * label) = 0;
+            virtual void setLabel(const std::string & labelName, htd::ILabel * label) = 0;
 
-            virtual void removeLabel(std::string labelName) = 0;
+            virtual void removeLabel(const std::string & labelName) = 0;
 
             virtual ILabelCollection * clone(void) const = 0;
     };

@@ -691,7 +691,6 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
                             std::cout << "SWAP NODES " << child << " AND " << vertex << " (ERASE NODE " << vertex << ")" << std::endl;
                             
                             //TODO Optimize
-                            for (std::string labelName : )
                             decomposition.swapLabels(vertex, child);
                             
                             decomposition.removeVertex(child);

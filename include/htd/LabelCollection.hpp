@@ -48,11 +48,11 @@ namespace htd
 
             std::string labelName(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::ILabel * label(std::string labelName) const HTD_OVERRIDE;
+            const htd::ILabel * label(const std::string & labelName) const HTD_OVERRIDE;
 
-            void setLabel(std::string labelName, htd::ILabel * label) HTD_OVERRIDE;
+            void setLabel(const std::string & labelName, htd::ILabel * label) HTD_OVERRIDE;
 
-            void removeLabel(std::string labelName) HTD_OVERRIDE;
+            void removeLabel(const std::string & labelName) HTD_OVERRIDE;
 
             LabelCollection * clone(void) const HTD_OVERRIDE;
 

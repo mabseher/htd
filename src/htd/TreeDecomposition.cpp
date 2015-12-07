@@ -2362,7 +2362,7 @@ htd::IGraphLabeling * htd::TreeDecomposition::cloneLabeling(const std::string & 
     }
     else
     {
-        throw std::out_of_range("htd::IGraphLabeling * htd::TreeDecomposition::cloneLabeling(std::string) const");
+        throw std::out_of_range("htd::IGraphLabeling * htd::TreeDecomposition::cloneLabeling(const std::string &) const");
     }
 
     return ret;

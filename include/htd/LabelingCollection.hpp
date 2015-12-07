@@ -56,9 +56,9 @@ namespace htd
 
             bool isLabelingName(const std::string & labelName) const HTD_OVERRIDE;
 
-            htd::IGraphLabeling * labeling(const std::string & labelName) HTD_OVERRIDE;
+            htd::IGraphLabeling & labeling(const std::string & labelName) HTD_OVERRIDE;
 
-            const htd::IGraphLabeling * labeling(const std::string & labelName) const HTD_OVERRIDE;
+            const htd::IGraphLabeling & labeling(const std::string & labelName) const HTD_OVERRIDE;
 
             void setLabeling(const std::string & labelName, htd::IGraphLabeling * labeling) HTD_OVERRIDE;
 
@@ -78,9 +78,9 @@ namespace htd
 
             LabelingCollection * clone(void) const HTD_OVERRIDE;
 
-            htd::IGraphLabeling * operator[](const std::string & labelName) HTD_OVERRIDE;
+            htd::IGraphLabeling & operator[](const std::string & labelName) HTD_OVERRIDE;
 
-            const htd::IGraphLabeling * operator[](const std::string & labelName) const HTD_OVERRIDE;
+            const htd::IGraphLabeling & operator[](const std::string & labelName) const HTD_OVERRIDE;
 
             htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) HTD_OVERRIDE;
 

@@ -59,7 +59,7 @@ htd::LabelingCollection::LabelingCollection(const htd::ILabelingCollection & ori
 
     for (const std::string & labelName : labelNames)
     {
-        setLabeling(labelName, original.labeling(labelName)->clone());
+        setLabeling(labelName, original.labeling(labelName).clone());
     }
 }
 
@@ -96,24 +96,24 @@ std::string htd::LabelingCollection::labelName(htd::index_t index) const
     return labelNames_[index];
 }
 
-htd::IGraphLabeling * htd::LabelingCollection::labeling(const std::string & labelName)
+htd::IGraphLabeling & htd::LabelingCollection::labeling(const std::string & labelName)
 {
     if (content_.find(labelName) == content_.end())
     {
-        throw std::out_of_range("htd::IGraphLabeling * htd::LabelingCollection::label(const std::string &)");
+        throw std::out_of_range("htd::IGraphLabeling & htd::LabelingCollection::label(const std::string &)");
     }
 
-    return content_.at(labelName);
+    return *(content_.at(labelName));
 }
 
-const htd::IGraphLabeling * htd::LabelingCollection::labeling(const std::string & labelName) const
+const htd::IGraphLabeling & htd::LabelingCollection::labeling(const std::string & labelName) const
 {
     if (content_.find(labelName) == content_.end())
     {
-        throw std::out_of_range("const htd::IGraphLabeling * htd::LabelingCollection::label(const std::string &) const");
+        throw std::out_of_range("const htd::IGraphLabeling & htd::LabelingCollection::label(const std::string &) const");
     }
 
-    return content_.at(labelName);
+    return *(content_.at(labelName));
 }
 
 bool htd::LabelingCollection::isLabelingName(const std::string & labelName) const
@@ -245,12 +245,12 @@ htd::LabelingCollection * htd::LabelingCollection::clone(void) const
     return ret;
 }
 
-htd::IGraphLabeling * htd::LabelingCollection::operator[](const std::string & labelName)
+htd::IGraphLabeling & htd::LabelingCollection::operator[](const std::string & labelName)
 {
     return labeling(labelName);
 }
 
-const htd::IGraphLabeling * htd::LabelingCollection::operator[](const std::string & labelName) const
+const htd::IGraphLabeling & htd::LabelingCollection::operator[](const std::string & labelName) const
 {
     return labeling(labelName);
 }

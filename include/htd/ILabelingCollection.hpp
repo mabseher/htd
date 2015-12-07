@@ -45,9 +45,9 @@ namespace htd
 
             virtual bool isLabelingName(const std::string & labelName) const = 0;
 
-            virtual htd::IGraphLabeling * labeling(const std::string & labelName) = 0;
+            virtual htd::IGraphLabeling & labeling(const std::string & labelName) = 0;
 
-            virtual const htd::IGraphLabeling * labeling(const std::string & labelName) const = 0;
+            virtual const htd::IGraphLabeling & labeling(const std::string & labelName) const = 0;
 
             virtual void setLabeling(const std::string & labelName, htd::IGraphLabeling * labeling) = 0;
 
@@ -67,9 +67,9 @@ namespace htd
 
             virtual ILabelingCollection * clone(void) const = 0;
 
-            virtual htd::IGraphLabeling * operator[](const std::string & labelName) = 0;
+            virtual htd::IGraphLabeling & operator[](const std::string & labelName) = 0;
 
-            virtual const htd::IGraphLabeling * operator[](const std::string & labelName) const = 0;
+            virtual const htd::IGraphLabeling & operator[](const std::string & labelName) const = 0;
 
             virtual htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) = 0;
 

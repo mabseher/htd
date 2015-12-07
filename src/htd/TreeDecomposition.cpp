@@ -1089,7 +1089,7 @@ const htd::ILabel * htd::TreeDecomposition::label(const std::string & labelName,
         throw std::logic_error("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, htd::vertex_t) const");
     }
 
-    auto labeling = dynamic_cast<htd::IGraphLabeling *>((*labelings_)[labelName]);
+    auto labeling = (*labelings_)[labelName];
 
     if (labeling == nullptr)
     {
@@ -1111,7 +1111,7 @@ const htd::ILabel * htd::TreeDecomposition::label(const std::string & labelName,
         throw std::logic_error("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, const htd::hyperedge_t &) const");
     }
 
-    auto labeling = dynamic_cast<htd::IGraphLabeling *>((*labelings_)[labelName]);
+    auto labeling = (*labelings_)[labelName];
 
     if (labeling == nullptr)
     {
@@ -1143,7 +1143,7 @@ void htd::TreeDecomposition::setLabel(const std::string & labelName, const htd::
             labelings_->setLabeling(labelName, new htd::GraphLabeling());
         }
 
-        auto labeling = dynamic_cast<htd::IGraphLabeling *>((*labelings_)[labelName]);
+        auto labeling = (*labelings_)[labelName];
 
         labeling->setLabel(edge, label);
     }
@@ -1155,7 +1155,7 @@ void htd::TreeDecomposition::removeLabel(const std::string & labelName, htd::ver
     {
         if (labelings_->isLabelingName(labelName))
         {
-            auto labeling = dynamic_cast<htd::IGraphLabeling *>((*labelings_)[labelName]);
+            auto labeling = (*labelings_)[labelName];
 
             labeling->removeLabel(vertex);
         }
@@ -1168,7 +1168,7 @@ void htd::TreeDecomposition::removeLabel(const std::string & labelName, const ht
     {
         if (labelings_->isLabelingName(labelName))
         {
-            auto labeling = dynamic_cast<htd::IGraphLabeling *>((*labelings_)[labelName]);
+            auto labeling = (*labelings_)[labelName];
 
             labeling->removeLabel(edge);
         }

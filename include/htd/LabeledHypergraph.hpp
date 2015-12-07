@@ -750,7 +750,7 @@ namespace htd
                     labelings_.setLabeling(labelName, new htd::GraphLabeling());
                 }
 
-                auto labeling = dynamic_cast<htd::IGraphLabeling *>(labelings_.labeling(labelName));
+                auto labeling = labelings_.labeling(labelName);
 
                 if (labeling != nullptr)
                 {
@@ -765,7 +765,7 @@ namespace htd
                     labelings_.setLabeling(labelName, new htd::GraphLabeling());
                 }
 
-                auto labeling = dynamic_cast<htd::IGraphLabeling *>(labelings_.labeling(labelName));
+                auto labeling = labelings_.labeling(labelName);
 
                 if (labeling != nullptr)
                 {
@@ -780,7 +780,7 @@ namespace htd
                     labelings_.setLabeling(labelName, new htd::GraphLabeling());
                 }
 
-                auto labeling = dynamic_cast<htd::IGraphLabeling *>(labelings_.labeling(labelName));
+                auto labeling = labelings_.labeling(labelName);
 
                 if (labeling != nullptr)
                 {
@@ -795,7 +795,7 @@ namespace htd
                     labelings_.setLabeling(labelName, new htd::GraphLabeling());
                 }
 
-                auto labeling = dynamic_cast<htd::IGraphLabeling *>(labelings_.labeling(labelName));
+                auto labeling = labelings_.labeling(labelName);
 
                 if (labeling != nullptr)
                 {

@@ -205,7 +205,7 @@ htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(htd::vert
 
     for (const std::string & labelName : labelNames_)
     {
-        IGraphLabeling * labeling = content_.at(labelName);
+        htd::IGraphLabeling * labeling = content_.at(labelName);
 
         if (labeling != nullptr && labeling->hasLabel(vertex))
         {

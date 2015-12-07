@@ -89,7 +89,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
             {
                 auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
 
-                htd::ILabelCollection * labelCollection = ret->exportLabelCollection(vertex);
+                htd::ILabelCollection * labelCollection = ret->labelings().exportLabelCollection(vertex);
 
                 //TODO Optimize (Use htd::Collection<T> as first parameter)
                 htd::ILabel * newLabel = labelingFunction->computeLabel(label, *labelCollection);

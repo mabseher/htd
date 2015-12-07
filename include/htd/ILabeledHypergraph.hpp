@@ -40,6 +40,8 @@ namespace htd
         public:
             virtual ~ILabeledHypergraph() = 0;
 
+            virtual const htd::ILabelingCollection & labelings(void) const = 0;
+
             virtual std::size_t labelCount(void) const = 0;
 
             virtual void getLabelNames(std::vector<std::string> & output) const = 0;
@@ -50,15 +52,7 @@ namespace htd
 
             virtual const htd::ILabel & label(const std::string & labelName, const htd::hyperedge_t & edge) const = 0;
 
-            virtual htd::ILabelingCollection * cloneLabelings(void) const = 0;
-
-            virtual htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const = 0;
-
             virtual ILabeledHypergraph * clone(void) const = 0;
-
-            virtual htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const = 0;
-
-            virtual htd::ILabelCollection * exportLabelCollection(const htd::hyperedge_t & edge) const = 0;
     };
 
     inline htd::ILabeledHypergraph::~ILabeledHypergraph() { }

@@ -146,7 +146,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
                     {
                         auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
 
-                        htd::ILabelCollection * labelCollection = ret->exportLabelCollection(vertex);
+                        htd::ILabelCollection * labelCollection = ret->labelings().exportLabelCollection(vertex);
 
                         //TODO Optimize
                         htd::ILabel * newLabel = labelingFunction->computeLabel(label, *labelCollection);

@@ -558,6 +558,11 @@ namespace htd
                 }
             }
 
+            const htd::ILabelingCollection & labelings(void) const HTD_OVERRIDE
+            {
+                return labelings_;
+            }
+
             std::size_t labelCount(void) const HTD_OVERRIDE
             {
                 return labelings_.labelCount();
@@ -649,21 +654,6 @@ namespace htd
                         labelings_[labelName].swapLabels(edge1, edge2);
                     }
                 }
-            }
-
-            htd::ILabelingCollection * cloneLabelings(void) const HTD_OVERRIDE
-            {
-                return labelings_.clone();
-            }
-
-            htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const HTD_OVERRIDE
-            {
-                if (!labelings_.isLabelingName(labelName))
-                {
-                    throw std::out_of_range("std::string htd::LabeledHypergraph::labelName(htd::index_t) const");
-                }
-
-                return labelings_[labelName].clone();
             }
 
             bool hasName(htd::vertex_t vertex) const
@@ -858,26 +848,6 @@ namespace htd
                 }
 
                 return ret;
-            }
-
-            htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const HTD_OVERRIDE
-            {
-                if (!isVertex(vertex))
-                {
-                    throw std::logic_error("htd::ILabelCollection * htd::LabeledHypergraph::exportLabelCollection(htd::vertex_t) const");
-                }
-
-                return labelings_.exportLabelCollection(vertex);
-            }
-
-            htd::ILabelCollection * exportLabelCollection(const htd::hyperedge_t & edge) const HTD_OVERRIDE
-            {
-                if (!isEdge(edge))
-                {
-                    throw std::logic_error("htd::ILabelCollection * htd::LabeledHypergraph::exportLabelCollection(const htd::hyperedge_t &) const");
-                }
-
-                return labelings_.exportLabelCollection(edge);
             }
 
             htd::vertex_t getVertex(const VertexLabelType & label) const

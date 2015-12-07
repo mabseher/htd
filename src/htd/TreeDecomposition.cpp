@@ -52,7 +52,7 @@ htd::TreeDecomposition::TreeDecomposition(void)
 
 //TODO Ensure correctness when htd::Vertex::FIRST does not match for this and original
 htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original)
-    : size_(0), root_(original.root()), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_(), labelings_(original.cloneLabelings())
+    : size_(0), root_(original.root()), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_(), labelings_(original.labelings().clone())
 {
     htd::vertex_t maximumVertex = 0;
 
@@ -95,7 +95,7 @@ htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original)
 }
 
 htd::TreeDecomposition::TreeDecomposition(const htd::TreeDecomposition & original)
-    : size_(original.size_), root_(original.root_), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_(original.deletions_), labelings_(original.cloneLabelings())
+    : size_(original.size_), root_(original.root_), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_(original.deletions_), labelings_(original.labelings().clone())
 {
     nodes_.reserve(original.nodes_.size());
     
@@ -1045,6 +1045,11 @@ htd::vertex_t htd::TreeDecomposition::addIntermediateParent(htd::vertex_t vertex
     }
 
     return ret;
+}
+
+const htd::ILabelingCollection & htd::TreeDecomposition::labelings(void) const
+{
+    return *labelings_;
 }
 
 std::size_t htd::TreeDecomposition::labelCount(void) const
@@ -2323,47 +2328,6 @@ void htd::TreeDecomposition::swapLabel(const std::string & labelName, const htd:
             (*labelings_)[labelName].swapLabels(edge1, edge2);
         }
     }
-}
-
-htd::ILabelingCollection * htd::TreeDecomposition::cloneLabelings(void) const
-{
-    return labelings_->clone();
-}
-
-htd::IGraphLabeling * htd::TreeDecomposition::cloneLabeling(const std::string & labelName) const
-{
-    htd::IGraphLabeling * ret = nullptr;
-
-    if (labelings_->isLabelingName(labelName))
-    {
-        ret = (*labelings_)[labelName].clone();
-    }
-    else
-    {
-        throw std::out_of_range("htd::IGraphLabeling * htd::TreeDecomposition::cloneLabeling(const std::string &) const");
-    }
-
-    return ret;
-}
-
-htd::ILabelCollection * htd::TreeDecomposition::exportLabelCollection(htd::vertex_t vertex) const
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ILabelCollection * htd::TreeDecomposition::exportLabelCollection(htd::vertex_t) const");
-    }
-
-    return labelings_->exportLabelCollection(vertex);
-}
-
-htd::ILabelCollection * htd::TreeDecomposition::exportLabelCollection(const htd::hyperedge_t & edge) const
-{
-    if (!isEdge(edge))
-    {
-        throw std::logic_error("htd::ILabelCollection * htd::TreeDecomposition::exportLabelCollection(const htd::hyperedge_t &) const");
-    }
-
-    return labelings_->exportLabelCollection(edge);
 }
 
 htd::TreeDecomposition * htd::TreeDecomposition::clone(void) const

@@ -99,6 +99,8 @@ namespace htd
 
             const htd::hyperedge_t & hyperedge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            const htd::ILabelingCollection & labelings(void) const HTD_OVERRIDE;
+
             std::size_t labelCount(void) const HTD_OVERRIDE;
 
             void getLabelNames(std::vector<std::string> & output) const HTD_OVERRIDE;
@@ -240,14 +242,6 @@ namespace htd
             std::size_t minimumBagSize(void) const HTD_OVERRIDE;
 
             std::size_t maximumBagSize(void) const HTD_OVERRIDE;
-
-            htd::ILabelingCollection * cloneLabelings(void) const HTD_OVERRIDE;
-
-            htd::IGraphLabeling * cloneLabeling(const std::string & labelName) const;
-
-            htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const HTD_OVERRIDE;
-
-            htd::ILabelCollection * exportLabelCollection(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
 
             TreeDecomposition & operator=(const TreeDecomposition & other);
 

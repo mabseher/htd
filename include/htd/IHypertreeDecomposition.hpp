@@ -33,6 +33,11 @@ namespace htd
     class IHypertreeDecomposition : public virtual htd::ITreeDecomposition
     {
         public:
+            /**
+             *  Constant for the identifier of the edge label.
+             */
+            static constexpr const char * EDGE_LABEL_IDENTIFIER = "Edges";
+
             virtual ~IHypertreeDecomposition() = 0;
 
             virtual void getEdgeLabel(htd::vertex_t vertex, htd::hyperedge_container & output) const = 0;

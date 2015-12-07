@@ -58,11 +58,11 @@ void htd::HypertreeDecomposition::getEdgeLabel(htd::vertex_t vertex, htd::hypere
 {
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::first_vertex];
+        auto& node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
-            auto bagLabeling = (*labelings_)[htd::bag_label_name];
+            auto bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
             auto& edgeLabel = dynamic_cast<const htd::HyperedgeContainerLabel *>(bagLabeling->label(vertex))->container();
 

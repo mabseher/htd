@@ -41,15 +41,15 @@ htd::Hypergraph::Hypergraph(void) : htd::Hypergraph::Hypergraph(0)
 
 htd::Hypergraph::Hypergraph(std::size_t size)
     : size_(size),
-      next_vertex_(htd::first_vertex + size),
+      next_vertex_(htd::Vertex::FIRST + size),
       vertices_(size),
       deletions_(),
       edges_(),
       neighborhood_(size, htd::vertex_container())
 {
-    for (htd::vertex_t vertex = htd::first_vertex; vertex < size + htd::first_vertex; ++vertex)
+    for (htd::vertex_t vertex = htd::Vertex::FIRST; vertex < size + htd::Vertex::FIRST; ++vertex)
     {
-        vertices_[vertex - htd::first_vertex] = vertex;
+        vertices_[vertex - htd::Vertex::FIRST] = vertex;
     }
 }
 
@@ -171,7 +171,7 @@ std::size_t htd::Hypergraph::neighborCount(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        ret = neighborhood_[vertex - htd::first_vertex].size();
+        ret = neighborhood_[vertex - htd::Vertex::FIRST].size();
     }
     
     return ret;
@@ -257,7 +257,7 @@ bool htd::Hypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) 
 
             std::vector<bool> reachableVertices(size_);
 
-            reachableVertices[vertex1 - htd::first_vertex] = true;
+            reachableVertices[vertex1 - htd::Vertex::FIRST] = true;
 
             newVertices.push_back(vertex1);
 
@@ -275,9 +275,9 @@ bool htd::Hypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) 
                         {
                             for (auto it3 = (*it2).begin(); !ret && it3 != (*it2).end(); it3++)
                             {
-                                if (*it3 != *it && !reachableVertices[*it3 - htd::first_vertex])
+                                if (*it3 != *it && !reachableVertices[*it3 - htd::Vertex::FIRST])
                                 {
-                                    reachableVertices[*it3 - htd::first_vertex] = true;
+                                    reachableVertices[*it3 - htd::Vertex::FIRST] = true;
 
                                     newVertices.push_back(*it3);
 
@@ -301,7 +301,7 @@ void htd::Hypergraph::getNeighbors(htd::vertex_t vertex, htd::vertex_container &
 {
     if (isVertex(vertex))
     {
-        std::copy(neighborhood_[vertex - htd::first_vertex].begin(), neighborhood_[vertex - htd::first_vertex].end(), std::back_inserter(output));
+        std::copy(neighborhood_[vertex - htd::Vertex::FIRST].begin(), neighborhood_[vertex - htd::Vertex::FIRST].end(), std::back_inserter(output));
     }
 }
 
@@ -335,7 +335,7 @@ std::size_t htd::Hypergraph::isolatedVertexCount(void) const
 {
     std::size_t ret = 0;
 
-    for (std::size_t vertex = htd::first_vertex; vertex < size_ + htd::first_vertex; vertex++)
+    for (std::size_t vertex = htd::Vertex::FIRST; vertex < size_ + htd::Vertex::FIRST; vertex++)
     {
         if (isVertex(vertex))
         {
@@ -358,7 +358,7 @@ std::size_t htd::Hypergraph::isolatedVertexCount(void) const
 
 void htd::Hypergraph::getIsolatedVertices(htd::vertex_container & output) const
 {
-    for (std::size_t vertex = htd::first_vertex; vertex < size_ + htd::first_vertex; vertex++)
+    for (std::size_t vertex = htd::Vertex::FIRST; vertex < size_ + htd::Vertex::FIRST; vertex++)
     {
         if (isVertex(vertex))
         {
@@ -506,7 +506,7 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHypered
 
         std::vector<htd::id_t> emptyEdges;
 
-        auto& currentNeighborhood = neighborhood_[vertex - htd::first_vertex];
+        auto& currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
 
         if (addNeighborHyperedge)
         {
@@ -610,7 +610,7 @@ void htd::Hypergraph::addEdge(const htd::hyperedge_t & edge)
             {
                 currentVertex[0] = vertex;
 
-                auto & currentNeighborhood = neighborhood_[vertex - htd::first_vertex];
+                auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
 
                 htd::vertex_container newNeighborhood;
 

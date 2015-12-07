@@ -37,6 +37,11 @@ namespace htd
     class InducedSubgraphLabelingFunction : public virtual htd::ILabelingFunction
     {
         public:
+            /**
+             *  Constant for the identifier of the induced subgraph label.
+             */
+            static constexpr const char * INDUCED_SUBGRAPH_LABEL_IDENTIFIER = "Induced Subgraph";
+
             InducedSubgraphLabelingFunction(const htd::IHypergraph & graph);
 
             ~InducedSubgraphLabelingFunction();

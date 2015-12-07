@@ -52,7 +52,7 @@ htd::InducedSubgraphLabelingFunction::~InducedSubgraphLabelingFunction()
 
 std::string htd::InducedSubgraphLabelingFunction::name() const
 {
-    return htd::induced_subgraph_label_name;
+    return htd::InducedSubgraphLabelingFunction::INDUCED_SUBGRAPH_LABEL_IDENTIFIER;
 }
 
 htd::ILabel * htd::InducedSubgraphLabelingFunction::computeLabel(const htd::vertex_container & vertices) const

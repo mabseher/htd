@@ -88,7 +88,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
                 htd::vertex_t intermediateVertex = decomposition.addIntermediateParent(child);
 
-                decomposition.setLabel(htd::bag_label_name, intermediateVertex, new htd::VertexContainerLabel(htd::vertex_container(bagContent.begin(), bagContent.end())));
+                decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, intermediateVertex, new htd::VertexContainerLabel(htd::vertex_container(bagContent.begin(), bagContent.end())));
             }
         }
     }

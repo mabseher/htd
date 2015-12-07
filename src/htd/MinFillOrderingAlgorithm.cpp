@@ -89,7 +89,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
 
     for (htd::vertex_t vertex : graph.vertices())
     {
-        auto& currentNeighborhood = neighborhood[vertex - htd::first_vertex];
+        auto& currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
         
         currentNeighborhood.reserve(graph.neighborCount(vertex));
         
@@ -105,7 +105,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
     
     for (htd::vertex_t vertex : vertices)
     {
-        auto& currentNeighborhood = neighborhood[vertex - htd::first_vertex];
+        auto& currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
         
         tmp = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
         
@@ -121,7 +121,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
             pool.insert(vertex);
         }
         
-        requiredFillAmount[vertex - htd::first_vertex] = tmp;
+        requiredFillAmount[vertex - htd::Vertex::FIRST] = tmp;
         
         DEBUGGING_CODE_LEVEL2(
         std::cout << "Vertex " << vertex << ":" << std::endl;
@@ -142,7 +142,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
     
             for (htd::vertex_t vertex : vertices)
             {
-                tmp = requiredFillAmount[vertex - htd::first_vertex];
+                tmp = requiredFillAmount[vertex - htd::Vertex::FIRST];
 
                 if (tmp <= minFill)
                 {
@@ -168,7 +168,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
         
         for (htd::vertex_t vertex : pool)
         {
-            currentDegree = neighborhood[vertex - htd::first_vertex].size() - 1;
+            currentDegree = neighborhood[vertex - htd::Vertex::FIRST].size() - 1;
             
             if (currentDegree <= minDegree)
             {
@@ -184,21 +184,21 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
         }
         
         htd::vertex_t selectedVertex = minDegreePool[rand() % minDegreePool.size()];
-        auto& selectedNeighborhood = neighborhood[selectedVertex - htd::first_vertex];
+        auto& selectedNeighborhood = neighborhood[selectedVertex - htd::Vertex::FIRST];
         
         pool.erase(pool.find(selectedVertex));
         
-        updateStatus[selectedVertex - htd::first_vertex] = 4;
+        updateStatus[selectedVertex - htd::Vertex::FIRST] = 4;
         
         affectedVertices.clear();
         
-        if (requiredFillAmount[selectedVertex - htd::first_vertex] == 0)
+        if (requiredFillAmount[selectedVertex - htd::Vertex::FIRST] == 0)
         {
             for (auto vertex : selectedNeighborhood)
             {
                 if (vertex != selectedVertex)
                 {
-                    auto& currentNeighborhood = neighborhood[vertex - htd::first_vertex];
+                    auto& currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
                     
                     currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
                 }
@@ -210,34 +210,34 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
             {
                 if (neighbor != selectedVertex)
                 {
-                    if (updateStatus[neighbor - htd::first_vertex] == 0)
+                    if (updateStatus[neighbor - htd::Vertex::FIRST] == 0)
                     {
-                        decompose_sets(selectedNeighborhood, neighborhood[neighbor - htd::first_vertex], selectedVertex,
-                                       additionalNeighbors[neighbor - htd::first_vertex],
-                                       unaffectedNeighbors[neighbor - htd::first_vertex],
-                                       existingNeighbors[neighbor - htd::first_vertex]);
+                        decompose_sets(selectedNeighborhood, neighborhood[neighbor - htd::Vertex::FIRST], selectedVertex,
+                                       additionalNeighbors[neighbor - htd::Vertex::FIRST],
+                                       unaffectedNeighbors[neighbor - htd::Vertex::FIRST],
+                                       existingNeighbors[neighbor - htd::Vertex::FIRST]);
                     }
 
-                    updateStatus[neighbor - htd::first_vertex] |= 1;
+                    updateStatus[neighbor - htd::Vertex::FIRST] |= 1;
 
-                    for (auto affectedVertex : neighborhood[neighbor - htd::first_vertex])
+                    for (auto affectedVertex : neighborhood[neighbor - htd::Vertex::FIRST])
                     {
                         //TODO Change into status_t
-                        char currentUpdateStatus = updateStatus[affectedVertex - htd::first_vertex];
+                        char currentUpdateStatus = updateStatus[affectedVertex - htd::Vertex::FIRST];
 
                         if (currentUpdateStatus < 2)
                         {
                             if (currentUpdateStatus == 0)
                             {
-                                decompose_sets(selectedNeighborhood, neighborhood[affectedVertex - htd::first_vertex], selectedVertex,
-                                               additionalNeighbors[affectedVertex - htd::first_vertex],
-                                               unaffectedNeighbors[affectedVertex - htd::first_vertex],
-                                               existingNeighbors[affectedVertex - htd::first_vertex]);
+                                decompose_sets(selectedNeighborhood, neighborhood[affectedVertex - htd::Vertex::FIRST], selectedVertex,
+                                               additionalNeighbors[affectedVertex - htd::Vertex::FIRST],
+                                               unaffectedNeighbors[affectedVertex - htd::Vertex::FIRST],
+                                               existingNeighbors[affectedVertex - htd::Vertex::FIRST]);
                             }
 
                             affectedVertices.push_back(affectedVertex);
                             
-                            updateStatus[affectedVertex - htd::first_vertex] |= 2;
+                            updateStatus[affectedVertex - htd::Vertex::FIRST] |= 2;
                         }
                     }
                 }
@@ -247,9 +247,9 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
             {
                 if (vertex != selectedVertex)
                 {
-                    auto& currentNeighborhood = neighborhood[vertex - htd::first_vertex];
-                    auto& currentUnaffectedNeighborhood = unaffectedNeighbors[vertex - htd::first_vertex];
-                    auto& currentAdditionalNeighborhood = additionalNeighbors[vertex - htd::first_vertex];
+                    auto& currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
+                    auto& currentUnaffectedNeighborhood = unaffectedNeighbors[vertex - htd::Vertex::FIRST];
+                    auto& currentAdditionalNeighborhood = additionalNeighbors[vertex - htd::Vertex::FIRST];
 
                     std::size_t additionalNeighborCount = currentAdditionalNeighborhood.size();
 
@@ -307,7 +307,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                         currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
                     }
 
-                    tmp = requiredFillAmount[vertex - htd::first_vertex];
+                    tmp = requiredFillAmount[vertex - htd::Vertex::FIRST];
 
                     if (additionalNeighborCount > 0 || tmp > 0)
                     {
@@ -317,7 +317,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                         {
                             if (additionalNeighborCount == 0)
                             {
-                                auto& relevantNeighborhood = existingNeighbors[vertex - htd::first_vertex];
+                                auto& relevantNeighborhood = existingNeighbors[vertex - htd::Vertex::FIRST];
 
                                 auto last = relevantNeighborhood.end();
 
@@ -328,7 +328,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                                 {
                                     htd::vertex_t vertex2 = *it;
 
-                                    auto& currentAdditionalNeighborhood2 = additionalNeighbors[vertex2 - htd::first_vertex];
+                                    auto& currentAdditionalNeighborhood2 = additionalNeighbors[vertex2 - htd::Vertex::FIRST];
 
                                     it++;
 
@@ -338,7 +338,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                                 tmp -= unaffectedNeighborCount;
 
                                 //TODO
-                                updateStatus[vertex - htd::first_vertex] = 0;
+                                updateStatus[vertex - htd::Vertex::FIRST] = 0;
 
                                 if (tmp <= minFill)
                                 {
@@ -359,16 +359,16 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
 
                                 for (htd::vertex_t unaffectedVertex : currentUnaffectedNeighborhood)
                                 {
-                                    auto& affectedVertices = existingNeighbors[unaffectedVertex - htd::first_vertex];
+                                    auto& affectedVertices = existingNeighbors[unaffectedVertex - htd::Vertex::FIRST];
 
                                     tmp += htd::compute_set_difference_size(first, last, affectedVertices.begin(), affectedVertices.end());
 
                                     tmp--;
                                 }
 
-                                updateStatus[vertex - htd::first_vertex] &= ~1;
+                                updateStatus[vertex - htd::Vertex::FIRST] &= ~1;
 
-                                if (updateStatus[vertex - htd::first_vertex] == 0)
+                                if (updateStatus[vertex - htd::Vertex::FIRST] == 0)
                                 {
                                     if (tmp <= minFill)
                                     {
@@ -389,7 +389,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                             tmp = 0;
 
                             //TODO
-                            updateStatus[vertex - htd::first_vertex] = 0;
+                            updateStatus[vertex - htd::Vertex::FIRST] = 0;
 
                             if (tmp < minFill)
                             {
@@ -401,11 +401,11 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                             pool.insert(vertex);
                         }
 
-                        requiredFillAmount[vertex - htd::first_vertex] = tmp;
+                        requiredFillAmount[vertex - htd::Vertex::FIRST] = tmp;
                     }
                     else
                     {
-                        updateStatus[vertex - htd::first_vertex] = 0;
+                        updateStatus[vertex - htd::Vertex::FIRST] = 0;
                     }
                 }
             }
@@ -460,13 +460,13 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
 
             for (auto vertex : affectedVertices)
             {
-                if (updateStatus[vertex - htd::first_vertex] == 2)
+                if (updateStatus[vertex - htd::Vertex::FIRST] == 2)
                 {
-                    tmp = requiredFillAmount[vertex - htd::first_vertex];
+                    tmp = requiredFillAmount[vertex - htd::Vertex::FIRST];
 
-                    if (unaffectedNeighbors[vertex - htd::first_vertex].size() > 0 && tmp > 0)
+                    if (unaffectedNeighbors[vertex - htd::Vertex::FIRST].size() > 0 && tmp > 0)
                     {
-                        auto& relevantNeighborhood = existingNeighbors[vertex - htd::first_vertex];
+                        auto& relevantNeighborhood = existingNeighbors[vertex - htd::Vertex::FIRST];
 
                         auto last = relevantNeighborhood.end();
 
@@ -477,7 +477,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                         {
                             htd::vertex_t vertex2 = *it;
 
-                            auto& currentAdditionalNeighborhood2 = additionalNeighbors[vertex2 - htd::first_vertex];
+                            auto& currentAdditionalNeighborhood2 = additionalNeighbors[vertex2 - htd::Vertex::FIRST];
 
                             it++;
                             index++;
@@ -511,26 +511,26 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                         pool.insert(vertex);
                     }
 
-                    requiredFillAmount[vertex - htd::first_vertex] = tmp;
+                    requiredFillAmount[vertex - htd::Vertex::FIRST] = tmp;
                 }
             }
 
             for (auto vertex : selectedNeighborhood)
             {
-                additionalNeighbors[vertex - htd::first_vertex].clear();
-                unaffectedNeighbors[vertex - htd::first_vertex].clear();
-                existingNeighbors[vertex - htd::first_vertex].clear();
+                additionalNeighbors[vertex - htd::Vertex::FIRST].clear();
+                unaffectedNeighbors[vertex - htd::Vertex::FIRST].clear();
+                existingNeighbors[vertex - htd::Vertex::FIRST].clear();
             }
 
             for (auto vertex : affectedVertices)
             {
-                if (updateStatus[vertex - htd::first_vertex] == 2)
+                if (updateStatus[vertex - htd::Vertex::FIRST] == 2)
                 {
-                    additionalNeighbors[vertex - htd::first_vertex].clear();
-                    unaffectedNeighbors[vertex - htd::first_vertex].clear();
-                    existingNeighbors[vertex - htd::first_vertex].clear();
+                    additionalNeighbors[vertex - htd::Vertex::FIRST].clear();
+                    unaffectedNeighbors[vertex - htd::Vertex::FIRST].clear();
+                    existingNeighbors[vertex - htd::Vertex::FIRST].clear();
 
-                    updateStatus[vertex - htd::first_vertex] = 0;
+                    updateStatus[vertex - htd::Vertex::FIRST] = 0;
                 }
             }
         }
@@ -624,7 +624,7 @@ std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::vector<ht
     
     for (auto it = vertices.begin(); index < count; index++)
     {
-        vertex = *it - htd::first_vertex;
+        vertex = *it - htd::Vertex::FIRST;
 
         auto& currentNeighborhood = availableNeighborhoods[vertex];
 

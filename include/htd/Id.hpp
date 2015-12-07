@@ -37,6 +37,8 @@ namespace htd
     struct Id
     {
         public:
+            static const htd::id_t FIRST = 1;
+
             static const htd::id_t UNKNOWN = 0;
 
         private:

@@ -78,7 +78,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
                 for (htd::vertex_t vertex : ret->vertices())
                 {
-                    auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::bag_label_name, vertex)))->container();
+                    auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->container();
 
                     htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(label);
 
@@ -131,7 +131,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
                 for (htd::vertex_t vertex : ret->vertices())
                 {
-                    auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::bag_label_name, vertex)))->container();
+                    auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->container();
 
                     htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(label);
 
@@ -144,7 +144,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
                 {
                     for (htd::vertex_t vertex : ret->vertices())
                     {
-                        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::bag_label_name, vertex)))->container();
+                        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->container();
 
                         htd::ILabelCollection * labelCollection = ret->exportLabelCollection(vertex);
 

@@ -63,14 +63,19 @@ namespace htd
             using htd::Hypergraph::addEdge;
             using htd::Hypergraph::removeEdge;
 
-            LabeledHypergraph<VertexLabelType, HyperedgeLabelType>(void) : Hypergraph(), labelings_()
+            /**
+             *  Constant for the identifier of the name label.
+             */
+            static constexpr const char * NAME_LABEL_IDENTIFIER = "Name";
+
+            LabeledHypergraph(void) : htd::Hypergraph(), labelings_()
             {
-                labelings_.setLabeling(htd::name_label_name, new htd::BidirectionalGraphLabeling());
+                labelings_.setLabeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER, new htd::BidirectionalGraphLabeling());
             }
             
-            LabeledHypergraph<VertexLabelType, HyperedgeLabelType>(std::size_t size) : Hypergraph(size), labelings_()
+            LabeledHypergraph(std::size_t size) : htd::Hypergraph(size), labelings_()
             {
-                labelings_.setLabeling(htd::name_label_name, new htd::BidirectionalGraphLabeling());
+                labelings_.setLabeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER, new htd::BidirectionalGraphLabeling());
             }
 
             ~LabeledHypergraph<VertexLabelType, HyperedgeLabelType>()
@@ -100,9 +105,9 @@ namespace htd
             {
                 bool ret = false;
 
-                if (labelings_.isLabelingName(htd::name_label_name))
+                if (labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
-                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                     if (labeling != nullptr)
                     {
@@ -119,9 +124,9 @@ namespace htd
             {
                 bool ret = false;
 
-                if (labelings_.isLabelingName(htd::name_label_name))
+                if (labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
-                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                     if (labeling != nullptr)
                     {
@@ -667,7 +672,7 @@ namespace htd
 
                 if (labelings_.isLabelingName(labelName))
                 {
-                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                     if (labeling != nullptr)
                     {
@@ -684,7 +689,7 @@ namespace htd
 
                 if (labelings_.isLabelingName(labelName))
                 {
-                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                     if (labeling != nullptr)
                     {
@@ -702,7 +707,7 @@ namespace htd
                     throw std::logic_error("const VertexLabelType & htd::LabeledHypergraph::label(htd::vertex_t) const");
                 }
 
-                auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                 if (labeling == nullptr)
                 {
@@ -726,7 +731,7 @@ namespace htd
                     throw std::logic_error("const HyperedgeLabelType & htd::LabeledHypergraph::label(const htd::hyperedge_t &) const");
                 }
 
-                auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                 if (labeling == nullptr)
                 {
@@ -807,9 +812,9 @@ namespace htd
             {
                 bool ret = false;
 
-                if (labelings_.isLabelingName(htd::name_label_name))
+                if (labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
-                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                     if (labeling != nullptr)
                     {
@@ -826,9 +831,9 @@ namespace htd
             {
                 bool ret = false;
 
-                if (labelings_.isLabelingName(htd::name_label_name))
+                if (labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
-                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                     if (labeling != nullptr)
                     {
@@ -888,9 +893,9 @@ namespace htd
             {
                 htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
-                if (labelings_.isLabelingName(htd::name_label_name))
+                if (labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
-                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                     if (labeling != nullptr)
                     {
@@ -908,12 +913,12 @@ namespace htd
 
             const htd::hyperedge_t & hyperedge(const HyperedgeLabelType & edgeLabel) const
             {
-                if (!labelings_.isLabelingName(htd::name_label_name))
+                if (!labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
                     throw std::logic_error("const htd::hyperedge_t & htd::LabeledHypergraph::hyperedge(const HyperedgeLabelType &) const");
                 }
 
-                auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                 if (labeling == nullptr)
                 {
@@ -932,12 +937,12 @@ namespace htd
 
             void setVertexName(htd::vertex_t vertex, const VertexLabelType & vertexLabel)
             {
-                if (!labelings_.isLabelingName(htd::name_label_name))
+                if (!labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
-                    labelings_.setLabeling(htd::name_label_name, new htd::BidirectionalGraphLabeling());
+                    labelings_.setLabeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER, new htd::BidirectionalGraphLabeling());
                 }
 
-                auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                 if (labeling != nullptr)
                 {
@@ -947,12 +952,12 @@ namespace htd
 
             void setHyperedgeName(const htd::hyperedge_t & edge, const HyperedgeLabelType & edgeLabel)
             {
-                if (!labelings_.isLabelingName(htd::name_label_name))
+                if (!labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
-                    labelings_.setLabeling(htd::name_label_name, new htd::BidirectionalGraphLabeling());
+                    labelings_.setLabeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER, new htd::BidirectionalGraphLabeling());
                 }
 
-                auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::name_label_name));
+                auto labeling = dynamic_cast<htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
 
                 if (labeling != nullptr)
                 {

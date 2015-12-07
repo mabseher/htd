@@ -65,36 +65,6 @@ namespace htd
      *  Datatype for storing hyperedges.
      */
     typedef std::vector<hyperedge_t> hyperedge_container;
-
-    /**
-     *  Constant for first identifier.
-     */
-    const htd::id_t first_id = (htd::id_t)1;
-
-    /**
-     *  Constant for first index.
-     */
-    const htd::vertex_t first_vertex = (htd::vertex_t)1;
-
-    /**
-     *  Constant for the name of the bag label.
-     */
-    const std::string bag_label_name = "Bag";
-
-    /**
-     *  Constant for the name of the name label.
-     */
-    const std::string name_label_name = "Name";
-
-    /**
-     *  Constant for the name of the edge label.
-     */
-    const std::string edge_label_name = "Edges";
-
-    /**
-     *  Constant for the name of the induced subgraph label.
-     */
-    const std::string induced_subgraph_label_name = "Induced Subgraph";
 }
 
 #endif /* HTD_HTD_GLOBALS_HPP */

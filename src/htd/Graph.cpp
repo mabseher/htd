@@ -43,14 +43,14 @@ htd::Graph::Graph(void) : htd::Graph::Graph(0)
 
 htd::Graph::Graph(std::size_t size)
     : size_(size),
-      next_vertex_(htd::first_vertex + size),
+      next_vertex_(htd::Vertex::FIRST + size),
       vertices_(size),
       deletions_(),
       neighborhood_(size, std::vector<htd::vertex_t>())
 {
-    for (htd::vertex_t vertex = htd::first_vertex; vertex < size + htd::first_vertex; ++vertex)
+    for (htd::vertex_t vertex = htd::Vertex::FIRST; vertex < size + htd::Vertex::FIRST; ++vertex)
     {
-        vertices_[vertex - htd::first_vertex] = vertex;
+        vertices_[vertex - htd::Vertex::FIRST] = vertex;
     }
 }
 
@@ -146,7 +146,7 @@ bool htd::Graph::isConnected(void) const
     
     if (size_ > 0)
     {
-        htd::vertex_t start = htd::first_vertex;
+        htd::vertex_t start = htd::Vertex::FIRST;
         
         htd::vertex_container newVertices;
         htd::vertex_container tmpVertices;
@@ -155,7 +155,7 @@ bool htd::Graph::isConnected(void) const
 
         for (auto deleted : deletions_)
         {
-            reachableVertices[deleted - htd::first_vertex] = true;
+            reachableVertices[deleted - htd::Vertex::FIRST] = true;
             
             if (start == deleted)
             {
@@ -163,7 +163,7 @@ bool htd::Graph::isConnected(void) const
             }
         }
         
-        reachableVertices[start - htd::first_vertex] = true;
+        reachableVertices[start - htd::Vertex::FIRST] = true;
 
         newVertices.push_back(start);
 
@@ -175,11 +175,11 @@ bool htd::Graph::isConnected(void) const
 
             for (htd::vertex_container::const_iterator it = tmpVertices.begin(); it != tmpVertices.end(); it++)
             {
-                for (htd::vertex_container::const_iterator it2 = neighborhood_[*it - htd::first_vertex].begin(); it2 != neighborhood_[*it - htd::first_vertex].end(); it2++)
+                for (htd::vertex_container::const_iterator it2 = neighborhood_[*it - htd::Vertex::FIRST].begin(); it2 != neighborhood_[*it - htd::Vertex::FIRST].end(); it2++)
                 {
-                    if (!reachableVertices[*it2 - htd::first_vertex])
+                    if (!reachableVertices[*it2 - htd::Vertex::FIRST])
                     {
-                        reachableVertices[*it2 - htd::first_vertex] = true;
+                        reachableVertices[*it2 - htd::Vertex::FIRST] = true;
 
                         newVertices.push_back(*it2);
                     }
@@ -210,7 +210,7 @@ bool htd::Graph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 
             std::vector<bool> reachableVertices(size_);
 
-            reachableVertices[vertex1 - htd::first_vertex] = true;
+            reachableVertices[vertex1 - htd::Vertex::FIRST] = true;
 
             newVertices.push_back(vertex1);
 
@@ -222,11 +222,11 @@ bool htd::Graph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 
                 for (htd::vertex_container::const_iterator it = tmpVertices.begin(); !ret && it != tmpVertices.end(); it++)
                 {
-                    for (htd::vertex_container::const_iterator it2 = neighborhood_[*it - htd::first_vertex].begin(); !ret && it2 != neighborhood_[*it - htd::first_vertex].end(); it2++)
+                    for (htd::vertex_container::const_iterator it2 = neighborhood_[*it - htd::Vertex::FIRST].begin(); !ret && it2 != neighborhood_[*it - htd::Vertex::FIRST].end(); it2++)
                     {
-                        if (!reachableVertices[*it2 - htd::first_vertex])
+                        if (!reachableVertices[*it2 - htd::Vertex::FIRST])
                         {
-                            reachableVertices[*it2 - htd::first_vertex] = true;
+                            reachableVertices[*it2 - htd::Vertex::FIRST] = true;
 
                             newVertices.push_back(*it2);
 
@@ -261,7 +261,7 @@ void htd::Graph::getNeighbors(htd::vertex_t vertex, htd::vertex_container & outp
 {
     if (isVertex(vertex))
     {
-        std::copy(neighborhood_[vertex - htd::first_vertex].begin(), neighborhood_[vertex - htd::first_vertex].end(), std::back_inserter(output));
+        std::copy(neighborhood_[vertex - htd::Vertex::FIRST].begin(), neighborhood_[vertex - htd::Vertex::FIRST].end(), std::back_inserter(output));
     }
 }
 
@@ -271,7 +271,7 @@ htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::id_t index) const
     
     if (isVertex(vertex))
     {
-        auto& currentNeighborhood = neighborhood_[vertex - htd::first_vertex];
+        auto& currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
         
         if (index < currentNeighborhood.size())
         {
@@ -295,7 +295,7 @@ std::size_t htd::Graph::isolatedVertexCount(void) const
     {
         if (isVertex(vertex))
         {
-            if (neighborhood_[vertex - htd::first_vertex].size() == 0)
+            if (neighborhood_[vertex - htd::Vertex::FIRST].size() == 0)
             {
                 ret++;
             }
@@ -311,7 +311,7 @@ void htd::Graph::getIsolatedVertices(htd::vertex_container & output) const
     {
         if (isVertex(vertex))
         {
-            if (neighborhood_[vertex - htd::first_vertex].size() == 0)
+            if (neighborhood_[vertex - htd::Vertex::FIRST].size() == 0)
             {
                 output.push_back(vertex);
             }
@@ -345,7 +345,7 @@ bool htd::Graph::isIsolatedVertex(htd::vertex_t vertex) const
 
     if (isVertex(vertex))
     {
-        ret = neighborhood_[vertex - htd::first_vertex].size() == 0;
+        ret = neighborhood_[vertex - htd::Vertex::FIRST].size() == 0;
     }
 
     return ret;
@@ -355,7 +355,7 @@ void htd::Graph::getEdges(htd::edge_container & output) const
 {
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
-        for (auto& vertex2 : neighborhood_[vertex1 - htd::first_vertex])
+        for (auto& vertex2 : neighborhood_[vertex1 - htd::Vertex::FIRST])
         {
             output.push_back(edge_t(vertex1, vertex2));
         }
@@ -366,7 +366,7 @@ void htd::Graph::getEdges(htd::edge_container & output, htd::vertex_t vertex) co
 {
     if (isVertex(vertex))
     {
-        for (auto& vertex2 : neighborhood_[vertex - htd::first_vertex])
+        for (auto& vertex2 : neighborhood_[vertex - htd::Vertex::FIRST])
         {
             output.push_back(edge_t(vertex, vertex2));
         }
@@ -394,7 +394,7 @@ void htd::Graph::getHyperedges(htd::hyperedge_container & output) const
 {
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
-        for (auto& vertex2 : neighborhood_[vertex1 - htd::first_vertex])
+        for (auto& vertex2 : neighborhood_[vertex1 - htd::Vertex::FIRST])
         {
             hyperedge_t hyperedge;
 
@@ -418,7 +418,7 @@ void htd::Graph::getHyperedges(htd::hyperedge_container & output, htd::vertex_t 
 {
     if (isVertex(vertex))
     {
-        for (auto& vertex2 : neighborhood_[vertex - htd::first_vertex])
+        for (auto& vertex2 : neighborhood_[vertex - htd::Vertex::FIRST])
         {
             hyperedge_t hyperedge;
 
@@ -474,9 +474,9 @@ void htd::Graph::removeVertex(htd::vertex_t vertex)
 {
     if (isVertex(vertex))
     {
-        for (auto neighbor : neighborhood_[vertex - htd::first_vertex])
+        for (auto neighbor : neighborhood_[vertex - htd::Vertex::FIRST])
         {
-            auto& currentNeighborhood = neighborhood_[neighbor - htd::first_vertex];
+            auto& currentNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
             
             auto position = std::find(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
             
@@ -486,7 +486,7 @@ void htd::Graph::removeVertex(htd::vertex_t vertex)
             }
         }
         
-        neighborhood_[vertex - htd::first_vertex].clear();
+        neighborhood_[vertex - htd::Vertex::FIRST].clear();
 
         deletions_.insert(vertex);
 
@@ -498,7 +498,7 @@ void htd::Graph::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
 {
     if (isVertex(vertex))
     {
-        auto& currentNeighborhood = neighborhood_[vertex - htd::first_vertex];
+        auto& currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
         
         if (addNeighborClique)
         {
@@ -516,7 +516,7 @@ void htd::Graph::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
             
             if (neighbor != vertex)
             {
-                auto& localNeighborhood = neighborhood_[neighbor - htd::first_vertex];
+                auto& localNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
 
                 if (addNeighborClique)
                 {
@@ -551,7 +551,7 @@ void htd::Graph::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
             }
         }
         
-        neighborhood_[vertex - htd::first_vertex].clear();
+        neighborhood_[vertex - htd::Vertex::FIRST].clear();
 
         deletions_.insert(vertex);
 
@@ -563,8 +563,8 @@ void htd::Graph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     if (isVertex(vertex1) && isVertex(vertex2))
     {
-        auto& currentNeighborhood1 = neighborhood_[vertex1 - htd::first_vertex];
-        auto& currentNeighborhood2 = neighborhood_[vertex2 - htd::first_vertex];
+        auto& currentNeighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
+        auto& currentNeighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
         
         std::vector<htd::id_t> newVertex1 { vertex1 };
         std::vector<htd::id_t> newVertex2 { vertex2 };
@@ -589,8 +589,8 @@ void htd::Graph::removeEdge(id_t vertex1, id_t vertex2)
 {
     if (isVertex(vertex1) && isVertex(vertex2))
     {
-        auto& neighborhood1 = neighborhood_[vertex1 - htd::first_vertex];
-        auto& neighborhood2 = neighborhood_[vertex2 - htd::first_vertex];
+        auto& neighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
+        auto& neighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
         
         auto position1 = std::find(neighborhood1.begin(), neighborhood1.end(), vertex2);
 

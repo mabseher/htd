@@ -105,7 +105,7 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
 
                 htd::vertex_t newNode = decomposition.addChild(node);
 
-                decomposition.setLabel(htd::bag_label_name, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+                decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
 
                 if (intermediatedVerticesCount > 0)
                 {
@@ -115,7 +115,7 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
                     {
                         newNode = decomposition.addIntermediateParent(newNode);
 
-                        decomposition.setLabel(htd::bag_label_name, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+                        decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
 
                         if (index < introducedVerticesCount + limit_)
                         {

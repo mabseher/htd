@@ -33,6 +33,11 @@ namespace htd
     class ITreeDecomposition : public virtual htd::ILabeledTree
     {
         public:
+            /**
+             *  Constant for the identifier of the bag label.
+             */
+            static constexpr const char * BAG_LABEL_IDENTIFIER = "Bag";
+
             virtual ~ITreeDecomposition() = 0;
 
             virtual std::size_t joinNodeCount(void) const = 0;

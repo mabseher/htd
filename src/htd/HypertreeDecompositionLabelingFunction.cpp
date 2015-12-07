@@ -52,7 +52,7 @@ htd::HypertreeDecompositionLabelingFunction::~HypertreeDecompositionLabelingFunc
 
 std::string htd::HypertreeDecompositionLabelingFunction::name() const
 {
-    return htd::edge_label_name;
+    return htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER;
 }
 
 htd::ILabel * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::vertex_container & vertices) const

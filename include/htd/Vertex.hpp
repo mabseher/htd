@@ -37,6 +37,8 @@ namespace htd
     struct Vertex
     {
         public:
+            static const htd::vertex_t FIRST = 1;
+
             static const htd::vertex_t UNKNOWN = 0;
 
         private:

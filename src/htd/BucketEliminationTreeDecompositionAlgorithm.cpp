@@ -87,7 +87,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
         {
             for (htd::vertex_t vertex : ret->vertices())
             {
-                auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::bag_label_name, vertex)))->container();
+                auto label = (dynamic_cast<const htd::VertexContainerLabel *>(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->container();
 
                 htd::ILabelCollection * labelCollection = ret->exportLabelCollection(vertex);
 
@@ -160,12 +160,12 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
             for (htd::vertex_t vertex : ordering)
             {
-                indices[vertex - htd::first_vertex] = index++;
+                indices[vertex - htd::Vertex::FIRST] = index++;
             }
 
             for (std::size_t index = 0; index < size; index++)
             {
-                buckets[index].push_back(index + htd::first_vertex);
+                buckets[index].push_back(index + htd::Vertex::FIRST);
             }
 
             htd::hyperedge_container edges;
@@ -176,13 +176,13 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             {
                 htd::vertex_t minimumVertex = getMinimumVertex(edge, indices);
 
-                auto& selectedBucket = buckets[minimumVertex - htd::first_vertex];
+                auto& selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
 
                 std::vector<htd::vertex_t> newBucketContent;
                 newBucketContent.reserve(selectedBucket.size());
 
                 /*
-                if (vertexLabels[minimumVertex - htd::first_vertex] == htd::unknown_id)
+                if (vertexLabels[minimumVertex - htd::Vertex::FIRST] == htd::unknown_id)
                 {
                     relevantBuckets.push_back(minimumVertex);
                 }
@@ -196,7 +196,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                     }
                 }
 
-                //vertexLabels[minimumVertex - htd::first_vertex] = minimumVertex;
+                //vertexLabels[minimumVertex - htd::Vertex::FIRST] = minimumVertex;
 
                 std::set_union(selectedBucket.begin(), selectedBucket.end(), edge.begin(), edge.end(), std::back_inserter(newBucketContent));
 
@@ -220,7 +220,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             DEBUGGING_CODE(std::cout << std::endl << "Buckets:" << std::endl;
             for (std::size_t index = 0; index < size; index++)
             {
-                std::cout << "   Bucket " << index + htd::first_vertex << ": ";
+                std::cout << "   Bucket " << index + htd::Vertex::FIRST << ": ";
                 htd::print(buckets[index], false);
                 std::cout << std::endl;
             })
@@ -229,7 +229,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             for (htd::id_t bucket : relevantBuckets)
             {
                 std::cout << "   Bucket " << bucket << ": ";
-                htd::print(buckets[bucket - htd::first_vertex], false);
+                htd::print(buckets[bucket - htd::Vertex::FIRST], false);
                 std::cout << std::endl;
             })
 
@@ -248,7 +248,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 DEBUGGING_CODE(std::cout << std::endl << "   Processing bucket " << selection << " ..." << std::endl;)
 
-                for (htd::vertex_t vertex : buckets[selection - htd::first_vertex])
+                for (htd::vertex_t vertex : buckets[selection - htd::Vertex::FIRST])
                 {
                     if (vertex != selection)
                     {
@@ -279,7 +279,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                         }
                     )
 
-                    auto& selectedBucket = buckets[minimumVertex - htd::first_vertex];
+                    auto& selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
 
                     std::vector<htd::vertex_t> newBucketContent;
                     newBucketContent.reserve(selectedBucket.size());
@@ -302,15 +302,15 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                     }
                     */
 
-                    neighbors[selection - htd::first_vertex].push_back(minimumVertex);
-                    neighbors[minimumVertex - htd::first_vertex].push_back(selection);
+                    neighbors[selection - htd::Vertex::FIRST].push_back(minimumVertex);
+                    neighbors[minimumVertex - htd::Vertex::FIRST].push_back(selection);
                 }
             }
 
             DEBUGGING_CODE(std::cout << std::endl << "Buckets:" << std::endl;
             for (std::size_t index = 0; index < size; index++)
             {
-                std::cout << "   Bucket " << index + htd::first_vertex << ": ";
+                std::cout << "   Bucket " << index + htd::Vertex::FIRST << ": ";
                 htd::print(buckets[index], false);
                 std::cout << std::endl;
             })
@@ -319,7 +319,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             for (htd::id_t bucket : relevantBuckets)
             {
                 std::cout << "   Bucket " << bucket << ": ";
-                htd::print(buckets[bucket - htd::first_vertex], false);
+                htd::print(buckets[bucket - htd::Vertex::FIRST], false);
                 std::cout << std::endl;
             })
 
@@ -336,7 +336,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 for (htd::vertex_t bucket : relevantBuckets)
                 {
-                    bucketIndices[bucket - htd::first_vertex] = currentIndex;
+                    bucketIndices[bucket - htd::Vertex::FIRST] = currentIndex;
 
                     ++currentIndex;
                 }
@@ -349,7 +349,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                     htd::vertex_t bestBucket = htd::Vertex::UNKNOWN;
                     htd::vertex_t currentBucket = unreachableVertices[0];
 
-                    auto& currentBucketContent = buckets[currentBucket - htd::first_vertex];
+                    auto& currentBucketContent = buckets[currentBucket - htd::Vertex::FIRST];
 
                     std::vector<htd::vertex_t> reachableVertices;
 
@@ -367,7 +367,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                         if (it == last || bucket < *it)
                         {
-                            auto& bucketContent = buckets[bucket - htd::first_vertex];
+                            auto& bucketContent = buckets[bucket - htd::Vertex::FIRST];
 
                             std::size_t currentOverlap = htd::compute_set_intersection_size(currentBucketContent.begin(), currentBucketContent.end(), bucketContent.begin(), bucketContent.end());
 
@@ -402,12 +402,12 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                         unreachableVertices.clear();
                     }
 
-                    neighbors[bestBucket - htd::first_vertex].push_back(currentBucket);
-                    neighbors[currentBucket - htd::first_vertex].push_back(bestBucket);
+                    neighbors[bestBucket - htd::Vertex::FIRST].push_back(currentBucket);
+                    neighbors[currentBucket - htd::Vertex::FIRST].push_back(bestBucket);
                 }
             }
 
-            ret = createRootedTreeDecomposition(relevantBuckets[root - htd::first_vertex], neighbors, buckets);
+            ret = createRootedTreeDecomposition(relevantBuckets[root - htd::Vertex::FIRST], neighbors, buckets);
         }
     }
     else
@@ -432,7 +432,7 @@ htd::vertex_t htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex
 
         for (htd::vertex_t vertex : edge)
         {
-            currentIndex = vertexIndices[vertex - htd::first_vertex];
+            currentIndex = vertexIndices[vertex - htd::Vertex::FIRST];
 
             if (currentIndex < minimum)
             {
@@ -465,7 +465,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::getReachableVertices(htd:
 
         std::vector<bool> reachableVertices(size, false);
 
-        reachableVertices[vertexIndices[start - htd::first_vertex]] = true;
+        reachableVertices[vertexIndices[start - htd::Vertex::FIRST]] = true;
 
         newVertices.push_back(start);
 
@@ -479,11 +479,11 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::getReachableVertices(htd:
 
             for (auto index : tmpVertices)
             {
-                vertex = vertices[vertexIndices[index - htd::first_vertex]];
+                vertex = vertices[vertexIndices[index - htd::Vertex::FIRST]];
 
-                for (htd::vertex_t neighbor : neighbors[vertex - htd::first_vertex])
+                for (htd::vertex_t neighbor : neighbors[vertex - htd::Vertex::FIRST])
                 {
-                    htd::index_t vertexIndex = vertexIndices[neighbor - htd::first_vertex];
+                    htd::index_t vertexIndex = vertexIndices[neighbor - htd::Vertex::FIRST];
 
                     if (!reachableVertices[vertexIndex])
                     {
@@ -535,11 +535,13 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
         {
             if (currentNode != htd::Vertex::UNKNOWN)
             {
-                const std::vector<htd::vertex_t>& currentNeighborhood = neighbors[currentNode - htd::first_vertex];
+                const std::vector<htd::vertex_t>& currentNeighborhood = neighbors[currentNode - htd::Vertex::FIRST];
 
                 if (visited.find(currentNode) == visited.end())
                 {
-                    ret->setLabel(htd::bag_label_name, decompositionNode, new htd::VertexContainerLabel(htd::vertex_container(buckets[currentNode - htd::first_vertex].begin(), buckets[currentNode - htd::first_vertex].end())));
+                    ret->setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, decompositionNode,
+                                  new htd::VertexContainerLabel(htd::vertex_container(buckets[currentNode - htd::Vertex::FIRST].begin(),
+                                                                                      buckets[currentNode - htd::Vertex::FIRST].end())));
 
                     visited.insert(currentNode);
                 }
@@ -612,7 +614,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
                 {
                     oldNode = currentNode;
 
-                    auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::bag_label_name, currentNode)))->container();
+                    auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, currentNode)))->container();
 
                     parentStack.push(std::make_pair(currentNode, currentIndex + 1));
 
@@ -620,7 +622,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
 
                     currentIndex = 0;
 
-                    auto childLabel = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::bag_label_name, currentNode)))->container();
+                    auto childLabel = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, currentNode)))->container();
 
                     if (childLabel.size() < label.size())
                     {
@@ -678,11 +680,11 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
                 std::vector<htd::vertex_t> children;
                 decomposition.getChildren(vertex, children);
 
-                auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::bag_label_name, vertex)))->container();
+                auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->container();
 
                 for (htd::vertex_t child : children)
                 {
-                    auto childLabel = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::bag_label_name, child)))->container();
+                    auto childLabel = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, child)))->container();
 
                     if (std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
                     {

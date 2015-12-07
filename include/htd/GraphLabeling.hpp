@@ -48,9 +48,9 @@ namespace htd
 
             bool hasLabel(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
 
-            const htd::ILabel * label(htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::ILabel & label(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::ILabel * label(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+            const htd::ILabel & label(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
 
             void setLabel(htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
 

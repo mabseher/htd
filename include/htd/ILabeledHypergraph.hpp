@@ -46,9 +46,9 @@ namespace htd
 
             virtual std::string labelName(htd::index_t index) const = 0;
 
-            virtual const htd::ILabel * label(const std::string & labelName, htd::vertex_t vertex) const = 0;
+            virtual const htd::ILabel & label(const std::string & labelName, htd::vertex_t vertex) const = 0;
 
-            virtual const htd::ILabel * label(const std::string & labelName, const htd::hyperedge_t & edge) const = 0;
+            virtual const htd::ILabel & label(const std::string & labelName, const htd::hyperedge_t & edge) const = 0;
 
             virtual htd::ILabelingCollection * cloneLabelings(void) const = 0;
 

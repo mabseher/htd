@@ -62,14 +62,14 @@ bool htd::GraphLabeling::hasLabel(const htd::hyperedge_t & edge) const
     return hyperedgeLabels_.find(edge) != hyperedgeLabels_.end();
 }
 
-const htd::ILabel * htd::GraphLabeling::label(htd::vertex_t vertex) const
+const htd::ILabel & htd::GraphLabeling::label(htd::vertex_t vertex) const
 {
-    return vertexLabels_.at(vertex);
+    return *(vertexLabels_.at(vertex));
 }
 
-const htd::ILabel * htd::GraphLabeling::label(const htd::hyperedge_t & edge) const
+const htd::ILabel & htd::GraphLabeling::label(const htd::hyperedge_t & edge) const
 {
-    return hyperedgeLabels_.at(edge);
+    return *(hyperedgeLabels_.at(edge));
 }
 
 void htd::GraphLabeling::setLabel(htd::vertex_t vertex, htd::ILabel * label)

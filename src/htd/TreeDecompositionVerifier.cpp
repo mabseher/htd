@@ -91,7 +91,7 @@ void htd::TreeDecompositionVerifier::getViolationsVertexExistence(const htd::IHy
     {
         htd::vertex_t node = *it1;
 
-        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, node)))->container();
+        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, node))))->container();
 
         for (auto it2 = label.begin(); !ret && it2 != label.end(); it2++)
         {
@@ -136,7 +136,7 @@ void htd::TreeDecompositionVerifier::getViolationsHyperEdgeCoverage(const htd::I
     {
         htd::vertex_t node = *it1;
 
-        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, node)))->container();
+        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, node))))->container();
 
         for (auto it2 = missingEdges.begin(); !ret && it2 != missingEdges.end(); it2++)
         {
@@ -181,7 +181,7 @@ void htd::TreeDecompositionVerifier::getViolationsConnectednessCriterion(const h
 
     for (htd::vertex_t node : decomposition.vertices())
     {
-        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, node)))->container();
+        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, node))))->container();
 
         for (htd::vertex_t vertex : label)
         {

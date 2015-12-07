@@ -105,9 +105,9 @@ namespace htd
 
             std::string labelName(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::ILabel * label(const std::string & labelName, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::ILabel & label(const std::string & labelName, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::ILabel * label(const std::string & labelName, const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+            const htd::ILabel & label(const std::string & labelName, const htd::hyperedge_t & edge) const HTD_OVERRIDE;
 
             void setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
 

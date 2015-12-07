@@ -209,7 +209,7 @@ htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(htd::vert
 
         if (labeling != nullptr && labeling->hasLabel(vertex))
         {
-            ret->setLabel(labelName, labeling->label(vertex)->clone());
+            ret->setLabel(labelName, labeling->label(vertex).clone());
         }
     }
 
@@ -226,7 +226,7 @@ htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(const htd
 
         if (labeling != nullptr && labeling->hasLabel(edge))
         {
-            ret->setLabel(labelName, labeling->label(edge)->clone());
+            ret->setLabel(labelName, labeling->label(edge).clone());
         }
     }
 

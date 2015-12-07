@@ -62,14 +62,14 @@ bool htd::BidirectionalGraphLabeling::hasLabel(const htd::hyperedge_t & edge) co
     return hyperedgeLabels_.find(edge) != hyperedgeLabels_.end();
 }
 
-const htd::ILabel * htd::BidirectionalGraphLabeling::label(htd::vertex_t vertex) const
+const htd::ILabel & htd::BidirectionalGraphLabeling::label(htd::vertex_t vertex) const
 {
-    return vertexLabels_.at(vertex);
+    return *(vertexLabels_.at(vertex));
 }
 
-const htd::ILabel * htd::BidirectionalGraphLabeling::label(const htd::hyperedge_t & edge) const
+const htd::ILabel & htd::BidirectionalGraphLabeling::label(const htd::hyperedge_t & edge) const
 {
-    return hyperedgeLabels_.at(edge);
+    return *(hyperedgeLabels_.at(edge));
 }
 
 void htd::BidirectionalGraphLabeling::setLabel(htd::vertex_t vertex, htd::ILabel * label)

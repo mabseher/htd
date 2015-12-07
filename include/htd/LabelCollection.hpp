@@ -48,7 +48,9 @@ namespace htd
 
             std::string labelName(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::ILabel * label(const std::string & labelName) const HTD_OVERRIDE;
+            htd::ILabel & label(const std::string & labelName) HTD_OVERRIDE;
+
+            const htd::ILabel & label(const std::string & labelName) const HTD_OVERRIDE;
 
             void setLabel(const std::string & labelName, htd::ILabel * label) HTD_OVERRIDE;
 

@@ -833,12 +833,12 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
 
                         auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-                        auto & oldNodeLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(node->id))->container();
+                        auto & oldNodeLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(node->id)))->container();
 
                         //Find optimal choice for new root
                         for (auto child : children)
                         {
-                            auto & childLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(child))->container();
+                            auto & childLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
 
                             std::size_t currentOverlap = htd::compute_set_intersection_size(oldNodeLabel.begin(), oldNodeLabel.end(), childLabel.begin(), childLabel.end());
 
@@ -1074,31 +1074,31 @@ std::string htd::TreeDecomposition::labelName(htd::index_t index) const
     return (*position).first;
 }
 
-const htd::ILabel * htd::TreeDecomposition::label(const std::string & labelName, htd::vertex_t vertex) const
+const htd::ILabel & htd::TreeDecomposition::label(const std::string & labelName, htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, htd::vertex_t) const");
+        throw std::out_of_range("const htd::ILabel & htd::TreeDecomposition::label(const std::string &, htd::vertex_t) const");
     }
 
     if (!labelings_->isLabelingName(labelName))
     {
-        throw std::logic_error("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, htd::vertex_t) const");
+        throw std::logic_error("const htd::ILabel & htd::TreeDecomposition::label(const std::string &, htd::vertex_t) const");
     }
 
     return (*labelings_)[labelName].label(vertex);
 }
 
-const htd::ILabel * htd::TreeDecomposition::label(const std::string & labelName, const htd::hyperedge_t & edge) const
+const htd::ILabel & htd::TreeDecomposition::label(const std::string & labelName, const htd::hyperedge_t & edge) const
 {
     if (!isEdge(edge))
     {
-        throw std::out_of_range("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, const htd::hyperedge_t &) const");
+        throw std::out_of_range("const htd::ILabel & htd::TreeDecomposition::label(const std::string &, const htd::hyperedge_t &) const");
     }
 
     if (!labelings_->isLabelingName(labelName))
     {
-        throw std::logic_error("const htd::ILabel * htd::TreeDecomposition::label(const std::string &, const htd::hyperedge_t &) const");
+        throw std::logic_error("const htd::ILabel & htd::TreeDecomposition::label(const std::string &, const htd::hyperedge_t &) const");
     }
 
     return (*labelings_)[labelName].label(edge);
@@ -1339,7 +1339,7 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
     {
         if (node != nullptr)
         {
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(node->id))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(node->id)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1363,7 +1363,7 @@ void htd::TreeDecomposition::getForgetNodes(htd::vertex_container & output) cons
     {
         if (node != nullptr)
         {
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(node->id))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(node->id)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1409,7 +1409,7 @@ bool htd::TreeDecomposition::isForgetNode(htd::vertex_t vertex) const
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(node->id))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(node->id)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1436,7 +1436,7 @@ std::size_t htd::TreeDecomposition::introduceNodeCount(void) const
     {
         if (node != nullptr)
         {
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(node->id))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(node->id)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1460,7 +1460,7 @@ void htd::TreeDecomposition::getIntroduceNodes(htd::vertex_container & output) c
     {
         if (node != nullptr)
         {
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(node->id))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(node->id)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1506,7 +1506,7 @@ bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t vertex) const
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(node->id))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(node->id)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1535,7 +1535,7 @@ htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t 
 
             if (bagLabeling.hasLabel(vertex))
             {
-                auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+                auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
                 return htd::Collection<htd::vertex_t>(vertexLabel);
             }
@@ -1557,7 +1557,7 @@ std::size_t htd::TreeDecomposition::minimumBagSize(void) const
     {
         if (bagLabeling.hasLabel(vertex))
         {
-            std::size_t bagSize = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->size();
+            std::size_t bagSize = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->size();
 
             if (start || bagSize < ret)
             {
@@ -1581,7 +1581,7 @@ std::size_t htd::TreeDecomposition::maximumBagSize(void) const
     {
         if (bagLabeling.hasLabel(vertex))
         {
-            std::size_t bagSize = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->size();
+            std::size_t bagSize = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->size();
 
             if (bagSize > ret)
             {
@@ -1605,7 +1605,7 @@ std::size_t htd::TreeDecomposition::forgottenVerticesCount(htd::vertex_t vertex)
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1630,9 +1630,9 @@ std::size_t htd::TreeDecomposition::forgottenVerticesCount(htd::vertex_t vertex,
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(child))->container();
+            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
 
             ret = htd::compute_set_difference_size(childVertexLabel.begin(), childVertexLabel.end(), vertexLabel.begin(), vertexLabel.end());
         }
@@ -1651,7 +1651,7 @@ void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::ver
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1672,9 +1672,9 @@ void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::ver
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(child))->container();
+            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
 
             std::set_difference(childVertexLabel.begin(), childVertexLabel.end(), vertexLabel.begin(), vertexLabel.end(), std::back_inserter(output));
         }
@@ -1759,7 +1759,7 @@ std::size_t htd::TreeDecomposition::introducedVerticesCount(htd::vertex_t vertex
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1784,9 +1784,9 @@ std::size_t htd::TreeDecomposition::introducedVerticesCount(htd::vertex_t vertex
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(child))->container();
+            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
 
             ret = htd::compute_set_difference_size(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end());
         }
@@ -1805,7 +1805,7 @@ void htd::TreeDecomposition::getIntroducedVertices(htd::vertex_t vertex, htd::ve
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1826,9 +1826,9 @@ void htd::TreeDecomposition::getIntroducedVertices(htd::vertex_t vertex, htd::ve
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(child))->container();
+            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
 
             std::set_difference(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end(), std::back_inserter(output));
         }
@@ -1913,7 +1913,7 @@ std::size_t htd::TreeDecomposition::rememberedVerticesCount(htd::vertex_t vertex
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1938,9 +1938,9 @@ std::size_t htd::TreeDecomposition::rememberedVerticesCount(htd::vertex_t vertex
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(child))->container();
+            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
 
             ret = htd::compute_set_intersection_size(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end());
         }
@@ -1959,7 +1959,7 @@ void htd::TreeDecomposition::getRememberedVertices(htd::vertex_t vertex, htd::ve
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
             htd::vertex_container childLabelContent;
 
@@ -1980,9 +1980,9 @@ void htd::TreeDecomposition::getRememberedVertices(htd::vertex_t vertex, htd::ve
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(child))->container();
+            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
 
             std::set_intersection(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end(), std::back_inserter(output));
         }
@@ -2069,7 +2069,8 @@ void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex
 
             for (auto child : children)
             {
-                auto & childLabel = dynamic_cast<const htd::VertexContainerLabel *>(bagLabeling.label(child))->container();
+                //TODO Use Collection<T> via bagContent(htd::vertex_t)
+                auto & childLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
 
                 std::copy(childLabel.begin(), childLabel.end(), std::back_inserter(output));
             }

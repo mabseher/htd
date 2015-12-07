@@ -579,35 +579,35 @@ namespace htd
                 return labelings_.labelName(index);
             }
 
-            const htd::ILabel * label(const std::string & labelName, htd::vertex_t vertex) const HTD_OVERRIDE
+            const htd::ILabel & label(const std::string & labelName, htd::vertex_t vertex) const HTD_OVERRIDE
             {
                 if (!labelings_.isLabelingName(labelName))
                 {
-                    throw std::out_of_range("const htd::ILabel * label(const std::string &, htd::vertex_t) const");
+                    throw std::out_of_range("const htd::ILabel & htd::LabeledHypergraph::label(const std::string &, htd::vertex_t) const");
                 }
 
                 auto & labeling = labelings_.labeling(labelName);
 
                 if (!labeling.hasLabel(vertex))
                 {
-                    throw std::logic_error("const htd::ILabel * label(const std::string &, htd::vertex_t) const");
+                    throw std::logic_error("const htd::ILabel & htd::LabeledHypergraph::label(const std::string &, htd::vertex_t) const");
                 }
 
                 return labeling.label(vertex);
             }
 
-            const htd::ILabel * label(const std::string & labelName, const htd::hyperedge_t & edge) const HTD_OVERRIDE
+            const htd::ILabel & label(const std::string & labelName, const htd::hyperedge_t & edge) const HTD_OVERRIDE
             {
                 if (!labelings_.isLabelingName(labelName))
                 {
-                    throw std::out_of_range("const htd::ILabel * label(const std::string &, const htd::hyperedge_t &) const");
+                    throw std::out_of_range("const htd::ILabel & htd::LabeledHypergraph::label(const std::string &, const htd::hyperedge_t &) const");
                 }
 
                 auto & labeling = labelings_.labeling(labelName);
 
                 if (!labeling.hasLabel(edge))
                 {
-                    throw std::logic_error("const htd::ILabel * label(const std::string &, const htd::hyperedge_t &) const");
+                    throw std::logic_error("const htd::ILabel & htd::LabeledHypergraph::label(const std::string &, const htd::hyperedge_t &) const");
                 }
 
                 return labeling.label(edge);
@@ -753,7 +753,7 @@ namespace htd
                     throw std::logic_error("const VertexLabelType & htd::LabeledHypergraph::name(htd::vertex_t) const");
                 }
 
-                auto label = dynamic_cast<const htd::Label<VertexLabelType> *>(labeling->label(vertex));
+                auto label = dynamic_cast<const htd::Label<VertexLabelType> *>(&(labeling->label(vertex)));
 
                 return label->value();
             }

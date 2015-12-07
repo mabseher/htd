@@ -45,9 +45,9 @@ namespace htd
 
             virtual bool hasLabel(const htd::hyperedge_t & edge) const = 0;
 
-            virtual const htd::ILabel * label(htd::vertex_t vertex) const = 0;
+            virtual const htd::ILabel & label(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::ILabel * label(const htd::hyperedge_t & edge) const = 0;
+            virtual const htd::ILabel & label(const htd::hyperedge_t & edge) const = 0;
 
             virtual void setLabel(htd::vertex_t vertex, htd::ILabel * label) = 0;
 

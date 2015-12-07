@@ -64,7 +64,7 @@ void htd::HypertreeDecomposition::getEdgeLabel(htd::vertex_t vertex, htd::hypere
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            auto & edgeLabel = dynamic_cast<const htd::HyperedgeContainerLabel *>(bagLabeling.label(vertex))->container();
+            auto & edgeLabel = dynamic_cast<const htd::HyperedgeContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
             std::copy(edgeLabel.begin(), edgeLabel.end(), std::back_inserter(output));
         }

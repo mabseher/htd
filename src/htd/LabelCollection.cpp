@@ -62,14 +62,24 @@ std::string htd::LabelCollection::labelName(htd::index_t index) const
     return labelNames_.at(index);
 }
 
-const htd::ILabel * htd::LabelCollection::label(const std::string & labelName) const
+htd::ILabel & htd::LabelCollection::label(const std::string & labelName)
 {
     if (content_.find(labelName) == content_.end())
     {
-        throw std::out_of_range("const htd::ILabel * const htd::LabelCollection::label(const std::string &) const");
+        throw std::out_of_range("htd::ILabel & htd::LabelCollection::label(const std::string &)");
     }
 
-    return content_.at(labelName);
+    return *(content_.at(labelName));
+}
+
+const htd::ILabel & htd::LabelCollection::label(const std::string & labelName) const
+{
+    if (content_.find(labelName) == content_.end())
+    {
+        throw std::out_of_range("const htd::ILabel & htd::LabelCollection::label(const std::string &) const");
+    }
+
+    return *(content_.at(labelName));
 }
 
 void htd::LabelCollection::setLabel(const std::string & labelName, htd::ILabel * label)

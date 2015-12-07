@@ -30,7 +30,6 @@
 #include <htd/IHypergraph.hpp>
 #include <htd/ITreeDecomposition.hpp>
 
-//TODO #include <cstdarg>
 #include <vector>
 
 namespace htd

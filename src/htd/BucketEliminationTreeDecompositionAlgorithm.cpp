@@ -36,9 +36,6 @@
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabelingFunction.hpp>
 
-//TODO Remove
-#include <iostream>
-
 #include <cstdarg>
 #include <stdexcept>
 #include <unordered_set>

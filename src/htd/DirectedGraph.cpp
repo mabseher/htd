@@ -302,48 +302,43 @@ bool htd::DirectedGraph::isReachable(htd::vertex_t vertex1, htd::vertex_t vertex
     }
     
     bool ret = false;
-    
-    //TODO Covered by check above?
-    if (std::find(deletions_.begin(), deletions_.end(), vertex1) == deletions_.end() &&
-        std::find(deletions_.begin(), deletions_.end(), vertex2) == deletions_.end())
+
+    if (vertex1 != vertex2)
     {
-        if (vertex1 != vertex2)
+        std::vector<id_t> newVertices;
+        std::vector<id_t> tmpVertices;
+
+        std::vector<bool> reachableVertices(size_);
+
+        reachableVertices[vertex1] = true;
+
+        newVertices.push_back(vertex1);
+
+        while (newVertices.size() > 0)
         {
-            std::vector<id_t> newVertices;
-            std::vector<id_t> tmpVertices;
+            std::swap(tmpVertices, newVertices);
 
-            std::vector<bool> reachableVertices(size_);
+            newVertices.resize(0);
 
-            reachableVertices[vertex1] = true;
-
-            newVertices.push_back(vertex1);
-
-            while (newVertices.size() > 0) 
+            for (std::vector<id_t>::const_iterator it = tmpVertices.begin(); !ret && it != tmpVertices.end(); it++)
             {
-                std::swap(tmpVertices, newVertices);
-
-                newVertices.resize(0);
-
-                for (std::vector<id_t>::const_iterator it = tmpVertices.begin(); !ret && it != tmpVertices.end(); it++)
+                for (std::set<id_t>::const_iterator it2 = outgoingNeighborhood_[*it].begin(); !ret && it2 != outgoingNeighborhood_[*it].end(); it2++)
                 {
-                    for (std::set<id_t>::const_iterator it2 = outgoingNeighborhood_[*it].begin(); !ret && it2 != outgoingNeighborhood_[*it].end(); it2++)
+                    if (!reachableVertices[*it2])
                     {
-                        if (!reachableVertices[*it2])
-                        {
-                            reachableVertices[*it2] = true;
+                        reachableVertices[*it2] = true;
 
-                            newVertices.push_back(*it2);
+                        newVertices.push_back(*it2);
 
-                            ret = *it2 == vertex2;
-                        }
+                        ret = *it2 == vertex2;
                     }
                 }
             }
         }
-        else
-        {
-            ret = true;
-        }
+    }
+    else
+    {
+        ret = true;
     }
     
     return ret;
@@ -485,12 +480,8 @@ void htd::DirectedGraph::getIncomingNeighbors(htd::vertex_t vertex, htd::vertex_
     {
         throw std::out_of_range("htd::DirectedGraph::getIncomingNeighbors(id_t, vertex_container&)");
     }
-    
-    //TODO Covered by check above?
-    if (std::find(deletions_.begin(), deletions_.end(), vertex) == deletions_.end())
-    {
-        std::copy(incomingNeighborhood_[vertex].begin(), incomingNeighborhood_[vertex].end(), std::back_inserter(output));
-    }
+
+    std::copy(incomingNeighborhood_[vertex].begin(), incomingNeighborhood_[vertex].end(), std::back_inserter(output));
 }
 
 void htd::DirectedGraph::getOutgoingNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
@@ -500,11 +491,7 @@ void htd::DirectedGraph::getOutgoingNeighbors(htd::vertex_t vertex, htd::vertex_
         throw std::out_of_range("htd::DirectedGraph::getOutgoingNeighbors(id_t, vertex_container&)");
     }
 
-    //TODO Covered by check above?
-    if (std::find(deletions_.begin(), deletions_.end(), vertex) == deletions_.end())
-    {
-        std::copy(outgoingNeighborhood_[vertex].begin(), outgoingNeighborhood_[vertex].end(), std::back_inserter(output));
-    }
+    std::copy(outgoingNeighborhood_[vertex].begin(), outgoingNeighborhood_[vertex].end(), std::back_inserter(output));
 }
 
 htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const
@@ -708,27 +695,23 @@ void htd::DirectedGraph::getHyperedges(htd::hyperedge_container & output, htd::v
     {
         throw std::out_of_range("htd::DirectedGraph::edges(htd::hyperedge_container&, id_t)");
     }
-    
-    //TODO Covered by check above?
-    if (std::find(deletions_.begin(), deletions_.end(), vertex) == deletions_.end())
+
+    for (auto& vertex2 : outgoingNeighborhood_[vertex])
     {
-        for (auto& vertex2 : outgoingNeighborhood_[vertex])
+        htd::hyperedge_t hyperedge;
+
+        if (vertex < vertex2)
         {
-            htd::hyperedge_t hyperedge;
-
-            if (vertex < vertex2)
-            {
-                hyperedge.push_back(vertex);
-                hyperedge.push_back(vertex2);
-            }
-            else
-            {
-                hyperedge.push_back(vertex2);
-                hyperedge.push_back(vertex);
-            }
-
-            output.push_back(hyperedge);
+            hyperedge.push_back(vertex);
+            hyperedge.push_back(vertex2);
         }
+        else
+        {
+            hyperedge.push_back(vertex2);
+            hyperedge.push_back(vertex);
+        }
+
+        output.push_back(hyperedge);
     }
 }
 

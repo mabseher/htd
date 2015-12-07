@@ -48,9 +48,9 @@ htd::Graph::Graph(std::size_t size)
       deletions_(),
       neighborhood_(size, std::vector<htd::vertex_t>())
 {
-    for (std::size_t index = 0; index < size; ++index)
+    for (htd::vertex_t vertex = htd::first_vertex; vertex < size + htd::first_vertex; ++vertex)
     {
-        vertices_[index] = index;
+        vertices_[vertex - htd::first_vertex] = vertex;
     }
 }
 

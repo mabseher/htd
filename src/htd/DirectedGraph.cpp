@@ -49,9 +49,9 @@ htd::DirectedGraph::DirectedGraph(std::size_t size)
       incomingNeighborhood_(size, std::set<htd::vertex_t>()),
       outgoingNeighborhood_(size, std::set<htd::vertex_t>())
 {
-    for (std::size_t index = 0; index < size; ++index)
+    for (htd::vertex_t vertex = htd::first_vertex; vertex < size + htd::first_vertex; ++vertex)
     {
-        vertices_[index] = index;
+        vertices_[vertex - htd::first_vertex] = vertex;
     }
 }
 

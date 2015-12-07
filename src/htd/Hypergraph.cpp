@@ -47,9 +47,9 @@ htd::Hypergraph::Hypergraph(std::size_t size)
       edges_(),
       neighborhood_(size, htd::vertex_container())
 {
-    for (std::size_t index = 0; index < size; ++index)
+    for (htd::vertex_t vertex = htd::first_vertex; vertex < size + htd::first_vertex; ++vertex)
     {
-        vertices_[index] = index;
+        vertices_[vertex - htd::first_vertex] = vertex;
     }
 }
 
@@ -246,47 +246,52 @@ bool htd::Hypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) 
     
     if (isVertex(vertex1) && isVertex(vertex2))
     {
-        htd::vertex_container newVertices;
-        htd::vertex_container tmpVertices;
-
-        std::vector<bool> reachableVertices(size_);
-
-        reachableVertices[vertex1] = true;
-
-        newVertices.push_back(vertex1);
-
-        while (!ret && newVertices.size() > 0) 
+        if (vertex1 == vertex2)
         {
-            std::swap(tmpVertices, newVertices);
+            ret = true;
+        }
+        else
+        {
+            htd::vertex_container newVertices;
+            htd::vertex_container tmpVertices;
 
-            newVertices.resize(0);
+            std::vector<bool> reachableVertices(size_);
 
-            for (auto it = tmpVertices.begin(); !ret && it != tmpVertices.end(); it++)
+            reachableVertices[vertex1 - htd::first_vertex] = true;
+
+            newVertices.push_back(vertex1);
+
+            while (!ret && newVertices.size() > 0)
             {
-                for (auto it2 = edges_.begin(); !ret && it2 != edges_.end(); it2++)
-                {
-                    if (std::find((*it2).begin(), (*it2).end(), *it) != (*it2).end())
-                    {
-                        for (auto it3 = (*it2).begin(); !ret && it3 != (*it2).end(); it3++)
-                        {
-                            if (*it3 != *it && !reachableVertices[*it3])
-                            {
-                                reachableVertices[*it3] = true;
+                std::swap(tmpVertices, newVertices);
 
-                                newVertices.push_back(*it3);
-                                
-                                if (*it3 == vertex2)
+                newVertices.resize(0);
+
+                for (auto it = tmpVertices.begin(); !ret && it != tmpVertices.end(); it++)
+                {
+                    for (auto it2 = edges_.begin(); !ret && it2 != edges_.end(); it2++)
+                    {
+                        if (std::find((*it2).begin(), (*it2).end(), *it) != (*it2).end())
+                        {
+                            for (auto it3 = (*it2).begin(); !ret && it3 != (*it2).end(); it3++)
+                            {
+                                if (*it3 != *it && !reachableVertices[*it3 - htd::first_vertex])
                                 {
-                                    ret = true;
-                                }                                
+                                    reachableVertices[*it3 - htd::first_vertex] = true;
+
+                                    newVertices.push_back(*it3);
+
+                                    if (*it3 == vertex2)
+                                    {
+                                        ret = true;
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        
-        ret = std::find(reachableVertices.begin(), reachableVertices.end(), false) == reachableVertices.end();
     }
     
     return ret;

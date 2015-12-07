@@ -1057,12 +1057,9 @@ std::size_t htd::TreeDecomposition::labelCount(void) const
     return labelings_->labelCount();
 }
 
-void htd::TreeDecomposition::getLabelNames(std::vector<std::string> & output) const
+htd::Collection<std::string> htd::TreeDecomposition::labelNames(void) const
 {
-    for (auto& labeling : *labelings_)
-    {
-        output.push_back(labeling.first);
-    }
+    return labelings_->labelNames();
 }
 
 std::string htd::TreeDecomposition::labelName(htd::index_t index) const

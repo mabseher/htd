@@ -596,10 +596,6 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
         std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
 
         htd::vertex_container unneededVertices;
-                
-        std::vector<std::string> labelNames;
-
-        decomposition.getLabelNames(labelNames);
 
         while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
         {

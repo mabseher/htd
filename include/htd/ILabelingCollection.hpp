@@ -26,6 +26,7 @@
 #define	HTD_HTD_ILABELINGCOLLECTION_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/Collection.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/ILabelCollection.hpp>
 #include <htd/Iterator.hpp>
@@ -39,8 +40,9 @@ namespace htd
 
             virtual std::size_t labelCount(void) const = 0;
 
-            virtual void getLabelNames(std::vector<std::string> & output) const = 0;
+            virtual htd::Collection<std::string> labelNames(void) const = 0;
 
+            //TODO Return const reference to label name
             virtual std::string labelName(htd::index_t index) const = 0;
 
             virtual bool isLabelingName(const std::string & labelName) const = 0;

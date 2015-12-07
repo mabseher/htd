@@ -52,12 +52,7 @@ htd::LabelingCollection::LabelingCollection(const LabelingCollection & original)
 
 htd::LabelingCollection::LabelingCollection(const htd::ILabelingCollection & original)
 {
-    std::vector<std::string> labelNames;
-
-    //TODO Implement and use iterator!
-    original.getLabelNames(labelNames);
-
-    for (const std::string & labelName : labelNames)
+    for (const std::string & labelName : original.labelNames())
     {
         setLabeling(labelName, original.labeling(labelName).clone());
     }
@@ -81,9 +76,9 @@ std::size_t htd::LabelingCollection::labelCount(void) const
     return content_.size();
 }
 
-void htd::LabelingCollection::getLabelNames(std::vector<std::string> & output) const
+htd::Collection<std::string> htd::LabelingCollection::labelNames(void) const
 {
-    std::copy(labelNames_.begin(), labelNames_.end(), std::back_inserter(output));
+    return htd::Collection<std::string>(labelNames_);
 }
 
 std::string htd::LabelingCollection::labelName(htd::index_t index) const

@@ -47,9 +47,9 @@ std::size_t htd::LabelCollection::labelCount(void) const
     return labelNames_.size();
 }
 
-void htd::LabelCollection::getLabelNames(std::vector<std::string> & output) const
+htd::Collection<std::string> htd::LabelCollection::labelNames(void) const
 {
-    std::copy(labelNames_.begin(), labelNames_.end(), std::back_inserter(output));
+    return htd::Collection<std::string>(labelNames_);
 }
 
 std::string htd::LabelCollection::labelName(htd::index_t index) const

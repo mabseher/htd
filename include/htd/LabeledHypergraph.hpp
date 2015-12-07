@@ -573,9 +573,9 @@ namespace htd
             }
 
 
-            void getLabelNames(std::vector<std::string> & output) const HTD_OVERRIDE
+            htd::Collection<std::string> labelNames(void) const HTD_OVERRIDE
             {
-                return labelings_.getLabelNames(output);
+                return labelings_.labelNames();
             }
 
             std::string labelName(htd::index_t index) const HTD_OVERRIDE

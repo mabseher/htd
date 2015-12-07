@@ -279,7 +279,7 @@ namespace htd
 
             htd::vertex_t addVertex(const VertexLabelType & vertexLabel)
             {
-                htd::vertex_t locatedVertex = vertex(vertexLabel);
+                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
 
                 if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
@@ -325,9 +325,9 @@ namespace htd
 
                 if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
-                    labelings_.removeLabels(locatedVertex);
-
                     htd::Hypergraph::removeVertex(locatedVertex, addNeighborHyperedge);
+
+                    labelings_.removeLabels(locatedVertex);
                 }
             }
 
@@ -368,14 +368,14 @@ namespace htd
 
             void addEdge(const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2, const HyperedgeLabelType & label)
             {
-                htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
+                htd::vertex_t locatedVertex1 = lookupVertex(vertexLabel1);
 
                 if (locatedVertex1 == htd::Vertex::UNKNOWN)
                 {
                     locatedVertex1 = addVertex(vertexLabel1);
                 }
 
-                htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
+                htd::vertex_t locatedVertex2 = lookupVertex(vertexLabel2);
 
                 if (locatedVertex2 == htd::Vertex::UNKNOWN)
                 {
@@ -398,7 +398,7 @@ namespace htd
                         addVertex(*it);
                     }
 
-                    hyperedge.push_back(vertex(*it));
+                    hyperedge.push_back(lookupVertex(*it));
                 }
 
                 if (ok)
@@ -480,10 +480,14 @@ namespace htd
 
             void removeEdge(const HyperedgeLabelType & label)
             {
-                HTD_UNUSED(label);
+                if (isHyperedgeName(label))
+                {
+                    const htd::hyperedge_t & hyperedge = lookupHyperedge(label);
 
-                //TODO Implement
-                throw std::logic_error("void htd::LabeledHypergraph::removeEdge(const HyperedgeLabelType &): NOT YET IMPLEMENTED!");
+                    htd::Hypergraph::removeEdge(hyperedge);
+
+                    labelings_.removeLabels(hyperedge);
+                }
             }
             
             void removeEdge(const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2)
@@ -818,7 +822,7 @@ namespace htd
 
                 if (labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
-                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
+                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(&(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER)));
 
                     if (labeling != nullptr)
                     {
@@ -837,7 +841,7 @@ namespace htd
 
                 if (labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
-                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER));
+                    auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(&(labelings_.labeling(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER)));
 
                     if (labeling != nullptr)
                     {
@@ -873,7 +877,7 @@ namespace htd
         private:
             htd::LabelingCollection labelings_;
 
-            htd::vertex_t vertex(const VertexLabelType & vertexLabel) const
+            htd::vertex_t lookupVertex(const VertexLabelType & vertexLabel) const
             {
                 htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
@@ -895,7 +899,7 @@ namespace htd
                 return ret;
             }
 
-            const htd::hyperedge_t & hyperedge(const HyperedgeLabelType & edgeLabel) const
+            const htd::hyperedge_t & lookupHyperedge(const HyperedgeLabelType & edgeLabel) const
             {
                 if (!labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {

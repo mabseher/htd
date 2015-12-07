@@ -671,7 +671,7 @@ void htd::Hypergraph::removeEdge(const htd::hyperedge_t & edge)
         {
             ok = isVertex(*it);
         }
-        
+
         if (ok)
         {
             auto position = std::find(edges_.begin(), edges_.end(), edge);

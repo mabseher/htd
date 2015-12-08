@@ -25,15 +25,12 @@
 #ifndef HTD_HTD_BUCKETELIMINATIONTREEDECOMPOSITIONALGORITHM_HPP
 #define	HTD_HTD_BUCKETELIMINATIONTREEDECOMPOSITIONALGORITHM_HPP
 
-//TODO Order of #include
 #include <htd/Globals.hpp>
-#include <htd/IGraph.hpp>
+#include <htd/ITreeDecompositionAlgorithm.hpp>
 #include <htd/ITreeDecomposition.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
-#include <htd/ITreeDecompositionAlgorithm.hpp>
 
-#include <cstdarg>
 #include <vector>
 #include <unordered_set>
 

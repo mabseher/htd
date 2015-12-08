@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
+#include <htd/ILabeledGraph.hpp>
 #include <htd/ILabelingFunction.hpp>
 
 #include <vector>

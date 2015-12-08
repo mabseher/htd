@@ -66,9 +66,9 @@ namespace htd
 
             virtual htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
 
-            virtual std::size_t forgottenVerticesCount(htd::vertex_t vertex) const = 0;
+            virtual std::size_t forgottenVertexCount(htd::vertex_t vertex) const = 0;
 
-            virtual std::size_t forgottenVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual std::size_t forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual void getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output) const = 0;
 
@@ -82,9 +82,9 @@ namespace htd
 
             virtual bool isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex, htd::vertex_t child) const = 0;
 
-            virtual std::size_t introducedVerticesCount(htd::vertex_t vertex) const = 0;
+            virtual std::size_t introducedVertexCount(htd::vertex_t vertex) const = 0;
 
-            virtual std::size_t introducedVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual std::size_t introducedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual void getIntroducedVertices(htd::vertex_t vertex, htd::vertex_container & output) const = 0;
 
@@ -98,9 +98,9 @@ namespace htd
 
             virtual bool isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex, htd::vertex_t child) const = 0;
 
-            virtual std::size_t rememberedVerticesCount(htd::vertex_t vertex) const = 0;
+            virtual std::size_t rememberedVertexCount(htd::vertex_t vertex) const = 0;
 
-            virtual std::size_t rememberedVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual std::size_t rememberedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual void getRememberedVertices(htd::vertex_t vertex, htd::vertex_container & output) const = 0;
 

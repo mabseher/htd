@@ -191,9 +191,9 @@ namespace htd
 
             htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            std::size_t forgottenVerticesCount(htd::vertex_t vertex) const HTD_OVERRIDE;
+            std::size_t forgottenVertexCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            std::size_t forgottenVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
+            std::size_t forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             void getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output) const HTD_OVERRIDE;
 
@@ -207,9 +207,9 @@ namespace htd
 
             bool isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            std::size_t introducedVerticesCount(htd::vertex_t vertex) const HTD_OVERRIDE;
+            std::size_t introducedVertexCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            std::size_t introducedVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
+            std::size_t introducedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             void getIntroducedVertices(htd::vertex_t vertex, htd::vertex_container & output) const HTD_OVERRIDE;
 
@@ -223,9 +223,9 @@ namespace htd
 
             bool isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            std::size_t rememberedVerticesCount(htd::vertex_t vertex) const HTD_OVERRIDE;
+            std::size_t rememberedVertexCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            std::size_t rememberedVerticesCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
+            std::size_t rememberedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             void getRememberedVertices(htd::vertex_t vertex, htd::vertex_container & output) const HTD_OVERRIDE;
 

@@ -58,16 +58,16 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
 
         std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
-        std::size_t forgottenVerticesCount = decomposition.forgottenVerticesCount(node);
+        std::size_t forgottenVertexCount = decomposition.forgottenVertexCount(node);
 
         DEBUGGING_CODE(
         std::cout << "FORGET NODE: " << node << std::endl;
         std::cout << "   ";
         htd::print(bagContent, false);
-        std::cout << std::endl << "   FORGOTTEN VERTEX COUNT: " << forgottenVerticesCount << std::endl << std::endl;
+        std::cout << std::endl << "   FORGOTTEN VERTEX COUNT: " << forgottenVertexCount << std::endl << std::endl;
         )
 
-        if (forgottenVerticesCount > limit_)
+        if (forgottenVertexCount > limit_)
         {
             std::cout << "VIOLATION: " << node << std::endl << std::endl;
 
@@ -85,11 +85,11 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
             htd::print(rememberedVertices, false);
             std::cout << std::endl;
 
-            std::size_t remainder = forgottenVerticesCount % limit_;
+            std::size_t remainder = forgottenVertexCount % limit_;
 
-            forgottenVerticesCount -= remainder;
+            forgottenVertexCount -= remainder;
 
-            std::size_t intermediatedVerticesCount = forgottenVerticesCount / limit_;
+            std::size_t intermediatedVerticesCount = forgottenVertexCount / limit_;
 
             if (intermediatedVerticesCount > 0)
             {

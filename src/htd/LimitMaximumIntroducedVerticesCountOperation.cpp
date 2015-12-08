@@ -59,16 +59,16 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
 
         std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
-        std::size_t introducedVerticesCount = decomposition.introducedVerticesCount(node);
+        std::size_t introducedVertexCount = decomposition.introducedVertexCount(node);
 
         DEBUGGING_CODE(
         std::cout << "INTRODUCE NODE: " << node << std::endl;
         std::cout << "   ";
         htd::print(bagContent, false);
-        std::cout << std::endl << "   INTRODUCED VERTEX COUNT: " << introducedVerticesCount << std::endl << std::endl;
+        std::cout << std::endl << "   INTRODUCED VERTEX COUNT: " << introducedVertexCount << std::endl << std::endl;
         )
 
-        if (introducedVerticesCount > limit_)
+        if (introducedVertexCount > limit_)
         {
             std::cout << "VIOLATION: " << node << std::endl << std::endl;
 
@@ -78,11 +78,11 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
             decomposition.getIntroducedVertices(node, introducedVertices);
             decomposition.getRememberedVertices(node, rememberedVertices);
 
-            std::size_t remainder = introducedVerticesCount % limit_;
+            std::size_t remainder = introducedVertexCount % limit_;
 
-            introducedVerticesCount -= remainder;
+            introducedVertexCount -= remainder;
 
-            std::size_t intermediatedVerticesCount = introducedVerticesCount / limit_;
+            std::size_t intermediatedVerticesCount = introducedVertexCount / limit_;
 
             if (intermediatedVerticesCount > 0)
             {
@@ -117,7 +117,7 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
 
                         decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
 
-                        if (index < introducedVerticesCount + limit_)
+                        if (index < introducedVertexCount + limit_)
                         {
                             std::advance(finish, limit_);
                         }

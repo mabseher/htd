@@ -87,7 +87,7 @@ namespace htd
             {
                 std::size_t ret = 0;
 
-                htd::vertex_t locatedVertex = vertex(vertexLabel);
+                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
 
                 if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
@@ -149,7 +149,7 @@ namespace htd
                 {
                     if (isVertex(*it))
                     {
-                        hyperedge.push_back(vertex(*it));
+                        hyperedge.push_back(lookupVertex(*it));
                     }
                     else
                     {
@@ -173,8 +173,8 @@ namespace htd
             {
                 bool ret = false;
 
-                htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
-                htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
+                htd::vertex_t locatedVertex1 = lookupVertex(vertexLabel1);
+                htd::vertex_t locatedVertex2 = lookupVertex(vertexLabel2);
 
                 if (locatedVertex1 != htd::Vertex::UNKNOWN && locatedVertex2 != htd::Vertex::UNKNOWN)
                 {
@@ -188,8 +188,8 @@ namespace htd
             {
                 bool ret = false;
 
-                htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
-                htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
+                htd::vertex_t locatedVertex1 = lookupVertex(vertexLabel1);
+                htd::vertex_t locatedVertex2 = lookupVertex(vertexLabel2);
 
                 if (locatedVertex1 != htd::Vertex::UNKNOWN && locatedVertex2 != htd::Vertex::UNKNOWN)
                 {
@@ -203,7 +203,7 @@ namespace htd
             {
                 std::size_t ret = 0;
 
-                htd::vertex_t locatedVertex = vertex(vertexLabel);
+                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
 
                 if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
@@ -215,7 +215,7 @@ namespace htd
             
             void getNeighbors(const VertexLabelType & vertexLabel, htd::vertex_container & output) const
             {
-                htd::vertex_t locatedVertex = vertex(vertexLabel);
+                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
 
                 if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
@@ -227,7 +227,7 @@ namespace htd
             {
                 htd::vertex_t ret = 0;
 
-                htd::vertex_t locatedVertex = vertex(vertexLabel);
+                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
 
                 if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
@@ -245,7 +245,7 @@ namespace htd
             {
                 bool ret = false;
 
-                htd::vertex_t locatedVertex = vertex(vertexLabel);
+                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
 
                 if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
@@ -257,7 +257,7 @@ namespace htd
 
             void getHyperedges(htd::hyperedge_container & output, const VertexLabelType & vertexLabel) const
             {
-                htd::vertex_t locatedVertex = vertex(vertexLabel);
+                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
 
                 if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
@@ -267,7 +267,7 @@ namespace htd
 
             const htd::hyperedge_t & hyperedge(htd::index_t index, const VertexLabelType & vertexLabel) const
             {
-                htd::vertex_t locatedVertex = vertex(vertexLabel);
+                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
 
                 if (locatedVertex == htd::Vertex::UNKNOWN)
                 {
@@ -302,7 +302,7 @@ namespace htd
 
             void removeVertex(const VertexLabelType & vertexLabel)
             {
-                htd::vertex_t locatedVertex = vertex(vertexLabel);
+                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
 
                 if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
@@ -321,7 +321,7 @@ namespace htd
 
             void removeVertex(const VertexLabelType & vertexLabel, bool addNeighborHyperedge)
             {
-                htd::vertex_t locatedVertex = vertex(vertexLabel);
+                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
 
                 if (locatedVertex != htd::Vertex::UNKNOWN)
                 {
@@ -333,14 +333,14 @@ namespace htd
 
             void addEdge(const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2)
             {
-                htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
+                htd::vertex_t locatedVertex1 = lookupVertex(vertexLabel1);
 
                 if (locatedVertex1 == htd::Vertex::UNKNOWN)
                 {
                     locatedVertex1 = addVertex(vertexLabel1);
                 }
 
-                htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
+                htd::vertex_t locatedVertex2 = lookupVertex(vertexLabel2);
 
                 if (locatedVertex2 == htd::Vertex::UNKNOWN)
                 {
@@ -433,7 +433,7 @@ namespace htd
                         addVertex(*it);
                     }
 
-                    hyperedge.push_back(vertex(*it));
+                    hyperedge.push_back(lookupVertex(*it));
                 }
 
                 if (ok)
@@ -492,8 +492,8 @@ namespace htd
             
             void removeEdge(const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2)
             {
-                htd::vertex_t locatedVertex1 = vertex(vertexLabel1);
-                htd::vertex_t locatedVertex2 = vertex(vertexLabel2);
+                htd::vertex_t locatedVertex1 = lookupVertex(vertexLabel1);
+                htd::vertex_t locatedVertex2 = lookupVertex(vertexLabel2);
 
                 if (locatedVertex1 != htd::Vertex::UNKNOWN && locatedVertex2 != htd::Vertex::UNKNOWN)
                 {
@@ -513,7 +513,7 @@ namespace htd
 
                     if (ok)
                     {
-                        hyperedge.push_back(vertex(*it));
+                        hyperedge.push_back(lookupVertex(*it));
                     }
                 }
 
@@ -546,7 +546,7 @@ namespace htd
 
                     if (ok)
                     {
-                        hyperedge.push_back(vertex(vertex));
+                        hyperedge.push_back(lookupVertex(vertex));
                     }
                 }
 
@@ -861,7 +861,7 @@ namespace htd
                     throw std::logic_error("htd::vertex_t htd::LabeledHypergraph::getVertex(const VertexLabelType &) const");
                 }
 
-                return vertex(label);
+                return lookupVertex(label);
             }
 
             const htd::hyperedge_t & getHyperedge(const HyperedgeLabelType & label) const
@@ -871,7 +871,7 @@ namespace htd
                     throw std::logic_error("htd::vertex_t htd::LabeledHypergraph::getHyperedge(const HyperedgeLabelType &) const");
                 }
 
-                return hyperedge(label);
+                return lookupHyperedge(label);
             }
 
         private:
@@ -903,21 +903,21 @@ namespace htd
             {
                 if (!labelings_.isLabelingName(htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER))
                 {
-                    throw std::logic_error("const htd::hyperedge_t & htd::LabeledHypergraph::hyperedge(const HyperedgeLabelType &) const");
+                    throw std::logic_error("const htd::hyperedge_t & htd::LabeledHypergraph::lookupHyperedge(const HyperedgeLabelType &) const");
                 }
 
                 auto labeling = dynamic_cast<const htd::IBidirectionalGraphLabeling *>(&(labelings_[htd::LabeledHypergraph<VertexLabelType, HyperedgeLabelType>::NAME_LABEL_IDENTIFIER]));
 
                 if (labeling == nullptr)
                 {
-                    throw std::logic_error("const htd::hyperedge_t & htd::LabeledHypergraph::hyperedge(const HyperedgeLabelType &) const");
+                    throw std::logic_error("const htd::hyperedge_t & htd::LabeledHypergraph::lookupHyperedge(const HyperedgeLabelType &) const");
                 }
 
                 Label<VertexLabelType> label(edgeLabel);
 
                 if (!labeling->isHyperedgeLabel(label))
                 {
-                    throw std::logic_error("const htd::hyperedge_t & htd::LabeledHypergraph::hyperedge(const HyperedgeLabelType &) const");
+                    throw std::logic_error("const htd::hyperedge_t & htd::LabeledHypergraph::lookupHyperedge(const HyperedgeLabelType &) const");
                 }
 
                 return labeling->getHyperedge(label);

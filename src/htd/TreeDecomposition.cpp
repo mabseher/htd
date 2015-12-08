@@ -1637,9 +1637,7 @@ void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::ver
 
         if (node != nullptr)
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
-
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
+            auto vertexLabel = bagContent(vertex);
 
             htd::vertex_container childLabelContent;
 
@@ -1658,11 +1656,9 @@ void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::ver
 
         if (node != nullptr)
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
+            auto vertexLabel = bagContent(vertex);
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
-
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
+            auto childVertexLabel = bagContent(child);
 
             std::set_difference(childVertexLabel.begin(), childVertexLabel.end(), vertexLabel.begin(), vertexLabel.end(), std::back_inserter(output));
         }
@@ -1745,9 +1741,7 @@ std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t vertex) 
 
         if (node != nullptr)
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
-
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
+            auto vertexLabel = bagContent(vertex);
 
             htd::vertex_container childLabelContent;
 
@@ -1770,11 +1764,9 @@ std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t vertex, 
 
         if (node != nullptr)
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
+            auto vertexLabel = bagContent(vertex);
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
-
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
+            auto childVertexLabel = bagContent(child);
 
             ret = htd::compute_set_difference_size(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end());
         }
@@ -1791,9 +1783,7 @@ void htd::TreeDecomposition::getIntroducedVertices(htd::vertex_t vertex, htd::ve
 
         if (node != nullptr)
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
-
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
+            auto vertexLabel = bagContent(vertex);
 
             htd::vertex_container childLabelContent;
 
@@ -1812,11 +1802,9 @@ void htd::TreeDecomposition::getIntroducedVertices(htd::vertex_t vertex, htd::ve
 
         if (node != nullptr)
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
+            auto vertexLabel = bagContent(vertex);
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
-
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
+            auto childVertexLabel = bagContent(child);
 
             std::set_difference(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end(), std::back_inserter(output));
         }
@@ -1899,9 +1887,7 @@ std::size_t htd::TreeDecomposition::rememberedVertexCount(htd::vertex_t vertex) 
 
         if (node != nullptr)
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
-
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
+            auto vertexLabel = bagContent(vertex);
 
             htd::vertex_container childLabelContent;
 
@@ -1924,11 +1910,9 @@ std::size_t htd::TreeDecomposition::rememberedVertexCount(htd::vertex_t vertex, 
 
         if (node != nullptr)
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
+            auto vertexLabel = bagContent(vertex);
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
-
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
+            auto childVertexLabel = bagContent(child);
 
             ret = htd::compute_set_intersection_size(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end());
         }
@@ -1945,9 +1929,7 @@ void htd::TreeDecomposition::getRememberedVertices(htd::vertex_t vertex, htd::ve
 
         if (node != nullptr)
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
-
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
+            auto vertexLabel = bagContent(vertex);
 
             htd::vertex_container childLabelContent;
 
@@ -1966,11 +1948,9 @@ void htd::TreeDecomposition::getRememberedVertices(htd::vertex_t vertex, htd::ve
 
         if (node != nullptr)
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
+            auto vertexLabel = bagContent(vertex);
 
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
-
-            auto & childVertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(child)))->container();
+            auto childVertexLabel = bagContent(child);
 
             std::set_intersection(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end(), std::back_inserter(output));
         }

@@ -411,7 +411,9 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
     {
         ret = htd::getDefaultTreeDecomposition();
 
-        ret->insertRoot();
+        htd::vertex_t root = ret->insertRoot();
+
+        ret->setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, root, new htd::VertexContainerLabel(htd::vertex_container()));
     }
 
     return ret;

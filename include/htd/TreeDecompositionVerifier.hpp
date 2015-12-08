@@ -27,7 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
-#include <htd/ILabeledTree.hpp>
+#include <htd/ITreeDecomposition.hpp>
 #include <htd/ITreeDecompositionVerifier.hpp>
 
 namespace htd
@@ -39,25 +39,25 @@ namespace htd
                         
             ~TreeDecompositionVerifier();
                         
-            bool verify(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const HTD_OVERRIDE;
+            bool verify(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            bool verifyVertexExistence(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const HTD_OVERRIDE;
+            bool verifyVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            bool verifyHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const HTD_OVERRIDE;
+            bool verifyHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            bool verifyConnectednessCriterion(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition) const HTD_OVERRIDE;
+            bool verifyConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            void getViolationsVertexExistence(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::vertex_container & output) const HTD_OVERRIDE;
+            void getViolationsVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition, htd::vertex_container & output) const HTD_OVERRIDE;
             
-            void getViolationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::hyperedge_container & output) const HTD_OVERRIDE;
+            void getViolationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition, htd::hyperedge_container & output) const HTD_OVERRIDE;
             
-            void getViolationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ILabeledTree & decomposition, htd::vertex_container & output) const HTD_OVERRIDE;
+            void getViolationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition, htd::vertex_container & output) const HTD_OVERRIDE;
 
         protected:
             TreeDecompositionVerifier & operator=(const TreeDecompositionVerifier &) { return *this; }
 
         private:
-            void getReachableVertices(htd::vertex_t start, const htd::ILabeledTree & decomposition, const htd::vertex_container & filter, htd::vertex_container & output) const;
+            void getReachableVertices(htd::vertex_t start, const htd::ITreeDecomposition & decomposition, const htd::vertex_container & filter, htd::vertex_container & output) const;
     };
 }
 

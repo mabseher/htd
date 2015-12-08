@@ -52,11 +52,11 @@ htd::Collection<std::string> htd::LabelCollection::labelNames(void) const
     return htd::Collection<std::string>(labelNames_);
 }
 
-std::string htd::LabelCollection::labelName(htd::index_t index) const
+const std::string & htd::LabelCollection::labelName(htd::index_t index) const
 {
     if (index >= labelNames_.size())
     {
-        throw std::out_of_range("std::string htd::LabelCollection::labelName(htd::index_t) const");
+        throw std::out_of_range("const std::string & htd::LabelCollection::labelName(htd::index_t) const");
     }
 
     return labelNames_.at(index);

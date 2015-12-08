@@ -81,11 +81,11 @@ htd::Collection<std::string> htd::LabelingCollection::labelNames(void) const
     return htd::Collection<std::string>(labelNames_);
 }
 
-std::string htd::LabelingCollection::labelName(htd::index_t index) const
+const std::string & htd::LabelingCollection::labelName(htd::index_t index) const
 {
     if (index >= labelNames_.size())
     {
-        throw std::out_of_range("std::string htd::LabelingCollection::labelName(htd::index_t) const");
+        throw std::out_of_range("const std::string & htd::LabelingCollection::labelName(htd::index_t) const");
     }
 
     return labelNames_[index];

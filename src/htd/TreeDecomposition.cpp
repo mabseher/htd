@@ -1060,11 +1060,11 @@ htd::Collection<std::string> htd::TreeDecomposition::labelNames(void) const
     return labelings_->labelNames();
 }
 
-std::string htd::TreeDecomposition::labelName(htd::index_t index) const
+const std::string & htd::TreeDecomposition::labelName(htd::index_t index) const
 {
     if (index >= labelings_->labelCount())
     {
-        throw std::out_of_range("std::string htd::TreeDecomposition::labelName(htd::index_t) const");
+        throw std::out_of_range("const std::string & htd::TreeDecomposition::labelName(htd::index_t) const");
     }
 
     auto position = labelings_->begin();

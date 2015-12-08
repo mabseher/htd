@@ -46,7 +46,7 @@ namespace htd
 
             virtual htd::Collection<std::string> labelNames(void) const = 0;
 
-            virtual std::string labelName(htd::index_t index) const = 0;
+            virtual const std::string & labelName(htd::index_t index) const = 0;
 
             virtual const htd::ILabel & label(const std::string & labelName, htd::vertex_t vertex) const = 0;
 

@@ -578,11 +578,11 @@ namespace htd
                 return labelings_.labelNames();
             }
 
-            std::string labelName(htd::index_t index) const HTD_OVERRIDE
+            const std::string & labelName(htd::index_t index) const HTD_OVERRIDE
             {
                 if (index >= labelings_.labelCount())
                 {
-                    throw std::out_of_range("std::string htd::LabeledHypergraph::labelName(htd::index_t) const");
+                    throw std::out_of_range("const std::string & htd::LabeledHypergraph::labelName(htd::index_t) const");
                 }
 
                 return labelings_.labelName(index);

@@ -42,8 +42,7 @@ namespace htd
 
             virtual htd::Collection<std::string> labelNames(void) const = 0;
 
-            //TODO Return const reference to label name
-            virtual std::string labelName(htd::index_t index) const = 0;
+            virtual const std::string & labelName(htd::index_t index) const = 0;
 
             virtual bool isLabelingName(const std::string & labelName) const = 0;
 

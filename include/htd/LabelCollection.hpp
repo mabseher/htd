@@ -46,7 +46,7 @@ namespace htd
 
             htd::Collection<std::string> labelNames(void) const HTD_OVERRIDE;
 
-            std::string labelName(htd::index_t index) const HTD_OVERRIDE;
+            const std::string & labelName(htd::index_t index) const HTD_OVERRIDE;
 
             htd::ILabel & label(const std::string & labelName) HTD_OVERRIDE;
 

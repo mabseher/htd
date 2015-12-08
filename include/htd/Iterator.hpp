@@ -109,7 +109,7 @@ namespace htd
                 return ret;
             }
 
-            bool operator==(const IteratorBase<T> & other) const
+            bool operator==(const IteratorBase<T> & other) const HTD_OVERRIDE
             {
                 bool ret = false;
 
@@ -146,7 +146,7 @@ namespace htd
                 return ret;
             }
 
-            bool operator!=(const IteratorBase<T> & other) const
+            bool operator!=(const IteratorBase<T> & other) const HTD_OVERRIDE
             {
                 return !(*this == other);
             }

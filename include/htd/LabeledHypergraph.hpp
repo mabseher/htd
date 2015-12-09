@@ -776,7 +776,7 @@ namespace htd
                 return label->value();
             }
 
-            void setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
+            void setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE
             {
                 if (labelings_.isLabelingName(labelName))
                 {
@@ -786,7 +786,17 @@ namespace htd
                 labelings_[labelName].setLabel(vertex, label);
             }
 
-            void setLabel(const std::string & labelName, const htd::hyperedge_t & edge, htd::ILabel * label)
+            void setVertexLabel(const std::string & labelName, const VertexLabelType & vertex, htd::ILabel * label)
+            {
+                if (!isVertexName(vertex))
+                {
+                    throw std::logic_error("void htd::LabeledHypergraph::setVertexLabel(const std::string &, const VertexLabelType &, htd::ILabel *)");
+                }
+
+                setLabel(labelName, lookupVertex(vertex), label);
+            }
+
+            void setLabel(const std::string & labelName, const htd::hyperedge_t & edge, htd::ILabel * label) HTD_OVERRIDE
             {
                 if (labelings_.isLabelingName(labelName))
                 {
@@ -796,7 +806,104 @@ namespace htd
                 labelings_[labelName].setLabel(edge, label);
             }
 
-            void removeLabel(const std::string & labelName, htd::vertex_t vertex)
+            void setHyperedgeLabel(const std::string & labelName, const HyperedgeLabelType & edge, htd::ILabel * label)
+            {
+                if (!isHyperedgeName(edge))
+                {
+                    throw std::logic_error("void htd::LabeledHypergraph::setHyperedgeLabel(const std::string &, const HyperedgeLabelType &, htd::ILabel *)");
+                }
+
+                setLabel(labelName, lookupHyperedge(edge), label);
+            }
+
+            void setHyperedgeLabel(const std::string & labelName, const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2, htd::ILabel * label)
+            {
+                htd::vertex_t locatedVertex1 = lookupVertex(vertexLabel1);
+                htd::vertex_t locatedVertex2 = lookupVertex(vertexLabel2);
+
+                if (locatedVertex1 != htd::Vertex::UNKNOWN && locatedVertex2 != htd::Vertex::UNKNOWN)
+                {
+                    htd::hyperedge_t hyperedge;
+
+                    hyperedge.push_back(locatedVertex1);
+                    hyperedge.push_back(locatedVertex2);
+
+                    std::sort(hyperedge.begin(), hyperedge.end());
+
+                    setLabel(labelName, hyperedge, label);
+                }
+                else
+                {
+                    throw std::logic_error("void htd::LabeledHypergraph::setHyperedgeLabel(const std::string & labelName, const VertexLabelType &, const VertexLabelType &, htd::ILabel *)");
+                }
+            }
+
+            void setHyperedgeLabel(typename std::vector<VertexLabelType>::const_iterator begin, typename std::vector<VertexLabelType>::const_iterator end, htd::ILabel * label)
+            {
+                bool ok = true;
+
+                htd::hyperedge_t hyperedge;
+
+                for (auto it = begin; ok && it != end; it++)
+                {
+                    ok = isVertex(*it);
+
+                    if (ok)
+                    {
+                        hyperedge.push_back(lookupVertex(*it));
+                    }
+                }
+
+                if (ok)
+                {
+                    std::sort(hyperedge.begin(), hyperedge.end());
+
+                    hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
+
+                    setLabel(labelName, hyperedge, label);
+                }
+                else
+                {
+                    throw std::logic_error("void htd::LabeledHypergraph::setHyperedgeLabel(typename std::vector<VertexLabelType>::const_iterator, typename std::vector<VertexLabelType>::const_iterator, htd::ILabel *)");
+                }
+            }
+
+            void setHyperedgeLabel(const std::pair<VertexLabelType, VertexLabelType> & edge, htd::ILabel * label)
+            {
+                setHyperedgeLabel(edge.first, edge.second, label);
+            }
+
+            void setHyperedgeLabel(const std::vector<VertexLabelType> & edge, htd::ILabel * label)
+            {
+                bool ok = true;
+
+                htd::hyperedge_t hyperedge;
+
+                for (auto & vertex : edge)
+                {
+                    ok = isVertex(vertex);
+
+                    if (ok)
+                    {
+                        hyperedge.push_back(lookupVertex(vertex));
+                    }
+                }
+
+                if (ok)
+                {
+                    std::sort(hyperedge.begin(), hyperedge.end());
+
+                    hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
+
+                    setLabel(labelName, hyperedge, label);
+                }
+                else
+                {
+                    throw std::logic_error("void htd::LabeledHypergraph::setHyperedgeLabel(const std::vector<VertexLabelType> &, htd::ILabel *)");
+                }
+            }
+
+            void removeLabel(const std::string & labelName, htd::vertex_t vertex) HTD_OVERRIDE
             {
                 if (labelings_.isLabelingName(labelName))
                 {
@@ -806,7 +913,17 @@ namespace htd
                 labelings_[labelName].removeLabel(vertex);
             }
 
-            void removeLabel(const std::string & labelName, const htd::hyperedge_t & edge)
+            void removeVertexLabel(const std::string & labelName, const VertexLabelType & vertex)
+            {
+                if (!isVertexName(vertex))
+                {
+                    throw std::logic_error("void removeVertexLabel(const std::string &, const VertexLabelType &, htd::ILabel *)");
+                }
+
+                removeLabel(labelName, lookupVertex(vertex));
+            }
+
+            void removeLabel(const std::string & labelName, const htd::hyperedge_t & edge) HTD_OVERRIDE
             {
                 if (labelings_.isLabelingName(labelName))
                 {
@@ -814,6 +931,89 @@ namespace htd
                 }
 
                 labelings_[labelName].removeLabel(edge);
+            }
+
+            void removeHyperedgeLabel(const std::string & labelName, const HyperedgeLabelType & edge)
+            {
+                if (isHyperedgeName(edge))
+                {
+                    removeLabel(labelName, lookupHyperedge(edge));
+                }
+            }
+
+            void removeHyperedgeLabel(const std::string & labelName, const VertexLabelType & vertexLabel1, const VertexLabelType & vertexLabel2)
+            {
+                htd::vertex_t locatedVertex1 = lookupVertex(vertexLabel1);
+                htd::vertex_t locatedVertex2 = lookupVertex(vertexLabel2);
+
+                if (locatedVertex1 != htd::Vertex::UNKNOWN && locatedVertex2 != htd::Vertex::UNKNOWN)
+                {
+                    htd::hyperedge_t hyperedge;
+
+                    hyperedge.push_back(locatedVertex1);
+                    hyperedge.push_back(locatedVertex2);
+
+                    std::sort(hyperedge.begin(), hyperedge.end());
+
+                    removeLabel(labelName, hyperedge);
+                }
+            }
+
+            void removeHyperedgeLabel(typename std::vector<VertexLabelType>::const_iterator begin, typename std::vector<VertexLabelType>::const_iterator end)
+            {
+                bool ok = true;
+
+                htd::hyperedge_t hyperedge;
+
+                for (auto it = begin; ok && it != end; it++)
+                {
+                    ok = isVertex(*it);
+
+                    if (ok)
+                    {
+                        hyperedge.push_back(lookupVertex(*it));
+                    }
+                }
+
+                if (ok)
+                {
+                    std::sort(hyperedge.begin(), hyperedge.end());
+
+                    hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
+
+                    removeLabel(labelName, hyperedge);
+                }
+            }
+
+            void removeHyperedgeLabel(const std::pair<VertexLabelType, VertexLabelType> & edge)
+            {
+                removeHyperedgeLabel(edge.first, edge.second, label);
+            }
+
+            void removeHyperedgeLabel(const std::vector<VertexLabelType> & edge)
+            {
+                bool ok = true;
+
+                htd::hyperedge_t hyperedge;
+
+                for (auto & vertex : edge)
+                {
+                    ok = isVertex(vertex);
+
+                    if (ok)
+                    {
+                        hyperedge.push_back(lookupVertex(vertex));
+                    }
+                }
+
+                if (ok)
+                {
+                    std::sort(hyperedge.begin(), hyperedge.end());
+
+                    hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
+
+                    removeLabel(labelName, hyperedge);
+                }
             }
 
             bool isVertexName(const VertexLabelType & vertexLabel) const

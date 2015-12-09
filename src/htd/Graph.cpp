@@ -29,6 +29,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/Graph.hpp>
 #include <htd/Collection.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <stdexcept>
@@ -390,8 +391,12 @@ const htd::edge_t & htd::Graph::edge(htd::index_t index, htd::vertex_t vertex) c
     throw std::logic_error("NOT IMPLEMENTED");
 }
 
-void htd::Graph::getHyperedges(htd::hyperedge_container & output) const
+htd::Collection<htd::hyperedge_t> htd::Graph::hyperedges(void) const
 {
+    htd::VectorAdapter<htd::hyperedge_t> ret;
+
+    auto & result = ret.container();
+
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
         for (auto& vertex2 : neighborhood_[vertex1 - htd::Vertex::FIRST])
@@ -409,9 +414,11 @@ void htd::Graph::getHyperedges(htd::hyperedge_container & output) const
                 hyperedge.push_back(vertex1);
             }
 
-            output.push_back(hyperedge);
+            result.push_back(hyperedge);
         }
     }
+
+    return result;
 }
 
 void htd::Graph::getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const

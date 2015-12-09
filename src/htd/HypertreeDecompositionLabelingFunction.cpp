@@ -38,9 +38,7 @@
 
 htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunction(const htd::IHypergraph & graph, const htd::ISetCoverAlgorithm & setCoverAlgorithm) : graph_(graph), setCoverAlgorithm_(setCoverAlgorithm)
 {
-    htd::hyperedge_container hyperedges;
-
-    graph_.getHyperedges(hyperedges);
+    htd::Collection<htd::hyperedge_t> hyperedges = graph_.hyperedges();
 
     hyperedges_ = htd::hyperedge_container(hyperedges.begin(), hyperedges.end());
 }

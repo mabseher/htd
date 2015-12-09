@@ -52,12 +52,8 @@ namespace htd
     htd::IMutableGraph * toMutableGraph(const htd::IHypergraph & graph)
     {
         htd::IMutableGraph * ret = htd::getDefaultGraph(graph.vertexCount());
-        
-        htd::hyperedge_container edges;
-        
-        graph.getHyperedges(edges);
-        
-        for (auto edge : edges)
+
+        for (const htd::hyperedge_t & edge : graph.hyperedges())
         {
             for (htd::vertex_t vertex1 : edge)
             {

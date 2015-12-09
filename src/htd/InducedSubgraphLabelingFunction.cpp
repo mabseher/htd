@@ -38,9 +38,7 @@
 
 htd::InducedSubgraphLabelingFunction::InducedSubgraphLabelingFunction(const htd::IHypergraph & graph) : graph_(graph)
 {
-    htd::hyperedge_container hyperedges;
-
-    graph_.getHyperedges(hyperedges);
+    htd::Collection<htd::hyperedge_t> hyperedges = graph_.hyperedges();
 
     hyperedges_ = htd::hyperedge_container(hyperedges.begin(), hyperedges.end());
 }

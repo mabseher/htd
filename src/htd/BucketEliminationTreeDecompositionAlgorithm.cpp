@@ -165,11 +165,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                 buckets[index].push_back(index + htd::Vertex::FIRST);
             }
 
-            htd::hyperedge_container edges;
-
-            graph.getHyperedges(edges);
-
-            for (htd::hyperedge_t edge : edges)
+            for (htd::hyperedge_t edge : graph.hyperedges())
             {
                 htd::vertex_t minimumVertex = getMinimumVertex(edge, indices);
 

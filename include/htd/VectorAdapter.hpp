@@ -29,7 +29,9 @@
 
 #include <htd/Collection.hpp>
 #include <htd/Iterator.hpp>
+#include <htd/VectorAdapterIteratorWrapper.hpp>
 
+#include <memory>
 #include <vector>
 
 namespace htd
@@ -40,12 +42,12 @@ namespace htd
         public:
             typedef T value_type;
 
-            VectorAdapter<T>(void) : container_()
+            VectorAdapter<T>(void) : container_(std::make_shared<std::vector<T>>())
             {
 
             }
 
-            VectorAdapter<T>(const std::vector<T> & collection) : container_(collection)
+            VectorAdapter<T>(const std::vector<T> & collection) : container_(std::make_shared<std::vector<T>>(collection))
             {
 
             }
@@ -57,36 +59,36 @@ namespace htd
 
             std::vector<T> & container()
             {
-                return container_;
+                return *container_;
             }
 
             const std::vector<T> & container() const
             {
-                return container_;
+                return *container_;
             }
 
             htd::Iterator<T> begin(void)
             {
-                return htd::Iterator<T>(container_.begin());
+                return htd::VectorAdapterIteratorWrapper<typename std::vector<T>::iterator, T>(container_, container_->begin());
             }
 
             const htd::Iterator<T> begin(void) const
             {
-                return htd::Iterator<T>(container_.begin());
+                return htd::VectorAdapterIteratorWrapper<typename std::vector<T>::const_iterator, T>(container_, container_->begin());
             }
 
             htd::Iterator<T> end(void)
             {
-                return htd::Iterator<T>(container_.end());
+                return htd::VectorAdapterIteratorWrapper<typename std::vector<T>::iterator, T>(container_, container_->end());
             }
 
             const htd::Iterator<T> end(void) const
             {
-                return htd::Iterator<T>(container_.end());
+                return htd::VectorAdapterIteratorWrapper<typename std::vector<T>::const_iterator, T>(container_, container_->end());
             }
 
         private:
-            std::vector<T> container_;
+            std::shared_ptr<std::vector<T>> container_;
     };
 }
 

@@ -29,6 +29,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/DirectedGraph.hpp>
 #include <htd/Collection.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <stdexcept>
@@ -665,8 +666,12 @@ const htd::edge_t & htd::DirectedGraph::edge(htd::index_t index, htd::vertex_t v
     throw std::out_of_range("const htd::edge_t & htd::DirectedGraph::edge(htd::index_t, htd::vertex_t) const");
 }
 
-void htd::DirectedGraph::getHyperedges(htd::hyperedge_container & output) const
+htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(void) const
 {
+    htd::VectorAdapter<htd::hyperedge_t> ret;
+
+    auto & result = ret.container();
+
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
         for (auto& vertex2 : outgoingNeighborhood_[vertex1])
@@ -684,9 +689,11 @@ void htd::DirectedGraph::getHyperedges(htd::hyperedge_container & output) const
                 hyperedge.push_back(vertex1);
             }
 
-            output.push_back(hyperedge);
+            result.push_back(hyperedge);
         }
     }
+
+    return result;
 }
 
 void htd::DirectedGraph::getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const

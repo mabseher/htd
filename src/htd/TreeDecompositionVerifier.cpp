@@ -115,14 +115,17 @@ void htd::TreeDecompositionVerifier::getViolationsHyperEdgeCoverage(const htd::I
 {
     bool ret = false;
 
-    htd::hyperedge_container edges;
-    
-    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> labels;
-    
-    graph.getHyperedges(edges);
+    std::size_t edgeCount = graph.edgeCount();
 
-    std::size_t edgeCount = edges.size();
-    
+    htd::hyperedge_container edges;
+
+    edges.reserve(edgeCount);
+
+    for (const htd::hyperedge_t & edge : graph.hyperedges())
+    {
+        edges.push_back(edge);
+    }
+
     std::unordered_set<htd::vertex_t> missingEdges(edgeCount);
     
     for (htd::index_t index = 0; index < edgeCount; index++)

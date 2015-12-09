@@ -64,7 +64,7 @@ namespace htd
 
             virtual std::size_t edgeCount(void) const = 0;
 
-            virtual void getHyperedges(htd::hyperedge_container & output) const = 0;
+            virtual htd::Collection<htd::hyperedge_t> hyperedges(void) const = 0;
 
             virtual const htd::hyperedge_t & hyperedge(htd::index_t index) const = 0;
 

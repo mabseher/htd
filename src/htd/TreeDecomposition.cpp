@@ -33,6 +33,7 @@
 #include <htd/ILabeledTree.hpp>
 #include <htd/LabelingCollection.hpp>
 #include <htd/VertexContainerLabel.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -440,8 +441,12 @@ const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t index, htd::vertex
     }
 }
 
-void htd::TreeDecomposition::getHyperedges(htd::hyperedge_container & output) const
+htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(void) const
 {
+    htd::VectorAdapter<htd::hyperedge_t> ret;
+
+    auto & result = ret.container();
+
     for (auto& currentNode : nodes_)
     {
         if (currentNode != nullptr)
@@ -463,10 +468,12 @@ void htd::TreeDecomposition::getHyperedges(htd::hyperedge_container & output) co
                     hyperedge.push_back(currentNode->id);
                 }
 
-                output.push_back(hyperedge);
+                result.push_back(hyperedge);
             }
         }
     }
+
+    return ret;
 }
 
 void htd::TreeDecomposition::getHyperedges(htd::hyperedge_container& output, htd::vertex_t vertex) const
@@ -520,18 +527,18 @@ void htd::TreeDecomposition::getHyperedges(htd::hyperedge_container& output, htd
 
 const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index) const
 {
-    htd::hyperedge_container result;
-
-    getHyperedges(result);
-
-    if (index < result.size())
-    {
-        return result[index];
-    }
-    else
+    if (index >= edgeCount())
     {
         throw std::out_of_range("const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t) const");
     }
+
+    const htd::Collection<htd::hyperedge_t> edges = hyperedges();
+
+    htd::Iterator<htd::hyperedge_t> it = edges.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index, htd::vertex_t vertex) const

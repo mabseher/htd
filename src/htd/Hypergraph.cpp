@@ -414,9 +414,9 @@ bool htd::Hypergraph::isIsolatedVertex(htd::vertex_t vertex) const
     return ret;
 }
 
-void htd::Hypergraph::getHyperedges(htd::hyperedge_container & output) const
+htd::Collection<htd::hyperedge_t> htd::Hypergraph::hyperedges(void) const
 {
-    std::copy(edges_.begin(), edges_.end(), std::back_inserter(output));
+    return Collection<htd::hyperedge_t>(edges_);
 }
 
 void htd::Hypergraph::getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const

@@ -279,16 +279,14 @@ namespace htd
 
             htd::vertex_t addVertex(const VertexLabelType & vertexLabel)
             {
-                htd::vertex_t locatedVertex = lookupVertex(vertexLabel);
+                htd::vertex_t ret = lookupVertex(vertexLabel);
 
-                if (locatedVertex != htd::Vertex::UNKNOWN)
+                if (ret == htd::Vertex::UNKNOWN)
                 {
-                    throw std::logic_error("htd::vertex_t htd::LabeledHypergraph::addVertex(const VertexLabelType &)");
+                    ret = htd::Hypergraph::addVertex();
+
+                    setVertexName(ret, vertexLabel);
                 }
-
-                htd::vertex_t ret = htd::Hypergraph::addVertex();
-
-                setVertexName(ret, vertexLabel);
 
                 return ret;
             }

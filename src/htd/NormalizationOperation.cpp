@@ -32,6 +32,7 @@
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
+#include <htd/LimitChildCountOperation.hpp>
 #include <htd/LimitMaximumForgottenVerticesCountOperation.hpp>
 #include <htd/LimitMaximumIntroducedVerticesCountOperation.hpp>
 
@@ -52,9 +53,10 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
     htd::AddEmptyRootOperation operation1;
     htd::AddEmptyLeavesOperation operation2;
     htd::JoinNodeNormalizationOperation operation3;
-    htd::ExchangeNodeReplacementOperation operation4;
-    htd::LimitMaximumForgottenVerticesCountOperation operation5(1);
-    htd::LimitMaximumIntroducedVerticesCountOperation operation6(1);
+    htd::LimitChildCountOperation operation4(2);
+    htd::ExchangeNodeReplacementOperation operation5;
+    htd::LimitMaximumForgottenVerticesCountOperation operation6(1);
+    htd::LimitMaximumIntroducedVerticesCountOperation operation7(1);
 
     operation1.apply(decomposition);
     operation2.apply(decomposition);
@@ -62,6 +64,7 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
     operation4.apply(decomposition);
     operation5.apply(decomposition);
     operation6.apply(decomposition);
+    operation7.apply(decomposition);
 }
 
 #endif /* HTD_HTD_NORMALIZATIONOPERATION_CPP */

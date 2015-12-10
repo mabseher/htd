@@ -48,7 +48,7 @@
 htd::TreeDecomposition::TreeDecomposition(void)
     : size_(0), root_(htd::Vertex::UNKNOWN), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_(), labelings_(new htd::LabelingCollection())
 {
-    
+    labelings_->setLabeling(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, new htd::GraphLabeling());
 }
 
 //TODO Ensure correctness when htd::Vertex::FIRST does not match for this and original
@@ -1074,6 +1074,48 @@ htd::vertex_t htd::TreeDecomposition::addParent(htd::vertex_t vertex)
     return ret;
 }
 
+void htd::TreeDecomposition::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
+{
+    if (!isVertex(vertex) || !isVertex(newParent))
+    {
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::setParent(htd::vertex_t, htd::vertex_t)");
+    }
+
+    if (vertex == newParent)
+    {
+        throw std::logic_error("htd::vertex_t htd::TreeDecomposition::setParent(htd::vertex_t, htd::vertex_t)");
+    }
+
+    auto & node = nodes_[vertex - htd::Vertex::FIRST];
+
+    if (node->parent != newParent)
+    {
+        auto & newParentNode = nodes_[newParent - htd::Vertex::FIRST];
+
+        if (isRoot(vertex))
+        {
+            root_ = newParent;
+        }
+        else
+        {
+            auto& parentNode = nodes_[node->parent - htd::Vertex::FIRST];
+
+            auto position = std::find(parentNode->children.begin(), parentNode->children.end(), vertex);
+
+            if (position != parentNode->children.end())
+            {
+                parentNode->children.erase(position);
+            }
+        }
+
+        auto position = std::lower_bound(newParentNode->children.begin(), newParentNode->children.end(), vertex);
+
+        newParentNode->children.insert(position, vertex);
+
+        node->parent = newParent;
+    }
+}
+
 const htd::ILabelingCollection & htd::TreeDecomposition::labelings(void) const
 {
     return *labelings_;
@@ -1555,6 +1597,10 @@ htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t 
                 auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
                 return htd::Collection<htd::vertex_t>(vertexLabel);
+            }
+            else
+            {
+                return htd::VectorAdapter<htd::vertex_t>();
             }
         }
     }

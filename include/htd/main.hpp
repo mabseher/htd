@@ -93,6 +93,7 @@
 #include <htd/LabelCollection.hpp>
 #include <htd/LabeledHypergraph.hpp>
 #include <htd/LabelingCollection.hpp>
+#include <htd/LimitChildCountOperation.hpp>
 #include <htd/LimitMaximumForgottenVerticesCountOperation.hpp>
 #include <htd/LimitMaximumIntroducedVerticesCountOperation.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>

@@ -30,10 +30,6 @@
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
-//TODO Remove
-#include <iostream>
-#include <htd/Helpers.hpp>
-
 htd::ExchangeNodeReplacementOperation::ExchangeNodeReplacementOperation(void)
 {
   
@@ -53,14 +49,6 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
     decomposition.getForgetNodes(forgetNodes);
     decomposition.getIntroduceNodes(introduceNodes);
 
-    std::cout << "FORGET NODES:    ";
-    htd::print(forgetNodes, false);
-    std::cout << std::endl;
-
-    std::cout << "INTRODUCE NODES: ";
-    htd::print(introduceNodes, false);
-    std::cout << std::endl;
-
     std::set_intersection(forgetNodes.begin(), forgetNodes.end(), introduceNodes.begin(), introduceNodes.end(), std::back_inserter(exchangeNodes));
 
     for (htd::vertex_t node : exchangeNodes)
@@ -70,13 +58,6 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
         htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
 
         std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
-
-        DEBUGGING_CODE(
-        std::cout << "EXCHANGE NODE: " << node << std::endl;
-        std::cout << "   ";
-        htd::print(bagContent, false);
-        std::cout << std::endl << std::endl;
-        )
 
         htd::vertex_container children;
 
@@ -90,13 +71,6 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
             if (rememberedVertices != bagContent)
             {
-                DEBUGGING_CODE(
-                std::cout << "   ADDING INTERMEDIATE NODE BETWEEN NODES " << node << " AND " << child << " ..." << std::endl;
-                std::cout << "      BAG CONTENT: ";
-                htd::print(rememberedVertices, false);
-                std::cout << std::endl << std::endl;
-                )
-
                 htd::vertex_t intermediateVertex = decomposition.addParent(child);
 
                 decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, intermediateVertex, new htd::VertexContainerLabel(htd::vertex_container(rememberedVertices.begin(), rememberedVertices.end())));

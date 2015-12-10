@@ -63,17 +63,8 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
 
         std::size_t introducedVertexCount = decomposition.introducedVertexCount(node);
 
-        DEBUGGING_CODE(
-        std::cout << "INTRODUCE NODE: " << node << std::endl;
-        std::cout << "   ";
-        htd::print(bagContent, false);
-        std::cout << std::endl << "   INTRODUCED VERTEX COUNT: " << introducedVertexCount << std::endl << std::endl;
-        )
-
         if (introducedVertexCount > limit_)
         {
-            std::cout << "VIOLATION: " << node << std::endl << std::endl;
-
             htd::vertex_container introducedVertices;
             htd::vertex_container rememberedVertices;
 

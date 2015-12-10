@@ -60,32 +60,13 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
 
         std::size_t forgottenVertexCount = decomposition.forgottenVertexCount(node);
 
-        DEBUGGING_CODE(
-        std::cout << "FORGET NODE: " << node << std::endl;
-        std::cout << "   ";
-        htd::print(bagContent, false);
-        std::cout << std::endl << "   FORGOTTEN VERTEX COUNT: " << forgottenVertexCount << std::endl << std::endl;
-        )
-
         if (forgottenVertexCount > limit_)
         {
-            DEBUGGING_CODE(std::cout << "VIOLATION: " << node << std::endl << std::endl;)
-
             htd::vertex_container forgottenVertices;
             htd::vertex_container rememberedVertices;
 
             decomposition.getForgottenVertices(node, forgottenVertices);
             decomposition.getRememberedVertices(node, rememberedVertices);
-
-            DEBUGGING_CODE(
-            std::cout << "FORGOTTEN: ";
-            htd::print(forgottenVertices, false);
-            std::cout << std::endl;
-
-            std::cout << "REMEMBERED: ";
-            htd::print(rememberedVertices, false);
-            std::cout << std::endl;
-            )
 
             std::size_t remainder = forgottenVertexCount % limit_;
 

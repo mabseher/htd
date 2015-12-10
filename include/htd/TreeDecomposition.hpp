@@ -191,6 +191,8 @@ namespace htd
 
             bool isIntroduceNode(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
+
             htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             std::size_t forgottenVertexCount(htd::vertex_t vertex) const HTD_OVERRIDE;

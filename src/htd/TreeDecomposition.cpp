@@ -1582,6 +1582,32 @@ bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t vertex) const
     return ret;
 }
 
+std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t vertex) const
+{
+    std::size_t ret = 0;
+
+    if (isVertex(vertex))
+    {
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+
+        if (node != nullptr)
+        {
+            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
+
+            if (bagLabeling.hasLabel(vertex))
+            {
+                ret = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container().size();
+            }
+        }
+    }
+    else
+    {
+        throw std::logic_error("std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t) const");
+    }
+
+    return ret;
+}
+
 htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
@@ -1598,11 +1624,11 @@ htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t 
 
                 return htd::Collection<htd::vertex_t>(vertexLabel);
             }
-            else
-            {
-                return htd::VectorAdapter<htd::vertex_t>();
-            }
         }
+    }
+    else
+    {
+        throw std::logic_error("htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t) const");
     }
 
     return htd::Collection<htd::vertex_t>();

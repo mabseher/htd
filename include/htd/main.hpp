@@ -25,6 +25,8 @@
 #ifndef HTD_HTD_MAIN_HPP
 #define	HTD_HTD_MAIN_HPP
 
+#include <htd/AddEmptyLeavesOperation.hpp>
+#include <htd/AddEmptyRootOperation.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/Collection.hpp>
@@ -96,6 +98,7 @@
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
 #include <htd/NaturalOrderingAlgorithm.hpp>
+#include <htd/NormalizationOperation.hpp>
 #include <htd/SetCoverAlgorithm.hpp>
 #include <htd/TreeDecomposition.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>

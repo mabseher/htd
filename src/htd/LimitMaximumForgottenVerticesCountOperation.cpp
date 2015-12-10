@@ -69,7 +69,7 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
 
         if (forgottenVertexCount > limit_)
         {
-            std::cout << "VIOLATION: " << node << std::endl << std::endl;
+            DEBUGGING_CODE(std::cout << "VIOLATION: " << node << std::endl << std::endl;)
 
             htd::vertex_container forgottenVertices;
             htd::vertex_container rememberedVertices;
@@ -77,6 +77,7 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
             decomposition.getForgottenVertices(node, forgottenVertices);
             decomposition.getRememberedVertices(node, rememberedVertices);
 
+            DEBUGGING_CODE(
             std::cout << "FORGOTTEN: ";
             htd::print(forgottenVertices, false);
             std::cout << std::endl;
@@ -84,6 +85,7 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
             std::cout << "REMEMBERED: ";
             htd::print(rememberedVertices, false);
             std::cout << std::endl;
+            )
 
             std::size_t remainder = forgottenVertexCount % limit_;
 
@@ -96,9 +98,92 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
                 intermediatedVerticesCount--;
             }
 
-            std::cout << "SPLIT: " << remainder << " + " << intermediatedVerticesCount << " x " << limit_ << std::endl << std::endl;
+            if (remainder == 0)
+            {
+                intermediatedVerticesCount--;
+            }
 
-            //TODO Implement
+            htd::vertex_container children;
+
+            decomposition.getChildren(node, children);
+
+            if (children.empty())
+            {
+                auto start = forgottenVertices.begin();
+                auto finish = forgottenVertices.end() - (remainder > 0 ? remainder : limit_);
+
+                htd::vertex_t newNode = decomposition.addChild(node);
+
+                decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+
+                if (intermediatedVerticesCount > 0)
+                {
+                    finish = finish - limit_;
+
+                    for (htd::index_t index = 0; index < intermediatedVerticesCount; index++)
+                    {
+                        newNode = decomposition.addParent(newNode);
+
+                        decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+
+                        if (index < forgottenVertexCount + limit_)
+                        {
+                            finish = finish - limit_;
+                        }
+                    }
+                }
+            }
+            else if (children.size() == 1)
+            {
+                htd::vertex_t child = children[0];
+
+                auto start = forgottenVertices.begin();
+                auto finish = forgottenVertices.end() - (remainder > 0 ? remainder : limit_);
+
+                htd::vertex_t newNode = decomposition.addParent(child);
+
+                decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+
+                if (intermediatedVerticesCount > 0)
+                {
+                    finish = finish - limit_;
+
+                    for (htd::index_t index = 0; index < intermediatedVerticesCount; index++)
+                    {
+                        newNode = decomposition.addParent(newNode);
+
+                        decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+
+                        if (index < forgottenVertexCount + limit_)
+                        {
+                            finish = finish - limit_;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw std::logic_error("void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeDecomposition &) const");
+
+                //TODO Implement also for multiple children
+                /*
+                for (htd::vertex_t child : children)
+                {
+                    htd::vertex_container addedVertices;
+
+                    decomposition.getIntroducedVertices(node, addedVertices, child);
+
+                    if (addedVertices.size() <= limit_)
+                    {
+                        std::cout << "MOVEABLE: " << child << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << "IMPORTANT: " << child << std::endl;
+                    }
+                }
+                */
+            }
         }
     }
 }

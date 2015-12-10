@@ -83,6 +83,8 @@ htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original)
         {
             maximumVertex = node;
         }
+
+        vertices_.push_back(node);
     }
 
     if (maximumVertex >= htd::Vertex::FIRST)
@@ -96,7 +98,7 @@ htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original)
 }
 
 htd::TreeDecomposition::TreeDecomposition(const htd::TreeDecomposition & original)
-    : size_(original.size_), root_(original.root_), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_(original.deletions_), labelings_(original.labelings().clone())
+    : size_(original.size_), root_(original.root_), next_vertex_(htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), deletions_(original.deletions_), labelings_(original.labelings().clone())
 {
     nodes_.reserve(original.nodes_.size());
     
@@ -909,7 +911,6 @@ htd::vertex_t htd::TreeDecomposition::insertRoot(void)
             labeling.second->clear();
         }
 
-        vertices_.clear();
         vertices_.push_back(root_);
 
         size_ = 1;
@@ -1007,7 +1008,7 @@ void htd::TreeDecomposition::removeChild(htd::vertex_t vertex, htd::vertex_t chi
     }
 }
 
-htd::vertex_t htd::TreeDecomposition::addIntermediateParent(htd::vertex_t vertex)
+htd::vertex_t htd::TreeDecomposition::addParent(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
@@ -1015,7 +1016,28 @@ htd::vertex_t htd::TreeDecomposition::addIntermediateParent(htd::vertex_t vertex
     {
         if (isRoot(vertex))
         {
+            auto& node = nodes_[vertex - htd::Vertex::FIRST];
 
+            if (node != nullptr)
+            {
+                ret = next_vertex_;
+
+                auto * newRootNode = new TreeNode(ret, htd::Vertex::UNKNOWN);
+
+                node->parent = ret;
+
+                newRootNode->children.push_back(vertex);
+
+                nodes_.push_back(newRootNode);
+
+                vertices_.push_back(ret);
+
+                next_vertex_++;
+
+                size_++;
+
+                root_ = ret;
+            }
         }
         else
         {
@@ -1562,6 +1584,10 @@ std::size_t htd::TreeDecomposition::minimumBagSize(void) const
 
                 start = false;
             }
+        }
+        else
+        {
+            ret = 0;
         }
     }
 

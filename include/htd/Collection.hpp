@@ -29,6 +29,7 @@
 
 #include <htd/Iterator.hpp>
 
+#include <algorithm>
 #include <iterator>
 
 namespace htd
@@ -58,6 +59,11 @@ namespace htd
             virtual ~Collection()
             {
 
+            }
+
+            std::size_t size() const
+            {
+                return std::distance(begin(), end());
             }
 
             htd::Iterator<T> begin(void)

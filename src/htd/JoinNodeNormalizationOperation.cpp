@@ -86,7 +86,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
                 std::cout << std::endl << std::endl;
                 )
 
-                htd::vertex_t intermediateVertex = decomposition.addIntermediateParent(child);
+                htd::vertex_t intermediateVertex = decomposition.addParent(child);
 
                 decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, intermediateVertex, new htd::VertexContainerLabel(htd::vertex_container(bagContent.begin(), bagContent.end())));
             }

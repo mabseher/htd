@@ -161,7 +161,7 @@ namespace htd
             
             htd::vertex_t addChild(htd::vertex_t vertex) HTD_OVERRIDE;
 
-            htd::vertex_t addIntermediateParent(htd::vertex_t vertex) HTD_OVERRIDE;
+            htd::vertex_t addParent(htd::vertex_t vertex) HTD_OVERRIDE;
             
             void removeChild(htd::vertex_t vertex, htd::vertex_t child) HTD_OVERRIDE;
 

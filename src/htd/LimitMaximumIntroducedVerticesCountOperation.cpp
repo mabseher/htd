@@ -30,6 +30,8 @@
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
+#include <stdexcept>
+
 //TODO Remove
 #include <iostream>
 #include <iterator>
@@ -113,7 +115,35 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
 
                     for (htd::index_t index = 0; index < intermediatedVerticesCount; index++)
                     {
-                        newNode = decomposition.addIntermediateParent(newNode);
+                        newNode = decomposition.addParent(newNode);
+
+                        decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+
+                        if (index < introducedVertexCount + limit_)
+                        {
+                            std::advance(finish, limit_);
+                        }
+                    }
+                }
+            }
+            else if (children.size() == 1)
+            {
+                htd::vertex_t child = children[0];
+
+                auto start = introducedVertices.begin();
+                auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : limit_);
+
+                htd::vertex_t newNode = decomposition.addParent(child);
+
+                decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+
+                if (intermediatedVerticesCount > 0)
+                {
+                    std::advance(finish, limit_);
+
+                    for (htd::index_t index = 0; index < intermediatedVerticesCount; index++)
+                    {
+                        newNode = decomposition.addParent(newNode);
 
                         decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
 
@@ -126,8 +156,10 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
             }
             else
             {
-                //TODO Implement
+                throw std::logic_error("void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeDecomposition &) const");
 
+                //TODO Implement also for multiple children
+                /*
                 for (htd::vertex_t child : children)
                 {
                     htd::vertex_container addedVertices;
@@ -143,6 +175,7 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
                         std::cout << "IMPORTANT: " << child << std::endl;
                     }
                 }
+                */
             }
         }
     }

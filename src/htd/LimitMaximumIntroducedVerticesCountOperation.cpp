@@ -126,20 +126,33 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
 
                 htd::vertex_t newNode = decomposition.addParent(child);
 
-                decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+                std::vector<htd::vertex_t> newContent;
+
+                htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(child);
+
+                std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
+
+                decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(newContent));
 
                 if (intermediatedVerticesCount > 0)
                 {
+                    std::advance(start, limit_);
                     std::advance(finish, limit_);
 
                     for (htd::index_t index = 0; index < intermediatedVerticesCount; index++)
                     {
                         newNode = decomposition.addParent(newNode);
 
-                        decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+                        for (auto it = start; it != finish; it++)
+                        {
+                            newContent.push_back(*it);
+                        }
+
+                        decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(newContent));
 
                         if (index < introducedVertexCount + limit_)
                         {
+                            std::advance(start, limit_);
                             std::advance(finish, limit_);
                         }
                     }

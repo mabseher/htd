@@ -27,16 +27,11 @@
 
 #include <htd/Globals.hpp>
 #include <htd/NormalizationOperation.hpp>
-#include <htd/AddEmptyLeavesOperation.hpp>
-#include <htd/AddEmptyRootOperation.hpp>
+#include <htd/SemiNormalizationOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
-#include <htd/LimitChildCountOperation.hpp>
 #include <htd/LimitMaximumForgottenVerticesCountOperation.hpp>
 #include <htd/LimitMaximumIntroducedVerticesCountOperation.hpp>
-
-#include <vector>
 
 htd::NormalizationOperation::NormalizationOperation(void)
 {
@@ -50,21 +45,36 @@ htd::NormalizationOperation::~NormalizationOperation()
 
 void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
-    htd::AddEmptyRootOperation operation1;
-    htd::AddEmptyLeavesOperation operation2;
-    htd::JoinNodeNormalizationOperation operation3;
-    htd::LimitChildCountOperation operation4(2);
-    htd::ExchangeNodeReplacementOperation operation5;
-    htd::LimitMaximumForgottenVerticesCountOperation operation6(1);
-    htd::LimitMaximumIntroducedVerticesCountOperation operation7(1);
+    htd::SemiNormalizationOperation::apply(decomposition);
 
-    operation1.apply(decomposition);
-    operation2.apply(decomposition);
-    operation3.apply(decomposition);
-    operation4.apply(decomposition);
-    operation5.apply(decomposition);
-    operation6.apply(decomposition);
-    operation7.apply(decomposition);
+    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
+
+    exchangeNodeReplacementOperation.apply(decomposition);
+
+    htd::LimitMaximumForgottenVerticesCountOperation limitMaximumForgottenVerticesCountOperation(1);
+
+    limitMaximumForgottenVerticesCountOperation.apply(decomposition);
+
+    htd::LimitMaximumIntroducedVerticesCountOperation limitMaximumIntroducedVerticesCountOperation(1);
+
+    limitMaximumIntroducedVerticesCountOperation.apply(decomposition);
+}
+
+void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const
+{
+    htd::SemiNormalizationOperation::apply(decomposition, emptyRoot, emptyLeaves);
+
+    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
+
+    exchangeNodeReplacementOperation.apply(decomposition);
+
+    htd::LimitMaximumForgottenVerticesCountOperation limitMaximumForgottenVerticesCountOperation(1);
+
+    limitMaximumForgottenVerticesCountOperation.apply(decomposition);
+
+    htd::LimitMaximumIntroducedVerticesCountOperation limitMaximumIntroducedVerticesCountOperation(1);
+
+    limitMaximumIntroducedVerticesCountOperation.apply(decomposition);
 }
 
 #endif /* HTD_HTD_NORMALIZATIONOPERATION_CPP */

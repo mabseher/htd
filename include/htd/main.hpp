@@ -100,11 +100,13 @@
 #include <htd/MinFillOrderingAlgorithm.hpp>
 #include <htd/NaturalOrderingAlgorithm.hpp>
 #include <htd/NormalizationOperation.hpp>
+#include <htd/SemiNormalizationOperation.hpp>
 #include <htd/SetCoverAlgorithm.hpp>
 #include <htd/TreeDecomposition.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
 #include <htd/VectorAdapter.hpp>
 #include <htd/Vertex.hpp>
 #include <htd/VertexContainerLabel.hpp>
+#include <htd/WeakNormalizationOperation.hpp>
 
 #endif /* HTD_HTD_MAIN_HPP */

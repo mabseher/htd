@@ -1,5 +1,5 @@
 /*
- * File:   NormalizationOperation.hpp
+ * File:   WeakNormalizationOperation.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,26 +22,26 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_NORMALIZATIONOPERATION_HPP
-#define	HTD_HTD_NORMALIZATIONOPERATION_HPP
+#ifndef HTD_HTD_WEAKNORMALIZATIONOPERATION_HPP
+#define	HTD_HTD_WEAKNORMALIZATIONOPERATION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/SemiNormalizationOperation.hpp>
+#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 namespace htd
 {
-    class NormalizationOperation : public htd::SemiNormalizationOperation
+    class WeakNormalizationOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
-            NormalizationOperation(void);
+            WeakNormalizationOperation(void);
 
-            virtual ~NormalizationOperation();
+            virtual ~WeakNormalizationOperation();
 
-            void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
+            virtual void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
-            void apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const HTD_OVERRIDE;
+            virtual void apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const;
     };
 }
 
-#endif /* HTD_HTD_NORMALIZATIONOPERATION_HPP */
+#endif /* HTD_HTD_WEAKNORMALIZATIONOPERATION_HPP */

@@ -60,6 +60,12 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
         if (childCount > limit_)
         {
+            htd::vertex_t newNode = decomposition.addChild(node);
+
+            htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(node);
+
+            decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(bagContent.begin(), bagContent.end())));
+
             std::size_t remainder = childCount % (limit_ - 1);
 
             childCount -= remainder;
@@ -76,8 +82,6 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
                 intermediatedVertexCount--;
             }
 
-            htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(node);
-
             htd::vertex_container children;
 
             decomposition.getChildren(node, children);
@@ -86,10 +90,6 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
             auto start = children.begin();
             auto finish = children.begin() + firstStep;
-
-            htd::vertex_t newNode = decomposition.addParent(node);
-
-            decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(bagContent.begin(), bagContent.end())));
 
             for (auto it = start; it != finish; ++it)
             {

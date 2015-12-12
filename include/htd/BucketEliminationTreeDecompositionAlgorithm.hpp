@@ -67,7 +67,7 @@ namespace htd
 
             htd::IMutableTreeDecomposition * createRootedTreeDecomposition(htd::vertex_t vertex, const std::vector<htd::vertex_container> & neighbors, const std::vector<htd::vertex_container> & buckets) const;
 
-            void compressDecomposition(htd::IMutableLabeledTree & decomposition) const;
+            void compressDecomposition(htd::IMutableTreeDecomposition & decomposition) const;
     };
 }
 

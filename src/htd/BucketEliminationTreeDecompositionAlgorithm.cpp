@@ -577,7 +577,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
     return ret;
 }
 
-void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd::IMutableLabeledTree & decomposition) const
+void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd::IMutableTreeDecomposition & decomposition) const
 {
     if (decomposition.vertexCount() > 1)
     {
@@ -603,7 +603,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
                 {
                     oldNode = currentNode;
 
-                    auto & label = (dynamic_cast<const htd::VertexContainerLabel *>(&(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, currentNode))))->container();
+                    Collection<htd::vertex_t> label = decomposition.bagContent(currentNode);
 
                     parentStack.push(std::make_pair(currentNode, currentIndex + 1));
 
@@ -611,7 +611,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
 
                     currentIndex = 0;
 
-                    auto & childLabel = (dynamic_cast<const htd::VertexContainerLabel *>(&(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, currentNode))))->container();
+                    Collection<htd::vertex_t> childLabel = decomposition.bagContent(currentNode);
 
                     if (childLabel.size() < label.size())
                     {
@@ -669,15 +669,15 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
                 std::vector<htd::vertex_t> children;
                 decomposition.getChildren(vertex, children);
 
-                auto & label = (dynamic_cast<const htd::VertexContainerLabel *>(&(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
+                Collection<htd::vertex_t> label = decomposition.bagContent(vertex);
 
                 for (htd::vertex_t child : children)
                 {
-                    auto & childLabel = (dynamic_cast<const htd::VertexContainerLabel *>(&(decomposition.label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, child))))->container();
+                    Collection<htd::vertex_t> childLabel = decomposition.bagContent(child);
 
                     if (std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
                     {
-                        decomposition.removeVertex(vertex);
+                        decomposition.removeVertex(child);
                     }
                     else
                     {

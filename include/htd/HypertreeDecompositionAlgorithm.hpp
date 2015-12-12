@@ -40,9 +40,9 @@ namespace htd
     class HypertreeDecompositionAlgorithm : public virtual htd::IHypertreeDecompositionAlgorithm
     {
         public:
-            HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm);
+            HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm);
 
-            HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions);
+            HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions);
 
             ~HypertreeDecompositionAlgorithm();
             
@@ -57,6 +57,8 @@ namespace htd
 
         private:
             const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm_;
+
+            const htd::ISetCoverAlgorithm & setCoverAlgorithm_;
     };
 }
 

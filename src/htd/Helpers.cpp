@@ -124,9 +124,9 @@ htd::IMutableHypertreeDecomposition * htd::getDefaultHypertreeDecomposition(cons
     return new htd::HypertreeDecomposition(decomposition);
 }
 
-htd::IHypertreeDecompositionAlgorithm * htd::getDefaultHypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm)
+htd::IHypertreeDecompositionAlgorithm * htd::getDefaultHypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm)
 {
-    return new htd::HypertreeDecompositionAlgorithm(treeDecompositionAlgorithm);
+    return new htd::HypertreeDecompositionAlgorithm(treeDecompositionAlgorithm, setCoverAlgorithm);
 }
 
 htd::IOrderingAlgorithm * htd::getDefaultOrderingAlgorithm(void)

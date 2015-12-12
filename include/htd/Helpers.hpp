@@ -658,7 +658,7 @@ namespace htd
 
     htd::ITreeDecompositionAlgorithm * getDefaultTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm);
 
-    htd::IHypertreeDecompositionAlgorithm * getDefaultHypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm);
+    htd::IHypertreeDecompositionAlgorithm * getDefaultHypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm);
 
     htd::IOrderingAlgorithm * getDefaultOrderingAlgorithm(void);
     

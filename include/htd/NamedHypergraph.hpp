@@ -99,7 +99,7 @@ namespace htd
                 return nameLabeling_->isHyperedgeLabel(Label<HyperedgeNameType>(edgeName));
             }
 
-            void setEdgeName(const htd::vertex_t & vertex1, const htd::vertex_t vertex2, const HyperedgeNameType & edgeName)
+            void setEdgeName(htd::vertex_t vertex1, htd::vertex_t vertex2, const HyperedgeNameType & edgeName)
             {
                 htd::hyperedge_t hyperedge;
 
@@ -112,7 +112,7 @@ namespace htd
 
                 if (!base_->isEdge(hyperedge))
                 {
-                    throw std::logic_error("void htd::NamedHypergraph<VertexNameType, HyperedgeNameType>::setHyperedgeName(const htd::hyperedge_t &, const HyperedgeNameType &)");
+                    throw std::logic_error("void htd::NamedHypergraph<VertexNameType, HyperedgeNameType>::setEdgeName(htd::vertex_t, htd::vertex_t, const HyperedgeNameType &)");
                 }
 
                 nameLabeling_->setLabel(hyperedge, new htd::Label<VertexNameType>(edgeName));
@@ -122,7 +122,7 @@ namespace htd
             {
                 if (!base_->isEdge(edge))
                 {
-                    throw std::logic_error("void htd::NamedHypergraph<VertexNameType, HyperedgeNameType>::setHyperedgeName(const htd::hyperedge_t &, const HyperedgeNameType &)");
+                    throw std::logic_error("void htd::NamedHypergraph<VertexNameType, HyperedgeNameType>::setEdgeName(const htd::hyperedge_t &, const HyperedgeNameType &)");
                 }
 
                 nameLabeling_->setLabel(edge, new htd::Label<VertexNameType>(edgeName));

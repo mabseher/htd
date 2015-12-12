@@ -51,7 +51,7 @@ htd::MinDegreeOrderingAlgorithm::~MinDegreeOrderingAlgorithm()
 void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t>& result) const
 {
     std::size_t size = graph.vertexCount();
-    
+
     std::size_t tmp = 0;
 
     std::size_t minDegree = (std::size_t)-1;
@@ -72,7 +72,7 @@ void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & g
     
     for (htd::vertex_t vertex : vertices)
     {
-        auto& currentNeighborhood = neighborhood[vertex];
+        auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
         
         currentNeighborhood.reserve(graph.neighborCount(vertex));
         
@@ -88,7 +88,7 @@ void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & g
     
     for (htd::vertex_t vertex : vertices)
     {
-        auto& currentNeighborhood = neighborhood[vertex];
+        auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
         
         tmp = currentNeighborhood.size() - 1;
         
@@ -121,7 +121,7 @@ void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & g
     
             for (htd::vertex_t vertex : vertices)
             {
-                tmp = neighborhood[vertex].size() - 1;
+                tmp = neighborhood[vertex - htd::Vertex::FIRST].size() - 1;
 
                 if (tmp <= minDegree)
                 {
@@ -148,19 +148,19 @@ void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & g
         std::sort(minDegreePool.begin(), minDegreePool.end());
         
         htd::vertex_t selectedVertex = minDegreePool[rand() % minDegreePool.size()];
-        auto& selectedNeighborhood = neighborhood[selectedVertex];
+        auto & selectedNeighborhood = neighborhood[selectedVertex - htd::Vertex::FIRST];
         
         pool.erase(pool.find(selectedVertex));
         
         affectedVertices.clear();
         
-        if (neighborhood[selectedVertex].size() > 1)
+        if (neighborhood[selectedVertex - htd::Vertex::FIRST].size() > 1)
         {
             for (auto neighbor : selectedNeighborhood)
             {
                 if (neighbor != selectedVertex)
                 {
-                    auto& currentNeighborhood = neighborhood[neighbor];
+                    auto & currentNeighborhood = neighborhood[neighbor - htd::Vertex::FIRST];
                     
                     set_union(currentNeighborhood, selectedNeighborhood, selectedVertex, newNeighborhood);
 

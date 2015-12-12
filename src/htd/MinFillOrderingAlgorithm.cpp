@@ -54,7 +54,7 @@ htd::MinFillOrderingAlgorithm::~MinFillOrderingAlgorithm()
 void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const
 {
     std::size_t size = graph.vertexCount();
-    
+
     std::size_t tmp = 0;
 
     std::size_t minFill = (std::size_t)-1;
@@ -89,7 +89,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
 
     for (htd::vertex_t vertex : graph.vertices())
     {
-        auto& currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
         
         currentNeighborhood.reserve(graph.neighborCount(vertex));
         

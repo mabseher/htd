@@ -15,7 +15,7 @@ file(GLOB TEST_PROGRAMS "*.cpp")
 foreach(TEST_PROGRAM ${TEST_PROGRAMS})
     get_filename_component(TEST_NAME ${TEST_PROGRAM} NAME_WE)
 
-    add_executable(${TEST_NAME} "${TEST_NAME}" ${HEADER_LIST} ${GTEST_INCLUDE_DIR})
+    add_executable(${TEST_NAME} "${TEST_PROGRAM}" ${HEADER_LIST} ${GTEST_INCLUDE_DIR})
 
     set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD 11)
     set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)

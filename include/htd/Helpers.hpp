@@ -52,9 +52,13 @@
 #define HTD_UNUSED(x) (void)(x)
 
 #ifdef NDEBUG
-    #define DEBUGGING_CODE(x) 
+    #define DEBUGGING_CODE(x)
 #else
-    #define DEBUGGING_CODE(x) x
+    #ifdef VERBOSE
+        #define DEBUGGING_CODE(x) x
+    #else
+        #define DEBUGGING_CODE(x)
+    #endif
 #endif
 
 #ifdef NDEBUG

@@ -93,8 +93,10 @@ INSTANTIATE_TEST_CASE_P(VertexCountTest, IHypergraphTest, ::testing::Values(
     VertexCountTestInput(new htd::Hypergraph(), 0),
     VertexCountTestInput(new htd::DirectedGraph(), 0),
     VertexCountTestInput(new htd::TreeDecomposition(), 0),
-    VertexCountTestInput(new htd::HypertreeDecomposition(), 0),
-    VertexCountTestInput(new htd::LabeledHypergraph<std::string, std::string>(), 0)
+    VertexCountTestInput(new htd::HypertreeDecomposition(), 0)
+    /* TODO
+    VertexCountTestInput(new htd::NamedHypergraph<std::string, std::string>(), 0)
+    */
 ));
 
 int main(int argc, char **argv)

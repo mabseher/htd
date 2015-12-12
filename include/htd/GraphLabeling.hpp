@@ -26,6 +26,7 @@
 #define	HTD_HTD_GRAPHLABELING_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/ILabel.hpp>
 

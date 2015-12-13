@@ -73,11 +73,9 @@ htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original)
 
         nodes_.push_back(new TreeNode(node, original.parent(node)));
 
-        htd::vertex_container children;
+        const htd::Collection<htd::vertex_t> childContainer = original.children(node);
 
-        original.getChildren(node, children);
-
-        nodes_[node - htd::Vertex::FIRST]->children = children;
+        std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(nodes_[node - htd::Vertex::FIRST]->children));
 
         if (node > maximumVertex)
         {
@@ -697,22 +695,14 @@ std::size_t htd::TreeDecomposition::childCount(htd::vertex_t vertex) const
     return ret;
 }
 
-void htd::TreeDecomposition::getChildren(htd::vertex_t vertex, htd::vertex_container & output) const
+const htd::Collection<htd::vertex_t> htd::TreeDecomposition::children(htd::vertex_t vertex) const
 {
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
-
-        if (node != nullptr)
-        {
-            auto& children = node->children;
-            
-            for (auto child : children)
-            {
-                output.push_back(child);
-            }
-        }
+        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::children(htd::vertex_t) const");
     }
+
+    return htd::Collection<htd::vertex_t>(nodes_[vertex - htd::Vertex::FIRST]->children);
 }
 
 htd::vertex_t htd::TreeDecomposition::child(htd::vertex_t vertex, htd::index_t index) const

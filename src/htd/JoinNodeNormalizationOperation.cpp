@@ -30,6 +30,8 @@
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
+#include <algorithm>
+
 //TODO Remove
 #include <iostream>
 #include <htd/Helpers.hpp>
@@ -67,7 +69,9 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
         htd::vertex_container children;
 
-        decomposition.getChildren(node, children);
+        const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
+
+        std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
         for (htd::vertex_t child : children)
         {

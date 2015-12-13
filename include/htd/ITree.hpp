@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IGraph.hpp>
+#include <htd/Collection.hpp>
 
 namespace htd
 {
@@ -53,7 +54,7 @@ namespace htd
             
             virtual std::size_t childCount(htd::vertex_t vertex) const = 0;
             
-            virtual void getChildren(htd::vertex_t vertex, htd::vertex_container & children) const = 0;
+            virtual const htd::Collection<htd::vertex_t> children(htd::vertex_t vertex) const = 0;
             
             virtual htd::vertex_t child(htd::vertex_t vertex, htd::index_t index) const = 0;
 

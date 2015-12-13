@@ -36,6 +36,7 @@
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabelingFunction.hpp>
 
+#include <algorithm>
 #include <cstdarg>
 #include <stdexcept>
 #include <unordered_set>
@@ -667,9 +668,12 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd
             else
             {
                 std::vector<htd::vertex_t> children;
-                decomposition.getChildren(vertex, children);
 
-                Collection<htd::vertex_t> label = decomposition.bagContent(vertex);
+                const htd::Collection<htd::vertex_t> label = decomposition.bagContent(vertex);
+
+                const htd::Collection<htd::vertex_t> childContainer = decomposition.children(vertex);
+
+                std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
                 for (htd::vertex_t child : children)
                 {

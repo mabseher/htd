@@ -144,8 +144,8 @@ namespace htd
             bool isParent(htd::vertex_t vertex, htd::vertex_t parent) const HTD_OVERRIDE;
 
             std::size_t childCount(htd::vertex_t vertex) const HTD_OVERRIDE;
-            
-            void getChildren(htd::vertex_t vertex, htd::vertex_container & output) const HTD_OVERRIDE;
+
+            const htd::Collection<htd::vertex_t> children(htd::vertex_t vertex) const HTD_OVERRIDE;
             
             htd::vertex_t child(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 

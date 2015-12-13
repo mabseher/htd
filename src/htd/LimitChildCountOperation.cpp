@@ -31,6 +31,7 @@
 #include <htd/Collection.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
+#include <algorithm>
 #include <stdexcept>
 
 //TODO Remove
@@ -84,7 +85,9 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
             htd::vertex_container children;
 
-            decomposition.getChildren(node, children);
+            const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
+
+            std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
             std::size_t firstStep = remainder > 0 ? remainder : (limit_ - 1);
 

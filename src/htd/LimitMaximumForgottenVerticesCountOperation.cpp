@@ -30,6 +30,9 @@
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
+#include <algorithm>
+#include <stdexcept>
+
 //TODO Remove
 #include <iostream>
 #include <htd/Helpers.hpp>
@@ -86,7 +89,9 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
 
             htd::vertex_container children;
 
-            decomposition.getChildren(node, children);
+            const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
+
+            std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
             if (children.size() == 1)
             {

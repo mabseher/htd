@@ -71,13 +71,32 @@ void htd::HypertreeDecomposition::getEdgeLabel(htd::vertex_t vertex, htd::hypere
     }
 }
 
-void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & labelContent)
+void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & content)
 {
-    HTD_UNUSED(vertex);
-    HTD_UNUSED(labelContent);
+    if (isVertex(vertex))
+    {
+        auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
 
-    //TODO Implement
-    throw std::out_of_range("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::hyperedge_container &)");
+        edgeLabeling.setLabel(vertex, new htd::HyperedgeContainerLabel(content));
+    }
+    else
+    {
+        throw std::logic_error("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::hyperedge_container &))");
+    }
+}
+
+void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::Collection<htd::hyperedge_t> & content)
+{
+    if (isVertex(vertex))
+    {
+        auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
+
+        edgeLabeling.setLabel(vertex, new htd::HyperedgeContainerLabel(content.begin(), content.end()));
+    }
+    else
+    {
+        throw std::logic_error("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::Collection<htd::hyperedge_t> &)");
+    }
 }
 
 htd::HypertreeDecomposition * htd::HypertreeDecomposition::clone(void) const

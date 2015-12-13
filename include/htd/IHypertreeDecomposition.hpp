@@ -42,6 +42,10 @@ namespace htd
 
             virtual void getEdgeLabel(htd::vertex_t vertex, htd::hyperedge_container & output) const = 0;
 
+            virtual void setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & content) = 0;
+
+            virtual void setEdgeLabel(htd::vertex_t vertex, const htd::Collection<htd::hyperedge_t> & content) = 0;
+
             virtual IHypertreeDecomposition * clone(void) const = 0;
     };
 

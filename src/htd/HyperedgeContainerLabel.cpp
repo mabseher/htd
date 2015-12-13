@@ -40,6 +40,11 @@ htd::HyperedgeContainerLabel::HyperedgeContainerLabel(const htd::hyperedge_conta
 
 }
 
+htd::HyperedgeContainerLabel::HyperedgeContainerLabel(const htd::Iterator<htd::hyperedge_t> begin, const htd::Iterator<htd::hyperedge_t> end) : container_(begin, end)
+{
+
+}
+
 htd::HyperedgeContainerLabel::~HyperedgeContainerLabel()
 {
 

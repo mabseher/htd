@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ILabel.hpp>
+#include <htd/Iterator.hpp>
 
 namespace htd
 {
@@ -36,6 +37,8 @@ namespace htd
             HyperedgeContainerLabel(void);
 
             HyperedgeContainerLabel(const htd::hyperedge_container & data);
+
+            HyperedgeContainerLabel(const htd::Iterator<htd::hyperedge_t> begin, const htd::Iterator<htd::hyperedge_t> end);
 
             ~HyperedgeContainerLabel();
 

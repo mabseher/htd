@@ -51,7 +51,9 @@ namespace htd
 
             void getEdgeLabel(htd::vertex_t vertex, htd::hyperedge_container & output) const HTD_OVERRIDE;
 
-            void setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & labelContent);
+            void setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & content) HTD_OVERRIDE;
+
+            void setEdgeLabel(htd::vertex_t vertex, const htd::Collection<htd::hyperedge_t> & content) HTD_OVERRIDE;
 
             HypertreeDecomposition * clone(void) const HTD_OVERRIDE;
     };

@@ -237,9 +237,9 @@ namespace htd
                 return base_->isIsolatedVertex(lookupVertex(vertexName));
             }
 
-            void getHyperedges(htd::hyperedge_container & output, const VertexNameType & vertexName) const
+            const htd::Collection<htd::hyperedge_t> hyperedges(const VertexNameType & vertexName) const
             {
-                return base_->getHyperedges(output, lookupVertex(vertexName));
+                return base_->hyperedges(lookupVertex(vertexName));
             }
 
             const htd::hyperedge_t & hyperedge(htd::index_t index, const VertexNameType & vertexName) const

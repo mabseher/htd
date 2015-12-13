@@ -102,7 +102,7 @@ namespace htd
 
             const htd::Collection<htd::hyperedge_t> hyperedges(void) const HTD_OVERRIDE;
 
-            void getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::Collection<htd::hyperedge_t> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             const htd::hyperedge_t & hyperedge(htd::index_t index) const HTD_OVERRIDE;
 

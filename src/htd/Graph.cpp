@@ -418,11 +418,15 @@ const htd::Collection<htd::hyperedge_t> htd::Graph::hyperedges(void) const
         }
     }
 
-    return result;
+    return ret;
 }
 
-void htd::Graph::getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const
+const htd::Collection<htd::hyperedge_t> htd::Graph::hyperedges(htd::vertex_t vertex) const
 {
+    htd::VectorAdapter<htd::hyperedge_t> ret;
+
+    auto & result = ret.container();
+
     if (isVertex(vertex))
     {
         for (auto& vertex2 : neighborhood_[vertex - htd::Vertex::FIRST])
@@ -440,9 +444,15 @@ void htd::Graph::getHyperedges(htd::hyperedge_container & output, htd::vertex_t 
                 hyperedge.push_back(vertex);
             }
 
-            output.push_back(hyperedge);
+            result.push_back(hyperedge);
         }
     }
+    else
+    {
+        throw std::logic_error("const htd::Collection<htd::hyperedge_t> htd::Graph::hyperedges(htd::vertex_t) const");
+    }
+
+    return ret;
 }
 
 const htd::hyperedge_t & htd::Graph::hyperedge(htd::index_t index) const

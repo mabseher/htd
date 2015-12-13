@@ -478,8 +478,12 @@ const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(void)
     return ret;
 }
 
-void htd::TreeDecomposition::getHyperedges(htd::hyperedge_container& output, htd::vertex_t vertex) const
+const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(htd::vertex_t vertex) const
 {
+    htd::VectorAdapter<htd::hyperedge_t> ret;
+
+    auto & result = ret.container();
+
     if (isVertex(vertex))
     {
         auto& node = nodes_[vertex - htd::Vertex::FIRST];
@@ -503,7 +507,7 @@ void htd::TreeDecomposition::getHyperedges(htd::hyperedge_container& output, htd
                     hyperedge.push_back(node->parent);
                 }
 
-                output.push_back(hyperedge);
+                result.push_back(hyperedge);
             }
 
             for (auto child : children)
@@ -521,10 +525,16 @@ void htd::TreeDecomposition::getHyperedges(htd::hyperedge_container& output, htd
                     hyperedge.push_back(node->id);
                 }
 
-                output.push_back(hyperedge);
+                result.push_back(hyperedge);
             }
         }
     }
+    else
+    {
+        throw std::logic_error("const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(htd::vertex_t) const");
+    }
+
+    return ret;
 }
 
 const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index) const
@@ -547,11 +557,15 @@ const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index, h
 {
     htd::hyperedge_container result;
 
-    getHyperedges(result, vertex);
+    const Collection<htd::hyperedge_t> hyperedgeCollection = hyperedges(vertex);
 
     if (index < result.size())
     {
-        return result[index];
+        auto position = std::begin(hyperedgeCollection);
+
+        std::advance(position, index);
+
+        return *position;
     }
     else
     {

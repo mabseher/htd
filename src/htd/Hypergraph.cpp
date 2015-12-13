@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/Hypergraph.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <array>
@@ -419,18 +420,24 @@ const htd::Collection<htd::hyperedge_t> htd::Hypergraph::hyperedges(void) const
     return Collection<htd::hyperedge_t>(edges_);
 }
 
-void htd::Hypergraph::getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const
+const htd::Collection<htd::hyperedge_t> htd::Hypergraph::hyperedges(htd::vertex_t vertex) const
 {
+    htd::VectorAdapter<htd::hyperedge_t> ret;
+
+    auto & result = ret.container();
+
     if (isVertex(vertex))
     {
-        for (auto& edge : edges_)
+        for (auto & edge : edges_)
         {
             if (std::find(edge.begin(), edge.end(), vertex) != edge.end())
             {
-                output.push_back(edge);
+                result.push_back(edge);
             }
         }
     }
+
+    return ret;
 }
 
 const htd::hyperedge_t & htd::Hypergraph::hyperedge(htd::index_t index) const

@@ -41,9 +41,9 @@ namespace htd
 
             virtual bool isHyperedgeLabel(const htd::ILabel & label) const = 0;
 
-            virtual htd::vertex_t getVertex(const htd::ILabel & label) const = 0;
+            virtual htd::vertex_t lookupVertex(const htd::ILabel & label) const = 0;
 
-            virtual const htd::hyperedge_t & getHyperedge(const htd::ILabel & label) const = 0;
+            virtual const htd::hyperedge_t & lookupHyperedge(const htd::ILabel & label) const = 0;
 
             virtual IBidirectionalGraphLabeling * clone(void) const = 0;
     };

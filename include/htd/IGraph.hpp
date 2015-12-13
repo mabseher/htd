@@ -26,6 +26,7 @@
 #define	HTD_HTD_IGRAPH_HPP
 
 #include <htd/IHypergraph.hpp>
+#include <htd/Collection.hpp>
 
 #include <cstdlib>
 
@@ -35,12 +36,12 @@ namespace htd
     {
         public:
             virtual ~IGraph() = 0;
-            
-            virtual void getEdges(htd::edge_container & output) const = 0;
+
+            virtual const htd::Collection<htd::edge_t> edges(void) const = 0;
 
             virtual const htd::edge_t & edge(htd::index_t index) const = 0;
-            
-            virtual void getEdges(htd::edge_container & output, htd::vertex_t vertex) const = 0;
+
+            virtual const htd::Collection<htd::edge_t> edges(htd::vertex_t vertex) const = 0;
 
             virtual const htd::edge_t & edge(htd::index_t index, htd::vertex_t vertex) const = 0;
 

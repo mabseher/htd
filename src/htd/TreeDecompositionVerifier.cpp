@@ -175,12 +175,8 @@ void htd::TreeDecompositionVerifier::getViolationsHyperEdgeCoverage(const htd::I
 void htd::TreeDecompositionVerifier::getViolationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition, htd::vertex_container & output) const
 {
     bool ok = false;
-    
-    htd::edge_container edges;
 
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> containers;
-
-    decomposition.getEdges(edges);
 
     for (htd::vertex_t node : decomposition.vertices())
     {
@@ -223,13 +219,9 @@ void htd::TreeDecompositionVerifier::getReachableVertices(htd::vertex_t start, c
     
     if (size > 0)
     {
-        htd::edge_container edges;
-        
         std::map<htd::index_t, htd::vertex_container> neighbors;
-        
-        decomposition.getEdges(edges);
-        
-        for (auto & edge : edges)
+
+        for (auto & edge : decomposition.edges())
         {
             if (std::binary_search(filter.begin(), filter.end(), edge.first) && std::binary_search(filter.begin(), filter.end(), edge.second))
             {
@@ -247,9 +239,7 @@ void htd::TreeDecompositionVerifier::getReachableVertices(htd::vertex_t start, c
                 }
             }
         }
-        
-        edges.clear();
-        
+
         std::vector<htd::vertex_t> newVertices;
         std::vector<htd::vertex_t> tmpVertices;
 

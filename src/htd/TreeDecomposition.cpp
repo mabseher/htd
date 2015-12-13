@@ -380,8 +380,12 @@ bool htd::TreeDecomposition::isIsolatedVertex(htd::vertex_t vertex) const
     return false;
 }
 
-void htd::TreeDecomposition::getEdges(htd::edge_container & output) const
+const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(void) const
 {
+    htd::VectorAdapter<htd::edge_t> ret;
+
+    auto & result = ret.container();
+
     for (auto& currentNode : nodes_)
     {
         if (currentNode != nullptr)
@@ -390,14 +394,33 @@ void htd::TreeDecomposition::getEdges(htd::edge_container & output) const
 
             for (auto child : children)
             {
-                output.push_back(edge_t(currentNode->id, child));
+                htd::edge_t edge;
+
+                if (currentNode->id < child)
+                {
+                    edge.first = currentNode->id;
+                    edge.second = child;
+                }
+                else
+                {
+                    edge.first = child;
+                    edge.second = currentNode->id;
+                }
+
+                result.push_back(edge);
             }
         }
     }
+
+    return ret;
 }
 
-void htd::TreeDecomposition::getEdges(htd::edge_container & output, htd::vertex_t vertex) const
+const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t vertex) const
 {
+    htd::VectorAdapter<htd::edge_t> ret;
+
+    auto & result = ret.container();
+
     if (isVertex(vertex))
     {
         auto& node = nodes_[vertex - htd::Vertex::FIRST];
@@ -405,50 +428,82 @@ void htd::TreeDecomposition::getEdges(htd::edge_container & output, htd::vertex_
         if (node != nullptr)
         {
             auto& children = node->children;
-            
+
             if (node->parent != htd::Vertex::UNKNOWN)
             {
-                output.push_back(edge_t(node->parent, node->id));
+                htd::edge_t edge;
+
+                if (node->parent < node->id)
+                {
+                    edge.first = node->parent;
+                    edge.second = node->id;
+                }
+                else
+                {
+                    edge.first = node->id;
+                    edge.second = node->parent;
+                }
+
+                result.push_back(edge);
             }
 
             for (auto child : children)
             {
-                output.push_back(edge_t(node->id, child));
+                htd::edge_t edge;
+
+                if (node->id < child)
+                {
+                    edge.first = node->id;
+                    edge.second = child;
+                }
+                else
+                {
+                    edge.first = child;
+                    edge.second = node->id;
+                }
+
+                result.push_back(edge);
             }
         }
     }
+    else
+    {
+        throw std::logic_error("const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t) const");
+    }
+
+    return ret;
 }
 
 const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t index) const
 {
-    htd::edge_container result;
+    const htd::Collection<htd::edge_t> edgeCollection = edges();
 
-    getEdges(result);
-
-    if (index < result.size())
-    {
-        return result[index];
-    }
-    else
+    if (index >= edgeCollection.size())
     {
         throw std::out_of_range("const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t) const");
     }
+
+    htd::Iterator<htd::edge_t> it = edgeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t index, htd::vertex_t vertex) const
 {
-    htd::edge_container result;
+    const htd::Collection<htd::edge_t> edgeCollection = edges(vertex);
 
-    getEdges(result, vertex);
-
-    if (index < result.size())
-    {
-        return result[index];
-    }
-    else
+    if (index >= edgeCollection.size())
     {
         throw std::out_of_range("const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t, htd::vertex_t) const");
     }
+
+    htd::Iterator<htd::edge_t> it = edgeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(void) const
@@ -547,14 +602,14 @@ const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(htd::
 
 const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index) const
 {
-    if (index >= edgeCount())
+    const htd::Collection<htd::hyperedge_t> edgeCollection = hyperedges();
+
+    if (index >= edgeCollection.size())
     {
         throw std::out_of_range("const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t) const");
     }
 
-    const htd::Collection<htd::hyperedge_t> edges = hyperedges();
-
-    htd::Iterator<htd::hyperedge_t> it = edges.begin();
+    htd::Iterator<htd::hyperedge_t> it = edgeCollection.begin();
 
     std::advance(it, index);
 
@@ -563,22 +618,18 @@ const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index) c
 
 const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index, htd::vertex_t vertex) const
 {
-    htd::hyperedge_container result;
+    const htd::Collection<htd::hyperedge_t> edgeCollection = hyperedges(vertex);
 
-    const Collection<htd::hyperedge_t> hyperedgeCollection = hyperedges(vertex);
-
-    if (index < result.size())
-    {
-        auto position = std::begin(hyperedgeCollection);
-
-        std::advance(position, index);
-
-        return *position;
-    }
-    else
+    if (index >= edgeCollection.size())
     {
         throw std::out_of_range("const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t, htd::vertex_t) const");
     }
+
+    htd::Iterator<htd::hyperedge_t> it = edgeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 htd::vertex_t htd::TreeDecomposition::root(void) const

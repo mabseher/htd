@@ -577,30 +577,40 @@ bool htd::DirectedGraph::isIsolatedVertex(htd::vertex_t vertex) const
     return ret;
 }
 
-void htd::DirectedGraph::getEdges(htd::edge_container & output) const
+const htd::Collection<htd::edge_t> htd::DirectedGraph::edges(void) const
 {
+    htd::VectorAdapter<htd::edge_t> ret;
+
+    auto & result = ret.container();
+
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
         for (auto& vertex2 : outgoingNeighborhood_[vertex1])
         {
-            output.push_back(edge_t(vertex1, vertex2));
+            result.push_back(htd::edge_t(vertex1, vertex2));
         }
     }
+
+    return ret;
 }
 
-void htd::DirectedGraph::getEdges(htd::edge_container & output, htd::vertex_t vertex) const
+const htd::Collection<htd::edge_t> htd::DirectedGraph::edges(htd::vertex_t vertex) const
 {
-    if (isVertex(vertex))
-    {
-        for (auto& vertex2 : outgoingNeighborhood_[vertex])
-        {
-            output.push_back(edge_t(vertex, vertex2));
-        }
-    }
-    else
+    htd::VectorAdapter<htd::edge_t> ret;
+
+    auto & result = ret.container();
+
+    if (!isVertex(vertex))
     {
         throw std::out_of_range("htd::DirectedGraph::getEdges(htd::edge_container&, id_t)");
     }
+
+    for (auto& vertex2 : outgoingNeighborhood_[vertex])
+    {
+        result.push_back(htd::edge_t(vertex, vertex2));
+    }
+
+    return ret;
 }
 
 const htd::edge_t & htd::DirectedGraph::edge(htd::index_t index) const
@@ -647,7 +657,7 @@ const htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(void) con
         }
     }
 
-    return result;
+    return ret;
 }
 
 const htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(htd::vertex_t vertex) const

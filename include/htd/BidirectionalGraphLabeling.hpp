@@ -72,9 +72,9 @@ namespace htd
 
             bool isHyperedgeLabel(const htd::ILabel & label) const HTD_OVERRIDE;
 
-            htd::vertex_t getVertex(const htd::ILabel & label) const HTD_OVERRIDE;
+            htd::vertex_t lookupVertex(const htd::ILabel & label) const HTD_OVERRIDE;
 
-            const htd::hyperedge_t & getHyperedge(const htd::ILabel & label) const HTD_OVERRIDE;
+            const htd::hyperedge_t & lookupHyperedge(const htd::ILabel & label) const HTD_OVERRIDE;
 
             BidirectionalGraphLabeling * clone(void) const HTD_OVERRIDE;
 

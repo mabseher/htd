@@ -36,12 +36,8 @@ namespace htd
     htd::IMutableGraph * toMutableGraph(const htd::IGraph & graph)
     {
         htd::IMutableGraph * ret = htd::getDefaultGraph(graph.vertexCount());
-        
-        htd::edge_container edges;
-        
-        graph.getEdges(edges);
-        
-        for (auto edge : edges)
+
+        for (auto & edge : graph.edges())
         {
             ret->addEdge(edge.first, edge.second);
         }

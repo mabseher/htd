@@ -263,12 +263,12 @@ bool htd::BidirectionalGraphLabeling::isHyperedgeLabel(const htd::ILabel & label
     return hyperedgeLabelsReverseMap_.find(&label) != hyperedgeLabelsReverseMap_.end();
 }
 
-htd::vertex_t htd::BidirectionalGraphLabeling::getVertex(const htd::ILabel & label) const
+htd::vertex_t htd::BidirectionalGraphLabeling::lookupVertex(const htd::ILabel & label) const
 {
     return vertexLabelsReverseMap_.at(&label);
 }
 
-const htd::hyperedge_t & htd::BidirectionalGraphLabeling::getHyperedge(const htd::ILabel & label) const
+const htd::hyperedge_t & htd::BidirectionalGraphLabeling::lookupHyperedge(const htd::ILabel & label) const
 {
     return hyperedgeLabelsReverseMap_.at(&label);
 }

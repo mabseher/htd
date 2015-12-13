@@ -76,9 +76,9 @@ namespace htd
 
             bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void getEdges(htd::edge_container & output) const HTD_OVERRIDE;
+            const htd::Collection<htd::edge_t> edges(void) const HTD_OVERRIDE;
 
-            void getEdges(htd::edge_container & output, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::Collection<htd::edge_t> edges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             const htd::edge_t & edge(htd::index_t index) const HTD_OVERRIDE;
 

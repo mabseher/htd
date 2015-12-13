@@ -157,7 +157,7 @@ namespace htd
                     throw std::logic_error("htd::vertex_t htd::NamedHypergraph<VertexNameType, HyperedgeNameType>::lookupVertex(const VertexNameType &) const");
                 }
 
-                return nameLabeling_->getVertex(label);
+                return nameLabeling_->lookupVertex(label);
             }
 
             const htd::hyperedge_t & lookupHyperedge(const HyperedgeNameType & edgeName) const
@@ -169,7 +169,7 @@ namespace htd
                     throw std::logic_error("const htd::hyperedge_t & htd::NamedHypergraph<VertexNameType, HyperedgeNameType>::lookupHyperedge(const HyperedgeNameType &) const");
                 }
 
-                return nameLabeling_->getHyperedge(label);
+                return nameLabeling_->lookupHyperedge(label);
             }
 
             std::size_t edgeCount(const VertexNameType & vertexName) const

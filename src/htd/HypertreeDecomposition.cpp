@@ -54,21 +54,25 @@ htd::HypertreeDecomposition::~HypertreeDecomposition()
 
 }
 
-void htd::HypertreeDecomposition::getEdgeLabel(htd::vertex_t vertex, htd::hyperedge_container & output) const
+const htd::Collection<htd::hyperedge_t> htd::HypertreeDecomposition::edgeLabel(htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
 
-        if (node != nullptr)
+        if (edgeLabeling.hasLabel(vertex))
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
+            auto & edgeLabel = dynamic_cast<const htd::HyperedgeContainerLabel *>(&(edgeLabeling.label(vertex)))->container();
 
-            auto & edgeLabel = dynamic_cast<const htd::HyperedgeContainerLabel *>(&(bagLabeling.label(vertex)))->container();
-
-            std::copy(edgeLabel.begin(), edgeLabel.end(), std::back_inserter(output));
+            return htd::Collection<htd::hyperedge_t>(edgeLabel);
         }
     }
+    else
+    {
+        throw std::logic_error("htd::Collection<htd::hyperedge_t> htd::HypertreeDecomposition::edgeLabel(htd::vertex_t) const");
+    }
+
+    return htd::Collection<htd::hyperedge_t>();
 }
 
 void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & content)

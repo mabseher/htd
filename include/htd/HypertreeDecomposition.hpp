@@ -30,7 +30,7 @@
 #include <htd/TreeDecomposition.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/ILabeledTree.hpp>
-#include <htd/IGraphLabeling.hpp>
+#include <htd/Collection.hpp>
 
 #include <string>
 #include <unordered_map>
@@ -49,7 +49,7 @@ namespace htd
 
             ~HypertreeDecomposition();
 
-            void getEdgeLabel(htd::vertex_t vertex, htd::hyperedge_container & output) const HTD_OVERRIDE;
+            const htd::Collection<htd::hyperedge_t> edgeLabel(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             void setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & content) HTD_OVERRIDE;
 

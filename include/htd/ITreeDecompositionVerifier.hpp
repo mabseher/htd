@@ -26,6 +26,7 @@
 #define	HTD_HTD_ITREEDECOMPOSITIONVERIFIER_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/Collection.hpp>
 #include <htd/IHypergraph.hpp>
 #include <htd/ITreeDecomposition.hpp>
 
@@ -44,11 +45,11 @@ namespace htd
             
             virtual bool verifyConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
             
-            virtual void getViolationsVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition, htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> violationsVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
             
-            virtual void getViolationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition, htd::hyperedge_container & output) const = 0;
+            virtual const htd::Collection<htd::hyperedge_t> violationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
             
-            virtual void getViolationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition, htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> violationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
     };
 
     inline htd::ITreeDecompositionVerifier::~ITreeDecompositionVerifier() { }

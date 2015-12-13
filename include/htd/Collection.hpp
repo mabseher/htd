@@ -61,6 +61,11 @@ namespace htd
 
             }
 
+            bool empty() const
+            {
+                return begin_ == end_;
+            }
+
             std::size_t size() const
             {
                 return std::distance(begin(), end());

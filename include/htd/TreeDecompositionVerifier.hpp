@@ -47,11 +47,11 @@ namespace htd
             
             bool verifyConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            void getViolationsVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition, htd::vertex_container & output) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> violationsVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            void getViolationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition, htd::hyperedge_container & output) const HTD_OVERRIDE;
+            const htd::Collection<htd::hyperedge_t> violationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            void getViolationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition, htd::vertex_container & output) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> violationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
 
         protected:
             TreeDecompositionVerifier & operator=(const TreeDecompositionVerifier &) { return *this; }

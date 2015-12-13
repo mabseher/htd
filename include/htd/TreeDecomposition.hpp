@@ -195,6 +195,10 @@ namespace htd
 
             htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            void setBagContent(htd::vertex_t vertex, const htd::vertex_container & content) HTD_OVERRIDE;
+
+            void setBagContent(htd::vertex_t vertex, const htd::Collection<htd::vertex_t> & content) HTD_OVERRIDE;
+
             std::size_t forgottenVertexCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             std::size_t forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;

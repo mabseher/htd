@@ -40,6 +40,11 @@ htd::VertexContainerLabel::VertexContainerLabel(const htd::vertex_container & da
 
 }
 
+htd::VertexContainerLabel::VertexContainerLabel(const htd::Iterator<htd::vertex_t> begin, const htd::Iterator<htd::vertex_t> end) : container_(begin, end)
+{
+
+}
+
 htd::VertexContainerLabel::~VertexContainerLabel()
 {
 

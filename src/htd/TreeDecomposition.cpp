@@ -1612,18 +1612,13 @@ htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t 
 {
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-        if (node != nullptr)
+        if (bagLabeling.hasLabel(vertex))
         {
-            auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
 
-            if (bagLabeling.hasLabel(vertex))
-            {
-                auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
-
-                return htd::Collection<htd::vertex_t>(vertexLabel);
-            }
+            return htd::Collection<htd::vertex_t>(vertexLabel);
         }
     }
     else
@@ -1632,6 +1627,34 @@ htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t 
     }
 
     return htd::Collection<htd::vertex_t>();
+}
+
+void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::vertex_container & content)
+{
+    if (isVertex(vertex))
+    {
+        auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
+
+        bagLabeling.setLabel(vertex, new htd::VertexContainerLabel(content));
+    }
+    else
+    {
+        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const htd::vertex_container &)");
+    }
+}
+
+void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::Collection<htd::vertex_t> & content)
+{
+    if (isVertex(vertex))
+    {
+        auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
+
+        bagLabeling.setLabel(vertex, new htd::VertexContainerLabel(content.begin(), content.end()));
+    }
+    else
+    {
+        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const htd::vertex_container &)");
+    }
 }
 
 std::size_t htd::TreeDecomposition::minimumBagSize(void) const

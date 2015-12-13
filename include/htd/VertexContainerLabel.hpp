@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ILabel.hpp>
+#include <htd/Iterator.hpp>
 
 namespace htd
 {
@@ -36,6 +37,8 @@ namespace htd
             VertexContainerLabel(void);
 
             VertexContainerLabel(const htd::vertex_container & data);
+
+            VertexContainerLabel(const htd::Iterator<htd::vertex_t> begin, const htd::Iterator<htd::vertex_t> end);
 
             ~VertexContainerLabel();
 

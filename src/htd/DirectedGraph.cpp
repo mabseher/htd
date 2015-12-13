@@ -577,38 +577,40 @@ std::size_t htd::DirectedGraph::isolatedVertexCount(void) const
     return ret;
 }
 
-void htd::DirectedGraph::getIsolatedVertices(htd::vertex_container & output) const
+const htd::Collection<htd::vertex_t> htd::DirectedGraph::isolatedVertices(void) const
 {
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    auto & result = ret.container();
+
     for (htd::vertex_t vertex = 0; vertex < size_; vertex++)
     {
         if (isVertex(vertex))
         {
             if (incomingNeighborhood_[vertex - htd::Vertex::FIRST].size() == 0 && outgoingNeighborhood_[vertex - htd::Vertex::FIRST].size() == 0)
             {
-                output.push_back(vertex);
+                result.push_back(vertex);
             }
         }
     }
+
+    return ret;
 }
 
 htd::vertex_t htd::DirectedGraph::isolatedVertex(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    const htd::Collection<htd::vertex_t> isolatedVertexCollection = isolatedVertices();
 
-    htd::vertex_container result;
-
-    getIsolatedVertices(result);
-
-    if (index < result.size())
-    {
-        ret = result[index];
-    }
-    else
+    if (index >= isolatedVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::DirectedGraph::isolatedVertex(htd::index_t) const");
     }
 
-    return ret;
+    htd::Iterator<htd::vertex_t> it = isolatedVertexCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 bool htd::DirectedGraph::isIsolatedVertex(htd::vertex_t vertex) const

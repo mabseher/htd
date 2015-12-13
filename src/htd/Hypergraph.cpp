@@ -357,8 +357,12 @@ std::size_t htd::Hypergraph::isolatedVertexCount(void) const
     return ret;
 }
 
-void htd::Hypergraph::getIsolatedVertices(htd::vertex_container & output) const
+const htd::Collection<htd::vertex_t> htd::Hypergraph::isolatedVertices(void) const
 {
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    auto & result = ret.container();
+
     for (std::size_t vertex = htd::Vertex::FIRST; vertex < size_ + htd::Vertex::FIRST; vertex++)
     {
         if (isVertex(vertex))
@@ -372,30 +376,28 @@ void htd::Hypergraph::getIsolatedVertices(htd::vertex_container & output) const
             
             if (isolated)
             {
-                output.push_back(vertex);
+                result.push_back(vertex);
             }
         }
     }
+
+    return ret;
 }
 
 htd::vertex_t htd::Hypergraph::isolatedVertex(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    const htd::Collection<htd::vertex_t> isolatedVertexCollection = isolatedVertices();
 
-    htd::vertex_container result;
-
-    getIsolatedVertices(result);
-
-    if (index < result.size())
-    {
-        ret = result[index];
-    }
-    else
+    if (index >= isolatedVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::Hypergraph::isolatedVertex(htd::index_t) const");
     }
 
-    return ret;
+    htd::Iterator<htd::vertex_t> it = isolatedVertexCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 bool htd::Hypergraph::isIsolatedVertex(htd::vertex_t vertex) const

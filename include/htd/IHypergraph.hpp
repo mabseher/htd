@@ -50,7 +50,7 @@ namespace htd
 
             virtual std::size_t isolatedVertexCount(void) const = 0;
 
-            virtual void getIsolatedVertices(htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> isolatedVertices(void) const = 0;
 
             virtual htd::vertex_t isolatedVertex(htd::index_t index) const = 0;
 

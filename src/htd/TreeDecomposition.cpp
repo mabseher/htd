@@ -353,9 +353,9 @@ std::size_t htd::TreeDecomposition::isolatedVertexCount(void) const
     return 0;
 }
 
-void htd::TreeDecomposition::getIsolatedVertices(htd::vertex_container& output) const
+const htd::Collection<htd::vertex_t> htd::TreeDecomposition::isolatedVertices(void) const
 {
-    HTD_UNUSED(output);
+    return htd::Collection<htd::vertex_t>();
 }
 
 htd::vertex_t htd::TreeDecomposition::isolatedVertex(htd::index_t index) const

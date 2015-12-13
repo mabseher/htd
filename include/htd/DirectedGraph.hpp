@@ -86,7 +86,7 @@ namespace htd
 
             std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
-            void getIsolatedVertices(htd::vertex_container & output) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> isolatedVertices(void) const HTD_OVERRIDE;
 
             htd::vertex_t isolatedVertex(htd::index_t index) const HTD_OVERRIDE;
 

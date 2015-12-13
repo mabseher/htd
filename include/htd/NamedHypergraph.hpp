@@ -232,6 +232,21 @@ namespace htd
                 return base_->neighbor(lookupVertex(vertexName), index);
             }
 
+            std::size_t isolatedVertexCount(void) const
+            {
+                return base_->isolatedVertexCount();
+            }
+
+            const htd::Collection<htd::vertex_t> isolatedVertices(void) const
+            {
+                return base_->isolatedVertices();
+            }
+
+            htd::vertex_t isolatedVertex(htd::index_t index) const
+            {
+                return base_->isolatedVertex(index);
+            }
+
             bool isIsolatedVertex(const VertexNameType & vertexName) const
             {
                 return base_->isIsolatedVertex(lookupVertex(vertexName));

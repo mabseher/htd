@@ -108,7 +108,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
     
     for (htd::vertex_t vertex : vertices)
     {
-        auto& currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
         
         tmp = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
         
@@ -187,7 +187,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
         }
         
         htd::vertex_t selectedVertex = minDegreePool[rand() % minDegreePool.size()];
-        auto& selectedNeighborhood = neighborhood[selectedVertex - htd::Vertex::FIRST];
+        auto & selectedNeighborhood = neighborhood[selectedVertex - htd::Vertex::FIRST];
         
         pool.erase(pool.find(selectedVertex));
         
@@ -201,7 +201,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
             {
                 if (vertex != selectedVertex)
                 {
-                    auto& currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
+                    auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
                     
                     currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
                 }
@@ -250,9 +250,9 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
             {
                 if (vertex != selectedVertex)
                 {
-                    auto& currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
-                    auto& currentUnaffectedNeighborhood = unaffectedNeighbors[vertex - htd::Vertex::FIRST];
-                    auto& currentAdditionalNeighborhood = additionalNeighbors[vertex - htd::Vertex::FIRST];
+                    auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
+                    auto & currentUnaffectedNeighborhood = unaffectedNeighbors[vertex - htd::Vertex::FIRST];
+                    auto & currentAdditionalNeighborhood = additionalNeighbors[vertex - htd::Vertex::FIRST];
 
                     std::size_t additionalNeighborCount = currentAdditionalNeighborhood.size();
 
@@ -320,7 +320,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                         {
                             if (additionalNeighborCount == 0)
                             {
-                                auto& relevantNeighborhood = existingNeighbors[vertex - htd::Vertex::FIRST];
+                                auto & relevantNeighborhood = existingNeighbors[vertex - htd::Vertex::FIRST];
 
                                 auto last = relevantNeighborhood.end();
 
@@ -331,7 +331,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                                 {
                                     htd::vertex_t vertex2 = *it;
 
-                                    auto& currentAdditionalNeighborhood2 = additionalNeighbors[vertex2 - htd::Vertex::FIRST];
+                                    auto & currentAdditionalNeighborhood2 = additionalNeighbors[vertex2 - htd::Vertex::FIRST];
 
                                     it++;
 
@@ -362,7 +362,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
 
                                 for (htd::vertex_t unaffectedVertex : currentUnaffectedNeighborhood)
                                 {
-                                    auto& affectedVertices = existingNeighbors[unaffectedVertex - htd::Vertex::FIRST];
+                                    auto & affectedVertices = existingNeighbors[unaffectedVertex - htd::Vertex::FIRST];
 
                                     tmp += htd::compute_set_difference_size(first, last, affectedVertices.begin(), affectedVertices.end());
 
@@ -469,7 +469,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
 
                     if (unaffectedNeighbors[vertex - htd::Vertex::FIRST].size() > 0 && tmp > 0)
                     {
-                        auto& relevantNeighborhood = existingNeighbors[vertex - htd::Vertex::FIRST];
+                        auto & relevantNeighborhood = existingNeighbors[vertex - htd::Vertex::FIRST];
 
                         auto last = relevantNeighborhood.end();
 
@@ -480,7 +480,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
                         {
                             htd::vertex_t vertex2 = *it;
 
-                            auto& currentAdditionalNeighborhood2 = additionalNeighbors[vertex2 - htd::Vertex::FIRST];
+                            auto & currentAdditionalNeighborhood2 = additionalNeighbors[vertex2 - htd::Vertex::FIRST];
 
                             it++;
                             index++;
@@ -565,7 +565,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
         {
             if (updateStatus[vertex] == 0)
             {
-                auto& currentNeighborhood = neighborhood[vertex];
+                auto & currentNeighborhood = neighborhood[vertex];
 
                 size = currentNeighborhood.size();
                 
@@ -629,7 +629,7 @@ std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::vector<ht
     {
         vertex = *it - htd::Vertex::FIRST;
 
-        auto& currentNeighborhood = availableNeighborhoods[vertex];
+        auto & currentNeighborhood = availableNeighborhoods[vertex];
 
         it++;
 

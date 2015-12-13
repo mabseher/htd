@@ -75,7 +75,7 @@ std::size_t htd::Hypergraph::edgeCount(htd::vertex_t vertex) const
 
     if (isVertex(vertex))
     {
-        for (auto& edge : edges_)
+        for (auto & edge : edges_)
         {
             if (std::binary_search(edge.begin(), edge.end(), vertex))
             {
@@ -213,7 +213,7 @@ bool htd::Hypergraph::isConnected(void) const
 
             for (htd::vertex_container::const_iterator it = tmpVertices.begin(); it != tmpVertices.end(); it++)
             {
-                for (auto& edge : edges_)
+                for (auto & edge : edges_)
                 {
                     if (std::find(edge.begin(), edge.end(), *it) != edge.end())
                     {
@@ -314,7 +314,7 @@ htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index
 
     if (isVertex(vertex))
     {
-        auto& currentNeighborhood = neighborhood_[vertex];
+        auto & currentNeighborhood = neighborhood_[vertex];
 
         if (index < currentNeighborhood.size())
         {
@@ -484,7 +484,7 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex)
         
         std::vector<htd::id_t> emptyEdges;
         
-        for (auto& edge : edges_)
+        for (auto & edge : edges_)
         {
             edge.erase(std::remove(edge.begin(), edge.end(), vertex), edge.end());
             
@@ -517,7 +517,7 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHypered
 
         std::vector<htd::id_t> emptyEdges;
 
-        auto& currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
 
         if (addNeighborHyperedge)
         {
@@ -537,7 +537,7 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHypered
 
         currentNeighborhood.clear();
 
-        for (auto& edge : edges_)
+        for (auto & edge : edges_)
         {
             edge.erase(std::remove(edge.begin(), edge.end(), vertex), edge.end());
 

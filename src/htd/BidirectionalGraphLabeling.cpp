@@ -224,7 +224,7 @@ void htd::BidirectionalGraphLabeling::removeLabel(const htd::hyperedge_t & edge)
 
 void htd::BidirectionalGraphLabeling::clear(void)
 {
-    for (auto& label : vertexLabels_)
+    for (auto & label : vertexLabels_)
     {
         if (label.second != nullptr)
         {
@@ -234,7 +234,7 @@ void htd::BidirectionalGraphLabeling::clear(void)
         }
     }
 
-    for (auto& label : hyperedgeLabels_)
+    for (auto & label : hyperedgeLabels_)
     {
         if (label.second != nullptr)
         {

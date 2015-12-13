@@ -170,7 +170,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             {
                 htd::vertex_t minimumVertex = getMinimumVertex(edge, indices);
 
-                auto& selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
+                auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
 
                 std::vector<htd::vertex_t> newBucketContent;
                 newBucketContent.reserve(selectedBucket.size());
@@ -273,7 +273,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                         }
                     )
 
-                    auto& selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
+                    auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
 
                     std::vector<htd::vertex_t> newBucketContent;
                     newBucketContent.reserve(selectedBucket.size());
@@ -343,7 +343,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                     htd::vertex_t bestBucket = htd::Vertex::UNKNOWN;
                     htd::vertex_t currentBucket = unreachableVertices[0];
 
-                    auto& currentBucketContent = buckets[currentBucket - htd::Vertex::FIRST];
+                    auto & currentBucketContent = buckets[currentBucket - htd::Vertex::FIRST];
 
                     std::vector<htd::vertex_t> reachableVertices;
 
@@ -361,7 +361,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                         if (it == last || bucket < *it)
                         {
-                            auto& bucketContent = buckets[bucket - htd::Vertex::FIRST];
+                            auto & bucketContent = buckets[bucket - htd::Vertex::FIRST];
 
                             std::size_t currentOverlap = htd::compute_set_intersection_size(currentBucketContent.begin(), currentBucketContent.end(), bucketContent.begin(), bucketContent.end());
 

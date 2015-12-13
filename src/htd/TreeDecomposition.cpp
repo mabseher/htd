@@ -100,7 +100,7 @@ htd::TreeDecomposition::TreeDecomposition(const htd::TreeDecomposition & origina
 {
     nodes_.reserve(original.nodes_.size());
     
-    for (auto& node : original.nodes_)
+    for (auto & node : original.nodes_)
     {
         if (node != nullptr)
         {
@@ -209,11 +209,11 @@ bool htd::TreeDecomposition::isNeighbor(htd::vertex_t vertex1, htd::vertex_t ver
     
     if (isVertex(vertex1) && isVertex(vertex2))
     {
-        auto& node = nodes_[vertex1];
+        auto & node = nodes_[vertex1];
 
         if (node != nullptr)
         {
-            auto& children = node->children;
+            auto & children = node->children;
             
             if (node->parent != htd::Vertex::UNKNOWN)
             {
@@ -261,11 +261,11 @@ std::size_t htd::TreeDecomposition::neighborCount(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
-            auto& children = node->children;
+            auto & children = node->children;
             
             if (node->parent != htd::Vertex::UNKNOWN)
             {
@@ -290,11 +290,11 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::neighbors(htd::vert
 
     auto & result = ret.container();
 
-    auto& node = nodes_[vertex - htd::Vertex::FIRST];
+    auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
     if (node != nullptr)
     {
-        auto& children = node->children;
+        auto & children = node->children;
 
         if (node->parent != htd::Vertex::UNKNOWN)
         {
@@ -316,13 +316,13 @@ htd::vertex_t htd::TreeDecomposition::neighbor(htd::vertex_t vertex, htd::index_
     
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
             std::size_t currentIndex = 0;
             
-            auto& children = node->children;
+            auto & children = node->children;
             
             if (node->parent != htd::Vertex::UNKNOWN)
             {
@@ -384,11 +384,11 @@ const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(void) const
 
     auto & result = ret.container();
 
-    for (auto& currentNode : nodes_)
+    for (auto & currentNode : nodes_)
     {
         if (currentNode != nullptr)
         {
-            auto& children = currentNode->children;
+            auto & children = currentNode->children;
 
             for (auto child : children)
             {
@@ -421,11 +421,11 @@ const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t v
 
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
-            auto& children = node->children;
+            auto & children = node->children;
 
             if (node->parent != htd::Vertex::UNKNOWN)
             {
@@ -510,11 +510,11 @@ const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(void)
 
     auto & result = ret.container();
 
-    for (auto& currentNode : nodes_)
+    for (auto & currentNode : nodes_)
     {
         if (currentNode != nullptr)
         {
-            auto& children = currentNode->children;
+            auto & children = currentNode->children;
 
             for (auto child : children)
             {
@@ -547,11 +547,11 @@ const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(htd::
 
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
-            auto& children = node->children;
+            auto & children = node->children;
             
             if (node->parent != htd::Vertex::UNKNOWN)
             {
@@ -646,7 +646,7 @@ htd::vertex_t htd::TreeDecomposition::parent(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
@@ -663,7 +663,7 @@ bool htd::TreeDecomposition::isParent(htd::vertex_t vertex, htd::vertex_t parent
 
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
@@ -684,7 +684,7 @@ std::size_t htd::TreeDecomposition::childCount(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];;
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];;
 
         if (node != nullptr)
         {
@@ -711,11 +711,11 @@ htd::vertex_t htd::TreeDecomposition::child(htd::vertex_t vertex, htd::index_t i
     
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
-            auto& children = node->children;
+            auto & children = node->children;
             
             if (index < children.size())
             {
@@ -745,11 +745,11 @@ bool htd::TreeDecomposition::isChild(htd::vertex_t vertex, htd::vertex_t child) 
 
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
-            auto& children = node->children;
+            auto & children = node->children;
 
             ret = std::find(children.begin(), children.end(), child) != children.end();
         }
@@ -766,17 +766,17 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
 {
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
-            auto& children = node->children;
+            auto & children = node->children;
             
             if (node->parent != htd::Vertex::UNKNOWN)
             {
-                auto& parent = nodes_[node->parent  - htd::Vertex::FIRST];
+                auto & parent = nodes_[node->parent  - htd::Vertex::FIRST];
             
-                auto& siblings = parent->children;
+                auto & siblings = parent->children;
 
                 switch (children.size())
                 {
@@ -804,7 +804,7 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
                         
                         htd::vertex_t bestChoice = htd::Vertex::UNKNOWN;
                         
-                        auto& parentLabel = vertex_labels[node->id];
+                        auto & parentLabel = vertex_labels[node->id];
 
                         std::cout << "ELIMINATING VERTEX " << node->id << " (PARENT=" << node->parent << ") ..." << std::endl;
                         std::cout << "   ";
@@ -814,7 +814,7 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
                         //Find optimal choice for new root
                         for (auto child : children)
                         {
-                            auto& childLabel = vertex_labels[child];
+                            auto & childLabel = vertex_labels[child];
 
                             std::size_t currentOverlap = htd::compute_set_intersection_size(parentLabel.begin(), parentLabel.end(), childLabel.begin(), childLabel.end());
 
@@ -845,13 +845,13 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
 
                         siblings.push_back(bestChoice);
                         
-                        auto& bestChoiceLabel = vertex_labels[bestChoice];
+                        auto & bestChoiceLabel = vertex_labels[bestChoice];
 
                         for (auto child : children)
                         {
                             if (child != bestChoice)
                             {
-                                auto& childLabel = vertex_labels[child];
+                                auto & childLabel = vertex_labels[child];
 
                                 std::size_t currentOverlap = htd::compute_set_intersection_size(bestChoiceLabel.begin(), bestChoiceLabel.end(), childLabel.begin(), childLabel.end());
 
@@ -969,7 +969,7 @@ htd::vertex_t htd::TreeDecomposition::insertRoot(void)
         nodes_.clear();
         nodes_.push_back(new TreeNode(1, htd::Vertex::UNKNOWN));
 
-        for (auto& labeling : *labelings_)
+        for (auto & labeling : *labelings_)
         {
             labeling.second->clear();
         }
@@ -1007,7 +1007,7 @@ void htd::TreeDecomposition::removeRoot(void)
     
     deletions_.clear();
 
-    for (auto& labeling : *labelings_)
+    for (auto & labeling : *labelings_)
     {
         labeling.second->clear();
     }
@@ -1019,7 +1019,7 @@ htd::vertex_t htd::TreeDecomposition::addChild(htd::vertex_t vertex)
     
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
@@ -1044,11 +1044,11 @@ void htd::TreeDecomposition::removeChild(htd::vertex_t vertex, htd::vertex_t chi
 {
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
-            auto& children = node->children;
+            auto & children = node->children;
             
             if (children.size() > 0)
             {
@@ -1079,7 +1079,7 @@ htd::vertex_t htd::TreeDecomposition::addParent(htd::vertex_t vertex)
     {
         if (isRoot(vertex))
         {
-            auto& node = nodes_[vertex - htd::Vertex::FIRST];
+            auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
             if (node != nullptr)
             {
@@ -1108,9 +1108,9 @@ htd::vertex_t htd::TreeDecomposition::addParent(htd::vertex_t vertex)
 
             ret = addChild(parentVertex);
 
-            auto& parentNode = nodes_[parentVertex - htd::Vertex::FIRST];
-            auto& selectedNode = nodes_[vertex - htd::Vertex::FIRST];
-            auto& intermediateNode = nodes_[ret - htd::Vertex::FIRST];
+            auto & parentNode = nodes_[parentVertex - htd::Vertex::FIRST];
+            auto & selectedNode = nodes_[vertex - htd::Vertex::FIRST];
+            auto & intermediateNode = nodes_[ret - htd::Vertex::FIRST];
 
             if (parentNode != nullptr && selectedNode != nullptr && intermediateNode != nullptr)
             {
@@ -1161,7 +1161,7 @@ void htd::TreeDecomposition::setParent(htd::vertex_t vertex, htd::vertex_t newPa
         }
         else
         {
-            auto& parentNode = nodes_[node->parent - htd::Vertex::FIRST];
+            auto & parentNode = nodes_[node->parent - htd::Vertex::FIRST];
 
             auto position = std::find(parentNode->children.begin(), parentNode->children.end(), vertex);
 
@@ -1297,7 +1297,7 @@ htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::TreeDecomp
         
         nodes_.reserve(other.nodes_.size());
     
-        for (auto& node : other.nodes_)
+        for (auto & node : other.nodes_)
         {
             if (node != nullptr)
             {
@@ -1377,7 +1377,7 @@ bool htd::TreeDecomposition::isLeafNode(htd::vertex_t vertex) const
 
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
@@ -1396,7 +1396,7 @@ std::size_t htd::TreeDecomposition::joinNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (auto& node : nodes_)
+    for (auto & node : nodes_)
     {
         if (node != nullptr)
         {
@@ -1412,7 +1412,7 @@ std::size_t htd::TreeDecomposition::joinNodeCount(void) const
 
 void htd::TreeDecomposition::getJoinNodes(htd::vertex_container & output) const
 {
-    for (auto& node : nodes_)
+    for (auto & node : nodes_)
     {
         if (node != nullptr)
         {
@@ -1450,7 +1450,7 @@ bool htd::TreeDecomposition::isJoinNode(htd::vertex_t vertex) const
 
     if (isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_[vertex - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
@@ -1469,7 +1469,7 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (auto& node : nodes_)
+    for (auto & node : nodes_)
     {
         if (node != nullptr)
         {
@@ -2378,13 +2378,13 @@ void htd::TreeDecomposition::deleteNode(TreeNode * node)
 {
     if (node != nullptr)
     {
-        auto& parent = node->parent;
+        auto & parent = node->parent;
         
         htd::id_t nodeIdentifier = node->id;
                 
         if (parent != htd::Vertex::UNKNOWN)
         {
-            auto& children = nodes_[parent - htd::Vertex::FIRST]->children;
+            auto & children = nodes_[parent - htd::Vertex::FIRST]->children;
 
             if (children.size() > 0)
             {
@@ -2406,7 +2406,7 @@ void htd::TreeDecomposition::deleteNode(TreeNode * node)
 
                     deletions_.insert(nodeIdentifier);
 
-                    for (auto& labeling : *labelings_)
+                    for (auto & labeling : *labelings_)
                     {
                         labeling.second->removeLabel(nodeIdentifier);
                     }
@@ -2428,7 +2428,7 @@ void htd::TreeDecomposition::deleteNode(TreeNode * node)
 
             deletions_.insert(nodeIdentifier);
 
-            for (auto& labeling : *labelings_)
+            for (auto & labeling : *labelings_)
             {
                 labeling.second->removeLabel(nodeIdentifier);
             }

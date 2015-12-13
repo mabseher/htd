@@ -174,7 +174,7 @@ void htd::GraphLabeling::removeLabel(const htd::hyperedge_t & edge)
 
 void htd::GraphLabeling::clear(void)
 {
-    for (auto& label : vertexLabels_)
+    for (auto & label : vertexLabels_)
     {
         if (label.second != nullptr)
         {
@@ -182,7 +182,7 @@ void htd::GraphLabeling::clear(void)
         }
     }
 
-    for (auto& label : hyperedgeLabels_)
+    for (auto & label : hyperedgeLabels_)
     {
         if (label.second != nullptr)
         {

@@ -122,7 +122,7 @@ void htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::vertex_containe
 
             populateNeighborhood(containers, newNeighborhood, bestSolutionFitness, oldNeighborhood);
 
-            for (auto& neighbor : newNeighborhood)
+            for (auto & neighbor : newNeighborhood)
             {
                 if (neighbor.remainder.empty())
                 {

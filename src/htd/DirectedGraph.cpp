@@ -70,9 +70,9 @@ std::size_t htd::DirectedGraph::edgeCount(void) const
 {
     std::size_t ret = 0;
     
-    for (auto& v : outgoingNeighborhood_)
+    for (auto & currentNeighborhood : outgoingNeighborhood_)
     {
-        ret += v.size();
+        ret += currentNeighborhood.size();
     }
     
     return ret;
@@ -453,7 +453,7 @@ htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t vertex, htd::in
 
     if (isVertex(vertex))
     {
-        auto& neighborhood = incomingNeighborhood_[vertex - htd::Vertex::FIRST];
+        auto & neighborhood = incomingNeighborhood_[vertex - htd::Vertex::FIRST];
 
         if (index < neighborhood.size())
         {
@@ -483,7 +483,7 @@ htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t vertex, htd::in
 
     if (isVertex(vertex))
     {
-        auto& neighborhood = outgoingNeighborhood_[vertex - htd::Vertex::FIRST];
+        auto & neighborhood = outgoingNeighborhood_[vertex - htd::Vertex::FIRST];
 
         if (index < neighborhood.size())
         {
@@ -585,7 +585,7 @@ const htd::Collection<htd::edge_t> htd::DirectedGraph::edges(void) const
 
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
-        for (auto& vertex2 : outgoingNeighborhood_[vertex1])
+        for (auto & vertex2 : outgoingNeighborhood_[vertex1])
         {
             result.push_back(htd::edge_t(vertex1, vertex2));
         }
@@ -605,7 +605,7 @@ const htd::Collection<htd::edge_t> htd::DirectedGraph::edges(htd::vertex_t verte
         throw std::out_of_range("htd::DirectedGraph::getEdges(htd::edge_container&, id_t)");
     }
 
-    for (auto& vertex2 : outgoingNeighborhood_[vertex])
+    for (auto & vertex2 : outgoingNeighborhood_[vertex])
     {
         result.push_back(htd::edge_t(vertex, vertex2));
     }
@@ -638,7 +638,7 @@ const htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(void) con
 
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
-        for (auto& vertex2 : outgoingNeighborhood_[vertex1])
+        for (auto & vertex2 : outgoingNeighborhood_[vertex1])
         {
             hyperedge_t hyperedge;
 
@@ -668,7 +668,7 @@ const htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(htd::vert
 
     if (isVertex(vertex))
     {
-        for (auto& vertex2 : outgoingNeighborhood_[vertex])
+        for (auto & vertex2 : outgoingNeighborhood_[vertex])
         {
             htd::hyperedge_t hyperedge;
 

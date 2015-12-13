@@ -69,9 +69,9 @@ std::size_t htd::Graph::edgeCount(void) const
 {
     std::size_t ret = 0;
     
-    for (auto& v : neighborhood_)
+    for (auto & currentNeighborhood : neighborhood_)
     {
-        ret += v.size();
+        ret += currentNeighborhood.size();
     }
     
     return ret / 2;
@@ -274,7 +274,7 @@ htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::index_t index) con
     
     if (isVertex(vertex))
     {
-        auto& currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
         
         if (index < currentNeighborhood.size())
         {
@@ -569,7 +569,7 @@ void htd::Graph::removeVertex(htd::vertex_t vertex)
     {
         for (auto neighbor : neighborhood_[vertex - htd::Vertex::FIRST])
         {
-            auto& currentNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
+            auto & currentNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
             
             auto position = std::find(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
             
@@ -591,7 +591,7 @@ void htd::Graph::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
 {
     if (isVertex(vertex))
     {
-        auto& currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
         
         if (addNeighborClique)
         {
@@ -609,7 +609,7 @@ void htd::Graph::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
             
             if (neighbor != vertex)
             {
-                auto& localNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
+                auto & localNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
 
                 if (addNeighborClique)
                 {
@@ -656,8 +656,8 @@ void htd::Graph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     if (isVertex(vertex1) && isVertex(vertex2))
     {
-        auto& currentNeighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
-        auto& currentNeighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
+        auto & currentNeighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
+        auto & currentNeighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
         
         std::vector<htd::id_t> newVertex1 { vertex1 };
         std::vector<htd::id_t> newVertex2 { vertex2 };
@@ -682,8 +682,8 @@ void htd::Graph::removeEdge(id_t vertex1, id_t vertex2)
 {
     if (isVertex(vertex1) && isVertex(vertex2))
     {
-        auto& neighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
-        auto& neighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
+        auto & neighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
+        auto & neighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
         
         auto position1 = std::find(neighborhood1.begin(), neighborhood1.end(), vertex2);
 

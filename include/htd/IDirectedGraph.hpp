@@ -37,7 +37,7 @@ namespace htd
 
             virtual std::size_t incomingNeighborCount(htd::vertex_t vertex) const = 0;
 
-            virtual void getIncomingNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> incomingNeighbors(htd::vertex_t vertex) const = 0;
 
             virtual htd::vertex_t incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const = 0;
 
@@ -45,7 +45,7 @@ namespace htd
 
             virtual std::size_t outgoingNeighborCount(htd::vertex_t vertex) const = 0;
 
-            virtual void getOutgoingNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> outgoingNeighbors(htd::vertex_t vertex) const = 0;
 
             virtual htd::vertex_t outgoingNeighbor(htd::vertex_t vertex, htd::index_t index) const = 0;
 

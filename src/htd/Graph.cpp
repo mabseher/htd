@@ -110,7 +110,7 @@ bool htd::Graph::isEdge(const htd::hyperedge_t & edge) const
     return ret;
 }
 
-htd::vertex_t htd::Graph::vertex(htd::id_t index) const
+htd::vertex_t htd::Graph::vertex(htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
@@ -257,16 +257,18 @@ std::size_t htd::Graph::neighborCount(htd::vertex_t vertex) const
     
     return ret;
 }
-            
-void htd::Graph::getNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
+
+const htd::Collection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t vertex) const
 {
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        std::copy(neighborhood_[vertex - htd::Vertex::FIRST].begin(), neighborhood_[vertex - htd::Vertex::FIRST].end(), std::back_inserter(output));
+        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t) const");
     }
+
+    return Collection<htd::vertex_t>(neighborhood_[vertex - htd::Vertex::FIRST]);
 }
 
-htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::id_t index) const
+htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
     

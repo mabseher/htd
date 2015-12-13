@@ -55,7 +55,7 @@ void htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::vertex_containe
 
     std::vector<std::vector<htd::id_t>> solutions;
 
-    for (htd::id_t index = 0; index < containers.size(); index++)
+    for (htd::index_t index = 0; index < containers.size(); index++)
     {
         if (htd::has_non_empty_set_intersection(vertices.begin(), vertices.end(), containers[index].begin(), containers[index].end()))
         {

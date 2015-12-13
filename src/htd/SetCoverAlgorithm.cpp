@@ -63,7 +63,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::vertex_container& vertic
 
     std::size_t minimumCoverSize = (std::size_t)-1;
 
-    for (htd::id_t index = 0; index < containers.size(); index++)
+    for (htd::index_t index = 0; index < containers.size(); index++)
     {
         std::size_t coverage = htd::compute_set_intersection_size(remainder.begin(), remainder.end(), containers[index].begin(), containers[index].end());
 

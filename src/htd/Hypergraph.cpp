@@ -298,12 +298,14 @@ bool htd::Hypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) 
     return ret;
 }
 
-void htd::Hypergraph::getNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
+const htd::Collection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t vertex) const
 {
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        std::copy(neighborhood_[vertex - htd::Vertex::FIRST].begin(), neighborhood_[vertex - htd::Vertex::FIRST].end(), std::back_inserter(output));
+        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t) const");
     }
+
+    return htd::Collection<htd::vertex_t>(neighborhood_[vertex - htd::Vertex::FIRST]);
 }
 
 htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index) const

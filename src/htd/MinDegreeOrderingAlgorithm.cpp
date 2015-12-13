@@ -30,6 +30,7 @@
 #include <htd/IHypergraph.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 
+#include <algorithm>
 #include <cstdlib>
 #include <set>
 #include <vector>
@@ -73,11 +74,13 @@ void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & g
     for (htd::vertex_t vertex : vertices)
     {
         auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
-        
-        currentNeighborhood.reserve(graph.neighborCount(vertex));
-        
-        graph.getNeighbors(vertex, currentNeighborhood);
-        
+
+        const htd::Collection<htd::vertex_t> neighborCollection = graph.neighbors(vertex);
+
+        currentNeighborhood.reserve(neighborCollection.size());
+
+        std::copy(neighborCollection.begin(), neighborCollection.end(), std::back_inserter(currentNeighborhood));
+
         auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
         
         if (position == currentNeighborhood.end() || *position != vertex)

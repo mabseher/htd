@@ -281,27 +281,35 @@ std::size_t htd::TreeDecomposition::neighborCount(htd::vertex_t vertex) const
     return ret;
 }
 
-void htd::TreeDecomposition::getNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
+const htd::Collection<htd::vertex_t> htd::TreeDecomposition::neighbors(htd::vertex_t vertex) const
 {
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        auto& node = nodes_[vertex - htd::Vertex::FIRST];
+        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::neighbors(htd::vertex_t) const");
+    }
 
-        if (node != nullptr)
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    auto & result = ret.container();
+
+    auto& node = nodes_[vertex - htd::Vertex::FIRST];
+
+    if (node != nullptr)
+    {
+        auto& children = node->children;
+
+        if (node->parent != htd::Vertex::UNKNOWN)
         {
-            auto& children = node->children;
-            
-            if (node->parent != htd::Vertex::UNKNOWN)
-            {
-                output.push_back(node->parent);
-            }
+            result.push_back(node->parent);
+        }
 
-            for (auto child : children)
-            {
-                output.push_back(child);
-            }
+        for (auto child : children)
+        {
+            result.push_back(child);
         }
     }
+
+    return ret;
 }
 
 htd::vertex_t htd::TreeDecomposition::neighbor(htd::vertex_t vertex, htd::index_t index) const

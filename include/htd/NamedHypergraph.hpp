@@ -221,10 +221,10 @@ namespace htd
             {
                 return base_->neighborCount(lookupVertex(vertexName));
             }
-            
-            void getNeighbors(const VertexNameType & vertexName, htd::vertex_container & output) const
+
+            const htd::Collection<htd::vertex_t> neighbors(const VertexNameType & vertexName) const
             {
-                base_->getNeighbors(lookupVertex(vertexName), output);
+                return base_->neighbors(lookupVertex(vertexName));
             }
 
             htd::vertex_t neighbor(const VertexNameType & vertexName, htd::index_t index) const

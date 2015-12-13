@@ -58,7 +58,7 @@ namespace htd
 
             virtual std::size_t neighborCount(htd::vertex_t vertex) const = 0;
 
-            virtual void getNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> neighbors(htd::vertex_t vertex) const = 0;
 
             virtual htd::vertex_t neighbor(htd::vertex_t vertex, htd::index_t index) const = 0;
 

@@ -62,9 +62,9 @@ namespace htd
             bool isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
             
             std::size_t neighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
-            
-            void getNeighbors(htd::vertex_t vertex, vertex_container& output) const HTD_OVERRIDE;
-            
+
+            const htd::Collection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
+
             htd::vertex_t neighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
             const htd::Collection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;

@@ -387,112 +387,64 @@ std::size_t htd::DirectedGraph::outgoingNeighborCount(htd::vertex_t vertex) cons
     
     return ret;
 }
-            
-void htd::DirectedGraph::getNeighbors(htd::vertex_t vertex, vertex_container & output) const
+
+const htd::Collection<htd::vertex_t> htd::DirectedGraph::neighbors(htd::vertex_t vertex) const
 {
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        std::set_union(incomingNeighborhood_[vertex].begin(), incomingNeighborhood_[vertex].end(),
-                       outgoingNeighborhood_[vertex].begin(), outgoingNeighborhood_[vertex].end(),
-                       std::back_inserter(output));
+        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::DirectedGraph::neighbors(htd::vertex_t) const");
     }
-}
 
-htd::vertex_t htd::DirectedGraph::neighbor(htd::vertex_t vertex, htd::id_t index) const
-{
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
-    
-    if (isVertex(vertex))
-    {
-        std::size_t currentIndex = 0;
-        
-        auto first1 = incomingNeighborhood_[vertex].begin();
-        auto first2 = outgoingNeighborhood_[vertex].begin();
-        
-        auto last1 = incomingNeighborhood_[vertex].end();
-        auto last2 = outgoingNeighborhood_[vertex].end();
-        
-        //TODO Make reusable
-        while (currentIndex <= index && first1 != last1) 
-        {
-            if (first2 == last2)
-            {
-                while (currentIndex <= index && first1 != last1)
-                {    
-                    if (currentIndex == index)
-                    {
-                        ret = *first1;
-                    }
+    htd::VectorAdapter<htd::vertex_t> ret;
 
-                    ++currentIndex;
+    auto & result = ret.container();
 
-                    ++first1;
-                }
-            }
-            
-            if (*first2 < *first1) 
-            {
-                if (currentIndex == index)
-                {
-                    ret = *first2;
-                }
-                
-                ++currentIndex;
-                
-                ++first2;
-            }
-            else
-            {
-                if (currentIndex == index)
-                {
-                    ret = *first1++;
-                }
-                
-                ++currentIndex;
-                
-                if (!(*first1 < *first2))
-                {
-                    ++first2;
-                }
-                
-                ++first1;
-            }
-        }
-        
-        while (currentIndex <= index && first2 != last2)
-        {    
-            if (currentIndex == index)
-            {
-                ret = *first2;
-            }
-            
-            ++currentIndex;
-            
-            ++first2;
-        }
-    }
-    
+    std::set_union(incomingNeighborhood_[vertex].begin(), incomingNeighborhood_[vertex].end(),
+                   outgoingNeighborhood_[vertex].begin(), outgoingNeighborhood_[vertex].end(),
+                   std::back_inserter(result));
+
     return ret;
 }
 
-void htd::DirectedGraph::getIncomingNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
+htd::vertex_t htd::DirectedGraph::neighbor(htd::vertex_t vertex, htd::index_t index) const
 {
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::DirectedGraph::getIncomingNeighbors(id_t, vertex_container&)");
+        throw std::logic_error("htd::vertex_t htd::DirectedGraph::neighbor(htd::vertex_t, htd::index_t) const");
     }
 
-    std::copy(incomingNeighborhood_[vertex].begin(), incomingNeighborhood_[vertex].end(), std::back_inserter(output));
+    const htd::Collection<htd::vertex_t> neighborCollection = neighbors(vertex);
+
+    if (index >= neighborCollection.size())
+    {
+        throw std::out_of_range("htd::vertex_t htd::DirectedGraph::neighbor(htd::vertex_t, htd::index_t) const");
+    }
+
+    htd::Iterator<htd::vertex_t> it = neighborCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
-void htd::DirectedGraph::getOutgoingNeighbors(htd::vertex_t vertex, htd::vertex_container & output) const
+const htd::Collection<htd::vertex_t> htd::DirectedGraph::incomingNeighbors(htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::DirectedGraph::getOutgoingNeighbors(id_t, vertex_container&)");
+        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::DirectedGraph::incomingNeighbors(htd::vertex_t) const");
     }
 
-    std::copy(outgoingNeighborhood_[vertex].begin(), outgoingNeighborhood_[vertex].end(), std::back_inserter(output));
+    return htd::Collection<htd::vertex_t>(incomingNeighborhood_[vertex - htd::Vertex::FIRST]);
+}
+
+const htd::Collection<htd::vertex_t> htd::DirectedGraph::outgoingNeighbors(htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::DirectedGraph::outgoingNeighbors(htd::vertex_t) const");
+    }
+
+    return htd::Collection<htd::vertex_t>(outgoingNeighborhood_[vertex - htd::Vertex::FIRST]);
 }
 
 htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const

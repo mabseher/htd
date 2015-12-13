@@ -17,6 +17,12 @@ if (NOT DEFINED BUILD_SHARED_LIBS)
     set(BUILD_SHARED_LIBS ON)
 endif()
 
+if (DEFINED VERBOSE)
+    if (VERBOSE)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERBOSE" )
+    endif()
+endif()
+
 subdirs(src/htd)
 
 subdirs(test)

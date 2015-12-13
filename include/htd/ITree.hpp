@@ -42,7 +42,7 @@ namespace htd
 
             virtual std::size_t leafNodeCount(void) const = 0;
 
-            virtual void getLeafNodes(htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> leafNodes(void) const = 0;
 
             virtual htd::vertex_t leafNode(htd::index_t index) const = 0;
 

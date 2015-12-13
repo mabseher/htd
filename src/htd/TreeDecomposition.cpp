@@ -1321,7 +1321,7 @@ std::size_t htd::TreeDecomposition::leafNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (auto& node : nodes_)
+    for (auto & node : nodes_)
     {
         if (node != nullptr)
         {
@@ -1335,38 +1335,40 @@ std::size_t htd::TreeDecomposition::leafNodeCount(void) const
     return ret;
 }
 
-void htd::TreeDecomposition::getLeafNodes(htd::vertex_container & output) const
+const htd::Collection<htd::vertex_t> htd::TreeDecomposition::leafNodes(void) const
 {
-    for (auto& node : nodes_)
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    auto & result = ret.container();
+
+    for (auto & node : nodes_)
     {
         if (node != nullptr)
         {
             if (node->children.empty())
             {
-                output.push_back(node->id);
+                result.push_back(node->id);
             }
         }
     }
+
+    return ret;
 }
 
 htd::vertex_t htd::TreeDecomposition::leafNode(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    const htd::Collection<htd::vertex_t> leafNodeCollection = leafNodes();
 
-    htd::vertex_container leafNodeContainer;
-
-    getLeafNodes(leafNodeContainer);
-
-    if (index < leafNodeContainer.size())
-    {
-        ret = leafNodeContainer[index];
-    }
-    else
+    if (index >= leafNodeCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::leafNode(htd::index_t) const");
     }
 
-    return ret;
+    htd::Iterator<htd::vertex_t> it = leafNodeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 bool htd::TreeDecomposition::isLeafNode(htd::vertex_t vertex) const

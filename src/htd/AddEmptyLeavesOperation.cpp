@@ -28,8 +28,9 @@
 #include <htd/Globals.hpp>
 #include <htd/AddEmptyLeavesOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/ITreeDecompositionManipulationOperation.hpp>
+#include <htd/Collection.hpp>
 
+#include <algorithm>
 #include <vector>
 
 htd::AddEmptyLeavesOperation::AddEmptyLeavesOperation(void)
@@ -46,7 +47,9 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
 {
     std::vector<htd::vertex_t> leafNodes;
 
-    decomposition.getLeafNodes(leafNodes);
+    const htd::Collection<htd::vertex_t> leafNodeContainer = decomposition.leafNodes();
+
+    std::copy(leafNodeContainer.begin(), leafNodeContainer.end(), std::back_inserter(leafNodes));
 
     for (htd::vertex_t leaf : leafNodes)
     {

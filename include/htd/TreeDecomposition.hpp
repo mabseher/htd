@@ -133,7 +133,7 @@ namespace htd
 
             std::size_t leafNodeCount(void) const HTD_OVERRIDE;
 
-            void getLeafNodes(htd::vertex_container & output) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> leafNodes(void) const HTD_OVERRIDE;
 
             htd::vertex_t leafNode(htd::index_t index) const HTD_OVERRIDE;
 

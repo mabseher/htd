@@ -1728,26 +1728,15 @@ std::size_t htd::TreeDecomposition::minimumBagSize(void) const
 
     std::size_t ret = 0;
 
-    auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
-
     for (htd::vertex_t vertex : vertices())
     {
-        if (bagLabeling.hasLabel(vertex))
+        std::size_t currentBagSize = bagSize(vertex);
+
+        if (start || currentBagSize < ret)
         {
-            auto vertexLabel = bagContent(vertex);
+            ret = currentBagSize;
 
-            std::size_t bagSize = std::distance(vertexLabel.begin(), vertexLabel.end());
-
-            if (start || bagSize < ret)
-            {
-                ret = bagSize;
-
-                start = false;
-            }
-        }
-        else
-        {
-            ret = 0;
+            start = false;
         }
     }
 
@@ -1758,20 +1747,13 @@ std::size_t htd::TreeDecomposition::maximumBagSize(void) const
 {
     std::size_t ret = 0;
 
-    auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
-
     for (htd::vertex_t vertex : vertices())
     {
-        if (bagLabeling.hasLabel(vertex))
+        std::size_t currentBagSize = bagSize(vertex);
+
+        if (currentBagSize > ret)
         {
-            auto vertexLabel = bagContent(vertex);
-
-            std::size_t bagSize = std::distance(vertexLabel.begin(), vertexLabel.end());
-
-            if (bagSize > ret)
-            {
-                ret = bagSize;
-            }
+            ret = currentBagSize;
         }
     }
 

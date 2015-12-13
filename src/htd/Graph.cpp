@@ -283,7 +283,7 @@ htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::id_t index) const
     return ret;
 }
 
-htd::Collection<htd::vertex_t> htd::Graph::vertices(void) const
+const htd::Collection<htd::vertex_t> htd::Graph::vertices(void) const
 {
     return Collection<htd::vertex_t>(vertices_);
 }
@@ -391,7 +391,7 @@ const htd::edge_t & htd::Graph::edge(htd::index_t index, htd::vertex_t vertex) c
     throw std::logic_error("NOT IMPLEMENTED");
 }
 
-htd::Collection<htd::hyperedge_t> htd::Graph::hyperedges(void) const
+const htd::Collection<htd::hyperedge_t> htd::Graph::hyperedges(void) const
 {
     htd::VectorAdapter<htd::hyperedge_t> ret;
 

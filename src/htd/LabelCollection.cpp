@@ -47,7 +47,7 @@ std::size_t htd::LabelCollection::labelCount(void) const
     return labelNames_.size();
 }
 
-htd::Collection<std::string> htd::LabelCollection::labelNames(void) const
+const htd::Collection<std::string> htd::LabelCollection::labelNames(void) const
 {
     return htd::Collection<std::string>(labelNames_);
 }

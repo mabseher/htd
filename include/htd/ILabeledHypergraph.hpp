@@ -44,7 +44,7 @@ namespace htd
 
             virtual std::size_t labelCount(void) const = 0;
 
-            virtual htd::Collection<std::string> labelNames(void) const = 0;
+            virtual const htd::Collection<std::string> labelNames(void) const = 0;
 
             virtual const std::string & labelName(htd::index_t index) const = 0;
 

@@ -554,7 +554,7 @@ htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t vertex, htd::in
     return ret;
 }
 
-htd::Collection<htd::vertex_t> htd::DirectedGraph::vertices(void) const
+const htd::Collection<htd::vertex_t> htd::DirectedGraph::vertices(void) const
 {
     return Collection<htd::vertex_t>(vertices_);
 }
@@ -666,7 +666,7 @@ const htd::edge_t & htd::DirectedGraph::edge(htd::index_t index, htd::vertex_t v
     throw std::out_of_range("const htd::edge_t & htd::DirectedGraph::edge(htd::index_t, htd::vertex_t) const");
 }
 
-htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(void) const
+const htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(void) const
 {
     htd::VectorAdapter<htd::hyperedge_t> ret;
 

@@ -67,7 +67,7 @@ namespace htd
 
             virtual std::size_t bagSize(htd::vertex_t vertex) const = 0;
 
-            virtual htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
+            virtual const htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
 
             virtual void setBagContent(htd::vertex_t vertex, const htd::vertex_container & content) = 0;
 

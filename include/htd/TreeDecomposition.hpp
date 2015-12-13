@@ -73,7 +73,7 @@ namespace htd
 
             bool isNeighbor(htd::vertex_t vertex1, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
-            htd::Collection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
 
             std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
@@ -91,7 +91,7 @@ namespace htd
 
             const htd::edge_t & edge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::Collection<htd::hyperedge_t> hyperedges(void) const HTD_OVERRIDE;
+            const htd::Collection<htd::hyperedge_t> hyperedges(void) const HTD_OVERRIDE;
 
             void getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const HTD_OVERRIDE;
 
@@ -103,7 +103,7 @@ namespace htd
 
             std::size_t labelCount(void) const HTD_OVERRIDE;
 
-            htd::Collection<std::string> labelNames(void) const HTD_OVERRIDE;
+            const htd::Collection<std::string> labelNames(void) const HTD_OVERRIDE;
 
             const std::string & labelName(htd::index_t index) const HTD_OVERRIDE;
 
@@ -193,7 +193,7 @@ namespace htd
 
             std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             void setBagContent(htd::vertex_t vertex, const htd::vertex_container & content) HTD_OVERRIDE;
 

@@ -76,7 +76,7 @@ std::size_t htd::LabelingCollection::labelCount(void) const
     return content_.size();
 }
 
-htd::Collection<std::string> htd::LabelingCollection::labelNames(void) const
+const htd::Collection<std::string> htd::LabelingCollection::labelNames(void) const
 {
     return htd::Collection<std::string>(labelNames_);
 }

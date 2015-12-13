@@ -343,7 +343,7 @@ htd::vertex_t htd::TreeDecomposition::neighbor(htd::vertex_t vertex, htd::index_
     return ret;
 }
 
-htd::Collection<htd::vertex_t> htd::TreeDecomposition::vertices(void) const
+const htd::Collection<htd::vertex_t> htd::TreeDecomposition::vertices(void) const
 {
     return Collection<htd::vertex_t>(vertices_);
 }
@@ -443,7 +443,7 @@ const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t index, htd::vertex
     }
 }
 
-htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(void) const
+const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(void) const
 {
     htd::VectorAdapter<htd::hyperedge_t> ret;
 
@@ -1126,7 +1126,7 @@ std::size_t htd::TreeDecomposition::labelCount(void) const
     return labelings_->labelCount();
 }
 
-htd::Collection<std::string> htd::TreeDecomposition::labelNames(void) const
+const htd::Collection<std::string> htd::TreeDecomposition::labelNames(void) const
 {
     return labelings_->labelNames();
 }
@@ -1608,7 +1608,7 @@ std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t vertex) const
     return ret;
 }
 
-htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t vertex) const
+const htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -1623,7 +1623,7 @@ htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t 
     }
     else
     {
-        throw std::logic_error("htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t) const");
+        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t) const");
     }
 
     return htd::Collection<htd::vertex_t>();

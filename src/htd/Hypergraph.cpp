@@ -326,7 +326,7 @@ htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index
     return ret;
 }
 
-htd::Collection<htd::vertex_t> htd::Hypergraph::vertices(void) const
+const htd::Collection<htd::vertex_t> htd::Hypergraph::vertices(void) const
 {
     return Collection<htd::vertex_t>(vertices_);
 }
@@ -414,7 +414,7 @@ bool htd::Hypergraph::isIsolatedVertex(htd::vertex_t vertex) const
     return ret;
 }
 
-htd::Collection<htd::hyperedge_t> htd::Hypergraph::hyperedges(void) const
+const htd::Collection<htd::hyperedge_t> htd::Hypergraph::hyperedges(void) const
 {
     return Collection<htd::hyperedge_t>(edges_);
 }

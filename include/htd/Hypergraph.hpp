@@ -67,7 +67,7 @@ namespace htd
             
             htd::vertex_t neighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
-            htd::Collection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
 
             std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
@@ -77,7 +77,7 @@ namespace htd
 
             bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::Collection<htd::hyperedge_t> hyperedges(void) const HTD_OVERRIDE;
+            const htd::Collection<htd::hyperedge_t> hyperedges(void) const HTD_OVERRIDE;
 
             void getHyperedges(htd::hyperedge_container & output, htd::vertex_t vertex) const HTD_OVERRIDE;
 

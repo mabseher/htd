@@ -59,7 +59,7 @@ namespace htd
 
             virtual std::size_t introduceNodeCount(void) const = 0;
 
-            virtual void getIntroduceNodes(htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> introduceNodes(void) const = 0;
 
             virtual htd::vertex_t introduceNode(htd::index_t index) const = 0;
 

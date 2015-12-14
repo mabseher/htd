@@ -52,7 +52,9 @@ void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeD
 {
     htd::vertex_container introduceNodes;
 
-    decomposition.getIntroduceNodes(introduceNodes);
+    const htd::Collection<htd::vertex_t> introduceNodeCollection = decomposition.introduceNodes();
+
+    std::copy(introduceNodeCollection.begin(), introduceNodeCollection.end(), std::back_inserter(introduceNodes));
 
     for (htd::vertex_t node : introduceNodes)
     {

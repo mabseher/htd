@@ -49,11 +49,11 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
     htd::vertex_container exchangeNodes;
     htd::vertex_container introduceNodes;
 
-    decomposition.getIntroduceNodes(introduceNodes);
-
-    const htd::Collection<htd::vertex_t> forgetNodeCollection = decomposition.joinNodes();
+    const htd::Collection<htd::vertex_t> forgetNodeCollection = decomposition.forgetNodes();
+    const htd::Collection<htd::vertex_t> introduceNodeCollection = decomposition.introduceNodes();
 
     std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
+    std::copy(introduceNodeCollection.begin(), introduceNodeCollection.end(), std::back_inserter(introduceNodes));
 
     std::set_intersection(forgetNodes.begin(), forgetNodes.end(), introduceNodes.begin(), introduceNodes.end(), std::back_inserter(exchangeNodes));
 

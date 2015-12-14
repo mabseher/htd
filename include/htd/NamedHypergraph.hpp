@@ -79,6 +79,16 @@ namespace htd
                 }
             }
 
+            std::size_t vertexCount(void) const
+            {
+                return base_->vertexCount();
+            }
+
+            std::size_t edgeCount(void) const
+            {
+                return base_->edgeCount();
+            }
+
             bool isVertexName(const VertexNameType & vertexName) const
             {
                 return nameLabeling_->isVertexLabel(Label<VertexNameType>(vertexName));

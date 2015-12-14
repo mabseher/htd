@@ -638,14 +638,6 @@ namespace htd
         }
     }
 
-    htd::IMutableGraph * getDefaultGraph(void);
-
-    htd::IMutableGraph * getDefaultGraph(std::size_t size);
-
-    htd::IMutableDirectedGraph * getDefaultDirectedGraph(void);
-
-    htd::IMutableDirectedGraph * getDefaultDirectedGraph(std::size_t size);
-
     htd::IMutableTreeDecomposition * getDefaultTreeDecomposition(void);
 
     htd::IMutableTreeDecomposition * getDefaultTreeDecomposition(const htd::ITreeDecomposition & decomposition);
@@ -663,7 +655,6 @@ namespace htd
     htd::IOrderingAlgorithm * getDefaultOrderingAlgorithm(void);
     
     htd::ISetCoverAlgorithm * getDefaultSetCoverAlgorithm(void);
-    
 }
 
 #endif /* HTD_HTD_HELPERS_HPP */

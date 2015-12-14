@@ -31,7 +31,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/ITreeDecomposition.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/Converters.hpp>
+#include <htd/TreeDecompositionFactory.hpp>
 #include <htd/VertexContainerLabel.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabelingFunction.hpp>
@@ -406,7 +406,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
     }
     else
     {
-        ret = htd::getDefaultTreeDecomposition();
+        ret = htd::TreeDecompositionFactory::instance().getTreeDecomposition();
 
         ret->insertRoot();
     }
@@ -511,7 +511,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::getUnreachableVertices(ht
 
 htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::createRootedTreeDecomposition(htd::vertex_t root, const std::vector<htd::vertex_container> & neighbors, const std::vector<std::vector<htd::id_t>> & buckets) const
 {
-    htd::IMutableTreeDecomposition * ret = htd::getDefaultTreeDecomposition();
+    htd::IMutableTreeDecomposition * ret = htd::TreeDecompositionFactory::instance().getTreeDecomposition();
 
     if (root != htd::Vertex::UNKNOWN)
     {

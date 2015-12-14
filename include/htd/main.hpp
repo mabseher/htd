@@ -31,7 +31,6 @@
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/Collection.hpp>
 #include <htd/CompilerDetection.hpp>
-#include <htd/Converters.hpp>
 #include <htd/DirectedGraph.hpp>
 #include <htd/DirectedGraphFactory.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
@@ -107,6 +106,7 @@
 #include <htd/SemiNormalizationOperation.hpp>
 #include <htd/SetCoverAlgorithm.hpp>
 #include <htd/TreeDecomposition.hpp>
+#include <htd/TreeDecompositionFactory.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
 #include <htd/VectorAdapter.hpp>
 #include <htd/Vertex.hpp>

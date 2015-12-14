@@ -638,10 +638,6 @@ namespace htd
         }
     }
 
-    htd::IMutableTreeDecomposition * getDefaultTreeDecomposition(void);
-
-    htd::IMutableTreeDecomposition * getDefaultTreeDecomposition(const htd::ITreeDecomposition & decomposition);
-
     htd::IMutableHypertreeDecomposition * getDefaultHypertreeDecomposition(void);
 
     htd::IMutableHypertreeDecomposition * getDefaultHypertreeDecomposition(const htd::ITreeDecomposition & decomposition);

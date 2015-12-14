@@ -33,14 +33,17 @@
 #include <htd/CompilerDetection.hpp>
 #include <htd/Converters.hpp>
 #include <htd/DirectedGraph.hpp>
+#include <htd/DirectedGraphFactory.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/Globals.hpp>
 #include <htd/Graph.hpp>
+#include <htd/GraphFactory.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/HeuristicSetCoverAlgorithm.hpp>
 #include <htd/HyperedgeContainerLabel.hpp>
 #include <htd/Hypergraph.hpp>
+#include <htd/HypergraphFactory.hpp>
 #include <htd/HypertreeDecomposition.hpp>
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>

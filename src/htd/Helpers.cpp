@@ -64,36 +64,6 @@ void htd::print<std::string>(const std::string & input)
     std::cout << "\"" << input << "\"";
 }
 
-htd::IMutableGraph * htd::getDefaultGraph(void)
-{
-    return new htd::Graph();
-}
-
-htd::IMutableGraph * htd::getDefaultGraph(std::size_t size)
-{
-    return new htd::Graph(size);
-}
-
-htd::IMutableHypergraph * htd::getDefaultHypergraph(void)
-{
-    return new htd::Hypergraph();
-}
-
-htd::IMutableHypergraph * htd::getDefaultHypergraph(std::size_t size)
-{
-    return new htd::Hypergraph(size);
-}
-
-htd::IMutableDirectedGraph * htd::getDefaultDirectedGraph(void)
-{
-    return new htd::DirectedGraph();
-}
-
-htd::IMutableDirectedGraph * htd::getDefaultDirectedGraph(std::size_t size)
-{
-    return new htd::DirectedGraph(size);
-}
-
 htd::ITreeDecompositionAlgorithm * htd::getDefaultTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm)
 {
     return new htd::BucketEliminationTreeDecompositionAlgorithm(orderingAlgorithm);

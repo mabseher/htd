@@ -642,10 +642,6 @@ namespace htd
 
     htd::IMutableGraph * getDefaultGraph(std::size_t size);
 
-    htd::IMutableHypergraph * getDefaultHypergraph(void);
-
-    htd::IMutableHypergraph * getDefaultHypergraph(std::size_t size);
-
     htd::IMutableDirectedGraph * getDefaultDirectedGraph(void);
 
     htd::IMutableDirectedGraph * getDefaultDirectedGraph(std::size_t size);

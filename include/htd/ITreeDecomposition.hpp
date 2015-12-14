@@ -109,9 +109,9 @@ namespace htd
 
             virtual std::size_t rememberedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual void getRememberedVertices(htd::vertex_t vertex, htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex) const = 0;
 
-            virtual void getRememberedVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const = 0;
+            virtual const htd::Collection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual htd::vertex_t rememberedVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
 

@@ -69,13 +69,10 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
         if (forgottenVertexCount > limit_)
         {
             htd::vertex_container forgottenVertices;
-            htd::vertex_container rememberedVertices;
 
             const htd::Collection<htd::vertex_t> forgottenVertexCollection = decomposition.forgottenVertices(node);
 
             std::copy(forgottenVertexCollection.begin(), forgottenVertexCollection.end(), std::back_inserter(forgottenVertices));
-
-            decomposition.getRememberedVertices(node, rememberedVertices);
 
             std::size_t remainder = forgottenVertexCount % limit_;
 

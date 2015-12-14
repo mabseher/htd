@@ -59,11 +59,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
     for (htd::vertex_t node : exchangeNodes)
     {
-        htd::vertex_container bagContent;
-
-        htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
-
-        std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
+        htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(node);
 
         htd::vertex_container children;
 
@@ -73,11 +69,9 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
         for (htd::vertex_t child : children)
         {
-            htd::vertex_container rememberedVertices;
+            const htd::Collection<htd::vertex_t> rememberedVertices = decomposition.rememberedVertices(node, child);
 
-            decomposition.getRememberedVertices(node, rememberedVertices, child);
-
-            if (rememberedVertices != bagContent)
+            if (bagContent.size() != rememberedVertices.size() || !std::equal(bagContent.begin(), bagContent.end(), rememberedVertices.begin()))
             {
                 htd::vertex_t intermediateVertex = decomposition.addParent(child);
 

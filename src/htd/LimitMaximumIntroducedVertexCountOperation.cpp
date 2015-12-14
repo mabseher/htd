@@ -70,13 +70,10 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
         if (introducedVertexCount > limit_)
         {
             htd::vertex_container introducedVertices;
-            htd::vertex_container rememberedVertices;
 
             const htd::Collection<htd::vertex_t> introducedVertexCollection = decomposition.introducedVertices(node);
 
             std::copy(introducedVertexCollection.begin(), introducedVertexCollection.end(), std::back_inserter(introducedVertices));
-
-            decomposition.getRememberedVertices(node, rememberedVertices);
 
             std::size_t remainder = introducedVertexCount % limit_;
 

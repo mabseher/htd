@@ -235,9 +235,9 @@ namespace htd
 
             std::size_t rememberedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            void getRememberedVertices(htd::vertex_t vertex, htd::vertex_container & output) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void getRememberedVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             htd::vertex_t rememberedVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 

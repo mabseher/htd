@@ -37,6 +37,7 @@
 #include <htd/VertexContainerLabel.hpp>
 #include <htd/HyperedgeContainerLabel.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
+#include <htd/HypertreeDecompositionFactory.hpp>
 
 #include <cstdarg>
 #include <stack>
@@ -66,7 +67,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
     if (treeDecomposition != nullptr)
     {
-        ret = htd::getDefaultHypertreeDecomposition(*treeDecomposition);
+        ret = htd::HypertreeDecompositionFactory::instance().getHypertreeDecomposition(*treeDecomposition);
 
         if (ret != nullptr)
         {
@@ -112,7 +113,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
     if (treeDecomposition != nullptr)
     {
-        ret = htd::getDefaultHypertreeDecomposition(*treeDecomposition);
+        ret = htd::HypertreeDecompositionFactory::instance().getHypertreeDecomposition(*treeDecomposition);
 
         if (ret != nullptr)
         {

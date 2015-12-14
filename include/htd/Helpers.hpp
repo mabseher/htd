@@ -638,12 +638,6 @@ namespace htd
         }
     }
 
-    htd::IMutableHypertreeDecomposition * getDefaultHypertreeDecomposition(void);
-
-    htd::IMutableHypertreeDecomposition * getDefaultHypertreeDecomposition(const htd::ITreeDecomposition & decomposition);
-
-    htd::IMutableHypertreeDecomposition * getDefaultHypertreeDecomposition(const htd::IHypertreeDecomposition & decomposition);
-
     htd::ITreeDecompositionAlgorithm * getDefaultTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm);
 
     htd::IHypertreeDecompositionAlgorithm * getDefaultHypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm);

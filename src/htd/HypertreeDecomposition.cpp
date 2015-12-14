@@ -34,17 +34,17 @@
 
 #include <algorithm>
 
-htd::HypertreeDecomposition::HypertreeDecomposition(void) : TreeDecomposition()
+htd::HypertreeDecomposition::HypertreeDecomposition(void) : htd::TreeDecomposition()
 {
     
 }
 
-htd::HypertreeDecomposition::HypertreeDecomposition(const htd::ILabeledTree & original) : TreeDecomposition(original)
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::ILabeledTree & original) : htd::TreeDecomposition(original)
 {
 
 }
 
-htd::HypertreeDecomposition::HypertreeDecomposition(const htd::HypertreeDecomposition & original) : TreeDecomposition(original)
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::HypertreeDecomposition & original) : htd::TreeDecomposition(original)
 {
 
 }

@@ -69,21 +69,6 @@ htd::ITreeDecompositionAlgorithm * htd::getDefaultTreeDecompositionAlgorithm(con
     return new htd::BucketEliminationTreeDecompositionAlgorithm(orderingAlgorithm);
 }
 
-htd::IMutableHypertreeDecomposition * htd::getDefaultHypertreeDecomposition(void)
-{
-    return new htd::HypertreeDecomposition();
-}
-
-htd::IMutableHypertreeDecomposition * htd::getDefaultHypertreeDecomposition(const htd::ITreeDecomposition & decomposition)
-{
-    return new htd::HypertreeDecomposition(decomposition);
-}
-
-htd::IMutableHypertreeDecomposition * htd::getDefaultHypertreeDecomposition(const htd::IHypertreeDecomposition & decomposition)
-{
-    return new htd::HypertreeDecomposition(decomposition);
-}
-
 htd::IHypertreeDecompositionAlgorithm * htd::getDefaultHypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm)
 {
     return new htd::HypertreeDecompositionAlgorithm(treeDecompositionAlgorithm, setCoverAlgorithm);

@@ -63,12 +63,12 @@ void htd::TreeDecompositionFactory::setConstructionTemplate(htd::IMutableTreeDec
 {
     if (original == nullptr)
     {
-        throw std::logic_error("void htd::HypergraphFactory::setConstructionTemplate(htd::IMutableHypergraph *)");
+        throw std::logic_error("void htd::TreeDecompositionFactory::setConstructionTemplate(htd::IMutableTreeDecomposition *)");
     }
 
     if (original->vertexCount() > 0)
     {
-        throw std::logic_error("void htd::HypergraphFactory::setConstructionTemplate(htd::IMutableHypergraph *)");
+        throw std::logic_error("void htd::TreeDecompositionFactory::setConstructionTemplate(htd::IMutableTreeDecomposition *)");
     }
 
     if (constructionTemplate_ != nullptr)

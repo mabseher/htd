@@ -94,8 +94,8 @@
 #include <htd/LabeledHypergraph.hpp>
 #include <htd/LabelingCollection.hpp>
 #include <htd/LimitChildCountOperation.hpp>
-#include <htd/LimitMaximumForgottenVerticesCountOperation.hpp>
-#include <htd/LimitMaximumIntroducedVerticesCountOperation.hpp>
+#include <htd/LimitMaximumForgottenVertexCountOperation.hpp>
+#include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
 #include <htd/NamedHypergraph.hpp>

@@ -30,8 +30,8 @@
 #include <htd/SemiNormalizationOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
-#include <htd/LimitMaximumForgottenVerticesCountOperation.hpp>
-#include <htd/LimitMaximumIntroducedVerticesCountOperation.hpp>
+#include <htd/LimitMaximumForgottenVertexCountOperation.hpp>
+#include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 
 htd::NormalizationOperation::NormalizationOperation(void)
 {
@@ -51,13 +51,13 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
     exchangeNodeReplacementOperation.apply(decomposition);
 
-    htd::LimitMaximumForgottenVerticesCountOperation limitMaximumForgottenVerticesCountOperation(1);
+    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
-    limitMaximumForgottenVerticesCountOperation.apply(decomposition);
+    limitMaximumForgottenVertexCountOperation.apply(decomposition);
 
-    htd::LimitMaximumIntroducedVerticesCountOperation limitMaximumIntroducedVerticesCountOperation(1);
+    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
 
-    limitMaximumIntroducedVerticesCountOperation.apply(decomposition);
+    limitMaximumIntroducedVertexCountOperation.apply(decomposition);
 }
 
 void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const
@@ -68,13 +68,13 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
     exchangeNodeReplacementOperation.apply(decomposition);
 
-    htd::LimitMaximumForgottenVerticesCountOperation limitMaximumForgottenVerticesCountOperation(1);
+    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
-    limitMaximumForgottenVerticesCountOperation.apply(decomposition);
+    limitMaximumForgottenVertexCountOperation.apply(decomposition);
 
-    htd::LimitMaximumIntroducedVerticesCountOperation limitMaximumIntroducedVerticesCountOperation(1);
+    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
 
-    limitMaximumIntroducedVerticesCountOperation.apply(decomposition);
+    limitMaximumIntroducedVertexCountOperation.apply(decomposition);
 }
 
 #endif /* HTD_HTD_NORMALIZATIONOPERATION_CPP */

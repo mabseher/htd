@@ -1,5 +1,5 @@
 /*
- * File:   LimitMaximumForgottenVerticesCountOperation.cpp
+ * File:   LimitMaximumForgottenVertexCountOperation.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,11 +22,11 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_LIMITMAXIMUMFORGOTTENVERTICESCOUNTOPERATION_CPP
-#define	HTD_HTD_LIMITMAXIMUMFORGOTTENVERTICESCOUNTOPERATION_CPP
+#ifndef HTD_HTD_LIMITMAXIMUMFORGOTTENVERTEXCOUNTOPERATION_CPP
+#define	HTD_HTD_LIMITMAXIMUMFORGOTTENVERTEXCOUNTOPERATION_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/LimitMaximumForgottenVerticesCountOperation.hpp>
+#include <htd/LimitMaximumForgottenVertexCountOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
@@ -37,17 +37,17 @@
 #include <iostream>
 #include <htd/Helpers.hpp>
 
-htd::LimitMaximumForgottenVerticesCountOperation::LimitMaximumForgottenVerticesCountOperation(std::size_t limit) : limit_(limit)
+htd::LimitMaximumForgottenVertexCountOperation::LimitMaximumForgottenVertexCountOperation(std::size_t limit) : limit_(limit)
 {
   
 }
   
-htd::LimitMaximumForgottenVerticesCountOperation::~LimitMaximumForgottenVerticesCountOperation()
+htd::LimitMaximumForgottenVertexCountOperation::~LimitMaximumForgottenVertexCountOperation()
 {
   
 }
     
-void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
     htd::vertex_container forgetNodes;
 
@@ -77,16 +77,16 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
 
             forgottenVertexCount -= remainder;
 
-            std::size_t intermediatedVerticesCount = forgottenVertexCount / limit_;
+            std::size_t intermediatedVertexCount = forgottenVertexCount / limit_;
 
-            if (intermediatedVerticesCount > 0)
+            if (intermediatedVertexCount > 0)
             {
-                intermediatedVerticesCount--;
+                intermediatedVertexCount--;
             }
 
             if (remainder == 0)
             {
-                intermediatedVerticesCount--;
+                intermediatedVertexCount--;
             }
 
             htd::vertex_container children;
@@ -112,12 +112,12 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
 
                 decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(newContent));
 
-                if (intermediatedVerticesCount > 0)
+                if (intermediatedVertexCount > 0)
                 {
                     start = start - limit_;
                     finish = finish - limit_;
 
-                    for (htd::index_t index = 0; index < intermediatedVerticesCount; index++)
+                    for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                     {
                         htd::Collection<htd::vertex_t> bagContent2 = decomposition.bagContent(newNode);
 
@@ -139,29 +139,10 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
             }
             else
             {
-                throw std::logic_error("void htd::LimitMaximumIntroducedVerticesCountOperation::apply(htd::IMutableTreeDecomposition &) const");
-
-                //TODO Implement also for multiple children
-                /*
-                for (htd::vertex_t child : children)
-                {
-                    htd::vertex_container addedVertices;
-
-                    decomposition.getIntroducedVertices(node, addedVertices, child);
-
-                    if (addedVertices.size() <= limit_)
-                    {
-                        std::cout << "MOVEABLE: " << child << std::endl;
-                    }
-                    else
-                    {
-                        std::cout << "IMPORTANT: " << child << std::endl;
-                    }
-                }
-                */
+                throw std::logic_error("void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition &) const");
             }
         }
     }
 }
 
-#endif /* HTD_HTD_LIMITMAXIMUMFORGOTTENVERTICESCOUNTOPERATION_CPP */
+#endif /* HTD_HTD_LIMITMAXIMUMFORGOTTENVERTEXCOUNTOPERATION_CPP */

@@ -1,5 +1,5 @@
 /*
- * File:   LimitMaximumIntroducedVerticesCountOperation.hpp
+ * File:   LimitMaximumForgottenVertexCountOperation.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_LIMITMAXIMUMINTRODUCEDVERTICESCOUNTOPERATION_HPP
-#define	HTD_HTD_LIMITMAXIMUMINTRODUCEDVERTICESCOUNTOPERATION_HPP
+#ifndef HTD_HTD_LIMITMAXIMUMFORGOTTENVERTEXCOUNTOPERATION_HPP
+#define	HTD_HTD_LIMITMAXIMUMFORGOTTENVERTEXCOUNTOPERATION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
@@ -31,12 +31,12 @@
 
 namespace htd
 {
-    class LimitMaximumIntroducedVerticesCountOperation : public virtual htd::ITreeDecompositionManipulationOperation
+    class LimitMaximumForgottenVertexCountOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
-            LimitMaximumIntroducedVerticesCountOperation(std::size_t limit);
+            LimitMaximumForgottenVertexCountOperation(std::size_t limit);
 
-            ~LimitMaximumIntroducedVerticesCountOperation();
+            ~LimitMaximumForgottenVertexCountOperation();
 
             void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -45,4 +45,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_LIMITMAXIMUMINTRODUCEDVERTICESCOUNTOPERATION_HPP */
+#endif /* HTD_HTD_LIMITMAXIMUMFORGOTTENVERTEXCOUNTOPERATION_HPP */

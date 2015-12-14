@@ -35,6 +35,7 @@
 #include <htd/VertexContainerLabel.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabelingFunction.hpp>
+#include <htd/OrderingAlgorithmFactory.hpp>
 
 #include <algorithm>
 #include <cstdarg>
@@ -46,12 +47,23 @@
 #include <utility>
 #include <vector>
 
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm) : orderingAlgorithm_(orderingAlgorithm)
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(void) : orderingAlgorithm_(htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm())
 {
 
 }
 
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions) : orderingAlgorithm_(orderingAlgorithm)
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions) : orderingAlgorithm_(htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm())
+{
+    //TODO
+    HTD_UNUSED(labelingFunctions);
+}
+
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm) : orderingAlgorithm_(orderingAlgorithm.clone())
+{
+
+}
+
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions) : orderingAlgorithm_(orderingAlgorithm.clone())
 {
     //TODO
     HTD_UNUSED(labelingFunctions);
@@ -59,7 +71,12 @@ htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecomposi
 
 htd::BucketEliminationTreeDecompositionAlgorithm::~BucketEliminationTreeDecompositionAlgorithm()
 {
-    
+    if (orderingAlgorithm_ != nullptr)
+    {
+        delete orderingAlgorithm_;
+
+        orderingAlgorithm_ = nullptr;
+    }
 }
 
 htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
@@ -126,7 +143,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
 htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDecompositionAlgorithm::clone(void) const
 {
-    return new BucketEliminationTreeDecompositionAlgorithm(*(std::shared_ptr<htd::IOrderingAlgorithm>(orderingAlgorithm_.clone())));
+    return new BucketEliminationTreeDecompositionAlgorithm(*orderingAlgorithm_);
 }
 
 htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph & graph) const
@@ -141,7 +158,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         std::vector<htd::vertex_t> ordering;
 
-        orderingAlgorithm_.computeOrdering(graph, ordering);
+        orderingAlgorithm_->computeOrdering(graph, ordering);
 
         if (ordering.size() == size)
         {

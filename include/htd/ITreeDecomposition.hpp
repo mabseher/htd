@@ -93,9 +93,9 @@ namespace htd
 
             virtual std::size_t introducedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual void getIntroducedVertices(htd::vertex_t vertex, htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> introducedVertices(htd::vertex_t vertex) const = 0;
 
-            virtual void getIntroducedVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const = 0;
+            virtual const htd::Collection<htd::vertex_t> introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual htd::vertex_t introducedVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
 

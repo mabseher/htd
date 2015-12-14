@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
+#include <htd/Collection.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
 #include <algorithm>
@@ -71,7 +72,10 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
             htd::vertex_container introducedVertices;
             htd::vertex_container rememberedVertices;
 
-            decomposition.getIntroducedVertices(node, introducedVertices);
+            const htd::Collection<htd::vertex_t> introducedVertexCollection = decomposition.introducedVertices(node);
+
+            std::copy(introducedVertexCollection.begin(), introducedVertexCollection.end(), std::back_inserter(introducedVertices));
+
             decomposition.getRememberedVertices(node, rememberedVertices);
 
             std::size_t remainder = introducedVertexCount % limit_;

@@ -34,6 +34,7 @@
 #include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/IMutableLabeledTree.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
+#include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/VertexContainerLabel.hpp>
 #include <htd/HyperedgeContainerLabel.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
@@ -117,7 +118,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
         if (ret != nullptr)
         {
-            htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::getDefaultSetCoverAlgorithm();
+            htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm();
 
             if (setCoverAlgorithm != nullptr)
             {
@@ -157,6 +158,11 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
     }
 
     return ret;
+}
+
+htd::HypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithm::clone(void) const
+{
+    return new HypertreeDecompositionAlgorithm(*(std::shared_ptr<htd::ITreeDecompositionAlgorithm>(treeDecompositionAlgorithm_.clone())), *(std::shared_ptr<htd::ISetCoverAlgorithm>(setCoverAlgorithm_.clone())));
 }
 
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_CPP */

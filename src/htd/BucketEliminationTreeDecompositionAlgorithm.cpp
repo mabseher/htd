@@ -38,12 +38,13 @@
 
 #include <algorithm>
 #include <cstdarg>
-#include <stdexcept>
-#include <unordered_set>
+#include <memory>
 #include <stack>
+#include <stdexcept>
+#include <tuple>
+#include <unordered_set>
 #include <utility>
 #include <vector>
-#include <tuple>
 
 htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm) : orderingAlgorithm_(orderingAlgorithm)
 {
@@ -121,6 +122,11 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
     }
 
     return computeDecomposition(graph, labelingFunctions);
+}
+
+htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDecompositionAlgorithm::clone(void) const
+{
+    return new BucketEliminationTreeDecompositionAlgorithm(*(std::shared_ptr<htd::IOrderingAlgorithm>(orderingAlgorithm_.clone())));
 }
 
 htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph & graph) const

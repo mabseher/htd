@@ -64,14 +64,4 @@ void htd::print<std::string>(const std::string & input)
     std::cout << "\"" << input << "\"";
 }
 
-htd::ITreeDecompositionAlgorithm * htd::getDefaultTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm)
-{
-    return new htd::BucketEliminationTreeDecompositionAlgorithm(orderingAlgorithm);
-}
-
-htd::IHypertreeDecompositionAlgorithm * htd::getDefaultHypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm)
-{
-    return new htd::HypertreeDecompositionAlgorithm(treeDecompositionAlgorithm, setCoverAlgorithm);
-}
-
 #endif /* HTD_HTD_HELPERS_CPP */

@@ -637,14 +637,6 @@ namespace htd
             std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() / 1000 << "." << std::setw(3) << std::setfill('0') << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() % 1000 << " seconds";
         }
     }
-
-    htd::ITreeDecompositionAlgorithm * getDefaultTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm);
-
-    htd::IHypertreeDecompositionAlgorithm * getDefaultHypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm);
-
-    htd::IOrderingAlgorithm * getDefaultOrderingAlgorithm(void);
-    
-    htd::ISetCoverAlgorithm * getDefaultSetCoverAlgorithm(void);
 }
 
 #endif /* HTD_HTD_HELPERS_HPP */

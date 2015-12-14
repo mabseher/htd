@@ -51,6 +51,8 @@ namespace htd
 
             htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const; //TODO HTD_OVERRIDE;
 
+            BucketEliminationTreeDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
+
         protected:
             BucketEliminationTreeDecompositionAlgorithm & operator=(const BucketEliminationTreeDecompositionAlgorithm &) { return *this; }
 

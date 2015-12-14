@@ -44,8 +44,9 @@
 #include <htd/Hypergraph.hpp>
 #include <htd/HypergraphFactory.hpp>
 #include <htd/HypertreeDecomposition.hpp>
-#include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
+#include <htd/HypertreeDecompositionAlgorithmFactory.hpp>
+#include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
 #include <htd/IBidirectionalGraphLabeling.hpp>
 #include <htd/Id.hpp>
@@ -109,6 +110,7 @@
 #include <htd/SetCoverAlgorithm.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/TreeDecomposition.hpp>
+#include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
 #include <htd/VectorAdapter.hpp>

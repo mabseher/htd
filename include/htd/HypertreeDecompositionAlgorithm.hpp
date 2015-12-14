@@ -52,6 +52,8 @@ namespace htd
 
             htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const; //TODO HTD_OVERRIDE;
 
+            HypertreeDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
+
         protected:
             HypertreeDecompositionAlgorithm & operator=(const HypertreeDecompositionAlgorithm &) { return *this; }
 

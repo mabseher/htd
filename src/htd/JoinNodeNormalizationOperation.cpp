@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
+#include <htd/Collection.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
 #include <algorithm>
@@ -50,7 +51,9 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 {
     htd::vertex_container joinNodes;
 
-    decomposition.getJoinNodes(joinNodes);
+    const htd::Collection<htd::vertex_t> joinNodeCollection = decomposition.joinNodes();
+
+    std::copy(joinNodeCollection.begin(), joinNodeCollection.end(), std::back_inserter(joinNodes));
 
     for (htd::vertex_t node : joinNodes)
     {

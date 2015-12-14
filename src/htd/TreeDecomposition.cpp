@@ -1410,38 +1410,40 @@ std::size_t htd::TreeDecomposition::joinNodeCount(void) const
     return ret;
 }
 
-void htd::TreeDecomposition::getJoinNodes(htd::vertex_container & output) const
+const htd::Collection<htd::vertex_t> htd::TreeDecomposition::joinNodes(void) const
 {
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    auto & result = ret.container();
+
     for (auto & node : nodes_)
     {
         if (node != nullptr)
         {
             if (node->children.size() > 1)
             {
-                output.push_back(node->id);
+                result.push_back(node->id);
             }
         }
     }
+
+    return ret;
 }
 
 htd::vertex_t htd::TreeDecomposition::joinNode(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    const htd::Collection<htd::vertex_t> joinNodeCollection = joinNodes();
 
-    htd::vertex_container joinNodeContainer;
-
-    getJoinNodes(joinNodeContainer);
-
-    if (index < joinNodeContainer.size())
-    {
-        ret = joinNodeContainer[index];
-    }
-    else
+    if (index >= joinNodeCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::joinNode(htd::index_t) const");
     }
 
-    return ret;
+    htd::Iterator<htd::vertex_t> it = joinNodeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 bool htd::TreeDecomposition::isJoinNode(htd::vertex_t vertex) const

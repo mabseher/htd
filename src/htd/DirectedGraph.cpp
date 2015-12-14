@@ -351,7 +351,7 @@ std::size_t htd::DirectedGraph::neighborCount(htd::vertex_t vertex) const
     
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::DirectedGraph::getNeighborCount(id_t)");
+        throw std::out_of_range("htd::DirectedGraph::neighborCount(htd::vertex_t)");
     }
     
     ret = htd::compute_set_union_size(incomingNeighborhood_[vertex].begin(), incomingNeighborhood_[vertex].end(),
@@ -366,7 +366,7 @@ std::size_t htd::DirectedGraph::incomingNeighborCount(htd::vertex_t vertex) cons
     
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::DirectedGraph::getIncomingNeighborCount(id_t)");
+        throw std::out_of_range("htd::DirectedGraph::incomingNeighborCount(htd::vertex_t)");
     }
     
     ret = incomingNeighborhood_[vertex].size();
@@ -380,7 +380,7 @@ std::size_t htd::DirectedGraph::outgoingNeighborCount(htd::vertex_t vertex) cons
     
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::DirectedGraph::getOutgoingNeighborCount(id_t)");
+        throw std::out_of_range("htd::DirectedGraph::outgoingNeighborCount(htd::vertex_t)");
     }
     
     ret = outgoingNeighborhood_[vertex].size();
@@ -602,7 +602,7 @@ const htd::Collection<htd::edge_t> htd::DirectedGraph::edges(htd::vertex_t verte
 
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("htd::DirectedGraph::getEdges(htd::edge_container&, id_t)");
+        throw std::out_of_range("htd::DirectedGraph::edges(htd::vertex_t vertex)");
     }
 
     for (auto & vertex2 : outgoingNeighborhood_[vertex])
@@ -615,19 +615,34 @@ const htd::Collection<htd::edge_t> htd::DirectedGraph::edges(htd::vertex_t verte
 
 const htd::edge_t & htd::DirectedGraph::edge(htd::index_t index) const
 {
-    HTD_UNUSED(index);
+    const htd::Collection<htd::edge_t> edgeCollection = edges();
 
-    //TODO Implement
-    throw std::out_of_range("const htd::edge_t & htd::DirectedGraph::edge(htd::index_t) const");
+    if (index >= edgeCollection.size())
+    {
+        throw std::out_of_range("const htd::edge_t & htd::DirectedGraph::edge(htd::index_t) const");
+    }
+
+    htd::Iterator<htd::edge_t> it = edgeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 const htd::edge_t & htd::DirectedGraph::edge(htd::index_t index, htd::vertex_t vertex) const
 {
-    HTD_UNUSED(index);
-    HTD_UNUSED(vertex);
+    const htd::Collection<htd::edge_t> edgeCollection = edges(vertex);
 
-    //TODO Implement
-    throw std::out_of_range("const htd::edge_t & htd::DirectedGraph::edge(htd::index_t, htd::vertex_t) const");
+    if (index >= edgeCollection.size())
+    {
+        throw std::out_of_range("const htd::edge_t & htd::DirectedGraph::edge(htd::index_t, htd::vertex_t) const");
+    }
+
+    htd::Iterator<htd::edge_t> it = edgeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 const htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(void) const

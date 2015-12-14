@@ -203,9 +203,9 @@ namespace htd
 
             std::size_t forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            void getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             htd::vertex_t forgottenVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 

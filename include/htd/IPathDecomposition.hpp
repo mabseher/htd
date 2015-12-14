@@ -57,9 +57,9 @@ namespace htd
 
             virtual std::size_t forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual void getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex) const = 0;
 
-            virtual void getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const = 0;
+            virtual const htd::Collection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual htd::vertex_t forgottenVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
 

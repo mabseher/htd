@@ -1810,8 +1810,12 @@ std::size_t htd::TreeDecomposition::forgottenVertexCount(htd::vertex_t vertex, h
     return ret;
 }
 
-void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output) const
+const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t vertex) const
 {
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    auto & result = ret.container();
+
     if (isVertex(vertex))
     {
         auto & node = nodes_[vertex - htd::Vertex::FIRST];
@@ -1824,13 +1828,23 @@ void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::ver
 
             getChildrenVertexLabelSetUnion(vertex, childLabelContent);
 
-            std::set_difference(childLabelContent.begin(), childLabelContent.end(), vertexLabel.begin(), vertexLabel.end(), std::back_inserter(output));
+            std::set_difference(childLabelContent.begin(), childLabelContent.end(), vertexLabel.begin(), vertexLabel.end(), std::back_inserter(result));
         }
     }
+    else
+    {
+        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t) const");
+    }
+
+    return ret;
 }
 
-void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::vertex_container & output, htd::vertex_t child) const
+const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const
 {
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    auto & result = ret.container();
+
     if (isVertex(vertex))
     {
         auto & node = nodes_[vertex - htd::Vertex::FIRST];
@@ -1841,75 +1855,61 @@ void htd::TreeDecomposition::getForgottenVertices(htd::vertex_t vertex, htd::ver
 
             auto childVertexLabel = bagContent(child);
 
-            std::set_difference(childVertexLabel.begin(), childVertexLabel.end(), vertexLabel.begin(), vertexLabel.end(), std::back_inserter(output));
+            std::set_difference(childVertexLabel.begin(), childVertexLabel.end(), vertexLabel.begin(), vertexLabel.end(), std::back_inserter(result));
         }
     }
+    else
+    {
+        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t, htd::vertex_t) const");
+    }
+
+    return ret;
 }
 
 htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    const htd::Collection<htd::vertex_t> forgottenVertexCollection = forgottenVertices(vertex);
 
-    htd::vertex_container forgottenVerticesContainer;
-
-    getForgottenVertices(vertex, forgottenVerticesContainer);
-
-    if (index < forgottenVerticesContainer.size())
-    {
-        ret = forgottenVerticesContainer[index];
-    }
-    else
+    if (index >= forgottenVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t, htd::index_t) const");
     }
 
-    return ret;
+    htd::Iterator<htd::vertex_t> it = forgottenVertexCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    const htd::Collection<htd::vertex_t> forgottenVertexCollection = forgottenVertices(vertex, child);
 
-    htd::vertex_container forgottenVerticesContainer;
-
-    getForgottenVertices(vertex, forgottenVerticesContainer, child);
-
-    if (index < forgottenVerticesContainer.size())
-    {
-        ret = forgottenVerticesContainer[index];
-    }
-    else
+    if (index >= forgottenVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
-    return ret;
+    htd::Iterator<htd::vertex_t> it = forgottenVertexCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 bool htd::TreeDecomposition::isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex) const
 {
-    bool ret = false;
+    const htd::Collection<htd::vertex_t> forgottenVertexCollection = forgottenVertices(vertex);
 
-    htd::vertex_container forgottenVerticesContainer;
-
-    getForgottenVertices(vertex, forgottenVerticesContainer);
-
-    ret = std::find(forgottenVerticesContainer.begin(), forgottenVerticesContainer.end(), forgottenVertex) != forgottenVerticesContainer.end();
-
-    return ret;
+    return std::binary_search(forgottenVertexCollection.begin(), forgottenVertexCollection.end(), forgottenVertex);
 }
 
 bool htd::TreeDecomposition::isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex, htd::vertex_t child) const
 {
-    bool ret = false;
+    const htd::Collection<htd::vertex_t> forgottenVertexCollection = forgottenVertices(vertex, child);
 
-    htd::vertex_container forgottenVerticesContainer;
-
-    getForgottenVertices(vertex, forgottenVerticesContainer, child);
-
-    ret = std::find(forgottenVerticesContainer.begin(), forgottenVerticesContainer.end(), forgottenVertex) != forgottenVerticesContainer.end();
-
-    return ret;
+    return std::binary_search(forgottenVertexCollection.begin(), forgottenVertexCollection.end(), forgottenVertex);
 }
 
 std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t vertex) const

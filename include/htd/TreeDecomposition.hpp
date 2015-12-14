@@ -177,7 +177,7 @@ namespace htd
 
             std::size_t forgetNodeCount(void) const HTD_OVERRIDE;
 
-            void getForgetNodes(htd::vertex_container & output) const HTD_OVERRIDE;
+            const htd::Collection<htd::vertex_t> forgetNodes(void) const HTD_OVERRIDE;
 
             htd::vertex_t forgetNode(htd::index_t index) const HTD_OVERRIDE;
 

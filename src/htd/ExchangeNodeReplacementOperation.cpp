@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
+#include <htd/Collection.hpp>
 #include <htd/VertexContainerLabel.hpp>
 
 #include <algorithm>
@@ -48,8 +49,11 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
     htd::vertex_container exchangeNodes;
     htd::vertex_container introduceNodes;
 
-    decomposition.getForgetNodes(forgetNodes);
     decomposition.getIntroduceNodes(introduceNodes);
+
+    const htd::Collection<htd::vertex_t> forgetNodeCollection = decomposition.joinNodes();
+
+    std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
 
     std::set_intersection(forgetNodes.begin(), forgetNodes.end(), introduceNodes.begin(), introduceNodes.end(), std::back_inserter(exchangeNodes));
 

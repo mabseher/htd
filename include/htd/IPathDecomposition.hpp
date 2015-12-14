@@ -37,7 +37,7 @@ namespace htd
 
             virtual std::size_t forgetNodeCount(void) const = 0;
 
-            virtual void getForgetNodes(htd::vertex_container & output) const = 0;
+            virtual const htd::Collection<htd::vertex_t> forgetNodes(void) const = 0;
 
             virtual htd::vertex_t forgetNode(htd::index_t index) const = 0;
 

@@ -1491,8 +1491,12 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
     return ret;
 }
 
-void htd::TreeDecomposition::getForgetNodes(htd::vertex_container & output) const
+const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) const
 {
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    auto & result = ret.container();
+
     for (auto & node : nodes_)
     {
         if (node != nullptr)
@@ -1505,30 +1509,28 @@ void htd::TreeDecomposition::getForgetNodes(htd::vertex_container & output) cons
 
             if (htd::has_non_empty_set_difference(childLabelContent.begin(), childLabelContent.end(), vertexLabel.begin(), vertexLabel.end()))
             {
-                output.push_back(node->id);
+                result.push_back(node->id);
             }
         }
     }
+
+    return ret;
 }
 
 htd::vertex_t htd::TreeDecomposition::forgetNode(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    const htd::Collection<htd::vertex_t> forgetNodeCollection = joinNodes();
 
-    htd::vertex_container forgetNodeContainer;
-
-    getForgetNodes(forgetNodeContainer);
-
-    if (index < forgetNodeContainer.size())
-    {
-        ret = forgetNodeContainer[index];
-    }
-    else
+    if (index >= forgetNodeCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgetNode(htd::index_t) const");
     }
 
-    return ret;
+    htd::Iterator<htd::vertex_t> it = forgetNodeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 bool htd::TreeDecomposition::isForgetNode(htd::vertex_t vertex) const

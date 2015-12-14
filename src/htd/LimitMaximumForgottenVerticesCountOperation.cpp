@@ -51,7 +51,9 @@ void htd::LimitMaximumForgottenVerticesCountOperation::apply(htd::IMutableTreeDe
 {
     htd::vertex_container forgetNodes;
 
-    decomposition.getForgetNodes(forgetNodes);
+    const htd::Collection<htd::vertex_t> forgetNodeCollection = decomposition.joinNodes();
+
+    std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
 
     for (htd::vertex_t node : forgetNodes)
     {

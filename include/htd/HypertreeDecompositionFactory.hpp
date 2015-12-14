@@ -51,7 +51,7 @@ namespace htd
 
             HypertreeDecompositionFactory(const HypertreeDecompositionFactory & original);
 
-            HypertreeDecompositionFactory & operator =(const HypertreeDecompositionFactory & original);
+            HypertreeDecompositionFactory & operator=(const HypertreeDecompositionFactory & original);
     };
 }
 

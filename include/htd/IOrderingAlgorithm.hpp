@@ -36,6 +36,8 @@ namespace htd
             virtual ~IOrderingAlgorithm() = 0;
             
             virtual void computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const = 0;
+
+            virtual IOrderingAlgorithm * clone(void) const = 0;
     };
 
     inline htd::IOrderingAlgorithm::~IOrderingAlgorithm() { }

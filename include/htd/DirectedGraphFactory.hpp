@@ -48,7 +48,7 @@ namespace htd
 
             DirectedGraphFactory(const DirectedGraphFactory & original);
 
-            DirectedGraphFactory & operator =(const DirectedGraphFactory & original);
+            DirectedGraphFactory & operator=(const DirectedGraphFactory & original);
     };
 }
 

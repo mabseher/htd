@@ -48,7 +48,7 @@ namespace htd
 
             TreeDecompositionFactory(const TreeDecompositionFactory & original);
 
-            TreeDecompositionFactory & operator =(const TreeDecompositionFactory & original);
+            TreeDecompositionFactory & operator=(const TreeDecompositionFactory & original);
     };
 }
 

@@ -276,4 +276,9 @@ void htd::MinDegreeOrderingAlgorithm::set_union(const std::vector<htd::vertex_t>
     }
 }
 
+htd::MinDegreeOrderingAlgorithm * htd::MinDegreeOrderingAlgorithm::clone(void) const
+{
+    return new htd::MinDegreeOrderingAlgorithm();
+}
+
 #endif /* HTD_HTD_MINDEGREEORDERINGALGORITHM_CPP */

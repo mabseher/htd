@@ -74,14 +74,4 @@ htd::IHypertreeDecompositionAlgorithm * htd::getDefaultHypertreeDecompositionAlg
     return new htd::HypertreeDecompositionAlgorithm(treeDecompositionAlgorithm, setCoverAlgorithm);
 }
 
-htd::IOrderingAlgorithm * htd::getDefaultOrderingAlgorithm(void)
-{
-    return new htd::MinFillOrderingAlgorithm();
-}
-
-htd::ISetCoverAlgorithm * htd::getDefaultSetCoverAlgorithm(void)
-{
-    return new htd::SetCoverAlgorithm();
-}
-
 #endif /* HTD_HTD_HELPERS_CPP */

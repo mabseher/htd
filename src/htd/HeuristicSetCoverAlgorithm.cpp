@@ -186,6 +186,11 @@ void htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::vertex_containe
     }
 }
 
+htd::HeuristicSetCoverAlgorithm * htd::HeuristicSetCoverAlgorithm::clone(void) const
+{
+    return new htd::HeuristicSetCoverAlgorithm();
+}
+
 void htd::HeuristicSetCoverAlgorithm::populateNeighborhood(const std::vector<htd::vertex_container>& containers, std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & origin) const
 {
     if (origin.size() > 0)

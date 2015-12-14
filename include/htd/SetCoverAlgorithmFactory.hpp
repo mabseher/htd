@@ -1,5 +1,5 @@
 /*
- * File:   GraphFactory.hpp
+ * File:   SetCoverAlgorithmFactory.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,34 +22,34 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_GRAPHFACTORY_HPP
-#define HTD_GRAPHFACTORY_HPP
+#ifndef HTD_SETCOVERALGORITHMFACTORY_HPP
+#define HTD_SETCOVERALGORITHMFACTORY_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableGraph.hpp>
+#include <htd/ISetCoverAlgorithm.hpp>
 
 namespace htd
 {
-    class GraphFactory
+    class SetCoverAlgorithmFactory
     {
         public:
-            ~GraphFactory();
+            ~SetCoverAlgorithmFactory();
 
-            static GraphFactory & instance(void);
+            static SetCoverAlgorithmFactory & instance(void);
 
-            htd::IMutableGraph * getGraph(void);
+            htd::ISetCoverAlgorithm * getSetCoverAlgorithm(void);
 
-            void setConstructionTemplate(htd::IMutableGraph * original);
+            void setConstructionTemplate(htd::ISetCoverAlgorithm * original);
 
         private:
-            htd::IMutableGraph * constructionTemplate_;
+            htd::ISetCoverAlgorithm * constructionTemplate_;
 
-            GraphFactory(void);
+            SetCoverAlgorithmFactory(void);
 
-            GraphFactory(const GraphFactory & original);
+            SetCoverAlgorithmFactory(const SetCoverAlgorithmFactory & original);
 
-            GraphFactory & operator=(const GraphFactory & original);
+            SetCoverAlgorithmFactory & operator=(const SetCoverAlgorithmFactory & original);
     };
 }
 
-#endif /* HTD_GRAPHFACTORY_HPP */
+#endif /* HTD_SETCOVERALGORITHMFACTORY_HPP */

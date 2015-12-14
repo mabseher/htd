@@ -1,5 +1,5 @@
 /*
- * File:   GraphFactory.hpp
+ * File:   OrderingAlgorithmFactory.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,34 +22,34 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_GRAPHFACTORY_HPP
-#define HTD_GRAPHFACTORY_HPP
+#ifndef HTD_ORDERINGALGORITHMFACTORY_HPP
+#define HTD_ORDERINGALGORITHMFACTORY_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableGraph.hpp>
+#include <htd/IOrderingAlgorithm.hpp>
 
 namespace htd
 {
-    class GraphFactory
+    class OrderingAlgorithmFactory
     {
         public:
-            ~GraphFactory();
+            ~OrderingAlgorithmFactory();
 
-            static GraphFactory & instance(void);
+            static OrderingAlgorithmFactory & instance(void);
 
-            htd::IMutableGraph * getGraph(void);
+            htd::IOrderingAlgorithm * getOrderingAlgorithm(void);
 
-            void setConstructionTemplate(htd::IMutableGraph * original);
+            void setConstructionTemplate(htd::IOrderingAlgorithm * original);
 
         private:
-            htd::IMutableGraph * constructionTemplate_;
+            htd::IOrderingAlgorithm * constructionTemplate_;
 
-            GraphFactory(void);
+            OrderingAlgorithmFactory(void);
 
-            GraphFactory(const GraphFactory & original);
+            OrderingAlgorithmFactory(const OrderingAlgorithmFactory & original);
 
-            GraphFactory & operator=(const GraphFactory & original);
+            OrderingAlgorithmFactory & operator=(const OrderingAlgorithmFactory & original);
     };
 }
 
-#endif /* HTD_GRAPHFACTORY_HPP */
+#endif /* HTD_ORDERINGALGORITHMFACTORY_HPP */

@@ -42,6 +42,8 @@ namespace htd
             
             void computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const HTD_OVERRIDE;
 
+            NaturalOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
+
         protected:
             NaturalOrderingAlgorithm & operator=(const NaturalOrderingAlgorithm &) { return *this; }
     };

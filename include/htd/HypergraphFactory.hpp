@@ -48,7 +48,7 @@ namespace htd
 
             HypergraphFactory(const HypergraphFactory & original);
 
-            HypergraphFactory & operator =(const HypergraphFactory & original);
+            HypergraphFactory & operator=(const HypergraphFactory & original);
     };
 }
 

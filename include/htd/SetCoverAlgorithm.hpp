@@ -41,6 +41,8 @@ namespace htd
             
             void computeSetCover(const htd::vertex_container& vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::vertex_container> & result) const HTD_OVERRIDE;
 
+            SetCoverAlgorithm * clone(void) const HTD_OVERRIDE;
+
         protected:
             SetCoverAlgorithm & operator=(const SetCoverAlgorithm &) { return *this; }
 

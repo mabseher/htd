@@ -44,6 +44,8 @@ namespace htd
             
             void computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const HTD_OVERRIDE;
 
+            MinFillOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
+
         protected:
             MinFillOrderingAlgorithm & operator=(const MinFillOrderingAlgorithm &) { return *this; }
 

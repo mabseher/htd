@@ -330,4 +330,9 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::vertex_container& vertic
     }
 }
 
+htd::SetCoverAlgorithm * htd::SetCoverAlgorithm::clone(void) const
+{
+    return new htd::SetCoverAlgorithm();
+}
+
 #endif /* HTD_HTD_SETCOVERALGORITHM_CPP */

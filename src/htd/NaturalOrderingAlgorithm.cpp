@@ -59,4 +59,9 @@ void htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
     std::copy(ret.begin(), ret.end(), std::back_inserter(result));
 }
 
+htd::NaturalOrderingAlgorithm * htd::NaturalOrderingAlgorithm::clone(void) const
+{
+    return new htd::NaturalOrderingAlgorithm();
+}
+
 #endif /* HTD_HTD_NATURALORDERINGALGORITHM_CPP */

@@ -44,6 +44,7 @@
 #include <htd/Hypergraph.hpp>
 #include <htd/HypergraphFactory.hpp>
 #include <htd/HypertreeDecomposition.hpp>
+#include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
 #include <htd/IBidirectionalGraphLabeling.hpp>
@@ -98,6 +99,7 @@
 #include <htd/LimitChildCountOperation.hpp>
 #include <htd/LimitMaximumForgottenVertexCountOperation.hpp>
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
+#include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
 #include <htd/NamedHypergraph.hpp>
@@ -105,6 +107,7 @@
 #include <htd/NormalizationOperation.hpp>
 #include <htd/SemiNormalizationOperation.hpp>
 #include <htd/SetCoverAlgorithm.hpp>
+#include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/TreeDecomposition.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>

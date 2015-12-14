@@ -35,6 +35,8 @@ namespace htd
             virtual ~ISetCoverAlgorithm() = 0;
             
             virtual void computeSetCover(const htd::vertex_container & vertices, const std::vector<htd::vertex_container> & containers, std::vector<htd::vertex_container> & result) const = 0;
+
+            virtual ISetCoverAlgorithm * clone(void) const = 0;
     };
 
     inline htd::ISetCoverAlgorithm::~ISetCoverAlgorithm() { }

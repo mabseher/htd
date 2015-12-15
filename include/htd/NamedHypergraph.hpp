@@ -529,12 +529,12 @@ namespace htd
 
             const htd::ILabel & vertexLabel(const std::string & labelName, const VertexNameType & vertexName) const
             {
-                return labelings_->labeling(labelName).label(vertexName);
+                return labelings_->labeling(labelName).label(lookupVertex(vertexName));
             }
 
             const htd::ILabel & hyperedgeLabel(const std::string & labelName, const HyperedgeNameType & edgeName) const
             {
-                return labelings_->labeling(labelName).label(edgeName);
+                return labelings_->labeling(labelName).label(lookupHyperedge(edgeName));
             }
 
             void setVertexLabel(const std::string & labelName, const VertexNameType & vertexName, htd::ILabel * label)

@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
+#include <htd/ITreeDecomposition.hpp>
 
 namespace htd
 {
@@ -38,6 +39,8 @@ namespace htd
             static TreeDecompositionFactory & instance(void);
 
             htd::IMutableTreeDecomposition * getTreeDecomposition(void);
+
+            htd::IMutableTreeDecomposition * getTreeDecomposition(const htd::ITreeDecomposition & original);
 
             void setConstructionTemplate(htd::IMutableTreeDecomposition * original);
 

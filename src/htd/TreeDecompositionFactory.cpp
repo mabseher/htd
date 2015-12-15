@@ -59,6 +59,16 @@ htd::IMutableTreeDecomposition * htd::TreeDecompositionFactory::getTreeDecomposi
     return constructionTemplate_->clone();
 }
 
+//TODO Use construction template!
+htd::IMutableTreeDecomposition * htd::TreeDecompositionFactory::getTreeDecomposition(const htd::ITreeDecomposition & original)
+{
+    htd::IMutableTreeDecomposition * ret = new htd::TreeDecomposition(original); //TODO constructionTemplate_->clone();
+
+    //TODO Copy decomposition content!
+
+    return ret;
+}
+
 void htd::TreeDecompositionFactory::setConstructionTemplate(htd::IMutableTreeDecomposition * original)
 {
     if (original == nullptr)

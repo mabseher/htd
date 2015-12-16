@@ -43,10 +43,6 @@ namespace htd
 
             BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions);
 
-            BucketEliminationTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm);
-
-            BucketEliminationTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions);
-
             ~BucketEliminationTreeDecompositionAlgorithm();
             
             htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE;
@@ -61,8 +57,6 @@ namespace htd
             BucketEliminationTreeDecompositionAlgorithm & operator=(const BucketEliminationTreeDecompositionAlgorithm &) { return *this; }
 
         private:
-            htd::IOrderingAlgorithm * orderingAlgorithm_;
-
             htd::IMutableTreeDecomposition * computeMutableDecomposition(const htd::IHypergraph & graph) const;
 
             htd::vertex_t getMinimumVertex(const htd::hyperedge_t & edge, const std::vector<htd::index_t> & vertexIndices) const;

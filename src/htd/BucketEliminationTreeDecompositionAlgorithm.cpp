@@ -47,23 +47,12 @@
 #include <utility>
 #include <vector>
 
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(void) : orderingAlgorithm_(htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm())
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(void)
 {
 
 }
 
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions) : orderingAlgorithm_(htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm())
-{
-    //TODO
-    HTD_UNUSED(labelingFunctions);
-}
-
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm) : orderingAlgorithm_(orderingAlgorithm.clone())
-{
-
-}
-
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::IOrderingAlgorithm & orderingAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions) : orderingAlgorithm_(orderingAlgorithm.clone())
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions)
 {
     //TODO
     HTD_UNUSED(labelingFunctions);
@@ -71,12 +60,7 @@ htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecomposi
 
 htd::BucketEliminationTreeDecompositionAlgorithm::~BucketEliminationTreeDecompositionAlgorithm()
 {
-    if (orderingAlgorithm_ != nullptr)
-    {
-        delete orderingAlgorithm_;
 
-        orderingAlgorithm_ = nullptr;
-    }
 }
 
 htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
@@ -141,9 +125,10 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
     return computeDecomposition(graph, labelingFunctions);
 }
 
+//TODO Consider labeling functions!
 htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDecompositionAlgorithm::clone(void) const
 {
-    return new BucketEliminationTreeDecompositionAlgorithm(*orderingAlgorithm_);
+    return new BucketEliminationTreeDecompositionAlgorithm();
 }
 
 htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph & graph) const
@@ -158,7 +143,16 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         std::vector<htd::vertex_t> ordering;
 
-        orderingAlgorithm_->computeOrdering(graph, ordering);
+        htd::IOrderingAlgorithm * algorithm = htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm();
+
+        if (algorithm == nullptr)
+        {
+            throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
+        }
+
+        algorithm->computeOrdering(graph, ordering);
+
+        delete algorithm;
 
         if (ordering.size() == size)
         {

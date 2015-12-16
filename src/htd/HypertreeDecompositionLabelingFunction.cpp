@@ -33,10 +33,11 @@
 #include <htd/IHypergraph.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
 #include <htd/HyperedgeContainerLabel.hpp>
+#include <htd/SetCoverAlgorithmFactory.hpp>
 
 #include <string>
 
-htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunction(const htd::IHypergraph & graph, const htd::ISetCoverAlgorithm & setCoverAlgorithm) : graph_(graph), setCoverAlgorithm_(setCoverAlgorithm)
+htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunction(const htd::IHypergraph & graph) : graph_(graph), setCoverAlgorithm_(htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm())
 {
     htd::Collection<htd::hyperedge_t> hyperedges = graph_.hyperedges();
 
@@ -45,7 +46,12 @@ htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunct
 
 htd::HypertreeDecompositionLabelingFunction::~HypertreeDecompositionLabelingFunction()
 {
+    if (setCoverAlgorithm_ != nullptr)
+    {
+        delete setCoverAlgorithm_;
 
+        setCoverAlgorithm_ = nullptr;
+    }
 }
 
 std::string htd::HypertreeDecompositionLabelingFunction::name() const
@@ -57,7 +63,7 @@ htd::ILabel * htd::HypertreeDecompositionLabelingFunction::computeLabel(const ht
 {
     htd::hyperedge_container label;
 
-    setCoverAlgorithm_.computeSetCover(vertices, hyperedges_, label);
+    setCoverAlgorithm_->computeSetCover(vertices, hyperedges_, label);
 
     return new HyperedgeContainerLabel(label);
 }

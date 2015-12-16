@@ -37,9 +37,7 @@
 
 htd::TreeDecompositionAlgorithmFactory::TreeDecompositionAlgorithmFactory(void)
 {
-    htd::IOrderingAlgorithm * orderingAlgorithm = htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm();
-
-    constructionTemplate_ = new htd::BucketEliminationTreeDecompositionAlgorithm(*(std::shared_ptr<htd::IOrderingAlgorithm>(orderingAlgorithm)));
+    constructionTemplate_ = new htd::BucketEliminationTreeDecompositionAlgorithm();
 }
 
 htd::TreeDecompositionAlgorithmFactory::~TreeDecompositionAlgorithmFactory()

@@ -37,10 +37,7 @@
 
 htd::HypertreeDecompositionAlgorithmFactory::HypertreeDecompositionAlgorithmFactory(void)
 {
-    htd::ITreeDecompositionAlgorithm * treeDecompositionAlgorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
-    htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm();
-
-    constructionTemplate_ = new htd::HypertreeDecompositionAlgorithm(*(std::shared_ptr<htd::ITreeDecompositionAlgorithm>(treeDecompositionAlgorithm)), *(std::shared_ptr<htd::ISetCoverAlgorithm>(setCoverAlgorithm)));
+    constructionTemplate_ = new htd::HypertreeDecompositionAlgorithm();
 }
 
 htd::HypertreeDecompositionAlgorithmFactory::~HypertreeDecompositionAlgorithmFactory()

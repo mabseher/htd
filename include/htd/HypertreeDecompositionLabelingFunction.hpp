@@ -39,7 +39,7 @@ namespace htd
     class HypertreeDecompositionLabelingFunction : public virtual htd::ILabelingFunction
     {
         public:
-            HypertreeDecompositionLabelingFunction(const htd::IHypergraph & graph, const htd::ISetCoverAlgorithm & setCoverAlgorithm);
+            HypertreeDecompositionLabelingFunction(const htd::IHypergraph & graph);
 
             ~HypertreeDecompositionLabelingFunction();
 	    
@@ -52,7 +52,7 @@ namespace htd
         private:
             const htd::IHypergraph & graph_;
 
-            const htd::ISetCoverAlgorithm & setCoverAlgorithm_;
+            const htd::ISetCoverAlgorithm * setCoverAlgorithm_;
 
             htd::hyperedge_container hyperedges_;
     };

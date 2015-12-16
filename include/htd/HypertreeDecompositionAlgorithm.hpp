@@ -44,10 +44,6 @@ namespace htd
 
             HypertreeDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions);
 
-            HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm);
-
-            HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions);
-
             ~HypertreeDecompositionAlgorithm();
             
             htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE;
@@ -60,11 +56,6 @@ namespace htd
 
         protected:
             HypertreeDecompositionAlgorithm & operator=(const HypertreeDecompositionAlgorithm &) { return *this; }
-
-        private:
-            const htd::ITreeDecompositionAlgorithm * treeDecompositionAlgorithm_;
-
-            const htd::ISetCoverAlgorithm * setCoverAlgorithm_;
     };
 }
 

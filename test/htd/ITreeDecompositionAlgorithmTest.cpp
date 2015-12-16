@@ -77,7 +77,7 @@ TEST(ITreeDecompositionAlgorithmTest, DecompositionTest01)
 
     ASSERT_EQ((std::size_t)3, ordering.size());
 
-    htd::BucketEliminationTreeDecompositionAlgorithm algorithm(*orderingAlgorithm);
+    htd::BucketEliminationTreeDecompositionAlgorithm algorithm;
 
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
 

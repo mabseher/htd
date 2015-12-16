@@ -77,7 +77,7 @@ std::size_t htd::Hypergraph::edgeCount(htd::vertex_t vertex) const
     {
         for (auto & edge : edges_)
         {
-            if (std::binary_search(edge.begin(), edge.end(), vertex))
+            if (std::find(edge.begin(), edge.end(), vertex) != edge.end())
             {
                 ret++;
             }
@@ -98,13 +98,7 @@ bool htd::Hypergraph::isVertex(htd::vertex_t vertex) const
 
 bool htd::Hypergraph::isEdge(const htd::hyperedge_t & edge) const
 {
-    htd::hyperedge_t hyperedge(edge);
-
-    std::sort(hyperedge.begin(), hyperedge.end());
-
-    hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
-
-    return std::find(edges_.begin(), edges_.end(), hyperedge) != edges_.end();
+    return std::find(edges_.begin(), edges_.end(), edge) != edges_.end();
 }
 
 htd::vertex_t htd::Hypergraph::vertex(htd::index_t index) const

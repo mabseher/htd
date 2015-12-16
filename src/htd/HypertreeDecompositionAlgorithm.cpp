@@ -46,23 +46,12 @@
 #include <stack>
 #include <vector>
 
-htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(void) : treeDecompositionAlgorithm_(htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm()), setCoverAlgorithm_(htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm())
+htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(void)
 {
 
 }
 
-htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions) : treeDecompositionAlgorithm_(htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm()), setCoverAlgorithm_(htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm())
-{
-    //TODO
-    HTD_UNUSED(labelingFunctions);
-}
-
-htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm) : treeDecompositionAlgorithm_(treeDecompositionAlgorithm.clone()), setCoverAlgorithm_(setCoverAlgorithm.clone())
-{
-
-}
-
-htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & treeDecompositionAlgorithm, const htd::ISetCoverAlgorithm & setCoverAlgorithm, const std::vector<htd::ILabelingFunction *> & labelingFunctions) : treeDecompositionAlgorithm_(treeDecompositionAlgorithm.clone()), setCoverAlgorithm_(setCoverAlgorithm.clone())
+htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions)
 {
     //TODO
     HTD_UNUSED(labelingFunctions);
@@ -70,46 +59,41 @@ htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(const htd:
 
 htd::HypertreeDecompositionAlgorithm::~HypertreeDecompositionAlgorithm()
 {
-    if (treeDecompositionAlgorithm_ != nullptr)
-    {
-        delete treeDecompositionAlgorithm_;
 
-        treeDecompositionAlgorithm_ = nullptr;
-    }
-
-    if (setCoverAlgorithm_ != nullptr)
-    {
-        delete setCoverAlgorithm_;
-
-        setCoverAlgorithm_ = nullptr;
-    }
 }
 
 htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
 {
     htd::IMutableHypertreeDecomposition * ret = nullptr;
 
-    htd::ITreeDecomposition * treeDecomposition = treeDecompositionAlgorithm_->computeDecomposition(graph);
+    htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
 
-    if (treeDecomposition != nullptr)
+    if (algorithm != nullptr)
     {
-        ret = htd::HypertreeDecompositionFactory::instance().getHypertreeDecomposition(*treeDecomposition);
+        htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph);
 
-        if (ret != nullptr)
+        if (treeDecomposition != nullptr)
         {
-            htd::HypertreeDecompositionLabelingFunction hypertreeDecompositionLabelingFunction(graph, *setCoverAlgorithm_);
+            ret = htd::HypertreeDecompositionFactory::instance().getHypertreeDecomposition(*treeDecomposition);
 
-            for (htd::vertex_t vertex : ret->vertices())
+            if (ret != nullptr)
             {
-                auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
+                htd::HypertreeDecompositionLabelingFunction hypertreeDecompositionLabelingFunction(graph);
 
-                htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(label);
+                for (htd::vertex_t vertex : ret->vertices())
+                {
+                    auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
 
-                ret->setLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
+                    htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(label);
+
+                    ret->setLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
+                }
+
+                delete treeDecomposition;
             }
-
-            delete treeDecomposition;
         }
+
+        delete algorithm;
     }
 
     return ret;
@@ -135,59 +119,59 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 {
     htd::IMutableHypertreeDecomposition * ret = nullptr;
 
-    htd::ITreeDecomposition * treeDecomposition = treeDecompositionAlgorithm_->computeDecomposition(graph);
+    htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
 
-    if (treeDecomposition != nullptr)
+    if (algorithm == nullptr)
     {
-        ret = htd::HypertreeDecompositionFactory::instance().getHypertreeDecomposition(*treeDecomposition);
+        throw std::logic_error("htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph &, const std::vector<htd::ILabelingFunction *> &) const");
+    }
 
-        if (ret != nullptr)
+    htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph);
+
+    delete algorithm;
+
+    ret = htd::HypertreeDecompositionFactory::instance().getHypertreeDecomposition(*treeDecomposition);
+
+    if (ret != nullptr)
+    {
+        htd::HypertreeDecompositionLabelingFunction hypertreeDecompositionLabelingFunction(graph);
+
+        for (htd::vertex_t vertex : ret->vertices())
         {
-            htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm();
+            auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
 
-            if (setCoverAlgorithm != nullptr)
-            {
-                htd::HypertreeDecompositionLabelingFunction hypertreeDecompositionLabelingFunction(graph, *setCoverAlgorithm);
+            htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(label);
 
-                for (htd::vertex_t vertex : ret->vertices())
-                {
-                    auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
-
-                    htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(label);
-
-                    ret->setLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
-                }
-
-                delete setCoverAlgorithm;
-
-                for (auto & labelingFunction : labelingFunctions)
-                {
-                    for (htd::vertex_t vertex : ret->vertices())
-                    {
-                        auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
-
-                        htd::ILabelCollection * labelCollection = ret->labelings().exportLabelCollection(vertex);
-
-                        //TODO Optimize
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(label, *labelCollection);
-
-                        delete labelCollection;
-
-                        ret->setLabel(labelingFunction->name(), vertex, newLabel);
-                    }
-                }
-            }
-
-            delete treeDecomposition;
+            ret->setLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
         }
+
+        for (auto & labelingFunction : labelingFunctions)
+        {
+            for (htd::vertex_t vertex : ret->vertices())
+            {
+                auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
+
+                htd::ILabelCollection * labelCollection = ret->labelings().exportLabelCollection(vertex);
+
+                //TODO Optimize
+                htd::ILabel * newLabel = labelingFunction->computeLabel(label, *labelCollection);
+
+                delete labelCollection;
+
+                ret->setLabel(labelingFunction->name(), vertex, newLabel);
+            }
+        }
+
+        delete treeDecomposition;
     }
 
     return ret;
 }
 
+//TODO Consider labeling functions!
 htd::HypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithm::clone(void) const
 {
-    return new HypertreeDecompositionAlgorithm(*treeDecompositionAlgorithm_, *setCoverAlgorithm_);
+    return new HypertreeDecompositionAlgorithm();
 }
 
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_CPP */

@@ -95,7 +95,7 @@ htd::IGraphLabeling & htd::LabelingCollection::labeling(const std::string & labe
 {
     if (content_.find(labelName) == content_.end())
     {
-        throw std::out_of_range("htd::IGraphLabeling & htd::LabelingCollection::label(const std::string &)");
+        throw std::logic_error("htd::IGraphLabeling & htd::LabelingCollection::label(const std::string &)");
     }
 
     return *(content_.at(labelName));
@@ -105,7 +105,7 @@ const htd::IGraphLabeling & htd::LabelingCollection::labeling(const std::string 
 {
     if (content_.find(labelName) == content_.end())
     {
-        throw std::out_of_range("const htd::IGraphLabeling & htd::LabelingCollection::label(const std::string &) const");
+        throw std::logic_error("const htd::IGraphLabeling & htd::LabelingCollection::label(const std::string &) const");
     }
 
     return *(content_.at(labelName));

@@ -45,12 +45,12 @@ namespace htd
     class NamedHypergraph
     {
         public:
-            NamedHypergraph(void) : base_(new htd::LabeledHypergraph()), nameLabeling_(new htd::BidirectionalGraphLabeling()), labelings_(new htd::LabelingCollection())
+            NamedHypergraph(void) : base_(new htd::LabeledHypergraph()), nameLabeling_(new htd::BidirectionalGraphLabeling())
             {
 
             }
 
-            NamedHypergraph(const NamedHypergraph<VertexNameType, HyperedgeNameType> & original) : base_(original.base_->clone()), nameLabeling_(original.nameLabeling_->clone()), labelings_(original.labelings_->clone())
+            NamedHypergraph(const NamedHypergraph<VertexNameType, HyperedgeNameType> & original) : base_(original.base_->clone()), nameLabeling_(original.nameLabeling_->clone())
             {
 
             }
@@ -62,13 +62,6 @@ namespace htd
                     delete base_;
 
                     base_ = nullptr;
-                }
-
-                if (labelings_ != nullptr)
-                {
-                    delete labelings_;
-
-                    labelings_ = nullptr;
                 }
 
                 if (nameLabeling_ != nullptr)
@@ -160,7 +153,7 @@ namespace htd
 
             htd::vertex_t lookupVertex(const VertexNameType & vertexName) const
             {
-                Label<VertexNameType> label(vertexName);
+                htd::Label<VertexNameType> label(vertexName);
 
                 if (!nameLabeling_->isVertexLabel(label))
                 {
@@ -172,7 +165,7 @@ namespace htd
 
             const htd::hyperedge_t & lookupHyperedge(const HyperedgeNameType & edgeName) const
             {
-                Label<HyperedgeNameType> label(edgeName);
+                htd::Label<HyperedgeNameType> label(edgeName);
 
                 if (!nameLabeling_->isHyperedgeLabel(label))
                 {
@@ -284,7 +277,7 @@ namespace htd
                 {
                     ret = base_->addVertex();
 
-                    nameLabeling_->setLabel(ret, new Label<VertexNameType>(vertexName));
+                    nameLabeling_->setLabel(ret, new htd::Label<VertexNameType>(vertexName));
                 }
 
                 return ret;
@@ -423,9 +416,9 @@ namespace htd
                 addEdge(edge.begin(), edge.end());
             }
 
-            void addEdge(const std::vector<VertexNameType> & edge, const HyperedgeNameType & label)
+            void addEdge(const std::vector<VertexNameType> & edge, const HyperedgeNameType & name)
             {
-                addEdge(edge.begin(), edge.end(), label);
+                addEdge(edge.begin(), edge.end(), name);
             }
 
             void removeEdge(const HyperedgeNameType & edgeName)
@@ -514,47 +507,77 @@ namespace htd
 
             std::size_t labelCount(void) const
             {
-                return labelings_->labelCount();
+                return base_->labelCount();
             }
 
             htd::Collection<std::string> labelNames(void) const
             {
-                return labelings_->labelNames();
+                return base_->labelNames();
             }
 
             const std::string & labelName(htd::index_t index) const
             {
-                return labelings_->labelName(index);
+                return base_->labelName(index);
             }
 
             const htd::ILabel & vertexLabel(const std::string & labelName, const VertexNameType & vertexName) const
             {
-                return labelings_->labeling(labelName).label(lookupVertex(vertexName));
+                return base_->label(labelName, lookupVertex(vertexName));
             }
 
             const htd::ILabel & hyperedgeLabel(const std::string & labelName, const HyperedgeNameType & edgeName) const
             {
-                return labelings_->labeling(labelName).label(lookupHyperedge(edgeName));
+                return base_->label(labelName, lookupHyperedge(edgeName));
+            }
+
+            const htd::ILabel & hyperedgeLabel(const std::string & labelName, const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
+            {
+                htd::hyperedge_t hyperedge;
+
+                hyperedge.push_back(lookupVertex(vertexName1));
+                hyperedge.push_back(lookupVertex(vertexName2));
+
+                std::sort(hyperedge.begin(), hyperedge.end());
+
+                hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
+
+                return base_->label(labelName, hyperedge);
+            }
+
+            const htd::ILabel & hyperedgeLabel(const std::string & labelName, typename std::vector<VertexNameType>::const_iterator begin, typename std::vector<VertexNameType>::const_iterator end) const
+            {
+                htd::hyperedge_t hyperedge;
+
+                for (auto it = begin; it != end; it++)
+                {
+                    hyperedge.push_back(lookupVertex(*it));
+                }
+
+                std::sort(hyperedge.begin(), hyperedge.end());
+
+                hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
+
+                return base_->label(labelName, hyperedge);
+            }
+
+            const htd::ILabel & hyperedgeLabel(const std::string & labelName, const std::pair<VertexNameType, VertexNameType> & edge) const
+            {
+                return hyperedgeLabel(labelName, edge.first, edge.second);
+            }
+
+            const htd::ILabel & hyperedgeLabel(const std::string & labelName, const std::vector<VertexNameType> & edge)
+            {
+                return hyperedgeLabel(labelName, edge.begin(), edge.end());
             }
 
             void setVertexLabel(const std::string & labelName, const VertexNameType & vertexName, htd::ILabel * label)
             {
-                if (!labelings_->isLabelingName(labelName))
-                {
-                    labelings_->setLabeling(labelName, new htd::GraphLabeling());
-                }
-
-                labelings_->labeling(labelName).setLabel(lookupVertex(vertexName), label);
+                base_->setLabel(labelName, lookupVertex(vertexName), label);
             }
 
             void setHyperedgeLabel(const std::string & labelName, const HyperedgeNameType & edgeName, htd::ILabel * label)
             {
-                if (!labelings_->isLabelingName(labelName))
-                {
-                    labelings_->setLabeling(labelName, new htd::GraphLabeling());
-                }
-
-                labelings_->labeling(labelName).setLabel(lookupHyperedge(edgeName), label);
+                base_->setLabel(labelName, lookupHyperedge(edgeName), label);
             }
 
             void setHyperedgeLabel(const std::string & labelName, const VertexNameType & vertexName1, const VertexNameType & vertexName2, htd::ILabel * label)
@@ -599,18 +622,12 @@ namespace htd
 
             void removeVertexLabel(const std::string & labelName, const VertexNameType & vertexName)
             {
-                if (labelings_->isLabelingName(labelName))
-                {
-                    labelings_->labeling(labelName).removeLabel(lookupVertex(vertexName));
-                }
+                base_->removeLabel(labelName, lookupVertex(vertexName));
             }
 
             void removeHyperedgeLabel(const std::string & labelName, const HyperedgeNameType & edgeName)
             {
-                if (labelings_->isLabelingName(labelName))
-                {
-                    labelings_->labeling(labelName).removeLabel(lookupHyperedge(edgeName));
-                }
+                base_->removeLabel(labelName, lookupHyperedge(edgeName));
             }
 
             void removeHyperedgeLabel(const std::string & labelName, const VertexNameType & vertexName1, const VertexNameType & vertexName2)
@@ -643,48 +660,34 @@ namespace htd
                 base_->removeLabel(labelName, hyperedge);
             }
 
-            void setHyperedgeLabel(const std::string & labelName, const std::pair<VertexNameType, VertexNameType> & edge)
+            void removeHyperedgeLabel(const std::string & labelName, const std::pair<VertexNameType, VertexNameType> & edge)
             {
                 removeHyperedgeLabel(labelName, edge.first, edge.second);
             }
 
-            void setHyperedgeLabel(const std::string & labelName, const std::vector<VertexNameType> & edge)
+            void removeHyperedgeLabel(const std::string & labelName, const std::vector<VertexNameType> & edge)
             {
                 removeHyperedgeLabel(labelName, edge.begin(), edge.end());
             }
 
             void swapVertexLabels(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
-                labelings_->swapLabels(lookupVertex(vertexName1), lookupVertex(vertexName2));
+                base_->swapLabels(lookupVertex(vertexName1), lookupVertex(vertexName2));
             }
 
             void swapHyperedgeLabels(const HyperedgeNameType & edgeName1, const HyperedgeNameType & edgeName2)
             {
-                labelings_->swapLabels(lookupHyperedge(edgeName1), lookupHyperedge(edgeName2));
+                base_->swapLabels(lookupHyperedge(edgeName1), lookupHyperedge(edgeName2));
             }
 
             void swapVertexLabel(const std::string & labelName, const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
-                if (labelings_->isLabelingName(labelName))
-                {
-                    labelings_->labeling(labelName).swapLabels(lookupVertex(vertexName1), lookupVertex(vertexName2));
-                }
-                else
-                {
-                    throw std::logic_error("void htd::NamedHypergraph<VertexNameType, HyperedgeNameType>::swapVertexLabel(const std::string &, const VertexNameType &, const VertexNameType &)");
-                }
+                base_->swapLabel(labelName, lookupVertex(vertexName1), lookupVertex(vertexName2));
             }
 
             void swapHyperedgeLabel(const std::string & labelName, const HyperedgeNameType & edgeName1, const HyperedgeNameType & edgeName2)
             {
-                if (labelings_->isLabelingName(labelName))
-                {
-                    labelings_->labeling(labelName).swapLabels(lookupHyperedge(edgeName1), lookupHyperedge(edgeName2));
-                }
-                else
-                {
-                    throw std::logic_error("void htd::NamedHypergraph<VertexNameType, HyperedgeNameType>::swapHyperedgeLabel(const std::string &, const VertexNameType &, const VertexNameType &)");
-                }
+                base_->swapLabel(labelName, lookupHyperedge(edgeName1), lookupHyperedge(edgeName2));
             }
 
             void swapHyperedgeLabel(const std::string & labelName, const VertexNameType & edge1VertexName1, const VertexNameType & edge1VertexName2, const VertexNameType & edge2VertexName1, const VertexNameType & edge2VertexName2)
@@ -755,8 +758,6 @@ namespace htd
             htd::IMutableLabeledHypergraph * base_;
 
             htd::IBidirectionalGraphLabeling * nameLabeling_;
-
-            htd::ILabelingCollection * labelings_;
     };
 }
 

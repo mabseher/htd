@@ -26,8 +26,8 @@
 #define	HTD_HTD_IHYPERGRAPH_HPP
 
 #include <htd/Globals.hpp>
-
 #include <htd/Collection.hpp>
+#include <htd/Hyperedge.hpp>
 
 #include <cstdlib>
 
@@ -46,7 +46,11 @@ namespace htd
 
             virtual bool isVertex(htd::vertex_t vertex) const = 0;
 
-            virtual bool isEdge(const htd::hyperedge_t & edge) const = 0;
+            virtual bool isEdge(htd::id_t edgeId) const = 0;
+
+            virtual bool isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
+
+            virtual bool isEdge(const htd::Collection<htd::vertex_t> & elements) const = 0;
 
             virtual std::size_t isolatedVertexCount(void) const = 0;
 
@@ -64,15 +68,15 @@ namespace htd
 
             virtual std::size_t edgeCount(void) const = 0;
 
-            virtual const htd::Collection<htd::hyperedge_t> hyperedges(void) const = 0;
+            virtual const htd::Collection<htd::Hyperedge> hyperedges(void) const = 0;
 
-            virtual const htd::hyperedge_t & hyperedge(htd::index_t index) const = 0;
+            virtual const htd::Hyperedge & hyperedge(htd::index_t index) const = 0;
 
             virtual std::size_t edgeCount(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::Collection<htd::hyperedge_t> hyperedges(htd::vertex_t vertex) const = 0;
+            virtual const htd::Collection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::hyperedge_t & hyperedge(htd::index_t index, htd::vertex_t vertex) const = 0;
+            virtual const htd::Hyperedge & hyperedge(htd::index_t index, htd::vertex_t vertex) const = 0;
 
             virtual bool isConnected(void) const = 0;
 

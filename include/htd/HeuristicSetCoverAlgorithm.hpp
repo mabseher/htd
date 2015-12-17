@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
+#include <htd/Collection.hpp>
 
 #include <vector>
 #include <unordered_set>
@@ -40,7 +41,7 @@ namespace htd
             
             ~HeuristicSetCoverAlgorithm();
             
-            void computeSetCover(const htd::vertex_container& vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::vertex_container> & result) const HTD_OVERRIDE;
+            void computeSetCover(const htd::Collection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container> & containers, std::vector<htd::index_t> & result) const HTD_OVERRIDE;
 
             HeuristicSetCoverAlgorithm * clone(void) const HTD_OVERRIDE;
 

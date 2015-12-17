@@ -32,7 +32,7 @@
 
 #include <stdexcept>
 
-htd::GraphLabeling::GraphLabeling(void) : vertexLabels_(), hyperedgeLabels_()
+htd::GraphLabeling::GraphLabeling(void) : vertexLabels_(), edgeLabels_()
 {
 
 }
@@ -47,32 +47,32 @@ std::size_t htd::GraphLabeling::vertexLabelCount(void) const
     return vertexLabels_.size();
 }
 
-std::size_t htd::GraphLabeling::hyperedgeLabelCount(void) const
+std::size_t htd::GraphLabeling::edgeLabelCount(void) const
 {
-    return hyperedgeLabels_.size();
+    return edgeLabels_.size();
 }
 
-bool htd::GraphLabeling::hasLabel(htd::vertex_t vertex) const
+bool htd::GraphLabeling::isLabeledVertex(htd::vertex_t vertex) const
 {
     return vertexLabels_.find(vertex) != vertexLabels_.end();
 }
 
-bool htd::GraphLabeling::hasLabel(const htd::hyperedge_t & edge) const
+bool htd::GraphLabeling::isLabeledEdge(htd::id_t edgeId) const
 {
-    return hyperedgeLabels_.find(edge) != hyperedgeLabels_.end();
+    return edgeLabels_.find(edgeId) != edgeLabels_.end();
 }
 
-const htd::ILabel & htd::GraphLabeling::label(htd::vertex_t vertex) const
+const htd::ILabel & htd::GraphLabeling::vertexLabel(htd::vertex_t vertex) const
 {
     return *(vertexLabels_.at(vertex));
 }
 
-const htd::ILabel & htd::GraphLabeling::label(const htd::hyperedge_t & edge) const
+const htd::ILabel & htd::GraphLabeling::edgeLabel(htd::id_t edgeId) const
 {
-    return *(hyperedgeLabels_.at(edge));
+    return *(edgeLabels_.at(edgeId));
 }
 
-void htd::GraphLabeling::setLabel(htd::vertex_t vertex, htd::ILabel * label)
+void htd::GraphLabeling::setVertexLabel(htd::vertex_t vertex, htd::ILabel * label)
 {
     auto position = vertexLabels_.find(vertex);
 
@@ -87,11 +87,11 @@ void htd::GraphLabeling::setLabel(htd::vertex_t vertex, htd::ILabel * label)
     vertexLabels_[vertex] = label;
 }
 
-void htd::GraphLabeling::setLabel(const htd::hyperedge_t & edge, htd::ILabel * label)
+void htd::GraphLabeling::setEdgeLabel(htd::id_t edgeId, htd::ILabel * label)
 {
-    auto position = hyperedgeLabels_.find(edge);
+    auto position = edgeLabels_.find(edgeId);
 
-    if (position != hyperedgeLabels_.end())
+    if (position != edgeLabels_.end())
     {
         if (!(*(position->second) == *label))
         {
@@ -99,10 +99,10 @@ void htd::GraphLabeling::setLabel(const htd::hyperedge_t & edge, htd::ILabel * l
         }
     }
 
-    hyperedgeLabels_[edge] = label;
+    edgeLabels_[edgeId] = label;
 }
 
-void htd::GraphLabeling::swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::GraphLabeling::swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     auto position1 = vertexLabels_.find(vertex1);
     auto position2 = vertexLabels_.find(vertex2);
@@ -117,16 +117,16 @@ void htd::GraphLabeling::swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2
     }
     else
     {
-        throw std::out_of_range("htd::GraphLabeling::swapLabels(htd::vertex_t, htd::vertex_t)");
+        throw std::out_of_range("htd::GraphLabeling::swapVertexLabels(htd::vertex_t, htd::vertex_t)");
     }
 }
 
-void htd::GraphLabeling::swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2)
+void htd::GraphLabeling::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    auto position1 = hyperedgeLabels_.find(edge1);
-    auto position2 = hyperedgeLabels_.find(edge2);
+    auto position1 = edgeLabels_.find(edgeId1);
+    auto position2 = edgeLabels_.find(edgeId2);
 
-    if (position1 != hyperedgeLabels_.end() && position2 != hyperedgeLabels_.end())
+    if (position1 != edgeLabels_.end() && position2 != edgeLabels_.end())
     {
         auto label1 = position1->second;
 
@@ -136,11 +136,11 @@ void htd::GraphLabeling::swapLabels(const htd::hyperedge_t & edge1, const htd::h
     }
     else
     {
-        throw std::out_of_range("htd::GraphLabeling::swapLabels(const htd::hyperedge_t &, const htd::hyperedge_t &)");
+        throw std::out_of_range("htd::GraphLabeling::swapEdgeLabels(htd::id_t, htd::id_t)");
     }
 }
 
-void htd::GraphLabeling::removeLabel(htd::vertex_t vertex)
+void htd::GraphLabeling::removeVertexLabel(htd::vertex_t vertex)
 {
     auto position = vertexLabels_.find(vertex);
 
@@ -152,23 +152,23 @@ void htd::GraphLabeling::removeLabel(htd::vertex_t vertex)
     }
     else
     {
-        throw std::out_of_range("htd::GraphLabeling::removeLabel(htd::vertex_t)");
+        throw std::out_of_range("htd::GraphLabeling::removeVertexLabel(htd::vertex_t)");
     }
 }
 
-void htd::GraphLabeling::removeLabel(const htd::hyperedge_t & edge)
+void htd::GraphLabeling::removeEdgeLabel(htd::id_t edgeId)
 {
-    auto position = hyperedgeLabels_.find(edge);
+    auto position = edgeLabels_.find(edgeId);
 
-    if (position != hyperedgeLabels_.end())
+    if (position != edgeLabels_.end())
     {
         delete position->second;
 
-        hyperedgeLabels_.erase(position);
+        edgeLabels_.erase(position);
     }
     else
     {
-        throw std::out_of_range("htd::GraphLabeling::removeLabel(const htd::hyperedge_t &)");
+        throw std::out_of_range("htd::GraphLabeling::removeEdgeLabel(htd::id_t)");
     }
 }
 
@@ -182,7 +182,7 @@ void htd::GraphLabeling::clear(void)
         }
     }
 
-    for (auto & label : hyperedgeLabels_)
+    for (auto & label : edgeLabels_)
     {
         if (label.second != nullptr)
         {
@@ -192,7 +192,7 @@ void htd::GraphLabeling::clear(void)
 
     vertexLabels_.clear();
 
-    hyperedgeLabels_.clear();
+    edgeLabels_.clear();
 }
 
 htd::GraphLabeling * htd::GraphLabeling::clone(void) const
@@ -201,12 +201,12 @@ htd::GraphLabeling * htd::GraphLabeling::clone(void) const
 
     for (auto label : vertexLabels_)
     {
-        ret->setLabel(label.first, label.second->clone());
+        ret->setVertexLabel(label.first, label.second->clone());
     }
 
-    for (auto label : hyperedgeLabels_)
+    for (auto label : edgeLabels_)
     {
-        ret->setLabel(label.first, label.second->clone());
+        ret->setEdgeLabel(label.first, label.second->clone());
     }
 
     return ret;

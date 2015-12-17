@@ -39,7 +39,7 @@ namespace htd
             
             ~SetCoverAlgorithm();
             
-            void computeSetCover(const htd::vertex_container& vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::vertex_container> & result) const HTD_OVERRIDE;
+            void computeSetCover(const htd::Collection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container> & containers, std::vector<htd::index_t> & result) const HTD_OVERRIDE;
 
             SetCoverAlgorithm * clone(void) const HTD_OVERRIDE;
 
@@ -56,7 +56,7 @@ namespace htd
 
                 std::vector<htd::id_t> containers;
 
-                HistoryEntry(htd::id_t selectedIndex, const std::vector<htd::id_t>& remainder, const std::vector<htd::id_t>& containers) : selectedIndex(selectedIndex), remainder(remainder), containers(containers)
+                HistoryEntry(htd::id_t selectedIndex, const std::vector<htd::id_t> & remainder, const std::vector<htd::id_t> & containers) : selectedIndex(selectedIndex), remainder(remainder), containers(containers)
                 {
 
                 }

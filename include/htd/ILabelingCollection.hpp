@@ -54,17 +54,17 @@ namespace htd
 
             virtual void removeLabeling(const std::string & labelName) = 0;
 
-            virtual void removeLabels(htd::vertex_t vertex) = 0;
+            virtual void removeVertexLabels(htd::vertex_t vertex) = 0;
 
-            virtual void removeLabels(const htd::hyperedge_t & edge) = 0;
+            virtual void removeEdgeLabels(htd::id_t edgeId) = 0;
 
-            virtual void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+            virtual void swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
-            virtual void swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) = 0;
+            virtual void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
-            virtual htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const = 0;
+            virtual htd::ILabelCollection * exportVertexLabelCollection(htd::vertex_t vertex) const = 0;
 
-            virtual htd::ILabelCollection * exportLabelCollection(const htd::hyperedge_t & edge) const = 0;
+            virtual htd::ILabelCollection * exportEdgeLabelCollection(htd::id_t edgeId) const = 0;
 
             virtual ILabelingCollection * clone(void) const = 0;
 

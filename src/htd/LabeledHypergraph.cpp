@@ -61,61 +61,30 @@ void htd::LabeledHypergraph::removeVertex(htd::vertex_t vertex)
 {
     htd::Hypergraph::removeVertex(vertex);
 
-    labelings_->removeLabels(vertex);
+    labelings_->removeVertexLabels(vertex);
 }
 
 void htd::LabeledHypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHyperedge)
 {
     htd::Hypergraph::removeVertex(vertex, addNeighborHyperedge);
 
-    labelings_->removeLabels(vertex);
+    labelings_->removeVertexLabels(vertex);
 }
 
 void htd::LabeledHypergraph::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     htd::Hypergraph::removeEdge(vertex1, vertex2);
 
-    htd::hyperedge_t hyperedge;
-
-    hyperedge.push_back(vertex1);
-    hyperedge.push_back(vertex2);
-
-    std::sort(hyperedge.begin(), hyperedge.end());
-
-    hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
-
-    labelings_->removeLabels(hyperedge);
+    //TODO
+    //labelings_->removeEdgeLabels(vertex1, vertex2);
 }
 
-void htd::LabeledHypergraph::removeEdge(htd::vertex_container::const_iterator begin, htd::vertex_container::const_iterator end)
+void htd::LabeledHypergraph::removeEdge(const htd::Collection<htd::vertex_t> & elements)
 {
-    htd::Hypergraph::removeEdge(begin, end);
+    htd::Hypergraph::removeEdge(elements);
 
-    htd::hyperedge_t hyperedge(begin, end);
-
-    std::sort(hyperedge.begin(), hyperedge.end());
-
-    hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
-
-    labelings_->removeLabels(hyperedge);
-}
-
-void htd::LabeledHypergraph::removeEdge(const htd::edge_t & edge)
-{
-    removeEdge(edge.first, edge.second);
-}
-
-void htd::LabeledHypergraph::removeEdge(const htd::hyperedge_t & edge)
-{
-    htd::Hypergraph::removeEdge(edge);
-
-    htd::hyperedge_t hyperedge(edge);
-
-    std::sort(hyperedge.begin(), hyperedge.end());
-
-    hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
-
-    labelings_->removeLabels(hyperedge);
+    //TODO
+    //labelings_->removeEdgeLabels(elements);
 }
 
 const htd::ILabelingCollection & htd::LabeledHypergraph::labelings(void) const
@@ -138,84 +107,80 @@ const std::string & htd::LabeledHypergraph::labelName(htd::index_t index) const
     return labelings_->labelName(index);
 }
 
-const htd::ILabel & htd::LabeledHypergraph::label(const std::string & labelName, htd::vertex_t vertex) const
+const htd::ILabel & htd::LabeledHypergraph::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->labeling(labelName).label(vertex);
+    return labelings_->labeling(labelName).vertexLabel(vertex);
 }
 
-const htd::ILabel & htd::LabeledHypergraph::label(const std::string & labelName, const htd::hyperedge_t & edge) const
+const htd::ILabel & htd::LabeledHypergraph::edgeLabel(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->labeling(labelName).label(edge);
+    return labelings_->labeling(labelName).edgeLabel(edgeId);
 }
 
-void htd::LabeledHypergraph::setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
+void htd::LabeledHypergraph::setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
     if (!labelings_->isLabelingName(labelName))
     {
         labelings_->setLabeling(labelName, new htd::GraphLabeling());
     }
 
-    labelings_->labeling(labelName).setLabel(vertex, label);
+    labelings_->labeling(labelName).setVertexLabel(vertex, label);
 }
 
-void htd::LabeledHypergraph::setLabel(const std::string & labelName, const htd::hyperedge_t & edge, htd::ILabel * label)
+void htd::LabeledHypergraph::setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label)
 {
     if (!labelings_->isLabelingName(labelName))
     {
         labelings_->setLabeling(labelName, new htd::GraphLabeling());
     }
 
-    labelings_->labeling(labelName).setLabel(edge, label);
+    labelings_->labeling(labelName).setEdgeLabel(edgeId, label);
 }
 
-void htd::LabeledHypergraph::removeLabel(const std::string & labelName, htd::vertex_t vertex)
+void htd::LabeledHypergraph::removeVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
     if (labelings_->isLabelingName(labelName))
     {
-        labelings_->labeling(labelName).removeLabel(vertex);
+        labelings_->labeling(labelName).removeVertexLabel(vertex);
     }
 }
 
-void htd::LabeledHypergraph::removeLabel(const std::string & labelName, const htd::hyperedge_t & edge)
+void htd::LabeledHypergraph::removeEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
     if (labelings_->isLabelingName(labelName))
     {
-        labelings_->labeling(labelName).removeLabel(edge);
+        labelings_->labeling(labelName).removeEdgeLabel(edgeId);
     }
 }
 
-void htd::LabeledHypergraph::swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::LabeledHypergraph::swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    labelings_->swapLabels(vertex1, vertex2);
+    labelings_->swapVertexLabels(vertex1, vertex2);
 }
 
-void htd::LabeledHypergraph::swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2)
+void htd::LabeledHypergraph::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    labelings_->swapLabels(edge1, edge2);
+    labelings_->swapEdgeLabels(edgeId1, edgeId2);
 }
 
-void htd::LabeledHypergraph::swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::LabeledHypergraph::swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelingName(labelName))
     {
-        labelings_->labeling(labelName).swapLabels(vertex1, vertex2);
+        throw std::logic_error("void htd::LabeledHypergraph::swapVertexLabel(const std::string &, htd::vertex_t, htd::vertex_t)");
     }
-    else
-    {
-        throw std::logic_error("void htd::LabeledHypergraph::swapLabel(const std::string &, htd::vertex_t, htd::vertex_t)");
-    }
+
+    labelings_->labeling(labelName).swapVertexLabels(vertex1, vertex2);
 }
 
-void htd::LabeledHypergraph::swapLabel(const std::string & labelName, const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2)
+void htd::LabeledHypergraph::swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    if (labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelingName(labelName))
     {
-        labelings_->labeling(labelName).swapLabels(edge1, edge2);
+        throw std::logic_error("void htd::LabeledHypergraph::swapEdgeLabel(const std::string &, htd::id_t, htd::id_t)");
     }
-    else
-    {
-        throw std::logic_error("void htd::LabeledHypergraph::swapLabel(const std::string &, htd::vertex_t, htd::vertex_t)");
-    }
+
+    labelings_->labeling(labelName).swapEdgeLabels(edgeId1, edgeId2);
 }
 
 htd::LabeledHypergraph * htd::LabeledHypergraph::clone(void) const

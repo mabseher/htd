@@ -87,16 +87,13 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
         {
             for (htd::vertex_t vertex : ret->vertices())
             {
-                auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
+                htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabelCollection * labelCollection = ret->labelings().exportLabelCollection(vertex);
-
-                //TODO Optimize (Use htd::Collection<T> as first parameter)
-                htd::ILabel * newLabel = labelingFunction->computeLabel(label, *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 
-                ret->setLabel(labelingFunction->name(), vertex, newLabel);
+                ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
         }
     }
@@ -183,9 +180,9 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                 buckets[index].push_back(index + htd::Vertex::FIRST);
             }
 
-            for (htd::hyperedge_t edge : graph.hyperedges())
+            for (htd::Hyperedge edge : graph.hyperedges())
             {
-                htd::vertex_t minimumVertex = getMinimumVertex(edge, indices);
+                htd::vertex_t minimumVertex = getMinimumVertex(edge.elements(), indices);
 
                 auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
 
@@ -431,17 +428,17 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
     return ret;
 }
 
-htd::vertex_t htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex(const htd::hyperedge_t & edge, const std::vector<htd::index_t> & vertexIndices) const
+htd::vertex_t htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
-    if (edge.size() > 0)
+    if (vertices.size() > 0)
     {
         std::size_t minimum = (std::size_t)-1;
 
         std::size_t currentIndex = (std::size_t)-1;
 
-        for (htd::vertex_t vertex : edge)
+        for (htd::vertex_t vertex : vertices)
         {
             currentIndex = vertexIndices[vertex - htd::Vertex::FIRST];
 
@@ -455,7 +452,7 @@ htd::vertex_t htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex
     }
     else
     {
-        throw std::out_of_range("htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex(const htd::hyperedge_t&, const std::vector<htd::index_t>&) const");
+        throw std::out_of_range("htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::vector<htd::index_t> &) const");
     }
 
     return ret;
@@ -550,9 +547,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 if (visited.find(currentNode) == visited.end())
                 {
-                    ret->setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, decompositionNode,
-                                  new htd::VertexContainerLabel(htd::vertex_container(buckets[currentNode - htd::Vertex::FIRST].begin(),
-                                                                                      buckets[currentNode - htd::Vertex::FIRST].end())));
+                    ret->setBagContent(decompositionNode, htd::Collection<htd::vertex_t>(buckets[currentNode - htd::Vertex::FIRST].begin(), buckets[currentNode - htd::Vertex::FIRST].end()));
 
                     visited.insert(currentNode);
                 }

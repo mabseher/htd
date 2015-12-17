@@ -64,17 +64,17 @@ namespace htd
 
             void removeLabeling(const std::string & labelName) HTD_OVERRIDE;
 
-            void removeLabels(htd::vertex_t vertex) HTD_OVERRIDE;
+            void removeVertexLabels(htd::vertex_t vertex) HTD_OVERRIDE;
 
-            void removeLabels(const htd::hyperedge_t & edge) HTD_OVERRIDE;
+            void removeEdgeLabels(htd::id_t edgeId) HTD_OVERRIDE;
 
-            void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+            void swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
-            void swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) HTD_OVERRIDE;
+            void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) HTD_OVERRIDE;
 
-            htd::ILabelCollection * exportLabelCollection(htd::vertex_t vertex) const HTD_OVERRIDE;
+            htd::ILabelCollection * exportVertexLabelCollection(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::ILabelCollection * exportLabelCollection(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+            htd::ILabelCollection * exportEdgeLabelCollection(htd::id_t edgeId) const HTD_OVERRIDE;
 
             LabelingCollection * clone(void) const HTD_OVERRIDE;
 

@@ -99,13 +99,26 @@ bool htd::DirectedGraph::isVertex(htd::vertex_t vertex) const
     return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
-bool htd::DirectedGraph::isEdge(const htd::hyperedge_t & edge) const
+bool htd::DirectedGraph::isEdge(htd::id_t edgeId) const
+{
+    HTD_UNUSED(edgeId);
+
+    //TODO
+    throw std::logic_error("bool htd::DirectedGraph::isEdge(htd::id_t) const: NOT YET IMPLEMENTED!");
+}
+
+bool htd::DirectedGraph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+{
+    return isEdge(htd::Collection<htd::vertex_t>(htd::vertex_container { vertex1, vertex2 }));
+}
+
+bool htd::DirectedGraph::isEdge(const htd::Collection<htd::vertex_t> & elements) const
 {
     bool ret = false;
 
-    if (edge.size() == 2)
+    if (elements.size() == 2)
     {
-        ret = isOutgoingNeighbor(edge[0], edge[1]);
+        ret = isOutgoingNeighbor(elements[0], elements[1]);
     }
 
     return ret;
@@ -645,85 +658,75 @@ const htd::edge_t & htd::DirectedGraph::edge(htd::index_t index, htd::vertex_t v
     return *it;
 }
 
-const htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(void) const
+const htd::Collection<htd::Hyperedge> htd::DirectedGraph::hyperedges(void) const
 {
-    htd::VectorAdapter<htd::hyperedge_t> ret;
+    htd::VectorAdapter<htd::Hyperedge> ret;
 
     auto & result = ret.container();
+
+    htd::id_t id = 0;
 
     for (size_t vertex1 = 0; vertex1 < size_; vertex1++)
     {
         for (auto & vertex2 : outgoingNeighborhood_[vertex1])
         {
-            hyperedge_t hyperedge;
+            htd::Hyperedge hyperedge(id);
 
-            if (vertex1 < vertex2)
-            {
-                hyperedge.push_back(vertex1);
-                hyperedge.push_back(vertex2);
-            }
-            else
-            {
-                hyperedge.push_back(vertex2);
-                hyperedge.push_back(vertex1);
-            }
+            hyperedge.push_back(vertex1);
+            hyperedge.push_back(vertex2);
 
             result.push_back(hyperedge);
+
+            ++id;
         }
     }
 
     return ret;
 }
 
-const htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(htd::vertex_t vertex) const
+const htd::Collection<htd::Hyperedge> htd::DirectedGraph::hyperedges(htd::vertex_t vertex) const
 {
-    htd::VectorAdapter<htd::hyperedge_t> ret;
+    htd::VectorAdapter<htd::Hyperedge> ret;
 
     auto & result = ret.container();
 
     if (isVertex(vertex))
     {
-        for (auto & vertex2 : outgoingNeighborhood_[vertex])
+        const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
+
+        for (auto it = hyperedgeCollection.begin(); it != hyperedgeCollection.end(); ++it)
         {
-            htd::hyperedge_t hyperedge;
+            const htd::Hyperedge & currentHyperedge = *it;
 
-            if (vertex < vertex2)
+            if (std::find(currentHyperedge.begin(), currentHyperedge.end(), vertex) != currentHyperedge.end())
             {
-                hyperedge.push_back(vertex);
-                hyperedge.push_back(vertex2);
+                result.push_back(currentHyperedge);
             }
-            else
-            {
-                hyperedge.push_back(vertex2);
-                hyperedge.push_back(vertex);
-            }
-
-            result.push_back(hyperedge);
         }
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::hyperedge_t> htd::DirectedGraph::hyperedges(htd::vertex_t) const");
+        throw std::logic_error("const htd::Collection<htd::Hyperedge> htd::DirectedGraph::hyperedges(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-const htd::hyperedge_t & htd::DirectedGraph::hyperedge(htd::index_t index) const
+const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t index) const
 {
     HTD_UNUSED(index);
 
     //TODO Implement
-    throw std::out_of_range("const htd::hyperedge_t & htd::DirectedGraph::hyperedge(htd::index_t) const");
+    throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t) const");
 }
 
-const htd::hyperedge_t & htd::DirectedGraph::hyperedge(htd::index_t index, htd::vertex_t vertex) const
+const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t index, htd::vertex_t vertex) const
 {
     HTD_UNUSED(index);
     HTD_UNUSED(vertex);
 
     //TODO Implement
-    throw std::out_of_range("const htd::hyperedge_t & htd::DirectedGraph::hyperedge(htd::index_t, htd::vertex_t) const");
+    throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t, htd::vertex_t) const");
 }
 
 htd::vertex_t htd::DirectedGraph::addVertex(void)

@@ -42,6 +42,7 @@ htd::Hypergraph::Hypergraph(void) : htd::Hypergraph::Hypergraph(0)
 
 htd::Hypergraph::Hypergraph(std::size_t size)
     : size_(size),
+      next_edge_(htd::Id::FIRST),
       next_vertex_(htd::Vertex::FIRST + size),
       vertices_(size),
       deletions_(),
@@ -77,7 +78,9 @@ std::size_t htd::Hypergraph::edgeCount(htd::vertex_t vertex) const
     {
         for (auto & edge : edges_)
         {
-            if (std::find(edge.begin(), edge.end(), vertex) != edge.end())
+            auto & elements = edge.elements();
+
+            if (std::find(elements.begin(), elements.end(), vertex) != elements.end())
             {
                 ret++;
             }
@@ -96,9 +99,33 @@ bool htd::Hypergraph::isVertex(htd::vertex_t vertex) const
     return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
-bool htd::Hypergraph::isEdge(const htd::hyperedge_t & edge) const
+bool htd::Hypergraph::isEdge(htd::id_t edgeId) const
 {
-    return std::find(edges_.begin(), edges_.end(), edge) != edges_.end();
+    bool ret = false;
+
+    for (auto it = edges_.begin(); !ret && it != edges_.end(); ++it)
+    {
+        ret = (it->id() == edgeId);
+    }
+
+    return ret;
+}
+
+bool htd::Hypergraph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+{
+    return isEdge(htd::Collection<htd::vertex_t>(htd::vertex_container { vertex1, vertex2 }));
+}
+
+bool htd::Hypergraph::isEdge(const htd::Collection<htd::vertex_t> & elements) const
+{
+    bool ret = false;
+
+    for (auto it = edges_.begin(); !ret && it != edges_.end(); ++it)
+    {
+        ret = it->size() == elements.size() && std::equal(it->begin(), it->end(), elements.begin());
+    }
+
+    return ret;
 }
 
 htd::vertex_t htd::Hypergraph::vertex(htd::index_t index) const
@@ -135,7 +162,7 @@ bool htd::Hypergraph::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) c
     {
         for (auto it = edges_.begin(); it != edges_.end();)
         {
-            const htd::hyperedge_t & edge = *it;
+            const htd::Hyperedge & edge = *it;
             
             if (std::binary_search(edge.begin(), edge.end(), vertex1))
             {
@@ -413,14 +440,14 @@ bool htd::Hypergraph::isIsolatedVertex(htd::vertex_t vertex) const
     return ret;
 }
 
-const htd::Collection<htd::hyperedge_t> htd::Hypergraph::hyperedges(void) const
+const htd::Collection<htd::Hyperedge> htd::Hypergraph::hyperedges(void) const
 {
-    return Collection<htd::hyperedge_t>(edges_);
+    return Collection<htd::Hyperedge>(edges_);
 }
 
-const htd::Collection<htd::hyperedge_t> htd::Hypergraph::hyperedges(htd::vertex_t vertex) const
+const htd::Collection<htd::Hyperedge> htd::Hypergraph::hyperedges(htd::vertex_t vertex) const
 {
-    htd::VectorAdapter<htd::hyperedge_t> ret;
+    htd::VectorAdapter<htd::Hyperedge> ret;
 
     auto & result = ret.container();
 
@@ -438,21 +465,21 @@ const htd::Collection<htd::hyperedge_t> htd::Hypergraph::hyperedges(htd::vertex_
     return ret;
 }
 
-const htd::hyperedge_t & htd::Hypergraph::hyperedge(htd::index_t index) const
+const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t index) const
 {
     HTD_UNUSED(index);
 
     //TODO Implement
-    throw std::logic_error("const htd::hyperedge_t & htd::Hypergraph::hyperedge(htd::index_t) const: NOT YET IMPLEMENTED");
+    throw std::logic_error("const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t) const: NOT YET IMPLEMENTED");
 }
 
-const htd::hyperedge_t & htd::Hypergraph::hyperedge(htd::index_t index, htd::vertex_t vertex) const
+const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t index, htd::vertex_t vertex) const
 {
     HTD_UNUSED(index);
     HTD_UNUSED(vertex);
 
     //TODO Implement
-    throw std::logic_error("const htd::hyperedge_t & htd::Hypergraph::hyperedge(htd::index_t, htd::vertex_t) const: NOT YET IMPLEMENTED");
+    throw std::logic_error("const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t, htd::vertex_t) const: NOT YET IMPLEMENTED");
 }
 
 htd::vertex_t htd::Hypergraph::addVertex(void)
@@ -480,7 +507,7 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex)
         
         for (auto & edge : edges_)
         {
-            edge.erase(std::remove(edge.begin(), edge.end(), vertex), edge.end());
+            edge.erase(vertex);
             
             if (edge.size() == 0)
             {
@@ -515,8 +542,6 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHypered
 
         if (addNeighborHyperedge)
         {
-            htd::hyperedge_t newEdge;
-
             auto position1 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
 
             if (position1 != currentNeighborhood.end())
@@ -524,16 +549,14 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHypered
                 currentNeighborhood.erase(position1);
             }
 
-            std::copy(currentNeighborhood.begin(), currentNeighborhood.end(), std::back_inserter(newEdge));
-
-            edges_.push_back(newEdge);
+            edges_.push_back(htd::Hyperedge(next_edge_, htd::Collection<htd::vertex_t>(currentNeighborhood)));
         }
 
         currentNeighborhood.clear();
 
         for (auto & edge : edges_)
         {
-            edge.erase(std::remove(edge.begin(), edge.end(), vertex), edge.end());
+            edge.erase(vertex);
 
             if (edge.size() == 0)
             {
@@ -556,159 +579,166 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHypered
     }
 }
 
-void htd::Hypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
+htd::id_t htd::Hypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    addEdge(htd::edge_t(vertex1, vertex2));
-}
-
-void htd::Hypergraph::addEdge(htd::vertex_container::const_iterator begin, htd::vertex_container::const_iterator end)
-{
-    addEdge(htd::hyperedge_t(begin, end));
-}
-
-void htd::Hypergraph::addEdge(const htd::edge_t & edge)
-{
-    htd::hyperedge_t hyperedge;
-
-    if (edge.first < edge.second)
+    if (!isVertex(vertex1) || !isVertex(vertex2))
     {
-        hyperedge.push_back(edge.first);
-        hyperedge.push_back(edge.second);
-    }
-    else
-    {
-        if (edge.first != edge.second)
-        {
-            hyperedge.push_back(edge.second);
-        }
-
-        hyperedge.push_back(edge.first);
+        throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(htd::vertex_t, htd::vertex_t)");
     }
 
-    addEdge(hyperedge);
+    edges_.push_back(htd::Hyperedge(next_edge_, htd::Collection<htd::vertex_t>(htd::vertex_container { vertex1, vertex2 })));
+
+    auto & currentNeighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
+    auto & currentNeighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
+
+    auto position1 = std::lower_bound(currentNeighborhood1.begin(), currentNeighborhood1.end(), vertex2);
+
+    if (position1 != currentNeighborhood1.end())
+    {
+        currentNeighborhood1.insert(position1, vertex2);
+    }
+
+    auto position2 = std::lower_bound(currentNeighborhood2.begin(), currentNeighborhood2.end(), vertex1);
+
+    if (position2 != currentNeighborhood2.end())
+    {
+        currentNeighborhood1.insert(position2, vertex1);
+    }
+
+    return next_edge_++;
 }
 
-void htd::Hypergraph::addEdge(const htd::hyperedge_t & edge)
+htd::id_t htd::Hypergraph::addEdge(const htd::Collection<htd::vertex_t> & elements)
 {
-    if (edge.size() > 0)
+    if (elements.empty())
     {
-        bool ok = true;
+        throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(const htd::Collection<htd::vertex_t> &)");
+    }
 
-        for (auto it = edge.begin(); ok && it != edge.end(); it++)
+    bool ok = true;
+
+    for (auto it = elements.begin(); ok && it != elements.end(); it++)
+    {
+        ok = isVertex(*it);
+    }
+
+    if (!ok)
+    {
+        throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(const htd::Collection<htd::vertex_t> &)");
+    }
+
+    edges_.push_back(htd::Hyperedge(next_edge_, elements));
+
+    std::array<htd::vertex_t, 1> currentVertex;
+
+    for (htd::vertex_t vertex : elements)
+    {
+        currentVertex[0] = vertex;
+
+        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+
+        htd::vertex_container newNeighborhood;
+
+        std::set_union(currentNeighborhood.begin(), currentNeighborhood.end(), elements.begin(), elements.end(), std::back_inserter(newNeighborhood));
+
+        currentNeighborhood.swap(newNeighborhood);
+    }
+
+    return next_edge_++;
+}
+
+void htd::Hypergraph::removeEdge(htd::id_t edgeId)
+{
+    bool found = false;
+
+    auto position = edges_.begin();
+
+    for (auto it = edges_.begin(); !found && it != edges_.end(); ++it)
+    {
+        if (it->id() == edgeId)
         {
-            ok = isVertex(*it);
+            position = it;
+
+            found = true;
         }
+    }
 
-        if (ok)
-        {
-            htd::hyperedge_t hyperedge(edge);
-
-            std::sort(hyperedge.begin(), hyperedge.end());
-
-            hyperedge.erase(std::unique(hyperedge.begin(), hyperedge.end()), hyperedge.end());
-
-            edges_.push_back(hyperedge);
-
-            std::array<htd::vertex_t, 1> currentVertex;
-
-            for (htd::vertex_t vertex : hyperedge)
-            {
-                currentVertex[0] = vertex;
-
-                auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
-
-                htd::vertex_container newNeighborhood;
-
-                htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(),
-                                        hyperedge.begin(), hyperedge.end(),
-                                        currentVertex.begin(), currentVertex.end(),
-                                        std::back_inserter(newNeighborhood));
-
-                currentNeighborhood.swap(newNeighborhood);
-            }
-        }
-        else
-        {
-            throw std::logic_error("void htd::Hypergraph::addEdge(const htd::hyperedge_t &)");
-        }
+    if (found)
+    {
+        edges_.erase(position);
     }
 }
 
 void htd::Hypergraph::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    removeEdge(htd::edge_t(vertex1, vertex2));
+    removeEdge(htd::Collection<htd::vertex_t>(htd::vertex_container { vertex1, vertex2 }));
 }
 
-void htd::Hypergraph::removeEdge(vertex_container::const_iterator begin, vertex_container::const_iterator end)
+void htd::Hypergraph::removeEdge(const htd::Collection<htd::vertex_t> & elements)
 {
-    removeEdge(htd::hyperedge_t(begin, end));
-}
-
-void htd::Hypergraph::removeEdge(const htd::edge_t & edge)
-{
-    htd::hyperedge_t hyperedge;
-
-    if (edge.first < edge.second)
+    if (elements.empty())
     {
-        hyperedge.push_back(edge.first);
-        hyperedge.push_back(edge.second);
+        throw std::logic_error("htd::id_t htd::Hypergraph::removeEdge(const htd::Collection<htd::vertex_t> &)");
     }
-    else
+
+    bool ok = true;
+
+    for (auto it = elements.begin(); ok && it != elements.end(); it++)
     {
-        if (edge.first != edge.second)
-        {
-            hyperedge.push_back(edge.second);
-        }    
-        
-        hyperedge.push_back(edge.first);
+        ok = isVertex(*it);
     }
-    
-    removeEdge(hyperedge);
-}
 
-void htd::Hypergraph::removeEdge(const htd::hyperedge_t & edge)
-{
-    if (edge.size() > 0)
+    if (!ok)
     {
-        bool ok = true;
+        throw std::logic_error("htd::id_t htd::Hypergraph::removeEdge(const htd::Collection<htd::vertex_t> &)");
+    }
 
-        for (auto it = edge.begin(); ok && it != edge.end(); it++)
-        {
-            ok = isVertex(*it);
-        }
+    auto position = edges_.begin();
 
-        if (ok)
+    while (position != edges_.end() && htd::Collection<htd::vertex_t>(position->elements()) != elements)
+    {
+        ++position;
+    }
+
+    if (position != edges_.end() && htd::Collection<htd::vertex_t>(position->elements()) == elements)
+    {
+        edges_.erase(position);
+
+        for (htd::vertex_t vertex : elements)
         {
-            auto position = std::find(edges_.begin(), edges_.end(), edge);
-            
-            if (position != edges_.end() && *position == edge)
+            std::unordered_set<htd::vertex_t> missing(elements.begin(), elements.end());
+
+            for (auto it = edges_.begin(); !missing.empty() && it != edges_.end(); it++)
             {
-                edges_.erase(position);
+                htd::Hyperedge & currentEdge = *it;
 
-                for (htd::vertex_t vertex : edge)
+                if (std::find(currentEdge.begin(), currentEdge.end(), vertex) != currentEdge.end())
                 {
-                    for (auto it = edges_.begin(); it != edges_.end(); it++)
+                    for (htd::vertex_t vertex2 : currentEdge)
                     {
-                        htd::hyperedge_t & currentEdge = *it;
-
-                        if (std::lower_bound(currentEdge.begin(), currentEdge.end(), vertex) != currentEdge.end())
-                        {
-                            it = edges_.end();
-                        }
+                        missing.erase(vertex2);
                     }
                 }
             }
-        }
-        else
-        {
-            throw std::logic_error("void htd::Hypergraph::removeEdge(const htd::hyperedge_t &)");
+
+            if (!missing.empty())
+            {
+                htd::vertex_container & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+
+                for (auto it = missing.begin(); it != missing.end(); it++)
+                {
+                    auto position2 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), *it);
+
+                    currentNeighborhood.erase(position2);
+                }
+            }
         }
     }
 }
 
 htd::Hypergraph * htd::Hypergraph::clone(void) const
 {
-    return new Hypergraph(*this);
+    return new htd::Hypergraph(*this);
 }
 
 #endif /* HTD_HTD_HYPERGRAPH_CPP */

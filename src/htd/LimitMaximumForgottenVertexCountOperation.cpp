@@ -111,7 +111,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                 std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(newContent));
+                decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
 
                 if (intermediatedVertexCount > 0)
                 {
@@ -128,7 +128,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
-                        decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(newContent));
+                        decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
 
                         if (index < forgottenVertexCount + limit_)
                         {

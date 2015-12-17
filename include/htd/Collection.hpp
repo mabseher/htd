@@ -91,6 +91,31 @@ namespace htd
                 return end_;
             }
 
+            T & operator[](htd::index_t index)
+            {
+                htd::Iterator<htd::vertex_t> position = begin();
+
+                std::advance(position, index);
+
+                return *position;
+            }
+
+            const T & operator[](htd::index_t index) const
+            {
+                htd::Iterator<htd::vertex_t> position = begin();
+
+                std::advance(position, index);
+
+                return *position;
+            }
+
+            inline bool operator==(const Collection & rhs) const
+            {
+                return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
+            }
+
+            inline bool operator!=(const Collection & rhs) const { return !(*this == rhs); }
+
         private:
             Iterator<T> begin_;
             Iterator<T> end_;

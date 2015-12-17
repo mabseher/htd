@@ -26,6 +26,7 @@
 #define HTD_HTD_VERTEX_HPP
 
 #include <cstdlib>
+#include <vector>
 
 namespace htd
 {
@@ -44,6 +45,11 @@ namespace htd
         private:
             Vertex(void);
     };
+
+    /**
+     *  Datatype for storing vertices.
+     */
+    typedef std::vector<vertex_t> vertex_container;
 }
 
 #endif /* HTD_HTD_VERTEX_HPP */

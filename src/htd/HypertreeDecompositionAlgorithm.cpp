@@ -82,11 +82,9 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
                 for (htd::vertex_t vertex : ret->vertices())
                 {
-                    auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
+                    htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(ret->bagContent(vertex));
 
-                    htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(label);
-
-                    ret->setLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
+                    ret->setVertexLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
                 }
 
                 delete treeDecomposition;
@@ -138,27 +136,23 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
         for (htd::vertex_t vertex : ret->vertices())
         {
-            auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
+            htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(ret->bagContent(vertex));
 
-            htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(label);
-
-            ret->setLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
+            ret->setVertexLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
         }
 
         for (auto & labelingFunction : labelingFunctions)
         {
             for (htd::vertex_t vertex : ret->vertices())
             {
-                auto label = (dynamic_cast<const htd::VertexContainerLabel *>(&(ret->label(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, vertex))))->container();
-
-                htd::ILabelCollection * labelCollection = ret->labelings().exportLabelCollection(vertex);
+                htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
                 //TODO Optimize
-                htd::ILabel * newLabel = labelingFunction->computeLabel(label, *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 
-                ret->setLabel(labelingFunction->name(), vertex, newLabel);
+                ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
         }
 

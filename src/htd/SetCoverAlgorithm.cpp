@@ -45,7 +45,7 @@ htd::SetCoverAlgorithm::~SetCoverAlgorithm()
     
 }
 
-void htd::SetCoverAlgorithm::computeSetCover(const htd::vertex_container& vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::vertex_container> & result) const
+void htd::SetCoverAlgorithm::computeSetCover(const htd::Collection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::index_t> & result) const
 {
     htd::id_t next = 0;
     
@@ -57,7 +57,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::vertex_container& vertic
     
     std::vector<std::vector<htd::id_t>> solutions;
     
-    std::vector<htd::id_t> remainder(vertices);
+    std::vector<htd::id_t> remainder(vertices.begin(), vertices.end());
 
     std::unordered_map<htd::id_t, std::size_t> additionalCoverage;
 
@@ -323,10 +323,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::vertex_container& vertic
         std::cout << "Total solutions: " << count << std::endl << std::endl;
         )
     
-        for (htd::id_t element : solutions[0])
-        {
-            result.push_back(containers[element]);
-        }
+        std::copy(solutions[0].begin(), solutions[0].end(), std::back_inserter(result));
     }
 }
 

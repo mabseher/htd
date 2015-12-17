@@ -82,10 +82,27 @@ namespace std
     }
 
     template<>
-    class hash<htd::hyperedge_t>
+    class hash<htd::Hyperedge>
     {
         public:
-            std::size_t operator()(const htd::hyperedge_t & data) const
+            std::size_t operator()(const htd::Hyperedge & data) const
+            {
+                std::size_t ret = 31 * data.id();
+
+                for (htd::vertex_t vertex : data.elements())
+                {
+                    std::hash_combine(ret, vertex);
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    class hash<htd::vertex_container>
+    {
+        public:
+            std::size_t operator()(const htd::vertex_container & data) const
             {
                 std::size_t ret = 31;
 

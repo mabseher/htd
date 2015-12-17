@@ -43,36 +43,36 @@ namespace htd
 
             std::size_t vertexLabelCount(void) const HTD_OVERRIDE;
 
-            std::size_t hyperedgeLabelCount(void) const HTD_OVERRIDE;
+            std::size_t edgeLabelCount(void) const HTD_OVERRIDE;
 
-            bool hasLabel(htd::vertex_t vertex) const HTD_OVERRIDE;
+            bool isLabeledVertex(htd::id_t id) const HTD_OVERRIDE;
 
-            bool hasLabel(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+            bool isLabeledEdge(htd::id_t id) const HTD_OVERRIDE;
 
-            const htd::ILabel & label(htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::ILabel & vertexLabel(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::ILabel & label(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+            const htd::ILabel & edgeLabel(htd::id_t id) const HTD_OVERRIDE;
 
-            void setLabel(htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
+            void setVertexLabel(htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
 
-            void setLabel(const htd::hyperedge_t & edge, htd::ILabel * label) HTD_OVERRIDE;
+            void setEdgeLabel(htd::id_t id, htd::ILabel * label) HTD_OVERRIDE;
 
-            void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+            void swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
-            void swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) HTD_OVERRIDE;
+            void swapEdgeLabels(htd::id_t id1, htd::id_t id2) HTD_OVERRIDE;
 
-            void removeLabel(htd::vertex_t vertex) HTD_OVERRIDE;
+            void removeVertexLabel(htd::vertex_t vertex) HTD_OVERRIDE;
 
-            void removeLabel(const htd::hyperedge_t & edge) HTD_OVERRIDE;
-
-            void clear(void) HTD_OVERRIDE;
+            void removeEdgeLabel(htd::id_t id) HTD_OVERRIDE;
 
             GraphLabeling * clone(void) const HTD_OVERRIDE;
 
-        private:
-            std::unordered_map<htd::vertex_t, htd::ILabel *> vertexLabels_;
+            void clear(void) HTD_OVERRIDE;
 
-            std::unordered_map<htd::hyperedge_t, htd::ILabel *> hyperedgeLabels_;
+        private:
+            std::unordered_map<htd::id_t, htd::ILabel *> vertexLabels_;
+
+            std::unordered_map<htd::id_t, htd::ILabel *> edgeLabels_;
     };
 }
 

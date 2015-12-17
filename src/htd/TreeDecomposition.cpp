@@ -165,13 +165,23 @@ bool htd::TreeDecomposition::isVertex(htd::vertex_t vertex) const
     return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
 }
 
-bool htd::TreeDecomposition::isEdge(const htd::hyperedge_t & edge) const
+bool htd::TreeDecomposition::isEdge(htd::id_t edgeId) const
+{
+    return edgeId > 0 && edgeId <= edgeCount();
+}
+
+bool htd::TreeDecomposition::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+{
+    return isNeighbor(vertex1, vertex2);
+}
+
+bool htd::TreeDecomposition::isEdge(const htd::Collection<htd::vertex_t> & elements) const
 {
     bool ret = false;
 
-    if (edge.size() == 2 && edge[0] != edge[1])
+    if (elements.size() == 2 && elements[0] != elements[1])
     {
-        ret = isNeighbor(edge[0], edge[1]);
+        ret = isNeighbor(elements[0], elements[1]);
     }
 
     return ret;
@@ -504,11 +514,13 @@ const htd::edge_t & htd::TreeDecomposition::edge(htd::index_t index, htd::vertex
     return *it;
 }
 
-const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(void) const
+const htd::Collection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(void) const
 {
-    htd::VectorAdapter<htd::hyperedge_t> ret;
+    htd::VectorAdapter<htd::Hyperedge> ret;
 
     auto & result = ret.container();
+
+    htd::id_t id = 0;
 
     for (auto & currentNode : nodes_)
     {
@@ -518,7 +530,7 @@ const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(void)
 
             for (auto child : children)
             {
-                htd::hyperedge_t hyperedge;
+                htd::Hyperedge hyperedge(id);
 
                 if (currentNode->id < child)
                 {
@@ -532,6 +544,8 @@ const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(void)
                 }
 
                 result.push_back(hyperedge);
+
+                ++id;
             }
         }
     }
@@ -539,9 +553,9 @@ const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(void)
     return ret;
 }
 
-const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(htd::vertex_t vertex) const
+const htd::Collection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::vertex_t vertex) const
 {
-    htd::VectorAdapter<htd::hyperedge_t> ret;
+    htd::VectorAdapter<htd::Hyperedge> ret;
 
     auto & result = ret.container();
 
@@ -551,79 +565,53 @@ const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(htd::
 
         if (node != nullptr)
         {
-            auto & children = node->children;
-            
-            if (node->parent != htd::Vertex::UNKNOWN)
+            const htd::Collection<htd::Hyperedge> hyperedgeCollection = htd::TreeDecomposition::hyperedges();
+
+            for (auto it = hyperedgeCollection.begin(); it != hyperedgeCollection.end(); ++it)
             {
-                htd::hyperedge_t hyperedge;
+                const htd::Hyperedge & currentHyperedge = *it;
 
-                if (node->parent < node->id)
+                if (std::find(currentHyperedge.begin(), currentHyperedge.end(), vertex) != currentHyperedge.end())
                 {
-                    hyperedge.push_back(node->parent);
-                    hyperedge.push_back(node->id);
+                    result.push_back(currentHyperedge);
                 }
-                else
-                {
-                    hyperedge.push_back(node->id);
-                    hyperedge.push_back(node->parent);
-                }
-
-                result.push_back(hyperedge);
-            }
-
-            for (auto child : children)
-            {
-                htd::hyperedge_t hyperedge;
-
-                if (node->id < child)
-                {
-                    hyperedge.push_back(node->id);
-                    hyperedge.push_back(child);
-                }
-                else
-                {
-                    hyperedge.push_back(child);
-                    hyperedge.push_back(node->id);
-                }
-
-                result.push_back(hyperedge);
             }
         }
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::hyperedge_t> htd::TreeDecomposition::hyperedges(htd::vertex_t) const");
+        throw std::logic_error("const htd::Collection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index) const
+const htd::Hyperedge & htd::TreeDecomposition::hyperedge(htd::index_t index) const
 {
-    const htd::Collection<htd::hyperedge_t> edgeCollection = hyperedges();
+    const htd::Collection<htd::Hyperedge> edgeCollection = hyperedges();
 
     if (index >= edgeCollection.size())
     {
-        throw std::out_of_range("const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t) const");
+        throw std::out_of_range("const htd::Hyperedge & htd::TreeDecomposition::hyperedge(htd::index_t) const");
     }
 
-    htd::Iterator<htd::hyperedge_t> it = edgeCollection.begin();
+    htd::Iterator<htd::Hyperedge> it = edgeCollection.begin();
 
     std::advance(it, index);
 
     return *it;
 }
 
-const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t index, htd::vertex_t vertex) const
+const htd::Hyperedge & htd::TreeDecomposition::hyperedge(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::Collection<htd::hyperedge_t> edgeCollection = hyperedges(vertex);
+    const htd::Collection<htd::Hyperedge> edgeCollection = hyperedges(vertex);
 
     if (index >= edgeCollection.size())
     {
-        throw std::out_of_range("const htd::hyperedge_t & htd::TreeDecomposition::hyperedge(htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("const htd::Hyperedge & htd::TreeDecomposition::hyperedge(htd::index_t, htd::vertex_t) const");
     }
 
-    htd::Iterator<htd::hyperedge_t> it = edgeCollection.begin();
+    htd::Iterator<htd::Hyperedge> it = edgeCollection.begin();
 
     std::advance(it, index);
 
@@ -1208,37 +1196,37 @@ const std::string & htd::TreeDecomposition::labelName(htd::index_t index) const
     return (*position).first;
 }
 
-const htd::ILabel & htd::TreeDecomposition::label(const std::string & labelName, htd::vertex_t vertex) const
+const htd::ILabel & htd::TreeDecomposition::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))
     {
-        throw std::out_of_range("const htd::ILabel & htd::TreeDecomposition::label(const std::string &, htd::vertex_t) const");
+        throw std::out_of_range("const htd::ILabel & htd::TreeDecomposition::vertexLabel(const std::string &, htd::vertex_t) const");
     }
 
     if (!labelings_->isLabelingName(labelName))
     {
-        throw std::logic_error("const htd::ILabel & htd::TreeDecomposition::label(const std::string &, htd::vertex_t) const");
+        throw std::logic_error("const htd::ILabel & htd::TreeDecomposition::vertexLabel(const std::string &, htd::vertex_t) const");
     }
 
-    return (*labelings_)[labelName].label(vertex);
+    return (*labelings_)[labelName].vertexLabel(vertex);
 }
 
-const htd::ILabel & htd::TreeDecomposition::label(const std::string & labelName, const htd::hyperedge_t & edge) const
+const htd::ILabel & htd::TreeDecomposition::edgeLabel(const std::string & labelName, htd::id_t edgeId) const
 {
-    if (!isEdge(edge))
+    if (!isEdge(edgeId))
     {
-        throw std::out_of_range("const htd::ILabel & htd::TreeDecomposition::label(const std::string &, const htd::hyperedge_t &) const");
+        throw std::out_of_range("const htd::ILabel & htd::TreeDecomposition::edgeLabel(const std::string &, htd::id_t) const");
     }
 
     if (!labelings_->isLabelingName(labelName))
     {
-        throw std::logic_error("const htd::ILabel & htd::TreeDecomposition::label(const std::string &, const htd::hyperedge_t &) const");
+        throw std::logic_error("const htd::ILabel & htd::TreeDecomposition::edgeLabel(const std::string &, htd::id_t) const");
     }
 
-    return (*labelings_)[labelName].label(edge);
+    return (*labelings_)[labelName].edgeLabel(edgeId);
 }
 
-void htd::TreeDecomposition::setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
+void htd::TreeDecomposition::setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
     if (isVertex(vertex))
     {
@@ -1247,41 +1235,41 @@ void htd::TreeDecomposition::setLabel(const std::string & labelName, htd::vertex
             labelings_->setLabeling(labelName, new htd::GraphLabeling());
         }
 
-        (*labelings_)[labelName].setLabel(vertex, label);
+        (*labelings_)[labelName].setVertexLabel(vertex, label);
     }
 }
 
-void htd::TreeDecomposition::setLabel(const std::string & labelName, const htd::hyperedge_t & edge, htd::ILabel * label)
+void htd::TreeDecomposition::setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label)
 {
-    if (isEdge(edge))
+    if (isEdge(edgeId))
     {
         if (!labelings_->isLabelingName(labelName))
         {
             labelings_->setLabeling(labelName, new htd::GraphLabeling());
         }
 
-        (*labelings_)[labelName].setLabel(edge, label);
+        (*labelings_)[labelName].setEdgeLabel(edgeId, label);
     }
 }
 
-void htd::TreeDecomposition::removeLabel(const std::string & labelName, htd::vertex_t vertex)
+void htd::TreeDecomposition::removeVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
     if (isVertex(vertex))
     {
         if (labelings_->isLabelingName(labelName))
         {
-            (*labelings_)[labelName].removeLabel(vertex);
+            (*labelings_)[labelName].removeVertexLabel(vertex);
         }
     }
 }
 
-void htd::TreeDecomposition::removeLabel(const std::string & labelName, const htd::hyperedge_t & edge)
+void htd::TreeDecomposition::removeEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (isEdge(edge))
+    if (isEdge(edgeId))
     {
         if (labelings_->isLabelingName(labelName))
         {
-            (*labelings_)[labelName].removeLabel(edge);
+            (*labelings_)[labelName].removeEdgeLabel(edgeId);
         }
     }
 }
@@ -1665,9 +1653,9 @@ std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t vertex) const
         {
             auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-            if (bagLabeling.hasLabel(vertex))
+            if (bagLabeling.isLabeledVertex(vertex))
             {
-                ret = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container().size();
+                ret = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.vertexLabel(vertex)))->container().size();
             }
         }
     }
@@ -1685,9 +1673,9 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::ver
     {
         auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-        if (bagLabeling.hasLabel(vertex))
+        if (bagLabeling.isLabeledVertex(vertex))
         {
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.label(vertex)))->container();
+            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.vertexLabel(vertex)))->container();
 
             return htd::Collection<htd::vertex_t>(vertexLabel);
         }
@@ -1706,7 +1694,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::vert
     {
         auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-        bagLabeling.setLabel(vertex, new htd::VertexContainerLabel(content));
+        bagLabeling.setVertexLabel(vertex, new htd::VertexContainerLabel(content));
     }
     else
     {
@@ -1720,7 +1708,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::Coll
     {
         auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-        bagLabeling.setLabel(vertex, new htd::VertexContainerLabel(content.begin(), content.end()));
+        bagLabeling.setVertexLabel(vertex, new htd::VertexContainerLabel(content.begin(), content.end()));
     }
     else
     {
@@ -2396,7 +2384,7 @@ void htd::TreeDecomposition::deleteNode(TreeNode * node)
 
                     for (auto & labeling : *labelings_)
                     {
-                        labeling.second->removeLabel(nodeIdentifier);
+                        labeling.second->removeVertexLabel(nodeIdentifier);
                     }
 
                     if (nodes_[nodeIdentifier - htd::Vertex::FIRST] != nullptr)
@@ -2418,7 +2406,7 @@ void htd::TreeDecomposition::deleteNode(TreeNode * node)
 
             for (auto & labeling : *labelings_)
             {
-                labeling.second->removeLabel(nodeIdentifier);
+                labeling.second->removeVertexLabel(nodeIdentifier);
             }
 
             if (nodes_[nodeIdentifier - htd::Vertex::FIRST] != nullptr)
@@ -2433,42 +2421,54 @@ void htd::TreeDecomposition::deleteNode(TreeNode * node)
     }
 }
 
-void htd::TreeDecomposition::swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::TreeDecomposition::swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (isVertex(vertex1) && isVertex(vertex2))
+    if (!isVertex(vertex1) || !isVertex(vertex2))
     {
-        labelings_->swapLabels(vertex1, vertex2);
+        throw std::logic_error("void htd::TreeDecomposition::swapVertexLabels(htd::vertex_t, htd::vertex_t)");
     }
+
+    labelings_->swapVertexLabels(vertex1, vertex2);
 }
 
-void htd::TreeDecomposition::swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2)
+void htd::TreeDecomposition::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    if (isEdge(edge1) && isEdge(edge2))
+    if (!isEdge(edgeId1) || !isEdge(edgeId2))
     {
-        labelings_->swapLabels(edge1, edge2);
+        throw std::logic_error("void htd::TreeDecomposition::swapEdgeLabels(htd::id_t, htd::id_t)");
     }
+
+    labelings_->swapEdgeLabels(edgeId1, edgeId2);
 }
 
-void htd::TreeDecomposition::swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::TreeDecomposition::swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (isVertex(vertex1) && isVertex(vertex2))
+    if (!isVertex(vertex1) || !isVertex(vertex2))
     {
-        if (labelings_->isLabelingName(labelName))
-        {
-            (*labelings_)[labelName].swapLabels(vertex1, vertex2);
-        }
+        throw std::logic_error("void htd::TreeDecomposition::swapVertexLabel(const std::string &, htd::id_t, htd::id_t)");
     }
+
+    if (!labelings_->isLabelingName(labelName))
+    {
+        throw std::logic_error("void htd::TreeDecomposition::swapVertexLabel(const std::string &, htd::id_t, htd::id_t)");
+    }
+
+    (*labelings_)[labelName].swapVertexLabels(vertex1, vertex2);
 }
 
-void htd::TreeDecomposition::swapLabel(const std::string & labelName, const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2)
+void htd::TreeDecomposition::swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    if (isEdge(edge1) && isEdge(edge2))
+    if (!isEdge(edgeId1) || !isEdge(edgeId2))
     {
-        if (labelings_->isLabelingName(labelName))
-        {
-            (*labelings_)[labelName].swapLabels(edge1, edge2);
-        }
+        throw std::logic_error("void htd::TreeDecomposition::swapEdgeLabel(const std::string &, htd::id_t, htd::id_t)");
     }
+
+    if (!labelings_->isLabelingName(labelName))
+    {
+        throw std::logic_error("void htd::TreeDecomposition::swapEdgeLabel(const std::string &, htd::id_t, htd::id_t)");
+    }
+
+    (*labelings_)[labelName].swapEdgeLabels(edgeId1, edgeId2);
 }
 
 htd::TreeDecomposition * htd::TreeDecomposition::clone(void) const

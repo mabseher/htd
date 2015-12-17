@@ -75,7 +75,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
             {
                 htd::vertex_t intermediateVertex = decomposition.addParent(child);
 
-                decomposition.setLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, intermediateVertex, new htd::VertexContainerLabel(htd::vertex_container(rememberedVertices.begin(), rememberedVertices.end())));
+                decomposition.setVertexLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, intermediateVertex, new htd::VertexContainerLabel(htd::vertex_container(rememberedVertices.begin(), rememberedVertices.end())));
             }
         }
     }

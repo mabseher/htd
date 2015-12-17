@@ -43,7 +43,7 @@ htd::HeuristicSetCoverAlgorithm::~HeuristicSetCoverAlgorithm()
     
 }
 
-void htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::vertex_container& vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::vertex_container> & result) const
+void htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::Collection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container> & containers, std::vector<htd::index_t> & result) const
 {
     std::vector<htd::id_t> relevantContainers;
 
@@ -179,10 +179,7 @@ void htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::vertex_containe
         std::cout << "Total solutions: " << count << std::endl << std::endl;
         )
 
-        for (htd::id_t element : solutions[0])
-        {
-            result.push_back(containers[element]);
-        }
+        std::copy(solutions[0].begin(), solutions[0].end(), std::back_inserter(result));
     }
 }
 

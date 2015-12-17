@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
+#include <htd/Collection.hpp>
 
 namespace htd
 {
@@ -41,21 +42,15 @@ namespace htd
 
             virtual void removeVertex(htd::vertex_t vertex, bool addNeighborHyperedge) = 0;
             
-            virtual void addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
-            
-            virtual void addEdge(htd::vertex_container::const_iterator begin, htd::vertex_container::const_iterator end) = 0;
-            
-            virtual void addEdge(const htd::edge_t & edge) = 0;
-            
-            virtual void addEdge(const htd::hyperedge_t & edge) = 0;
-            
+            virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+
+            virtual htd::id_t addEdge(const htd::Collection<htd::vertex_t> & elements) = 0;
+
+            virtual void removeEdge(htd::id_t edgeId) = 0;
+
             virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
-            
-            virtual void removeEdge(htd::vertex_container::const_iterator begin, htd::vertex_container::const_iterator end) = 0;
-            
-            virtual void removeEdge(const htd::edge_t & edge) = 0;
-            
-            virtual void removeEdge(const htd::hyperedge_t & edge) = 0;
+
+            virtual void removeEdge(const htd::Collection<htd::vertex_t> & elements) = 0;
 
             virtual IMutableHypergraph * clone(void) const = 0;
     };

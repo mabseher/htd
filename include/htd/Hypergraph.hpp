@@ -51,7 +51,11 @@ namespace htd
 
             bool isVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            bool isEdge(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+            bool isEdge(htd::id_t edgeId) const HTD_OVERRIDE;
+
+            bool isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
+
+            bool isEdge(const htd::Collection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
             htd::vertex_t vertex(htd::index_t index) const HTD_OVERRIDE;
             
@@ -77,13 +81,13 @@ namespace htd
 
             bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::hyperedge_t> hyperedges(void) const HTD_OVERRIDE;
+            const htd::Collection<htd::Hyperedge> hyperedges(void) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::hyperedge_t> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::Collection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::hyperedge_t & hyperedge(htd::index_t index) const HTD_OVERRIDE;
+            const htd::Hyperedge & hyperedge(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::hyperedge_t & hyperedge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::Hyperedge & hyperedge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
             
@@ -91,21 +95,15 @@ namespace htd
 
             void removeVertex(htd::vertex_t vertex, bool addNeighborHyperedge) HTD_OVERRIDE;
 
-            void addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+            htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
-            void addEdge(htd::vertex_container::const_iterator begin, htd::vertex_container::const_iterator end) HTD_OVERRIDE;
+            htd::id_t addEdge(const htd::Collection<htd::vertex_t> & elements) HTD_OVERRIDE;
 
-            void addEdge(const htd::edge_t & edge) HTD_OVERRIDE;
-
-            void addEdge(const htd::hyperedge_t & edge) HTD_OVERRIDE;
+            void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
             void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
-            
-            void removeEdge(htd::vertex_container::const_iterator begin, htd::vertex_container::const_iterator end) HTD_OVERRIDE;
-            
-            void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
-            
-            void removeEdge(const htd::hyperedge_t & edge) HTD_OVERRIDE;
+
+            void removeEdge(const htd::Collection<htd::vertex_t> & elements) HTD_OVERRIDE;
 
             Hypergraph * clone(void) const HTD_OVERRIDE;
 
@@ -115,13 +113,15 @@ namespace htd
         private:
             std::size_t size_;
 
+            htd::index_t next_edge_;
+
             htd::vertex_t next_vertex_;
 
             htd::vertex_container vertices_;
 
             std::unordered_set<htd::vertex_t> deletions_;
 
-            std::vector<htd::hyperedge_t> edges_;
+            std::vector<htd::Hyperedge> edges_;
 
             std::vector<htd::vertex_container> neighborhood_;
     };

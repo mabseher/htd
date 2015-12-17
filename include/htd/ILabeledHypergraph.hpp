@@ -48,9 +48,9 @@ namespace htd
 
             virtual const std::string & labelName(htd::index_t index) const = 0;
 
-            virtual const htd::ILabel & label(const std::string & labelName, htd::vertex_t vertex) const = 0;
+            virtual const htd::ILabel & vertexLabel(const std::string & labelName, htd::vertex_t vertex) const = 0;
 
-            virtual const htd::ILabel & label(const std::string & labelName, const htd::hyperedge_t & edge) const = 0;
+            virtual const htd::ILabel & edgeLabel(const std::string & labelName, htd::id_t edgeId) const = 0;
 
             virtual ILabeledHypergraph * clone(void) const = 0;
     };

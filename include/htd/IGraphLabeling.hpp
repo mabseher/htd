@@ -37,31 +37,31 @@ namespace htd
 
             virtual std::size_t vertexLabelCount() const = 0;
 
-            virtual std::size_t hyperedgeLabelCount() const = 0;
+            virtual std::size_t edgeLabelCount() const = 0;
 
-            virtual void clear(void) = 0;
+            virtual bool isLabeledVertex(htd::id_t id) const = 0;
 
-            virtual bool hasLabel(htd::vertex_t vertex) const = 0;
+            virtual bool isLabeledEdge(htd::id_t id) const = 0;
 
-            virtual bool hasLabel(const htd::hyperedge_t & edge) const = 0;
+            virtual const htd::ILabel & vertexLabel(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::ILabel & label(htd::vertex_t vertex) const = 0;
+            virtual const htd::ILabel & edgeLabel(htd::id_t id) const = 0;
 
-            virtual const htd::ILabel & label(const htd::hyperedge_t & edge) const = 0;
+            virtual void setVertexLabel(htd::vertex_t vertex, htd::ILabel * label) = 0;
 
-            virtual void setLabel(htd::vertex_t vertex, htd::ILabel * label) = 0;
+            virtual void setEdgeLabel(htd::id_t edgeId, htd::ILabel * label) = 0;
 
-            virtual void setLabel(const htd::hyperedge_t & edge, htd::ILabel * label) = 0;
+            virtual void swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
-            virtual void removeLabel(htd::vertex_t vertex) = 0;
+            virtual void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
-            virtual void removeLabel(const htd::hyperedge_t & edge) = 0;
+            virtual void removeVertexLabel(htd::vertex_t vertex) = 0;
 
-            virtual void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
-
-            virtual void swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) = 0;
+            virtual void removeEdgeLabel(htd::id_t edgeId) = 0;
 
             virtual IGraphLabeling * clone(void) const = 0;
+
+            virtual void clear(void) = 0;
     };
     
     inline htd::IGraphLabeling::~IGraphLabeling() { }

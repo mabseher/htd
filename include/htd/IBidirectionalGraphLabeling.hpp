@@ -39,11 +39,11 @@ namespace htd
 
             virtual bool isVertexLabel(const htd::ILabel & label) const = 0;
 
-            virtual bool isHyperedgeLabel(const htd::ILabel & label) const = 0;
+            virtual bool isEdgeLabel(const htd::ILabel & label) const = 0;
 
             virtual htd::vertex_t lookupVertex(const htd::ILabel & label) const = 0;
 
-            virtual const htd::hyperedge_t & lookupHyperedge(const htd::ILabel & label) const = 0;
+            virtual htd::id_t lookupEdge(const htd::ILabel & label) const = 0;
 
             virtual IBidirectionalGraphLabeling * clone(void) const = 0;
     };

@@ -54,25 +54,25 @@ htd::HypertreeDecomposition::~HypertreeDecomposition()
 
 }
 
-const htd::Collection<htd::hyperedge_t> htd::HypertreeDecomposition::edgeLabel(htd::vertex_t vertex) const
+const htd::Collection<htd::Hyperedge> htd::HypertreeDecomposition::edgeLabel(htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
         auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
 
-        if (edgeLabeling.hasLabel(vertex))
+        if (edgeLabeling.isLabeledVertex(vertex))
         {
-            auto & edgeLabel = dynamic_cast<const htd::HyperedgeContainerLabel *>(&(edgeLabeling.label(vertex)))->container();
+            auto & edgeLabel = dynamic_cast<const htd::HyperedgeContainerLabel *>(&(edgeLabeling.vertexLabel(vertex)))->container();
 
-            return htd::Collection<htd::hyperedge_t>(edgeLabel);
+            return htd::Collection<htd::Hyperedge>(edgeLabel);
         }
     }
     else
     {
-        throw std::logic_error("htd::Collection<htd::hyperedge_t> htd::HypertreeDecomposition::edgeLabel(htd::vertex_t) const");
+        throw std::logic_error("htd::Collection<htd::Hyperedge> htd::HypertreeDecomposition::edgeLabel(htd::vertex_t) const");
     }
 
-    return htd::Collection<htd::hyperedge_t>();
+    return htd::Collection<htd::Hyperedge>();
 }
 
 void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & content)
@@ -81,25 +81,25 @@ void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::
     {
         auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
 
-        edgeLabeling.setLabel(vertex, new htd::HyperedgeContainerLabel(content));
+        edgeLabeling.setVertexLabel(vertex, new htd::HyperedgeContainerLabel(content));
     }
     else
     {
-        throw std::logic_error("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::hyperedge_container &))");
+        throw std::logic_error("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::Hyperedge_container &))");
     }
 }
 
-void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::Collection<htd::hyperedge_t> & content)
+void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::Collection<htd::Hyperedge> & content)
 {
     if (isVertex(vertex))
     {
         auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
 
-        edgeLabeling.setLabel(vertex, new htd::HyperedgeContainerLabel(content.begin(), content.end()));
+        edgeLabeling.setVertexLabel(vertex, new htd::HyperedgeContainerLabel(content.begin(), content.end()));
     }
     else
     {
-        throw std::logic_error("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::Collection<htd::hyperedge_t> &)");
+        throw std::logic_error("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::Collection<htd::Hyperedge> &)");
     }
 }
 

@@ -48,7 +48,11 @@ namespace htd
 
             bool isVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            bool isEdge(const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+            bool isEdge(htd::id_t edgeId) const HTD_OVERRIDE;
+
+            bool isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
+
+            bool isEdge(const htd::Collection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
             htd::vertex_t vertex(htd::index_t index) const HTD_OVERRIDE;
             
@@ -100,13 +104,13 @@ namespace htd
 
             const htd::edge_t & edge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::hyperedge_t> hyperedges(void) const HTD_OVERRIDE;
+            const htd::Collection<htd::Hyperedge> hyperedges(void) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::hyperedge_t> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::Collection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::hyperedge_t & hyperedge(htd::index_t index) const HTD_OVERRIDE;
+            const htd::Hyperedge & hyperedge(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::hyperedge_t & hyperedge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::Hyperedge & hyperedge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
 

@@ -102,9 +102,9 @@ const htd::Collection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsV
     return ret;
 }
             
-const htd::Collection<htd::hyperedge_t> htd::TreeDecompositionVerifier::violationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
+const htd::Collection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
 {
-    htd::VectorAdapter<htd::hyperedge_t> ret;
+    htd::VectorAdapter<htd::Hyperedge> ret;
 
     auto & result = ret.container();
 
@@ -116,7 +116,7 @@ const htd::Collection<htd::hyperedge_t> htd::TreeDecompositionVerifier::violatio
 
     edges.reserve(edgeCount);
 
-    for (const htd::hyperedge_t & edge : graph.hyperedges())
+    for (const htd::Hyperedge & edge : graph.hyperedges())
     {
         edges.push_back(edge);
     }

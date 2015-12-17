@@ -50,11 +50,7 @@ namespace htd
 
             void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
-            void removeEdge(htd::vertex_container::const_iterator begin, htd::vertex_container::const_iterator end) HTD_OVERRIDE;
-
-            void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
-
-            void removeEdge(const htd::hyperedge_t & edge) HTD_OVERRIDE;
+            void removeEdge(const htd::Collection<htd::vertex_t> & elements) HTD_OVERRIDE;
 
             const htd::ILabelingCollection & labelings(void) const HTD_OVERRIDE;
 
@@ -64,25 +60,25 @@ namespace htd
 
             const std::string & labelName(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::ILabel & label(const std::string & labelName, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::ILabel & vertexLabel(const std::string & labelName, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::ILabel & label(const std::string & labelName, const htd::hyperedge_t & edge) const HTD_OVERRIDE;
+            const htd::ILabel & edgeLabel(const std::string & labelName, htd::id_t edgeId) const HTD_OVERRIDE;
 
-            void setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
+            void setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
 
-            void setLabel(const std::string & labelName, const htd::hyperedge_t & edge, htd::ILabel * label) HTD_OVERRIDE;
+            void setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label) HTD_OVERRIDE;
 
-            void removeLabel(const std::string & labelName, htd::vertex_t vertex) HTD_OVERRIDE;
+            void removeVertexLabel(const std::string & labelName, htd::vertex_t vertex) HTD_OVERRIDE;
 
-            void removeLabel(const std::string & labelName, const htd::hyperedge_t & edge) HTD_OVERRIDE;
+            void removeEdgeLabel(const std::string & labelName, htd::id_t edgeId) HTD_OVERRIDE;
 
-            void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+            void swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
-            void swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) HTD_OVERRIDE;
+            void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) HTD_OVERRIDE;
 
-            void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+            void swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
-            void swapLabel(const std::string & labelName, const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2) HTD_OVERRIDE;
+            void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2) HTD_OVERRIDE;
 
             LabeledHypergraph * clone(void) const HTD_OVERRIDE;
 

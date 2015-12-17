@@ -152,49 +152,49 @@ void htd::LabelingCollection::removeLabeling(const std::string & labelName)
     }
 }
 
-void htd::LabelingCollection::removeLabels(htd::vertex_t vertex)
+void htd::LabelingCollection::removeVertexLabels(htd::vertex_t vertex)
 {
     for (const std::string & labelName : labelNames_)
     {
         auto labeling = content_.at(labelName);
 
-        if (labeling->hasLabel(vertex))
+        if (labeling->isLabeledVertex(vertex))
         {
-            labeling->removeLabel(vertex);
+            labeling->removeVertexLabel(vertex);
         }
     }
 }
 
-void htd::LabelingCollection::removeLabels(const htd::hyperedge_t & edge)
+void htd::LabelingCollection::removeEdgeLabels(htd::id_t edgeId)
 {
     for (const std::string & labelName : labelNames_)
     {
         auto labeling = content_.at(labelName);
 
-        if (labeling->hasLabel(edge))
+        if (labeling->isLabeledEdge(edgeId))
         {
-            labeling->removeLabel(edge);
+            labeling->removeEdgeLabel(edgeId);
         }
     }
 }
 
-void htd::LabelingCollection::swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::LabelingCollection::swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     for (const std::string & labelName : labelNames_)
     {
-        content_.at(labelName)->swapLabels(vertex1, vertex2);
+        content_.at(labelName)->swapVertexLabels(vertex1, vertex2);
     }
 }
 
-void htd::LabelingCollection::swapLabels(const htd::hyperedge_t & edge1, const htd::hyperedge_t & edge2)
+void htd::LabelingCollection::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
 {
     for (const std::string & labelName : labelNames_)
     {
-        content_.at(labelName)->swapLabels(edge1, edge2);
+        content_.at(labelName)->swapEdgeLabels(edgeId1, edgeId2);
     }
 }
 
-htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(htd::vertex_t vertex) const
+htd::ILabelCollection * htd::LabelingCollection::exportVertexLabelCollection(htd::vertex_t vertex) const
 {
     htd::ILabelCollection * ret = new LabelCollection();
 
@@ -202,16 +202,16 @@ htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(htd::vert
     {
         htd::IGraphLabeling * labeling = content_.at(labelName);
 
-        if (labeling != nullptr && labeling->hasLabel(vertex))
+        if (labeling != nullptr && labeling->isLabeledVertex(vertex))
         {
-            ret->setLabel(labelName, labeling->label(vertex).clone());
+            ret->setLabel(labelName, labeling->vertexLabel(vertex).clone());
         }
     }
 
     return ret;
 }
 
-htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(const htd::hyperedge_t & edge) const
+htd::ILabelCollection * htd::LabelingCollection::exportEdgeLabelCollection(htd::id_t edgeId) const
 {
     htd::ILabelCollection * ret = new LabelCollection();
 
@@ -219,9 +219,9 @@ htd::ILabelCollection * htd::LabelingCollection::exportLabelCollection(const htd
     {
         htd::IGraphLabeling * labeling = content_.at(labelName);
 
-        if (labeling != nullptr && labeling->hasLabel(edge))
+        if (labeling != nullptr && labeling->isLabeledEdge(edgeId))
         {
-            ret->setLabel(labelName, labeling->label(edge).clone());
+            ret->setLabel(labelName, labeling->edgeLabel(edgeId).clone());
         }
     }
 

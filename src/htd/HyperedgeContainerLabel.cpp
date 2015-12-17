@@ -40,7 +40,7 @@ htd::HyperedgeContainerLabel::HyperedgeContainerLabel(const htd::hyperedge_conta
 
 }
 
-htd::HyperedgeContainerLabel::HyperedgeContainerLabel(const htd::Iterator<htd::hyperedge_t> begin, const htd::Iterator<htd::hyperedge_t> end) : container_(begin, end)
+htd::HyperedgeContainerLabel::HyperedgeContainerLabel(const htd::Iterator<htd::Hyperedge> begin, const htd::Iterator<htd::Hyperedge> end) : container_(begin, end)
 {
 
 }
@@ -54,9 +54,9 @@ std::size_t htd::HyperedgeContainerLabel::hash(void) const
 {
     std::size_t ret = 7;
 
-    std::hash<htd::hyperedge_t> hash_function;
+    std::hash<htd::Hyperedge> hash_function;
 
-    for (htd::hyperedge_t edge : container_)
+    for (htd::Hyperedge edge : container_)
     {
         std::hash_combine(ret, hash_function(edge));
     }

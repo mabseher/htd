@@ -150,7 +150,7 @@ namespace htd
 
                 if (!nameLabeling_->isEdgeLabel(label))
                 {
-                    throw std::logic_error("const htd::Hyperedge & htd::NamedHypergraph<VertexNameType, EdgeNameType>::lookupEdge(const EdgeNameType &) const");
+                    throw std::logic_error("htd::id_t htd::NamedHypergraph<VertexNameType, EdgeNameType>::lookupEdge(const EdgeNameType &) const");
                 }
 
                 return nameLabeling_->lookupEdge(label);
@@ -161,7 +161,7 @@ namespace htd
                 return base_->edgeCount(lookupVertex(vertexName));
             }
 
-            void isEdge(const htd::Collection<VertexNameType> & elements)
+            bool isEdge(const htd::Collection<VertexNameType> & elements)
             {
                 bool ok = true;
 
@@ -175,7 +175,7 @@ namespace htd
 
                 if (ok)
                 {
-                    ok = htd::Hypergraph::isEdge(elements);
+                    ok = base_->isEdge(elements);
                 }
 
                 return ok;

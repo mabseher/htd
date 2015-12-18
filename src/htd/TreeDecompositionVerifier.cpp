@@ -191,7 +191,7 @@ const htd::Collection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsC
     
     for (htd::vertex_t vertex : graph.vertices())
     {
-        ok = false;
+        ok = true;
         
         auto & currentContainers = containers[vertex];
         
@@ -201,10 +201,6 @@ const htd::Collection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsC
             getReachableVertices(currentContainers[0], decomposition, containers[vertex], reachableVertices);
 
             ok = reachableVertices.size() == currentContainers.size();
-        }
-        else
-        {
-            ok = true;
         }
         
         if (!ok)

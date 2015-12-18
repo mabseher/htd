@@ -501,19 +501,34 @@ const htd::Collection<htd::Hyperedge> htd::Hypergraph::hyperedges(htd::vertex_t 
 
 const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t index) const
 {
-    HTD_UNUSED(index);
+    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
 
-    //TODO Implement
-    throw std::logic_error("const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t) const: NOT YET IMPLEMENTED");
+    if (index >= hyperedgeCollection.size())
+    {
+        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t) const");
+    }
+
+    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t index, htd::vertex_t vertex) const
 {
-    HTD_UNUSED(index);
-    HTD_UNUSED(vertex);
+    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges(vertex);
 
-    //TODO Implement
-    throw std::logic_error("const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t, htd::vertex_t) const: NOT YET IMPLEMENTED");
+    if (index >= hyperedgeCollection.size())
+    {
+        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t, htd::vertex_t) const");
+    }
+
+    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 htd::vertex_t htd::Hypergraph::addVertex(void)

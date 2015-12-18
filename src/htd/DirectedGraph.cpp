@@ -101,10 +101,16 @@ bool htd::DirectedGraph::isVertex(htd::vertex_t vertex) const
 
 bool htd::DirectedGraph::isEdge(htd::id_t edgeId) const
 {
-    HTD_UNUSED(edgeId);
+    bool ret = false;
 
-    //TODO
-    throw std::logic_error("bool htd::DirectedGraph::isEdge(htd::id_t) const: NOT YET IMPLEMENTED!");
+    htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
+
+    for (auto it = hyperedgeCollection.begin(); !ret && it != hyperedgeCollection.end(); ++it)
+    {
+        ret = (it->id() == edgeId);
+    }
+
+    return ret;
 }
 
 bool htd::DirectedGraph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
@@ -751,19 +757,34 @@ const htd::Collection<htd::Hyperedge> htd::DirectedGraph::hyperedges(htd::vertex
 
 const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t index) const
 {
-    HTD_UNUSED(index);
+    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
 
-    //TODO Implement
-    throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t) const");
+    if (index >= hyperedgeCollection.size())
+    {
+        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t) const");
+    }
+
+    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t index, htd::vertex_t vertex) const
 {
-    HTD_UNUSED(index);
-    HTD_UNUSED(vertex);
+    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges(vertex);
 
-    //TODO Implement
-    throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t, htd::vertex_t) const");
+    if (index >= hyperedgeCollection.size())
+    {
+        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t, htd::vertex_t) const");
+    }
+
+    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
 }
 
 htd::vertex_t htd::DirectedGraph::addVertex(void)

@@ -128,6 +128,40 @@ bool htd::Hypergraph::isEdge(const htd::Collection<htd::vertex_t> & elements) co
     return ret;
 }
 
+const htd::Collection<htd::id_t> htd::Hypergraph::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+{
+    htd::VectorAdapter<htd::id_t> ret;
+
+    auto & result = ret.container();
+
+    for (const htd::Hyperedge & edge : hyperedges())
+    {
+        if (edge.size() == 2 && edge[0] == vertex1 && edge[1] == vertex2)
+        {
+            result.push_back(edge.id());
+        }
+    }
+
+    return ret;
+}
+
+const htd::Collection<htd::id_t> htd::Hypergraph::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
+{
+    htd::VectorAdapter<htd::id_t> ret;
+
+    auto & result = ret.container();
+
+    for (const htd::Hyperedge & edge : hyperedges())
+    {
+        if (edge.size() == elements.size() && std::equal(edge.begin(), edge.end(), elements.begin()))
+        {
+            result.push_back(edge.id());
+        }
+    }
+
+    return ret;
+}
+
 htd::vertex_t htd::Hypergraph::vertex(htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;

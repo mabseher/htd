@@ -100,10 +100,16 @@ bool htd::Graph::isVertex(htd::vertex_t vertex) const
 
 bool htd::Graph::isEdge(htd::id_t edgeId) const
 {
-    HTD_UNUSED(edgeId);
+    bool ret = false;
 
-    //TODO
-    throw std::logic_error("bool htd::Graph::isEdge(htd::id_t) const: NOT YET IMPLEMENTED!");
+    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
+
+    for (auto it = hyperedgeCollection.begin(); !ret && it != hyperedgeCollection.end(); ++it)
+    {
+        ret = it->id() == edgeId;
+    }
+
+    return ret;
 }
 
 bool htd::Graph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
@@ -118,6 +124,43 @@ bool htd::Graph::isEdge(const htd::Collection<htd::vertex_t> & elements) const
     if (elements.size() == 2)
     {
         ret = isNeighbor(elements[0], elements[1]);
+    }
+
+    return ret;
+}
+
+const htd::Collection<htd::id_t> htd::Graph::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+{
+    htd::VectorAdapter<htd::id_t> ret;
+
+    auto & result = ret.container();
+
+    for (const htd::Hyperedge & edge : hyperedges())
+    {
+        if (edge[0] == vertex1 && edge[1] == vertex2)
+        {
+            result.push_back(edge.id());
+        }
+    }
+
+    return ret;
+}
+
+const htd::Collection<htd::id_t> htd::Graph::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
+{
+    htd::VectorAdapter<htd::id_t> ret;
+
+    if (elements.size() == 2)
+    {
+        auto & result = ret.container();
+
+        for (const htd::Hyperedge & edge : hyperedges())
+        {
+            if (std::equal(edge.begin(), edge.end(), elements.begin()))
+            {
+                result.push_back(edge.id());
+            }
+        }
     }
 
     return ret;

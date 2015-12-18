@@ -187,6 +187,43 @@ bool htd::TreeDecomposition::isEdge(const htd::Collection<htd::vertex_t> & eleme
     return ret;
 }
 
+const htd::Collection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+{
+    htd::VectorAdapter<htd::id_t> ret;
+
+    auto & result = ret.container();
+
+    for (const htd::Hyperedge & edge : hyperedges())
+    {
+        if (edge[0] == vertex1 && edge[1] == vertex2)
+        {
+            result.push_back(edge.id());
+        }
+    }
+
+    return ret;
+}
+
+const htd::Collection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
+{
+    htd::VectorAdapter<htd::id_t> ret;
+
+    if (elements.size() == 2)
+    {
+        auto & result = ret.container();
+
+        for (const htd::Hyperedge & edge : hyperedges())
+        {
+            if (std::equal(edge.begin(), edge.end(), elements.begin()))
+            {
+                result.push_back(edge.id());
+            }
+        }
+    }
+
+    return ret;
+}
+
 htd::vertex_t htd::TreeDecomposition::vertex(htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;

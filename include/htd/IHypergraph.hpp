@@ -52,6 +52,10 @@ namespace htd
 
             virtual bool isEdge(const htd::Collection<htd::vertex_t> & elements) const = 0;
 
+            virtual const htd::Collection<htd::id_t> associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
+
+            virtual const htd::Collection<htd::id_t> associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const = 0;
+
             virtual std::size_t isolatedVertexCount(void) const = 0;
 
             virtual const htd::Collection<htd::vertex_t> isolatedVertices(void) const = 0;

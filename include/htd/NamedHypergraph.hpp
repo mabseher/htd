@@ -34,6 +34,7 @@
 #include <htd/Label.hpp>
 #include <htd/ILabelingCollection.hpp>
 #include <htd/LabelingCollection.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <set>
 #include <vector>
@@ -144,18 +145,6 @@ namespace htd
                 return nameLabeling_->lookupVertex(label);
             }
 
-            htd::id_t lookupEdge(const EdgeNameType & edgeName) const
-            {
-                htd::Label<EdgeNameType> label(edgeName);
-
-                if (!nameLabeling_->isEdgeLabel(label))
-                {
-                    throw std::logic_error("htd::id_t htd::NamedHypergraph<VertexNameType, EdgeNameType>::lookupEdge(const EdgeNameType &) const");
-                }
-
-                return nameLabeling_->lookupEdge(label);
-            }
-
             std::size_t edgeCount(const VertexNameType & vertexName) const
             {
                 return base_->edgeCount(lookupVertex(vertexName));
@@ -179,6 +168,47 @@ namespace htd
                 }
 
                 return ok;
+            }
+
+            htd::id_t associatedEdgeId(const EdgeNameType & edgeName) const
+            {
+                htd::Label<EdgeNameType> label(edgeName);
+
+                if (!nameLabeling_->isEdgeLabel(label))
+                {
+                    throw std::logic_error("htd::id_t htd::NamedHypergraph<VertexNameType, EdgeNameType>::correspondingEdgeId(const EdgeNameType &) const");
+                }
+
+                return nameLabeling_->lookupEdge(label);
+            }
+
+            const htd::Collection<htd::id_t> associatedEdgeIds(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
+            {
+                if (isVertexName(vertexName1) && isVertexName(vertexName2))
+                {
+                    return base_->associatedEdgeIds(lookupVertex(vertexName1), lookupVertex(vertexName2));
+                }
+
+                return htd::VectorAdapter<htd::id_t>();
+            }
+
+            const htd::Collection<htd::id_t> associatedEdgeIds(const htd::Collection<VertexNameType> & elements) const
+            {
+                htd::vertex_container hyperedge;
+
+                bool ok = true;
+
+                for (auto it = elements.begin(); ok && it != elements.end(); ++it)
+                {
+                    ok = isVertexName(*it);
+
+                    if (ok)
+                    {
+                        hyperedge.push_back(lookupVertex(*it));
+                    }
+                }
+
+                return ok ? base_->associatedEdgeIds(htd::Collection<htd::vertex_t>(hyperedge)) : htd::VectorAdapter<htd::id_t>();
             }
 
             bool isConnected(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const

@@ -38,6 +38,7 @@
 #include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
+#include <htd/Collection.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -128,6 +129,38 @@ namespace htd
     
     template < >
     void print<std::string>(const std::string& input);
+
+    template < typename T >
+    void print(const htd::Collection<T> & input, bool sorted = false)
+    {
+        std::vector<T> tmp(input.begin(), input.end());
+
+        if (tmp.size() > 0)
+        {
+            if (sorted)
+            {
+                std::sort(tmp.begin(), tmp.end());
+            }
+
+            std::cout << "[ ";
+
+            for (auto it = tmp.cbegin(); it != tmp.cend();)
+            {
+                print(*it);
+
+                if (++it != tmp.cend())
+                {
+                    std::cout << ", ";
+                }
+            }
+
+            std::cout << " ] (SIZE: " << input.size() << ")";
+        }
+        else
+        {
+            std::cout << "<EMPTY>";
+        }
+    }
     
     template < typename T >
     void print(const std::vector<T> & input, bool sorted = false)

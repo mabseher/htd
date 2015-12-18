@@ -714,48 +714,13 @@ void htd::Hypergraph::removeEdge(htd::id_t edgeId)
 
     if (found)
     {
-        edges_.erase(position);
-    }
-}
+        htd::Hyperedge edge = *position;
 
-void htd::Hypergraph::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
-{
-    removeEdge(htd::Collection<htd::vertex_t>(htd::vertex_container { vertex1, vertex2 }));
-}
-
-void htd::Hypergraph::removeEdge(const htd::Collection<htd::vertex_t> & elements)
-{
-    if (elements.empty())
-    {
-        throw std::logic_error("htd::id_t htd::Hypergraph::removeEdge(const htd::Collection<htd::vertex_t> &)");
-    }
-
-    bool ok = true;
-
-    for (auto it = elements.begin(); ok && it != elements.end(); it++)
-    {
-        ok = isVertex(*it);
-    }
-
-    if (!ok)
-    {
-        throw std::logic_error("htd::id_t htd::Hypergraph::removeEdge(const htd::Collection<htd::vertex_t> &)");
-    }
-
-    auto position = edges_.begin();
-
-    while (position != edges_.end() && htd::Collection<htd::vertex_t>(position->elements()) != elements)
-    {
-        ++position;
-    }
-
-    if (position != edges_.end() && htd::Collection<htd::vertex_t>(position->elements()) == elements)
-    {
         edges_.erase(position);
 
-        for (htd::vertex_t vertex : elements)
+        for (htd::vertex_t vertex : edge)
         {
-            std::unordered_set<htd::vertex_t> missing(elements.begin(), elements.end());
+            std::unordered_set<htd::vertex_t> missing(edge.begin(), edge.end());
 
             for (auto it = edges_.begin(); !missing.empty() && it != edges_.end(); it++)
             {

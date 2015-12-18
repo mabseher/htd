@@ -105,10 +105,6 @@ namespace htd
 
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
-            void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
-
-            void removeEdge(const htd::Collection<htd::vertex_t> & elements) HTD_OVERRIDE;
-
             Hypergraph * clone(void) const HTD_OVERRIDE;
 
         protected:

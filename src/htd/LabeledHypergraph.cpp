@@ -71,20 +71,11 @@ void htd::LabeledHypergraph::removeVertex(htd::vertex_t vertex, bool addNeighbor
     labelings_->removeVertexLabels(vertex);
 }
 
-void htd::LabeledHypergraph::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::LabeledHypergraph::removeEdge(htd::id_t edgeId)
 {
-    htd::Hypergraph::removeEdge(vertex1, vertex2);
+    htd::Hypergraph::removeEdge(edgeId);
 
-    //TODO
-    //labelings_->removeEdgeLabels(vertex1, vertex2);
-}
-
-void htd::LabeledHypergraph::removeEdge(const htd::Collection<htd::vertex_t> & elements)
-{
-    htd::Hypergraph::removeEdge(elements);
-
-    //TODO
-    //labelings_->removeEdgeLabels(elements);
+    labelings_->removeEdgeLabels(edgeId);
 }
 
 const htd::ILabelingCollection & htd::LabeledHypergraph::labelings(void) const

@@ -48,10 +48,6 @@ namespace htd
 
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
-            virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
-
-            virtual void removeEdge(const htd::Collection<htd::vertex_t> & elements) = 0;
-
             virtual IMutableHypergraph * clone(void) const = 0;
     };
 

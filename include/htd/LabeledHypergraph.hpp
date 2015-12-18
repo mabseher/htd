@@ -48,9 +48,7 @@ namespace htd
 
             void removeVertex(htd::vertex_t vertex, bool addNeighborHyperedge) HTD_OVERRIDE;
 
-            void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
-
-            void removeEdge(const htd::Collection<htd::vertex_t> & elements) HTD_OVERRIDE;
+            void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
             const htd::ILabelingCollection & labelings(void) const HTD_OVERRIDE;
 

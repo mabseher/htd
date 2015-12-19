@@ -26,8 +26,9 @@
 #define	HTD_HTD_DIRECTEDGRAPH_HPP
 
 #include <htd/IMutableDirectedGraph.hpp>
+#include <htd/IMutableHypergraph.hpp>
 
-#include <set>
+#include <unordered_set>
 
 namespace htd
 {
@@ -36,8 +37,6 @@ namespace htd
         public:
             DirectedGraph(void);
 
-            DirectedGraph(size_t size);
-            
             ~DirectedGraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
@@ -66,7 +65,7 @@ namespace htd
             
             bool isReachable(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
             
-            bool isNeighbor(htd::vertex_t vertex1, htd::vertex_t neighbor) const HTD_OVERRIDE;
+            bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
             std::size_t neighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
@@ -104,31 +103,29 @@ namespace htd
 
             const htd::Collection<htd::edge_t> edges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::edge_t & edge(htd::index_t index) const HTD_OVERRIDE;
+            const htd::edge_t & edgeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::edge_t & edge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::edge_t & edgeAtPosition(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
             const htd::Collection<htd::Hyperedge> hyperedges(void) const HTD_OVERRIDE;
 
             const htd::Collection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & hyperedge(htd::index_t index) const HTD_OVERRIDE;
+            const htd::Hyperedge & hyperedge(htd::id_t edgeId) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & hyperedge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index) const HTD_OVERRIDE;
+
+            const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
             
-            void removeVertex(htd::vertex_t vertex, bool addNeighborClique) HTD_OVERRIDE;
+            htd::id_t addEdge(const htd::edge_t & edge) HTD_OVERRIDE;
             
-            void addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
-            
-            void addEdge(const htd::edge_t & edge) HTD_OVERRIDE;
-            
-            void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
-            
-            void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
+            void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
             DirectedGraph * clone(void) const HTD_OVERRIDE;
 
@@ -136,19 +133,12 @@ namespace htd
             DirectedGraph & operator=(const DirectedGraph &) { return *this; }
 
         private:
-            std::size_t size_;
 
-            htd::vertex_t next_vertex_;
+    private:
+            htd::IMutableHypergraph * base_;
 
-            htd::vertex_container vertices_;
-
-            std::set<htd::vertex_t> deletions_;
-
-            //TODO Replace std::set<htd::vertex_t> with htd::vertex_container
-            std::vector<std::set<htd::vertex_t>> incomingNeighborhood_;
-
-            //TODO Replace std::set<htd::vertex_t> with htd::vertex_container
-            std::vector<std::set<htd::vertex_t>> outgoingNeighborhood_;
+            std::vector<std::unordered_set<htd::vertex_t>> incomingNeighborhood_;
+            std::vector<std::unordered_set<htd::vertex_t>> outgoingNeighborhood_;
     };
 }
 

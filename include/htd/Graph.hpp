@@ -27,19 +27,17 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableGraph.hpp>
-
-#include <unordered_set>
-#include <vector>
+#include <htd/IMutableHypergraph.hpp>
 
 namespace htd
 {
-    class Graph : public IMutableGraph
+    class Graph : public htd::IMutableGraph
     {
         public:
             Graph(void);
 
-            Graph(size_t size);
-            
+            Graph(const htd::Graph & original);
+
             ~Graph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
@@ -66,7 +64,7 @@ namespace htd
             
             bool isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
 
-            bool isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
+            bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
             
             std::size_t neighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
@@ -88,31 +86,29 @@ namespace htd
 
             const htd::Collection<htd::edge_t> edges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::edge_t & edge(htd::index_t index) const HTD_OVERRIDE;
+            const htd::edge_t & edgeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::edge_t & edge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::edge_t & edgeAtPosition(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
             const htd::Collection<htd::Hyperedge> hyperedges(void) const HTD_OVERRIDE;
 
             const htd::Collection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & hyperedge(htd::index_t index) const HTD_OVERRIDE;
+            const htd::Hyperedge & hyperedge(htd::id_t edgeId) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & hyperedge(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index) const HTD_OVERRIDE;
+
+            const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
             
-            void removeVertex(htd::vertex_t vertex, bool addNeighborClique) HTD_OVERRIDE;
+            htd::id_t addEdge(const htd::edge_t & edge) HTD_OVERRIDE;
             
-            void addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
-            
-            void addEdge(const htd::edge_t & edge) HTD_OVERRIDE;
-            
-            void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
-            
-            void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
+            void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
             Graph * clone(void) const HTD_OVERRIDE;
 
@@ -120,15 +116,7 @@ namespace htd
             Graph & operator=(const Graph &) { return *this; }
 
         private:
-            std::size_t size_;
-
-            htd::vertex_t next_vertex_;
-
-            htd::vertex_container vertices_;
-
-            std::unordered_set<htd::vertex_t> deletions_;
-
-            std::vector<htd::vertex_container> neighborhood_;
+            htd::IMutableHypergraph * base_;
     };
 }
 

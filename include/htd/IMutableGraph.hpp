@@ -38,16 +38,12 @@ namespace htd
             virtual htd::vertex_t addVertex(void) = 0;
 
             virtual void removeVertex(htd::vertex_t vertex) = 0;
+
+            virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
             
-            virtual void removeVertex(htd::vertex_t vertex, bool addNeighborClique) = 0;
+            virtual htd::id_t addEdge(const htd::edge_t & edge) = 0;
             
-            virtual void addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
-            
-            virtual void addEdge(const htd::edge_t & edge) = 0;
-            
-            virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
-            
-            virtual void removeEdge(const htd::edge_t & edge) = 0;
+            virtual void removeEdge(htd::id_t edgeId) = 0;
 
             virtual IMutableGraph * clone(void) const = 0;
     };

@@ -261,9 +261,14 @@ namespace htd
                 return base_->hyperedges(lookupVertex(vertexName));
             }
 
-            const htd::Hyperedge & hyperedge(htd::index_t index, const VertexNameType & vertexName) const
+            const htd::Hyperedge & hyperedge(htd::id_t edgeId) const
             {
-                return base_->hyperedge(index, lookupVertex(vertexName));
+                return base_->hyperedge(edgeId);
+            }
+
+            const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, const VertexNameType & vertexName) const
+            {
+                return base_->hyperedgeAtPosition(index, lookupVertex(vertexName));
             }
 
             htd::vertex_t addVertex(const VertexNameType & vertexName)
@@ -291,18 +296,6 @@ namespace htd
                     htd::vertex_t locatedVertex = lookupVertex(vertexName);
 
                     base_->removeVertex(locatedVertex);
-
-                    nameLabeling_->removeVertexLabel(locatedVertex);
-                }
-            }
-
-            void removeVertex(const VertexNameType & vertexName, bool addNeighborHyperedge)
-            {
-                if (isVertexName(vertexName))
-                {
-                    htd::vertex_t locatedVertex = lookupVertex(vertexName);
-
-                    base_->removeVertex(locatedVertex, addNeighborHyperedge);
 
                     nameLabeling_->removeVertexLabel(locatedVertex);
                 }

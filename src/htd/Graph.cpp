@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/Graph.hpp>
+#include <htd/HypergraphFactory.hpp>
 #include <htd/Collection.hpp>
 #include <htd/VectorAdapter.hpp>
 
@@ -37,84 +38,54 @@
 #include <vector>
 #include <set>
 
-htd::Graph::Graph(void) : htd::Graph::Graph(0)
+htd::Graph::Graph(void) : base_(htd::HypergraphFactory::instance().getHypergraph())
 {
 
 }
 
-htd::Graph::Graph(std::size_t size)
-    : size_(size),
-      next_vertex_(htd::Vertex::FIRST + size),
-      vertices_(size),
-      deletions_(),
-      neighborhood_(size, std::vector<htd::vertex_t>())
+htd::Graph::Graph(const htd::Graph & original) : base_(original.base_->clone())
 {
-    for (htd::vertex_t vertex = htd::Vertex::FIRST; vertex < size + htd::Vertex::FIRST; ++vertex)
-    {
-        vertices_[vertex - htd::Vertex::FIRST] = vertex;
-    }
+
 }
 
 htd::Graph::~Graph()
 {
-    
+    if (base_ != nullptr)
+    {
+        delete base_;
+
+        base_ = nullptr;
+    }
 }
 
 std::size_t htd::Graph::vertexCount(void) const
 {
-    return size_ - deletions_.size();
+    return base_->vertexCount();
 }
 
 std::size_t htd::Graph::edgeCount(void) const
 {
-    std::size_t ret = 0;
-    
-    for (auto & currentNeighborhood : neighborhood_)
-    {
-        ret += currentNeighborhood.size();
-    }
-    
-    return ret / 2;
+    return base_->edgeCount();
 }
 
 std::size_t htd::Graph::edgeCount(htd::vertex_t vertex) const
 {
-    std::size_t ret = 0;
-
-    if (isVertex(vertex))
-    {
-        ret = neighborhood_[vertex].size();
-    }
-    else
-    {
-        throw std::out_of_range("std::size_t htd::Graph::edgeCount(htd::vertex_t) const");
-    }
-
-    return ret;
+    return base_->edgeCount(vertex);
 }
 
 bool htd::Graph::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
+    return base_->isVertex(vertex);
 }
 
 bool htd::Graph::isEdge(htd::id_t edgeId) const
 {
-    bool ret = false;
-
-    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
-
-    for (auto it = hyperedgeCollection.begin(); !ret && it != hyperedgeCollection.end(); ++it)
-    {
-        ret = it->id() == edgeId;
-    }
-
-    return ret;
+    return base_->isEdge(edgeId);
 }
 
 bool htd::Graph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    return isEdge(htd::Collection<htd::vertex_t>(htd::vertex_container { vertex1, vertex2 }));
+    return base_->isEdge(vertex1, vertex2);
 }
 
 bool htd::Graph::isEdge(const htd::Collection<htd::vertex_t> & elements) const
@@ -123,7 +94,7 @@ bool htd::Graph::isEdge(const htd::Collection<htd::vertex_t> & elements) const
 
     if (elements.size() == 2)
     {
-        ret = isNeighbor(elements[0], elements[1]);
+        ret = base_->isEdge(elements);
     }
 
     return ret;
@@ -168,150 +139,27 @@ const htd::Collection<htd::id_t> htd::Graph::associatedEdgeIds(const htd::Collec
 
 htd::vertex_t htd::Graph::vertex(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
-    
-    if (index < vertexCount())
-    {
-        htd::vertex_t vertex = 0;
-        
-        std::size_t currentIndex = 0;
-        
-        while (currentIndex < index)
-        {
-            if (!std::binary_search(deletions_.begin(), deletions_.end(), vertex))
-            {
-                ++currentIndex;
-            }
-            
-            ++vertex;
-        }
-        
-        ret = vertex;
-    }
-    
-    return ret;
+    return base_->vertex(index);
 }
             
-bool htd::Graph::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::Graph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
-    return std::binary_search(neighborhood_[vertex1].begin(), neighborhood_[vertex1].end(), vertex2);
+    return base_->isNeighbor(vertex, neighbor);
 }
 
 bool htd::Graph::isConnected(void) const
 {
-    bool ret = true;
-    
-    if (size_ > 0)
-    {
-        htd::vertex_t start = htd::Vertex::FIRST;
-        
-        htd::vertex_container newVertices;
-        htd::vertex_container tmpVertices;
-
-        std::vector<bool> reachableVertices(size_);
-
-        for (auto deleted : deletions_)
-        {
-            reachableVertices[deleted - htd::Vertex::FIRST] = true;
-            
-            if (start == deleted)
-            {
-                start++;
-            }
-        }
-        
-        reachableVertices[start - htd::Vertex::FIRST] = true;
-
-        newVertices.push_back(start);
-
-        while (newVertices.size() > 0) 
-        {
-            std::swap(tmpVertices, newVertices);
-
-            newVertices.resize(0);
-
-            for (htd::vertex_container::const_iterator it = tmpVertices.begin(); it != tmpVertices.end(); it++)
-            {
-                for (htd::vertex_container::const_iterator it2 = neighborhood_[*it - htd::Vertex::FIRST].begin(); it2 != neighborhood_[*it - htd::Vertex::FIRST].end(); it2++)
-                {
-                    if (!reachableVertices[*it2 - htd::Vertex::FIRST])
-                    {
-                        reachableVertices[*it2 - htd::Vertex::FIRST] = true;
-
-                        newVertices.push_back(*it2);
-                    }
-                }
-            }
-        }
-        
-        ret = std::find(reachableVertices.begin(), reachableVertices.end(), false) == reachableVertices.end();
-    }
-    else
-    {
-        ret = false;
-    }
-    
-    return ret;
+    return base_->isConnected();
 }
 
 bool htd::Graph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    bool ret = false;
-
-    if (isVertex(vertex1) && isVertex(vertex2))
-    {
-        if (vertex1 != vertex2)
-        {
-            htd::vertex_container newVertices;
-            htd::vertex_container tmpVertices;
-
-            std::vector<bool> reachableVertices(size_);
-
-            reachableVertices[vertex1 - htd::Vertex::FIRST] = true;
-
-            newVertices.push_back(vertex1);
-
-            while (!ret && newVertices.size() > 0) 
-            {
-                std::swap(tmpVertices, newVertices);
-
-                newVertices.resize(0);
-
-                for (htd::vertex_container::const_iterator it = tmpVertices.begin(); !ret && it != tmpVertices.end(); it++)
-                {
-                    for (htd::vertex_container::const_iterator it2 = neighborhood_[*it - htd::Vertex::FIRST].begin(); !ret && it2 != neighborhood_[*it - htd::Vertex::FIRST].end(); it2++)
-                    {
-                        if (!reachableVertices[*it2 - htd::Vertex::FIRST])
-                        {
-                            reachableVertices[*it2 - htd::Vertex::FIRST] = true;
-
-                            newVertices.push_back(*it2);
-
-                            ret = *it2 == vertex2;
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            ret = true;
-        }
-    }
-    
-    return ret;
+    return base_->isConnected(vertex1, vertex2);
 }
 
 std::size_t htd::Graph::neighborCount(htd::vertex_t vertex) const
 {
-    std::size_t ret = 0;
-    
-    if (isVertex(vertex))
-    {
-        ret = neighborhood_[vertex].size();
-    }
-    
-    return ret;
+    return base_->neighborCount(vertex);
 }
 
 const htd::Collection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t vertex) const
@@ -321,122 +169,69 @@ const htd::Collection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t vertex)
         throw std::logic_error("const htd::Collection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t) const");
     }
 
-    return Collection<htd::vertex_t>(neighborhood_[vertex - htd::Vertex::FIRST]);
+    return base_->neighbors(vertex);
 }
 
 htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
-    
-    if (isVertex(vertex))
-    {
-        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
-        
-        if (index < currentNeighborhood.size())
-        {
-            ret = currentNeighborhood[index];
-        }
-    }
-    
-    return ret;
+    return base_->neighbor(vertex, index);
 }
 
 const htd::Collection<htd::vertex_t> htd::Graph::vertices(void) const
 {
-    return Collection<htd::vertex_t>(vertices_);
+    return base_->vertices();
 }
 
 std::size_t htd::Graph::isolatedVertexCount(void) const
 {
-    std::size_t ret = 0;
-
-    for (htd::vertex_t vertex = 0; vertex < size_; vertex++)
-    {
-        if (isVertex(vertex))
-        {
-            if (neighborhood_[vertex - htd::Vertex::FIRST].size() == 0)
-            {
-                ret++;
-            }
-        }
-    }
-
-    return ret;
+    return base_->isolatedVertexCount();
 }
 
 const htd::Collection<htd::vertex_t> htd::Graph::isolatedVertices(void) const
 {
-    htd::VectorAdapter<htd::vertex_t> ret;
-
-    auto & result = ret.container();
-
-    for (htd::vertex_t vertex = 0; vertex < size_; vertex++)
-    {
-        if (isVertex(vertex))
-        {
-            if (neighborhood_[vertex - htd::Vertex::FIRST].empty())
-            {
-                result.push_back(vertex);
-            }
-        }
-    }
-
-    return ret;
+    return base_->isolatedVertices();
 }
 
 htd::vertex_t htd::Graph::isolatedVertex(htd::index_t index) const
 {
-    const htd::Collection<htd::vertex_t> isolatedVertexCollection = isolatedVertices();
-
-    if (index >= isolatedVertexCollection.size())
-    {
-        throw std::out_of_range("htd::vertex_t htd::Graph::isolatedVertex(htd::index_t) const");
-    }
-
-    htd::Iterator<htd::vertex_t> it = isolatedVertexCollection.begin();
-
-    std::advance(it, index);
-
-    return *it;
+    return base_->isolatedVertex(index);
 }
 
 bool htd::Graph::isIsolatedVertex(htd::vertex_t vertex) const
 {
-    bool ret = false;
-
-    if (isVertex(vertex))
-    {
-        ret = neighborhood_[vertex - htd::Vertex::FIRST].size() == 0;
-    }
-
-    return ret;
+    return base_->isIsolatedVertex(vertex);
 }
 
 const htd::Collection<htd::edge_t> htd::Graph::edges(void) const
 {
     htd::VectorAdapter<htd::edge_t> ret;
 
+    htd::Collection<htd::Hyperedge> hyperedgeCollection = base_->hyperedges();
+
     auto & result = ret.container();
 
-    for (htd::vertex_t vertex1 = htd::Vertex::FIRST; vertex1 < size_ + htd::Vertex::FIRST; vertex1++)
+    htd::vertex_t vertex1 = htd::Vertex::UNKNOWN;
+    htd::vertex_t vertex2 = htd::Vertex::UNKNOWN;
+
+    for (const htd::Hyperedge & hyperedge : hyperedgeCollection)
     {
-        for (auto & vertex2 : neighborhood_[vertex1 - htd::Vertex::FIRST])
+        htd::edge_t edge;
+
+        vertex1 = hyperedge[0];
+        vertex2 = hyperedge[1];
+
+        if (vertex1 < vertex2)
         {
-            htd::edge_t edge;
-
-            if (vertex1 < vertex2)
-            {
-                edge.first = vertex1;
-                edge.second = vertex2;
-            }
-            else
-            {
-                edge.first = vertex2;
-                edge.second = vertex1;
-            }
-
-            result.push_back(edge);
+            edge.first = vertex1;
+            edge.second = vertex2;
         }
+        else
+        {
+            edge.first = vertex2;
+            edge.second = vertex1;
+        }
+
+        result.push_back(edge);
     }
 
     return ret;
@@ -446,43 +241,44 @@ const htd::Collection<htd::edge_t> htd::Graph::edges(htd::vertex_t vertex) const
 {
     htd::VectorAdapter<htd::edge_t> ret;
 
+    htd::Collection<htd::Hyperedge> hyperedgeCollection = base_->hyperedges(vertex);
+
     auto & result = ret.container();
 
-    if (isVertex(vertex))
+    htd::vertex_t vertex1 = htd::Vertex::UNKNOWN;
+    htd::vertex_t vertex2 = htd::Vertex::UNKNOWN;
+
+    for (const htd::Hyperedge & hyperedge : hyperedgeCollection)
     {
-        for (auto & vertex2 : neighborhood_[vertex - htd::Vertex::FIRST])
+        htd::edge_t edge;
+
+        vertex1 = hyperedge[0];
+        vertex2 = hyperedge[1];
+
+        if (vertex1 < vertex2)
         {
-            htd::edge_t edge;
-
-            if (vertex < vertex2)
-            {
-                edge.first = vertex;
-                edge.second = vertex2;
-            }
-            else
-            {
-                edge.first = vertex2;
-                edge.second = vertex;
-            }
-
-            result.push_back(edge);
+            edge.first = vertex1;
+            edge.second = vertex2;
         }
-    }
-    else
-    {
-        throw std::logic_error("const htd::Collection<htd::edge_t> htd::Graph::edges(htd::vertex_t) const");
+        else
+        {
+            edge.first = vertex2;
+            edge.second = vertex1;
+        }
+
+        result.push_back(edge);
     }
 
     return ret;
 }
 
-const htd::edge_t & htd::Graph::edge(htd::index_t index) const
+const htd::edge_t & htd::Graph::edgeAtPosition(htd::index_t index) const
 {
     const htd::Collection<htd::edge_t> edgeCollection = edges();
 
     if (index >= edgeCollection.size())
     {
-        throw std::out_of_range("const htd::edge_t & htd::Graph::edge(htd::index_t) const");
+        throw std::out_of_range("const htd::edge_t & htd::Graph::edgeAtPosition(htd::index_t) const");
     }
 
     htd::Iterator<htd::edge_t> it = edgeCollection.begin();
@@ -492,13 +288,13 @@ const htd::edge_t & htd::Graph::edge(htd::index_t index) const
     return *it;
 }
 
-const htd::edge_t & htd::Graph::edge(htd::index_t index, htd::vertex_t vertex) const
+const htd::edge_t & htd::Graph::edgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
     const htd::Collection<htd::edge_t> edgeCollection = edges(vertex);
 
     if (index >= edgeCollection.size())
     {
-        throw std::out_of_range("const htd::edge_t & htd::Graph::edge(htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("const htd::edge_t & htd::Graph::edgeAtPosition(htd::index_t, htd::vertex_t) const");
     }
 
     htd::Iterator<htd::edge_t> it = edgeCollection.begin();
@@ -510,92 +306,45 @@ const htd::edge_t & htd::Graph::edge(htd::index_t index, htd::vertex_t vertex) c
 
 const htd::Collection<htd::Hyperedge> htd::Graph::hyperedges(void) const
 {
-    htd::VectorAdapter<htd::Hyperedge> ret;
-
-    auto & result = ret.container();
-
-    htd::id_t id = 0;
-
-    for (htd::vertex_t vertex1 = htd::Vertex::FIRST; vertex1 < size_ + htd::Vertex::FIRST; vertex1++)
-    {
-        for (auto & vertex2 : neighborhood_[vertex1 - htd::Vertex::FIRST])
-        {
-            htd::Hyperedge hyperedge(id);
-
-            if (vertex1 < vertex2)
-            {
-                hyperedge.push_back(vertex1);
-                hyperedge.push_back(vertex2);
-            }
-            else
-            {
-                hyperedge.push_back(vertex2);
-                hyperedge.push_back(vertex1);
-            }
-
-            result.push_back(hyperedge);
-
-            ++id;
-        }
-    }
-
-    return ret;
+    return base_->hyperedges();
 }
 
 const htd::Collection<htd::Hyperedge> htd::Graph::hyperedges(htd::vertex_t vertex) const
 {
-    htd::VectorAdapter<htd::Hyperedge> ret;
-
-    auto & result = ret.container();
-
-    if (isVertex(vertex))
-    {
-        const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
-
-        for (auto it = hyperedgeCollection.begin(); it != hyperedgeCollection.end(); ++it)
-        {
-            const htd::Hyperedge & currentHyperedge = *it;
-
-            if (std::find(currentHyperedge.begin(), currentHyperedge.end(), vertex) != currentHyperedge.end())
-            {
-                result.push_back(currentHyperedge);
-            }
-        }
-    }
-    else
-    {
-        throw std::logic_error("const htd::Collection<htd::Hyperedge> htd::Graph::hyperedges(htd::vertex_t) const");
-    }
-
-    return ret;
+    return base_->hyperedges(vertex);
 }
 
-const htd::Hyperedge & htd::Graph::hyperedge(htd::index_t index) const
+const htd::Hyperedge & htd::Graph::hyperedge(htd::id_t edgeId) const
 {
-    const htd::Collection<htd::Hyperedge> edgeCollection = hyperedges();
+    return base_->hyperedge(edgeId);
+}
 
-    if (index >= edgeCollection.size())
+const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t index) const
+{
+    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
+
+    if (index >= hyperedgeCollection.size())
     {
-        throw std::out_of_range("const htd::Hyperedge & htd::Graph::hyperedge(htd::index_t) const");
+        throw std::out_of_range("const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t) const");
     }
 
-    htd::Iterator<htd::Hyperedge> it = edgeCollection.begin();
+    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
 
     std::advance(it, index);
 
     return *it;
 }
 
-const htd::Hyperedge & htd::Graph::hyperedge(htd::index_t index, htd::vertex_t vertex) const
+const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::Collection<htd::Hyperedge> edgeCollection = hyperedges(vertex);
+    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges(vertex);
 
-    if (index >= edgeCollection.size())
+    if (index >= hyperedgeCollection.size())
     {
-        throw std::out_of_range("const htd::Hyperedge & htd::Graph::hyperedge(htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
     }
 
-    htd::Iterator<htd::Hyperedge> it = edgeCollection.begin();
+    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
 
     std::advance(it, index);
 
@@ -604,160 +353,27 @@ const htd::Hyperedge & htd::Graph::hyperedge(htd::index_t index, htd::vertex_t v
 
 htd::vertex_t htd::Graph::addVertex(void)
 {
-    htd::vertex_t ret = next_vertex_;
-
-    size_++;
-
-    next_vertex_++;
-
-    vertices_.push_back(ret);
-
-    neighborhood_.push_back(htd::vertex_container());
-
-    return ret;
+    return base_->addVertex();
 }
 
 void htd::Graph::removeVertex(htd::vertex_t vertex)
 {
-    if (isVertex(vertex))
-    {
-        for (auto neighbor : neighborhood_[vertex - htd::Vertex::FIRST])
-        {
-            auto & currentNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
-            
-            auto position = std::find(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
-            
-            if (position != currentNeighborhood.end())
-            {
-                currentNeighborhood.erase(position);
-            }
-        }
-        
-        neighborhood_[vertex - htd::Vertex::FIRST].clear();
-
-        deletions_.insert(vertex);
-
-        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
-    }
+    base_->removeVertex(vertex);
 }
 
-void htd::Graph::removeVertex(htd::vertex_t vertex, bool addNeighborClique)
+htd::id_t htd::Graph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (isVertex(vertex))
-    {
-        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
-        
-        if (addNeighborClique)
-        {
-            auto position = std::find(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
-
-            if (position != currentNeighborhood.end())
-            {
-                currentNeighborhood.erase(position);
-            }
-        }
-        
-        for (std::size_t index = 0; index < currentNeighborhood.size(); index++)
-        {
-            auto neighbor = currentNeighborhood[index];
-            
-            if (neighbor != vertex)
-            {
-                auto & localNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
-
-                if (addNeighborClique)
-                {
-                    htd::vertex_container newNeighborhood;
-
-                    htd::vertex_container filter(2);
-
-                    if (vertex < neighbor)
-                    {
-                        filter[0] = vertex;
-                        filter[1] = neighbor;
-                    }
-                    else
-                    {
-                        filter[0] = neighbor;
-                        filter[1] = vertex;
-                    }
-
-                    htd::filtered_set_union(localNeighborhood.begin(), localNeighborhood.end(), currentNeighborhood.begin(), currentNeighborhood.end(), filter.begin(), filter.end(), std::back_inserter(newNeighborhood));
-
-                    std::swap(newNeighborhood, localNeighborhood);
-                }
-                else
-                {
-                    auto position = std::find(localNeighborhood.begin(), localNeighborhood.end(), vertex);
-
-                    if (position != localNeighborhood.end())
-                    {
-                        localNeighborhood.erase(position);
-                    }
-                }
-            }
-        }
-        
-        neighborhood_[vertex - htd::Vertex::FIRST].clear();
-
-        deletions_.insert(vertex);
-
-        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
-    }
+    return base_->addEdge(vertex1, vertex2);
 }
 
-void htd::Graph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
+htd::id_t htd::Graph::addEdge(const htd::edge_t & edge)
 {
-    if (isVertex(vertex1) && isVertex(vertex2))
-    {
-        auto & currentNeighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
-        auto & currentNeighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
-        
-        std::vector<htd::id_t> newVertex1 { vertex1 };
-        std::vector<htd::id_t> newVertex2 { vertex2 };
-        
-        std::vector<htd::id_t> newNeighborhood1;
-        std::vector<htd::id_t> newNeighborhood2;
-
-        std::set_union(currentNeighborhood1.begin(), currentNeighborhood1.end(), newVertex2.begin(), newVertex2.end(), std::back_inserter(newNeighborhood1));
-        std::set_union(currentNeighborhood2.begin(), currentNeighborhood2.end(), newVertex1.begin(), newVertex1.end(), std::back_inserter(newNeighborhood2));
-
-        std::swap(newNeighborhood1, currentNeighborhood1);
-        std::swap(newNeighborhood2, currentNeighborhood2);
-    }
+    return base_->addEdge(edge.first, edge.second);
 }
 
-void htd::Graph::addEdge(const htd::edge_t & edge)
+void htd::Graph::removeEdge(htd::id_t edgeId)
 {
-    addEdge(edge.first, edge.second);
-}
-
-void htd::Graph::removeEdge(id_t vertex1, id_t vertex2)
-{
-    if (isVertex(vertex1) && isVertex(vertex2))
-    {
-        auto & neighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
-        auto & neighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
-        
-        auto position1 = std::find(neighborhood1.begin(), neighborhood1.end(), vertex2);
-
-        if (position1 != neighborhood2.end())
-        {
-            neighborhood1.erase(position1);
-        }
-        
-        auto position2 = std::find(neighborhood2.begin(), neighborhood2.end(), vertex1);
-
-        if (position2 != neighborhood2.end())
-        {
-            neighborhood2.erase(position2);
-        }
-    }
-}
-
-void htd::Graph::removeEdge(const htd::edge_t & edge)
-{
-    removeEdge(edge.first, edge.second);
+    base_->removeEdge(edgeId);
 }
 
 htd::Graph * htd::Graph::clone(void) const

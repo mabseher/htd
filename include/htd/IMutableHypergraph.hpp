@@ -31,7 +31,7 @@
 
 namespace htd
 {
-    class IMutableHypergraph : public virtual IHypergraph
+    class IMutableHypergraph : public virtual htd::IHypergraph
     {
         public:
             virtual ~IMutableHypergraph() = 0;
@@ -40,8 +40,6 @@ namespace htd
 
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 
-            virtual void removeVertex(htd::vertex_t vertex, bool addNeighborHyperedge) = 0;
-            
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
             virtual htd::id_t addEdge(const htd::Collection<htd::vertex_t> & elements) = 0;

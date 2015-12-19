@@ -52,6 +52,11 @@ namespace htd
 
             }
 
+            VectorAdapter<T>(const htd::Collection<T> & collection) : container_(std::make_shared<std::vector<T>>(collection.begin(), collection.end()))
+            {
+
+            }
+
             virtual ~VectorAdapter()
             {
 

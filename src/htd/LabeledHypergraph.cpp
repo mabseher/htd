@@ -64,13 +64,6 @@ void htd::LabeledHypergraph::removeVertex(htd::vertex_t vertex)
     labelings_->removeVertexLabels(vertex);
 }
 
-void htd::LabeledHypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHyperedge)
-{
-    htd::Hypergraph::removeVertex(vertex, addNeighborHyperedge);
-
-    labelings_->removeVertexLabels(vertex);
-}
-
 void htd::LabeledHypergraph::removeEdge(htd::id_t edgeId)
 {
     htd::Hypergraph::removeEdge(edgeId);

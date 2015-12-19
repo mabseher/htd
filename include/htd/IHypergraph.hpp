@@ -74,19 +74,21 @@ namespace htd
 
             virtual const htd::Collection<htd::Hyperedge> hyperedges(void) const = 0;
 
-            virtual const htd::Hyperedge & hyperedge(htd::index_t index) const = 0;
+            virtual const htd::Hyperedge & hyperedge(htd::id_t edgeId) const = 0;
+
+            virtual const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index) const = 0;
 
             virtual std::size_t edgeCount(htd::vertex_t vertex) const = 0;
 
             virtual const htd::Collection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::Hyperedge & hyperedge(htd::index_t index, htd::vertex_t vertex) const = 0;
+            virtual const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const = 0;
 
             virtual bool isConnected(void) const = 0;
 
             virtual bool isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
 
-            virtual bool isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
+            virtual bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const = 0;
 
             virtual IHypergraph * clone(void) const = 0;
     };

@@ -188,19 +188,19 @@ htd::vertex_t htd::Hypergraph::vertex(htd::index_t index) const
     return ret;
 }
 
-bool htd::Hypergraph::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::Hypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
     bool ret = 0;
     
-    if (isVertex(vertex1) && isVertex(vertex2))
+    if (isVertex(vertex) && isVertex(neighbor))
     {
         for (auto it = edges_.begin(); it != edges_.end();)
         {
             const htd::Hyperedge & edge = *it;
             
-            if (std::binary_search(edge.begin(), edge.end(), vertex1))
+            if (std::binary_search(edge.begin(), edge.end(), vertex))
             {
-                if (std::binary_search(edge.begin(), edge.end(), vertex2))
+                if (std::binary_search(edge.begin(), edge.end(), neighbor))
                 {
                     ret = true;
                     
@@ -499,13 +499,37 @@ const htd::Collection<htd::Hyperedge> htd::Hypergraph::hyperedges(htd::vertex_t 
     return ret;
 }
 
-const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t index) const
+const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::id_t edgeId) const
+{
+    bool found = false;
+
+    auto position = edges_.begin();
+
+    for (auto it = edges_.begin(); !found && it != edges_.end(); ++it)
+    {
+        if (it->id() == edgeId)
+        {
+            position = it;
+
+            found = true;
+        }
+    }
+
+    if (!found)
+    {
+        throw std::logic_error("const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::id_t) const");
+    }
+
+    return *position;
+}
+
+const htd::Hyperedge & htd::Hypergraph::hyperedgeAtPosition(htd::index_t index) const
 {
     const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
 
     if (index >= hyperedgeCollection.size())
     {
-        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t) const");
+        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedgeAtPosition(htd::index_t) const");
     }
 
     htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
@@ -515,13 +539,13 @@ const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t index) const
     return *it;
 }
 
-const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::index_t index, htd::vertex_t vertex) const
+const htd::Hyperedge & htd::Hypergraph::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
     const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges(vertex);
 
     if (index >= hyperedgeCollection.size())
     {
-        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
     }
 
     htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
@@ -573,55 +597,6 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex)
             emptyEdges.erase(emptyEdges.begin() + count - currentIndex - 1);
         }
         
-        deletions_.insert(vertex);
-
-        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
-    }
-}
-
-void htd::Hypergraph::removeVertex(htd::vertex_t vertex, bool addNeighborHyperedge)
-{
-    if (isVertex(vertex))
-    {
-        htd::index_t currentIndex = 0;
-
-        std::vector<htd::id_t> emptyEdges;
-
-        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
-
-        if (addNeighborHyperedge)
-        {
-            auto position1 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
-
-            if (position1 != currentNeighborhood.end())
-            {
-                currentNeighborhood.erase(position1);
-            }
-
-            edges_.push_back(htd::Hyperedge(next_edge_, htd::Collection<htd::vertex_t>(currentNeighborhood)));
-        }
-
-        currentNeighborhood.clear();
-
-        for (auto & edge : edges_)
-        {
-            edge.erase(vertex);
-
-            if (edge.size() == 0)
-            {
-                emptyEdges.push_back(currentIndex);
-            }
-
-            ++currentIndex;
-        }
-
-        std::size_t count = emptyEdges.size();
-
-        for (currentIndex = 0; currentIndex < count; currentIndex++)
-        {
-            emptyEdges.erase(emptyEdges.begin() + count - currentIndex - 1);
-        }
-
         deletions_.insert(vertex);
 
         vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));

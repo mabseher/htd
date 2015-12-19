@@ -61,7 +61,7 @@ namespace htd
 
             const htd::Collection<htd::id_t> associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
-            htd::vertex_t vertex(htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
             
             bool isConnected(void) const HTD_OVERRIDE;
             

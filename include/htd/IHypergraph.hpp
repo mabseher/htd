@@ -42,7 +42,7 @@ namespace htd
 
             virtual const htd::Collection<htd::vertex_t> vertices(void) const = 0;
             
-            virtual htd::vertex_t vertex(htd::index_t index) const = 0;
+            virtual htd::vertex_t vertexAtPosition(htd::index_t index) const = 0;
 
             virtual bool isVertex(htd::vertex_t vertex) const = 0;
 

@@ -224,30 +224,14 @@ const htd::Collection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(const
     return ret;
 }
 
-htd::vertex_t htd::TreeDecomposition::vertex(htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::vertexAtPosition(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
-    
-    if (index < size_ - deletions_.size())
+    if (index >= vertices_.size())
     {
-        htd::vertex_t vertex = 0;
-        
-        std::size_t currentIndex = 0;
-        
-        while (currentIndex < index)
-        {
-            if (!std::binary_search(deletions_.begin(), deletions_.end(), vertex))
-            {
-                ++currentIndex;
-            }
-            
-            ++vertex;
-        }
-        
-        ret = vertex;
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::vertexAtPosition(htd::index_t) const");
     }
-    
-    return ret;
+
+    return vertices_[index];
 }
 
 bool htd::TreeDecomposition::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const

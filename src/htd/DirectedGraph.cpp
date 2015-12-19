@@ -131,9 +131,9 @@ const htd::Collection<htd::id_t> htd::DirectedGraph::associatedEdgeIds(const htd
     return ret;
 }
 
-htd::vertex_t htd::DirectedGraph::vertex(htd::index_t index) const
+htd::vertex_t htd::DirectedGraph::vertexAtPosition(htd::index_t index) const
 {
-    return base_->vertex(index);
+    return base_->vertexAtPosition(index);
 }
 
 bool htd::DirectedGraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const

@@ -137,9 +137,9 @@ const htd::Collection<htd::id_t> htd::Graph::associatedEdgeIds(const htd::Collec
     return ret;
 }
 
-htd::vertex_t htd::Graph::vertex(htd::index_t index) const
+htd::vertex_t htd::Graph::vertexAtPosition(htd::index_t index) const
 {
-    return base_->vertex(index);
+    return base_->vertexAtPosition(index);
 }
             
 bool htd::Graph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const

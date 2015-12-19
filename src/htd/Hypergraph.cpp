@@ -162,30 +162,14 @@ const htd::Collection<htd::id_t> htd::Hypergraph::associatedEdgeIds(const htd::C
     return ret;
 }
 
-htd::vertex_t htd::Hypergraph::vertex(htd::index_t index) const
+htd::vertex_t htd::Hypergraph::vertexAtPosition(htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
-    
-    if (index < vertexCount())
+    if (index >= vertices_.size())
     {
-        htd::vertex_t vertex = 0;
-        
-        htd::index_t currentIndex = 0;
-        
-        while (currentIndex < index)
-        {
-            if (!std::binary_search(deletions_.begin(), deletions_.end(), vertex))
-            {
-                ++currentIndex;
-            }
-            
-            ++vertex;
-        }
-        
-        ret = vertex;
+        throw std::out_of_range("htd::vertex_t htd::Hypergraph::vertexAtPosition(htd::index_t) const");
     }
-    
-    return ret;
+
+    return vertices_[index];
 }
 
 bool htd::Hypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const

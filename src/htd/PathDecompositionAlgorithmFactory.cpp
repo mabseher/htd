@@ -1,5 +1,5 @@
 /*
- * File:   TreeDecompositionAlgorithmFactory.cpp
+ * File:   PathDecompositionAlgorithmFactory.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,23 +22,23 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP
-#define HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP
+#ifndef HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP
+#define HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/TreeDecompositionAlgorithmFactory.hpp>
-#include <htd/ITreeDecompositionAlgorithm.hpp>
-#include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
+#include <htd/PathDecompositionAlgorithmFactory.hpp>
+#include <htd/IPathDecompositionAlgorithm.hpp>
+#include <htd/PostProcessingPathDecompositionAlgorithm.hpp>
 
 #include <memory>
 #include <stdexcept>
 
-htd::TreeDecompositionAlgorithmFactory::TreeDecompositionAlgorithmFactory(void)
+htd::PathDecompositionAlgorithmFactory::PathDecompositionAlgorithmFactory(void)
 {
-    constructionTemplate_ = new htd::BucketEliminationTreeDecompositionAlgorithm();
+    constructionTemplate_ = new htd::PostProcessingPathDecompositionAlgorithm();
 }
 
-htd::TreeDecompositionAlgorithmFactory::~TreeDecompositionAlgorithmFactory()
+htd::PathDecompositionAlgorithmFactory::~PathDecompositionAlgorithmFactory()
 {
     if (constructionTemplate_ != nullptr)
     {
@@ -48,23 +48,23 @@ htd::TreeDecompositionAlgorithmFactory::~TreeDecompositionAlgorithmFactory()
     }
 }
 
-htd::TreeDecompositionAlgorithmFactory & htd::TreeDecompositionAlgorithmFactory::instance(void)
+htd::PathDecompositionAlgorithmFactory & htd::PathDecompositionAlgorithmFactory::instance(void)
 {
-    static htd::TreeDecompositionAlgorithmFactory instance_;
+    static htd::PathDecompositionAlgorithmFactory instance_;
 
     return instance_;
 }
 
-htd::ITreeDecompositionAlgorithm * htd::TreeDecompositionAlgorithmFactory::getTreeDecompositionAlgorithm(void)
+htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPathDecompositionAlgorithm(void)
 {
     return constructionTemplate_->clone();
 }
 
-void htd::TreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::ITreeDecompositionAlgorithm * original)
+void htd::PathDecompositionAlgorithmFactory::setConstructionTemplate(htd::IPathDecompositionAlgorithm * original)
 {
     if (original == nullptr)
     {
-        throw std::logic_error("void htd::TreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::ITreeDecompositionAlgorithm *)");
+        throw std::logic_error("void htd::PathDecompositionAlgorithmFactory::setConstructionTemplate(htd::IPathDecompositionAlgorithm *)");
     }
 
     if (constructionTemplate_ != nullptr)
@@ -77,4 +77,4 @@ void htd::TreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::ITreeD
     constructionTemplate_ = original;
 }
 
-#endif /* HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP */
+#endif /* HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP */

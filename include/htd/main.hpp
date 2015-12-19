@@ -111,6 +111,7 @@
 #include <htd/PathDecompositionAlgorithmFactory.hpp>
 #include <htd/PathDecompositionFactory.hpp>
 #include <htd/PathDecomposition.hpp>
+#include <htd/PostProcessingPathDecompositionAlgorithm.hpp>
 #include <htd/SemiNormalizationOperation.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/SetCoverAlgorithm.hpp>

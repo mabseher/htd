@@ -27,10 +27,11 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ILabeledPath.hpp>
+#include <htd/ITreeDecomposition.hpp>
 
 namespace htd
 {
-    class IPathDecomposition : public virtual htd::ILabeledPath
+    class IPathDecomposition : public virtual htd::ILabeledPath, public virtual htd::ITreeDecomposition
     {
         public:
             virtual ~IPathDecomposition() = 0;
@@ -50,6 +51,8 @@ namespace htd
             virtual htd::vertex_t introduceNode(htd::index_t index) const = 0;
 
             virtual bool isIntroduceNode(htd::vertex_t vertex) const = 0;
+
+            virtual std::size_t bagSize(htd::vertex_t vertex) const = 0;
 
             virtual const htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
 

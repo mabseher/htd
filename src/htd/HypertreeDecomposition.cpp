@@ -39,12 +39,12 @@ htd::HypertreeDecomposition::HypertreeDecomposition(void) : htd::TreeDecompositi
     
 }
 
-htd::HypertreeDecomposition::HypertreeDecomposition(const htd::ILabeledTree & original) : htd::TreeDecomposition(original)
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::ITreeDecomposition & original) : htd::TreeDecomposition(original)
 {
 
 }
 
-htd::HypertreeDecomposition::HypertreeDecomposition(const htd::HypertreeDecomposition & original) : htd::TreeDecomposition(original)
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::IHypertreeDecomposition & original) : htd::TreeDecomposition(original)
 {
 
 }

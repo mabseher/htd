@@ -43,9 +43,9 @@ namespace htd
         public:
             HypertreeDecomposition(void);
             
-            HypertreeDecomposition(const htd::ILabeledTree & original);
+            HypertreeDecomposition(const htd::ITreeDecomposition & original);
 
-            HypertreeDecomposition(const htd::HypertreeDecomposition & original);
+            HypertreeDecomposition(const htd::IHypertreeDecomposition & original);
 
             ~HypertreeDecomposition();
 

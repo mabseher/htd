@@ -1,5 +1,5 @@
 /* 
- * File:   TreeDecomposition.hpp
+ * File:   PathDecomposition.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,32 +22,27 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_TREEDECOMPOSITION_HPP
-#define	HTD_HTD_TREEDECOMPOSITION_HPP
+#ifndef HTD_HTD_PATHDECOMPOSITION_HPP
+#define	HTD_HTD_PATHDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/ILabeledTree.hpp>
+#include <htd/IMutablePathDecomposition.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/ILabelingCollection.hpp>
 
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-
 namespace htd
 {
-    class TreeDecomposition : public virtual htd::IMutableTreeDecomposition
+    class PathDecomposition : public virtual htd::IMutablePathDecomposition
     {
         public:
-            TreeDecomposition(void);
+            PathDecomposition(void);
 
-            TreeDecomposition(const TreeDecomposition & original);
+            PathDecomposition(const PathDecomposition & original);
 
-            TreeDecomposition(const htd::ITreeDecomposition & original);
+            PathDecomposition(const htd::IPathDecomposition & original);
             
-            ~TreeDecomposition();
+            ~PathDecomposition();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -145,6 +140,8 @@ namespace htd
 
             const htd::Collection<htd::vertex_t> leafNodes(void) const HTD_OVERRIDE;
 
+            htd::vertex_t leafNode(void) const HTD_OVERRIDE;
+
             htd::vertex_t leafNode(htd::index_t index) const HTD_OVERRIDE;
 
             bool isLeafNode(htd::vertex_t vertex) const HTD_OVERRIDE;
@@ -156,14 +153,16 @@ namespace htd
             std::size_t childCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             const htd::Collection<htd::vertex_t> children(htd::vertex_t vertex) const HTD_OVERRIDE;
-            
+
+            htd::vertex_t child(htd::vertex_t vertex) const HTD_OVERRIDE;
+
             htd::vertex_t child(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
             bool isChild(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 
-            void removeSubtree(htd::vertex_t subtreeRoot) HTD_OVERRIDE;
+            void removeSubpath(htd::vertex_t subpathRoot) HTD_OVERRIDE;
 
             htd::vertex_t insertRoot(void) HTD_OVERRIDE;
             
@@ -174,6 +173,8 @@ namespace htd
             htd::vertex_t addParent(htd::vertex_t vertex) HTD_OVERRIDE;
 
             void setParent(htd::vertex_t vertex, htd::vertex_t newParent) HTD_OVERRIDE;
+
+            void removeChild(htd::vertex_t vertex) HTD_OVERRIDE;
 
             void removeChild(htd::vertex_t vertex, htd::vertex_t child) HTD_OVERRIDE;
 
@@ -261,52 +262,15 @@ namespace htd
 
             std::size_t maximumBagSize(void) const HTD_OVERRIDE;
 
-            TreeDecomposition & operator=(const TreeDecomposition & other);
+            PathDecomposition & operator=(const PathDecomposition & other);
 
-            TreeDecomposition & operator=(const htd::ITreeDecomposition & other);
+            PathDecomposition & operator=(const htd::IPathDecomposition & other);
 
-            TreeDecomposition * clone(void) const HTD_OVERRIDE;
+            PathDecomposition * clone(void) const HTD_OVERRIDE;
 
-        protected:
-
-            struct TreeNode
-            {
-                htd::id_t id;
-
-                htd::vertex_t parent;
-
-                htd::vertex_container children;
-
-                TreeNode(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), children()
-                {
-
-                }
-            };
-
-            std::size_t size_;
-
-            htd::vertex_t root_;
-
-            htd::vertex_t next_vertex_;
-
-            htd::vertex_container vertices_;
-
-            std::vector<TreeNode *> nodes_;
-
-            std::unordered_set<htd::vertex_t> deletions_;
-
-            htd::ILabelingCollection * labelings_;
-
-            std::size_t size(htd::TreeDecomposition::TreeNode * start) const;
-
-            void getChildrenVertexLabelSetUnion(htd::vertex_t vertex, htd::vertex_container & output) const;
-
-            void deleteSubtree(htd::TreeDecomposition::TreeNode * start);
-
-            void deleteNode(htd::TreeDecomposition::TreeNode * node);
-
-            void copy(const htd::ILabeledTree& original, htd::vertex_t vertex);
+        private:
+            htd::IMutableTreeDecomposition * base_;
     };
 }
 
-#endif /* HTD_HTD_TREEDECOMPOSITION_HPP */
+#endif /* HTD_HTD_PATHDECOMPOSITION_HPP */

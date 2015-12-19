@@ -51,9 +51,22 @@ htd::TreeDecomposition::TreeDecomposition(void)
     labelings_->setLabeling(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, new htd::GraphLabeling());
 }
 
+htd::TreeDecomposition::TreeDecomposition(const htd::TreeDecomposition & original)
+    : size_(original.size_), root_(original.root_), next_vertex_(htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), deletions_(original.deletions_), labelings_(original.labelings().clone())
+{
+    nodes_.reserve(original.nodes_.size());
+    
+    for (auto & node : original.nodes_)
+    {
+        if (node != nullptr)
+        {
+            nodes_.push_back(new TreeNode(*node));
+        }
+    }
+}
+
 //TODO Ensure correctness when htd::Vertex::FIRST does not match for this and original
-htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original)
-    : size_(0), root_(original.root()), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_(), labelings_(original.labelings().clone())
+htd::TreeDecomposition::TreeDecomposition(const htd::ITreeDecomposition & original) : size_(0), root_(original.root()), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_(), labelings_(original.labelings().clone())
 {
     htd::vertex_t maximumVertex = 0;
 
@@ -92,20 +105,6 @@ htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original)
     else
     {
         next_vertex_ = htd::Vertex::FIRST;
-    }
-}
-
-htd::TreeDecomposition::TreeDecomposition(const htd::TreeDecomposition & original)
-    : size_(original.size_), root_(original.root_), next_vertex_(htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), deletions_(original.deletions_), labelings_(original.labelings().clone())
-{
-    nodes_.reserve(original.nodes_.size());
-    
-    for (auto & node : original.nodes_)
-    {
-        if (node != nullptr)
-        {
-            nodes_.push_back(new TreeNode(*node));
-        }
     }
 }
 
@@ -278,7 +277,7 @@ bool htd::TreeDecomposition::isNeighbor(htd::vertex_t vertex1, htd::vertex_t ver
 
 bool htd::TreeDecomposition::isConnected(void) const
 {
-    return true;
+    return edgeCount() > 0;
 }
 
 bool htd::TreeDecomposition::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const

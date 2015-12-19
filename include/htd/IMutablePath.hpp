@@ -35,9 +35,23 @@ namespace htd
         public:
             virtual ~IMutablePath() = 0;
 
+            virtual htd::vertex_t insertRoot(void) = 0;
+
+            virtual void removeRoot(void) = 0;
+
+            virtual void removeVertex(htd::vertex_t vertex) = 0;
+
             virtual void removeSubpath(htd::vertex_t subpathRoot) = 0;
 
             virtual void removeChild(htd::vertex_t vertex) = 0;
+
+            virtual htd::vertex_t addChild(htd::vertex_t vertex) = 0;
+
+            virtual void removeChild(htd::vertex_t vertex, htd::vertex_t child) = 0;
+
+            virtual htd::vertex_t addParent(htd::vertex_t vertex) = 0;
+
+            virtual void setParent(htd::vertex_t vertex, htd::vertex_t newParent) = 0;
 
             virtual IMutablePath * clone(void) const = 0;
     };

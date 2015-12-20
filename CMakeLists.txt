@@ -17,9 +17,11 @@ if (NOT DEFINED BUILD_SHARED_LIBS)
     set(BUILD_SHARED_LIBS ON)
 endif()
 
-if (DEFINED VERBOSE)
-    if (VERBOSE)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERBOSE" )
+if (DEFINED DEBUG_OUTPUT)
+    if (DEBUG_OUTPUT)
+        message("Debugging output is enabled!")
+
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG_OUTPUT" )
     endif()
 endif()
 

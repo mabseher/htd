@@ -55,7 +55,7 @@
 #ifdef NDEBUG
     #define DEBUGGING_CODE(x)
 #else
-    #ifdef VERBOSE
+    #ifdef DEBUG_OUTPUT
         #define DEBUGGING_CODE(x) x
     #else
         #define DEBUGGING_CODE(x)

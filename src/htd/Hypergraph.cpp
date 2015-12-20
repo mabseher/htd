@@ -639,7 +639,13 @@ htd::id_t htd::Hypergraph::addEdge(const htd::Collection<htd::vertex_t> & elemen
 
     std::array<htd::vertex_t, 1> currentVertex;
 
-    for (htd::vertex_t vertex : elements)
+    std::vector<htd::vertex_t> sortedElements(elements.begin(), elements.end());
+
+    std::sort(sortedElements.begin(), sortedElements.end());
+
+    sortedElements.erase(std::unique(sortedElements.begin(), sortedElements.end()), sortedElements.end());
+
+    for (htd::vertex_t vertex : sortedElements)
     {
         currentVertex[0] = vertex;
 
@@ -647,7 +653,7 @@ htd::id_t htd::Hypergraph::addEdge(const htd::Collection<htd::vertex_t> & elemen
 
         htd::vertex_container newNeighborhood;
 
-        std::set_union(currentNeighborhood.begin(), currentNeighborhood.end(), elements.begin(), elements.end(), std::back_inserter(newNeighborhood));
+        htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(), sortedElements.begin(), sortedElements.end(), currentVertex.begin(), currentVertex.end(), std::back_inserter(newNeighborhood));
 
         currentNeighborhood.swap(newNeighborhood);
     }

@@ -97,7 +97,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
         currentNeighborhood.reserve(neighborCollection.size());
 
         std::copy(neighborCollection.begin(), neighborCollection.end(), std::back_inserter(currentNeighborhood));
-        
+
         auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
         
         if (position == currentNeighborhood.end() || *position != vertex)
@@ -105,7 +105,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
             currentNeighborhood.insert(position, vertex);
         }
     }
-    
+
     for (htd::vertex_t vertex : vertices)
     {
         auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];

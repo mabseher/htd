@@ -195,7 +195,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                 }
                 */
 
-                if (edge.size() > 1)
+                if (elements.size() > 1)
                 {
                     for (htd::vertex_t vertex : elements)
                     {
@@ -546,7 +546,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 if (visited.find(currentNode) == visited.end())
                 {
-                    ret->setBagContent(decompositionNode, htd::Collection<htd::vertex_t>(buckets[currentNode - htd::Vertex::FIRST].begin(), buckets[currentNode - htd::Vertex::FIRST].end()));
+                    ret->setBagContent(decompositionNode, htd::Collection<htd::vertex_t>(buckets[currentNode - htd::Vertex::FIRST]));
 
                     visited.insert(currentNode);
                 }

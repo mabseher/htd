@@ -161,7 +161,7 @@ std::size_t htd::TreeDecomposition::edgeCount(htd::vertex_t vertex) const
 
 bool htd::TreeDecomposition::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
+    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && deletions_.find(vertex) == deletions_.end();
 }
 
 bool htd::TreeDecomposition::isEdge(htd::id_t edgeId) const

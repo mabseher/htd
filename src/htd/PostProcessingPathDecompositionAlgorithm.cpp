@@ -32,7 +32,10 @@
 
 #include <htd/IPathDecomposition.hpp>
 #include <htd/IMutablePathDecomposition.hpp>
+#include <htd/PathDecompositionFactory.hpp>
+#include <htd/TreeDecompositionFactory.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
+#include <htd/JoinNodeReplacementOperation.hpp>
 
 #include <cstdarg>
 #include <stack>
@@ -56,25 +59,7 @@ htd::PostProcessingPathDecompositionAlgorithm::~PostProcessingPathDecompositionA
 
 htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
 {
-    htd::IMutablePathDecomposition * ret = nullptr;
-
-    htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
-
-    if (algorithm != nullptr)
-    {
-        htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph);
-
-        if (treeDecomposition != nullptr)
-        {
-            //TODO
-
-            delete treeDecomposition;
-        }
-
-        delete algorithm;
-    }
-
-    return ret;
+    return computeDecomposition(graph, std::vector<htd::ILabelingFunction *>());
 }
 
 htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const
@@ -108,10 +93,76 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
     delete algorithm;
 
-    //TODO
-    HTD_UNUSED(labelingFunctions);
+    htd::IMutableTreeDecomposition * mutableTreeDecomposition = htd::TreeDecompositionFactory::instance().getTreeDecomposition(*treeDecomposition);
 
     delete treeDecomposition;
+
+    htd::JoinNodeReplacementOperation joinNodeReplacementOperation(graph);
+
+    joinNodeReplacementOperation.apply(*mutableTreeDecomposition);
+
+    ret = toPathDecomposition(*mutableTreeDecomposition);
+
+    delete mutableTreeDecomposition;
+
+    for (auto & labelingFunction : labelingFunctions)
+    {
+        for (htd::vertex_t vertex : ret->vertices())
+        {
+            htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
+
+            //TODO Optimize
+            htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
+
+            delete labelCollection;
+
+            ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
+        }
+    }
+
+    return ret;
+}
+
+htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::toPathDecomposition(const htd::ITreeDecomposition & decomposition) const
+{
+    htd::IMutablePathDecomposition * ret = htd::PathDecompositionFactory::instance().getPathDecomposition();
+
+    if (decomposition.vertexCount() > 0)
+    {
+        const htd::Collection<std::string> labelNames = decomposition.labelNames();
+
+        htd::vertex_t currentVertex = decomposition.root();
+
+        htd::vertex_t newVertex = ret->insertRoot();
+
+        for (const std::string & labelName : labelNames)
+        {
+            if (decomposition.isLabeledVertex(labelName, currentVertex))
+            {
+                ret->setVertexLabel(labelName, newVertex, decomposition.vertexLabel(labelName, currentVertex).clone());
+            }
+        }
+
+        while (decomposition.childCount(currentVertex) == 1)
+        {
+            currentVertex = decomposition.child(currentVertex, 0);
+
+            newVertex = ret->addChild(newVertex);
+
+            for (const std::string & labelName : labelNames)
+            {
+                if (decomposition.isLabeledVertex(labelName, currentVertex))
+                {
+                    ret->setVertexLabel(labelName, newVertex, decomposition.vertexLabel(labelName, currentVertex).clone());
+                }
+            }
+        }
+
+        if (decomposition.childCount(currentVertex) != 0)
+        {
+            throw std::logic_error("htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::toPathDecomposition(const htd::ITreeDecomposition &) const");
+        }
+    }
 
     return ret;
 }

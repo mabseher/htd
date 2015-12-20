@@ -29,6 +29,7 @@
 #include <htd/IHypergraph.hpp>
 #include <htd/IPathDecomposition.hpp>
 #include <htd/IPathDecompositionAlgorithm.hpp>
+#include <htd/IMutablePathDecomposition.hpp>
 
 #include <cstdarg>
 #include <vector>
@@ -54,6 +55,8 @@ namespace htd
 
         protected:
             PostProcessingPathDecompositionAlgorithm & operator=(const PostProcessingPathDecompositionAlgorithm &) { return *this; }
+
+            htd::IMutablePathDecomposition * toPathDecomposition(const htd::ITreeDecomposition & decomposition) const;
     };
 }
 

@@ -360,6 +360,16 @@ const std::string & htd::PathDecomposition::labelName(htd::index_t index) const
     return base_->labelName(index);
 }
 
+bool htd::PathDecomposition::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const
+{
+    return base_->isLabeledVertex(labelName, vertex);
+}
+
+bool htd::PathDecomposition::isLabeledEdge(const std::string & labelName, htd::id_t edgeId) const
+{
+    return base_->isLabeledEdge(labelName, edgeId);
+}
+
 const htd::ILabel & htd::PathDecomposition::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
 {
     return base_->vertexLabel(labelName, vertex);

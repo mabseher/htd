@@ -1098,7 +1098,7 @@ void htd::TreeDecomposition::removeChild(htd::vertex_t vertex, htd::vertex_t chi
 
                 if (position != children.end())
                 {
-                    deleteSubtree(nodes_[*position]);
+                    removeVertex(child);
                 }
             }
         }
@@ -1240,6 +1240,16 @@ const std::string & htd::TreeDecomposition::labelName(htd::index_t index) const
     std::advance(position, index);
 
     return (*position).first;
+}
+
+bool htd::TreeDecomposition::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const
+{
+    return labelings_->isLabelingName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
+}
+
+bool htd::TreeDecomposition::isLabeledEdge(const std::string & labelName, htd::id_t edgeId) const
+{
+    return labelings_->isLabelingName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
 }
 
 const htd::ILabel & htd::TreeDecomposition::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const

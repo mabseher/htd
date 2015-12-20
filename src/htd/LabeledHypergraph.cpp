@@ -91,6 +91,16 @@ const std::string & htd::LabeledHypergraph::labelName(htd::index_t index) const
     return labelings_->labelName(index);
 }
 
+bool htd::LabeledHypergraph::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const
+{
+    return labelings_->isLabelingName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
+}
+
+bool htd::LabeledHypergraph::isLabeledEdge(const std::string & labelName, htd::id_t edgeId) const
+{
+    return labelings_->isLabelingName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
+}
+
 const htd::ILabel & htd::LabeledHypergraph::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
 {
     return labelings_->labeling(labelName).vertexLabel(vertex);

@@ -64,37 +64,7 @@ htd::HypertreeDecompositionAlgorithm::~HypertreeDecompositionAlgorithm()
 
 htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
 {
-    htd::IMutableHypertreeDecomposition * ret = nullptr;
-
-    htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
-
-    if (algorithm != nullptr)
-    {
-        htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph);
-
-        if (treeDecomposition != nullptr)
-        {
-            ret = htd::HypertreeDecompositionFactory::instance().getHypertreeDecomposition(*treeDecomposition);
-
-            if (ret != nullptr)
-            {
-                htd::HypertreeDecompositionLabelingFunction hypertreeDecompositionLabelingFunction(graph);
-
-                for (htd::vertex_t vertex : ret->vertices())
-                {
-                    htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(ret->bagContent(vertex));
-
-                    ret->setVertexLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
-                }
-
-                delete treeDecomposition;
-            }
-        }
-
-        delete algorithm;
-    }
-
-    return ret;
+    return computeDecomposition(graph, std::vector<htd::ILabelingFunction *>());
 }
 
 htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const

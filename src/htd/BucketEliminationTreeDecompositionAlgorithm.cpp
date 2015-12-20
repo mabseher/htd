@@ -65,14 +65,7 @@ htd::BucketEliminationTreeDecompositionAlgorithm::~BucketEliminationTreeDecompos
 
 htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
 {
-    htd::IMutableTreeDecomposition * ret = computeMutableDecomposition(graph);
-
-    if (ret != nullptr)
-    {
-        compressDecomposition(*ret);
-    }
-
-    return ret;
+    return computeDecomposition(graph, std::vector<htd::ILabelingFunction *>());
 }
 
 htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const

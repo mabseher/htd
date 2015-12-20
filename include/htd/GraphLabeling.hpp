@@ -45,9 +45,9 @@ namespace htd
 
             std::size_t edgeLabelCount(void) const HTD_OVERRIDE;
 
-            bool isLabeledVertex(htd::id_t id) const HTD_OVERRIDE;
+            bool isLabeledVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            bool isLabeledEdge(htd::id_t id) const HTD_OVERRIDE;
+            bool isLabeledEdge(htd::id_t edgeId) const HTD_OVERRIDE;
 
             const htd::ILabel & vertexLabel(htd::vertex_t vertex) const HTD_OVERRIDE;
 

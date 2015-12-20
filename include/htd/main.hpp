@@ -95,6 +95,7 @@
 #include <htd/ITreeDecompositionVerifier.hpp>
 #include <htd/ITree.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
+#include <htd/JoinNodeReplacementOperation.hpp>
 #include <htd/LabelCollection.hpp>
 #include <htd/LabeledHypergraph.hpp>
 #include <htd/Label.hpp>

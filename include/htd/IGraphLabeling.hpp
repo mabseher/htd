@@ -39,9 +39,9 @@ namespace htd
 
             virtual std::size_t edgeLabelCount() const = 0;
 
-            virtual bool isLabeledVertex(htd::id_t id) const = 0;
+            virtual bool isLabeledVertex(htd::vertex_t vertex) const = 0;
 
-            virtual bool isLabeledEdge(htd::id_t id) const = 0;
+            virtual bool isLabeledEdge(htd::id_t edgeId) const = 0;
 
             virtual const htd::ILabel & vertexLabel(htd::vertex_t vertex) const = 0;
 

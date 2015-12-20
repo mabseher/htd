@@ -129,8 +129,6 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
     if (size > 0)
     {
-        std::size_t index = 0;
-
         std::vector<htd::vertex_t> ordering;
 
         htd::IOrderingAlgorithm * algorithm = htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm();
@@ -163,6 +161,8 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                 std::cout << vertex << std::endl;
             })
 
+            std::size_t index = 0;
+
             for (htd::vertex_t vertex : ordering)
             {
                 indices[vertex - htd::Vertex::FIRST] = index++;
@@ -175,15 +175,15 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
             for (htd::Hyperedge edge : graph.hyperedges())
             {
-                htd::vertex_t minimumVertex = getMinimumVertex(edge.elements(), indices);
-
-                auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
-
                 htd::vertex_container elements = htd::vertex_container(edge.begin(), edge.end());
 
                 std::sort(elements.begin(), elements.end());
 
                 elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
+
+                htd::vertex_t minimumVertex = getMinimumVertex(elements, indices);
+
+                auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
 
                 std::vector<htd::vertex_t> newBucketContent;
                 newBucketContent.reserve(selectedBucket.size());

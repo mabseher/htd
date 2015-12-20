@@ -27,9 +27,8 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/IGraph.hpp>
-#include <htd/IHypergraph.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
+#include <htd/IHypergraph.hpp>
 #include <htd/Collection.hpp>
 
 #include <algorithm>

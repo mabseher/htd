@@ -118,7 +118,15 @@ const htd::Collection<htd::Hyperedge> htd::TreeDecompositionVerifier::violations
 
     for (const htd::Hyperedge & edge : graph.hyperedges())
     {
-        edges.push_back(edge);
+        htd::Collection<htd::vertex_t> elementCollection = edge.elements();
+
+        htd::vertex_container elements(elementCollection.begin(), elementCollection.end());
+
+        std::sort(elements.begin(), elements.end());
+
+        elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
+
+        edges.push_back(htd::Hyperedge(edge.id(), htd::Collection<htd::vertex_t>(elements)));
     }
 
     std::unordered_set<htd::vertex_t> missingEdges(edgeCount);

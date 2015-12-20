@@ -77,58 +77,69 @@ htd::JoinNodeReplacementOperation::~JoinNodeReplacementOperation()
 
 void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
-    htd::vertex_container joinNodes;
-
-    const htd::Collection<htd::vertex_t> joinNodeCollection = decomposition.joinNodes();
-
-    std::copy(joinNodeCollection.begin(), joinNodeCollection.end(), std::back_inserter(joinNodes));
-
-    for (htd::vertex_t node : joinNodes)
+    if (decomposition.vertexCount() > 0)
     {
-        htd::vertex_container bagContent;
+        htd::vertex_t node = decomposition.root();
 
-        htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
+        std::size_t childCount = decomposition.childCount(node);
 
-        std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
-
-        htd::vertex_container children;
-
-        const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
-
-        std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
-
-        DEBUGGING_CODE(
-        std::cout << "JOIN NODE: " << node << std::endl;
-        std::cout << "   ";
-        htd::print(children, false);
-        std::cout << std::endl << std::endl;
-        )
-
-        htd::vertex_container newBagContent;
-
-        getChildrenVertexLabelSetUnion(decomposition, node, newBagContent);
-
-        decomposition.setBagContent(children[0], htd::Collection<htd::vertex_t>(newBagContent));
-
-        for (htd::vertex_t child : children)
+        while (childCount > 0)
         {
-            if (child != children[0])
+            htd::vertex_container children;
+
+            const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
+
+            std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+
+            if (childCount >= 2)
             {
-                htd::vertex_container grandChildren;
+                DEBUGGING_CODE(std::cout << "JOIN NODE: " << node << std::endl;)
 
-                const htd::Collection<htd::vertex_t> grandChildContainer = decomposition.children(child);
+                htd::vertex_container bagContent;
 
-                std::copy(grandChildContainer.begin(), grandChildContainer.end(), std::back_inserter(grandChildren));
+                htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
 
-                for (htd::vertex_t grandChild : grandChildren)
+                std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
+
+                DEBUGGING_CODE(
+                std::cout << "   ";
+                htd::print(children, false);
+                std::cout << std::endl << std::endl;
+                )
+
+                htd::vertex_container newBagContent;
+
+                getChildrenVertexLabelSetUnion(decomposition, node, newBagContent);
+
+                decomposition.setBagContent(children[0], htd::Collection<htd::vertex_t>(newBagContent));
+
+                for (htd::vertex_t child : children)
                 {
-                    decomposition.setParent(grandChild, children[0]);
+                    if (child != children[0])
+                    {
+                        htd::vertex_container grandChildren;
 
-                    std::cout << "MOVING GRANDCHILD " << grandChild << " TO " << children[0] << " ..." << std::endl;
+                        const htd::Collection<htd::vertex_t> grandChildContainer = decomposition.children(child);
+
+                        std::copy(grandChildContainer.begin(), grandChildContainer.end(), std::back_inserter(grandChildren));
+
+                        for (htd::vertex_t grandChild : grandChildren)
+                        {
+                            decomposition.setParent(grandChild, children[0]);
+
+                            std::cout << "MOVING GRANDCHILD " << grandChild << " TO " << children[0] << " ..." << std::endl;
+                        }
+
+                        std::cout << "REMOVING NODE " << child << " ..." << std::endl;
+
+                        decomposition.removeChild(node, child);
+                    }
                 }
-
-                decomposition.removeChild(node, child);
             }
+
+            node = children[0];
+
+            childCount = decomposition.childCount(node);
         }
     }
 }

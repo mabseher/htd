@@ -179,6 +179,12 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
 
+                htd::vertex_container elements = htd::vertex_container(edge.begin(), edge.end());
+
+                std::sort(elements.begin(), elements.end());
+
+                elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
+
                 std::vector<htd::vertex_t> newBucketContent;
                 newBucketContent.reserve(selectedBucket.size());
 
@@ -191,7 +197,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 if (edge.size() > 1)
                 {
-                    for (htd::vertex_t vertex : edge)
+                    for (htd::vertex_t vertex : elements)
                     {
                         isolatedVertices.erase(vertex);
                     }
@@ -199,7 +205,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 //vertexLabels[minimumVertex - htd::Vertex::FIRST] = minimumVertex;
 
-                std::set_union(selectedBucket.begin(), selectedBucket.end(), edge.begin(), edge.end(), std::back_inserter(newBucketContent));
+                std::set_union(selectedBucket.begin(), selectedBucket.end(), elements.begin(), elements.end(), std::back_inserter(newBucketContent));
 
                 std::swap(selectedBucket, newBucketContent);
             }

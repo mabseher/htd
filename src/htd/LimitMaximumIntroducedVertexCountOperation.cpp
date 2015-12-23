@@ -110,6 +110,17 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                 decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(start, finish));
 
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
+                }
+
                 if (intermediatedVertexCount > 0)
                 {
                     std::advance(finish, limit_);
@@ -119,6 +130,17 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                         newNode = decomposition.addParent(newNode);
 
                         decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(start, finish));
+
+                        for (auto & labelingFunction : labelingFunctions)
+                        {
+                            htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
+
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+
+                            delete labelCollection;
+
+                            decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
+                        }
 
                         if (index < introducedVertexCount + limit_)
                         {

@@ -48,7 +48,7 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
 void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::WeakNormalizationOperation::apply(decomposition);
+    htd::WeakNormalizationOperation::apply(decomposition, labelingFunctions);
 
     htd::LimitChildCountOperation limitChildCountOperation(2);
 

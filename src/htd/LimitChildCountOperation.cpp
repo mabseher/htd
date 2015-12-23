@@ -71,6 +71,17 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
             decomposition.setBagContent(newNode, decomposition.bagContent(node));
 
+            for (auto & labelingFunction : labelingFunctions)
+            {
+                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
+
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+
+                delete labelCollection;
+
+                decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
+            }
+
             std::size_t remainder = childCount % (limit_ - 1);
 
             childCount -= remainder;

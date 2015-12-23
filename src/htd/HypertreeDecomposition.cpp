@@ -30,7 +30,8 @@
 #include <htd/TreeDecomposition.hpp>
 #include <htd/HypertreeDecomposition.hpp>
 #include <htd/GraphLabeling.hpp>
-#include <htd/HyperedgeContainerLabel.hpp>
+#include <htd/Label.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 
@@ -62,7 +63,7 @@ const htd::Collection<htd::Hyperedge> htd::HypertreeDecomposition::edgeLabel(htd
 
         if (edgeLabeling.isLabeledVertex(vertex))
         {
-            auto & edgeLabel = dynamic_cast<const htd::HyperedgeContainerLabel *>(&(edgeLabeling.vertexLabel(vertex)))->container();
+            auto & edgeLabel = dynamic_cast<const htd::Label<htd::Collection<htd::Hyperedge>> *>(&(edgeLabeling.vertexLabel(vertex)))->value();
 
             return htd::Collection<htd::Hyperedge>(edgeLabel);
         }
@@ -81,7 +82,7 @@ void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::
     {
         auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
 
-        edgeLabeling.setVertexLabel(vertex, new htd::HyperedgeContainerLabel(content));
+        edgeLabeling.setVertexLabel(vertex, new htd::Label<htd::Collection<htd::Hyperedge>>(htd::VectorAdapter<htd::Hyperedge>(content)));
     }
     else
     {
@@ -95,7 +96,7 @@ void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::
     {
         auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
 
-        edgeLabeling.setVertexLabel(vertex, new htd::HyperedgeContainerLabel(content.begin(), content.end()));
+        edgeLabeling.setVertexLabel(vertex, new htd::Label<htd::Collection<htd::Hyperedge>>(htd::VectorAdapter<htd::Hyperedge>(htd::Collection<htd::Hyperedge>(content.begin(), content.end()))));
     }
     else
     {

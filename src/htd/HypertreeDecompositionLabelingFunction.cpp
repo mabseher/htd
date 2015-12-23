@@ -32,8 +32,8 @@
 #include <htd/ILabel.hpp>
 #include <htd/IHypergraph.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
-#include <htd/HyperedgeContainerLabel.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <string>
@@ -83,7 +83,7 @@ std::string htd::HypertreeDecompositionLabelingFunction::name() const
     return htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER;
 }
 
-htd::ILabel * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::Collection<htd::vertex_t> & vertices) const
+htd::Label<htd::Collection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::Collection<htd::vertex_t> & vertices) const
 {
     std::vector<htd::id_t> relevantContainerIds;
 
@@ -118,19 +118,17 @@ htd::ILabel * htd::HypertreeDecompositionLabelingFunction::computeLabel(const ht
 
     setCoverAlgorithm_->computeSetCover(vertices, relevantContainers, setCoverResult);
 
-    htd::HyperedgeContainerLabel * label = new HyperedgeContainerLabel();
-
-    htd::hyperedge_container & selectedHyperedges = label->container();
+    htd::VectorAdapter<htd::Hyperedge> selectedHyperedges;
 
     for (htd::index_t selectedHyperedgeIndex : setCoverResult)
     {
-        selectedHyperedges.push_back(htd::Hyperedge(relevantContainerIds[selectedHyperedgeIndex], relevantContainers[selectedHyperedgeIndex]));
+        selectedHyperedges.container().push_back(htd::Hyperedge(relevantContainerIds[selectedHyperedgeIndex], relevantContainers[selectedHyperedgeIndex]));
     }
 
-    return label;
+    return new htd::Label<htd::Collection<htd::Hyperedge>>(selectedHyperedges);
 }
 
-htd::ILabel * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::Collection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const
+htd::Label<htd::Collection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::Collection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const
 {
     HTD_UNUSED(labels);
 

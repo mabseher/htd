@@ -41,7 +41,6 @@
 #include <htd/GraphLabeling.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/HeuristicSetCoverAlgorithm.hpp>
-#include <htd/HyperedgeContainerLabel.hpp>
 #include <htd/Hyperedge.hpp>
 #include <htd/HypergraphFactory.hpp>
 #include <htd/Hypergraph.hpp>
@@ -123,7 +122,6 @@
 #include <htd/TreeDecompositionVerifier.hpp>
 #include <htd/VectorAdapter.hpp>
 #include <htd/VectorAdapterIteratorWrapper.hpp>
-#include <htd/VertexContainerLabel.hpp>
 #include <htd/Vertex.hpp>
 #include <htd/WeakNormalizationOperation.hpp>
 

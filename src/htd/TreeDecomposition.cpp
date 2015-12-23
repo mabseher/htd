@@ -31,8 +31,8 @@
 #include <htd/TreeDecomposition.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabeledTree.hpp>
+#include <htd/Label.hpp>
 #include <htd/LabelingCollection.hpp>
-#include <htd/VertexContainerLabel.hpp>
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
@@ -1711,7 +1711,7 @@ std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t vertex) const
 
             if (bagLabeling.isLabeledVertex(vertex))
             {
-                ret = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.vertexLabel(vertex)))->container().size();
+                ret = dynamic_cast<const htd::Label<htd::Collection<htd::vertex_t>> *>(&(bagLabeling.vertexLabel(vertex)))->value().size();
             }
         }
     }
@@ -1731,7 +1731,7 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::ver
 
         if (bagLabeling.isLabeledVertex(vertex))
         {
-            auto & vertexLabel = dynamic_cast<const htd::VertexContainerLabel *>(&(bagLabeling.vertexLabel(vertex)))->container();
+            auto & vertexLabel = dynamic_cast<const htd::Label<htd::Collection<htd::vertex_t>> *>(&(bagLabeling.vertexLabel(vertex)))->value();
 
             return htd::Collection<htd::vertex_t>(vertexLabel);
         }
@@ -1750,7 +1750,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::vert
     {
         auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-        bagLabeling.setVertexLabel(vertex, new htd::VertexContainerLabel(content));
+        bagLabeling.setVertexLabel(vertex, new htd::Label<htd::Collection<htd::vertex_t>>(htd::VectorAdapter<htd::vertex_t>(content)));
     }
     else
     {
@@ -1764,7 +1764,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::Coll
     {
         auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-        bagLabeling.setVertexLabel(vertex, new htd::VertexContainerLabel(content.begin(), content.end()));
+        bagLabeling.setVertexLabel(vertex, new htd::Label<htd::Collection<htd::vertex_t>>(htd::VectorAdapter<htd::vertex_t>(htd::Collection<htd::vertex_t>(content.begin(), content.end()))));
     }
     else
     {

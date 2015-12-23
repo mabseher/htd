@@ -30,7 +30,6 @@
 #include <htd/IHypergraph.hpp>
 #include <htd/ITreeDecomposition.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
-#include <htd/VertexContainerLabel.hpp>
 #include <htd/VectorAdapter.hpp>
 
 #include <map>

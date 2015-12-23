@@ -29,7 +29,6 @@
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/Collection.hpp>
-#include <htd/VertexContainerLabel.hpp>
 
 #include <algorithm>
 #include <stdexcept>
@@ -104,7 +103,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                 htd::vertex_t newNode = decomposition.addChild(node);
 
-                decomposition.setVertexLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+                decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(start, finish));
 
                 if (intermediatedVertexCount > 0)
                 {
@@ -114,7 +113,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                     {
                         newNode = decomposition.addParent(newNode);
 
-                        decomposition.setVertexLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(htd::vertex_container(start, finish)));
+                        decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(start, finish));
 
                         if (index < introducedVertexCount + limit_)
                         {
@@ -138,7 +137,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                 std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                decomposition.setVertexLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(newContent));
+                decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
 
                 if (intermediatedVertexCount > 0)
                 {
@@ -154,7 +153,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                             newContent.push_back(*it);
                         }
 
-                        decomposition.setVertexLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, newNode, new htd::VertexContainerLabel(newContent));
+                        decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
 
                         if (index < introducedVertexCount + limit_)
                         {

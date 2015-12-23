@@ -35,8 +35,6 @@
 #include <htd/IMutableLabeledTree.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
-#include <htd/VertexContainerLabel.hpp>
-#include <htd/HyperedgeContainerLabel.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
 #include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>

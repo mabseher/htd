@@ -29,7 +29,6 @@
 #include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/Collection.hpp>
-#include <htd/VertexContainerLabel.hpp>
 
 #include <algorithm>
 

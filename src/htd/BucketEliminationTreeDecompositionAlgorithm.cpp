@@ -32,7 +32,6 @@
 #include <htd/ITreeDecomposition.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
-#include <htd/VertexContainerLabel.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabelingFunction.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>

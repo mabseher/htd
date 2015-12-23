@@ -29,7 +29,6 @@
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/Collection.hpp>
-#include <htd/VertexContainerLabel.hpp>
 
 #include <algorithm>
 
@@ -73,9 +72,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
             if (bagContent.size() != rememberedVertices.size() || !std::equal(bagContent.begin(), bagContent.end(), rememberedVertices.begin()))
             {
-                htd::vertex_t intermediateVertex = decomposition.addParent(child);
-
-                decomposition.setVertexLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, intermediateVertex, new htd::VertexContainerLabel(htd::vertex_container(rememberedVertices.begin(), rememberedVertices.end())));
+                decomposition.setBagContent(decomposition.addParent(child), htd::Collection<htd::vertex_t>(rememberedVertices.begin(), rememberedVertices.end()));
             }
         }
     }

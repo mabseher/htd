@@ -77,9 +77,9 @@ namespace std
     template<typename T>
     void hash_combine(std::size_t & seed, const T & v)
     {
-        std::hash<T> hash_function;
+        std::hash<T> hashFunction;
 
-        seed ^= hash_function(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        seed ^= hashFunction(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
     }
 
     template<>
@@ -93,6 +93,42 @@ namespace std
                 for (htd::vertex_t vertex : data.elements())
                 {
                     std::hash_combine(ret, vertex);
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    class hash<htd::Collection<htd::vertex_t>>
+    {
+        public:
+            std::size_t operator()(const htd::Collection<htd::vertex_t> & data) const
+            {
+                std::size_t ret = 31;
+
+                for (htd::vertex_t vertex : data)
+                {
+                    std::hash_combine(ret, vertex);
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    class hash<htd::Collection<htd::Hyperedge>>
+    {
+        public:
+            std::size_t operator()(const htd::Collection<htd::Hyperedge> & data) const
+            {
+                std::size_t ret = 31;
+
+                std::hash<htd::Hyperedge> hashFunction;
+
+                for (const htd::Hyperedge & hyperedge : data)
+                {
+                    std::hash_combine(ret, hashFunction(hyperedge));
                 }
 
                 return ret;

@@ -117,7 +117,9 @@ namespace htd
             {
                 if (!nameLabeling_->isLabeledVertex(vertex))
                 {
-                    throw std::logic_error("const VertexNameType & htd::NamedHypergraph::vertexName(htd::vertex_t) const");
+                    std::cout << "NOT NAMED: " << vertex << std::endl;
+
+                    throw std::logic_error("const VertexNameType & htd::NamedHypergraph<VertexNameType, EdgeNameType>::vertexName(htd::vertex_t) const");
                 }
 
                 return dynamic_cast<const htd::Label<VertexNameType> *>(&(nameLabeling_->vertexLabel(vertex)))->value();
@@ -127,7 +129,7 @@ namespace htd
             {
                 if (!nameLabeling_->isLabeledEdge(edgeId))
                 {
-                    throw std::logic_error("const EdgeNameType & htd::NamedHypergraph::edgeName(htd::id_t) const");
+                    throw std::logic_error("const EdgeNameType & htd::NamedHypergraph<VertexNameType, EdgeNameType>::edgeName(htd::id_t) const");
                 }
 
                 return dynamic_cast<const htd::Label<VertexNameType> *>(&(nameLabeling_->edgeLabel(edgeId)))->value();

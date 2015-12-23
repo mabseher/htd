@@ -39,6 +39,7 @@
 #include <htd/ITreeDecompositionAlgorithm.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
 #include <htd/Collection.hpp>
+#include <htd/ILabel.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -722,6 +723,12 @@ namespace htd
         {
             std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() / 1000 << "." << std::setw(3) << std::setfill('0') << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() % 1000 << " seconds";
         }
+    }
+
+    template<typename OutputType>
+    const OutputType & accessLabel(const htd::ILabel & input)
+    {
+        return *(dynamic_cast<const OutputType *>(&input));
     }
 }
 

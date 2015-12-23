@@ -147,10 +147,6 @@ void htd::GraphLabeling::removeVertexLabel(htd::vertex_t vertex)
 
         vertexLabels_.erase(position);
     }
-    else
-    {
-        throw std::out_of_range("htd::GraphLabeling::removeVertexLabel(htd::vertex_t)");
-    }
 }
 
 void htd::GraphLabeling::removeEdgeLabel(htd::id_t edgeId)
@@ -162,10 +158,6 @@ void htd::GraphLabeling::removeEdgeLabel(htd::id_t edgeId)
         delete position->second;
 
         edgeLabels_.erase(position);
-    }
-    else
-    {
-        throw std::out_of_range("htd::GraphLabeling::removeEdgeLabel(htd::id_t)");
     }
 }
 

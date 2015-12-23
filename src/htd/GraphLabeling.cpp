@@ -78,10 +78,7 @@ void htd::GraphLabeling::setVertexLabel(htd::vertex_t vertex, htd::ILabel * labe
 
     if (position != vertexLabels_.end())
     {
-        if (!(*(position->second) == *label))
-        {
-            delete position->second;
-        }
+        delete position->second;
     }
 
     vertexLabels_[vertex] = label;

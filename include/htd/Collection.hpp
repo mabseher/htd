@@ -109,12 +109,20 @@ namespace htd
                 return *position;
             }
 
-            inline bool operator==(const Collection & rhs) const
+            Collection<T> & operator=(const Collection<T> & rhs) const
+            {
+                begin_ = rhs.begin_;
+                end_ = rhs.end_;
+
+                return *this;
+            }
+
+            inline bool operator==(const Collection<T> & rhs) const
             {
                 return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
             }
 
-            inline bool operator!=(const Collection & rhs) const { return !(*this == rhs); }
+            inline bool operator!=(const Collection<T> & rhs) const { return !(*this == rhs); }
 
         private:
             Iterator<T> begin_;

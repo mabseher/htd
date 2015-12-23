@@ -109,6 +109,18 @@ namespace htd
                 return ret;
             }
 
+            Iterator<T> & operator=(const Iterator<T> & other)
+            {
+                if (baseIterator_!= nullptr)
+                {
+                    delete baseIterator_;
+                }
+
+                baseIterator_ = other.baseIterator_->clone();
+
+                return *this;
+            }
+
             bool operator==(const IteratorBase<T> & other) const HTD_OVERRIDE
             {
                 bool ret = false;

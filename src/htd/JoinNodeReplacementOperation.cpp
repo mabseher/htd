@@ -32,11 +32,28 @@
 #include <htd/VertexContainerLabel.hpp>
 
 #include <algorithm>
+#include <stack>
 #include <unordered_set>
+#include <vector>
 
 //TODO Remove
 #include <iostream>
 #include <htd/Helpers.hpp>
+
+struct HistoryEntry
+{
+    std::size_t visits;
+    htd::vertex_t vertex;
+
+    std::vector<htd::vertex_t> requiredVertices;
+
+    std::unordered_set<htd::vertex_t> availableChildren;
+
+    HistoryEntry(htd::vertex_t currentVertex, std::size_t visits) : visits(visits), vertex(currentVertex), requiredVertices(), availableChildren()
+    {
+
+    }
+};
 
 htd::JoinNodeReplacementOperation::JoinNodeReplacementOperation(const htd::IHypergraph & graph): graph_(graph), hyperedges_()
 {
@@ -79,67 +96,202 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 {
     if (decomposition.vertexCount() > 0)
     {
-        htd::vertex_t node = decomposition.root();
+        std::size_t currentVisits = 0;
 
-        std::size_t childCount = decomposition.childCount(node);
+        htd::vertex_t currentNode = decomposition.root();
 
-        while (childCount > 0)
+       htd::vertex_t attachmentPoint = htd::Vertex::UNKNOWN;
+
+        std::stack<HistoryEntry> parentStack;
+
+        std::vector<htd::vertex_t> requiredVertices;
+
+        htd::Collection<htd::vertex_t> childCollection = decomposition.children(currentNode);
+
+        std::unordered_set<htd::vertex_t> availableChildren(childCollection.begin(), childCollection.end());
+
+        while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
         {
-            htd::vertex_container children;
-
-            const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
-
-            std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
-
-            if (childCount >= 2)
+            if (currentNode != htd::Vertex::UNKNOWN)
             {
-                DEBUGGING_CODE(std::cout << "JOIN NODE: " << node << std::endl;)
+                std::cout << std::endl << std::endl << "NODE: " << currentNode << std::endl;
 
-                htd::vertex_container bagContent;
-
-                htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
-
-                std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
-
-                DEBUGGING_CODE(
-                std::cout << "   ";
-                htd::print(children, false);
-                std::cout << std::endl << std::endl;
-                )
-
-                htd::vertex_container newBagContent;
-
-                getChildrenVertexLabelSetUnion(decomposition, node, newBagContent);
-
-                decomposition.setBagContent(children[0], htd::Collection<htd::vertex_t>(newBagContent));
-
-                for (htd::vertex_t child : children)
+                if (currentVisits == 0)
                 {
-                    if (child != children[0])
+                    if (attachmentPoint != htd::Vertex::UNKNOWN && decomposition.parent(currentNode) != attachmentPoint)
                     {
-                        htd::vertex_container grandChildren;
+                        std::cout << "   ATTACH " << currentNode << " TO " << attachmentPoint << std::endl;
 
-                        const htd::Collection<htd::vertex_t> grandChildContainer = decomposition.children(child);
-
-                        std::copy(grandChildContainer.begin(), grandChildContainer.end(), std::back_inserter(grandChildren));
-
-                        for (htd::vertex_t grandChild : grandChildren)
-                        {
-                            decomposition.setParent(grandChild, children[0]);
-
-                            std::cout << "MOVING GRANDCHILD " << grandChild << " TO " << children[0] << " ..." << std::endl;
-                        }
-
-                        std::cout << "REMOVING NODE " << child << " ..." << std::endl;
-
-                        decomposition.removeChild(node, child);
+                        decomposition.setParent(currentNode, attachmentPoint);
                     }
+
+                    attachmentPoint = currentNode;
+                }
+
+                if (!availableChildren.empty())
+                {
+                    htd::vertex_t selectedChild = *(availableChildren.begin());
+
+                    std::unordered_set<htd::vertex_t> newAvailableChildren(availableChildren);
+
+                    newAvailableChildren.erase(selectedChild);
+
+                    availableChildren.erase(selectedChild);
+
+                    std::cout << "   SELECTED CHILD: " << selectedChild << std::endl;
+                    std::cout << "   REMAINING CHILDREN: ";
+                    htd::print(availableChildren, true);
+                    std::cout << std::endl;
+
+                    std::cout << "OLD REQUIRED VERTICES " << currentNode << ": ";
+                    htd::print(requiredVertices, false);
+                    std::cout << std::endl << std::endl;
+
+                    std::vector<htd::vertex_t> newRequiredVertices;
+
+                    htd::Collection<htd::vertex_t> rememberedVertexCollection = decomposition.rememberedVertices(currentNode);
+
+                    std::set_union(requiredVertices.begin(), requiredVertices.end(), rememberedVertexCollection.begin(), rememberedVertexCollection.end(), std::back_inserter(newRequiredVertices));
+
+                    std::cout << "NEW REQUIRED VERTICES " << currentNode << ": ";
+                    htd::print(newRequiredVertices, false);
+                    std::cout << std::endl << std::endl;
+
+                    std::swap(requiredVertices, newRequiredVertices);
+
+                    //TODO Fix!
+                    /*
+                    if (availableChildren.size() == 0)
+                    {
+                        if (attachmentPoint == decomposition.parent(selectedChild))
+                        {
+                            htd::Collection<htd::vertex_t> introducedVertexCollection = decomposition.introducedVertices(currentNode, selectedChild);
+
+                            std::cout << "   INTRODUCED VERTICES: ";
+                            htd::print(introducedVertexCollection, false);
+                            std::cout << std::endl;
+
+                            htd::vertex_container newRequiredVertices2;
+
+                            std::set_difference(requiredVertices.begin(), requiredVertices.end(), introducedVertexCollection.begin(), introducedVertexCollection.end(), std::back_inserter(newRequiredVertices));
+
+                            std::swap(requiredVertices, newRequiredVertices2);
+                        }
+                    }
+                    */
+
+                    parentStack.push(HistoryEntry(currentNode, currentVisits + 1));
+
+                    parentStack.top().availableChildren = newAvailableChildren;
+
+                    parentStack.top().requiredVertices = requiredVertices;
+
+                    currentNode = selectedChild;
+
+                    availableChildren.clear();
+
+                    htd::Collection<htd::vertex_t> newChildCollection = decomposition.children(currentNode);
+
+                    availableChildren.insert(newChildCollection.begin(), newChildCollection.end());
+
+                    if (requiredVertices.size() > 0)
+                    {
+                        htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(currentNode);
+
+                        htd::vertex_container newBagContent;
+
+                        std::cout << "OLD BAG CONTENT " << currentNode << ": ";
+                        htd::print(bagContent, false);
+                        std::cout << std::endl << std::endl;
+
+                        std::set_union(bagContent.begin(), bagContent.end(), requiredVertices.begin(), requiredVertices.end(), std::back_inserter(newBagContent));
+
+                        std::cout << "NEW BAG CONTENT " << currentNode << ": ";
+                        htd::print(newBagContent, false);
+                        std::cout << std::endl << std::endl;
+
+                        decomposition.setBagContent(currentNode, newBagContent);
+                    }
+
+                    currentVisits = 0;
+                }
+                else
+                {
+                    currentNode = htd::Vertex::UNKNOWN;
                 }
             }
+            else
+            {
+                std::cout << "   BACKTRACKING TO " << parentStack.top().vertex << std::endl;
 
-            node = children[0];
+                std::cout << "   REQUIRED VERTICES 1: ";
+                htd::print(requiredVertices, false);
+                std::cout << std::endl;
 
-            childCount = decomposition.childCount(node);
+                currentNode = parentStack.top().vertex;
+
+                currentVisits = parentStack.top().visits;
+
+                requiredVertices = parentStack.top().requiredVertices;
+
+                availableChildren = parentStack.top().availableChildren;
+
+                parentStack.pop();
+
+                std::cout << "   REQUIRED VERTICES 2: ";
+                htd::print(requiredVertices, false);
+                std::cout << std::endl;
+
+                if (currentNode != decomposition.root())
+                {
+                    std::vector<htd::vertex_t> potentiallyUnneededVertices;
+
+                    std::set_difference(requiredVertices.begin(), requiredVertices.end(), parentStack.top().requiredVertices.begin(), parentStack.top().requiredVertices.end(), std::back_inserter(potentiallyUnneededVertices));
+
+                    std::cout << "POTENTIALLY UNNEEDED VERTICES: ";
+                    htd::print(potentiallyUnneededVertices, false);
+                    std::cout << std::endl;
+
+                    std::unordered_set<htd::vertex_t> unneededVertices(potentiallyUnneededVertices.begin(), potentiallyUnneededVertices.end());
+
+                    for (htd::vertex_t child : availableChildren)
+                    {
+                        htd::Collection<htd::vertex_t> childBagContent = decomposition.bagContent(child);
+
+                        std::cout << "   SIBLING: " << child << std::endl;
+                        std::cout << "      CONTENT: ";
+                        htd::print(childBagContent);
+                        std::cout << std::endl;
+
+                        for (htd::vertex_t requiredVertex : childBagContent)
+                        {
+                            unneededVertices.erase(requiredVertex);
+                        }
+                    }
+
+                    std::vector<htd::vertex_t> unneededVertices2(unneededVertices.begin(), unneededVertices.end());
+
+                    std::sort(unneededVertices2.begin(), unneededVertices2.end());
+
+                    std::cout << "   REQUIRED VERTICES: ";
+                    htd::print(requiredVertices, false);
+                    std::cout << std::endl;
+
+                    std::cout << "   UNNEEDED VERTICES: ";
+                    htd::print(unneededVertices2, false);
+                    std::cout << std::endl;
+
+                    std::vector<htd::vertex_t> newRequiredVertices;
+
+                    std::set_difference(requiredVertices.begin(), requiredVertices.end(), unneededVertices2.begin(), unneededVertices2.end(), std::back_inserter(newRequiredVertices));
+
+                    std::cout << "   NEW REQUIRED VERTICES: ";
+                    htd::print(newRequiredVertices, false);
+                    std::cout << std::endl;
+
+                    requiredVertices = newRequiredVertices;
+                }
+            }
         }
     }
 }

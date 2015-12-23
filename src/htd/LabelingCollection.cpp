@@ -65,10 +65,10 @@ htd::LabelingCollection::~LabelingCollection()
         if (labeling.second != nullptr)
         {
             delete labeling.second;
-
-            labeling.second = nullptr;
         }
     }
+
+    content_.clear();
 }
 
 std::size_t htd::LabelingCollection::labelCount(void) const

@@ -38,7 +38,6 @@
 #include <htd/JoinNodeReplacementOperation.hpp>
 
 #include <cstdarg>
-#include <stack>
 #include <vector>
 
 htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(void)

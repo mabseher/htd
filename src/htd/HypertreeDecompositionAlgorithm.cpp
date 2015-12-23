@@ -43,7 +43,6 @@
 #include <htd/SetCoverAlgorithmFactory.hpp>
 
 #include <cstdarg>
-#include <stack>
 #include <vector>
 
 htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(void)

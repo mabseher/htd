@@ -51,7 +51,20 @@ void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decompos
 
     if (decomposition.bagContent(root).size() > 0)
     {
-        decomposition.addParent(root);
+        htd::vertex_t newRoot = decomposition.addParent(root);
+
+        for (auto & labelingFunction : labelingFunctions)
+        {
+            htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newRoot);
+
+            htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(newRoot);
+
+            htd::ILabel * newLabel = labelingFunction->computeLabel(bagContent, *labelCollection);
+
+            delete labelCollection;
+
+            decomposition.setVertexLabel(labelingFunction->name(), newRoot, newLabel);
+        }
     }
 }
 

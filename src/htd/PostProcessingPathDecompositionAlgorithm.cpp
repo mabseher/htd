@@ -35,6 +35,7 @@
 #include <htd/PathDecompositionFactory.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
+#include <htd/CompressionOperation.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>
 
 #include <cstdarg>
@@ -95,6 +96,10 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
     htd::IMutableTreeDecomposition * mutableTreeDecomposition = htd::TreeDecompositionFactory::instance().getTreeDecomposition(*treeDecomposition);
 
     delete treeDecomposition;
+
+    htd::CompressionOperation compressionOperation;
+
+    compressionOperation.apply(*mutableTreeDecomposition);
 
     htd::JoinNodeReplacementOperation joinNodeReplacementOperation(graph);
 

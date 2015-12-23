@@ -30,6 +30,7 @@
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/Collection.hpp>
+#include <htd/CompressionOperation.hpp>
 #include <htd/CompilerDetection.hpp>
 #include <htd/DirectedGraphFactory.hpp>
 #include <htd/DirectedGraph.hpp>

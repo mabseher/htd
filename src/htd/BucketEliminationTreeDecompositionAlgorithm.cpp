@@ -72,10 +72,10 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 {
     htd::IMutableTreeDecomposition * ret = computeMutableDecomposition(graph);
 
+    //TODO Apply manipulation operations!
+
     if (ret != nullptr)
     {
-        compressDecomposition(*ret);
-
         for (auto & labelingFunction : labelingFunctions)
         {
             for (htd::vertex_t vertex : ret->vertices())
@@ -89,11 +89,6 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
                 ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
         }
-    }
-
-    if (ret != nullptr)
-    {
-        compressDecomposition(*ret);
     }
 
     return ret;
@@ -587,133 +582,6 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
     }
     
     return ret;
-}
-
-void htd::BucketEliminationTreeDecompositionAlgorithm::compressDecomposition(htd::IMutableTreeDecomposition & decomposition) const
-{
-    if (decomposition.vertexCount() > 1)
-    {
-        std::size_t childCount = 0;
-
-        htd::index_t currentIndex = 0;
-
-        htd::vertex_t oldNode = htd::Vertex::UNKNOWN;
-
-        htd::vertex_t currentNode = decomposition.root();
-
-        std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
-
-        htd::vertex_container unneededVertices;
-
-        while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
-        {
-            if (currentNode != htd::Vertex::UNKNOWN)
-            {
-                childCount = decomposition.childCount(currentNode);
-
-                if (currentIndex < childCount)
-                {
-                    oldNode = currentNode;
-
-                    Collection<htd::vertex_t> label = decomposition.bagContent(currentNode);
-
-                    parentStack.push(std::make_pair(currentNode, currentIndex + 1));
-
-                    currentNode = decomposition.child(currentNode, currentIndex);
-
-                    currentIndex = 0;
-
-                    Collection<htd::vertex_t> childLabel = decomposition.bagContent(currentNode);
-
-                    if (childLabel.size() < label.size())
-                    {
-                        if (std::find(unneededVertices.begin(), unneededVertices.end(), currentNode) == unneededVertices.end() && std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
-                        {
-                            unneededVertices.push_back(currentNode);
-                        }
-                    }
-                    else
-                    {
-                        if (std::find(unneededVertices.begin(), unneededVertices.end(), oldNode) == unneededVertices.end() && std::includes(childLabel.begin(), childLabel.end(), label.begin(), label.end()))
-                        {
-                            unneededVertices.push_back(oldNode);
-                        }
-                    }
-                }
-                else
-                {
-                    currentNode = htd::Vertex::UNKNOWN;
-                }
-            }
-            else
-            {
-                currentNode = parentStack.top().first;
-
-                currentIndex = parentStack.top().second;
-
-                parentStack.pop();
-            }
-        }
-
-        for (htd::vertex_t vertex : unneededVertices)
-        {
-            /*
-            std::cout << "ELIMINATING VERTEX " << vertex << " (CHILDREN: " << decomposition.childCount(vertex) << ")" << std::endl;
-            std::vector<htd::vertex_t> childrenTMP;
-            decomposition.getChildren(vertex, childrenTMP);
-            for (auto child : childrenTMP)
-            {
-                htd::vertex_container label;
-                decomposition.getVertexLabel(child, label);
-                
-                std::cout << "   CHILD: VERTEX " << child << "   ";
-                htd::print(label, false);
-                std::cout << std::endl;
-            }
-            */
-            
-            if (decomposition.childCount(vertex) <= 1)
-            {
-                decomposition.removeVertex(vertex);
-            }
-            else
-            {
-                std::vector<htd::vertex_t> children;
-
-                const htd::Collection<htd::vertex_t> label = decomposition.bagContent(vertex);
-
-                const htd::Collection<htd::vertex_t> childContainer = decomposition.children(vertex);
-
-                std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
-
-                for (htd::vertex_t child : children)
-                {
-                    Collection<htd::vertex_t> childLabel = decomposition.bagContent(child);
-
-                    if (std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
-                    {
-                        decomposition.removeVertex(child);
-                    }
-                    else
-                    {
-                        /*
-                        if (std::includes(childLabel.begin(), childLabel.end(), label.begin(), label.end()))
-                        {
-                            std::cout << "SWAP NODES " << child << " AND " << vertex << " (ERASE NODE " << vertex << ")" << std::endl;
-                            
-                            //TODO Optimize
-                            decomposition.swapLabels(vertex, child);
-                            
-                            decomposition.removeVertex(child);
-                        }
-                        */
-                    }
-                }
-            }
-        }
-            
-        DEBUGGING_CODE(std::cout << std::endl;)
-    }
 }
 
 #endif /* HTD_HTD_BUCKETELIMINATIONTREEDECOMPOSITIONALGORITHM_CPP */

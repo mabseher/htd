@@ -26,6 +26,7 @@
 #define	HTD_HTD_ITREEDECOMPOSITIONMANIPULATIONOPERATION_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/ILabelingFunction.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 
 namespace htd
@@ -36,6 +37,8 @@ namespace htd
             virtual ~ITreeDecompositionManipulationOperation() = 0;
 
             virtual void apply(htd::IMutableTreeDecomposition & decomposition) const = 0;
+
+            virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
     };
     
     inline htd::ITreeDecompositionManipulationOperation::~ITreeDecompositionManipulationOperation() { }

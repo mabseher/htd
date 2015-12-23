@@ -44,28 +44,38 @@ htd::WeakNormalizationOperation::~WeakNormalizationOperation()
 
 void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
-    apply(decomposition, false, false);
+    apply(decomposition, false, false, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    apply(decomposition, false, false, labelingFunctions);
 }
 
 void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const
+{
+    apply(decomposition, emptyRoot, emptyLeaves, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     if (emptyRoot)
     {
         htd::AddEmptyRootOperation addEmptyRootOperation;
 
-        addEmptyRootOperation.apply(decomposition);
+        addEmptyRootOperation.apply(decomposition, labelingFunctions);
     }
 
     if (emptyLeaves)
     {
         htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
 
-        addEmptyLeavesOperation.apply(decomposition);
+        addEmptyLeavesOperation.apply(decomposition, labelingFunctions);
     }
 
     htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation;
 
-    joinNodeNormalizationOperation.apply(decomposition);
+    joinNodeNormalizationOperation.apply(decomposition, labelingFunctions);
 }
 
 #endif /* HTD_HTD_WEAKNORMALIZATIONOPERATION_CPP */

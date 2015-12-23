@@ -114,7 +114,6 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
             {
                 htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
-                //TODO Optimize
                 htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;

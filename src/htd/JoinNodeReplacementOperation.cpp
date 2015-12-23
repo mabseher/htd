@@ -93,6 +93,11 @@ htd::JoinNodeReplacementOperation::~JoinNodeReplacementOperation()
 
 void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
     if (decomposition.vertexCount() > 0)
     {
         std::size_t currentVisits = 0;
@@ -210,6 +215,17 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
                         std::cout << std::endl << std::endl;
 
                         decomposition.setBagContent(currentNode, newBagContent);
+
+                        for (auto & labelingFunction : labelingFunctions)
+                        {
+                            htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(currentNode);
+
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(newBagContent.begin(), newBagContent.end()), *labelCollection);
+
+                            delete labelCollection;
+
+                            decomposition.setVertexLabel(labelingFunction->name(), currentNode, newLabel);
+                        }
                     }
 
                     currentVisits = 0;

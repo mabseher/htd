@@ -43,6 +43,11 @@ htd::SemiNormalizationOperation::~SemiNormalizationOperation()
 
 void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
     htd::WeakNormalizationOperation::apply(decomposition);
 
     htd::LimitChildCountOperation limitChildCountOperation(2);
@@ -52,11 +57,16 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
 void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const
 {
-    htd::WeakNormalizationOperation::apply(decomposition, emptyRoot, emptyLeaves);
+    apply(decomposition, emptyRoot, emptyLeaves, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    htd::WeakNormalizationOperation::apply(decomposition, emptyRoot, emptyLeaves, labelingFunctions);
 
     htd::LimitChildCountOperation limitChildCountOperation(2);
 
-    limitChildCountOperation.apply(decomposition);
+    limitChildCountOperation.apply(decomposition, labelingFunctions);
 }
 
 #endif /* HTD_HTD_SEMINORMALIZATIONOPERATION_CPP */

@@ -46,8 +46,13 @@ htd::LimitMaximumForgottenVertexCountOperation::~LimitMaximumForgottenVertexCoun
 {
   
 }
-    
+
 void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+{
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     htd::vertex_container forgetNodes;
 
@@ -112,6 +117,17 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                 decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
 
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(newContent), *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
+                }
+
                 if (intermediatedVertexCount > 0)
                 {
                     start = start - limit_;
@@ -128,6 +144,17 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
                         decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
+
+                        for (auto & labelingFunction : labelingFunctions)
+                        {
+                            htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
+
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(newContent), *labelCollection);
+
+                            delete labelCollection;
+
+                            decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
+                        }
 
                         if (index < forgottenVertexCount + limit_)
                         {

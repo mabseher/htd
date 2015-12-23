@@ -45,6 +45,11 @@ htd::AddEmptyLeavesOperation::~AddEmptyLeavesOperation()
 
 void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
     std::vector<htd::vertex_t> leafNodes;
 
     const htd::Collection<htd::vertex_t> leafNodeContainer = decomposition.leafNodes();
@@ -55,7 +60,20 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
     {
         if (decomposition.bagContent(leaf).size() > 0)
         {
-            decomposition.addChild(leaf);
+            htd::vertex_t newLeaf = decomposition.addChild(leaf);
+
+            for (auto & labelingFunction : labelingFunctions)
+            {
+                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newLeaf);
+
+                htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(newLeaf);
+
+                htd::ILabel * newLabel = labelingFunction->computeLabel(bagContent, *labelCollection);
+
+                delete labelCollection;
+
+                decomposition.setVertexLabel(labelingFunction->name(), newLeaf, newLabel);
+            }
         }
     }
 }

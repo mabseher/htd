@@ -48,6 +48,11 @@ htd::JoinNodeNormalizationOperation::~JoinNodeNormalizationOperation()
 
 void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
     htd::vertex_container joinNodes;
 
     const htd::Collection<htd::vertex_t> joinNodeCollection = decomposition.joinNodes();
@@ -95,6 +100,17 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
                 htd::vertex_t intermediateVertex = decomposition.addParent(child);
 
                 decomposition.setBagContent(intermediateVertex, htd::Collection<htd::vertex_t>(bagContent.begin(), bagContent.end()));
+
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(intermediateVertex);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(bagContent.begin(), bagContent.end()), *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), intermediateVertex, newLabel);
+                }
             }
         }
     }

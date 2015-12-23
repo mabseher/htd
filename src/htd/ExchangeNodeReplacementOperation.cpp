@@ -41,8 +41,13 @@ htd::ExchangeNodeReplacementOperation::~ExchangeNodeReplacementOperation()
 {
   
 }
-    
+
 void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+{
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+    
+void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     htd::vertex_container forgetNodes;
     htd::vertex_container exchangeNodes;
@@ -72,7 +77,20 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
             if (bagContent.size() != rememberedVertices.size() || !std::equal(bagContent.begin(), bagContent.end(), rememberedVertices.begin()))
             {
-                decomposition.setBagContent(decomposition.addParent(child), htd::Collection<htd::vertex_t>(rememberedVertices.begin(), rememberedVertices.end()));
+                htd::vertex_t newVertex = decomposition.addParent(child);
+
+                decomposition.setBagContent(newVertex, htd::Collection<htd::vertex_t>(rememberedVertices.begin(), rememberedVertices.end()));
+
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newVertex);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(bagContent.begin(), bagContent.end()), *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), newVertex, newLabel);
+                }
             }
         }
     }

@@ -26,6 +26,7 @@
 #define	HTD_HTD_COMPRESSIONOPERATION_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/CompressionOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 
@@ -43,6 +44,13 @@ htd::CompressionOperation::~CompressionOperation()
 
 void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(labelingFunctions);
+
     if (decomposition.vertexCount() > 1)
     {
         std::size_t childCount = 0;

@@ -47,8 +47,13 @@ htd::LimitMaximumIntroducedVertexCountOperation::~LimitMaximumIntroducedVertexCo
 {
   
 }
-    
+
 void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+{
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+    
+void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     htd::vertex_container introduceNodes;
 
@@ -139,6 +144,17 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                 decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
 
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(newContent), *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
+                }
+
                 if (intermediatedVertexCount > 0)
                 {
                     std::advance(start, limit_);
@@ -154,6 +170,17 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                         }
 
                         decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
+
+                        for (auto & labelingFunction : labelingFunctions)
+                        {
+                            htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
+
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(newContent), *labelCollection);
+
+                            delete labelCollection;
+
+                            decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
+                        }
 
                         if (index < introducedVertexCount + limit_)
                         {

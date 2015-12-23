@@ -45,36 +45,46 @@ htd::NormalizationOperation::~NormalizationOperation()
 
 void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
-    htd::SemiNormalizationOperation::apply(decomposition);
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    htd::SemiNormalizationOperation::apply(decomposition, labelingFunctions);
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
-    exchangeNodeReplacementOperation.apply(decomposition);
+    exchangeNodeReplacementOperation.apply(decomposition, labelingFunctions);
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
-    limitMaximumForgottenVertexCountOperation.apply(decomposition);
+    limitMaximumForgottenVertexCountOperation.apply(decomposition, labelingFunctions);
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
 
-    limitMaximumIntroducedVertexCountOperation.apply(decomposition);
+    limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
 }
 
 void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const
 {
-    htd::SemiNormalizationOperation::apply(decomposition, emptyRoot, emptyLeaves);
+    apply(decomposition, emptyRoot, emptyLeaves, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    htd::SemiNormalizationOperation::apply(decomposition, emptyRoot, emptyLeaves, labelingFunctions);
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
-    exchangeNodeReplacementOperation.apply(decomposition);
+    exchangeNodeReplacementOperation.apply(decomposition, labelingFunctions);
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
-    limitMaximumForgottenVertexCountOperation.apply(decomposition);
+    limitMaximumForgottenVertexCountOperation.apply(decomposition, labelingFunctions);
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
 
-    limitMaximumIntroducedVertexCountOperation.apply(decomposition);
+    limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
 }
 
 #endif /* HTD_HTD_NORMALIZATIONOPERATION_CPP */

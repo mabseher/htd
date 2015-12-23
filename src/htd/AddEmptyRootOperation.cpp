@@ -42,6 +42,11 @@ htd::AddEmptyRootOperation::~AddEmptyRootOperation()
 
 void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
     htd::vertex_t root = decomposition.root();
 
     if (decomposition.bagContent(root).size() > 0)

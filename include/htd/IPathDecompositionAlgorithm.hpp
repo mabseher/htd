@@ -41,9 +41,9 @@ namespace htd
             
             virtual htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE = 0;
 
-            virtual htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE = 0;
+            virtual htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE = 0;
 
-            //virtual htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const HTD_OVERRIDE = 0;
+            //virtual htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const HTD_OVERRIDE = 0;
 
             virtual IPathDecompositionAlgorithm * clone(void) const = 0;
     };

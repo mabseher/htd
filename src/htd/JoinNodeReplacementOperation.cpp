@@ -331,4 +331,9 @@ void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd
     output.erase(std::unique(output.begin(), output.end()), output.end());
 }
 
+htd::JoinNodeReplacementOperation * htd::JoinNodeReplacementOperation::clone(void) const
+{
+    return new htd::JoinNodeReplacementOperation(graph_);
+}
+
 #endif /* HTD_HTD_JOINNODEREPLACEMENTOPERATION_CPP */

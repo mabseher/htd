@@ -41,6 +41,26 @@ htd::SemiNormalizationOperation::~SemiNormalizationOperation()
 
 }
 
+void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+{
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    htd::WeakNormalizationOperation::apply(decomposition, labelingFunctions);
+}
+
+void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const
+{
+    apply(decomposition, emptyRoot, emptyLeaves, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    htd::WeakNormalizationOperation::apply(decomposition, emptyRoot, emptyLeaves, labelingFunctions);
+}
+
 void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
@@ -67,6 +87,11 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     htd::LimitChildCountOperation limitChildCountOperation(2);
 
     limitChildCountOperation.apply(decomposition, labelingFunctions);
+}
+
+htd::SemiNormalizationOperation * htd::SemiNormalizationOperation::clone(void) const
+{
+    return new htd::SemiNormalizationOperation();
 }
 
 #endif /* HTD_HTD_SEMINORMALIZATIONOPERATION_CPP */

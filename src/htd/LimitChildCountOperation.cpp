@@ -158,4 +158,9 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
     }
 }
 
+htd::LimitChildCountOperation * htd::LimitChildCountOperation::clone(void) const
+{
+    return new htd::LimitChildCountOperation(limit_);
+}
+
 #endif /* HTD_HTD_LIMITCHILDCOUNTOPERATION_CPP */

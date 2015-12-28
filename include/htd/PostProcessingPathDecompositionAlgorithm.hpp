@@ -30,6 +30,8 @@
 #include <htd/IPathDecomposition.hpp>
 #include <htd/IPathDecompositionAlgorithm.hpp>
 #include <htd/IMutablePathDecomposition.hpp>
+#include <htd/ILabelingFunction.hpp>
+#include <htd/IPathDecompositionManipulationOperation.hpp>
 
 #include <cstdarg>
 #include <vector>
@@ -41,15 +43,15 @@ namespace htd
         public:
             PostProcessingPathDecompositionAlgorithm(void);
 
-            PostProcessingPathDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions);
+            PostProcessingPathDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
             ~PostProcessingPathDecompositionAlgorithm();
             
             htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE;
 
-            htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
 
-            htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const; //TODO HTD_OVERRIDE;
+            htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const; //TODO HTD_OVERRIDE;
 
             PostProcessingPathDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
 
@@ -57,6 +59,11 @@ namespace htd
             PostProcessingPathDecompositionAlgorithm & operator=(const PostProcessingPathDecompositionAlgorithm &) { return *this; }
 
             htd::IMutablePathDecomposition * toPathDecomposition(const htd::ITreeDecomposition & decomposition) const;
+
+        private:
+            std::vector<htd::ILabelingFunction *> labelingFunctions_;
+
+            std::vector<htd::IPathDecompositionManipulationOperation *> postProcessingOperations_;
     };
 }
 

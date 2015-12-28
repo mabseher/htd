@@ -29,12 +29,13 @@
 #include <htd/Collection.hpp>
 #include <htd/ILabel.hpp>
 #include <htd/ILabelCollection.hpp>
+#include <htd/IDecompositionManipulationOperation.hpp>
 
 #include <string>
 
 namespace htd
 {
-    class ILabelingFunction
+    class ILabelingFunction : public virtual htd::IDecompositionManipulationOperation
     {
         public:
             virtual ~ILabelingFunction() = 0;

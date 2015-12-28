@@ -30,7 +30,8 @@
 #include <htd/IHypertreeDecomposition.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
 #include <htd/IHypertreeDecompositionAlgorithm.hpp>
-#include <htd/ISetCoverAlgorithm.hpp>
+#include <htd/ILabelingFunction.hpp>
+#include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 #include <cstdarg>
 #include <vector>
@@ -42,20 +43,25 @@ namespace htd
         public:
             HypertreeDecompositionAlgorithm(void);
 
-            HypertreeDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions);
+            HypertreeDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
             ~HypertreeDecompositionAlgorithm();
             
             htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE;
 
-            htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
 
-            htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const; //TODO HTD_OVERRIDE;
+            htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const; //TODO HTD_OVERRIDE;
 
             HypertreeDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:
             HypertreeDecompositionAlgorithm & operator=(const HypertreeDecompositionAlgorithm &) { return *this; }
+
+        private:
+            std::vector<htd::ILabelingFunction *> labelingFunctions_;
+
+            std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
     };
 }
 

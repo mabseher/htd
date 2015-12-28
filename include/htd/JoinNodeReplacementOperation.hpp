@@ -42,6 +42,8 @@ namespace htd
 
             void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
+            JoinNodeReplacementOperation * clone(void) const HTD_OVERRIDE;
+
         private:
             const htd::IHypergraph & graph_;
 

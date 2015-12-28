@@ -35,6 +35,7 @@
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabelingFunction.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
+#include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 #include <algorithm>
 #include <cstdarg>
@@ -51,10 +52,24 @@ htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecomposi
 
 }
 
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions)
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
-    //TODO
-    HTD_UNUSED(labelingFunctions);
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    {
+        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+
+        if (labelingFunction != nullptr)
+        {
+            labelingFunctions_.push_back(labelingFunction);
+        }
+
+        htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
+
+        if (manipulationOperation != nullptr)
+        {
+            postProcessingOperations_.push_back(manipulationOperation);
+        }
+    }
 }
 
 htd::BucketEliminationTreeDecompositionAlgorithm::~BucketEliminationTreeDecompositionAlgorithm()
@@ -64,14 +79,33 @@ htd::BucketEliminationTreeDecompositionAlgorithm::~BucketEliminationTreeDecompos
 
 htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
 {
-    return computeDecomposition(graph, std::vector<htd::ILabelingFunction *>());
+    return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>());
 }
 
-htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
     htd::IMutableTreeDecomposition * ret = computeMutableDecomposition(graph);
 
-    //TODO Apply manipulation operations!
+    std::vector<htd::ILabelingFunction *> labelingFunctions;
+
+    std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations;
+
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    {
+        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+
+        if (labelingFunction != nullptr)
+        {
+            labelingFunctions.push_back(labelingFunction);
+        }
+
+        htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
+
+        if (manipulationOperation != nullptr)
+        {
+            postProcessingOperations.push_back(manipulationOperation);
+        }
+    }
 
     if (ret != nullptr)
     {
@@ -90,29 +124,45 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
         }
     }
 
+    for (auto & operation : postProcessingOperations)
+    {
+        operation->apply(*ret);
+    }
+
     return ret;
 }
 
-htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const
+htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const
 {
     va_list arguments;
 
-    va_start(arguments, labelingFunctionCount);
+    va_start(arguments, manipulationOperationCount);
 
-    std::vector<htd::ILabelingFunction *> labelingFunctions;
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
 
-    for (int labelingFunctionIndex = 0; labelingFunctionIndex < labelingFunctionCount; labelingFunctionIndex++)
+    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
     {
-        labelingFunctions.push_back(va_arg(arguments, htd::ILabelingFunction *));
+        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
     }
 
-    return computeDecomposition(graph, labelingFunctions);
+    return computeDecomposition(graph, manipulationOperations);
 }
 
-//TODO Consider labeling functions!
 htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDecompositionAlgorithm::clone(void) const
 {
-    return new BucketEliminationTreeDecompositionAlgorithm();
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+
+    for (auto & labelingFunction : labelingFunctions_)
+    {
+        manipulationOperations.push_back(labelingFunction->clone());
+    }
+
+    for (auto & postProcessingOperation : postProcessingOperations_)
+    {
+        manipulationOperations.push_back(postProcessingOperation->clone());
+    }
+
+    return new BucketEliminationTreeDecompositionAlgorithm(manipulationOperations);
 }
 
 htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph & graph) const

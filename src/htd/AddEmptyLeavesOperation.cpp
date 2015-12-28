@@ -43,6 +43,41 @@ htd::AddEmptyLeavesOperation::~AddEmptyLeavesOperation()
 
 }
 
+void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+{
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    std::vector<htd::vertex_t> leafNodes;
+
+    const htd::Collection<htd::vertex_t> leafNodeContainer = decomposition.leafNodes();
+
+    std::copy(leafNodeContainer.begin(), leafNodeContainer.end(), std::back_inserter(leafNodes));
+
+    for (htd::vertex_t leaf : leafNodes)
+    {
+        if (decomposition.bagContent(leaf).size() > 0)
+        {
+            htd::vertex_t newLeaf = decomposition.addChild(leaf);
+
+            for (auto & labelingFunction : labelingFunctions)
+            {
+                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newLeaf);
+
+                htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(newLeaf);
+
+                htd::ILabel * newLabel = labelingFunction->computeLabel(bagContent, *labelCollection);
+
+                delete labelCollection;
+
+                decomposition.setVertexLabel(labelingFunction->name(), newLeaf, newLabel);
+            }
+        }
+    }
+}
+
 void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
@@ -76,6 +111,11 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
             }
         }
     }
+}
+
+htd::AddEmptyLeavesOperation * htd::AddEmptyLeavesOperation::clone(void) const
+{
+    return new htd::AddEmptyLeavesOperation();
 }
 
 #endif /* HTD_HTD_ADDEMPTYLEAVESOPERATION_CPP */

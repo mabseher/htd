@@ -40,6 +40,34 @@ htd::AddEmptyRootOperation::~AddEmptyRootOperation()
 
 }
 
+void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+{
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    htd::vertex_t root = decomposition.root();
+
+    if (decomposition.bagContent(root).size() > 0)
+    {
+        htd::vertex_t newRoot = decomposition.addParent(root);
+
+        for (auto & labelingFunction : labelingFunctions)
+        {
+            htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newRoot);
+
+            htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(newRoot);
+
+            htd::ILabel * newLabel = labelingFunction->computeLabel(bagContent, *labelCollection);
+
+            delete labelCollection;
+
+            decomposition.setVertexLabel(labelingFunction->name(), newRoot, newLabel);
+        }
+    }
+}
+
 void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
@@ -66,6 +94,11 @@ void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decompos
             decomposition.setVertexLabel(labelingFunction->name(), newRoot, newLabel);
         }
     }
+}
+
+htd::AddEmptyRootOperation * htd::AddEmptyRootOperation::clone(void) const
+{
+    return new htd::AddEmptyRootOperation();
 }
 
 #endif /* HTD_HTD_ADDEMPTYROOTOPERATION_CPP */

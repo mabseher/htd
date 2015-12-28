@@ -51,6 +51,7 @@
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
 #include <htd/IBidirectionalGraphLabeling.hpp>
 #include <htd/Id.hpp>
+#include <htd/IDecompositionManipulationOperation.hpp>
 #include <htd/IDirectedGraph.hpp>
 #include <htd/IGraphDecompositionAlgorithm.hpp>
 #include <htd/IGraph.hpp>
@@ -83,6 +84,7 @@
 #include <htd/InducedSubgraphLabelingFunction.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
 #include <htd/IPathDecompositionAlgorithm.hpp>
+#include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/IPathDecomposition.hpp>
 #include <htd/IPath.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>

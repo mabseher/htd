@@ -1,5 +1,5 @@
 /*
- * File:   ITreeDecompositionManipulationOperation.hpp
+ * File:   IPathDecompositionManipulationOperation.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,27 +22,27 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_ITREEDECOMPOSITIONMANIPULATIONOPERATION_HPP
-#define	HTD_HTD_ITREEDECOMPOSITIONMANIPULATIONOPERATION_HPP
+#ifndef HTD_HTD_IPATHDECOMPOSITIONMANIPULATIONOPERATION_HPP
+#define	HTD_HTD_IPATHDECOMPOSITIONMANIPULATIONOPERATION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ILabelingFunction.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
+#include <htd/IMutablePathDecomposition.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
 
 namespace htd
 {
-    class ITreeDecompositionManipulationOperation : public virtual htd::IDecompositionManipulationOperation
+    class IPathDecompositionManipulationOperation : public virtual htd::IDecompositionManipulationOperation
     {
         public:
-            virtual ~ITreeDecompositionManipulationOperation() = 0;
+            virtual ~IPathDecompositionManipulationOperation() = 0;
 
-            virtual void apply(htd::IMutableTreeDecomposition & decomposition) const = 0;
+            virtual void apply(htd::IMutablePathDecomposition & decomposition) const = 0;
 
-            virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+            virtual void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
     };
     
-    inline htd::ITreeDecompositionManipulationOperation::~ITreeDecompositionManipulationOperation() { }
+    inline htd::IPathDecompositionManipulationOperation::~IPathDecompositionManipulationOperation() { }
 }
 
-#endif /* HTD_HTD_ITREEDECOMPOSITIONMANIPULATIONOPERATION_HPP */
+#endif /* HTD_HTD_IPATHDECOMPOSITIONMANIPULATIONOPERATION_HPP */

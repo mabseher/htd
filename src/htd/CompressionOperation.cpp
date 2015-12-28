@@ -42,6 +42,124 @@ htd::CompressionOperation::~CompressionOperation()
 
 }
 
+void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+{
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+//TODO Exploit the fact that nodes in a path have at most one child!
+void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(labelingFunctions);
+
+    if (decomposition.vertexCount() > 1)
+    {
+        std::size_t childCount = 0;
+
+        htd::index_t currentIndex = 0;
+
+        htd::vertex_t oldNode = htd::Vertex::UNKNOWN;
+
+        htd::vertex_t currentNode = decomposition.root();
+
+        std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
+
+        htd::vertex_container unneededVertices;
+
+        while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
+        {
+            if (currentNode != htd::Vertex::UNKNOWN)
+            {
+                childCount = decomposition.childCount(currentNode);
+
+                if (currentIndex < childCount)
+                {
+                    oldNode = currentNode;
+
+                    Collection<htd::vertex_t> label = decomposition.bagContent(currentNode);
+
+                    parentStack.push(std::make_pair(currentNode, currentIndex + 1));
+
+                    currentNode = decomposition.child(currentNode);
+
+                    currentIndex = 0;
+
+                    Collection<htd::vertex_t> childLabel = decomposition.bagContent(currentNode);
+
+                    if (childLabel.size() < label.size())
+                    {
+                        if (std::find(unneededVertices.begin(), unneededVertices.end(), currentNode) == unneededVertices.end() && std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
+                        {
+                            unneededVertices.push_back(currentNode);
+                        }
+                    }
+                    else
+                    {
+                        if (std::find(unneededVertices.begin(), unneededVertices.end(), oldNode) == unneededVertices.end() && std::includes(childLabel.begin(), childLabel.end(), label.begin(), label.end()))
+                        {
+                            unneededVertices.push_back(oldNode);
+                        }
+                    }
+                }
+                else
+                {
+                    currentNode = htd::Vertex::UNKNOWN;
+                }
+            }
+            else
+            {
+                currentNode = parentStack.top().first;
+
+                currentIndex = parentStack.top().second;
+
+                parentStack.pop();
+            }
+        }
+
+        for (htd::vertex_t vertex : unneededVertices)
+        {
+            if (decomposition.childCount(vertex) <= 1)
+            {
+                decomposition.removeVertex(vertex);
+            }
+            else
+            {
+                std::vector<htd::vertex_t> children;
+
+                const htd::Collection<htd::vertex_t> label = decomposition.bagContent(vertex);
+
+                const htd::Collection<htd::vertex_t> childContainer = decomposition.children(vertex);
+
+                std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+
+                for (htd::vertex_t child : children)
+                {
+                    Collection<htd::vertex_t> childLabel = decomposition.bagContent(child);
+
+                    if (std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
+                    {
+                        decomposition.removeVertex(child);
+                    }
+                    else
+                    {
+                        /*
+                        if (std::includes(childLabel.begin(), childLabel.end(), label.begin(), label.end()))
+                        {
+                            std::cout << "SWAP NODES " << child << " AND " << vertex << " (ERASE NODE " << vertex << ")" << std::endl;
+
+                            //TODO Optimize
+                            decomposition.swapLabels(vertex, child);
+
+                            decomposition.removeVertex(child);
+                        }
+                        */
+                    }
+                }
+            }
+        }
+    }
+}
+
 void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
@@ -157,6 +275,11 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
             }
         }
     }
+}
+
+htd::CompressionOperation * htd::CompressionOperation::clone(void) const
+{
+    return new htd::CompressionOperation();
 }
 
 #endif /* HTD_HTD_COMPRESSIONOPERATION_CPP */

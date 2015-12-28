@@ -48,6 +48,8 @@ namespace htd
 
             htd::Label<htd::Collection<htd::Hyperedge>> * computeLabel(const htd::Collection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE;
 
+            HypertreeDecompositionLabelingFunction * clone(void) const HTD_OVERRIDE;
+
         private:
             const htd::IHypergraph & graph_;
 

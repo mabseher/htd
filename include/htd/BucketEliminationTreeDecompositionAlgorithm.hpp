@@ -30,6 +30,8 @@
 #include <htd/ITreeDecomposition.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
+#include <htd/ILabelingFunction.hpp>
+#include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 #include <vector>
 #include <unordered_set>
@@ -41,15 +43,15 @@ namespace htd
         public:
             BucketEliminationTreeDecompositionAlgorithm(void);
 
-            BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions);
+            BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
             ~BucketEliminationTreeDecompositionAlgorithm();
             
             htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE;
 
-            htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
 
-            htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const; //TODO HTD_OVERRIDE;
+            htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const; //TODO HTD_OVERRIDE;
 
             BucketEliminationTreeDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
 
@@ -57,6 +59,10 @@ namespace htd
             BucketEliminationTreeDecompositionAlgorithm & operator=(const BucketEliminationTreeDecompositionAlgorithm &) { return *this; }
 
         private:
+            std::vector<htd::ILabelingFunction *> labelingFunctions_;
+
+            std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
+
             htd::IMutableTreeDecomposition * computeMutableDecomposition(const htd::IHypergraph & graph) const;
 
             htd::vertex_t getMinimumVertex(const htd::Collection<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices) const;

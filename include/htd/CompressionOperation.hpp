@@ -27,20 +27,27 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
+#include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 namespace htd
 {
-    class CompressionOperation : public htd::ITreeDecompositionManipulationOperation
+    class CompressionOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             CompressionOperation(void);
 
             virtual ~CompressionOperation();
 
+            void apply(htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
+
+            void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+
             void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
             void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+
+            CompressionOperation * clone(void) const HTD_OVERRIDE;
     };
 }
 

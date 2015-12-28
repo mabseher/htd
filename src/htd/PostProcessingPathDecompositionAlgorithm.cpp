@@ -37,6 +37,7 @@
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/CompressionOperation.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>
+#include <htd/IPathDecompositionManipulationOperation.hpp>
 
 #include <cstdarg>
 #include <vector>
@@ -46,10 +47,24 @@ htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAl
 
 }
 
-htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(const std::vector<htd::ILabelingFunction *> & labelingFunctions)
+htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
-    //TODO
-    HTD_UNUSED(labelingFunctions);
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    {
+        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+
+        if (labelingFunction != nullptr)
+        {
+            labelingFunctions_.push_back(labelingFunction);
+        }
+
+        htd::IPathDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(operation);
+
+        if (manipulationOperation != nullptr)
+        {
+            postProcessingOperations_.push_back(manipulationOperation);
+        }
+    }
 }
 
 htd::PostProcessingPathDecompositionAlgorithm::~PostProcessingPathDecompositionAlgorithm()
@@ -59,26 +74,26 @@ htd::PostProcessingPathDecompositionAlgorithm::~PostProcessingPathDecompositionA
 
 htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
 {
-    return computeDecomposition(graph, std::vector<htd::ILabelingFunction *>());
+    return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>());
 }
 
-htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const
+htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const
 {
     va_list arguments;
 
-    va_start(arguments, labelingFunctionCount);
+    va_start(arguments, manipulationOperationCount);
 
-    std::vector<htd::ILabelingFunction *> labelingFunctions;
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
 
-    for (int labelingFunctionIndex = 0; labelingFunctionIndex < labelingFunctionCount; labelingFunctionIndex++)
+    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
     {
-        labelingFunctions.push_back(va_arg(arguments, htd::ILabelingFunction *));
+        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
     }
 
-    return computeDecomposition(graph, labelingFunctions);
+    return computeDecomposition(graph, manipulationOperations);
 }
 
-htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
     htd::IMutablePathDecomposition * ret = nullptr;
 
@@ -86,7 +101,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
     if (algorithm == nullptr)
     {
-        throw std::logic_error("htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph &, const std::vector<htd::ILabelingFunction *> &) const");
+        throw std::logic_error("htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph &, const std::vector<htd::IDecompositionManipulationOperation *> &) const");
     }
 
     htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph);
@@ -109,6 +124,27 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
     delete mutableTreeDecomposition;
 
+    std::vector<htd::ILabelingFunction *> labelingFunctions;
+
+    std::vector<htd::IPathDecompositionManipulationOperation *> postProcessingOperations;
+
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    {
+        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+
+        if (labelingFunction != nullptr)
+        {
+            labelingFunctions.push_back(labelingFunction);
+        }
+
+        htd::IPathDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(operation);
+
+        if (manipulationOperation != nullptr)
+        {
+            postProcessingOperations.push_back(manipulationOperation);
+        }
+    }
+
     for (auto & labelingFunction : labelingFunctions)
     {
         for (htd::vertex_t vertex : ret->vertices())
@@ -122,6 +158,11 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
             ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
         }
+    }
+
+    for (auto & operation : postProcessingOperations)
+    {
+        operation->apply(*ret);
     }
 
     return ret;
@@ -171,10 +212,21 @@ htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::
     return ret;
 }
 
-//TODO Consider labeling functions!
 htd::PostProcessingPathDecompositionAlgorithm * htd::PostProcessingPathDecompositionAlgorithm::clone(void) const
 {
-    return new PostProcessingPathDecompositionAlgorithm();
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+
+    for (auto & labelingFunction : labelingFunctions_)
+    {
+        manipulationOperations.push_back(labelingFunction->clone());
+    }
+
+    for (auto & postProcessingOperation : postProcessingOperations_)
+    {
+        manipulationOperations.push_back(postProcessingOperation->clone());
+    }
+
+    return new PostProcessingPathDecompositionAlgorithm(manipulationOperations);
 }
 
 #endif /* HTD_HTD_POSTPROCESSINGPATHDECOMPOSITIONALGORITHM_CPP */

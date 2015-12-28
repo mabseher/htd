@@ -42,6 +42,8 @@ namespace htd
 
             void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
+            LimitChildCountOperation * clone(void) const HTD_OVERRIDE;
+
         private:
             std::size_t limit_;
     };

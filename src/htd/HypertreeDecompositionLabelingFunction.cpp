@@ -135,4 +135,9 @@ htd::Label<htd::Collection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelin
     return computeLabel(vertices);
 }
 
+htd::HypertreeDecompositionLabelingFunction * htd::HypertreeDecompositionLabelingFunction::clone(void) const
+{
+    return new htd::HypertreeDecompositionLabelingFunction(graph_);
+}
+
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITIONLABELINGFUNCTION_CPP */

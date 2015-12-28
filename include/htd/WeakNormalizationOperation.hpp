@@ -27,16 +27,25 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
+#include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 namespace htd
 {
-    class WeakNormalizationOperation : public virtual htd::ITreeDecompositionManipulationOperation
+    class WeakNormalizationOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             WeakNormalizationOperation(void);
 
             virtual ~WeakNormalizationOperation();
+
+            virtual void apply(htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
+
+            virtual void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+
+            virtual void apply(htd::IMutablePathDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const;
+
+            virtual void apply(htd::IMutablePathDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const;
 
             virtual void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -45,6 +54,8 @@ namespace htd
             virtual void apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const;
 
             virtual void apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const;
+
+            WeakNormalizationOperation * clone(void) const HTD_OVERRIDE;
     };
 }
 

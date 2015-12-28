@@ -42,6 +42,38 @@ htd::WeakNormalizationOperation::~WeakNormalizationOperation()
 
 }
 
+void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+{
+    apply(decomposition, false, false, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    apply(decomposition, false, false, labelingFunctions);
+}
+
+void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const
+{
+    apply(decomposition, emptyRoot, emptyLeaves, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    if (emptyRoot)
+    {
+        htd::AddEmptyRootOperation addEmptyRootOperation;
+
+        addEmptyRootOperation.apply(decomposition, labelingFunctions);
+    }
+
+    if (emptyLeaves)
+    {
+        htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
+
+        addEmptyLeavesOperation.apply(decomposition, labelingFunctions);
+    }
+}
+
 void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
     apply(decomposition, false, false, std::vector<htd::ILabelingFunction *>());
@@ -76,6 +108,11 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation;
 
     joinNodeNormalizationOperation.apply(decomposition, labelingFunctions);
+}
+
+htd::WeakNormalizationOperation * htd::WeakNormalizationOperation::clone(void) const
+{
+    return new htd::WeakNormalizationOperation();
 }
 
 #endif /* HTD_HTD_WEAKNORMALIZATIONOPERATION_CPP */

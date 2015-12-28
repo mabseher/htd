@@ -27,20 +27,27 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
+#include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 namespace htd
 {
-    class LimitMaximumIntroducedVertexCountOperation : public virtual htd::ITreeDecompositionManipulationOperation
+    class LimitMaximumIntroducedVertexCountOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             LimitMaximumIntroducedVertexCountOperation(std::size_t limit);
 
             ~LimitMaximumIntroducedVertexCountOperation();
 
+            void apply(htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
+
+            void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+
             void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
             void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+
+            LimitMaximumIntroducedVertexCountOperation * clone(void) const HTD_OVERRIDE;
 
         private:
             std::size_t limit_;

@@ -116,4 +116,9 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
     }
 }
 
+htd::JoinNodeNormalizationOperation * htd::JoinNodeNormalizationOperation::clone(void) const
+{
+    return new htd::JoinNodeNormalizationOperation();
+}
+
 #endif /* HTD_HTD_JOINNODENORMALIZATIONOPERATION_CPP */

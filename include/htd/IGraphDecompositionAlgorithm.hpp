@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
 #include <htd/ILabeledGraph.hpp>
-#include <htd/ILabelingFunction.hpp>
+#include <htd/IDecompositionManipulationOperation.hpp>
 
 #include <vector>
 
@@ -41,7 +41,7 @@ namespace htd
             
             virtual htd::ILabeledGraph * computeDecomposition(const htd::IHypergraph & graph) const = 0;
 
-            virtual htd::ILabeledGraph * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+            virtual htd::ILabeledGraph * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const = 0;
 
             //virtual htd::ILabeledGraph * computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const = 0; //TODO HTD_OVERRIDE
     };

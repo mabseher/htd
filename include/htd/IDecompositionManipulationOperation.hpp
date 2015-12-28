@@ -1,5 +1,5 @@
 /*
- * File:   JoinNodeNormalizationOperation.hpp
+ * File:   IDecompositionManipulationOperation.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,28 +22,22 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_JOINNODENORMALIZATIONOPERATION_HPP
-#define	HTD_HTD_JOINNODENORMALIZATIONOPERATION_HPP
+#ifndef HTD_HTD_IDECOMPOSITIONMANIPULATIONOPERATION_HPP
+#define	HTD_HTD_IDECOMPOSITIONMANIPULATIONOPERATION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 namespace htd
 {
-    class JoinNodeNormalizationOperation : public virtual htd::ITreeDecompositionManipulationOperation
+    class IDecompositionManipulationOperation
     {
         public:
-            JoinNodeNormalizationOperation(void);
+            virtual ~IDecompositionManipulationOperation() = 0;
 
-            ~JoinNodeNormalizationOperation();
-
-            void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
-
-            void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
-
-            JoinNodeNormalizationOperation * clone(void) const HTD_OVERRIDE;
+            virtual IDecompositionManipulationOperation * clone(void) const = 0;
     };
+    
+    inline htd::IDecompositionManipulationOperation::~IDecompositionManipulationOperation() { }
 }
 
-#endif /* HTD_HTD_JOINNODENORMALIZATIONOPERATION_HPP */
+#endif /* HTD_HTD_IDECOMPOSITIONMANIPULATIONOPERATION_HPP */

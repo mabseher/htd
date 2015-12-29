@@ -46,8 +46,6 @@ htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunct
 
     for (htd::Hyperedge originalHyperedge : hyperedgeCollection)
     {
-        htd::Hyperedge newHyperedge(originalHyperedge.id());
-
         htd::Collection<htd::vertex_t> elementCollection = originalHyperedge.elements();
 
         htd::vertex_container elements(elementCollection.begin(), elementCollection.end());
@@ -56,10 +54,8 @@ htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunct
 
         elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
 
-        hyperedges_.push_back(newHyperedge);
+        hyperedges_.push_back(htd::Hyperedge(originalHyperedge.id(), htd::Collection<htd::vertex_t>(elements.begin(), elements.end())));
     }
-
-    //TODO Overload operator < and std::less
 
     std::sort(hyperedges_.begin(), hyperedges_.end());
 

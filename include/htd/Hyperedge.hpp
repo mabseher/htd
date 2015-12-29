@@ -76,7 +76,11 @@ namespace htd
 
             bool operator<(const Hyperedge & other) const;
 
+            bool operator>(const Hyperedge & other) const;
+
             bool operator==(const Hyperedge & other) const;
+
+            bool operator!=(const Hyperedge & other) const;
 
         private:
             htd::id_t id_;

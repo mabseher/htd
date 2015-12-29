@@ -134,9 +134,19 @@ bool htd::Hyperedge::operator<(const htd::Hyperedge & other) const
     return std::tie(elements_, id_) < std::tie(other.elements_, other.id_);
 }
 
+bool htd::Hyperedge::operator>(const htd::Hyperedge & other) const
+{
+    return std::tie(elements_, id_) > std::tie(other.elements_, other.id_);
+}
+
 bool htd::Hyperedge::operator==(const htd::Hyperedge & other) const
 {
     return other.id_ == id_ && other.elements_ == elements_;
+}
+
+bool htd::Hyperedge::operator!=(const htd::Hyperedge & other) const
+{
+    return other.id_ != id_ || other.elements_ != elements_;
 }
 
 #endif /* HTD_HTD_HYPEREDGE_CPP */

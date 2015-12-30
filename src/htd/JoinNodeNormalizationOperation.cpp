@@ -36,7 +36,12 @@
 #include <iostream>
 #include <htd/Helpers.hpp>
 
-htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(void)
+htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(void) : identicalParent_(false)
+{
+
+}
+
+htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(bool identicalParent) : identicalParent_(identicalParent)
 {
 
 }
@@ -61,18 +66,27 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
     for (htd::vertex_t node : joinNodes)
     {
-        htd::vertex_container bagContent;
-
         htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
-
-        std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
         DEBUGGING_CODE(
         std::cout << "JOIN NODE: " << node << std::endl;
         std::cout << "   ";
-        htd::print(bagContent, false);
+        htd::print(bag, false);
         std::cout << std::endl << std::endl;
         )
+
+        if (identicalParent_)
+        {
+            if (!decomposition.isRoot(node))
+            {
+                htd::Collection<htd::vertex_t> parentBag = decomposition.bagContent(decomposition.parent(node));
+
+                if (parentBag != bag)
+                {
+                    decomposition.setBagContent(decomposition.addParent(node), bag);
+                }
+            }
+        }
 
         htd::vertex_container children;
 
@@ -82,30 +96,26 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
         for (htd::vertex_t child : children)
         {
-            htd::vertex_container childBagContent;
-
             htd::Collection<htd::vertex_t> childBag = decomposition.bagContent(child);
 
-            std::copy(std::begin(childBag), std::end(childBag), std::back_inserter(childBagContent));
-
-            if (childBagContent != bagContent)
+            if (childBag != bag)
             {
                 DEBUGGING_CODE(
                 std::cout << "   ADDING INTERMEDIATE NODE BETWEEN NODES " << node << " AND " << child << " ..." << std::endl;
                 std::cout << "      BAG CONTENT: ";
-                htd::print(bagContent, false);
+                htd::print(bag, false);
                 std::cout << std::endl << std::endl;
                 )
 
                 htd::vertex_t intermediateVertex = decomposition.addParent(child);
 
-                decomposition.setBagContent(intermediateVertex, htd::Collection<htd::vertex_t>(bagContent.begin(), bagContent.end()));
+                decomposition.setBagContent(intermediateVertex, bag);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
                     htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(intermediateVertex);
 
-                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(bagContent.begin(), bagContent.end()), *labelCollection);
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(bag, *labelCollection);
 
                     delete labelCollection;
 
@@ -118,7 +128,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
 htd::JoinNodeNormalizationOperation * htd::JoinNodeNormalizationOperation::clone(void) const
 {
-    return new htd::JoinNodeNormalizationOperation();
+    return new htd::JoinNodeNormalizationOperation(identicalParent_);
 }
 
 #endif /* HTD_HTD_JOINNODENORMALIZATIONOPERATION_CPP */

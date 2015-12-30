@@ -36,6 +36,8 @@ namespace htd
         public:
             JoinNodeNormalizationOperation(void);
 
+            JoinNodeNormalizationOperation(bool identicalParent);
+
             ~JoinNodeNormalizationOperation();
 
             void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
@@ -43,6 +45,9 @@ namespace htd
             void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
             JoinNodeNormalizationOperation * clone(void) const HTD_OVERRIDE;
+
+        private:
+            bool identicalParent_;
     };
 }
 

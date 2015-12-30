@@ -34,6 +34,13 @@
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 
 htd::NormalizationOperation::NormalizationOperation(void)
+    : htd::SemiNormalizationOperation(), emptyRoot_(false), emptyLeaves_(false), identicalJoinNodeParent_(false)
+{
+
+}
+
+htd::NormalizationOperation::NormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent)
+    : htd::SemiNormalizationOperation(emptyRoot, emptyLeaves, identicalJoinNodeParent), emptyRoot_(emptyRoot), emptyLeaves_(emptyLeaves), identicalJoinNodeParent_(identicalJoinNodeParent)
 {
 
 }
@@ -51,28 +58,6 @@ void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decompo
 void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     htd::SemiNormalizationOperation::apply(decomposition, labelingFunctions);
-
-    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
-
-    exchangeNodeReplacementOperation.apply(decomposition, labelingFunctions);
-
-    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
-
-    limitMaximumForgottenVertexCountOperation.apply(decomposition, labelingFunctions);
-
-    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
-
-    limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
-}
-
-void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const
-{
-    apply(decomposition, emptyRoot, emptyLeaves, std::vector<htd::ILabelingFunction *>());
-}
-
-void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
-{
-    htd::SemiNormalizationOperation::apply(decomposition, emptyRoot, emptyLeaves, labelingFunctions);
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
@@ -109,31 +94,9 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
     limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
 }
 
-void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const
-{
-    apply(decomposition, emptyRoot, emptyLeaves, std::vector<htd::ILabelingFunction *>());
-}
-
-void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
-{
-    htd::SemiNormalizationOperation::apply(decomposition, emptyRoot, emptyLeaves, labelingFunctions);
-
-    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
-
-    exchangeNodeReplacementOperation.apply(decomposition, labelingFunctions);
-
-    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
-
-    limitMaximumForgottenVertexCountOperation.apply(decomposition, labelingFunctions);
-
-    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
-
-    limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
-}
-
 htd::NormalizationOperation * htd::NormalizationOperation::clone(void) const
 {
-    return new htd::NormalizationOperation();
+    return new htd::NormalizationOperation(emptyRoot_, emptyLeaves_, identicalJoinNodeParent_);
 }
 
 #endif /* HTD_HTD_NORMALIZATIONOPERATION_CPP */

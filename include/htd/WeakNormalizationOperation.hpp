@@ -37,25 +37,26 @@ namespace htd
         public:
             WeakNormalizationOperation(void);
 
+            WeakNormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent);
+
             virtual ~WeakNormalizationOperation();
 
             virtual void apply(htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
 
             virtual void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
-            virtual void apply(htd::IMutablePathDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const;
-
-            virtual void apply(htd::IMutablePathDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const;
-
             virtual void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
             virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
-            virtual void apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves) const;
-
-            virtual void apply(htd::IMutableTreeDecomposition & decomposition, bool emptyRoot, bool emptyLeaves, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const;
-
             WeakNormalizationOperation * clone(void) const HTD_OVERRIDE;
+
+        private:
+            bool emptyRoot_;
+
+            bool emptyLeaves_;
+
+            bool identicalJoinNodeParent_;
     };
 }
 

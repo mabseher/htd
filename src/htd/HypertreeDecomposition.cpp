@@ -55,7 +55,7 @@ htd::HypertreeDecomposition::~HypertreeDecomposition()
 
 }
 
-const htd::Collection<htd::Hyperedge> htd::HypertreeDecomposition::edgeLabel(htd::vertex_t vertex) const
+const htd::Collection<htd::Hyperedge> htd::HypertreeDecomposition::coveringEdges(htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -70,13 +70,13 @@ const htd::Collection<htd::Hyperedge> htd::HypertreeDecomposition::edgeLabel(htd
     }
     else
     {
-        throw std::logic_error("htd::Collection<htd::Hyperedge> htd::HypertreeDecomposition::edgeLabel(htd::vertex_t) const");
+        throw std::logic_error("htd::Collection<htd::Hyperedge> htd::HypertreeDecomposition::coveringEdges(htd::vertex_t) const");
     }
 
     return htd::Collection<htd::Hyperedge>();
 }
 
-void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & content)
+void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const htd::hyperedge_container & content)
 {
     if (isVertex(vertex))
     {
@@ -86,11 +86,11 @@ void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::
     }
     else
     {
-        throw std::logic_error("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::Hyperedge_container &))");
+        throw std::logic_error("void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t, const htd::Hyperedge_container &))");
     }
 }
 
-void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::Collection<htd::Hyperedge> & content)
+void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const htd::Collection<htd::Hyperedge> & content)
 {
     if (isVertex(vertex))
     {
@@ -100,7 +100,7 @@ void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t vertex, const htd::
     }
     else
     {
-        throw std::logic_error("void htd::HypertreeDecomposition::setEdgeLabel(htd::vertex_t, const htd::Collection<htd::Hyperedge> &)");
+        throw std::logic_error("void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t, const htd::Collection<htd::Hyperedge> &)");
     }
 }
 

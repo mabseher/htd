@@ -84,7 +84,7 @@ namespace std
     }
 
     template<>
-    class hash<htd::Hyperedge>
+    struct hash<htd::Hyperedge>
     {
         public:
             std::size_t operator()(const htd::Hyperedge & data) const
@@ -101,7 +101,7 @@ namespace std
     };
 
     template<>
-    class hash<htd::Collection<htd::vertex_t>>
+    struct hash<htd::Collection<htd::vertex_t>>
     {
         public:
             std::size_t operator()(const htd::Collection<htd::vertex_t> & data) const
@@ -118,7 +118,7 @@ namespace std
     };
 
     template<>
-    class hash<htd::Collection<htd::Hyperedge>>
+    struct hash<htd::Collection<htd::Hyperedge>>
     {
         public:
             std::size_t operator()(const htd::Collection<htd::Hyperedge> & data) const
@@ -137,7 +137,7 @@ namespace std
     };
 
     template<>
-    class hash<htd::vertex_container>
+    struct hash<htd::vertex_container>
     {
         public:
             std::size_t operator()(const htd::vertex_container & data) const

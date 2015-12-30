@@ -36,9 +36,9 @@ namespace htd
         public:
             virtual ~IMutableHypertreeDecomposition() = 0;
 
-            virtual void setEdgeLabel(htd::vertex_t vertex, const htd::hyperedge_container & content) = 0;
+            virtual void setCoveringEdges(htd::vertex_t vertex, const htd::hyperedge_container & content) = 0;
 
-            virtual void setEdgeLabel(htd::vertex_t vertex, const htd::Collection<htd::Hyperedge> & content) = 0;
+            virtual void setCoveringEdges(htd::vertex_t vertex, const htd::Collection<htd::Hyperedge> & content) = 0;
 
             virtual IMutableHypertreeDecomposition * clone(void) const = 0;
     };

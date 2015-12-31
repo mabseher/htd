@@ -43,7 +43,9 @@ namespace htd
 
             virtual htd::ILabeledGraph * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const = 0;
 
-            //virtual htd::ILabeledGraph * computeDecomposition(const htd::IHypergraph & graph, int labelingFunctionCount, ...) const = 0; //TODO HTD_OVERRIDE
+            virtual void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) = 0;
+
+            virtual IGraphDecompositionAlgorithm * clone(void) const = 0;
     };
 
     inline htd::IGraphDecompositionAlgorithm::~IGraphDecompositionAlgorithm() { }

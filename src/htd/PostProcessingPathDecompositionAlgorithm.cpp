@@ -42,34 +42,27 @@
 #include <cstdarg>
 #include <vector>
 
-htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(void)
+htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(void) : labelingFunctions_(), postProcessingOperations_()
 {
 
 }
 
-htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : labelingFunctions_(), postProcessingOperations_()
 {
-    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
-    {
-        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
-
-        if (labelingFunction != nullptr)
-        {
-            labelingFunctions_.push_back(labelingFunction);
-        }
-
-        htd::IPathDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(operation);
-
-        if (manipulationOperation != nullptr)
-        {
-            postProcessingOperations_.push_back(manipulationOperation);
-        }
-    }
+    setManipulationOperations(manipulationOperations);
 }
 
 htd::PostProcessingPathDecompositionAlgorithm::~PostProcessingPathDecompositionAlgorithm()
 {
+    for (auto labelingFunction : labelingFunctions_)
+    {
+        delete labelingFunction;
+    }
 
+    for (auto postProcessingOperation : postProcessingOperations_)
+    {
+        delete postProcessingOperation;
+    }
 }
 
 htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
@@ -208,6 +201,30 @@ htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::
     }
 
     return ret;
+}
+
+void htd::PostProcessingPathDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
+    labelingFunctions_.clear();
+
+    postProcessingOperations_.clear();
+
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    {
+        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+
+        if (labelingFunction != nullptr)
+        {
+            labelingFunctions_.push_back(labelingFunction);
+        }
+
+        htd::IPathDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(operation);
+
+        if (manipulationOperation != nullptr)
+        {
+            postProcessingOperations_.push_back(manipulationOperation);
+        }
+    }
 }
 
 htd::PostProcessingPathDecompositionAlgorithm * htd::PostProcessingPathDecompositionAlgorithm::clone(void) const

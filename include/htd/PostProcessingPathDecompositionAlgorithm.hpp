@@ -51,7 +51,9 @@ namespace htd
 
             htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
 
-            htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const; //TODO HTD_OVERRIDE;
+            htd::IPathDecomposition * computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const;
+
+            void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) HTD_OVERRIDE;
 
             PostProcessingPathDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
 

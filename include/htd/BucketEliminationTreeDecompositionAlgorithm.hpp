@@ -53,6 +53,8 @@ namespace htd
 
             htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const; //TODO HTD_OVERRIDE;
 
+            void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) HTD_OVERRIDE;
+
             BucketEliminationTreeDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:

@@ -26,6 +26,7 @@
 #define HTD_DIRECTEDGRAPHFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/IDirectedGraph.hpp>
 #include <htd/IMutableDirectedGraph.hpp>
 
 namespace htd
@@ -40,6 +41,10 @@ namespace htd
             htd::IMutableDirectedGraph * getDirectedGraph(void);
 
             void setConstructionTemplate(htd::IMutableDirectedGraph * original);
+
+            htd::IMutableDirectedGraph & accessMutableDirectedGraph(htd::IDirectedGraph & original);
+
+            const htd::IMutableDirectedGraph & accessMutableDirectedGraph(const htd::IDirectedGraph & original);
 
         private:
             htd::IMutableDirectedGraph * constructionTemplate_;

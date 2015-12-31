@@ -91,4 +91,14 @@ void htd::PathDecompositionFactory::setConstructionTemplate(htd::IMutablePathDec
     constructionTemplate_ = original;
 }
 
+htd::IMutablePathDecomposition & htd::PathDecompositionFactory::accessMutablePathDecomposition(htd::IPathDecomposition & original)
+{
+    return *(dynamic_cast<htd::IMutablePathDecomposition *>(&original));
+}
+
+const htd::IMutablePathDecomposition & htd::PathDecompositionFactory::accessMutablePathDecomposition(const htd::IPathDecomposition & original)
+{
+    return *(dynamic_cast<const htd::IMutablePathDecomposition *>(&original));
+}
+
 #endif /* HTD_PATHDECOMPOSITIONFACTORY_CPP */

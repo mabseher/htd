@@ -41,6 +41,10 @@ namespace htd
 
             void setConstructionTemplate(htd::IMutableHypergraph * original);
 
+            htd::IMutableHypergraph & accessMutableHypergraph(htd::IHypergraph & original);
+
+            const htd::IMutableHypergraph & accessMutableHypergraph(const htd::IHypergraph & original);
+
         private:
             htd::IMutableHypergraph * constructionTemplate_;
 

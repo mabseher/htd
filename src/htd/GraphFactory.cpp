@@ -81,4 +81,14 @@ void htd::GraphFactory::setConstructionTemplate(htd::IMutableGraph * original)
     constructionTemplate_ = original;
 }
 
+htd::IMutableGraph & htd::GraphFactory::accessMutableGraph(htd::IGraph & original)
+{
+    return *(dynamic_cast<htd::IMutableGraph *>(&original));
+}
+
+const htd::IMutableGraph & htd::GraphFactory::accessMutableGraph(const htd::IGraph & original)
+{
+    return *(dynamic_cast<const htd::IMutableGraph *>(&original));
+}
+
 #endif /* HTD_GRAPHFACTORY_CPP */

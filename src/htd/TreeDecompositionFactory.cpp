@@ -91,4 +91,14 @@ void htd::TreeDecompositionFactory::setConstructionTemplate(htd::IMutableTreeDec
     constructionTemplate_ = original;
 }
 
+htd::IMutableTreeDecomposition & htd::TreeDecompositionFactory::accessMutableTreeDecomposition(htd::ITreeDecomposition & original)
+{
+    return *(dynamic_cast<htd::IMutableTreeDecomposition *>(&original));
+}
+
+const htd::IMutableTreeDecomposition & htd::TreeDecompositionFactory::accessMutableTreeDecomposition(const htd::ITreeDecomposition & original)
+{
+    return *(dynamic_cast<const htd::IMutableTreeDecomposition *>(&original));
+}
+
 #endif /* HTD_TREEDECOMPOSITIONFACTORY_CPP */

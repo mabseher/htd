@@ -44,6 +44,10 @@ namespace htd
 
             void setConstructionTemplate(htd::IMutablePathDecomposition * original);
 
+            htd::IMutablePathDecomposition & accessMutablePathDecomposition(htd::IPathDecomposition & original);
+
+            const htd::IMutablePathDecomposition & accessMutablePathDecomposition(const htd::IPathDecomposition & original);
+
         private:
             htd::IMutablePathDecomposition * constructionTemplate_;
 

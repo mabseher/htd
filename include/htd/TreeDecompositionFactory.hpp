@@ -44,6 +44,10 @@ namespace htd
 
             void setConstructionTemplate(htd::IMutableTreeDecomposition * original);
 
+            htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(htd::ITreeDecomposition & original);
+
+            const htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(const htd::ITreeDecomposition & original);
+
         private:
             htd::IMutableTreeDecomposition * constructionTemplate_;
 

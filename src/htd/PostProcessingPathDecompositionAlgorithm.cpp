@@ -108,21 +108,19 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
     delete algorithm;
 
-    htd::IMutableTreeDecomposition * mutableTreeDecomposition = htd::TreeDecompositionFactory::instance().getTreeDecomposition(*treeDecomposition);
-
-    delete treeDecomposition;
+    htd::IMutableTreeDecomposition & mutableTreeDecomposition = htd::TreeDecompositionFactory::instance().accessMutableTreeDecomposition(*treeDecomposition);
 
     htd::CompressionOperation compressionOperation;
 
-    compressionOperation.apply(*mutableTreeDecomposition);
+    compressionOperation.apply(mutableTreeDecomposition);
 
     htd::JoinNodeReplacementOperation joinNodeReplacementOperation(graph);
 
-    joinNodeReplacementOperation.apply(*mutableTreeDecomposition);
+    joinNodeReplacementOperation.apply(mutableTreeDecomposition);
 
-    ret = toPathDecomposition(*mutableTreeDecomposition);
+    ret = toPathDecomposition(mutableTreeDecomposition);
 
-    delete mutableTreeDecomposition;
+    delete treeDecomposition;
 
     std::vector<htd::ILabelingFunction *> labelingFunctions;
 

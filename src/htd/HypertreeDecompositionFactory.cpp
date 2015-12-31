@@ -93,4 +93,14 @@ void htd::HypertreeDecompositionFactory::setConstructionTemplate(htd::IMutableHy
     constructionTemplate_ = original;
 }
 
+htd::IMutableHypertreeDecomposition & htd::HypertreeDecompositionFactory::accessMutableHypertreeDecomposition(htd::IHypertreeDecomposition & original)
+{
+    return *(dynamic_cast<htd::IMutableHypertreeDecomposition *>(&original));
+}
+
+const htd::IMutableHypertreeDecomposition & htd::HypertreeDecompositionFactory::accessMutableHypertreeDecomposition(const htd::IHypertreeDecomposition & original)
+{
+    return *(dynamic_cast<const htd::IMutableHypertreeDecomposition *>(&original));
+}
+
 #endif /* HTD_HYPERTREEDECOMPOSITIONFACTORY_CPP */

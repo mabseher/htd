@@ -26,6 +26,7 @@
 #define HTD_HYPERTREEDECOMPOSITIONFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/IHypertreeDecomposition.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/ITreeDecomposition.hpp>
 
@@ -43,6 +44,10 @@ namespace htd
             htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(const htd::ITreeDecomposition & original);
 
             void setConstructionTemplate(htd::IMutableHypertreeDecomposition * original);
+
+            htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(htd::IHypertreeDecomposition & original);
+
+            const htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(const htd::IHypertreeDecomposition & original);
 
         private:
             htd::IMutableHypertreeDecomposition * constructionTemplate_;

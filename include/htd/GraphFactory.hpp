@@ -41,6 +41,10 @@ namespace htd
 
             void setConstructionTemplate(htd::IMutableGraph * original);
 
+            htd::IMutableGraph & accessMutableGraph(htd::IGraph & original);
+
+            const htd::IMutableGraph & accessMutableGraph(const htd::IGraph & original);
+
         private:
             htd::IMutableGraph * constructionTemplate_;
 

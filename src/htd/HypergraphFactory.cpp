@@ -81,4 +81,14 @@ void htd::HypergraphFactory::setConstructionTemplate(htd::IMutableHypergraph * o
     constructionTemplate_ = original;
 }
 
+htd::IMutableHypergraph & htd::HypergraphFactory::accessMutableHypergraph(htd::IHypergraph & original)
+{
+    return *(dynamic_cast<htd::IMutableHypergraph *>(&original));
+}
+
+const htd::IMutableHypergraph & htd::HypergraphFactory::accessMutableHypergraph(const htd::IHypergraph & original)
+{
+    return *(dynamic_cast<const htd::IMutableHypergraph *>(&original));
+}
+
 #endif /* HTD_HYPERGRAPHFACTORY_CPP */

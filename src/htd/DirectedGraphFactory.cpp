@@ -81,4 +81,14 @@ void htd::DirectedGraphFactory::setConstructionTemplate(htd::IMutableDirectedGra
     constructionTemplate_ = original;
 }
 
+htd::IMutableDirectedGraph & htd::DirectedGraphFactory::accessMutableDirectedGraph(htd::IDirectedGraph & original)
+{
+    return *(dynamic_cast<htd::IMutableDirectedGraph *>(&original));
+}
+
+const htd::IMutableDirectedGraph & htd::DirectedGraphFactory::accessMutableDirectedGraph(const htd::IDirectedGraph & original)
+{
+    return *(dynamic_cast<const htd::IMutableDirectedGraph *>(&original));
+}
+
 #endif /* HTD_DIRECTEDGRAPHFACTORY_CPP */

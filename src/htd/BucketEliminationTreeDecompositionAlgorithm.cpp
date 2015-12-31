@@ -102,6 +102,20 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
     if (ret != nullptr)
     {
+        for (auto & labelingFunction : labelingFunctions_)
+        {
+            for (htd::vertex_t vertex : ret->vertices())
+            {
+                htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
+
+                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
+
+                delete labelCollection;
+
+                ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
+            }
+        }
+
         for (auto & labelingFunction : labelingFunctions)
         {
             for (htd::vertex_t vertex : ret->vertices())
@@ -115,11 +129,16 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
                 ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
         }
-    }
 
-    for (auto & operation : postProcessingOperations)
-    {
-        operation->apply(*ret);
+        for (auto & operation : postProcessingOperations_)
+        {
+            operation->apply(*ret);
+        }
+
+        for (auto & operation : postProcessingOperations)
+        {
+            operation->apply(*ret);
+        }
     }
 
     return ret;

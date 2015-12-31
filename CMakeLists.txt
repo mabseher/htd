@@ -25,6 +25,10 @@ if (DEFINED HTD_DEBUG_OUTPUT)
     endif()
 endif()
 
+if (NOT DEFINED HTD_BUILD_TESTS)
+    set(HTD_BUILD_TESTS ON)
+endif()
+
 subdirs(src/htd)
 
 subdirs(test)

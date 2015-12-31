@@ -17,11 +17,11 @@ if (NOT DEFINED BUILD_SHARED_LIBS)
     set(BUILD_SHARED_LIBS ON)
 endif()
 
-if (DEFINED DEBUG_OUTPUT)
-    if (DEBUG_OUTPUT)
+if (DEFINED HTD_DEBUG_OUTPUT)
+    if (HTD_DEBUG_OUTPUT)
         message("Debugging output is enabled!")
 
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG_OUTPUT" )
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHTD_DEBUG_OUTPUT" )
     endif()
 endif()
 

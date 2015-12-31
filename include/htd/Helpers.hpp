@@ -56,7 +56,7 @@
 #ifdef NDEBUG
     #define DEBUGGING_CODE(x)
 #else
-    #ifdef DEBUG_OUTPUT
+    #ifdef HTD_DEBUG_OUTPUT
         #define DEBUGGING_CODE(x) x
     #else
         #define DEBUGGING_CODE(x)

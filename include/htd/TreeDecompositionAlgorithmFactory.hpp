@@ -41,6 +41,8 @@ namespace htd
 
             void setConstructionTemplate(htd::ITreeDecompositionAlgorithm * original);
 
+            void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
+
         private:
             htd::ITreeDecompositionAlgorithm * constructionTemplate_;
 

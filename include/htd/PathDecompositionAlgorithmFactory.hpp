@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IPathDecompositionAlgorithm.hpp>
+#include <htd/IDecompositionManipulationOperation.hpp>
 
 namespace htd
 {
@@ -40,6 +41,8 @@ namespace htd
             htd::IPathDecompositionAlgorithm * getPathDecompositionAlgorithm(void);
 
             void setConstructionTemplate(htd::IPathDecompositionAlgorithm * original);
+
+            void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
         private:
             htd::IPathDecompositionAlgorithm * constructionTemplate_;

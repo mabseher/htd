@@ -77,4 +77,9 @@ void htd::TreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::ITreeD
     constructionTemplate_ = original;
 }
 
+void htd::TreeDecompositionAlgorithmFactory::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
+    constructionTemplate_->setManipulationOperations(manipulationOperations);
+}
+
 #endif /* HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP */

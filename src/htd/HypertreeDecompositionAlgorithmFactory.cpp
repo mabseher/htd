@@ -79,4 +79,9 @@ void htd::HypertreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::I
     constructionTemplate_ = original;
 }
 
+void htd::HypertreeDecompositionAlgorithmFactory::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
+    constructionTemplate_->setManipulationOperations(manipulationOperations);
+}
+
 #endif /* HTD_HYPERTREEDECOMPOSITIONALGORITHMFACTORY_CPP */

@@ -77,4 +77,9 @@ void htd::PathDecompositionAlgorithmFactory::setConstructionTemplate(htd::IPathD
     constructionTemplate_ = original;
 }
 
+void htd::PathDecompositionAlgorithmFactory::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
+    constructionTemplate_->setManipulationOperations(manipulationOperations);
+}
+
 #endif /* HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP */

@@ -118,13 +118,13 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
         {
             if (currentNode != htd::Vertex::UNKNOWN)
             {
-                std::cout << std::endl << std::endl << "NODE: " << currentNode << std::endl;
+                DEBUGGING_CODE(std::cout << std::endl << std::endl << "NODE: " << currentNode << std::endl;)
 
                 if (currentVisits == 0)
                 {
                     if (attachmentPoint != htd::Vertex::UNKNOWN && decomposition.parent(currentNode) != attachmentPoint)
                     {
-                        std::cout << "   ATTACH " << currentNode << " TO " << attachmentPoint << std::endl;
+                        DEBUGGING_CODE(std::cout << "   ATTACH " << currentNode << " TO " << attachmentPoint << std::endl;)
 
                         decomposition.setParent(currentNode, attachmentPoint);
                     }
@@ -142,6 +142,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     availableChildren.erase(selectedChild);
 
+                    DEBUGGING_CODE(
                     std::cout << "   SELECTED CHILD: " << selectedChild << std::endl;
                     std::cout << "   REMAINING CHILDREN: ";
                     htd::print(availableChildren, true);
@@ -150,6 +151,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
                     std::cout << "OLD REQUIRED VERTICES " << currentNode << ": ";
                     htd::print(requiredVertices, false);
                     std::cout << std::endl << std::endl;
+                    )
 
                     std::vector<htd::vertex_t> newRequiredVertices;
 
@@ -157,9 +159,11 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     std::set_union(requiredVertices.begin(), requiredVertices.end(), rememberedVertexCollection.begin(), rememberedVertexCollection.end(), std::back_inserter(newRequiredVertices));
 
+                    DEBUGGING_CODE(
                     std::cout << "NEW REQUIRED VERTICES " << currentNode << ": ";
                     htd::print(newRequiredVertices, false);
                     std::cout << std::endl << std::endl;
+                    )
 
                     std::swap(requiredVertices, newRequiredVertices);
 
@@ -204,15 +208,19 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                         htd::vertex_container newBagContent;
 
+                        DEBUGGING_CODE(
                         std::cout << "OLD BAG CONTENT " << currentNode << ": ";
                         htd::print(bagContent, false);
                         std::cout << std::endl << std::endl;
+                        )
 
                         std::set_union(bagContent.begin(), bagContent.end(), requiredVertices.begin(), requiredVertices.end(), std::back_inserter(newBagContent));
 
+                        DEBUGGING_CODE(
                         std::cout << "NEW BAG CONTENT " << currentNode << ": ";
                         htd::print(newBagContent, false);
                         std::cout << std::endl << std::endl;
+                        )
 
                         decomposition.setBagContent(currentNode, newBagContent);
 
@@ -237,11 +245,13 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
             }
             else
             {
+                DEBUGGING_CODE(
                 std::cout << "   BACKTRACKING TO " << parentStack.top().vertex << std::endl;
 
                 std::cout << "   REQUIRED VERTICES 1: ";
                 htd::print(requiredVertices, false);
                 std::cout << std::endl;
+                )
 
                 currentNode = parentStack.top().vertex;
 
@@ -253,9 +263,11 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                 parentStack.pop();
 
+                DEBUGGING_CODE(
                 std::cout << "   REQUIRED VERTICES 2: ";
                 htd::print(requiredVertices, false);
                 std::cout << std::endl;
+                )
 
                 if (currentNode != decomposition.root())
                 {
@@ -263,9 +275,11 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     std::set_difference(requiredVertices.begin(), requiredVertices.end(), parentStack.top().requiredVertices.begin(), parentStack.top().requiredVertices.end(), std::back_inserter(potentiallyUnneededVertices));
 
+                    DEBUGGING_CODE(
                     std::cout << "POTENTIALLY UNNEEDED VERTICES: ";
                     htd::print(potentiallyUnneededVertices, false);
                     std::cout << std::endl;
+                    )
 
                     std::unordered_set<htd::vertex_t> unneededVertices(potentiallyUnneededVertices.begin(), potentiallyUnneededVertices.end());
 
@@ -273,10 +287,12 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
                     {
                         htd::Collection<htd::vertex_t> childBagContent = decomposition.bagContent(child);
 
+                        DEBUGGING_CODE(
                         std::cout << "   SIBLING: " << child << std::endl;
                         std::cout << "      CONTENT: ";
                         htd::print(childBagContent);
                         std::cout << std::endl;
+                        )
 
                         for (htd::vertex_t requiredVertex : childBagContent)
                         {
@@ -288,6 +304,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     std::sort(unneededVertices2.begin(), unneededVertices2.end());
 
+                    DEBUGGING_CODE(
                     std::cout << "   REQUIRED VERTICES: ";
                     htd::print(requiredVertices, false);
                     std::cout << std::endl;
@@ -295,14 +312,17 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
                     std::cout << "   UNNEEDED VERTICES: ";
                     htd::print(unneededVertices2, false);
                     std::cout << std::endl;
+                    )
 
                     std::vector<htd::vertex_t> newRequiredVertices;
 
                     std::set_difference(requiredVertices.begin(), requiredVertices.end(), unneededVertices2.begin(), unneededVertices2.end(), std::back_inserter(newRequiredVertices));
 
+                    DEBUGGING_CODE(
                     std::cout << "   NEW REQUIRED VERTICES: ";
                     htd::print(newRequiredVertices, false);
                     std::cout << std::endl;
+                    )
 
                     requiredVertices = newRequiredVertices;
                 }

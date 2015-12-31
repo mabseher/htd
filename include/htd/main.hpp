@@ -82,6 +82,7 @@
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/IMutableTree.hpp>
 #include <htd/InducedSubgraphLabelingFunction.hpp>
+#include <htd/InOrderTreeTraversal.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
 #include <htd/IPathDecompositionAlgorithm.hpp>
 #include <htd/IPathDecompositionManipulationOperation.hpp>
@@ -96,6 +97,7 @@
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionVerifier.hpp>
 #include <htd/ITree.hpp>
+#include <htd/ITreeTraversal.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>
 #include <htd/LabelCollection.hpp>
@@ -114,7 +116,9 @@
 #include <htd/PathDecompositionAlgorithmFactory.hpp>
 #include <htd/PathDecompositionFactory.hpp>
 #include <htd/PathDecomposition.hpp>
+#include <htd/PostOrderTreeTraversal.hpp>
 #include <htd/PostProcessingPathDecompositionAlgorithm.hpp>
+#include <htd/PreOrderTreeTraversal.hpp>
 #include <htd/SemiNormalizationOperation.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/SetCoverAlgorithm.hpp>

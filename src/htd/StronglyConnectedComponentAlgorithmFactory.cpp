@@ -28,13 +28,14 @@
 #include <htd/Globals.hpp>
 #include <htd/StronglyConnectedComponentAlgorithmFactory.hpp>
 #include <htd/IStronglyConnectedComponentAlgorithm.hpp>
+#include <htd/TarjanStronglyConnectedComponentAlgorithm.hpp>
 
 #include <memory>
 #include <stdexcept>
 
 htd::StronglyConnectedComponentAlgorithmFactory::StronglyConnectedComponentAlgorithmFactory(void)
 {
-    constructionTemplate_ = nullptr; //TODO Use Tarjan's algorithm!
+    constructionTemplate_ = new htd::TarjanStronglyConnectedComponentAlgorithm();
 }
 
 htd::StronglyConnectedComponentAlgorithmFactory::~StronglyConnectedComponentAlgorithmFactory()

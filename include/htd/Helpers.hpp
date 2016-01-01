@@ -703,7 +703,17 @@ namespace htd
 
         return result;
     }
-    
+
+    template <typename T>
+    void inplace_set_union(std::vector<T> & set1, const std::vector<T> & set2)
+    {
+        htd::index_t mid = set1.size();
+
+        std::set_difference(set2.begin(), set2.end(), set1.begin(), set1.end(), std::back_inserter(set1));
+
+        std::inplace_merge(set1.begin(), set1.begin() + mid, set1.end());
+    }
+
     template <class Rep, class Period = std::ratio<1> >
     void printDuration(const std::chrono::duration<Rep, Period>& duration)
     {

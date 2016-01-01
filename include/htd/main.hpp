@@ -33,6 +33,7 @@
 #include <htd/CompilerDetection.hpp>
 #include <htd/CompressionOperation.hpp>
 #include <htd/ConnectedComponentAlgorithmFactory.hpp>
+#include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
 #include <htd/DirectedGraphFactory.hpp>
 #include <htd/DirectedGraph.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>

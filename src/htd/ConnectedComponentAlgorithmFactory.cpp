@@ -28,13 +28,14 @@
 #include <htd/Globals.hpp>
 #include <htd/ConnectedComponentAlgorithmFactory.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
+#include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
 
 #include <memory>
 #include <stdexcept>
 
 htd::ConnectedComponentAlgorithmFactory::ConnectedComponentAlgorithmFactory(void)
 {
-    constructionTemplate_ = nullptr; //TODO Use DFS!
+    constructionTemplate_ = new htd::DepthFirstConnectedComponentAlgorithm();
 }
 
 htd::ConnectedComponentAlgorithmFactory::~ConnectedComponentAlgorithmFactory()

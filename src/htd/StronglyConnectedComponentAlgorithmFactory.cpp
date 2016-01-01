@@ -1,0 +1,79 @@
+/*
+ * File:   StronglyConnectedComponentAlgorithmFactory.cpp
+ *
+ * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
+ *
+ * Copyright 2015, Michael Abseher
+ *    E-Mail: <abseher@dbai.tuwien.ac.at>
+ *
+ * This file is part of htd.
+ *
+ * htd is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * htd is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+ * License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with htd.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP
+#define HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP
+
+#include <htd/Globals.hpp>
+#include <htd/StronglyConnectedComponentAlgorithmFactory.hpp>
+#include <htd/IStronglyConnectedComponentAlgorithm.hpp>
+
+#include <memory>
+#include <stdexcept>
+
+htd::StronglyConnectedComponentAlgorithmFactory::StronglyConnectedComponentAlgorithmFactory(void)
+{
+    constructionTemplate_ = nullptr; //TODO Use Tarjan's algorithm!
+}
+
+htd::StronglyConnectedComponentAlgorithmFactory::~StronglyConnectedComponentAlgorithmFactory()
+{
+    if (constructionTemplate_ != nullptr)
+    {
+        delete constructionTemplate_;
+
+        constructionTemplate_ = nullptr;
+    }
+}
+
+htd::StronglyConnectedComponentAlgorithmFactory & htd::StronglyConnectedComponentAlgorithmFactory::instance(void)
+{
+    static htd::StronglyConnectedComponentAlgorithmFactory instance_;
+
+    return instance_;
+}
+
+htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgorithmFactory::getStronglyConnectedComponentAlgorithm(void)
+{
+    return constructionTemplate_->clone();
+}
+
+void htd::StronglyConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IStronglyConnectedComponentAlgorithm * original)
+{
+    if (original == nullptr)
+    {
+        throw std::logic_error("void htd::StronglyConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IStronglyConnectedComponentAlgorithm *)");
+    }
+
+    if (constructionTemplate_ != nullptr)
+    {
+        delete constructionTemplate_;
+
+        constructionTemplate_ = nullptr;
+    }
+
+    constructionTemplate_ = original;
+}
+
+#endif /* HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP */

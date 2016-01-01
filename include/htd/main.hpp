@@ -30,8 +30,9 @@
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/Collection.hpp>
-#include <htd/CompressionOperation.hpp>
 #include <htd/CompilerDetection.hpp>
+#include <htd/CompressionOperation.hpp>
+#include <htd/ConnectedComponentAlgorithmFactory.hpp>
 #include <htd/DirectedGraphFactory.hpp>
 #include <htd/DirectedGraph.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
@@ -50,8 +51,9 @@
 #include <htd/HypertreeDecomposition.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
 #include <htd/IBidirectionalGraphLabeling.hpp>
-#include <htd/Id.hpp>
+#include <htd/IConnectedComponentAlgorithm.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
+#include <htd/Id.hpp>
 #include <htd/IDirectedGraph.hpp>
 #include <htd/IGraphDecompositionAlgorithm.hpp>
 #include <htd/IGraph.hpp>
@@ -85,10 +87,11 @@
 #include <htd/InOrderTreeTraversal.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
 #include <htd/IPathDecompositionAlgorithm.hpp>
-#include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/IPathDecomposition.hpp>
+#include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/IPath.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
+#include <htd/IStronglyConnectedComponentAlgorithm.hpp>
 #include <htd/IteratorBase.hpp>
 #include <htd/Iterator.hpp>
 #include <htd/IteratorWrapper.hpp>
@@ -122,6 +125,7 @@
 #include <htd/SemiNormalizationOperation.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/SetCoverAlgorithm.hpp>
+#include <htd/StronglyConnectedComponentAlgorithmFactory.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/TreeDecomposition.hpp>

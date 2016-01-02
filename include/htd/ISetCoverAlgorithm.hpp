@@ -26,7 +26,7 @@
 #define	HTD_HTD_ISETCOVERALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 
 namespace htd
 {
@@ -35,7 +35,7 @@ namespace htd
         public:
             virtual ~ISetCoverAlgorithm() = 0;
 
-            virtual void computeSetCover(const htd::Collection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container> & containers, std::vector<htd::index_t> & result) const = 0;
+            virtual void computeSetCover(const htd::ConstCollection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container> & containers, std::vector<htd::index_t> & result) const = 0;
 
             virtual ISetCoverAlgorithm * clone(void) const = 0;
     };

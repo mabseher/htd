@@ -50,7 +50,7 @@ namespace htd
 
             std::size_t labelCount(void) const HTD_OVERRIDE;
 
-            const htd::Collection<std::string> labelNames(void) const HTD_OVERRIDE;
+            htd::ConstCollection<std::string> labelNames(void) const HTD_OVERRIDE;
 
             const std::string & labelName(htd::index_t index) const HTD_OVERRIDE;
 
@@ -84,11 +84,11 @@ namespace htd
 
             htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) HTD_OVERRIDE;
 
-            const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) const HTD_OVERRIDE;
+            const htd::ConstIterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) const HTD_OVERRIDE;
 
             htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) HTD_OVERRIDE;
 
-            const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) const HTD_OVERRIDE;
+            const htd::ConstIterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) const HTD_OVERRIDE;
 
         private:
             std::vector<std::string> labelNames_;

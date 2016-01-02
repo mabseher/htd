@@ -45,7 +45,7 @@ htd::SetCoverAlgorithm::~SetCoverAlgorithm()
     
 }
 
-void htd::SetCoverAlgorithm::computeSetCover(const htd::Collection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::index_t> & result) const
+void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::index_t> & result) const
 {
     htd::id_t next = 0;
     

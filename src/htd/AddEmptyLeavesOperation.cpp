@@ -52,7 +52,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomp
 {
     std::vector<htd::vertex_t> leafNodes;
 
-    const htd::Collection<htd::vertex_t> leafNodeContainer = decomposition.leafNodes();
+    const htd::ConstCollection<htd::vertex_t> & leafNodeContainer = decomposition.leafNodes();
 
     std::copy(leafNodeContainer.begin(), leafNodeContainer.end(), std::back_inserter(leafNodes));
 
@@ -66,9 +66,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomp
             {
                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newLeaf);
 
-                htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(newLeaf);
-
-                htd::ILabel * newLabel = labelingFunction->computeLabel(bagContent, *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newLeaf), *labelCollection);
 
                 delete labelCollection;
 
@@ -87,7 +85,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
 {
     std::vector<htd::vertex_t> leafNodes;
 
-    const htd::Collection<htd::vertex_t> leafNodeContainer = decomposition.leafNodes();
+    const htd::ConstCollection<htd::vertex_t> & leafNodeContainer = decomposition.leafNodes();
 
     std::copy(leafNodeContainer.begin(), leafNodeContainer.end(), std::back_inserter(leafNodes));
 
@@ -101,9 +99,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
             {
                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newLeaf);
 
-                htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(newLeaf);
-
-                htd::ILabel * newLabel = labelingFunction->computeLabel(bagContent, *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newLeaf), *labelCollection);
 
                 delete labelCollection;
 

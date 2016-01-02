@@ -26,19 +26,9 @@
 #define	HTD_HTD_HELPERS_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IHypertreeDecompositionAlgorithm.hpp>
-#include <htd/IMutableGraph.hpp>
-#include <htd/IMutableHypergraph.hpp>
-#include <htd/IMutableDirectedGraph.hpp>
-#include <htd/IMutableLabeledTree.hpp>
-#include <htd/IOrderingAlgorithm.hpp>
-#include <htd/ITreeDecomposition.hpp>
-#include <htd/IHypertreeDecomposition.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/IMutableHypertreeDecomposition.hpp>
-#include <htd/ITreeDecompositionAlgorithm.hpp>
-#include <htd/ISetCoverAlgorithm.hpp>
+#include <htd/Hyperedge.hpp>
 #include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 #include <htd/ILabel.hpp>
 
 #include <algorithm>
@@ -91,7 +81,7 @@ namespace std
             {
                 std::size_t ret = 31 * data.id();
 
-                for (htd::vertex_t vertex : data.elements())
+                for (htd::vertex_t vertex : data)
                 {
                     std::hash_combine(ret, vertex);
                 }
@@ -104,7 +94,24 @@ namespace std
     struct hash<htd::Collection<htd::vertex_t>>
     {
         public:
-            std::size_t operator()(const htd::Collection<htd::vertex_t> & data) const
+            std::size_t operator()(const htd::ConstCollection<htd::vertex_t> & data) const
+            {
+                std::size_t ret = 31;
+
+                for (htd::vertex_t vertex : data)
+                {
+                    std::hash_combine(ret, vertex);
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    struct hash<htd::ConstCollection<htd::vertex_t>>
+    {
+        public:
+            std::size_t operator()(const htd::ConstCollection<htd::vertex_t> & data) const
             {
                 std::size_t ret = 31;
 
@@ -121,7 +128,26 @@ namespace std
     struct hash<htd::Collection<htd::Hyperedge>>
     {
         public:
-            std::size_t operator()(const htd::Collection<htd::Hyperedge> & data) const
+            std::size_t operator()(const htd::ConstCollection<htd::Hyperedge> & data) const
+            {
+                std::size_t ret = 31;
+
+                std::hash<htd::Hyperedge> hashFunction;
+
+                for (const htd::Hyperedge & hyperedge : data)
+                {
+                    std::hash_combine(ret, hashFunction(hyperedge));
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    struct hash<htd::ConstCollection<htd::Hyperedge>>
+    {
+        public:
+            std::size_t operator()(const htd::ConstCollection<htd::Hyperedge> & data) const
             {
                 std::size_t ret = 31;
 
@@ -159,7 +185,7 @@ namespace htd
     void print(bool input);
     
     template < typename T >
-    void print(const T& input)
+    void print(const T & input)
     {
         std::cout << input;
     }
@@ -168,7 +194,7 @@ namespace htd
     void print<std::string>(const std::string& input);
 
     template < typename T >
-    void print(const htd::Collection<T> & input, bool sorted = false)
+    void print(const htd::ConstCollection<T> & input, bool sorted = false)
     {
         std::vector<T> tmp(input.begin(), input.end());
 

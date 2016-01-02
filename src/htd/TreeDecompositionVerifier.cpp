@@ -70,7 +70,7 @@ bool htd::TreeDecompositionVerifier::verifyConnectednessCriterion(const htd::IHy
     return violationsConnectednessCriterion(graph, decomposition).empty();
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -84,9 +84,9 @@ const htd::Collection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsV
     {
         htd::vertex_t node = *it1;
 
-        auto label = decomposition.bagContent(node);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
 
-        for (auto it2 = label.begin(); !ok && it2 != label.end(); it2++)
+        for (auto it2 = bag.begin(); !ok && it2 != bag.end(); it2++)
         {
             missingVertices.erase(*it2);
             
@@ -101,7 +101,7 @@ const htd::Collection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsV
     return ret;
 }
             
-const htd::Collection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
+htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
 {
     htd::VectorAdapter<htd::Hyperedge> ret;
 
@@ -117,7 +117,7 @@ const htd::Collection<htd::Hyperedge> htd::TreeDecompositionVerifier::violations
 
     for (const htd::Hyperedge & edge : graph.hyperedges())
     {
-        htd::Collection<htd::vertex_t> elementCollection = edge.elements();
+        const htd::ConstCollection<htd::vertex_t> & elementCollection = edge.elements();
 
         htd::vertex_container elements(elementCollection.begin(), elementCollection.end());
 
@@ -125,7 +125,7 @@ const htd::Collection<htd::Hyperedge> htd::TreeDecompositionVerifier::violations
 
         elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
 
-        edges.push_back(htd::Hyperedge(edge.id(), htd::Collection<htd::vertex_t>(elements)));
+        edges.push_back(htd::Hyperedge(edge.id(), htd::ConstCollection<htd::vertex_t>(elements)));
     }
 
     std::unordered_set<htd::vertex_t> missingEdges(edgeCount);
@@ -141,13 +141,13 @@ const htd::Collection<htd::Hyperedge> htd::TreeDecompositionVerifier::violations
     {
         htd::vertex_t node = *it1;
 
-        auto label = decomposition.bagContent(node);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         for (auto it2 = missingEdges.begin(); !ok && it2 != missingEdges.end(); it2++)
         {
             auto & edge = edges[*it2];
         
-            if (std::includes(label.begin(), label.end(), edge.begin(), edge.end()))
+            if (std::includes(bag.begin(), bag.end(), edge.begin(), edge.end()))
             {
                 coveredEdges.push_back(*it2);
             }
@@ -176,7 +176,7 @@ const htd::Collection<htd::Hyperedge> htd::TreeDecompositionVerifier::violations
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -188,9 +188,9 @@ const htd::Collection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsC
 
     for (htd::vertex_t node : decomposition.vertices())
     {
-        auto label = decomposition.bagContent(node);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
 
-        for (htd::vertex_t vertex : label)
+        for (htd::vertex_t vertex : bag)
         {
             containers[vertex].push_back(node);
         }

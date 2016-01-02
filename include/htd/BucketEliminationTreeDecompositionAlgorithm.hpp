@@ -67,7 +67,7 @@ namespace htd
 
             htd::IMutableTreeDecomposition * computeMutableDecomposition(const htd::IHypergraph & graph) const;
 
-            htd::vertex_t getMinimumVertex(const htd::Collection<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices) const;
+            htd::vertex_t getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices) const;
 
             void getReachableVertices(htd::vertex_t start, const htd::vertex_container & vertices, const std::vector<htd::index_t> & vertexIndices, const std::vector<htd::vertex_container> & neighbors, htd::vertex_container & output) const;
             

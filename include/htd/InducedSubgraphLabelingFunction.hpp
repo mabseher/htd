@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/ILabelingFunction.hpp>
 #include <htd/Label.hpp>
-#include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 #include <htd/IHypergraph.hpp>
 
 #include <string>
@@ -49,9 +49,9 @@ namespace htd
 	    
             std::string name() const HTD_OVERRIDE;
 	        
-            htd::Label<htd::Collection<htd::Hyperedge>> * computeLabel(const htd::Collection<htd::vertex_t> & vertices) const;
+            htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices) const;
 
-            htd::Label<htd::Collection<htd::Hyperedge>> * computeLabel(const htd::Collection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE;
+            htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE;
 
         private:
             const htd::IHypergraph & graph_;

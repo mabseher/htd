@@ -49,11 +49,11 @@ namespace htd
 
             ~HypertreeDecomposition();
 
-            const htd::Collection<htd::Hyperedge> coveringEdges(htd::vertex_t vertex) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::Hyperedge> coveringEdges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             void setCoveringEdges(htd::vertex_t vertex, const htd::hyperedge_container & content) HTD_OVERRIDE;
 
-            void setCoveringEdges(htd::vertex_t vertex, const htd::Collection<htd::Hyperedge> & content) HTD_OVERRIDE;
+            void setCoveringEdges(htd::vertex_t vertex, const htd::ConstCollection<htd::Hyperedge> & content) HTD_OVERRIDE;
 
             HypertreeDecomposition * clone(void) const HTD_OVERRIDE;
     };

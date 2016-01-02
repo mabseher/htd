@@ -76,7 +76,7 @@ void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposi
                 {
                     oldNode = currentNode;
 
-                    Collection<htd::vertex_t> label = decomposition.bagContent(currentNode);
+                    const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(currentNode);
 
                     parentStack.push(std::make_pair(currentNode, currentIndex + 1));
 
@@ -84,18 +84,18 @@ void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposi
 
                     currentIndex = 0;
 
-                    Collection<htd::vertex_t> childLabel = decomposition.bagContent(currentNode);
+                    const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(currentNode);
 
-                    if (childLabel.size() < label.size())
+                    if (childBag.size() < bag.size())
                     {
-                        if (std::find(unneededVertices.begin(), unneededVertices.end(), currentNode) == unneededVertices.end() && std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
+                        if (std::find(unneededVertices.begin(), unneededVertices.end(), currentNode) == unneededVertices.end() && std::includes(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
                         {
                             unneededVertices.push_back(currentNode);
                         }
                     }
                     else
                     {
-                        if (std::find(unneededVertices.begin(), unneededVertices.end(), oldNode) == unneededVertices.end() && std::includes(childLabel.begin(), childLabel.end(), label.begin(), label.end()))
+                        if (std::find(unneededVertices.begin(), unneededVertices.end(), oldNode) == unneededVertices.end() && std::includes(childBag.begin(), childBag.end(), bag.begin(), bag.end()))
                         {
                             unneededVertices.push_back(oldNode);
                         }
@@ -126,17 +126,17 @@ void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposi
             {
                 std::vector<htd::vertex_t> children;
 
-                const htd::Collection<htd::vertex_t> label = decomposition.bagContent(vertex);
+                const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
-                const htd::Collection<htd::vertex_t> childContainer = decomposition.children(vertex);
+                const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(vertex);
 
                 std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
                 for (htd::vertex_t child : children)
                 {
-                    Collection<htd::vertex_t> childLabel = decomposition.bagContent(child);
+                    const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(child);
 
-                    if (std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
+                    if (std::includes(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
                     {
                         decomposition.removeVertex(child);
                     }
@@ -193,7 +193,7 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
                 {
                     oldNode = currentNode;
 
-                    Collection<htd::vertex_t> label = decomposition.bagContent(currentNode);
+                    const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(currentNode);
 
                     parentStack.push(std::make_pair(currentNode, currentIndex + 1));
 
@@ -201,18 +201,18 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
 
                     currentIndex = 0;
 
-                    Collection<htd::vertex_t> childLabel = decomposition.bagContent(currentNode);
+                    const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(currentNode);
 
-                    if (childLabel.size() < label.size())
+                    if (childBag.size() < bag.size())
                     {
-                        if (std::find(unneededVertices.begin(), unneededVertices.end(), currentNode) == unneededVertices.end() && std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
+                        if (std::find(unneededVertices.begin(), unneededVertices.end(), currentNode) == unneededVertices.end() && std::includes(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
                         {
                             unneededVertices.push_back(currentNode);
                         }
                     }
                     else
                     {
-                        if (std::find(unneededVertices.begin(), unneededVertices.end(), oldNode) == unneededVertices.end() && std::includes(childLabel.begin(), childLabel.end(), label.begin(), label.end()))
+                        if (std::find(unneededVertices.begin(), unneededVertices.end(), oldNode) == unneededVertices.end() && std::includes(childBag.begin(), childBag.end(), bag.begin(), bag.end()))
                         {
                             unneededVertices.push_back(oldNode);
                         }
@@ -243,24 +243,24 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
             {
                 std::vector<htd::vertex_t> children;
 
-                const htd::Collection<htd::vertex_t> label = decomposition.bagContent(vertex);
+                const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(currentNode);
 
-                const htd::Collection<htd::vertex_t> childContainer = decomposition.children(vertex);
+                const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(vertex);
 
                 std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
                 for (htd::vertex_t child : children)
                 {
-                    Collection<htd::vertex_t> childLabel = decomposition.bagContent(child);
+                    const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(currentNode);
 
-                    if (std::includes(label.begin(), label.end(), childLabel.begin(), childLabel.end()))
+                    if (std::includes(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
                     {
                         decomposition.removeVertex(child);
                     }
                     else
                     {
                         /*
-                        if (std::includes(childLabel.begin(), childLabel.end(), label.begin(), label.end()))
+                        if (std::includes(childBag.begin(), childBag.end(), bag.begin(), bag.end()))
                         {
                             std::cout << "SWAP NODES " << child << " AND " << vertex << " (ERASE NODE " << vertex << ")" << std::endl;
 

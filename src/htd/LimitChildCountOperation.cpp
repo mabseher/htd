@@ -57,7 +57,7 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 {
     htd::vertex_container joinNodes;
 
-    const htd::Collection<htd::vertex_t> joinNodeCollection = decomposition.joinNodes();
+    const htd::ConstCollection<htd::vertex_t> & joinNodeCollection = decomposition.joinNodes();
 
     std::copy(joinNodeCollection.begin(), joinNodeCollection.end(), std::back_inserter(joinNodes));
 
@@ -100,7 +100,7 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
             htd::vertex_container children;
 
-            const htd::Collection<htd::vertex_t> childCollection = decomposition.children(node);
+            const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(node);
 
             std::copy(childCollection.begin(), childCollection.end(), std::back_inserter(children));
 

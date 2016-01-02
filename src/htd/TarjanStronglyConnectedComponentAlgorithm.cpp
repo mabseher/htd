@@ -28,7 +28,8 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/TarjanStronglyConnectedComponentAlgorithm.hpp>
-#include <htd/VectorAdapter.hpp>
+#include <htd/GraphComponentCollection.hpp>
+#include <htd/ConstCollection.hpp>
 
 htd::TarjanStronglyConnectedComponentAlgorithm::TarjanStronglyConnectedComponentAlgorithm(void)
 {
@@ -40,9 +41,9 @@ htd::TarjanStronglyConnectedComponentAlgorithm::~TarjanStronglyConnectedComponen
 
 }
 
-htd::Collection<htd::Collection<htd::vertex_t>> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IHypergraph & graph) const
+htd::GraphComponentCollection htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IHypergraph & graph) const
 {
-    htd::VectorAdapter<htd::Collection<htd::vertex_t>> ret;
+    htd::GraphComponentCollection ret;
 
     //TODO Implement!
     HTD_UNUSED(graph);
@@ -50,9 +51,9 @@ htd::Collection<htd::Collection<htd::vertex_t>> htd::TarjanStronglyConnectedComp
     return ret;
 }
 
-htd::Collection<htd::Collection<htd::vertex_t>> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IDirectedGraph & graph) const
+htd::GraphComponentCollection htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IDirectedGraph & graph) const
 {
-    htd::VectorAdapter<htd::Collection<htd::vertex_t>> ret;
+    htd::GraphComponentCollection ret;
 
     //TODO Implement!
     HTD_UNUSED(graph);

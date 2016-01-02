@@ -1,5 +1,5 @@
 /* 
- * File:   IMutablePathDecomposition.hpp
+ * File:   GraphComponentCollection.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,28 +22,30 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_IMUTABLEPATHDECOMPOSITION_HPP
-#define	HTD_HTD_IMUTABLEPATHDECOMPOSITION_HPP
+#ifndef HTD_HTD_GRAPHCOMPONENTCOLLECTION_HPP
+#define	HTD_HTD_GRAPHCOMPONENTCOLLECTION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableLabeledPath.hpp>
-#include <htd/IPathDecomposition.hpp>
+#include <htd/VectorAdapter.hpp>
 
 namespace htd
 {
-    class IMutablePathDecomposition : public virtual htd::IMutableLabeledPath, public virtual htd::IPathDecomposition
+    class GraphComponentCollection
     {
         public:
-            virtual ~IMutablePathDecomposition() = 0;
+            GraphComponentCollection(void);
 
-            virtual void setBagContent(htd::vertex_t vertex, const htd::vertex_container & content) = 0;
+            ~GraphComponentCollection();
+            
+            std::size_t componentCount(void) const;
 
-            virtual void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) = 0;
+            htd::ConstCollection<htd::vertex_t> componentAtPosition(htd::index_t index) const;
 
-            virtual IMutablePathDecomposition * clone(void) const = 0;
+            void addComponent(const htd::ConstCollection<htd::vertex_t> & component);
+
+        private:
+            std::vector<htd::VectorAdapter<htd::vertex_t>> components_;
     };
-
-    inline htd::IMutablePathDecomposition::~IMutablePathDecomposition() { }
 }
 
-#endif /* HTD_HTD_IMUTABLEPATHDECOMPOSITION_HPP */
+#endif /* HTD_HTD_IGRAPHCOMPONENTCOLLECTION_HPP */

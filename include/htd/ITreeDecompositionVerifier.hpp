@@ -45,11 +45,11 @@ namespace htd
             
             virtual bool verifyConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
             
-            virtual const htd::Collection<htd::vertex_t> violationsVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> violationsVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
             
-            virtual const htd::Collection<htd::Hyperedge> violationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
+            virtual htd::ConstCollection<htd::Hyperedge> violationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
             
-            virtual const htd::Collection<htd::vertex_t> violationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> violationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
     };
 
     inline htd::ITreeDecompositionVerifier::~ITreeDecompositionVerifier() { }

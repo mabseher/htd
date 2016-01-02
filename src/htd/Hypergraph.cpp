@@ -29,6 +29,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/Hypergraph.hpp>
 #include <htd/VectorAdapter.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <array>
@@ -78,7 +79,7 @@ std::size_t htd::Hypergraph::edgeCount(htd::vertex_t vertex) const
     {
         for (auto & edge : edges_)
         {
-            auto & elements = edge.elements();
+            const htd::ConstCollection<htd::vertex_t> & elements = edge.elements();
 
             if (std::find(elements.begin(), elements.end(), vertex) != elements.end())
             {
@@ -113,10 +114,12 @@ bool htd::Hypergraph::isEdge(htd::id_t edgeId) const
 
 bool htd::Hypergraph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    return isEdge(htd::Collection<htd::vertex_t>(htd::vertex_container { vertex1, vertex2 }));
+    htd::vertex_container elements { vertex1, vertex2 };
+
+    return isEdge(htd::ConstCollection<htd::vertex_t>(elements));
 }
 
-bool htd::Hypergraph::isEdge(const htd::Collection<htd::vertex_t> & elements) const
+bool htd::Hypergraph::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     bool ret = false;
 
@@ -128,7 +131,7 @@ bool htd::Hypergraph::isEdge(const htd::Collection<htd::vertex_t> & elements) co
     return ret;
 }
 
-const htd::Collection<htd::id_t> htd::Hypergraph::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+htd::ConstCollection<htd::id_t> htd::Hypergraph::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     htd::VectorAdapter<htd::id_t> ret;
 
@@ -145,7 +148,7 @@ const htd::Collection<htd::id_t> htd::Hypergraph::associatedEdgeIds(htd::vertex_
     return ret;
 }
 
-const htd::Collection<htd::id_t> htd::Hypergraph::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
+htd::ConstCollection<htd::id_t> htd::Hypergraph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     htd::VectorAdapter<htd::id_t> ret;
 
@@ -337,14 +340,14 @@ bool htd::Hypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) 
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t) const");
     }
 
-    return htd::Collection<htd::vertex_t>(neighborhood_[vertex - htd::Vertex::FIRST]);
+    return htd::ConstCollection<htd::vertex_t>(neighborhood_[vertex - htd::Vertex::FIRST]);
 }
 
 htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index) const
@@ -368,9 +371,9 @@ htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::Hypergraph::vertices(void) const
+htd::ConstCollection<htd::vertex_t> htd::Hypergraph::vertices(void) const
 {
-    return Collection<htd::vertex_t>(vertices_);
+    return htd::ConstCollection<htd::vertex_t>(vertices_);
 }
 
 std::size_t htd::Hypergraph::isolatedVertexCount(void) const
@@ -398,7 +401,7 @@ std::size_t htd::Hypergraph::isolatedVertexCount(void) const
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::Hypergraph::isolatedVertices(void) const
+htd::ConstCollection<htd::vertex_t> htd::Hypergraph::isolatedVertices(void) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -427,14 +430,14 @@ const htd::Collection<htd::vertex_t> htd::Hypergraph::isolatedVertices(void) con
 
 htd::vertex_t htd::Hypergraph::isolatedVertex(htd::index_t index) const
 {
-    const htd::Collection<htd::vertex_t> isolatedVertexCollection = isolatedVertices();
+    const htd::ConstCollection<htd::vertex_t> & isolatedVertexCollection = isolatedVertices();
 
     if (index >= isolatedVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::Hypergraph::isolatedVertex(htd::index_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = isolatedVertexCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = isolatedVertexCollection.begin();
 
     std::advance(it, index);
 
@@ -458,12 +461,12 @@ bool htd::Hypergraph::isIsolatedVertex(htd::vertex_t vertex) const
     return ret;
 }
 
-const htd::Collection<htd::Hyperedge> htd::Hypergraph::hyperedges(void) const
+htd::ConstCollection<htd::Hyperedge> htd::Hypergraph::hyperedges(void) const
 {
-    return Collection<htd::Hyperedge>(edges_);
+    return htd::ConstCollection<htd::Hyperedge>(edges_);
 }
 
-const htd::Collection<htd::Hyperedge> htd::Hypergraph::hyperedges(htd::vertex_t vertex) const
+htd::ConstCollection<htd::Hyperedge> htd::Hypergraph::hyperedges(htd::vertex_t vertex) const
 {
     htd::VectorAdapter<htd::Hyperedge> ret;
 
@@ -509,14 +512,14 @@ const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::id_t edgeId) const
 
 const htd::Hyperedge & htd::Hypergraph::hyperedgeAtPosition(htd::index_t index) const
 {
-    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();
 
     if (index >= hyperedgeCollection.size())
     {
         throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedgeAtPosition(htd::index_t) const");
     }
 
-    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
+    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
 
     std::advance(it, index);
 
@@ -525,14 +528,14 @@ const htd::Hyperedge & htd::Hypergraph::hyperedgeAtPosition(htd::index_t index) 
 
 const htd::Hyperedge & htd::Hypergraph::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges(vertex);
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges(vertex);
 
     if (index >= hyperedgeCollection.size())
     {
         throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
     }
 
-    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
+    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
 
     std::advance(it, index);
 
@@ -594,7 +597,7 @@ htd::id_t htd::Hypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
         throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(htd::vertex_t, htd::vertex_t)");
     }
 
-    edges_.push_back(htd::Hyperedge(next_edge_, htd::Collection<htd::vertex_t>(htd::vertex_container { vertex1, vertex2 })));
+    edges_.push_back(htd::Hyperedge(next_edge_, htd::ConstCollection<htd::vertex_t>(htd::vertex_container { vertex1, vertex2 })));
 
     auto & currentNeighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
     auto & currentNeighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
@@ -616,11 +619,11 @@ htd::id_t htd::Hypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
     return next_edge_++;
 }
 
-htd::id_t htd::Hypergraph::addEdge(const htd::Collection<htd::vertex_t> & elements)
+htd::id_t htd::Hypergraph::addEdge(const htd::ConstCollection<htd::vertex_t> & elements)
 {
     if (elements.empty())
     {
-        throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(const htd::Collection<htd::vertex_t> &)");
+        throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(const htd::IConstCollection<htd::vertex_t> &)");
     }
 
     bool ok = true;
@@ -632,7 +635,7 @@ htd::id_t htd::Hypergraph::addEdge(const htd::Collection<htd::vertex_t> & elemen
 
     if (!ok)
     {
-        throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(const htd::Collection<htd::vertex_t> &)");
+        throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(const htd::IConstCollection<htd::vertex_t> &)");
     }
 
     edges_.push_back(htd::Hyperedge(next_edge_, elements));

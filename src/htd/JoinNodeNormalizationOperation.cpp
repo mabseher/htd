@@ -60,13 +60,13 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 {
     htd::vertex_container joinNodes;
 
-    const htd::Collection<htd::vertex_t> joinNodeCollection = decomposition.joinNodes();
+    const htd::ConstCollection<htd::vertex_t> & joinNodeCollection = decomposition.joinNodes();
 
     std::copy(joinNodeCollection.begin(), joinNodeCollection.end(), std::back_inserter(joinNodes));
 
     for (htd::vertex_t node : joinNodes)
     {
-        htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         DEBUGGING_CODE(
         std::cout << "JOIN NODE: " << node << std::endl;
@@ -79,7 +79,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
         {
             if (!decomposition.isRoot(node))
             {
-                htd::Collection<htd::vertex_t> parentBag = decomposition.bagContent(decomposition.parent(node));
+                const htd::ConstCollection<htd::vertex_t> & parentBag = decomposition.bagContent(decomposition.parent(node));
 
                 if (parentBag != bag)
                 {
@@ -90,13 +90,13 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
         htd::vertex_container children;
 
-        const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
+        const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 
         std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
         for (htd::vertex_t child : children)
         {
-            htd::Collection<htd::vertex_t> childBag = decomposition.bagContent(child);
+            const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(child);
 
             if (childBag != bag)
             {

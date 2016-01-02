@@ -27,6 +27,7 @@
 
 #include <htd/Hyperedge.hpp>
 #include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <tuple>
 
@@ -41,7 +42,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t ver
     elements_.push_back(vertex2);
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, const htd::Collection<htd::vertex_t> & elements) : id_(id), elements_(elements.begin(), elements.end())
+htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements) : id_(id), elements_(elements.begin(), elements.end())
 {
 
 }
@@ -61,9 +62,9 @@ htd::Collection<htd::vertex_t> htd::Hyperedge::elements()
     return htd::Collection<htd::vertex_t>(elements_);
 }
 
-const htd::Collection<htd::vertex_t> htd::Hyperedge::elements() const
+htd::ConstCollection<htd::vertex_t> htd::Hyperedge::elements() const
 {
-    return htd::Collection<htd::vertex_t>(elements_);
+    return htd::ConstCollection<htd::vertex_t>(elements_);
 }
 
 bool htd::Hyperedge::empty() const
@@ -96,9 +97,9 @@ htd::Iterator<htd::vertex_t> htd::Hyperedge::begin(void)
     return htd::Iterator<htd::vertex_t>(elements_.begin());
 }
 
-const htd::Iterator<htd::vertex_t> htd::Hyperedge::begin(void) const
+const htd::ConstIterator<htd::vertex_t> htd::Hyperedge::begin(void) const
 {
-    return htd::Iterator<htd::vertex_t>(elements_.begin());
+    return htd::ConstIterator<htd::vertex_t>(elements_.begin());
 }
 
 htd::Iterator<htd::vertex_t> htd::Hyperedge::end(void)
@@ -106,14 +107,14 @@ htd::Iterator<htd::vertex_t> htd::Hyperedge::end(void)
     return htd::Iterator<htd::vertex_t>(elements_.end());
 }
 
-const htd::Iterator<htd::vertex_t> htd::Hyperedge::end(void) const
+const htd::ConstIterator<htd::vertex_t> htd::Hyperedge::end(void) const
 {
-    return htd::Iterator<htd::vertex_t>(elements_.end());
+    return htd::ConstIterator<htd::vertex_t>(elements_.end());
 }
 
 const htd::vertex_t & htd::Hyperedge::operator[](htd::index_t index) const
 {
-    htd::Iterator<htd::vertex_t> position = begin();
+    htd::ConstIterator<htd::vertex_t> position = begin();
 
     std::advance(position, index);
 

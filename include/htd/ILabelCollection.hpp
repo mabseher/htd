@@ -26,8 +26,8 @@
 #define	HTD_HTD_ILABELCOLLECTION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Collection.hpp>
 #include <htd/ILabel.hpp>
+#include <htd/ConstCollection.hpp>
 
 namespace htd
 {
@@ -38,7 +38,7 @@ namespace htd
 
             virtual std::size_t labelCount(void) const = 0;
 
-            virtual const htd::Collection<std::string> labelNames(void) const = 0;
+            virtual htd::ConstCollection<std::string> labelNames(void) const = 0;
 
             virtual const std::string & labelName(htd::index_t index) const = 0;
 

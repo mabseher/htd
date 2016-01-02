@@ -47,8 +47,6 @@ namespace htd
         private:
             const htd::IHypergraph & graph_;
 
-            htd::hyperedge_container hyperedges_;
-
             void getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, htd::vertex_container & output) const;
     };
 }

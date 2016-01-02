@@ -1,6 +1,6 @@
 /* 
- * File:   IMutablePathDecomposition.hpp
- *
+ * File:   ConstIteratorBase.hpp
+ * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
  * Copyright 2015, Michael Abseher
@@ -22,28 +22,34 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_IMUTABLEPATHDECOMPOSITION_HPP
-#define	HTD_HTD_IMUTABLEPATHDECOMPOSITION_HPP
+#ifndef HTD_HTD_CONSTITERATORBASE_HPP
+#define HTD_HTD_CONSTITERATORBASE_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableLabeledPath.hpp>
-#include <htd/IPathDecomposition.hpp>
 
 namespace htd
 {
-    class IMutablePathDecomposition : public virtual htd::IMutableLabeledPath, public virtual htd::IPathDecomposition
+    template <typename T>
+    class ConstIteratorBase
     {
         public:
-            virtual ~IMutablePathDecomposition() = 0;
+            virtual ~ConstIteratorBase<T>() = 0;
 
-            virtual void setBagContent(htd::vertex_t vertex, const htd::vertex_container & content) = 0;
+            virtual ConstIteratorBase<T> & operator++(void) = 0;
 
-            virtual void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) = 0;
+            virtual const T * operator->(void) const = 0;
 
-            virtual IMutablePathDecomposition * clone(void) const = 0;
+            virtual const T & operator*(void) const = 0;
+
+            virtual bool operator==(const ConstIteratorBase<T> & other) const = 0;
+
+            virtual bool operator!=(const ConstIteratorBase<T> & other) const = 0;
+
+            virtual ConstIteratorBase<T> * clone(void) const = 0;
     };
 
-    inline htd::IMutablePathDecomposition::~IMutablePathDecomposition() { }
+    template <typename T>
+    inline htd::ConstIteratorBase<T>::~ConstIteratorBase() { }
 }
 
-#endif /* HTD_HTD_IMUTABLEPATHDECOMPOSITION_HPP */
+#endif /* HTD_HTD_CONSTITERATORBASE_HPP */

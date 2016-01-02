@@ -26,26 +26,21 @@
 #define HTD_HTD_ITERATORBASE_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/ConstIteratorBase.hpp>
 
 #include <iterator>
 
 namespace htd
 {
     template <typename T>
-    class IteratorBase
+    class IteratorBase : public virtual htd::ConstIteratorBase<T>
     {
         public:
             virtual ~IteratorBase<T>() = 0;
 
-            virtual IteratorBase<T> & operator++(void) = 0;
+            virtual T * operator->(void) = 0;
 
-            virtual const T * operator->(void) const = 0;
-
-            virtual const T & operator*(void) const = 0;
-
-            virtual bool operator==(const IteratorBase<T> & other) const = 0;
-
-            virtual bool operator!=(const IteratorBase<T> & other) const = 0;
+            virtual T & operator*(void) = 0;
 
             virtual IteratorBase<T> * clone(void) const = 0;
     };

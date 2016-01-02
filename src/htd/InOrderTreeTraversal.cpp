@@ -43,7 +43,7 @@ htd::InOrderTreeTraversal::~InOrderTreeTraversal()
 
 void htd::InOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t)> targetFunction) const
 {
-    htd::Collection<htd::vertex_t> vertexCollection = tree.vertices();
+    const htd::ConstCollection<htd::vertex_t> & vertexCollection = tree.vertices();
 
     htd::vertex_container vertices(vertexCollection.begin(), vertexCollection.end());
 

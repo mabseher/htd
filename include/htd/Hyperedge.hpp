@@ -26,8 +26,10 @@
 #define	HTD_HTD_HYPEREDGE_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Collection.hpp>
 #include <htd/Iterator.hpp>
+#include <htd/ConstIterator.hpp>
+#include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <vector>
 
@@ -42,7 +44,7 @@ namespace htd
 
             Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2);
 
-            Hyperedge(htd::id_t id, const htd::Collection<htd::vertex_t> & elements);
+            Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements);
 
             ~Hyperedge();
 
@@ -50,7 +52,7 @@ namespace htd
 
             htd::Collection<htd::vertex_t> elements();
 
-            const htd::Collection<htd::vertex_t> elements() const;
+            htd::ConstCollection<htd::vertex_t> elements() const;
 
             bool empty() const;
 
@@ -64,11 +66,11 @@ namespace htd
 
             htd::Iterator<htd::vertex_t> begin(void);
 
-            const htd::Iterator<htd::vertex_t> begin(void) const;
+            const htd::ConstIterator<htd::vertex_t> begin(void) const;
 
             htd::Iterator<htd::vertex_t> end(void);
 
-            const htd::Iterator<htd::vertex_t> end(void) const;
+            const htd::ConstIterator<htd::vertex_t> end(void) const;
 
             const htd::vertex_t & operator[](htd::index_t index) const;
 

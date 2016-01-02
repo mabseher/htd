@@ -26,9 +26,9 @@
 #define	HTD_HTD_ISTRONGLYCONNECTEDCOMPONENTALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Collection.hpp>
-#include <htd/IDirectedGraph.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
+#include <htd/GraphComponentCollection.hpp>
+#include <htd/IDirectedGraph.hpp>
 
 namespace htd
 {
@@ -39,7 +39,7 @@ namespace htd
             
             using htd::IConnectedComponentAlgorithm::determineComponents;
 
-            virtual htd::Collection<htd::Collection<htd::vertex_t>> determineComponents(const htd::IDirectedGraph & graph) const = 0;
+            virtual htd::GraphComponentCollection determineComponents(const htd::IDirectedGraph & graph) const = 0;
 
             virtual IStronglyConnectedComponentAlgorithm * clone(void) const = 0;
     };

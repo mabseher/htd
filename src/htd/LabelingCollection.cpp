@@ -33,6 +33,7 @@
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabelCollection.hpp>
 #include <htd/LabelCollection.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <stdexcept>
@@ -76,9 +77,9 @@ std::size_t htd::LabelingCollection::labelCount(void) const
     return content_.size();
 }
 
-const htd::Collection<std::string> htd::LabelingCollection::labelNames(void) const
+htd::ConstCollection<std::string> htd::LabelingCollection::labelNames(void) const
 {
-    return htd::Collection<std::string>(labelNames_);
+    return htd::ConstCollection<std::string>(labelNames_);
 }
 
 const std::string & htd::LabelingCollection::labelName(htd::index_t index) const
@@ -255,9 +256,9 @@ htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::Labeling
     return htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.begin());
 }
 
-const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::begin(void) const
+const htd::ConstIterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::begin(void) const
 {
-    return htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.begin());
+    return htd::ConstIterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.begin());
 }
 
 htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::end(void)
@@ -265,9 +266,9 @@ htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::Labeling
     return htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.end());
 }
 
-const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::end(void) const
+const htd::ConstIterator<std::pair<const std::string, htd::IGraphLabeling *>> htd::LabelingCollection::end(void) const
 {
-    return htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.end());
+    return htd::ConstIterator<std::pair<const std::string, htd::IGraphLabeling *>>(content_.end());
 }
 
 #endif /* HTD_HTD_LABELINGCOLLECTION_CPP */

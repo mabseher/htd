@@ -101,17 +101,17 @@ bool htd::PathDecomposition::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2
     return base_->isNeighbor(vertex1, vertex2);
 }
 
-bool htd::PathDecomposition::isEdge(const htd::Collection<htd::vertex_t> & elements) const
+bool htd::PathDecomposition::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     return base_->isEdge(elements);
 }
 
-const htd::Collection<htd::id_t> htd::PathDecomposition::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+htd::ConstCollection<htd::id_t> htd::PathDecomposition::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     return base_->associatedEdgeIds(vertex1, vertex2);
 }
 
-const htd::Collection<htd::id_t> htd::PathDecomposition::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
+htd::ConstCollection<htd::id_t> htd::PathDecomposition::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     return base_->associatedEdgeIds(elements);
 }
@@ -141,7 +141,7 @@ std::size_t htd::PathDecomposition::neighborCount(htd::vertex_t vertex) const
     return base_->neighborCount(vertex);
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::neighbors(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::neighbors(htd::vertex_t vertex) const
 {
     return base_->neighbors(vertex);
 }
@@ -151,7 +151,7 @@ htd::vertex_t htd::PathDecomposition::neighbor(htd::vertex_t vertex, htd::index_
     return base_->neighbor(vertex, index);
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::vertices(void) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::vertices(void) const
 {
     return base_->vertices();
 }
@@ -161,7 +161,7 @@ std::size_t htd::PathDecomposition::isolatedVertexCount(void) const
     return base_->isolatedVertexCount();
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::isolatedVertices(void) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::isolatedVertices(void) const
 {
     return base_->isolatedVertices();
 }
@@ -183,12 +183,12 @@ bool htd::PathDecomposition::isIsolatedVertex(htd::vertex_t vertex) const
     return false;
 }
 
-const htd::Collection<htd::edge_t> htd::PathDecomposition::edges(void) const
+htd::ConstCollection<htd::edge_t> htd::PathDecomposition::edges(void) const
 {
     return base_->edges();
 }
 
-const htd::Collection<htd::edge_t> htd::PathDecomposition::edges(htd::vertex_t vertex) const
+htd::ConstCollection<htd::edge_t> htd::PathDecomposition::edges(htd::vertex_t vertex) const
 {
     return base_->edges(vertex);
 }
@@ -203,12 +203,12 @@ const htd::edge_t & htd::PathDecomposition::edgeAtPosition(htd::index_t index, h
     return base_->edgeAtPosition(index, vertex);
 }
 
-const htd::Collection<htd::Hyperedge> htd::PathDecomposition::hyperedges(void) const
+htd::ConstCollection<htd::Hyperedge> htd::PathDecomposition::hyperedges(void) const
 {
     return base_->hyperedges();
 }
 
-const htd::Collection<htd::Hyperedge> htd::PathDecomposition::hyperedges(htd::vertex_t vertex) const
+htd::ConstCollection<htd::Hyperedge> htd::PathDecomposition::hyperedges(htd::vertex_t vertex) const
 {
     return base_->hyperedges(vertex);
 }
@@ -253,7 +253,7 @@ std::size_t htd::PathDecomposition::childCount(htd::vertex_t vertex) const
     return base_->childCount(vertex);
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::children(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::children(htd::vertex_t vertex) const
 {
     return base_->children(vertex);
 }
@@ -305,7 +305,7 @@ htd::vertex_t htd::PathDecomposition::addChild(htd::vertex_t vertex)
         throw std::logic_error("htd::vertex_t htd::PathDecomposition::addChild(htd::vertex_t)");
     }
 
-    const htd::Collection<htd::vertex_t> childCollection = base_->children(vertex);
+    const htd::ConstCollection<htd::vertex_t> & childCollection = base_->children(vertex);
 
     if (childCollection.size() > 0)
     {
@@ -350,7 +350,7 @@ std::size_t htd::PathDecomposition::labelCount(void) const
     return base_->labelCount();
 }
 
-const htd::Collection<std::string> htd::PathDecomposition::labelNames(void) const
+htd::ConstCollection<std::string> htd::PathDecomposition::labelNames(void) const
 {
     return base_->labelNames();
 }
@@ -420,7 +420,7 @@ std::size_t htd::PathDecomposition::leafNodeCount(void) const
     return base_->leafNodeCount();
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::leafNodes(void) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::leafNodes(void) const
 {
     return base_->leafNodes();
 }
@@ -445,7 +445,7 @@ std::size_t htd::PathDecomposition::joinNodeCount(void) const
     return base_->joinNodeCount();
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::joinNodes(void) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::joinNodes(void) const
 {
     return base_->joinNodes();
 }
@@ -465,7 +465,7 @@ std::size_t htd::PathDecomposition::forgetNodeCount(void) const
     return base_->forgetNodeCount();
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::forgetNodes(void) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgetNodes(void) const
 {
     return base_->forgetNodes();
 }
@@ -485,7 +485,7 @@ std::size_t htd::PathDecomposition::introduceNodeCount(void) const
     return base_->introduceNodeCount();
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::introduceNodes(void) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introduceNodes(void) const
 {
     return base_->introduceNodes();
 }
@@ -505,7 +505,7 @@ std::size_t htd::PathDecomposition::bagSize(htd::vertex_t vertex) const
     return base_->bagSize(vertex);
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::bagContent(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::bagContent(htd::vertex_t vertex) const
 {
     return base_->bagContent(vertex);
 }
@@ -515,7 +515,7 @@ void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const htd::vert
     base_->setBagContent(vertex, content);
 }
 
-void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const htd::Collection<htd::vertex_t> & content)
+void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
 {
     base_->setBagContent(vertex, content);
 }
@@ -540,12 +540,12 @@ std::size_t htd::PathDecomposition::forgottenVertexCount(htd::vertex_t vertex, h
     return base_->forgottenVertexCount(vertex, child);
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::forgottenVertices(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgottenVertices(htd::vertex_t vertex) const
 {
     return base_->forgottenVertices(vertex);
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const
 {
     return base_->forgottenVertices(vertex, child);
 }
@@ -580,12 +580,12 @@ std::size_t htd::PathDecomposition::introducedVertexCount(htd::vertex_t vertex, 
     return base_->introducedVertexCount(vertex, child);
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::introducedVertices(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introducedVertices(htd::vertex_t vertex) const
 {
     return base_->introducedVertices(vertex);
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const
 {
     return base_->introducedVertices(vertex, child);
 }
@@ -620,12 +620,12 @@ std::size_t htd::PathDecomposition::rememberedVertexCount(htd::vertex_t vertex, 
     return base_->rememberedVertexCount(vertex, child);
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::rememberedVertices(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::rememberedVertices(htd::vertex_t vertex) const
 {
     return base_->rememberedVertices(vertex);
 }
 
-const htd::Collection<htd::vertex_t> htd::PathDecomposition::rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const
 {
     return base_->rememberedVertices(vertex, child);
 }

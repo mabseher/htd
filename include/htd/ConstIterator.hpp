@@ -1,5 +1,5 @@
 /* 
- * File:   Iterator.hpp
+ * File:   ConstIterator.hpp
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,43 +22,44 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_ITERATOR_HPP
-#define HTD_HTD_ITERATOR_HPP
+#ifndef HTD_HTD_CONSTITERATOR_HPP
+#define HTD_HTD_CONSTITERATOR_HPP
 
 #include <htd/Globals.hpp>
 
-#include <htd/IteratorBase.hpp>
-#include <htd/IteratorWrapper.hpp>
 #include <htd/ConstIteratorBase.hpp>
+#include <htd/ConstIteratorWrapper.hpp>
+
+#include <htd/Iterator.hpp>
 
 #include <memory>
 
 namespace htd
 {
     template <typename T>
-    class Iterator : public virtual htd::IteratorBase<T>
+    class ConstIterator : public virtual htd::ConstIteratorBase<T>
     {
         public:
             typedef std::ptrdiff_t difference_type;
             typedef T value_type;
-            typedef T & reference;
-            typedef T * pointer;
+            typedef const T & reference;
+            typedef const T * pointer;
             typedef const T & const_reference;
             typedef const T * const_pointer;
             typedef std::forward_iterator_tag iterator_category;
 
-            Iterator(void) : baseIterator_(nullptr)
+            ConstIterator(void) : baseIterator_(nullptr)
             {
 
             }
 
             template <class Iter>
-            Iterator(Iter iterator) : baseIterator_(new IteratorWrapper<Iter, T>(iterator))
+            ConstIterator(Iter iterator) : baseIterator_(new htd::ConstIteratorWrapper<Iter, T>(iterator))
             {
 
             }
 
-            Iterator<T>(const Iterator<T> & original) : baseIterator_(nullptr)
+            ConstIterator<T>(const ConstIterator<T> & original) : baseIterator_(nullptr)
             {
                 if (original.baseIterator_ != nullptr)
                 {
@@ -66,7 +67,7 @@ namespace htd
                 }
             }
 
-            virtual ~Iterator()
+            virtual ~ConstIterator()
             {
                 if (baseIterator_ != nullptr)
                 {
@@ -76,7 +77,24 @@ namespace htd
                 }
             }
 
-            Iterator & operator=(Iterator & other)
+            ConstIterator & operator=(htd::Iterator<T> & other)
+            {
+                if (baseIterator_ != nullptr)
+                {
+                    delete baseIterator_;
+
+                    baseIterator_ = nullptr;
+                }
+
+                if (other.baseIterator_ != nullptr)
+                {
+                    baseIterator_ = other;
+                }
+
+                return *this;
+            }
+
+            ConstIterator & operator=(ConstIterator<T> & other)
             {
                 if (baseIterator_ != nullptr)
                 {
@@ -93,7 +111,7 @@ namespace htd
                 return *this;
             }
 
-            Iterator<T> & operator++(void) HTD_OVERRIDE
+            ConstIterator<T> & operator++(void) HTD_OVERRIDE
             {
                 if (baseIterator_!= nullptr)
                 {
@@ -103,16 +121,16 @@ namespace htd
                 return *this;
             }
 
-            Iterator<T> operator++(int)
+            ConstIterator<T> operator++(int)
             {
-                Iterator<T> ret(*baseIterator_);
+                ConstIterator<T> ret(*baseIterator_);
 
                 operator++();
 
                 return ret;
             }
 
-            Iterator<T> & operator=(const Iterator<T> & other)
+            ConstIterator<T> & operator=(const ConstIterator<T> & other)
             {
                 if (baseIterator_!= nullptr)
                 {
@@ -128,7 +146,7 @@ namespace htd
             {
                 bool ret = false;
 
-                const Iterator<T> * o = dynamic_cast<const Iterator<T> *>(&other);
+                const ConstIterator<T> * o = dynamic_cast<const ConstIterator<T> *>(&other);
 
                 if (o != nullptr)
                 {
@@ -145,7 +163,7 @@ namespace htd
                 return ret;
             }
 
-            bool operator==(const Iterator<T> & other) const
+            bool operator==(const ConstIterator<T> & other) const
             {
                 bool ret = false;
 
@@ -166,14 +184,9 @@ namespace htd
                 return !(*this == other);
             }
 
-            bool operator!=(const Iterator<T> & other) const
+            bool operator!=(const ConstIterator<T> & other) const
             {
                 return !(*this == other);
-            }
-
-            T * operator->(void) HTD_OVERRIDE
-            {
-                return &(*(*(baseIterator_)));
             }
 
             const T * operator->(void) const HTD_OVERRIDE
@@ -181,40 +194,35 @@ namespace htd
                 return &(*(*(baseIterator_)));
             }
 
-            T & operator*(void) HTD_OVERRIDE
-            {
-                return *(*baseIterator_);
-            }
-
             const T & operator*(void) const HTD_OVERRIDE
             {
                 return *(*baseIterator_);
             }
 
-            Iterator<T> * clone(void) const HTD_OVERRIDE
+            ConstIterator<T> * clone(void) const HTD_OVERRIDE
             {
-                Iterator<T> * ret = nullptr;
+                ConstIterator<T> * ret = nullptr;
 
                 if (baseIterator_ == nullptr)
                 {
-                    return new Iterator<T>();
+                    return new ConstIterator<T>();
                 }
                 else
                 {
-                    return new Iterator<T>(*this);
+                    return new ConstIterator<T>(*this);
                 }
 
                 return ret;
             }
 
         private:
-            htd::IteratorBase<T> * baseIterator_;
+            htd::ConstIteratorBase<T> * baseIterator_;
 
-            Iterator<T>(const htd::IteratorBase<T> & original) : baseIterator_(original.clone())
+            ConstIterator<T>(const htd::ConstIteratorBase<T> & original) : baseIterator_(original.clone())
             {
 
             }
     };
 }
 
-#endif /* HTD_HTD_ITERATOR_HPP */
+#endif /* HTD_HTD_CONSTITERATOR_HPP */

@@ -28,7 +28,11 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
-#include <htd/VectorAdapter.hpp>
+#include <htd/GraphComponentCollection.hpp>
+#include <htd/ConstCollection.hpp>
+
+#include <algorithm>
+#include <stack>
 
 htd::DepthFirstConnectedComponentAlgorithm::DepthFirstConnectedComponentAlgorithm(void)
 {
@@ -40,12 +44,45 @@ htd::DepthFirstConnectedComponentAlgorithm::~DepthFirstConnectedComponentAlgorit
 
 }
 
-htd::Collection<htd::Collection<htd::vertex_t>> htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::IHypergraph & graph) const
+htd::GraphComponentCollection htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::IHypergraph & graph) const
 {
-    htd::VectorAdapter<htd::Collection<htd::vertex_t>> ret;
+    htd::GraphComponentCollection ret;
 
-    //TODO Implement!
-    HTD_UNUSED(graph);
+    const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
+
+    if (vertexCollection.size() > 0)
+    {
+        std::stack<htd::vertex_t> originStack;
+
+        std::unordered_set<htd::vertex_t> unvisitedVertices(vertexCollection.begin(), vertexCollection.end());
+
+        while (unvisitedVertices.size() > 0)
+        {
+            std::vector<htd::vertex_t> component;
+
+            originStack.push(*(unvisitedVertices.begin()));
+
+            while (!originStack.empty())
+            {
+                component.push_back(originStack.top());
+                unvisitedVertices.erase(originStack.top());
+
+                for (htd::vertex_t neighbor : graph.neighbors(originStack.top()))
+                {
+                    if (unvisitedVertices.count(neighbor) == 1)
+                    {
+                        originStack.push(neighbor);
+                    }
+                }
+
+                originStack.pop();
+            }
+
+            std::sort(component.begin(), component.end());
+
+            ret.addComponent(htd::ConstCollection<htd::vertex_t>(component));
+        }
+    }
 
     return ret;
 }

@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <stack>
@@ -54,36 +54,9 @@ struct HistoryEntry
     }
 };
 
-htd::JoinNodeReplacementOperation::JoinNodeReplacementOperation(const htd::IHypergraph & graph): graph_(graph), hyperedges_()
+htd::JoinNodeReplacementOperation::JoinNodeReplacementOperation(const htd::IHypergraph & graph) : graph_(graph)
 {
-    htd::Collection<htd::Hyperedge> hyperedgeCollection = graph.hyperedges();
 
-    hyperedges_.reserve(hyperedgeCollection.size());
-
-    for (htd::Hyperedge originalHyperedge : hyperedgeCollection)
-    {
-        htd::Hyperedge newHyperedge(originalHyperedge.id());
-
-        htd::Collection<htd::vertex_t> elementCollection = originalHyperedge.elements();
-
-        htd::vertex_container elements;
-
-        elements.reserve(elementCollection.size());
-
-        std::copy(elementCollection.begin(), elementCollection.end(), std::back_inserter(elements));
-
-        std::sort(elements.begin(), elements.end());
-
-        elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
-
-        hyperedges_.push_back(newHyperedge);
-    }
-
-    std::sort(hyperedges_.begin(), hyperedges_.end());
-
-    hyperedges_.erase(std::unique(hyperedges_.begin(), hyperedges_.end()), hyperedges_.end());
-
-    //TODO Remove hyperedges which are subset of another!
 }
 
 htd::JoinNodeReplacementOperation::~JoinNodeReplacementOperation()
@@ -110,7 +83,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
         std::vector<htd::vertex_t> requiredVertices;
 
-        htd::Collection<htd::vertex_t> childCollection = decomposition.children(currentNode);
+        const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(currentNode);
 
         std::unordered_set<htd::vertex_t> availableChildren(childCollection.begin(), childCollection.end());
 
@@ -155,7 +128,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     std::vector<htd::vertex_t> newRequiredVertices;
 
-                    htd::Collection<htd::vertex_t> rememberedVertexCollection = decomposition.rememberedVertices(currentNode);
+                    const htd::ConstCollection<htd::vertex_t> & rememberedVertexCollection = decomposition.rememberedVertices(currentNode);
 
                     std::set_union(requiredVertices.begin(), requiredVertices.end(), rememberedVertexCollection.begin(), rememberedVertexCollection.end(), std::back_inserter(newRequiredVertices));
 
@@ -198,13 +171,13 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     availableChildren.clear();
 
-                    htd::Collection<htd::vertex_t> newChildCollection = decomposition.children(currentNode);
+                    const htd::ConstCollection<htd::vertex_t> & newChildCollection = decomposition.children(currentNode);
 
                     availableChildren.insert(newChildCollection.begin(), newChildCollection.end());
 
                     if (requiredVertices.size() > 0)
                     {
-                        htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(currentNode);
+                        const htd::ConstCollection<htd::vertex_t> & bagContent = decomposition.bagContent(currentNode);
 
                         htd::vertex_container newBagContent;
 
@@ -228,7 +201,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
                         {
                             htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(currentNode);
 
-                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(newBagContent.begin(), newBagContent.end()), *labelCollection);
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>(newBagContent), *labelCollection);
 
                             delete labelCollection;
 
@@ -285,7 +258,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     for (htd::vertex_t child : availableChildren)
                     {
-                        htd::Collection<htd::vertex_t> childBagContent = decomposition.bagContent(child);
+                        const htd::ConstCollection<htd::vertex_t> & childBagContent = decomposition.bagContent(child);
 
                         DEBUGGING_CODE(
                         std::cout << "   SIBLING: " << child << std::endl;
@@ -337,7 +310,7 @@ void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd
 
     for (htd::vertex_t child : decomposition.children(vertex))
     {
-        auto childLabel = decomposition.bagContent(child);
+        const htd::ConstCollection<htd::vertex_t> & childLabel = decomposition.bagContent(child);
 
         result.insert(childLabel.begin(), childLabel.end());
     }

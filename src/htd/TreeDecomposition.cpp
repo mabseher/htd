@@ -86,7 +86,7 @@ htd::TreeDecomposition::TreeDecomposition(const htd::ITreeDecomposition & origin
 
         nodes_.push_back(new TreeNode(node, original.parent(node)));
 
-        const htd::Collection<htd::vertex_t> childContainer = original.children(node);
+        const htd::ConstCollection<htd::vertex_t> & childContainer = original.children(node);
 
         std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(nodes_[node - htd::Vertex::FIRST]->children));
 
@@ -174,7 +174,7 @@ bool htd::TreeDecomposition::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2
     return isNeighbor(vertex1, vertex2);
 }
 
-bool htd::TreeDecomposition::isEdge(const htd::Collection<htd::vertex_t> & elements) const
+bool htd::TreeDecomposition::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     bool ret = false;
 
@@ -186,7 +186,7 @@ bool htd::TreeDecomposition::isEdge(const htd::Collection<htd::vertex_t> & eleme
     return ret;
 }
 
-const htd::Collection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+htd::ConstCollection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     htd::VectorAdapter<htd::id_t> ret;
 
@@ -203,7 +203,7 @@ const htd::Collection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(htd::
     return ret;
 }
 
-const htd::Collection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
+htd::ConstCollection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     htd::VectorAdapter<htd::id_t> ret;
 
@@ -309,11 +309,11 @@ std::size_t htd::TreeDecomposition::neighborCount(htd::vertex_t vertex) const
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::neighbors(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::neighbors(htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::neighbors(htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::neighbors(htd::vertex_t) const");
     }
 
     htd::VectorAdapter<htd::vertex_t> ret;
@@ -379,9 +379,9 @@ htd::vertex_t htd::TreeDecomposition::neighbor(htd::vertex_t vertex, htd::index_
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::vertices(void) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::vertices(void) const
 {
-    return Collection<htd::vertex_t>(vertices_);
+    return htd::ConstCollection<htd::vertex_t>(vertices_);
 }
 
 std::size_t htd::TreeDecomposition::isolatedVertexCount(void) const
@@ -389,9 +389,9 @@ std::size_t htd::TreeDecomposition::isolatedVertexCount(void) const
     return 0;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::isolatedVertices(void) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::isolatedVertices(void) const
 {
-    return htd::Collection<htd::vertex_t>();
+    return htd::ConstCollection<htd::vertex_t>();
 }
 
 htd::vertex_t htd::TreeDecomposition::isolatedVertex(htd::index_t index) const
@@ -408,7 +408,7 @@ bool htd::TreeDecomposition::isIsolatedVertex(htd::vertex_t vertex) const
     return false;
 }
 
-const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(void) const
+htd::ConstCollection<htd::edge_t> htd::TreeDecomposition::edges(void) const
 {
     htd::VectorAdapter<htd::edge_t> ret;
 
@@ -443,7 +443,7 @@ const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(void) const
     return ret;
 }
 
-const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t vertex) const
+htd::ConstCollection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t vertex) const
 {
     htd::VectorAdapter<htd::edge_t> ret;
 
@@ -496,7 +496,7 @@ const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t v
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t) const");
+        throw std::logic_error("const htd::IConstCollection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t) const");
     }
 
     return ret;
@@ -504,14 +504,14 @@ const htd::Collection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t v
 
 const htd::edge_t & htd::TreeDecomposition::edgeAtPosition(htd::index_t index) const
 {
-    const htd::Collection<htd::edge_t> edgeCollection = edges();
+    const htd::ConstCollection<htd::edge_t> & edgeCollection = edges();
 
     if (index >= edgeCollection.size())
     {
         throw std::out_of_range("const htd::edge_t & htd::TreeDecomposition::edgeAtPosition(htd::index_t) const");
     }
 
-    htd::Iterator<htd::edge_t> it = edgeCollection.begin();
+    htd::ConstIterator<htd::edge_t> it = edgeCollection.begin();
 
     std::advance(it, index);
 
@@ -520,21 +520,21 @@ const htd::edge_t & htd::TreeDecomposition::edgeAtPosition(htd::index_t index) c
 
 const htd::edge_t & htd::TreeDecomposition::edgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::Collection<htd::edge_t> edgeCollection = edges(vertex);
+    const htd::ConstCollection<htd::edge_t> & edgeCollection = edges(vertex);
 
     if (index >= edgeCollection.size())
     {
         throw std::out_of_range("const htd::edge_t & htd::TreeDecomposition::edgeAtPosition(htd::index_t, htd::vertex_t) const");
     }
 
-    htd::Iterator<htd::edge_t> it = edgeCollection.begin();
+    htd::ConstIterator<htd::edge_t> it = edgeCollection.begin();
 
     std::advance(it, index);
 
     return *it;
 }
 
-const htd::Collection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(void) const
+htd::ConstCollection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(void) const
 {
     htd::VectorAdapter<htd::Hyperedge> ret;
 
@@ -573,7 +573,7 @@ const htd::Collection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(void) c
     return ret;
 }
 
-const htd::Collection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::vertex_t vertex) const
+htd::ConstCollection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::vertex_t vertex) const
 {
     htd::VectorAdapter<htd::Hyperedge> ret;
 
@@ -585,7 +585,7 @@ const htd::Collection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::ve
 
         if (node != nullptr)
         {
-            const htd::Collection<htd::Hyperedge> hyperedgeCollection = htd::TreeDecomposition::hyperedges();
+            const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = htd::TreeDecomposition::hyperedges();
 
             for (auto it = hyperedgeCollection.begin(); it != hyperedgeCollection.end(); ++it)
             {
@@ -600,7 +600,7 @@ const htd::Collection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::ve
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::vertex_t) const");
+        throw std::logic_error("const htd::IConstCollection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::vertex_t) const");
     }
 
     return ret;
@@ -608,7 +608,7 @@ const htd::Collection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::ve
 
 const htd::Hyperedge & htd::TreeDecomposition::hyperedge(htd::id_t edgeId) const
 {
-    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();
 
     bool found = false;
 
@@ -634,14 +634,14 @@ const htd::Hyperedge & htd::TreeDecomposition::hyperedge(htd::id_t edgeId) const
 
 const htd::Hyperedge & htd::TreeDecomposition::hyperedgeAtPosition(htd::index_t index) const
 {
-    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();
 
     if (index >= hyperedgeCollection.size())
     {
         throw std::out_of_range("const htd::Hyperedge & htd::TreeDecomposition::hyperedgeAtPosition(htd::index_t) const");
     }
 
-    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
+    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
 
     std::advance(it, index);
 
@@ -650,14 +650,14 @@ const htd::Hyperedge & htd::TreeDecomposition::hyperedgeAtPosition(htd::index_t 
 
 const htd::Hyperedge & htd::TreeDecomposition::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges(vertex);
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges(vertex);
 
     if (index >= hyperedgeCollection.size())
     {
         throw std::out_of_range("const htd::Hyperedge & htd::TreeDecomposition::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
     }
 
-    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
+    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
 
     std::advance(it, index);
 
@@ -729,14 +729,14 @@ std::size_t htd::TreeDecomposition::childCount(htd::vertex_t vertex) const
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::children(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::children(htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::children(htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::children(htd::vertex_t) const");
     }
 
-    return htd::Collection<htd::vertex_t>(nodes_[vertex - htd::Vertex::FIRST]->children);
+    return htd::ConstCollection<htd::vertex_t>(nodes_[vertex - htd::Vertex::FIRST]->children);
 }
 
 htd::vertex_t htd::TreeDecomposition::child(htd::vertex_t vertex, htd::index_t index) const
@@ -937,12 +937,12 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
                         
                         htd::vertex_t bestChoice = htd::Vertex::UNKNOWN;
 
-                        auto oldNodeLabel = bagContent(node->id);
+                        const htd::ConstCollection<htd::vertex_t> & oldNodeLabel = bagContent(node->id);
 
                         //Find optimal choice for new root
                         for (auto child : children)
                         {
-                            auto childLabel = bagContent(child);
+                            const htd::ConstCollection<htd::vertex_t> & childLabel = bagContent(child);
 
                             std::size_t currentOverlap = htd::compute_set_intersection_size(oldNodeLabel.begin(), oldNodeLabel.end(), childLabel.begin(), childLabel.end());
 
@@ -1223,7 +1223,7 @@ std::size_t htd::TreeDecomposition::labelCount(void) const
     return labelings_->labelCount();
 }
 
-const htd::Collection<std::string> htd::TreeDecomposition::labelNames(void) const
+htd::ConstCollection<std::string> htd::TreeDecomposition::labelNames(void) const
 {
     return labelings_->labelNames();
 }
@@ -1379,7 +1379,7 @@ std::size_t htd::TreeDecomposition::leafNodeCount(void) const
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::leafNodes(void) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::leafNodes(void) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -1401,14 +1401,14 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::leafNodes(void) con
 
 htd::vertex_t htd::TreeDecomposition::leafNode(htd::index_t index) const
 {
-    const htd::Collection<htd::vertex_t> leafNodeCollection = leafNodes();
+    const htd::ConstCollection<htd::vertex_t> & leafNodeCollection = leafNodes();
 
     if (index >= leafNodeCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::leafNode(htd::index_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = leafNodeCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = leafNodeCollection.begin();
 
     std::advance(it, index);
 
@@ -1454,7 +1454,7 @@ std::size_t htd::TreeDecomposition::joinNodeCount(void) const
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::joinNodes(void) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::joinNodes(void) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -1476,14 +1476,14 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::joinNodes(void) con
 
 htd::vertex_t htd::TreeDecomposition::joinNode(htd::index_t index) const
 {
-    const htd::Collection<htd::vertex_t> joinNodeCollection = joinNodes();
+    const htd::ConstCollection<htd::vertex_t> & joinNodeCollection = joinNodes();
 
     if (index >= joinNodeCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::joinNode(htd::index_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = joinNodeCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = joinNodeCollection.begin();
 
     std::advance(it, index);
 
@@ -1519,13 +1519,13 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
     {
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(node->id);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node->id);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(node->id, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            if (htd::has_non_empty_set_difference(childLabelContent.begin(), childLabelContent.end(), vertexLabel.begin(), vertexLabel.end()))
+            if (htd::has_non_empty_set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end()))
             {
                 ret++;
             }
@@ -1535,7 +1535,7 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -1545,13 +1545,13 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) c
     {
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(node->id);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node->id);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(node->id, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            if (htd::has_non_empty_set_difference(childLabelContent.begin(), childLabelContent.end(), vertexLabel.begin(), vertexLabel.end()))
+            if (htd::has_non_empty_set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end()))
             {
                 result.push_back(node->id);
             }
@@ -1563,14 +1563,14 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) c
 
 htd::vertex_t htd::TreeDecomposition::forgetNode(htd::index_t index) const
 {
-    const htd::Collection<htd::vertex_t> forgetNodeCollection = forgetNodes();
+    const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = forgetNodes();
 
     if (index >= forgetNodeCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgetNode(htd::index_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = forgetNodeCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = forgetNodeCollection.begin();
 
     std::advance(it, index);
 
@@ -1587,13 +1587,13 @@ bool htd::TreeDecomposition::isForgetNode(htd::vertex_t vertex) const
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(node->id);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node->id);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(node->id, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            ret = htd::has_non_empty_set_difference(childLabelContent.begin(), childLabelContent.end(), vertexLabel.begin(), vertexLabel.end());
+            ret = htd::has_non_empty_set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end());
         }
     }
     else
@@ -1612,13 +1612,13 @@ std::size_t htd::TreeDecomposition::introduceNodeCount(void) const
     {
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(node->id);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node->id);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(node->id, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            if (htd::has_non_empty_set_difference(vertexLabel.begin(), vertexLabel.end(), childLabelContent.begin(), childLabelContent.end()))
+            if (htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end()))
             {
                 ret++;
             }
@@ -1628,7 +1628,7 @@ std::size_t htd::TreeDecomposition::introduceNodeCount(void) const
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -1638,13 +1638,13 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void
     {
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(node->id);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node->id);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(node->id, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            if (htd::has_non_empty_set_difference(vertexLabel.begin(), vertexLabel.end(), childLabelContent.begin(), childLabelContent.end()))
+            if (htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end()))
             {
                 result.push_back(node->id);
             }
@@ -1656,14 +1656,14 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void
 
 htd::vertex_t htd::TreeDecomposition::introduceNode(htd::index_t index) const
 {
-    const htd::Collection<htd::vertex_t> introduceNodeCollection = introduceNodes();
+    const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = introduceNodes();
 
     if (index >= introduceNodeCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introduceNode(htd::index_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = introduceNodeCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = introduceNodeCollection.begin();
 
     std::advance(it, index);
 
@@ -1680,13 +1680,13 @@ bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t vertex) const
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(node->id);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node->id);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(node->id, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            ret = htd::has_non_empty_set_difference(vertexLabel.begin(), vertexLabel.end(), childLabelContent.begin(), childLabelContent.end());
+            ret = htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end());
         }
     }
     else
@@ -1711,7 +1711,7 @@ std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t vertex) const
 
             if (bagLabeling.isLabeledVertex(vertex))
             {
-                ret = dynamic_cast<const htd::Label<htd::Collection<htd::vertex_t>> *>(&(bagLabeling.vertexLabel(vertex)))->value().size();
+                ret = dynamic_cast<const htd::Label<htd::ConstCollection<htd::vertex_t>> *>(&(bagLabeling.vertexLabel(vertex)))->value().size();
             }
         }
     }
@@ -1723,7 +1723,7 @@ std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t vertex) const
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -1731,9 +1731,9 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::ver
 
         if (bagLabeling.isLabeledVertex(vertex))
         {
-            auto & vertexLabel = dynamic_cast<const htd::Label<htd::Collection<htd::vertex_t>> *>(&(bagLabeling.vertexLabel(vertex)))->value();
+            auto & vertexLabel = dynamic_cast<const htd::Label<htd::ConstCollection<htd::vertex_t>> *>(&(bagLabeling.vertexLabel(vertex)))->value();
 
-            return htd::Collection<htd::vertex_t>(vertexLabel);
+            return htd::ConstCollection<htd::vertex_t>(vertexLabel);
         }
     }
     else
@@ -1741,7 +1741,7 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::ver
         throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vertex_t) const");
     }
 
-    return htd::Collection<htd::vertex_t>();
+    return htd::ConstCollection<htd::vertex_t>();
 }
 
 void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::vertex_container & content)
@@ -1750,7 +1750,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::vert
     {
         auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-        bagLabeling.setVertexLabel(vertex, new htd::Label<htd::Collection<htd::vertex_t>>(htd::VectorAdapter<htd::vertex_t>(content)));
+        bagLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::VectorAdapter<htd::vertex_t>(content)));
     }
     else
     {
@@ -1758,17 +1758,17 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::vert
     }
 }
 
-void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::Collection<htd::vertex_t> & content)
+void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
 {
     if (isVertex(vertex))
     {
         auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-        bagLabeling.setVertexLabel(vertex, new htd::Label<htd::Collection<htd::vertex_t>>(htd::VectorAdapter<htd::vertex_t>(htd::Collection<htd::vertex_t>(content.begin(), content.end()))));
+        bagLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::VectorAdapter<htd::vertex_t>(htd::ConstCollection<htd::vertex_t>(content.begin(), content.end()))));
     }
     else
     {
-        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const htd::Collection<htd::vertex_t> &)");
+        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const htd::IConstCollection<htd::vertex_t> &)");
     }
 }
 
@@ -1820,13 +1820,13 @@ std::size_t htd::TreeDecomposition::forgottenVertexCount(htd::vertex_t vertex) c
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node->id);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(vertex, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            ret = htd::compute_set_difference_size(childLabelContent.begin(), childLabelContent.end(), vertexLabel.begin(), vertexLabel.end());
+            ret = htd::compute_set_difference_size(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end());
         }
     }
 
@@ -1843,18 +1843,18 @@ std::size_t htd::TreeDecomposition::forgottenVertexCount(htd::vertex_t vertex, h
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            auto childVertexLabel = bagContent(child);
+            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
-            ret = htd::compute_set_difference_size(childVertexLabel.begin(), childVertexLabel.end(), vertexLabel.begin(), vertexLabel.end());
+            ret = htd::compute_set_difference_size(childBag.begin(), childBag.end(), bag.begin(), bag.end());
         }
     }
 
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t vertex) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -1866,24 +1866,24 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(h
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(vertex, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            std::set_difference(childLabelContent.begin(), childLabelContent.end(), vertexLabel.begin(), vertexLabel.end(), std::back_inserter(result));
+            std::set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end(), std::back_inserter(result));
         }
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -1895,16 +1895,16 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(h
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            auto childVertexLabel = bagContent(child);
+            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
-            std::set_difference(childVertexLabel.begin(), childVertexLabel.end(), vertexLabel.begin(), vertexLabel.end(), std::back_inserter(result));
+            std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(result));
         }
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t, htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t, htd::vertex_t) const");
     }
 
     return ret;
@@ -1912,14 +1912,14 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(h
 
 htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index) const
 {
-    const htd::Collection<htd::vertex_t> forgottenVertexCollection = forgottenVertices(vertex);
+    const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = forgottenVertices(vertex);
 
     if (index >= forgottenVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t, htd::index_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = forgottenVertexCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = forgottenVertexCollection.begin();
 
     std::advance(it, index);
 
@@ -1928,14 +1928,14 @@ htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd:
 
 htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
-    const htd::Collection<htd::vertex_t> forgottenVertexCollection = forgottenVertices(vertex, child);
+    const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = forgottenVertices(vertex, child);
 
     if (index >= forgottenVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = forgottenVertexCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = forgottenVertexCollection.begin();
 
     std::advance(it, index);
 
@@ -1944,14 +1944,14 @@ htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd:
 
 bool htd::TreeDecomposition::isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex) const
 {
-    const htd::Collection<htd::vertex_t> forgottenVertexCollection = forgottenVertices(vertex);
+    const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = forgottenVertices(vertex);
 
     return std::binary_search(forgottenVertexCollection.begin(), forgottenVertexCollection.end(), forgottenVertex);
 }
 
 bool htd::TreeDecomposition::isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex, htd::vertex_t child) const
 {
-    const htd::Collection<htd::vertex_t> forgottenVertexCollection = forgottenVertices(vertex, child);
+    const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = forgottenVertices(vertex, child);
 
     return std::binary_search(forgottenVertexCollection.begin(), forgottenVertexCollection.end(), forgottenVertex);
 }
@@ -1966,13 +1966,13 @@ std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t vertex) 
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(vertex, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            ret = htd::compute_set_difference_size(vertexLabel.begin(), vertexLabel.end(), childLabelContent.begin(), childLabelContent.end());
+            ret = htd::compute_set_difference_size(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end());
         }
     }
 
@@ -1989,18 +1989,18 @@ std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t vertex, 
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            auto childVertexLabel = bagContent(child);
+            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
-            ret = htd::compute_set_difference_size(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end());
+            ret = htd::compute_set_difference_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
         }
     }
 
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t vertex) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -2012,24 +2012,24 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(vertex, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            std::set_difference(vertexLabel.begin(), vertexLabel.end(), childLabelContent.begin(), childLabelContent.end(), std::back_inserter(result));
+            std::set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end(), std::back_inserter(result));
         }
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -2041,16 +2041,16 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            auto childVertexLabel = bagContent(child);
+            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
-            std::set_difference(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end(), std::back_inserter(result));
+            std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(result));
         }
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t, htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t, htd::vertex_t) const");
     }
 
     return ret;
@@ -2058,14 +2058,14 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(
 
 htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index) const
 {
-    const htd::Collection<htd::vertex_t> introducedVertexCollection = introducedVertices(vertex);
+    const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex);
 
     if (index >= introducedVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t, htd::index_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = introducedVertexCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = introducedVertexCollection.begin();
 
     std::advance(it, index);
 
@@ -2074,14 +2074,14 @@ htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd
 
 htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
-    const htd::Collection<htd::vertex_t> introducedVertexCollection = introducedVertices(vertex, child);
+    const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex, child);
 
     if (index >= introducedVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = introducedVertexCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = introducedVertexCollection.begin();
 
     std::advance(it, index);
 
@@ -2090,14 +2090,14 @@ htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd
 
 bool htd::TreeDecomposition::isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex) const
 {
-    const htd::Collection<htd::vertex_t> introducedVertexCollection = introducedVertices(vertex);
+    const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex);
 
     return std::binary_search(introducedVertexCollection.begin(), introducedVertexCollection.end(), introducedVertex);
 }
 
 bool htd::TreeDecomposition::isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex, htd::vertex_t child) const
 {
-    const htd::Collection<htd::vertex_t> introducedVertexCollection = introducedVertices(vertex, child);
+    const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex, child);
 
     return std::binary_search(introducedVertexCollection.begin(), introducedVertexCollection.end(), introducedVertex);
 }
@@ -2112,13 +2112,13 @@ std::size_t htd::TreeDecomposition::rememberedVertexCount(htd::vertex_t vertex) 
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(vertex, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            ret = htd::compute_set_intersection_size(vertexLabel.begin(), vertexLabel.end(), childLabelContent.begin(), childLabelContent.end());
+            ret = htd::compute_set_intersection_size(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end());
         }
     }
 
@@ -2135,18 +2135,18 @@ std::size_t htd::TreeDecomposition::rememberedVertexCount(htd::vertex_t vertex, 
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            auto childVertexLabel = bagContent(child);
+            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
-            ret = htd::compute_set_intersection_size(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end());
+            ret = htd::compute_set_intersection_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
         }
     }
 
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t vertex) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -2158,24 +2158,24 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            htd::vertex_container childLabelContent;
+            htd::vertex_container childBagContent;
 
-            getChildrenVertexLabelSetUnion(vertex, childLabelContent);
+            getChildrenVertexLabelSetUnion(node->id, childBagContent);
 
-            std::set_intersection(vertexLabel.begin(), vertexLabel.end(), childLabelContent.begin(), childLabelContent.end(), std::back_inserter(result));
+            std::set_intersection(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end(), std::back_inserter(result));
         }
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t) const");
     }
 
     return ret;
 }
 
-const htd::Collection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -2187,16 +2187,16 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(
 
         if (node != nullptr)
         {
-            auto vertexLabel = bagContent(vertex);
+            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
 
-            auto childVertexLabel = bagContent(child);
+            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
-            std::set_intersection(vertexLabel.begin(), vertexLabel.end(), childVertexLabel.begin(), childVertexLabel.end(), std::back_inserter(result));
+            std::set_intersection(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(result));
         }
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t, htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t, htd::vertex_t) const");
     }
 
     return ret;
@@ -2204,14 +2204,14 @@ const htd::Collection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(
 
 htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index) const
 {
-    const htd::Collection<htd::vertex_t> introducedVertexCollection = introducedVertices(vertex);
+    const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex);
 
     if (index >= introducedVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t, htd::index_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = introducedVertexCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = introducedVertexCollection.begin();
 
     std::advance(it, index);
 
@@ -2220,14 +2220,14 @@ htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd
 
 htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
-    const htd::Collection<htd::vertex_t> introducedVertexCollection = introducedVertices(vertex, child);
+    const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex, child);
 
     if (index >= introducedVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
-    htd::Iterator<htd::vertex_t> it = introducedVertexCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = introducedVertexCollection.begin();
 
     std::advance(it, index);
 
@@ -2236,14 +2236,14 @@ htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd
 
 bool htd::TreeDecomposition::isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex) const
 {
-    const htd::Collection<htd::vertex_t> rememberedVertexCollection = rememberedVertices(vertex);
+    const htd::ConstCollection<htd::vertex_t> & rememberedVertexCollection = rememberedVertices(vertex);
 
     return std::binary_search(rememberedVertexCollection.begin(), rememberedVertexCollection.end(), rememberedVertex);
 }
 
 bool htd::TreeDecomposition::isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const
 {
-    const htd::Collection<htd::vertex_t> rememberedVertexCollection = rememberedVertices(vertex, child);
+    const htd::ConstCollection<htd::vertex_t> & rememberedVertexCollection = rememberedVertices(vertex, child);
 
     return std::binary_search(rememberedVertexCollection.begin(), rememberedVertexCollection.end(), rememberedVertex);
 }
@@ -2260,9 +2260,9 @@ void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex
 
             for (auto child : children)
             {
-                auto childLabel = bagContent(child);
+                const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
-                std::copy(childLabel.begin(), childLabel.end(), std::back_inserter(output));
+                std::copy(childBag.begin(), childBag.end(), std::back_inserter(output));
             }
 
             std::sort(output.begin(), output.end());

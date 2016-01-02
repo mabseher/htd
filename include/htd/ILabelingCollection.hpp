@@ -40,7 +40,7 @@ namespace htd
 
             virtual std::size_t labelCount(void) const = 0;
 
-            virtual const htd::Collection<std::string> labelNames(void) const = 0;
+            virtual htd::ConstCollection<std::string> labelNames(void) const = 0;
 
             virtual const std::string & labelName(htd::index_t index) const = 0;
 
@@ -74,11 +74,11 @@ namespace htd
 
             virtual htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) = 0;
 
-            virtual const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) const = 0;
+            virtual const htd::ConstIterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) const = 0;
 
             virtual htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) = 0;
 
-            virtual const htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) const = 0;
+            virtual const htd::ConstIterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) const = 0;
     };
 
     inline htd::ILabelingCollection::~ILabelingCollection() { }

@@ -29,6 +29,7 @@
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 
@@ -53,8 +54,8 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
     htd::vertex_container exchangeNodes;
     htd::vertex_container introduceNodes;
 
-    const htd::Collection<htd::vertex_t> forgetNodeCollection = decomposition.forgetNodes();
-    const htd::Collection<htd::vertex_t> introduceNodeCollection = decomposition.introduceNodes();
+    const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
+    const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = decomposition.introduceNodes();
 
     std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
     std::copy(introduceNodeCollection.begin(), introduceNodeCollection.end(), std::back_inserter(introduceNodes));
@@ -63,29 +64,29 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
 
     for (htd::vertex_t node : exchangeNodes)
     {
-        htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(node);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         htd::vertex_container children;
 
-        const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
+        const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 
         std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
         for (htd::vertex_t child : children)
         {
-            const htd::Collection<htd::vertex_t> rememberedVertices = decomposition.rememberedVertices(node, child);
+            const htd::ConstCollection<htd::vertex_t> & rememberedVertices = decomposition.rememberedVertices(node, child);
 
-            if (bagContent.size() != rememberedVertices.size() || !std::equal(bagContent.begin(), bagContent.end(), rememberedVertices.begin()))
+            if (bag.size() != rememberedVertices.size() || !std::equal(bag.begin(), bag.end(), rememberedVertices.begin()))
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
-                decomposition.setBagContent(newVertex, htd::Collection<htd::vertex_t>(rememberedVertices.begin(), rememberedVertices.end()));
+                decomposition.setBagContent(newVertex, htd::ConstCollection<htd::vertex_t>(rememberedVertices));
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
                     htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newVertex);
 
-                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(bagContent.begin(), bagContent.end()), *labelCollection);
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(bag, *labelCollection);
 
                     delete labelCollection;
 
@@ -107,8 +108,8 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
     htd::vertex_container exchangeNodes;
     htd::vertex_container introduceNodes;
 
-    const htd::Collection<htd::vertex_t> forgetNodeCollection = decomposition.forgetNodes();
-    const htd::Collection<htd::vertex_t> introduceNodeCollection = decomposition.introduceNodes();
+    const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
+    const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = decomposition.introduceNodes();
 
     std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
     std::copy(introduceNodeCollection.begin(), introduceNodeCollection.end(), std::back_inserter(introduceNodes));
@@ -117,29 +118,29 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
     for (htd::vertex_t node : exchangeNodes)
     {
-        htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(node);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         htd::vertex_container children;
 
-        const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
+        const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 
         std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
         for (htd::vertex_t child : children)
         {
-            const htd::Collection<htd::vertex_t> rememberedVertices = decomposition.rememberedVertices(node, child);
+            const htd::ConstCollection<htd::vertex_t> & rememberedVertices = decomposition.rememberedVertices(node, child);
 
-            if (bagContent.size() != rememberedVertices.size() || !std::equal(bagContent.begin(), bagContent.end(), rememberedVertices.begin()))
+            if (bag.size() != rememberedVertices.size() || !std::equal(bag.begin(), bag.end(), rememberedVertices.begin()))
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
-                decomposition.setBagContent(newVertex, htd::Collection<htd::vertex_t>(rememberedVertices.begin(), rememberedVertices.end()));
+                decomposition.setBagContent(newVertex, htd::ConstCollection<htd::vertex_t>(rememberedVertices));
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
                     htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newVertex);
 
-                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(bagContent.begin(), bagContent.end()), *labelCollection);
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(bag, *labelCollection);
 
                     delete labelCollection;
 

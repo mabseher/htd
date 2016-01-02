@@ -36,6 +36,7 @@
 #include <htd/ILabelingFunction.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <cstdarg>
@@ -507,7 +508,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
     return ret;
 }
 
-htd::vertex_t htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices) const
+htd::vertex_t htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
@@ -626,7 +627,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 if (visited.find(currentNode) == visited.end())
                 {
-                    ret->setBagContent(decompositionNode, htd::Collection<htd::vertex_t>(buckets[currentNode - htd::Vertex::FIRST]));
+                    ret->setBagContent(decompositionNode, htd::ConstCollection<htd::vertex_t>(buckets[currentNode - htd::Vertex::FIRST]));
 
                     visited.insert(currentNode);
                 }

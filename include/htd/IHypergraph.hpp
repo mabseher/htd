@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 #include <htd/Hyperedge.hpp>
 
 #include <cstdlib>
@@ -40,7 +41,7 @@ namespace htd
 
             virtual std::size_t vertexCount(void) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> vertices(void) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> vertices(void) const = 0;
             
             virtual htd::vertex_t vertexAtPosition(htd::index_t index) const = 0;
 
@@ -50,15 +51,15 @@ namespace htd
 
             virtual bool isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
 
-            virtual bool isEdge(const htd::Collection<htd::vertex_t> & elements) const = 0;
+            virtual bool isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const = 0;
 
-            virtual const htd::Collection<htd::id_t> associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
+            virtual htd::ConstCollection<htd::id_t> associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
 
-            virtual const htd::Collection<htd::id_t> associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const = 0;
+            virtual htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const = 0;
 
             virtual std::size_t isolatedVertexCount(void) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> isolatedVertices(void) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const = 0;
 
             virtual htd::vertex_t isolatedVertex(htd::index_t index) const = 0;
 
@@ -66,13 +67,13 @@ namespace htd
 
             virtual std::size_t neighborCount(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> neighbors(htd::vertex_t vertex) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const = 0;
 
             virtual htd::vertex_t neighbor(htd::vertex_t vertex, htd::index_t index) const = 0;
 
             virtual std::size_t edgeCount(void) const = 0;
 
-            virtual const htd::Collection<htd::Hyperedge> hyperedges(void) const = 0;
+            virtual htd::ConstCollection<htd::Hyperedge> hyperedges(void) const = 0;
 
             virtual const htd::Hyperedge & hyperedge(htd::id_t edgeId) const = 0;
 
@@ -80,7 +81,7 @@ namespace htd
 
             virtual std::size_t edgeCount(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::Collection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const = 0;
+            virtual htd::ConstCollection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const = 0;
 
             virtual const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const = 0;
 

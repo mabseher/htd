@@ -185,7 +185,7 @@ htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::
 
     if (decomposition.vertexCount() > 0)
     {
-        const htd::Collection<std::string> labelNames = decomposition.labelNames();
+        const htd::ConstCollection<std::string> & labelNames = decomposition.labelNames();
 
         htd::vertex_t currentVertex = decomposition.root();
 

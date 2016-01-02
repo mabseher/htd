@@ -38,7 +38,7 @@ TEST(ITreeDecompositionAlgorithmTest, DecompositionTest01)
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
 
-    htd::Collection<htd::vertex_t> collection = graph.vertices();
+    const htd::ConstCollection<htd::vertex_t> & collection = graph.vertices();
 
     std::copy(collection.begin(), collection.end(), std::back_inserter(vertices));
 

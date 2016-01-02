@@ -81,7 +81,7 @@ std::size_t htd::LabeledHypergraph::labelCount(void) const
     return labelings_->labelCount();
 }
 
-const htd::Collection<std::string> htd::LabeledHypergraph::labelNames(void) const
+htd::ConstCollection<std::string> htd::LabeledHypergraph::labelNames(void) const
 {
     return labelings_->labelNames();
 }

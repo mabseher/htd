@@ -30,6 +30,7 @@
 #include <htd/MinFillOrderingAlgorithm.hpp>
 #include <htd/IHypergraph.hpp>
 #include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <cstdlib>
@@ -91,7 +92,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
     {
         auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
 
-        const htd::Collection<htd::vertex_t> neighborCollection = graph.neighbors(vertex);
+        const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
 
         currentNeighborhood.reserve(neighborCollection.size());
 

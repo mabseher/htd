@@ -43,7 +43,7 @@ namespace htd
 
             virtual std::size_t joinNodeCount(void) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> joinNodes(void) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> joinNodes(void) const = 0;
 
             virtual htd::vertex_t joinNode(htd::index_t index) const = 0;
 
@@ -51,7 +51,7 @@ namespace htd
 
             virtual std::size_t forgetNodeCount(void) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> forgetNodes(void) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> forgetNodes(void) const = 0;
 
             virtual htd::vertex_t forgetNode(htd::index_t index) const = 0;
 
@@ -59,7 +59,7 @@ namespace htd
 
             virtual std::size_t introduceNodeCount(void) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> introduceNodes(void) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> introduceNodes(void) const = 0;
 
             virtual htd::vertex_t introduceNode(htd::index_t index) const = 0;
 
@@ -67,15 +67,15 @@ namespace htd
 
             virtual std::size_t bagSize(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
 
             virtual std::size_t forgottenVertexCount(htd::vertex_t vertex) const = 0;
 
             virtual std::size_t forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual htd::vertex_t forgottenVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
 
@@ -89,9 +89,9 @@ namespace htd
 
             virtual std::size_t introducedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> introducedVertices(htd::vertex_t vertex) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> introducedVertices(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual htd::vertex_t introducedVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
 
@@ -105,9 +105,9 @@ namespace htd
 
             virtual std::size_t rememberedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex) const = 0;
 
-            virtual const htd::Collection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual htd::vertex_t rememberedVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
 

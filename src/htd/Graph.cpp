@@ -88,7 +88,7 @@ bool htd::Graph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
     return base_->isEdge(vertex1, vertex2);
 }
 
-bool htd::Graph::isEdge(const htd::Collection<htd::vertex_t> & elements) const
+bool htd::Graph::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     bool ret = false;
 
@@ -100,7 +100,7 @@ bool htd::Graph::isEdge(const htd::Collection<htd::vertex_t> & elements) const
     return ret;
 }
 
-const htd::Collection<htd::id_t> htd::Graph::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     htd::VectorAdapter<htd::id_t> ret;
 
@@ -117,7 +117,7 @@ const htd::Collection<htd::id_t> htd::Graph::associatedEdgeIds(htd::vertex_t ver
     return ret;
 }
 
-const htd::Collection<htd::id_t> htd::Graph::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
+htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     htd::VectorAdapter<htd::id_t> ret;
 
@@ -162,11 +162,11 @@ std::size_t htd::Graph::neighborCount(htd::vertex_t vertex) const
     return base_->neighborCount(vertex);
 }
 
-const htd::Collection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t vertex) const
+htd::ConstCollection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t) const");
     }
 
     return base_->neighbors(vertex);
@@ -177,7 +177,7 @@ htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::index_t index) con
     return base_->neighbor(vertex, index);
 }
 
-const htd::Collection<htd::vertex_t> htd::Graph::vertices(void) const
+htd::ConstCollection<htd::vertex_t> htd::Graph::vertices(void) const
 {
     return base_->vertices();
 }
@@ -187,7 +187,7 @@ std::size_t htd::Graph::isolatedVertexCount(void) const
     return base_->isolatedVertexCount();
 }
 
-const htd::Collection<htd::vertex_t> htd::Graph::isolatedVertices(void) const
+htd::ConstCollection<htd::vertex_t> htd::Graph::isolatedVertices(void) const
 {
     return base_->isolatedVertices();
 }
@@ -202,11 +202,11 @@ bool htd::Graph::isIsolatedVertex(htd::vertex_t vertex) const
     return base_->isIsolatedVertex(vertex);
 }
 
-const htd::Collection<htd::edge_t> htd::Graph::edges(void) const
+htd::ConstCollection<htd::edge_t> htd::Graph::edges(void) const
 {
     htd::VectorAdapter<htd::edge_t> ret;
 
-    htd::Collection<htd::Hyperedge> hyperedgeCollection = base_->hyperedges();
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = base_->hyperedges();
 
     auto & result = ret.container();
 
@@ -237,11 +237,11 @@ const htd::Collection<htd::edge_t> htd::Graph::edges(void) const
     return ret;
 }
 
-const htd::Collection<htd::edge_t> htd::Graph::edges(htd::vertex_t vertex) const
+htd::ConstCollection<htd::edge_t> htd::Graph::edges(htd::vertex_t vertex) const
 {
     htd::VectorAdapter<htd::edge_t> ret;
 
-    htd::Collection<htd::Hyperedge> hyperedgeCollection = base_->hyperedges(vertex);
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = base_->hyperedges(vertex);
 
     auto & result = ret.container();
 
@@ -274,14 +274,14 @@ const htd::Collection<htd::edge_t> htd::Graph::edges(htd::vertex_t vertex) const
 
 const htd::edge_t & htd::Graph::edgeAtPosition(htd::index_t index) const
 {
-    const htd::Collection<htd::edge_t> edgeCollection = edges();
+    const htd::ConstCollection<htd::edge_t> & edgeCollection = edges();
 
     if (index >= edgeCollection.size())
     {
         throw std::out_of_range("const htd::edge_t & htd::Graph::edgeAtPosition(htd::index_t) const");
     }
 
-    htd::Iterator<htd::edge_t> it = edgeCollection.begin();
+    htd::ConstIterator<htd::edge_t> it = edgeCollection.begin();
 
     std::advance(it, index);
 
@@ -290,26 +290,26 @@ const htd::edge_t & htd::Graph::edgeAtPosition(htd::index_t index) const
 
 const htd::edge_t & htd::Graph::edgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::Collection<htd::edge_t> edgeCollection = edges(vertex);
+    const htd::ConstCollection<htd::edge_t> & edgeCollection = edges(vertex);
 
     if (index >= edgeCollection.size())
     {
         throw std::out_of_range("const htd::edge_t & htd::Graph::edgeAtPosition(htd::index_t, htd::vertex_t) const");
     }
 
-    htd::Iterator<htd::edge_t> it = edgeCollection.begin();
+    htd::ConstIterator<htd::edge_t> it = edgeCollection.begin();
 
     std::advance(it, index);
 
     return *it;
 }
 
-const htd::Collection<htd::Hyperedge> htd::Graph::hyperedges(void) const
+htd::ConstCollection<htd::Hyperedge> htd::Graph::hyperedges(void) const
 {
     return base_->hyperedges();
 }
 
-const htd::Collection<htd::Hyperedge> htd::Graph::hyperedges(htd::vertex_t vertex) const
+htd::ConstCollection<htd::Hyperedge> htd::Graph::hyperedges(htd::vertex_t vertex) const
 {
     return base_->hyperedges(vertex);
 }
@@ -321,14 +321,14 @@ const htd::Hyperedge & htd::Graph::hyperedge(htd::id_t edgeId) const
 
 const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t index) const
 {
-    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges();
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();
 
     if (index >= hyperedgeCollection.size())
     {
         throw std::out_of_range("const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t) const");
     }
 
-    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
+    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
 
     std::advance(it, index);
 
@@ -337,14 +337,14 @@ const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t index) const
 
 const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::Collection<htd::Hyperedge> hyperedgeCollection = hyperedges(vertex);
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges(vertex);
 
     if (index >= hyperedgeCollection.size())
     {
         throw std::out_of_range("const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
     }
 
-    htd::Iterator<htd::Hyperedge> it = hyperedgeCollection.begin();
+    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
 
     std::advance(it, index);
 

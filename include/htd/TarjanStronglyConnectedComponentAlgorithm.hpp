@@ -27,9 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IStronglyConnectedComponentAlgorithm.hpp>
-#include <htd/Collection.hpp>
-#include <htd/IHypergraph.hpp>
-#include <htd/IDirectedGraph.hpp>
 
 namespace htd
 {
@@ -40,9 +37,9 @@ namespace htd
 
             ~TarjanStronglyConnectedComponentAlgorithm();
             
-            htd::Collection<htd::Collection<htd::vertex_t>> determineComponents(const htd::IHypergraph & graph) const HTD_OVERRIDE;
+            htd::GraphComponentCollection determineComponents(const htd::IHypergraph & graph) const HTD_OVERRIDE;
 
-            htd::Collection<htd::Collection<htd::vertex_t>> determineComponents(const htd::IDirectedGraph & graph) const HTD_OVERRIDE;
+            htd::GraphComponentCollection determineComponents(const htd::IDirectedGraph & graph) const HTD_OVERRIDE;
 
             TarjanStronglyConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
     };

@@ -30,6 +30,7 @@
 #include <htd/IMutablePathDecomposition.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/ILabelingCollection.hpp>
+#include <htd/IMutableTreeDecomposition.hpp>
 
 namespace htd
 {
@@ -56,11 +57,11 @@ namespace htd
 
             bool isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
 
-            bool isEdge(const htd::Collection<htd::vertex_t> & elements) const HTD_OVERRIDE;
+            bool isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::id_t> associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::id_t> associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::id_t> associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
             htd::vertex_t vertexAtPosition(htd::vertex_t index) const HTD_OVERRIDE;
 
@@ -70,33 +71,33 @@ namespace htd
 
             std::size_t neighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::vertex_t neighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
             bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
 
             std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> isolatedVertices(void) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const HTD_OVERRIDE;
 
             htd::vertex_t isolatedVertex(htd::index_t index) const HTD_OVERRIDE;
 
             bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::edge_t> edges(void) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::edge_t> edges(void) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::edge_t> edges(htd::vertex_t vertex) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::edge_t> edges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             const htd::edge_t & edgeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             const htd::edge_t & edgeAtPosition(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::Hyperedge> hyperedges(void) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::Hyperedge> hyperedges(void) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             const htd::Hyperedge & hyperedge(htd::id_t edgeId) const HTD_OVERRIDE;
 
@@ -108,7 +109,7 @@ namespace htd
 
             std::size_t labelCount(void) const HTD_OVERRIDE;
 
-            const htd::Collection<std::string> labelNames(void) const HTD_OVERRIDE;
+            htd::ConstCollection<std::string> labelNames(void) const HTD_OVERRIDE;
 
             const std::string & labelName(htd::index_t index) const HTD_OVERRIDE;
 
@@ -142,7 +143,7 @@ namespace htd
 
             std::size_t leafNodeCount(void) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> leafNodes(void) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> leafNodes(void) const HTD_OVERRIDE;
 
             htd::vertex_t leafNode(void) const HTD_OVERRIDE;
 
@@ -156,7 +157,7 @@ namespace htd
 
             std::size_t childCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> children(htd::vertex_t vertex) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> children(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::vertex_t child(htd::vertex_t vertex) const HTD_OVERRIDE;
 
@@ -184,7 +185,7 @@ namespace htd
 
             std::size_t joinNodeCount(void) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> joinNodes(void) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> joinNodes(void) const HTD_OVERRIDE;
 
             htd::vertex_t joinNode(htd::index_t index) const HTD_OVERRIDE;
 
@@ -192,7 +193,7 @@ namespace htd
 
             std::size_t forgetNodeCount(void) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> forgetNodes(void) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> forgetNodes(void) const HTD_OVERRIDE;
 
             htd::vertex_t forgetNode(htd::index_t index) const HTD_OVERRIDE;
 
@@ -200,7 +201,7 @@ namespace htd
 
             std::size_t introduceNodeCount(void) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> introduceNodes(void) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> introduceNodes(void) const HTD_OVERRIDE;
 
             htd::vertex_t introduceNode(htd::index_t index) const HTD_OVERRIDE;
 
@@ -208,19 +209,19 @@ namespace htd
 
             std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             void setBagContent(htd::vertex_t vertex, const htd::vertex_container & content) HTD_OVERRIDE;
 
-            void setBagContent(htd::vertex_t vertex, const htd::Collection<htd::vertex_t> & content) HTD_OVERRIDE;
+            void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) HTD_OVERRIDE;
 
             std::size_t forgottenVertexCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             std::size_t forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             htd::vertex_t forgottenVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
@@ -234,9 +235,9 @@ namespace htd
 
             std::size_t introducedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> introducedVertices(htd::vertex_t vertex) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> introducedVertices(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             htd::vertex_t introducedVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
@@ -250,9 +251,9 @@ namespace htd
 
             std::size_t rememberedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Collection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             htd::vertex_t rememberedVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 

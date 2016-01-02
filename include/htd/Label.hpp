@@ -26,7 +26,10 @@
 #define	HTD_HTD_LABEL_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/ILabel.hpp>
+
+#include <memory>
 
 namespace htd
 {
@@ -34,47 +37,52 @@ namespace htd
     class Label : public virtual htd::ILabel
     {
         public:
-        Label(T value) : value_(value)
-        {
+            Label(T value) : value_(std::make_shared<T>(value))
+            {
 
-        }
+            }
 
-        ~Label()
-        {
+            Label(const Label<T> & original) : value_(std::make_shared<T>(original.value()))
+            {
 
-        }
+            }
 
-        const T & value() const
-        {
-            return value_;
-        }
+            ~Label()
+            {
 
-        std::size_t hash(void) const
-        {
-            std::hash<T> hash_function;
+            }
 
-            return hash_function(value_);
-        }
+            const T & value() const
+            {
+                return *value_;
+            }
 
-        bool operator==(const htd::ILabel & other) const
-        {
-             const Label<T> * o = dynamic_cast<const Label<T> *>(&other);
+            std::size_t hash(void) const
+            {
+                std::hash<T> hash_function;
 
-             return o != nullptr && value_ == o->value();
-        }
+                return hash_function(*value_);
+            }
 
-        bool operator==(const Label<T> & other) const
-        {
-            return value_ == other.value();
-        }
+            bool operator==(const htd::ILabel & other) const
+            {
+                 const Label<T> * o = dynamic_cast<const Label<T> *>(&other);
 
-        Label<T> * clone(void) const
-        {
-            return new Label<T>(value_);
-        }
+                 return o != nullptr && *value_ == o->value();
+            }
+
+            bool operator==(const Label<T> & other) const
+            {
+                return *value_ == other.value();
+            }
+
+            Label<T> * clone(void) const
+            {
+                return new Label<T>(*value_);
+            }
 
         private:
-            T value_;
+            std::shared_ptr<T> value_;
     };
 }
 

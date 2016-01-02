@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/LabelCollection.hpp>
 #include <htd/ILabel.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <stdexcept>
@@ -47,9 +48,9 @@ std::size_t htd::LabelCollection::labelCount(void) const
     return labelNames_.size();
 }
 
-const htd::Collection<std::string> htd::LabelCollection::labelNames(void) const
+htd::ConstCollection<std::string> htd::LabelCollection::labelNames(void) const
 {
-    return htd::Collection<std::string>(labelNames_);
+    return htd::ConstCollection<std::string>(labelNames_);
 }
 
 const std::string & htd::LabelCollection::labelName(htd::index_t index) const

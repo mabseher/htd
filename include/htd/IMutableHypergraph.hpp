@@ -42,7 +42,7 @@ namespace htd
 
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
-            virtual htd::id_t addEdge(const htd::Collection<htd::vertex_t> & elements) = 0;
+            virtual htd::id_t addEdge(const htd::ConstCollection<htd::vertex_t> & elements) = 0;
 
             virtual void removeEdge(htd::id_t edgeId) = 0;
 

@@ -33,11 +33,16 @@
 #include <htd/CompilerDetection.hpp>
 #include <htd/CompressionOperation.hpp>
 #include <htd/ConnectedComponentAlgorithmFactory.hpp>
+#include <htd/ConstCollection.hpp>
+#include <htd/ConstIteratorBase.hpp>
+#include <htd/ConstIterator.hpp>
+#include <htd/ConstIteratorWrapper.hpp>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
 #include <htd/DirectedGraphFactory.hpp>
 #include <htd/DirectedGraph.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/Globals.hpp>
+#include <htd/GraphComponentCollection.hpp>
 #include <htd/GraphFactory.hpp>
 #include <htd/Graph.hpp>
 #include <htd/GraphLabeling.hpp>
@@ -132,6 +137,7 @@
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/TreeDecomposition.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
+#include <htd/VectorAdapterConstIteratorWrapper.hpp>
 #include <htd/VectorAdapter.hpp>
 #include <htd/VectorAdapterIteratorWrapper.hpp>
 #include <htd/Vertex.hpp>

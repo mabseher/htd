@@ -27,8 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
-#include <htd/Collection.hpp>
-#include <htd/IHypergraph.hpp>
 
 namespace htd
 {
@@ -39,7 +37,7 @@ namespace htd
 
             ~DepthFirstConnectedComponentAlgorithm();
             
-            htd::Collection<htd::Collection<htd::vertex_t>> determineComponents(const htd::IHypergraph & graph) const HTD_OVERRIDE;
+            htd::GraphComponentCollection determineComponents(const htd::IHypergraph & graph) const HTD_OVERRIDE;
 
             DepthFirstConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
     };

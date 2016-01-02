@@ -38,7 +38,7 @@
 
 htd::InducedSubgraphLabelingFunction::InducedSubgraphLabelingFunction(const htd::IHypergraph & graph) : graph_(graph)
 {
-    htd::Collection<htd::Hyperedge> hyperedges = graph_.hyperedges();
+    const htd::ConstCollection<htd::Hyperedge> & hyperedges = graph_.hyperedges();
 
     hyperedges_ = htd::hyperedge_container(hyperedges.begin(), hyperedges.end());
 }
@@ -53,7 +53,7 @@ std::string htd::InducedSubgraphLabelingFunction::name() const
     return htd::InducedSubgraphLabelingFunction::INDUCED_SUBGRAPH_LABEL_IDENTIFIER;
 }
 
-htd::Label<htd::Collection<htd::Hyperedge>> * htd::InducedSubgraphLabelingFunction::computeLabel(const htd::Collection<htd::vertex_t> & vertices) const
+htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::InducedSubgraphLabelingFunction::computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices) const
 {
     htd::VectorAdapter<htd::Hyperedge> label;
 
@@ -71,10 +71,10 @@ htd::Label<htd::Collection<htd::Hyperedge>> * htd::InducedSubgraphLabelingFuncti
         }
     }
 
-    return new htd::Label<htd::Collection<htd::Hyperedge>>(label);
+    return new htd::Label<htd::ConstCollection<htd::Hyperedge>>(label);
 }
 
-htd::Label<htd::Collection<htd::Hyperedge>> * htd::InducedSubgraphLabelingFunction::computeLabel(const htd::Collection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const
+htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::InducedSubgraphLabelingFunction::computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const
 {
     HTD_UNUSED(labels);
 

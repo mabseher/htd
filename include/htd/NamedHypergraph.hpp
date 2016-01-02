@@ -152,7 +152,7 @@ namespace htd
                 return base_->edgeCount(lookupVertex(vertexName));
             }
 
-            bool isEdge(const htd::Collection<VertexNameType> & elements)
+            bool isEdge(const htd::ConstCollection<VertexNameType> & elements)
             {
                 bool ok = true;
 
@@ -184,7 +184,7 @@ namespace htd
                 return nameLabeling_->lookupEdge(label);
             }
 
-            const htd::Collection<htd::id_t> associatedEdgeIds(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
+            htd::ConstCollection<htd::id_t> associatedEdgeIds(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
             {
                 if (isVertexName(vertexName1) && isVertexName(vertexName2))
                 {
@@ -194,7 +194,7 @@ namespace htd
                 return htd::VectorAdapter<htd::id_t>();
             }
 
-            const htd::Collection<htd::id_t> associatedEdgeIds(const htd::Collection<VertexNameType> & elements) const
+            htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<VertexNameType> & elements) const
             {
                 htd::vertex_container hyperedge;
 
@@ -210,7 +210,12 @@ namespace htd
                     }
                 }
 
-                return ok ? base_->associatedEdgeIds(htd::Collection<htd::vertex_t>(hyperedge)) : htd::VectorAdapter<htd::id_t>();
+                if (!ok)
+                {
+                    return htd::VectorAdapter<htd::id_t>();
+                }
+
+                return base_->associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(hyperedge));
             }
 
             bool isConnected(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
@@ -228,7 +233,7 @@ namespace htd
                 return base_->neighborCount(lookupVertex(vertexName));
             }
 
-            const htd::Collection<htd::vertex_t> neighbors(const VertexNameType & vertexName) const
+            htd::ConstCollection<htd::vertex_t> neighbors(const VertexNameType & vertexName) const
             {
                 return base_->neighbors(lookupVertex(vertexName));
             }
@@ -243,7 +248,7 @@ namespace htd
                 return base_->isolatedVertexCount();
             }
 
-            const htd::Collection<htd::vertex_t> isolatedVertices(void) const
+            htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const
             {
                 return base_->isolatedVertices();
             }
@@ -258,7 +263,7 @@ namespace htd
                 return base_->isIsolatedVertex(lookupVertex(vertexName));
             }
 
-            const htd::Collection<htd::Hyperedge> hyperedges(const VertexNameType & vertexName) const
+            htd::ConstCollection<htd::Hyperedge> hyperedges(const VertexNameType & vertexName) const
             {
                 return base_->hyperedges(lookupVertex(vertexName));
             }
@@ -345,7 +350,7 @@ namespace htd
                 return edgeId;
             }
 
-            htd::id_t addEdge(const htd::Collection<VertexNameType> & elements)
+            htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements)
             {
                 htd::vertex_container hyperedge;
 
@@ -359,10 +364,10 @@ namespace htd
                     hyperedge.push_back(lookupVertex(vertex));
                 }
 
-                return base_->addEdge(htd::Collection<htd::vertex_t>(hyperedge));
+                return base_->addEdge(htd::ConstCollection<htd::vertex_t>(hyperedge));
             }
 
-            htd::id_t addEdge(const htd::Collection<VertexNameType> & elements, const EdgeNameType & name)
+            htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements, const EdgeNameType & name)
             {
                 htd::vertex_container hyperedge;
 
@@ -376,7 +381,7 @@ namespace htd
                     hyperedge.push_back(lookupVertex(vertex));
                 }
 
-                htd::id_t edgeId = base_->addEdge(hyperedge);
+                htd::id_t edgeId = base_->addEdge(htd::ConstCollection<htd::vertex_t>(hyperedge));
 
                 setEdgeName(edgeId, name);
 
@@ -417,7 +422,7 @@ namespace htd
                 return base_->labelCount();
             }
 
-            htd::Collection<std::string> labelNames(void) const
+            htd::ConstCollection<std::string> labelNames(void) const
             {
                 return base_->labelNames();
             }

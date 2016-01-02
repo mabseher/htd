@@ -1,5 +1,5 @@
-/*
- * File:   Collection.hpp
+/* 
+ * File:   ConstCollection.hpp
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,12 +22,14 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_COLLECTION_HPP
-#define HTD_HTD_COLLECTION_HPP
+#ifndef HTD_HTD_CONSTCOLLECTION_HPP
+#define HTD_HTD_CONSTCOLLECTION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Iterator.hpp>
+#include <htd/ConstCollection.hpp>
+#include <htd/Collection.hpp>
 #include <htd/ConstIterator.hpp>
+#include <htd/Iterator.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -35,28 +37,28 @@
 namespace htd
 {
     template <typename T>
-    class Collection
+    class ConstCollection
     {
         public:
             typedef T value_type;
 
-            Collection(void) : begin_(), end_()
+            ConstCollection(void) : begin_(), end_()
             {
 
             }
 
-            Collection(const Iterator<T> & begin, const Iterator<T> & end) : begin_(begin), end_(end)
+            ConstCollection(const htd::ConstIterator<T> & begin, const htd::ConstIterator<T> & end) : begin_(begin), end_(end)
             {
 
             }
 
             template <typename CollectionType>
-            Collection(CollectionType & collection) : begin_(std::begin(collection)), end_(std::end(collection))
+            ConstCollection(const CollectionType & collection) : begin_(std::begin(collection)), end_(std::end(collection))
             {
 
             }
 
-            ~Collection()
+            ~ConstCollection()
             {
 
             }
@@ -71,19 +73,9 @@ namespace htd
                 return std::distance(begin(), end());
             }
 
-            htd::Iterator<T> begin(void)
-            {
-                return begin_;
-            }
-
             const htd::ConstIterator<T> begin(void) const
             {
                 return begin_;
-            }
-
-            htd::Iterator<T> end(void)
-            {
-                return end_;
             }
 
             const htd::ConstIterator<T> end(void) const
@@ -91,25 +83,16 @@ namespace htd
                 return end_;
             }
 
-            T & operator[](htd::index_t index)
-            {
-                htd::Iterator<htd::vertex_t> position = begin_;
-
-                std::advance(position, index);
-
-                return *position;
-            }
-
             const T & operator[](htd::index_t index) const
             {
-                htd::Iterator<htd::vertex_t> position = begin_;
+                htd::ConstIterator<T> position = begin_;
 
                 std::advance(position, index);
 
                 return *position;
             }
 
-            Collection<T> & operator=(Collection<T> & rhs)
+            ConstCollection<T> & operator=(const ConstCollection<T> & rhs)
             {
                 begin_ = rhs.begin_;
                 end_ = rhs.end_;
@@ -118,7 +101,7 @@ namespace htd
             }
 
             template <typename CollectionType>
-            Collection<T> & operator=(CollectionType & rhs)
+            ConstCollection<T> & operator=(CollectionType & rhs)
             {
                 begin_ = rhs.begin();
                 end_ = rhs.end();
@@ -126,20 +109,20 @@ namespace htd
                 return *this;
             }
 
-            inline bool operator==(const Collection<T> & rhs) const
+            inline bool operator==(const htd::ConstCollection<T> & rhs) const
             {
                 return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
             }
 
-            inline bool operator!=(const Collection<T> & rhs) const
+            inline bool operator!=(const htd::ConstCollection<T> & rhs) const
             {
                 return !(*this == rhs);
             }
 
         private:
-            htd::Iterator<T> begin_;
-            htd::Iterator<T> end_;
+            htd::ConstIterator<T> begin_;
+            htd::ConstIterator<T> end_;
     };
 }
 
-#endif /* HTD_HTD_COLLECTION_HPP */
+#endif /* HTD_HTD_CONSTCOLLECTION_HPP */

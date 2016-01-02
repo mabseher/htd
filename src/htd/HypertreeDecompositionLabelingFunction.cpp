@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
+#include <htd/IHypertreeDecomposition.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
 
 #include <htd/ILabel.hpp>
@@ -38,15 +39,15 @@
 #include <algorithm>
 #include <string>
 
-htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunction(const htd::IHypergraph & graph) : graph_(graph), setCoverAlgorithm_(htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm()), hyperedges_()
+htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunction(const htd::IHypergraph & graph) : graph_(graph), hyperedges_()
 {
-    htd::Collection<htd::Hyperedge> hyperedgeCollection = graph.hyperedges();
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = graph.hyperedges();
 
     hyperedges_.reserve(hyperedgeCollection.size());
 
     for (htd::Hyperedge originalHyperedge : hyperedgeCollection)
     {
-        htd::Collection<htd::vertex_t> elementCollection = originalHyperedge.elements();
+        const htd::ConstCollection<htd::vertex_t> & elementCollection = originalHyperedge.elements();
 
         htd::vertex_container elements(elementCollection.begin(), elementCollection.end());
 
@@ -54,7 +55,7 @@ htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunct
 
         elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
 
-        hyperedges_.push_back(htd::Hyperedge(originalHyperedge.id(), htd::Collection<htd::vertex_t>(elements.begin(), elements.end())));
+        hyperedges_.push_back(htd::Hyperedge(originalHyperedge.id(), htd::ConstCollection<htd::vertex_t>(elements.begin(), elements.end())));
     }
 
     std::sort(hyperedges_.begin(), hyperedges_.end());
@@ -66,12 +67,7 @@ htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunct
 
 htd::HypertreeDecompositionLabelingFunction::~HypertreeDecompositionLabelingFunction()
 {
-    if (setCoverAlgorithm_ != nullptr)
-    {
-        delete setCoverAlgorithm_;
 
-        setCoverAlgorithm_ = nullptr;
-    }
 }
 
 std::string htd::HypertreeDecompositionLabelingFunction::name() const
@@ -79,7 +75,7 @@ std::string htd::HypertreeDecompositionLabelingFunction::name() const
     return htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER;
 }
 
-htd::Label<htd::Collection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::Collection<htd::vertex_t> & vertices) const
+htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices) const
 {
     std::vector<htd::id_t> relevantContainerIds;
 
@@ -88,13 +84,13 @@ htd::Label<htd::Collection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelin
     //TODO Exploit sortedness of hyperedges here and also at other places!
     for (auto it1 = hyperedges_.begin(); it1 < hyperedges_.end(); it1++)
     {
-        const htd::Collection<htd::vertex_t> & elements1 = it1->elements();
+        const htd::ConstCollection<htd::vertex_t> & elements1 = it1->elements();
 
         bool maximal = true;
 
         for (auto it2 = it1 + 1; it2 < hyperedges_.end(); it2++)
         {
-            const htd::Collection<htd::vertex_t> & elements2 = it2->elements();
+            const htd::ConstCollection<htd::vertex_t> & elements2 = it2->elements();
 
             if (std::includes(elements2.begin(), elements2.end(), elements1.begin(), elements1.end()))
             {
@@ -112,19 +108,23 @@ htd::Label<htd::Collection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelin
 
     std::vector<htd::index_t> setCoverResult;
 
-    setCoverAlgorithm_->computeSetCover(vertices, relevantContainers, setCoverResult);
+    htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm();
+
+    setCoverAlgorithm->computeSetCover(vertices, relevantContainers, setCoverResult);
+
+    delete setCoverAlgorithm;
 
     htd::VectorAdapter<htd::Hyperedge> selectedHyperedges;
 
     for (htd::index_t selectedHyperedgeIndex : setCoverResult)
     {
-        selectedHyperedges.container().push_back(htd::Hyperedge(relevantContainerIds[selectedHyperedgeIndex], relevantContainers[selectedHyperedgeIndex]));
+        selectedHyperedges.container().push_back(htd::Hyperedge(relevantContainerIds[selectedHyperedgeIndex], htd::ConstCollection<htd::vertex_t>(relevantContainers[selectedHyperedgeIndex])));
     }
 
-    return new htd::Label<htd::Collection<htd::Hyperedge>>(selectedHyperedges);
+    return new htd::Label<htd::ConstCollection<htd::Hyperedge>>(selectedHyperedges);
 }
 
-htd::Label<htd::Collection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::Collection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const
+htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const
 {
     HTD_UNUSED(labels);
 

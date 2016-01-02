@@ -27,32 +27,32 @@
 
 #include <htd/Globals.hpp>
 
-#include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 #include <htd/Iterator.hpp>
+#include <htd/ConstIterator.hpp>
 #include <htd/VectorAdapterIteratorWrapper.hpp>
+#include <htd/VectorAdapterConstIteratorWrapper.hpp>
 
 #include <memory>
 #include <vector>
 
 namespace htd
 {
-    template <typename T>
-    class VectorAdapter : public htd::Collection<T>
+    template <typename T, class Allocator = std::allocator<T>>
+    class VectorAdapter
     {
         public:
-            typedef T value_type;
-
-            VectorAdapter<T>(void) : container_(std::make_shared<std::vector<T>>())
+            VectorAdapter(void) : container_(std::make_shared<std::vector<T, Allocator>>())
             {
 
             }
 
-            VectorAdapter<T>(const std::vector<T> & collection) : container_(std::make_shared<std::vector<T>>(collection))
+            VectorAdapter(const std::vector<T> & collection) : container_(std::make_shared<std::vector<T, Allocator>>(collection))
             {
 
             }
 
-            VectorAdapter<T>(const htd::Collection<T> & collection) : container_(std::make_shared<std::vector<T>>(collection.begin(), collection.end()))
+            VectorAdapter(const htd::ConstCollection<T> & collection) : container_(std::make_shared<std::vector<T, Allocator>>(collection.begin(), collection.end()))
             {
 
             }
@@ -62,38 +62,106 @@ namespace htd
 
             }
 
-            std::vector<T> & container()
+            bool empty() const
+            {
+                return container_->empty();
+            }
+
+            std::size_t size() const
+            {
+                return container_->size();
+            }
+
+            std::vector<T, Allocator> & container()
             {
                 return *container_;
             }
 
-            const std::vector<T> & container() const
+            const std::vector<T, Allocator> & container() const
             {
                 return *container_;
             }
 
             htd::Iterator<T> begin(void)
             {
-                return htd::VectorAdapterIteratorWrapper<typename std::vector<T>::iterator, T>(container_, container_->begin());
+                return htd::VectorAdapterIteratorWrapper<typename std::vector<T, Allocator>::iterator, T, Allocator>(container_, container_->begin());
             }
 
-            const htd::Iterator<T> begin(void) const
+            const htd::ConstIterator<T> begin(void) const
             {
-                return htd::VectorAdapterIteratorWrapper<typename std::vector<T>::const_iterator, T>(container_, container_->begin());
+                return htd::VectorAdapterConstIteratorWrapper<typename std::vector<T, Allocator>::const_iterator, T, Allocator>(container_, container_->begin());
             }
 
             htd::Iterator<T> end(void)
             {
-                return htd::VectorAdapterIteratorWrapper<typename std::vector<T>::iterator, T>(container_, container_->end());
+                return htd::VectorAdapterIteratorWrapper<typename std::vector<T, Allocator>::iterator, T, Allocator>(container_, container_->end());
             }
 
-            const htd::Iterator<T> end(void) const
+            const htd::ConstIterator<T> end(void) const
             {
-                return htd::VectorAdapterIteratorWrapper<typename std::vector<T>::const_iterator, T>(container_, container_->end());
+                return htd::VectorAdapterConstIteratorWrapper<typename std::vector<T, Allocator>::const_iterator, T, Allocator>(container_, container_->end());
+            }
+
+            T & operator[](htd::index_t index)
+            {
+                return container_->at(index);
+            }
+
+            const T & operator[](htd::index_t index) const
+            {
+                return container_->at(index);
+            }
+
+            VectorAdapter<T, Allocator> & operator=(htd::Collection<T> & rhs)
+            {
+                container_->clear();
+
+                std::copy(rhs.begin(), rhs.end(), std::back_inserter(*container_));
+
+                return *this;
+            }
+
+            VectorAdapter<T, Allocator> & operator=(const htd::ConstCollection<T> & rhs)
+            {
+                container_->clear();
+
+                std::copy(rhs.begin(), rhs.end(), std::back_inserter(*container_));
+
+                return *this;
+            }
+
+            template <typename CollectionType>
+            VectorAdapter<T, Allocator> & operator=(const CollectionType & rhs)
+            {
+                container_->clear();
+
+                std::copy(rhs.begin(), rhs.end(), std::back_inserter(*container_));
+
+                return *this;
+            }
+
+            inline bool operator==(const htd::Collection<T> & rhs) const
+            {
+                return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
+            }
+
+            inline bool operator!=(const htd::Collection<T> & rhs) const
+            {
+                return !(*this == rhs);
+            }
+
+            inline bool operator==(const htd::ConstCollection<T> & rhs) const
+            {
+                return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
+            }
+
+            inline bool operator!=(const htd::ConstCollection<T> & rhs) const
+            {
+                return !(*this == rhs);
             }
 
         private:
-            std::shared_ptr<std::vector<T>> container_;
+            std::shared_ptr<std::vector<T, Allocator>> container_;
     };
 }
 

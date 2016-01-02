@@ -29,13 +29,10 @@
 #include <htd/LimitMaximumForgottenVertexCountOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <stdexcept>
-
-//TODO Remove
-#include <iostream>
-#include <htd/Helpers.hpp>
 
 htd::LimitMaximumForgottenVertexCountOperation::LimitMaximumForgottenVertexCountOperation(std::size_t limit) : limit_(limit)
 {
@@ -56,7 +53,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 {
     htd::vertex_container forgetNodes;
 
-    const htd::Collection<htd::vertex_t> forgetNodeCollection = decomposition.forgetNodes();
+    const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
 
     std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
 
@@ -64,7 +61,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
     {
         htd::vertex_container bagContent;
 
-        htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
@@ -74,7 +71,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
         {
             htd::vertex_container forgottenVertices;
 
-            const htd::Collection<htd::vertex_t> forgottenVertexCollection = decomposition.forgottenVertices(node);
+            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(node);
 
             std::copy(forgottenVertexCollection.begin(), forgottenVertexCollection.end(), std::back_inserter(forgottenVertices));
 
@@ -96,7 +93,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
             htd::vertex_container children;
 
-            const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
+            const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 
             std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
@@ -111,17 +108,17 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
                 std::vector<htd::vertex_t> newContent;
 
-                htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(child);
+                const htd::ConstCollection<htd::vertex_t> & bagContent = decomposition.bagContent(child);
 
                 std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
+                decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(newContent));
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
                     htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(newContent), *labelCollection);
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>(newContent), *labelCollection);
 
                     delete labelCollection;
 
@@ -135,7 +132,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
                     for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                     {
-                        htd::Collection<htd::vertex_t> bagContent2 = decomposition.bagContent(newNode);
+                        const htd::ConstCollection<htd::vertex_t> & bagContent2 = decomposition.bagContent(newNode);
 
                         newNode = decomposition.addParent(newNode);
 
@@ -143,13 +140,13 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
-                        decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
+                        decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(newContent));
 
                         for (auto & labelingFunction : labelingFunctions)
                         {
                             htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(newContent), *labelCollection);
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>(newContent), *labelCollection);
 
                             delete labelCollection;
 
@@ -181,7 +178,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 {
     htd::vertex_container forgetNodes;
 
-    const htd::Collection<htd::vertex_t> forgetNodeCollection = decomposition.forgetNodes();
+    const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
 
     std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
 
@@ -189,7 +186,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
     {
         htd::vertex_container bagContent;
 
-        htd::Collection<htd::vertex_t> bag = decomposition.bagContent(node);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
@@ -199,7 +196,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
         {
             htd::vertex_container forgottenVertices;
 
-            const htd::Collection<htd::vertex_t> forgottenVertexCollection = decomposition.forgottenVertices(node);
+            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(node);
 
             std::copy(forgottenVertexCollection.begin(), forgottenVertexCollection.end(), std::back_inserter(forgottenVertices));
 
@@ -221,7 +218,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
             htd::vertex_container children;
 
-            const htd::Collection<htd::vertex_t> childContainer = decomposition.children(node);
+            const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 
             std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
@@ -236,17 +233,17 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                 std::vector<htd::vertex_t> newContent;
 
-                htd::Collection<htd::vertex_t> bagContent = decomposition.bagContent(child);
+                const htd::ConstCollection<htd::vertex_t> & bagContent = decomposition.bagContent(child);
 
                 std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
+                decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(newContent));
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
                     htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(newContent), *labelCollection);
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>(newContent), *labelCollection);
 
                     delete labelCollection;
 
@@ -260,7 +257,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                     for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                     {
-                        htd::Collection<htd::vertex_t> bagContent2 = decomposition.bagContent(newNode);
+                        const htd::ConstCollection<htd::vertex_t> & bagContent2 = decomposition.bagContent(newNode);
 
                         newNode = decomposition.addParent(newNode);
 
@@ -268,13 +265,13 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
-                        decomposition.setBagContent(newNode, htd::Collection<htd::vertex_t>(newContent));
+                        decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(newContent));
 
                         for (auto & labelingFunction : labelingFunctions)
                         {
                             htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::Collection<htd::vertex_t>(newContent), *labelCollection);
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>(newContent), *labelCollection);
 
                             delete labelCollection;
 

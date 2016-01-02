@@ -1,5 +1,5 @@
 /* 
- * File:   VectorAdapterIteratorWrapper.hpp
+ * File:   VectorAdapterConstIteratorWrapper.hpp
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,13 +22,12 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_VECTORADAPTERITERATORWRAPPER_HPP
-#define HTD_HTD_VECTORADAPTERITERATORWRAPPER_HPP
+#ifndef HTD_HTD_VECTORADAPTERCONSTITERATORWRAPPER_HPP
+#define HTD_HTD_VECTORADAPTERCONSTITERATORWRAPPER_HPP
 
 #include <htd/Globals.hpp>
 
-#include <htd/IteratorBase.hpp>
-#include <htd/IteratorWrapper.hpp>
+#include <htd/ConstIteratorWrapper.hpp>
 
 #include <iterator>
 #include <memory>
@@ -36,20 +35,20 @@
 namespace htd
 {
     template <typename Iter, typename T = typename Iter::value_type, class Allocator = std::allocator<T>>
-    class VectorAdapterIteratorWrapper : public virtual htd::IteratorWrapper<Iter, T>
+    class VectorAdapterConstIteratorWrapper : public virtual htd::ConstIteratorWrapper<Iter, T>
     {
         public:
-            VectorAdapterIteratorWrapper(std::shared_ptr<std::vector<T, Allocator>> collection, Iter baseIterator) : htd::IteratorWrapper<Iter, T>(baseIterator), collection_(collection)
+            VectorAdapterConstIteratorWrapper(std::shared_ptr<std::vector<T, Allocator>> collection, Iter baseIterator) : htd::ConstIteratorWrapper<Iter, T>(baseIterator), collection_(collection)
             {
 
             }
 
-            VectorAdapterIteratorWrapper(const VectorAdapterIteratorWrapper<Iter, T> & original) : htd::IteratorWrapper<Iter, T>(original), collection_(original.collection_)
+            VectorAdapterConstIteratorWrapper(const VectorAdapterConstIteratorWrapper<Iter, T, Allocator> & original) : htd::ConstIteratorWrapper<Iter, T>(original), collection_(original.collection_)
             {
 
             }
 
-            virtual ~VectorAdapterIteratorWrapper()
+            virtual ~VectorAdapterConstIteratorWrapper()
             {
 
             }

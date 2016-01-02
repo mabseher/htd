@@ -40,7 +40,7 @@ namespace htd
 
             virtual ~IHypertreeDecomposition() = 0;
 
-            virtual const htd::Collection<htd::Hyperedge> coveringEdges(htd::vertex_t vertex) const = 0;
+            virtual htd::ConstCollection<htd::Hyperedge> coveringEdges(htd::vertex_t vertex) const = 0;
 
             virtual IHypertreeDecomposition * clone(void) const = 0;
     };

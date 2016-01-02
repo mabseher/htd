@@ -29,6 +29,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/IHypergraph.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
+#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <cstdlib>
@@ -75,7 +76,7 @@ void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & g
     {
         auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
 
-        const htd::Collection<htd::vertex_t> neighborCollection = graph.neighbors(vertex);
+        const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
 
         currentNeighborhood.reserve(neighborCollection.size());
 

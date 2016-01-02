@@ -3,7 +3,7 @@
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
- * Copyright 2015, Michael Abseher
+ * Copyright 2015-2016, Michael Abseher
  *    E-Mail: <abseher@dbai.tuwien.ac.at>
  * 
  * This file is part of htd.

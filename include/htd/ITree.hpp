@@ -35,7 +35,11 @@ namespace htd
     {
         public:
             virtual ~ITree() = 0;
-            
+
+            using htd::IGraph::vertexCount;
+
+            virtual std::size_t vertexCount(htd::vertex_t subtreeRoot) const = 0;
+
             virtual htd::vertex_t root(void) const = 0;
 
             virtual bool isRoot(htd::vertex_t vertex) const = 0;

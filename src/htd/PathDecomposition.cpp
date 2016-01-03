@@ -76,6 +76,11 @@ std::size_t htd::PathDecomposition::vertexCount(void) const
     return base_->vertexCount();
 }
 
+std::size_t htd::PathDecomposition::vertexCount(htd::vertex_t subpathRoot) const
+{
+    return base_->vertexCount(subpathRoot);
+}
+
 std::size_t htd::PathDecomposition::edgeCount(void) const
 {
     return base_->edgeCount();

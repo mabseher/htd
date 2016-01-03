@@ -51,6 +51,8 @@ namespace htd
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
+            std::size_t vertexCount(htd::vertex_t subtreeRoot) const HTD_OVERRIDE;
+
             std::size_t edgeCount(void) const HTD_OVERRIDE;
 
             std::size_t edgeCount(htd::vertex_t vertex) const HTD_OVERRIDE;
@@ -300,8 +302,6 @@ namespace htd
             std::unordered_set<htd::vertex_t> deletions_;
 
             htd::ILabelingCollection * labelings_;
-
-            std::size_t size(htd::TreeDecomposition::TreeNode * start) const;
 
             void getChildrenVertexLabelSetUnion(htd::vertex_t vertex, htd::vertex_container & output) const;
 

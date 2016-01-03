@@ -34,6 +34,7 @@
 #include <htd/Label.hpp>
 #include <htd/LabelingCollection.hpp>
 #include <htd/VectorAdapter.hpp>
+#include <htd/PreOrderTreeTraversal.hpp>
 #include <htd/PostOrderTreeTraversal.hpp>
 
 #include <algorithm>
@@ -137,6 +138,22 @@ htd::TreeDecomposition::~TreeDecomposition()
 std::size_t htd::TreeDecomposition::vertexCount(void) const
 {
     return size_;
+}
+
+std::size_t htd::TreeDecomposition::vertexCount(htd::vertex_t subtreeRoot) const
+{
+    if (!isVertex(subtreeRoot))
+    {
+        throw std::logic_error("std::size_t htd::TreeDecomposition::vertexCount(htd::vertex_t) const");
+    }
+
+    std::size_t ret = 0;
+
+    htd::PreOrderTreeTraversal treeTraversal;
+
+    treeTraversal.traverse(*this, [&](htd::vertex_t vertex) { HTD_UNUSED(vertex); ++ret; });
+
+    return ret;
 }
 
 std::size_t htd::TreeDecomposition::edgeCount(void) const
@@ -2275,51 +2292,6 @@ void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex
             output.erase(std::unique(output.begin(), output.end()), output.end());
         }
     }
-}
-            
-std::size_t htd::TreeDecomposition::size(htd::TreeDecomposition::TreeNode * start) const
-{
-    std::size_t ret = 0;
-    
-    if (start != nullptr)
-    {
-        TreeNode * currentNode = start;
-
-        htd::index_t currentIndex = 0;
-
-        std::stack<std::pair<TreeNode *, htd::index_t>> parentStack;
-
-        while (parentStack.size() > 0 || currentNode != nullptr)
-        {
-            if (currentNode != nullptr)
-            {
-                ret++;
-                
-                if (currentIndex < currentNode->children.size())
-                {
-                    parentStack.push(std::make_pair(currentNode, currentIndex + 1));
-
-                    currentNode = nodes_[currentNode->children[currentIndex]];
-
-                    currentIndex = 0;
-                }
-                else
-                {
-                    currentNode = nullptr;
-                }
-            }
-            else
-            {
-                currentNode = parentStack.top().first;
-
-                currentIndex = parentStack.top().second;
-
-                parentStack.pop();
-            }
-        }
-    }
-    
-    return ret;
 }
 
 void htd::TreeDecomposition::deleteNode(TreeNode * node)

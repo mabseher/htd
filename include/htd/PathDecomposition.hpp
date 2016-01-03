@@ -47,6 +47,8 @@ namespace htd
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
+            std::size_t vertexCount(htd::vertex_t subpathRoot) const HTD_OVERRIDE;
+
             std::size_t edgeCount(void) const HTD_OVERRIDE;
 
             std::size_t edgeCount(htd::vertex_t vertex) const HTD_OVERRIDE;

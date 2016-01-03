@@ -38,6 +38,8 @@ namespace htd
             
             virtual htd::GraphComponentCollection determineComponents(const htd::IHypergraph & graph) const = 0;
 
+            virtual htd::ConstCollection<htd::vertex_t> determineComponent(const htd::IHypergraph & graph, htd::vertex_t origin) const = 0;
+
             virtual IConnectedComponentAlgorithm * clone(void) const = 0;
     };
 

@@ -38,8 +38,11 @@ namespace htd
             virtual ~IStronglyConnectedComponentAlgorithm() = 0;
             
             using htd::IConnectedComponentAlgorithm::determineComponents;
+            using htd::IConnectedComponentAlgorithm::determineComponent;
 
             virtual htd::GraphComponentCollection determineComponents(const htd::IDirectedGraph & graph) const = 0;
+
+            virtual htd::ConstCollection<htd::vertex_t> determineComponent(const htd::IDirectedGraph & graph, htd::vertex_t origin) const = 0;
 
             virtual IStronglyConnectedComponentAlgorithm * clone(void) const = 0;
     };

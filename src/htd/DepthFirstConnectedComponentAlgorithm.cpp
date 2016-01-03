@@ -33,6 +33,7 @@
 
 #include <algorithm>
 #include <stack>
+#include <stdexcept>
 
 htd::DepthFirstConnectedComponentAlgorithm::DepthFirstConnectedComponentAlgorithm(void)
 {
@@ -52,37 +53,58 @@ htd::GraphComponentCollection htd::DepthFirstConnectedComponentAlgorithm::determ
 
     if (vertexCollection.size() > 0)
     {
-        std::stack<htd::vertex_t> originStack;
-
         std::unordered_set<htd::vertex_t> unvisitedVertices(vertexCollection.begin(), vertexCollection.end());
 
         while (unvisitedVertices.size() > 0)
         {
-            std::vector<htd::vertex_t> component;
+            const htd::ConstCollection<htd::vertex_t> & component = determineComponent(graph, *(unvisitedVertices.begin()));
 
-            originStack.push(*(unvisitedVertices.begin()));
-
-            while (!originStack.empty())
+            for (htd::vertex_t visitedVertex : component)
             {
-                component.push_back(originStack.top());
-                unvisitedVertices.erase(originStack.top());
-
-                for (htd::vertex_t neighbor : graph.neighbors(originStack.top()))
-                {
-                    if (unvisitedVertices.count(neighbor) == 1)
-                    {
-                        originStack.push(neighbor);
-                    }
-                }
-
-                originStack.pop();
+                unvisitedVertices.erase(visitedVertex);
             }
 
-            std::sort(component.begin(), component.end());
-
-            ret.addComponent(htd::ConstCollection<htd::vertex_t>(component));
+            ret.addComponent(component);
         }
     }
+
+    return ret;
+}
+
+htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph & graph, htd::vertex_t origin) const
+{
+    if (!graph.isVertex(origin))
+    {
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph &, htd::vertex_t) const");
+    }
+
+    std::stack<htd::vertex_t> originStack;
+
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    std::unordered_set<htd::vertex_t> visitedVertices;
+
+    std::vector<htd::vertex_t> & component = ret.container();
+
+    originStack.push(origin);
+
+    while (!originStack.empty())
+    {
+        component.push_back(originStack.top());
+        visitedVertices.insert(originStack.top());
+
+        for (htd::vertex_t neighbor : graph.neighbors(originStack.top()))
+        {
+            if (visitedVertices.count(neighbor) == 0)
+            {
+                originStack.push(neighbor);
+            }
+        }
+
+        originStack.pop();
+    }
+
+    std::sort(component.begin(), component.end());
 
     return ret;
 }

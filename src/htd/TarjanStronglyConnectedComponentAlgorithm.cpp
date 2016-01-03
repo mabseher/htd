@@ -31,6 +31,10 @@
 #include <htd/GraphComponentCollection.hpp>
 #include <htd/ConstCollection.hpp>
 
+#include <algorithm>
+#include <stack>
+#include <stdexcept>
+
 htd::TarjanStronglyConnectedComponentAlgorithm::TarjanStronglyConnectedComponentAlgorithm(void)
 {
 
@@ -45,8 +49,24 @@ htd::GraphComponentCollection htd::TarjanStronglyConnectedComponentAlgorithm::de
 {
     htd::GraphComponentCollection ret;
 
-    //TODO Implement!
-    HTD_UNUSED(graph);
+    const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
+
+    if (vertexCollection.size() > 0)
+    {
+        std::unordered_set<htd::vertex_t> unvisitedVertices(vertexCollection.begin(), vertexCollection.end());
+
+        while (unvisitedVertices.size() > 0)
+        {
+            const htd::ConstCollection<htd::vertex_t> & component = determineComponent(graph, *(unvisitedVertices.begin()));
+
+            for (htd::vertex_t visitedVertex : component)
+            {
+                unvisitedVertices.erase(visitedVertex);
+            }
+
+            ret.addComponent(component);
+        }
+    }
 
     return ret;
 }
@@ -55,8 +75,100 @@ htd::GraphComponentCollection htd::TarjanStronglyConnectedComponentAlgorithm::de
 {
     htd::GraphComponentCollection ret;
 
-    //TODO Implement!
-    HTD_UNUSED(graph);
+    const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
+
+    if (vertexCollection.size() > 0)
+    {
+        std::unordered_set<htd::vertex_t> unvisitedVertices(vertexCollection.begin(), vertexCollection.end());
+
+        while (unvisitedVertices.size() > 0)
+        {
+            const htd::ConstCollection<htd::vertex_t> & component = determineComponent(graph, *(unvisitedVertices.begin()));
+
+            for (htd::vertex_t visitedVertex : component)
+            {
+                unvisitedVertices.erase(visitedVertex);
+            }
+
+            ret.addComponent(component);
+        }
+    }
+
+    return ret;
+}
+
+htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph & graph, htd::vertex_t origin) const
+{
+    if (!graph.isVertex(origin))
+    {
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph &, htd::vertex_t) const");
+    }
+
+    std::stack<htd::vertex_t> originStack;
+
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    std::unordered_set<htd::vertex_t> visitedVertices;
+
+    std::vector<htd::vertex_t> & component = ret.container();
+
+    originStack.push(origin);
+
+    while (!originStack.empty())
+    {
+        component.push_back(originStack.top());
+        visitedVertices.insert(originStack.top());
+
+        for (htd::vertex_t neighbor : graph.neighbors(originStack.top()))
+        {
+            if (visitedVertices.count(neighbor) == 0)
+            {
+                originStack.push(neighbor);
+            }
+        }
+
+        originStack.pop();
+    }
+
+    std::sort(component.begin(), component.end());
+
+    return ret;
+}
+
+htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IDirectedGraph & graph, htd::vertex_t origin) const
+{
+    if (!graph.isVertex(origin))
+    {
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IDirectedGraph &, htd::vertex_t) const");
+    }
+
+    std::stack<htd::vertex_t> originStack;
+
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    std::unordered_set<htd::vertex_t> visitedVertices;
+
+    std::vector<htd::vertex_t> & component = ret.container();
+
+    originStack.push(origin);
+
+    while (!originStack.empty())
+    {
+        component.push_back(originStack.top());
+        visitedVertices.insert(originStack.top());
+
+        for (htd::vertex_t neighbor : graph.neighbors(originStack.top()))
+        {
+            if (visitedVertices.count(neighbor) == 0)
+            {
+                originStack.push(neighbor);
+            }
+        }
+
+        originStack.pop();
+    }
+
+    std::sort(component.begin(), component.end());
 
     return ret;
 }

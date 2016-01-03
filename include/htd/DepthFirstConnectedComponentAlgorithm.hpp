@@ -37,7 +37,7 @@ namespace htd
 
             ~DepthFirstConnectedComponentAlgorithm();
             
-            htd::GraphComponentCollection determineComponents(const htd::IHypergraph & graph) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> determineComponents(const htd::IHypergraph & graph) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> determineComponent(const htd::IHypergraph & graph, htd::vertex_t origin) const HTD_OVERRIDE;
 

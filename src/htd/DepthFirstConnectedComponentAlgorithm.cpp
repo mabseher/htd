@@ -28,8 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
-#include <htd/GraphComponentCollection.hpp>
-#include <htd/ConstCollection.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <stack>
@@ -45,9 +44,11 @@ htd::DepthFirstConnectedComponentAlgorithm::~DepthFirstConnectedComponentAlgorit
 
 }
 
-htd::GraphComponentCollection htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::IHypergraph & graph) const
+htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::IHypergraph & graph) const
 {
-    htd::GraphComponentCollection ret;
+    htd::VectorAdapter<htd::ConstCollection<htd::vertex_t>> ret;
+
+    std::vector<htd::ConstCollection<htd::vertex_t>> & components = ret.container();
 
     const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
 
@@ -64,11 +65,11 @@ htd::GraphComponentCollection htd::DepthFirstConnectedComponentAlgorithm::determ
                 unvisitedVertices.erase(visitedVertex);
             }
 
-            ret.addComponent(component);
+            components.push_back(component);
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::ConstCollection<htd::vertex_t>>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph & graph, htd::vertex_t origin) const

@@ -26,8 +26,8 @@
 #define	HTD_HTD_ICONNECTEDCOMPONENTALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/GraphComponentCollection.hpp>
 #include <htd/IHypergraph.hpp>
+#include <htd/ConstCollection.hpp>
 
 namespace htd
 {
@@ -36,7 +36,7 @@ namespace htd
         public:
             virtual ~IConnectedComponentAlgorithm() = 0;
             
-            virtual htd::GraphComponentCollection determineComponents(const htd::IHypergraph & graph) const = 0;
+            virtual htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> determineComponents(const htd::IHypergraph & graph) const = 0;
 
             virtual htd::ConstCollection<htd::vertex_t> determineComponent(const htd::IHypergraph & graph, htd::vertex_t origin) const = 0;
 

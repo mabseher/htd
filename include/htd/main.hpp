@@ -42,7 +42,6 @@
 #include <htd/DirectedGraph.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/Globals.hpp>
-#include <htd/GraphComponentCollection.hpp>
 #include <htd/GraphFactory.hpp>
 #include <htd/Graph.hpp>
 #include <htd/GraphLabeling.hpp>

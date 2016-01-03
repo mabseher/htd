@@ -28,8 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/TarjanStronglyConnectedComponentAlgorithm.hpp>
-#include <htd/GraphComponentCollection.hpp>
-#include <htd/ConstCollection.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <stack>
@@ -45,9 +44,11 @@ htd::TarjanStronglyConnectedComponentAlgorithm::~TarjanStronglyConnectedComponen
 
 }
 
-htd::GraphComponentCollection htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IHypergraph & graph) const
+htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IHypergraph & graph) const
 {
-    htd::GraphComponentCollection ret;
+    htd::VectorAdapter<htd::ConstCollection<htd::vertex_t>> ret;
+
+    std::vector<htd::ConstCollection<htd::vertex_t>> & components = ret.container();
 
     const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
 
@@ -64,16 +65,18 @@ htd::GraphComponentCollection htd::TarjanStronglyConnectedComponentAlgorithm::de
                 unvisitedVertices.erase(visitedVertex);
             }
 
-            ret.addComponent(component);
+            components.push_back(component);
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::ConstCollection<htd::vertex_t>>::getInstance(ret);
 }
 
-htd::GraphComponentCollection htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IDirectedGraph & graph) const
+htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IDirectedGraph & graph) const
 {
-    htd::GraphComponentCollection ret;
+    htd::VectorAdapter<htd::ConstCollection<htd::vertex_t>> ret;
+
+    std::vector<htd::ConstCollection<htd::vertex_t>> & components = ret.container();
 
     const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
 
@@ -90,11 +93,11 @@ htd::GraphComponentCollection htd::TarjanStronglyConnectedComponentAlgorithm::de
                 unvisitedVertices.erase(visitedVertex);
             }
 
-            ret.addComponent(component);
+            components.push_back(component);
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::ConstCollection<htd::vertex_t>>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph & graph, htd::vertex_t origin) const

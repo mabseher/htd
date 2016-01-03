@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_PATHDECOMPOSITIONFACTORY_HPP
-#define HTD_PATHDECOMPOSITIONFACTORY_HPP
+#ifndef HTD_HTD_PATHDECOMPOSITIONFACTORY_HPP
+#define HTD_HTD_PATHDECOMPOSITIONFACTORY_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutablePathDecomposition.hpp>
@@ -59,4 +59,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_PATHDECOMPOSITIONFACTORY_HPP */
+#endif /* HTD_HTD_PATHDECOMPOSITIONFACTORY_HPP */

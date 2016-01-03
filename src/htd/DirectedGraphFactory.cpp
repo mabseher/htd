@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_DIRECTEDGRAPHFACTORY_CPP
-#define HTD_DIRECTEDGRAPHFACTORY_CPP
+#ifndef HTD_HTD_DIRECTEDGRAPHFACTORY_CPP
+#define HTD_HTD_DIRECTEDGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/DirectedGraphFactory.hpp>
@@ -91,4 +91,4 @@ const htd::IMutableDirectedGraph & htd::DirectedGraphFactory::accessMutableDirec
     return *(dynamic_cast<const htd::IMutableDirectedGraph *>(&original));
 }
 
-#endif /* HTD_DIRECTEDGRAPHFACTORY_CPP */
+#endif /* HTD_HTD_DIRECTEDGRAPHFACTORY_CPP */

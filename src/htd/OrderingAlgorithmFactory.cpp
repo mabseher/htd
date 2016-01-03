@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_ORDERINGALGORITHMFACTORY_CPP
-#define HTD_ORDERINGALGORITHMFACTORY_CPP
+#ifndef HTD_HTD_ORDERINGALGORITHMFACTORY_CPP
+#define HTD_HTD_ORDERINGALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
@@ -76,4 +76,4 @@ void htd::OrderingAlgorithmFactory::setConstructionTemplate(htd::IOrderingAlgori
     constructionTemplate_ = original;
 }
 
-#endif /* HTD_ORDERINGALGORITHMFACTORY_CPP */
+#endif /* HTD_HTD_ORDERINGALGORITHMFACTORY_CPP */

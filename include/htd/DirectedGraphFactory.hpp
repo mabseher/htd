@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_DIRECTEDGRAPHFACTORY_HPP
-#define HTD_DIRECTEDGRAPHFACTORY_HPP
+#ifndef HTD_HTD_DIRECTEDGRAPHFACTORY_HPP
+#define HTD_HTD_DIRECTEDGRAPHFACTORY_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IDirectedGraph.hpp>
@@ -57,4 +57,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_DIRECTEDGRAPHFACTORY_HPP */
+#endif /* HTD_HTD_DIRECTEDGRAPHFACTORY_HPP */

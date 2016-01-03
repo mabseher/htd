@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP
-#define HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP
+#ifndef HTD_HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP
+#define HTD_HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/StronglyConnectedComponentAlgorithmFactory.hpp>
@@ -77,4 +77,4 @@ void htd::StronglyConnectedComponentAlgorithmFactory::setConstructionTemplate(ht
     constructionTemplate_ = original;
 }
 
-#endif /* HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP */
+#endif /* HTD_HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP */

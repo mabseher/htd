@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_CPP
-#define HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_CPP
+#ifndef HTD_HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_CPP
+#define HTD_HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/ConnectedComponentAlgorithmFactory.hpp>
@@ -77,4 +77,4 @@ void htd::ConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IConn
     constructionTemplate_ = original;
 }
 
-#endif /* HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_CPP */
+#endif /* HTD_HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_CPP */

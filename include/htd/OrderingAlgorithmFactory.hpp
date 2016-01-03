@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_ORDERINGALGORITHMFACTORY_HPP
-#define HTD_ORDERINGALGORITHMFACTORY_HPP
+#ifndef HTD_HTD_ORDERINGALGORITHMFACTORY_HPP
+#define HTD_HTD_ORDERINGALGORITHMFACTORY_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
@@ -52,4 +52,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_ORDERINGALGORITHMFACTORY_HPP */
+#endif /* HTD_HTD_ORDERINGALGORITHMFACTORY_HPP */

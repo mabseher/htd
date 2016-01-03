@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_TREEDECOMPOSITIONFACTORY_HPP
-#define HTD_TREEDECOMPOSITIONFACTORY_HPP
+#ifndef HTD_HTD_TREEDECOMPOSITIONFACTORY_HPP
+#define HTD_HTD_TREEDECOMPOSITIONFACTORY_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
@@ -59,4 +59,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_TREEDECOMPOSITIONFACTORY_HPP */
+#endif /* HTD_HTD_TREEDECOMPOSITIONFACTORY_HPP */

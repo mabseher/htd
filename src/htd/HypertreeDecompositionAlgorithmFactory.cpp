@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HYPERTREEDECOMPOSITIONALGORITHMFACTORY_CPP
-#define HTD_HYPERTREEDECOMPOSITIONALGORITHMFACTORY_CPP
+#ifndef HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHMFACTORY_CPP
+#define HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/HypertreeDecompositionAlgorithmFactory.hpp>
@@ -84,4 +84,4 @@ void htd::HypertreeDecompositionAlgorithmFactory::setManipulationOperations(cons
     constructionTemplate_->setManipulationOperations(manipulationOperations);
 }
 
-#endif /* HTD_HYPERTREEDECOMPOSITIONALGORITHMFACTORY_CPP */
+#endif /* HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHMFACTORY_CPP */

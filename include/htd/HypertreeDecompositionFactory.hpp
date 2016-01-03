@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HYPERTREEDECOMPOSITIONFACTORY_HPP
-#define HTD_HYPERTREEDECOMPOSITIONFACTORY_HPP
+#ifndef HTD_HTD_HYPERTREEDECOMPOSITIONFACTORY_HPP
+#define HTD_HTD_HYPERTREEDECOMPOSITIONFACTORY_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IHypertreeDecomposition.hpp>
@@ -60,4 +60,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HYPERTREEDECOMPOSITIONFACTORY_HPP */
+#endif /* HTD_HTD_HYPERTREEDECOMPOSITIONFACTORY_HPP */

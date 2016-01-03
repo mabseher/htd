@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HYPERGRAPHFACTORY_CPP
-#define HTD_HYPERGRAPHFACTORY_CPP
+#ifndef HTD_HTD_HYPERGRAPHFACTORY_CPP
+#define HTD_HTD_HYPERGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/HypergraphFactory.hpp>
@@ -91,4 +91,4 @@ const htd::IMutableHypergraph & htd::HypergraphFactory::accessMutableHypergraph(
     return *(dynamic_cast<const htd::IMutableHypergraph *>(&original));
 }
 
-#endif /* HTD_HYPERGRAPHFACTORY_CPP */
+#endif /* HTD_HTD_HYPERGRAPHFACTORY_CPP */

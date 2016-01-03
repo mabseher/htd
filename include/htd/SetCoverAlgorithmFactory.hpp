@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_SETCOVERALGORITHMFACTORY_HPP
-#define HTD_SETCOVERALGORITHMFACTORY_HPP
+#ifndef HTD_HTD_SETCOVERALGORITHMFACTORY_HPP
+#define HTD_HTD_SETCOVERALGORITHMFACTORY_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
@@ -52,4 +52,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_SETCOVERALGORITHMFACTORY_HPP */
+#endif /* HTD_HTD_SETCOVERALGORITHMFACTORY_HPP */

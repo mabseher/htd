@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP
-#define HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP
+#ifndef HTD_HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP
+#define HTD_HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
@@ -82,4 +82,4 @@ void htd::TreeDecompositionAlgorithmFactory::setManipulationOperations(const std
     constructionTemplate_->setManipulationOperations(manipulationOperations);
 }
 
-#endif /* HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP */
+#endif /* HTD_HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP */

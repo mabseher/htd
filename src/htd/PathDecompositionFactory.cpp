@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_PATHDECOMPOSITIONFACTORY_CPP
-#define HTD_PATHDECOMPOSITIONFACTORY_CPP
+#ifndef HTD_HTD_PATHDECOMPOSITIONFACTORY_CPP
+#define HTD_HTD_PATHDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/PathDecompositionFactory.hpp>
@@ -101,4 +101,4 @@ const htd::IMutablePathDecomposition & htd::PathDecompositionFactory::accessMuta
     return *(dynamic_cast<const htd::IMutablePathDecomposition *>(&original));
 }
 
-#endif /* HTD_PATHDECOMPOSITIONFACTORY_CPP */
+#endif /* HTD_HTD_PATHDECOMPOSITIONFACTORY_CPP */

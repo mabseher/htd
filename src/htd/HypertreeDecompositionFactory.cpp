@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HYPERTREEDECOMPOSITIONFACTORY_CPP
-#define HTD_HYPERTREEDECOMPOSITIONFACTORY_CPP
+#ifndef HTD_HTD_HYPERTREEDECOMPOSITIONFACTORY_CPP
+#define HTD_HTD_HYPERTREEDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/HypertreeDecompositionFactory.hpp>
@@ -103,4 +103,4 @@ const htd::IMutableHypertreeDecomposition & htd::HypertreeDecompositionFactory::
     return *(dynamic_cast<const htd::IMutableHypertreeDecomposition *>(&original));
 }
 
-#endif /* HTD_HYPERTREEDECOMPOSITIONFACTORY_CPP */
+#endif /* HTD_HTD_HYPERTREEDECOMPOSITIONFACTORY_CPP */

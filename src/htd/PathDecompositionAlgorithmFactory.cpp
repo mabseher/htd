@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP
-#define HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP
+#ifndef HTD_HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP
+#define HTD_HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/PathDecompositionAlgorithmFactory.hpp>
@@ -82,4 +82,4 @@ void htd::PathDecompositionAlgorithmFactory::setManipulationOperations(const std
     constructionTemplate_->setManipulationOperations(manipulationOperations);
 }
 
-#endif /* HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP */
+#endif /* HTD_HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP */

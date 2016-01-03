@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_TREEDECOMPOSITIONFACTORY_CPP
-#define HTD_TREEDECOMPOSITIONFACTORY_CPP
+#ifndef HTD_HTD_TREEDECOMPOSITIONFACTORY_CPP
+#define HTD_HTD_TREEDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
@@ -101,4 +101,4 @@ const htd::IMutableTreeDecomposition & htd::TreeDecompositionFactory::accessMuta
     return *(dynamic_cast<const htd::IMutableTreeDecomposition *>(&original));
 }
 
-#endif /* HTD_TREEDECOMPOSITIONFACTORY_CPP */
+#endif /* HTD_HTD_TREEDECOMPOSITIONFACTORY_CPP */

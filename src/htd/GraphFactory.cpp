@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_GRAPHFACTORY_CPP
-#define HTD_GRAPHFACTORY_CPP
+#ifndef HTD_HTD_GRAPHFACTORY_CPP
+#define HTD_HTD_GRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/GraphFactory.hpp>
@@ -91,4 +91,4 @@ const htd::IMutableGraph & htd::GraphFactory::accessMutableGraph(const htd::IGra
     return *(dynamic_cast<const htd::IMutableGraph *>(&original));
 }
 
-#endif /* HTD_GRAPHFACTORY_CPP */
+#endif /* HTD_HTD_GRAPHFACTORY_CPP */

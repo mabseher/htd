@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_SETCOVERALGORITHMFACTORY_CPP
-#define HTD_SETCOVERALGORITHMFACTORY_CPP
+#ifndef HTD_HTD_SETCOVERALGORITHMFACTORY_CPP
+#define HTD_HTD_SETCOVERALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
@@ -76,4 +76,4 @@ void htd::SetCoverAlgorithmFactory::setConstructionTemplate(htd::ISetCoverAlgori
     constructionTemplate_ = original;
 }
 
-#endif /* HTD_SETCOVERALGORITHMFACTORY_CPP */
+#endif /* HTD_HTD_SETCOVERALGORITHMFACTORY_CPP */

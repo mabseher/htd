@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_HPP
-#define HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_HPP
+#ifndef HTD_HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_HPP
+#define HTD_HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
@@ -52,4 +52,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_HPP */
+#endif /* HTD_HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_HPP */

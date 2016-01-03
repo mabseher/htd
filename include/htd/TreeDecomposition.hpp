@@ -305,11 +305,7 @@ namespace htd
 
             void getChildrenVertexLabelSetUnion(htd::vertex_t vertex, htd::vertex_container & output) const;
 
-            void deleteSubtree(htd::TreeDecomposition::TreeNode * start);
-
             void deleteNode(htd::TreeDecomposition::TreeNode * node);
-
-            void copy(const htd::ILabeledTree& original, htd::vertex_t vertex);
     };
 }
 

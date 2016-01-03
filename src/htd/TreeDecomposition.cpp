@@ -34,6 +34,7 @@
 #include <htd/Label.hpp>
 #include <htd/LabelingCollection.hpp>
 #include <htd/VectorAdapter.hpp>
+#include <htd/PostOrderTreeTraversal.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -986,10 +987,14 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
 
 void htd::TreeDecomposition::removeSubtree(htd::vertex_t subtreeRoot)
 {
-    if (isVertex(subtreeRoot))
+    if (!isVertex(subtreeRoot))
     {
-        deleteSubtree(nodes_[subtreeRoot - htd::Vertex::FIRST]);
+        throw std::logic_error("void htd::TreeDecomposition::removeSubtree(htd::vertex_t)");
     }
+
+    htd::PostOrderTreeTraversal treeTraversal;
+
+    treeTraversal.traverse(*this, [&](htd::vertex_t vertex) { removeVertex(vertex); });
 }
 
 htd::vertex_t htd::TreeDecomposition::insertRoot(void)
@@ -2315,95 +2320,6 @@ std::size_t htd::TreeDecomposition::size(htd::TreeDecomposition::TreeNode * star
     }
     
     return ret;
-}
-
-void htd::TreeDecomposition::deleteSubtree(htd::TreeDecomposition::TreeNode * start)
-{
-    if (start != nullptr)
-    {
-        TreeNode * lastNode = nullptr;
-
-        TreeNode * peekNode = nullptr;
-
-        TreeNode * currentNode = start;
-
-        htd::index_t lastIndex = 0;
-
-        htd::index_t peekIndex = 0;
-
-        htd::index_t currentIndex = 0;
-        
-        std::stack<std::pair<TreeNode *, htd::index_t>> parentStack;
-
-        if (currentNode != nullptr)
-        {
-            currentIndex = currentNode->children.size() - 1;
-        }
-        
-        while (parentStack.size() > 0 || currentNode != nullptr)
-        {
-            if (currentNode != nullptr)
-            {
-                if (currentIndex < currentNode->children.size())
-                {
-                    parentStack.push(std::make_pair(currentNode, currentIndex));
-
-                    currentNode = nodes_[currentNode->children[currentIndex]];
-                    
-                    currentIndex = currentNode->children.size() - 1;
-                }
-                else
-                {
-                    if (parentStack.size() > 0 && parentStack.top().first != nullptr)
-                    {
-                        deleteNode(currentNode);
-                        
-                        parentStack.top().second--;
-                    }
-                    else
-                    {
-                        removeRoot();
-                    }
-                    
-                    currentNode = nullptr;
-                }
-            }
-            else
-            {
-                peekNode = parentStack.top().first;
-                peekIndex = parentStack.top().second;
-                
-                if (peekIndex < peekNode->children.size() && !(lastNode == peekNode && lastIndex == peekIndex))
-                {
-                    currentNode = nodes_[peekNode->children[peekIndex]];
-                        
-                    currentIndex = currentNode->children.size() - 1;
-                    
-                    parentStack.top().second--;
-                }
-                else
-                {
-                    lastNode = peekNode;
-                    lastIndex = peekIndex;
-                    
-                    currentNode = nullptr;
-                    
-                    parentStack.pop();
-                    
-                    if (parentStack.size() > 0 && parentStack.top().first != nullptr)
-                    {
-                        deleteNode(peekNode);
-                        
-                        parentStack.top().second--;
-                    }
-                    else
-                    {        
-                        removeRoot();
-                    }
-                }
-            }
-        }
-    }
 }
 
 void htd::TreeDecomposition::deleteNode(TreeNode * node)

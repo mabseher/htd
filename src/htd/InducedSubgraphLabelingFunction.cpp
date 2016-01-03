@@ -71,7 +71,7 @@ htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::InducedSubgraphLabelingF
         }
     }
 
-    return new htd::Label<htd::ConstCollection<htd::Hyperedge>>(label);
+    return new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(label));
 }
 
 htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::InducedSubgraphLabelingFunction::computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const

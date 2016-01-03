@@ -98,7 +98,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsVe
         
     std::sort(result.begin(), result.end());
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
             
 htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
@@ -125,7 +125,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
         elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
 
-        edges.push_back(htd::Hyperedge(edge.id(), htd::ConstCollection<htd::vertex_t>(elements)));
+        edges.push_back(htd::Hyperedge(edge.id(), htd::ConstCollection<htd::vertex_t>::getInstance(elements)));
     }
 
     std::unordered_set<htd::vertex_t> missingEdges(edgeCount);
@@ -173,7 +173,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
         std::sort(result.begin(), result.end());
     }
 
-    return ret;
+    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
@@ -216,7 +216,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsCo
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 void htd::TreeDecompositionVerifier::getReachableVertices(htd::vertex_t start, const htd::ITreeDecomposition & decomposition, const htd::vertex_container & filter, htd::vertex_container & output) const

@@ -627,7 +627,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 if (visited.find(currentNode) == visited.end())
                 {
-                    ret->setBagContent(decompositionNode, htd::ConstCollection<htd::vertex_t>(buckets[currentNode - htd::Vertex::FIRST]));
+                    ret->setBagContent(decompositionNode, htd::ConstCollection<htd::vertex_t>::getInstance(buckets[currentNode - htd::Vertex::FIRST]));
 
                     visited.insert(currentNode);
                 }

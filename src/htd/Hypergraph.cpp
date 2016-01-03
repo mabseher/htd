@@ -114,9 +114,7 @@ bool htd::Hypergraph::isEdge(htd::id_t edgeId) const
 
 bool htd::Hypergraph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    htd::vertex_container elements { vertex1, vertex2 };
-
-    return isEdge(htd::ConstCollection<htd::vertex_t>(elements));
+    return isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(htd::vertex_container { vertex1, vertex2 }));
 }
 
 bool htd::Hypergraph::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
@@ -145,7 +143,7 @@ htd::ConstCollection<htd::id_t> htd::Hypergraph::associatedEdgeIds(htd::vertex_t
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::id_t> htd::Hypergraph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
@@ -162,7 +160,7 @@ htd::ConstCollection<htd::id_t> htd::Hypergraph::associatedEdgeIds(const htd::Co
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::Hypergraph::vertexAtPosition(htd::index_t index) const
@@ -347,7 +345,7 @@ htd::ConstCollection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t ver
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t) const");
     }
 
-    return htd::ConstCollection<htd::vertex_t>(neighborhood_[vertex - htd::Vertex::FIRST]);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(neighborhood_[vertex - htd::Vertex::FIRST]);
 }
 
 htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index) const
@@ -373,7 +371,7 @@ htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index
 
 htd::ConstCollection<htd::vertex_t> htd::Hypergraph::vertices(void) const
 {
-    return htd::ConstCollection<htd::vertex_t>(vertices_);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(vertices_);
 }
 
 std::size_t htd::Hypergraph::isolatedVertexCount(void) const
@@ -425,7 +423,7 @@ htd::ConstCollection<htd::vertex_t> htd::Hypergraph::isolatedVertices(void) cons
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::Hypergraph::isolatedVertex(htd::index_t index) const
@@ -463,7 +461,7 @@ bool htd::Hypergraph::isIsolatedVertex(htd::vertex_t vertex) const
 
 htd::ConstCollection<htd::Hyperedge> htd::Hypergraph::hyperedges(void) const
 {
-    return htd::ConstCollection<htd::Hyperedge>(edges_);
+    return htd::ConstCollection<htd::Hyperedge>::getInstance(edges_);
 }
 
 htd::ConstCollection<htd::Hyperedge> htd::Hypergraph::hyperedges(htd::vertex_t vertex) const
@@ -483,7 +481,7 @@ htd::ConstCollection<htd::Hyperedge> htd::Hypergraph::hyperedges(htd::vertex_t v
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
 }
 
 const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::id_t edgeId) const
@@ -597,23 +595,23 @@ htd::id_t htd::Hypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
         throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(htd::vertex_t, htd::vertex_t)");
     }
 
-    edges_.push_back(htd::Hyperedge(next_edge_, htd::ConstCollection<htd::vertex_t>(htd::vertex_container { vertex1, vertex2 })));
+    edges_.push_back(htd::Hyperedge(next_edge_, htd::ConstCollection<htd::vertex_t>::getInstance(htd::vertex_container { vertex1, vertex2 })));
 
     auto & currentNeighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
     auto & currentNeighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
 
     auto position1 = std::lower_bound(currentNeighborhood1.begin(), currentNeighborhood1.end(), vertex2);
 
-    if (position1 != currentNeighborhood1.end())
+    if (position1 == currentNeighborhood1.end() || *position1 != vertex2)
     {
         currentNeighborhood1.insert(position1, vertex2);
     }
 
     auto position2 = std::lower_bound(currentNeighborhood2.begin(), currentNeighborhood2.end(), vertex1);
 
-    if (position2 != currentNeighborhood2.end())
+    if (position2 == currentNeighborhood2.end() || *position2 != vertex1)
     {
-        currentNeighborhood1.insert(position2, vertex1);
+        currentNeighborhood2.insert(position2, vertex1);
     }
 
     return next_edge_++;

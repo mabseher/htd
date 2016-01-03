@@ -112,13 +112,13 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
                 std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(newContent));
+                decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>::getInstance(newContent));
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
                     htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>(newContent), *labelCollection);
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(newContent), *labelCollection);
 
                     delete labelCollection;
 
@@ -140,13 +140,13 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
-                        decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(newContent));
+                        decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>::getInstance(newContent));
 
                         for (auto & labelingFunction : labelingFunctions)
                         {
                             htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>(newContent), *labelCollection);
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(newContent), *labelCollection);
 
                             delete labelCollection;
 
@@ -237,13 +237,13 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                 std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(newContent));
+                decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>::getInstance(newContent));
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
                     htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>(newContent), *labelCollection);
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(newContent), *labelCollection);
 
                     delete labelCollection;
 
@@ -265,13 +265,13 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
-                        decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(newContent));
+                        decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>::getInstance(newContent));
 
                         for (auto & labelingFunction : labelingFunctions)
                         {
                             htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>(newContent), *labelCollection);
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(newContent), *labelCollection);
 
                             delete labelCollection;
 

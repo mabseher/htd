@@ -191,7 +191,7 @@ namespace htd
                     return base_->associatedEdgeIds(lookupVertex(vertexName1), lookupVertex(vertexName2));
                 }
 
-                return htd::VectorAdapter<htd::id_t>();
+                return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>());
             }
 
             htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<VertexNameType> & elements) const
@@ -212,10 +212,10 @@ namespace htd
 
                 if (!ok)
                 {
-                    return htd::VectorAdapter<htd::id_t>();
+                    return htd::ConstCollection<htd::id_t>();;
                 }
 
-                return base_->associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(hyperedge));
+                return base_->associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
             }
 
             bool isConnected(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
@@ -364,7 +364,7 @@ namespace htd
                     hyperedge.push_back(lookupVertex(vertex));
                 }
 
-                return base_->addEdge(htd::ConstCollection<htd::vertex_t>(hyperedge));
+                return base_->addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
             }
 
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements, const EdgeNameType & name)
@@ -381,7 +381,7 @@ namespace htd
                     hyperedge.push_back(lookupVertex(vertex));
                 }
 
-                htd::id_t edgeId = base_->addEdge(htd::ConstCollection<htd::vertex_t>(hyperedge));
+                htd::id_t edgeId = base_->addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
 
                 setEdgeName(edgeId, name);
 

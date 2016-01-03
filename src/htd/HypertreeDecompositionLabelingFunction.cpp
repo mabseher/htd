@@ -45,7 +45,7 @@ htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunct
 
     hyperedges_.reserve(hyperedgeCollection.size());
 
-    for (htd::Hyperedge originalHyperedge : hyperedgeCollection)
+    for (const htd::Hyperedge & originalHyperedge : hyperedgeCollection)
     {
         const htd::ConstCollection<htd::vertex_t> & elementCollection = originalHyperedge.elements();
 
@@ -118,10 +118,10 @@ htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLa
 
     for (htd::index_t selectedHyperedgeIndex : setCoverResult)
     {
-        selectedHyperedges.container().push_back(htd::Hyperedge(relevantContainerIds[selectedHyperedgeIndex], htd::ConstCollection<htd::vertex_t>(relevantContainers[selectedHyperedgeIndex])));
+        selectedHyperedges.container().push_back(htd::Hyperedge(relevantContainerIds[selectedHyperedgeIndex], htd::ConstCollection<htd::vertex_t>::getInstance(relevantContainers[selectedHyperedgeIndex])));
     }
 
-    return new htd::Label<htd::ConstCollection<htd::Hyperedge>>(selectedHyperedges);
+    return new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(selectedHyperedges));
 }
 
 htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const

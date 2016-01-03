@@ -200,7 +200,7 @@ htd::ConstCollection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(htd::v
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
@@ -220,7 +220,7 @@ htd::ConstCollection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(const 
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::vertexAtPosition(htd::index_t index) const
@@ -337,7 +337,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::neighbors(htd::verte
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::neighbor(htd::vertex_t vertex, htd::index_t index) const
@@ -381,7 +381,7 @@ htd::vertex_t htd::TreeDecomposition::neighbor(htd::vertex_t vertex, htd::index_
 
 htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::vertices(void) const
 {
-    return htd::ConstCollection<htd::vertex_t>(vertices_);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(vertices_);
 }
 
 std::size_t htd::TreeDecomposition::isolatedVertexCount(void) const
@@ -440,7 +440,7 @@ htd::ConstCollection<htd::edge_t> htd::TreeDecomposition::edges(void) const
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::edge_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t vertex) const
@@ -499,7 +499,7 @@ htd::ConstCollection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t ve
         throw std::logic_error("const htd::IConstCollection<htd::edge_t> htd::TreeDecomposition::edges(htd::vertex_t) const");
     }
 
-    return ret;
+    return htd::ConstCollection<htd::edge_t>::getInstance(ret);
 }
 
 const htd::edge_t & htd::TreeDecomposition::edgeAtPosition(htd::index_t index) const
@@ -570,7 +570,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(void) co
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::vertex_t vertex) const
@@ -603,7 +603,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::ver
         throw std::logic_error("const htd::IConstCollection<htd::Hyperedge> htd::TreeDecomposition::hyperedges(htd::vertex_t) const");
     }
 
-    return ret;
+    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
 }
 
 const htd::Hyperedge & htd::TreeDecomposition::hyperedge(htd::id_t edgeId) const
@@ -736,7 +736,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::children(htd::vertex
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::children(htd::vertex_t) const");
     }
 
-    return htd::ConstCollection<htd::vertex_t>(nodes_[vertex - htd::Vertex::FIRST]->children);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(nodes_[vertex - htd::Vertex::FIRST]->children);
 }
 
 htd::vertex_t htd::TreeDecomposition::child(htd::vertex_t vertex, htd::index_t index) const
@@ -1396,7 +1396,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::leafNodes(void) cons
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::leafNode(htd::index_t index) const
@@ -1471,7 +1471,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::joinNodes(void) cons
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::joinNode(htd::index_t index) const
@@ -1558,7 +1558,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) co
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::forgetNode(htd::index_t index) const
@@ -1651,7 +1651,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void)
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::introduceNode(htd::index_t index) const
@@ -1750,7 +1750,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::vert
     {
         auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-        bagLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::VectorAdapter<htd::vertex_t>(content)));
+        bagLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>(content))));
     }
     else
     {
@@ -1764,7 +1764,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::Cons
     {
         auto & bagLabeling = (*labelings_)[htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER];
 
-        bagLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::VectorAdapter<htd::vertex_t>(htd::ConstCollection<htd::vertex_t>(content.begin(), content.end()))));
+        bagLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>(content))));
     }
     else
     {
@@ -1880,7 +1880,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(ht
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t) const");
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const
@@ -1907,7 +1907,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(ht
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(htd::vertex_t, htd::vertex_t) const");
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index) const
@@ -2026,7 +2026,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(h
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t) const");
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const
@@ -2053,7 +2053,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(h
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(htd::vertex_t, htd::vertex_t) const");
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index) const
@@ -2172,7 +2172,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(h
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t) const");
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const
@@ -2199,7 +2199,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(h
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(htd::vertex_t, htd::vertex_t) const");
     }
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index) const

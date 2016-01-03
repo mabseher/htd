@@ -52,7 +52,7 @@ htd::ConstCollection<htd::vertex_t> htd::GraphComponentCollection::componentAtPo
         throw std::out_of_range("const htd::ConstCollection<htd::vertex_t> & htd::GraphComponentCollection::componentAtPosition(htd::index_t) const");
     }
 
-    return htd::ConstCollection<htd::vertex_t>(components_[index]);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(components_[index]);
 }
 
 void htd::GraphComponentCollection::addComponent(const htd::ConstCollection<htd::vertex_t> & component)

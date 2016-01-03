@@ -108,7 +108,7 @@ htd::ConstCollection<htd::id_t> htd::DirectedGraph::associatedEdgeIds(htd::verte
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::id_t> htd::DirectedGraph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
@@ -128,7 +128,7 @@ htd::ConstCollection<htd::id_t> htd::DirectedGraph::associatedEdgeIds(const htd:
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::DirectedGraph::vertexAtPosition(htd::index_t index) const
@@ -269,7 +269,7 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::incomingNeighbors(htd::v
 
     std::sort(result.begin(), result.end());
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::outgoingNeighbors(htd::vertex_t vertex) const
@@ -287,7 +287,7 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::outgoingNeighbors(htd::v
 
     std::sort(result.begin(), result.end());
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const
@@ -388,7 +388,7 @@ htd::ConstCollection<htd::edge_t> htd::DirectedGraph::edges(void) const
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::edge_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::edge_t> htd::DirectedGraph::edges(htd::vertex_t vertex) const
@@ -407,7 +407,7 @@ htd::ConstCollection<htd::edge_t> htd::DirectedGraph::edges(htd::vertex_t vertex
         result.push_back(htd::edge_t(vertex, vertex2));
     }
 
-    return ret;
+    return htd::ConstCollection<htd::edge_t>::getInstance(ret);
 }
 
 const htd::edge_t & htd::DirectedGraph::edgeAtPosition(htd::index_t index) const

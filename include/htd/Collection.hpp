@@ -50,12 +50,6 @@ namespace htd
 
             }
 
-            template <typename CollectionType>
-            Collection(CollectionType & collection) : begin_(std::begin(collection)), end_(std::end(collection))
-            {
-
-            }
-
             ~Collection()
             {
 
@@ -134,6 +128,12 @@ namespace htd
             inline bool operator!=(const Collection<T> & rhs) const
             {
                 return !(*this == rhs);
+            }
+
+            template <typename CollectionType>
+            static Collection<T> getInstance(CollectionType & collection)
+            {
+                return Collection<T>(std::begin(collection), std::end(collection));
             }
 
         private:

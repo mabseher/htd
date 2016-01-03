@@ -59,12 +59,12 @@ htd::id_t htd::Hyperedge::id() const
 
 htd::Collection<htd::vertex_t> htd::Hyperedge::elements()
 {
-    return htd::Collection<htd::vertex_t>(elements_);
+    return htd::Collection<htd::vertex_t>::getInstance(elements_);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::Hyperedge::elements() const
 {
-    return htd::ConstCollection<htd::vertex_t>(elements_);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(elements_);
 }
 
 bool htd::Hyperedge::empty() const

@@ -114,7 +114,7 @@ htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(htd::vertex_t vert
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
@@ -134,7 +134,7 @@ htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(const htd::ConstCo
         }
     }
 
-    return ret;
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::Graph::vertexAtPosition(htd::index_t index) const
@@ -234,7 +234,7 @@ htd::ConstCollection<htd::edge_t> htd::Graph::edges(void) const
         result.push_back(edge);
     }
 
-    return ret;
+    return htd::ConstCollection<htd::edge_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::edge_t> htd::Graph::edges(htd::vertex_t vertex) const
@@ -269,7 +269,7 @@ htd::ConstCollection<htd::edge_t> htd::Graph::edges(htd::vertex_t vertex) const
         result.push_back(edge);
     }
 
-    return ret;
+    return htd::ConstCollection<htd::edge_t>::getInstance(ret);
 }
 
 const htd::edge_t & htd::Graph::edgeAtPosition(htd::index_t index) const

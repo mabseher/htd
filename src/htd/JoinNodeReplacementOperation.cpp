@@ -201,7 +201,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
                         {
                             htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(currentNode);
 
-                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>(newBagContent), *labelCollection);
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(newBagContent), *labelCollection);
 
                             delete labelCollection;
 

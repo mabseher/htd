@@ -79,7 +79,7 @@ std::size_t htd::LabelingCollection::labelCount(void) const
 
 htd::ConstCollection<std::string> htd::LabelingCollection::labelNames(void) const
 {
-    return htd::ConstCollection<std::string>(labelNames_);
+    return htd::ConstCollection<std::string>::getInstance(labelNames_);
 }
 
 const std::string & htd::LabelingCollection::labelName(htd::index_t index) const

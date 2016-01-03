@@ -82,7 +82,7 @@ void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const h
     {
         auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
 
-        edgeLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::VectorAdapter<htd::Hyperedge>(content)));
+        edgeLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(htd::VectorAdapter<htd::Hyperedge>(content))));
     }
     else
     {
@@ -96,7 +96,7 @@ void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const h
     {
         auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
 
-        edgeLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::VectorAdapter<htd::Hyperedge>(htd::ConstCollection<htd::Hyperedge>(content.begin(), content.end()))));
+        edgeLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(htd::VectorAdapter<htd::Hyperedge>(content))));
     }
     else
     {

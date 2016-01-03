@@ -112,27 +112,31 @@ htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorit
 
     std::vector<htd::vertex_t> & component = ret.container();
 
-    originStack.push(origin);
+    htd::vertex_t currentVertex = origin;
+
+    originStack.push(currentVertex);
 
     while (!originStack.empty())
     {
-        component.push_back(originStack.top());
-        visitedVertices.insert(originStack.top());
+        currentVertex = originStack.top();
 
-        for (htd::vertex_t neighbor : graph.neighbors(originStack.top()))
+        component.push_back(currentVertex);
+        visitedVertices.insert(currentVertex);
+
+        originStack.pop();
+
+        for (htd::vertex_t neighbor : graph.neighbors(currentVertex))
         {
             if (visitedVertices.count(neighbor) == 0)
             {
                 originStack.push(neighbor);
             }
         }
-
-        originStack.pop();
     }
 
     std::sort(component.begin(), component.end());
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IDirectedGraph & graph, htd::vertex_t origin) const
@@ -150,27 +154,31 @@ htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorit
 
     std::vector<htd::vertex_t> & component = ret.container();
 
-    originStack.push(origin);
+    htd::vertex_t currentVertex = origin;
+
+    originStack.push(currentVertex);
 
     while (!originStack.empty())
     {
-        component.push_back(originStack.top());
-        visitedVertices.insert(originStack.top());
+        currentVertex = originStack.top();
 
-        for (htd::vertex_t neighbor : graph.neighbors(originStack.top()))
+        component.push_back(currentVertex);
+        visitedVertices.insert(currentVertex);
+
+        originStack.pop();
+
+        for (htd::vertex_t neighbor : graph.neighbors(currentVertex))
         {
             if (visitedVertices.count(neighbor) == 0)
             {
                 originStack.push(neighbor);
             }
         }
-
-        originStack.pop();
     }
 
     std::sort(component.begin(), component.end());
 
-    return ret;
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::TarjanStronglyConnectedComponentAlgorithm * htd::TarjanStronglyConnectedComponentAlgorithm::clone(void) const

@@ -76,7 +76,7 @@ namespace htd
                 return begin_;
             }
 
-            const htd::ConstIterator<T> begin(void) const
+            htd::ConstIterator<T> begin(void) const
             {
                 return begin_;
             }
@@ -86,7 +86,7 @@ namespace htd
                 return end_;
             }
 
-            const htd::ConstIterator<T> end(void) const
+            htd::ConstIterator<T> end(void) const
             {
                 return end_;
             }

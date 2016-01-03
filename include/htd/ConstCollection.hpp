@@ -73,12 +73,12 @@ namespace htd
                 return std::distance(begin(), end());
             }
 
-            const htd::ConstIterator<T> begin(void) const
+            htd::ConstIterator<T> begin(void) const
             {
                 return begin_;
             }
 
-            const htd::ConstIterator<T> end(void) const
+            htd::ConstIterator<T> end(void) const
             {
                 return end_;
             }

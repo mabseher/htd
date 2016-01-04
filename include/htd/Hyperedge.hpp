@@ -35,6 +35,7 @@
 
 namespace htd
 {
+    //TODO Implement copy on write to improve (memory) efficiency!
     class Hyperedge
     {
         public:

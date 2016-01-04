@@ -26,10 +26,7 @@
 #define HTD_HTD_CONSTCOLLECTION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/ConstCollection.hpp>
-#include <htd/Collection.hpp>
 #include <htd/ConstIterator.hpp>
-#include <htd/Iterator.hpp>
 
 #include <algorithm>
 #include <iterator>

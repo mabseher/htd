@@ -27,10 +27,9 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
-#include <htd/ITreeDecomposition.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/IOrderingAlgorithm.hpp>
+
 #include <htd/ILabelingFunction.hpp>
+#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 #include <vector>

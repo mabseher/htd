@@ -27,12 +27,8 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ILabelingFunction.hpp>
-#include <htd/Label.hpp>
-#include <htd/ConstCollection.hpp>
 #include <htd/IHypergraph.hpp>
-#include <htd/ISetCoverAlgorithm.hpp>
-
-#include <string>
+#include <htd/Label.hpp>
 
 namespace htd
 {

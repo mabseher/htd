@@ -26,7 +26,6 @@
 #define	HTD_HTD_COMPRESSIONOPERATION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 

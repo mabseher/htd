@@ -26,7 +26,6 @@
 #define	HTD_HTD_ADDEMPTYLEAVESOPERATION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 

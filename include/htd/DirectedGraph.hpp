@@ -26,6 +26,7 @@
 #define	HTD_HTD_DIRECTEDGRAPH_HPP
 
 #include <htd/IMutableDirectedGraph.hpp>
+
 #include <htd/IMutableHypergraph.hpp>
 
 #include <unordered_set>

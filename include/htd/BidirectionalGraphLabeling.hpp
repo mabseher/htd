@@ -27,9 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-
 #include <htd/IBidirectionalGraphLabeling.hpp>
-#include <htd/ILabel.hpp>
 
 #include <unordered_map>
 

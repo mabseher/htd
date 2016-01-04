@@ -26,10 +26,8 @@
 #define HTD_HTD_CONSTITERATOR_HPP
 
 #include <htd/Globals.hpp>
-
 #include <htd/ConstIteratorBase.hpp>
 #include <htd/ConstIteratorWrapper.hpp>
-
 #include <htd/Iterator.hpp>
 
 #include <memory>

@@ -29,16 +29,10 @@
 #include <htd/Helpers.hpp>
 #include <htd/TreeDecomposition.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
-#include <htd/ILabeledTree.hpp>
-#include <htd/Collection.hpp>
-
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
 
 namespace htd
 {
-    class HypertreeDecomposition : public TreeDecomposition, public virtual htd::IMutableHypertreeDecomposition
+    class HypertreeDecomposition : public htd::TreeDecomposition, public virtual htd::IMutableHypertreeDecomposition
     {
         public:
             HypertreeDecomposition(void);

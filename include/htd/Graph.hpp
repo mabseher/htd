@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableGraph.hpp>
+
 #include <htd/IMutableHypergraph.hpp>
 
 namespace htd

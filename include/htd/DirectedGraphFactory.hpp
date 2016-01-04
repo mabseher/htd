@@ -26,7 +26,6 @@
 #define HTD_HTD_DIRECTEDGRAPHFACTORY_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IDirectedGraph.hpp>
 #include <htd/IMutableDirectedGraph.hpp>
 
 namespace htd

@@ -44,7 +44,7 @@ namespace htd
             
             ~MinDegreeOrderingAlgorithm();
             
-            void computeOrdering(const IHypergraph& graph, std::vector<htd::vertex_t>& result) const HTD_OVERRIDE;
+            void computeOrdering(const htd::IHypergraph& graph, std::vector<htd::vertex_t> & result) const HTD_OVERRIDE;
 
             MinDegreeOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 

@@ -25,14 +25,11 @@
 #ifndef HTD_HTD_GLOBALS_HPP
 #define HTD_HTD_GLOBALS_HPP
 
-#include <htd/CompilerDetection.hpp>
 #include <htd/Id.hpp>
 #include <htd/Vertex.hpp>
+#include <htd/CompilerDetection.hpp>
 
 #include <cstdlib>
-#include <string>
-#include <utility>
-#include <vector>
 
 namespace htd
 {

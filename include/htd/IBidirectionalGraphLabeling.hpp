@@ -28,7 +28,6 @@
 #include <htd/Globals.hpp>
 
 #include <htd/IGraphLabeling.hpp>
-#include <htd/ILabel.hpp>
 
 namespace htd
 {

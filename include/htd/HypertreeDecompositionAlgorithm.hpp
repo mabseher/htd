@@ -26,14 +26,11 @@
 #define	HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IHypergraph.hpp>
-#include <htd/IHypertreeDecomposition.hpp>
-#include <htd/ITreeDecompositionAlgorithm.hpp>
 #include <htd/IHypertreeDecompositionAlgorithm.hpp>
+
 #include <htd/ILabelingFunction.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
-#include <cstdarg>
 #include <vector>
 
 namespace htd

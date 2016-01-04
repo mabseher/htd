@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
-#include <htd/Collection.hpp>
 
 #include <vector>
 #include <unordered_set>

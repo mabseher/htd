@@ -27,8 +27,6 @@
 
 #include <htd/IMutableHypergraph.hpp>
 
-#include <htd/Collection.hpp>
-
 #include <vector>
 #include <unordered_set>
 
@@ -121,7 +119,7 @@ namespace htd
 
             std::unordered_set<htd::vertex_t> deletions_;
 
-            std::vector<htd::Hyperedge> edges_;
+            htd::hyperedge_container edges_;
 
             std::vector<htd::vertex_container> neighborhood_;
     };

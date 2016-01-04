@@ -27,8 +27,8 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/TreeDecomposition.hpp>
 #include <htd/HypertreeDecomposition.hpp>
+#include <htd/TreeDecomposition.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/Label.hpp>
 #include <htd/VectorAdapter.hpp>
@@ -106,7 +106,7 @@ void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const h
 
 htd::HypertreeDecomposition * htd::HypertreeDecomposition::clone(void) const
 {
-    return new HypertreeDecomposition(*this);
+    return new htd::HypertreeDecomposition(*this);
 }
 
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITION_CPP */

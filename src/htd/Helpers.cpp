@@ -25,26 +25,7 @@
 #ifndef HTD_HTD_HELPERS_CPP
 #define	HTD_HTD_HELPERS_CPP
 
-#include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/HypertreeDecompositionAlgorithm.hpp>
-#include <htd/IMutableGraph.hpp>
-#include <htd/IOrderingAlgorithm.hpp>
-#include <htd/IMutableHypergraph.hpp>
-#include <htd/IMutableDirectedGraph.hpp>
-#include <htd/IMutableLabeledTree.hpp>
-#include <htd/ILabeledTree.hpp>
-#include <htd/ITreeDecomposition.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/ITreeDecompositionAlgorithm.hpp>
-#include <htd/Hypergraph.hpp>
-#include <htd/Graph.hpp>
-#include <htd/DirectedGraph.hpp>
-#include <htd/TreeDecomposition.hpp>
-#include <htd/HypertreeDecomposition.hpp>
-#include <htd/ISetCoverAlgorithm.hpp>
-#include <htd/SetCoverAlgorithm.hpp>
-#include <htd/MinFillOrderingAlgorithm.hpp>
 
 void htd::print(bool input)
 {

@@ -27,8 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/LabelCollection.hpp>
-#include <htd/ILabel.hpp>
-#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <stdexcept>

@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
-#include <htd/IOrderingAlgorithm.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
 
 #include <stdexcept>

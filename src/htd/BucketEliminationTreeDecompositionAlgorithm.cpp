@@ -25,18 +25,14 @@
 #ifndef HTD_HTD_BUCKETELIMINATIONTREEDECOMPOSITIONALGORITHM_CPP
 #define	HTD_HTD_BUCKETELIMINATIONTREEDECOMPOSITIONALGORITHM_CPP
 
-#include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/ITreeDecomposition.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
+#include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabelingFunction.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
-#include <htd/ITreeDecompositionManipulationOperation.hpp>
-#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <cstdarg>

@@ -28,7 +28,6 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
-#include <htd/ILabel.hpp>
 
 #include <stdexcept>
 

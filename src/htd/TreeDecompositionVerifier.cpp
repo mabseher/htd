@@ -27,8 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/IHypergraph.hpp>
-#include <htd/ITreeDecomposition.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
 #include <htd/VectorAdapter.hpp>
 

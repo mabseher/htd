@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/HypergraphFactory.hpp>
-#include <htd/IMutableHypergraph.hpp>
 #include <htd/Hypergraph.hpp>
 
 #include <stdexcept>

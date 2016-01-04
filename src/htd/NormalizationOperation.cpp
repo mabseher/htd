@@ -28,7 +28,6 @@
 #include <htd/Globals.hpp>
 #include <htd/NormalizationOperation.hpp>
 #include <htd/SemiNormalizationOperation.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/LimitMaximumForgottenVertexCountOperation.hpp>
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>

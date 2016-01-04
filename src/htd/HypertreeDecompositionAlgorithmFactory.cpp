@@ -27,10 +27,8 @@
 
 #include <htd/Globals.hpp>
 #include <htd/HypertreeDecompositionAlgorithmFactory.hpp>
-#include <htd/IHypertreeDecompositionAlgorithm.hpp>
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
-#include <htd/TreeDecompositionAlgorithmFactory.hpp>
 
 #include <memory>
 #include <stdexcept>

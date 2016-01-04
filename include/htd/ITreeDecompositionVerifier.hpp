@@ -26,7 +26,6 @@
 #define	HTD_HTD_ITREEDECOMPOSITIONVERIFIER_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Collection.hpp>
 #include <htd/IHypergraph.hpp>
 #include <htd/ITreeDecomposition.hpp>
 

@@ -29,7 +29,6 @@
 #include <htd/Helpers.hpp>
 #include <htd/LabeledHypergraph.hpp>
 #include <htd/IMutableLabeledHypergraph.hpp>
-#include <htd/GraphLabeling.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/Label.hpp>
 #include <htd/ILabelingCollection.hpp>

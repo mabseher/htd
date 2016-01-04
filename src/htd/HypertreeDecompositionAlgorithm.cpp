@@ -29,17 +29,11 @@
 #include <htd/Helpers.hpp>
 
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
-
-#include <htd/IHypertreeDecomposition.hpp>
+#include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
-#include <htd/IMutableLabeledTree.hpp>
-#include <htd/ISetCoverAlgorithm.hpp>
-#include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/HypertreeDecompositionLabelingFunction.hpp>
 #include <htd/HypertreeDecompositionFactory.hpp>
-#include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
-#include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 #include <cstdarg>
 #include <vector>

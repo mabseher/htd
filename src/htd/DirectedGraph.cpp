@@ -29,7 +29,6 @@
 #include <htd/Helpers.hpp>
 #include <htd/DirectedGraph.hpp>
 #include <htd/HypergraphFactory.hpp>
-#include <htd/Collection.hpp>
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>

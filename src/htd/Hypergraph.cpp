@@ -29,7 +29,6 @@
 #include <htd/Helpers.hpp>
 #include <htd/Hypergraph.hpp>
 #include <htd/VectorAdapter.hpp>
-#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <array>

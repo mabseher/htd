@@ -29,7 +29,6 @@
 #include <htd/WeakNormalizationOperation.hpp>
 #include <htd/AddEmptyLeavesOperation.hpp>
 #include <htd/AddEmptyRootOperation.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 
 htd::WeakNormalizationOperation::WeakNormalizationOperation(void)

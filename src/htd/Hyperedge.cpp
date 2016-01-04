@@ -26,8 +26,6 @@
 #define	HTD_HTD_HYPEREDGE_CPP
 
 #include <htd/Hyperedge.hpp>
-#include <htd/Collection.hpp>
-#include <htd/ConstCollection.hpp>
 
 #include <tuple>
 

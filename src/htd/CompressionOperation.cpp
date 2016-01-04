@@ -28,7 +28,6 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/CompressionOperation.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
 
 #include <stack>
 

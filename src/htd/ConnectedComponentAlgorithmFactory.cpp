@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ConnectedComponentAlgorithmFactory.hpp>
-#include <htd/IConnectedComponentAlgorithm.hpp>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
 
 #include <memory>

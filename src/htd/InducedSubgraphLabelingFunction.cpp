@@ -28,9 +28,6 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/InducedSubgraphLabelingFunction.hpp>
-
-#include <htd/ILabel.hpp>
-#include <htd/IHypergraph.hpp>
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>

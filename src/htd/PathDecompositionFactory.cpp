@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/PathDecompositionFactory.hpp>
-#include <htd/IMutablePathDecomposition.hpp>
 #include <htd/PathDecomposition.hpp>
 
 #include <stdexcept>

@@ -27,9 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/Collection.hpp>
-#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <stdexcept>

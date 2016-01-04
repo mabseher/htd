@@ -27,8 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/ConstCollection.hpp>
 
 #include <algorithm>
 #include <stack>

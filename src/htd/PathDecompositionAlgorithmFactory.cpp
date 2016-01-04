@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/PathDecompositionAlgorithmFactory.hpp>
-#include <htd/IPathDecompositionAlgorithm.hpp>
 #include <htd/PostProcessingPathDecompositionAlgorithm.hpp>
 
 #include <memory>

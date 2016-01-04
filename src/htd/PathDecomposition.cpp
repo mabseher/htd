@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-
 #include <htd/PathDecomposition.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 

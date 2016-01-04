@@ -27,17 +27,12 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-
 #include <htd/PostProcessingPathDecompositionAlgorithm.hpp>
-
-#include <htd/IPathDecomposition.hpp>
-#include <htd/IMutablePathDecomposition.hpp>
 #include <htd/PathDecompositionFactory.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/CompressionOperation.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>
-#include <htd/IPathDecompositionManipulationOperation.hpp>
 
 #include <cstdarg>
 #include <vector>

@@ -27,8 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/LimitChildCountOperation.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/Collection.hpp>
 
 #include <algorithm>
 #include <stdexcept>

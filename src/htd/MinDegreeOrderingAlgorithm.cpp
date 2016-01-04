@@ -27,15 +27,10 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/IHypergraph.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
-#include <htd/ConstCollection.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
-#include <cstdlib>
-#include <set>
-#include <vector>
-#include <stdexcept>
 
 //TODO Remove
 #include <iostream>
@@ -50,8 +45,12 @@ htd::MinDegreeOrderingAlgorithm::~MinDegreeOrderingAlgorithm()
     
 }
 
-void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t>& result) const
+htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph) const
 {
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    std::vector<htd::vertex_t> & ordering = ret.container();
+
     std::size_t size = graph.vertexCount();
 
     std::size_t tmp = 0;
@@ -71,7 +70,7 @@ void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & g
     
     htd::vertex_container affectedVertices;
     affectedVertices.reserve(size);
-    
+
     for (htd::vertex_t vertex : vertices)
     {
         auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
@@ -112,7 +111,6 @@ void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & g
         std::cout << "Vertex " << vertex << ":" << std::endl;
         htd::print(currentNeighborhood, false);
         std::cout << std::endl;
-        std::size_t neighborhoodSize = currentNeighborhood.size();
         std::cout << "   INITIAL DEGREE " << vertex << ": " << (currentNeighborhood.size() - 1) << std::endl;
         )
     }
@@ -191,8 +189,10 @@ void htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & g
         
         size--;
 
-        result.push_back(selectedVertex);
+        ordering.push_back(selectedVertex);
     }
+
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 //TODO Refactor

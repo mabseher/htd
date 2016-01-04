@@ -210,8 +210,6 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
     if (size > 0)
     {
-        std::vector<htd::vertex_t> ordering;
-
         htd::IOrderingAlgorithm * algorithm = htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm();
 
         if (algorithm == nullptr)
@@ -219,7 +217,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
         }
 
-        algorithm->computeOrdering(graph, ordering);
+        const htd::ConstCollection<htd::vertex_t> & ordering = algorithm->computeOrdering(graph);
 
         delete algorithm;
 

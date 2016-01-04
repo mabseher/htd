@@ -26,16 +26,10 @@
 #define	HTD_HTD_NATURALORDERINGALGORITHM_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/IGraph.hpp>
-#include <htd/IHypergraph.hpp>
 #include <htd/NaturalOrderingAlgorithm.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
-#include <cstdlib>
-#include <set>
-#include <vector>
-#include <iterator>
-#include <stdexcept>
 
 htd::NaturalOrderingAlgorithm::NaturalOrderingAlgorithm(void)
 {
@@ -47,16 +41,15 @@ htd::NaturalOrderingAlgorithm::~NaturalOrderingAlgorithm()
     
 }
 
-void htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const
+htd::ConstCollection<htd::vertex_t> htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph) const
 {
-    std::vector<htd::vertex_t> ret;
-    ret.reserve(graph.vertexCount());
-    
-    std::copy(graph.vertices().begin(), graph.vertices().end(), std::back_inserter(ret));
+    htd::VectorAdapter<htd::vertex_t> ret(graph.vertices());
 
-    std::sort(ret.begin(), ret.end());
-    
-    std::copy(ret.begin(), ret.end(), std::back_inserter(result));
+    std::vector<htd::vertex_t> & ordering = ret.container();
+
+    std::sort(ordering.begin(), ordering.end());
+
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::NaturalOrderingAlgorithm * htd::NaturalOrderingAlgorithm::clone(void) const

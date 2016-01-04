@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
+#include <htd/ConstCollection.hpp>
 
 namespace htd
 {
@@ -35,7 +36,7 @@ namespace htd
         public:
             virtual ~IOrderingAlgorithm() = 0;
             
-            virtual void computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IHypergraph & graph) const = 0;
 
             virtual IOrderingAlgorithm * clone(void) const = 0;
     };

@@ -28,19 +28,9 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
-#include <htd/IHypergraph.hpp>
-#include <htd/Collection.hpp>
-#include <htd/ConstCollection.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
-#include <cstdlib>
-#include <set>
-#include <vector>
-#include <stdexcept>
-#include <iterator>
-
-//TODO Remove
-#include <iostream>
 
 htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(void)
 {
@@ -52,8 +42,12 @@ htd::MinFillOrderingAlgorithm::~MinFillOrderingAlgorithm()
     
 }
 
-void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph, std::vector<htd::vertex_t> & result) const
+htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph) const
 {
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    std::vector<htd::vertex_t> & ordering = ret.container();
+
     std::size_t size = graph.vertexCount();
 
     std::size_t tmp = 0;
@@ -544,7 +538,7 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
         
         size--;
 
-        result.push_back(selectedVertex);
+        ordering.push_back(selectedVertex);
         
 #ifdef TESTOUTPUT
         std::cout << "STATUS AFTER: ";
@@ -606,6 +600,8 @@ void htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IHypergraph & gra
     }
     
     DEBUGGING_CODE_LEVEL2(std::cout << std::endl;)
+
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::vector<htd::vertex_container> & availableNeighborhoods, const htd::vertex_container & vertices) const

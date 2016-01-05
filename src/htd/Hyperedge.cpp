@@ -70,6 +70,11 @@ bool htd::Hyperedge::empty() const
     return elements_.empty();
 }
 
+std::size_t htd::Hyperedge::size() const
+{
+    return elements_.size();
+}
+
 bool htd::Hyperedge::containsVertex(htd::vertex_t vertex) const
 {
     return std::find(elements_.begin(), elements_.end(), vertex) != elements_.end();
@@ -83,11 +88,6 @@ void htd::Hyperedge::push_back(htd::vertex_t vertex)
 void htd::Hyperedge::erase(htd::vertex_t vertex)
 {
     elements_.erase(std::remove(elements_.begin(), elements_.end(), vertex), elements_.end());
-}
-
-std::size_t htd::Hyperedge::size() const
-{
-    return elements_.size();
 }
 
 htd::Iterator<htd::vertex_t> htd::Hyperedge::begin(void)

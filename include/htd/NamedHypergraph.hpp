@@ -53,7 +53,7 @@ namespace htd
 
             }
 
-            ~NamedHypergraph<VertexNameType, EdgeNameType>()
+            ~NamedHypergraph()
             {
                 if (base_ != nullptr)
                 {

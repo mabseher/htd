@@ -120,6 +120,7 @@
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
+#include <htd/NamedHyperedge.hpp>
 #include <htd/NamedHypergraph.hpp>
 #include <htd/NaturalOrderingAlgorithm.hpp>
 #include <htd/NormalizationOperation.hpp>

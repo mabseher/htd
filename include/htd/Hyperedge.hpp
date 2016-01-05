@@ -57,13 +57,13 @@ namespace htd
 
             bool empty() const;
 
+            std::size_t size() const;
+
             bool containsVertex(htd::vertex_t vertex) const;
 
             void push_back(htd::vertex_t vertex);
 
             void erase(htd::vertex_t vertex);
-
-            std::size_t size() const;
 
             htd::Iterator<htd::vertex_t> begin(void);
 

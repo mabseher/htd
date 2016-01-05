@@ -28,6 +28,7 @@
 #include <htd/AddEmptyLeavesOperation.hpp>
 #include <htd/AddEmptyRootOperation.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
+#include <htd/BreadthFirstGraphTraversal.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/Collection.hpp>
 #include <htd/CompilerDetection.hpp>
@@ -38,6 +39,7 @@
 #include <htd/ConstIterator.hpp>
 #include <htd/ConstIteratorWrapper.hpp>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
+#include <htd/DepthFirstGraphTraversal.hpp>
 #include <htd/DirectedGraphFactory.hpp>
 #include <htd/DirectedGraph.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
@@ -63,6 +65,7 @@
 #include <htd/IGraphDecompositionAlgorithm.hpp>
 #include <htd/IGraph.hpp>
 #include <htd/IGraphLabeling.hpp>
+#include <htd/IGraphTraversal.hpp>
 #include <htd/IHypergraph.hpp>
 #include <htd/IHypertreeDecompositionAlgorithm.hpp>
 #include <htd/IHypertreeDecomposition.hpp>

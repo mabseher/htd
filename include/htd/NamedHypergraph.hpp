@@ -31,8 +31,6 @@
 #include <htd/IMutableLabeledHypergraph.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/Label.hpp>
-#include <htd/ILabelingCollection.hpp>
-#include <htd/LabelingCollection.hpp>
 #include <htd/VectorAdapter.hpp>
 
 #include <set>

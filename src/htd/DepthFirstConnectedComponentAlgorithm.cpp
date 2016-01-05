@@ -72,9 +72,9 @@ htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::DepthFirstConnect
     return htd::ConstCollection<htd::ConstCollection<htd::vertex_t>>::getInstance(ret);
 }
 
-htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph & graph, htd::vertex_t origin) const
+htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph & graph, htd::vertex_t startingVertex) const
 {
-    if (!graph.isVertex(origin))
+    if (!graph.isVertex(startingVertex))
     {
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph &, htd::vertex_t) const");
     }
@@ -87,7 +87,7 @@ htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::
 
     std::vector<htd::vertex_t> & component = ret.container();
 
-    htd::vertex_t currentVertex = origin;
+    htd::vertex_t currentVertex = startingVertex;
 
     originStack.push(currentVertex);
 

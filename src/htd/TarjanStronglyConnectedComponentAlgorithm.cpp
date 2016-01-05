@@ -100,9 +100,9 @@ htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::TarjanStronglyCon
     return htd::ConstCollection<htd::ConstCollection<htd::vertex_t>>::getInstance(ret);
 }
 
-htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph & graph, htd::vertex_t origin) const
+htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph & graph, htd::vertex_t startingVertex) const
 {
-    if (!graph.isVertex(origin))
+    if (!graph.isVertex(startingVertex))
     {
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph &, htd::vertex_t) const");
     }
@@ -115,7 +115,7 @@ htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorit
 
     std::vector<htd::vertex_t> & component = ret.container();
 
-    htd::vertex_t currentVertex = origin;
+    htd::vertex_t currentVertex = startingVertex;
 
     originStack.push(currentVertex);
 
@@ -142,9 +142,9 @@ htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorit
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IDirectedGraph & graph, htd::vertex_t origin) const
+htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IDirectedGraph & graph, htd::vertex_t startingVertex) const
 {
-    if (!graph.isVertex(origin))
+    if (!graph.isVertex(startingVertex))
     {
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IDirectedGraph &, htd::vertex_t) const");
     }
@@ -157,7 +157,7 @@ htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorit
 
     std::vector<htd::vertex_t> & component = ret.container();
 
-    htd::vertex_t currentVertex = origin;
+    htd::vertex_t currentVertex = startingVertex;
 
     originStack.push(currentVertex);
 

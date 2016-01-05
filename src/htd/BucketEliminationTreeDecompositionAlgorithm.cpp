@@ -44,6 +44,7 @@
 #include <utility>
 #include <vector>
 
+//TODO Use also as graph decomposition algorithm!
 htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(void) : labelingFunctions_(), postProcessingOperations_()
 {
 
@@ -319,10 +320,13 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
             std::size_t edgeCount = 0;
 
+            //TODO Implement and use htd::NamedGraph<int,int>!
+            //htd::NamedGraph<int, int> result = htd::GraphFactory::instance().getGraph();
+
             std::vector<htd::vertex_t> tmp;
             std::vector<std::vector<htd::vertex_t>> neighbors(size);
 
-            for (std::size_t index = 0; index < size; index++)
+            for (htd::index_t index = 0; index < size; index++)
             {
                 tmp.clear();
 

@@ -230,14 +230,23 @@ namespace htd
                 return base_->neighborCount(lookupVertex(vertexName));
             }
 
-            htd::ConstCollection<htd::vertex_t> neighbors(const VertexNameType & vertexName) const
+            htd::ConstCollection<VertexNameType> neighbors(const VertexNameType & vertexName) const
             {
-                return base_->neighbors(lookupVertex(vertexName));
+                htd::VectorAdapter<VertexNameType> ret;
+
+                std::vector<VertexNameType> & container = ret.container();
+
+                for (htd::vertex_t neighbor : base_->neighbors(lookupVertex(vertexName)))
+                {
+                    container.push_back(vertexName(neighbor));
+                }
+
+                return htd::ConstCollection<VertexNameType>::getInstance(ret);
             }
 
-            htd::vertex_t neighbor(const VertexNameType & vertexName, htd::index_t index) const
+            const VertexNameType & neighborAtPosition(const VertexNameType & vertexName, htd::index_t index) const
             {
-                return base_->neighbor(lookupVertex(vertexName), index);
+                return vertexName(base_->neighbor(lookupVertex(vertexName), index));
             }
 
             std::size_t isolatedVertexCount(void) const
@@ -245,14 +254,23 @@ namespace htd
                 return base_->isolatedVertexCount();
             }
 
-            htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const
+            htd::ConstCollection<VertexNameType> isolatedVertices(void) const
             {
-                return base_->isolatedVertices();
+                htd::VectorAdapter<VertexNameType> ret;
+
+                std::vector<VertexNameType> & container = ret.container();
+
+                for (htd::vertex_t isolatedVertex : base_->isolatedVertices())
+                {
+                    container.push_back(vertexName(isolatedVertex));
+                }
+
+                return htd::ConstCollection<VertexNameType>::getInstance(ret);
             }
 
-            htd::vertex_t isolatedVertex(htd::index_t index) const
+            const VertexNameType & isolatedVertexAtPosition(htd::index_t index) const
             {
-                return base_->isolatedVertex(index);
+                return vertexName(base_->isolatedVertex(index));
             }
 
             bool isIsolatedVertex(const VertexNameType & vertexName) const
@@ -424,7 +442,7 @@ namespace htd
                 return base_->labelNames();
             }
 
-            const std::string & labelName(htd::index_t index) const
+            const std::string & labelNameAtPosition(htd::index_t index) const
             {
                 return base_->labelName(index);
             }

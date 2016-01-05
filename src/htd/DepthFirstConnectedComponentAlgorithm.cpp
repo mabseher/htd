@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
+#include <htd/DepthFirstGraphTraversal.hpp>
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
@@ -79,35 +80,19 @@ htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph &, htd::vertex_t) const");
     }
 
-    std::stack<htd::vertex_t> originStack;
-
     htd::VectorAdapter<htd::vertex_t> ret;
-
-    std::unordered_set<htd::vertex_t> visitedVertices;
 
     std::vector<htd::vertex_t> & component = ret.container();
 
-    htd::vertex_t currentVertex = startingVertex;
+    htd::DepthFirstGraphTraversal traversal;
 
-    originStack.push(currentVertex);
-
-    while (!originStack.empty())
+    traversal.traverse(graph, startingVertex, [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
     {
-        currentVertex = originStack.top();
+        HTD_UNUSED(predecessor);
+        HTD_UNUSED(distanceFromStartingVertex);
 
-        component.push_back(currentVertex);
-        visitedVertices.insert(currentVertex);
-
-        originStack.pop();
-
-        for (htd::vertex_t neighbor : graph.neighbors(currentVertex))
-        {
-            if (visitedVertices.count(neighbor) == 0)
-            {
-                originStack.push(neighbor);
-            }
-        }
-    }
+        component.push_back(vertex);
+    });
 
     std::sort(component.begin(), component.end());
 

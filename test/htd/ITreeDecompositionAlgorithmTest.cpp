@@ -34,8 +34,6 @@ TEST(ITreeDecompositionAlgorithmTest, DecompositionTest01)
 
     std::vector<htd::vertex_t> vertices;
 
-    std::vector<htd::vertex_t> ordering;
-
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
 
     const htd::ConstCollection<htd::vertex_t> & collection = graph.vertices();
@@ -73,7 +71,7 @@ TEST(ITreeDecompositionAlgorithmTest, DecompositionTest01)
 
     htd::IOrderingAlgorithm * orderingAlgorithm = new htd::MinFillOrderingAlgorithm();
 
-    orderingAlgorithm->computeOrdering(graph, ordering);
+    const htd::ConstCollection<htd::vertex_t> & ordering = orderingAlgorithm->computeOrdering(graph);
 
     ASSERT_EQ((std::size_t)3, ordering.size());
 

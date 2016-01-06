@@ -27,11 +27,11 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ILabeledTree.hpp>
-#include <htd/Collection.hpp>
+#include <htd/IGraphDecomposition.hpp>
 
 namespace htd
 {
-    class ITreeDecomposition : public virtual htd::ILabeledTree
+    class ITreeDecomposition : public virtual htd::ILabeledTree, public virtual htd::IGraphDecomposition
     {
         public:
             /**
@@ -64,10 +64,6 @@ namespace htd
             virtual htd::vertex_t introduceNode(htd::index_t index) const = 0;
 
             virtual bool isIntroduceNode(htd::vertex_t vertex) const = 0;
-
-            virtual std::size_t bagSize(htd::vertex_t vertex) const = 0;
-
-            virtual htd::ConstCollection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
 
             virtual std::size_t forgottenVertexCount(htd::vertex_t vertex) const = 0;
 
@@ -116,10 +112,6 @@ namespace htd
             virtual bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex) const = 0;
 
             virtual bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const = 0;
-
-            virtual std::size_t minimumBagSize(void) const = 0;
-
-            virtual std::size_t maximumBagSize(void) const = 0;
 
             virtual ITreeDecomposition * clone(void) const = 0;
     };

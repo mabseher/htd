@@ -38,6 +38,10 @@ namespace htd
         public:
             DirectedGraph(void);
 
+            DirectedGraph(const DirectedGraph & original);
+
+            DirectedGraph(const htd::IDirectedGraph & original);
+
             ~DirectedGraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;

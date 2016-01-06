@@ -36,21 +36,21 @@ namespace htd
         public:
             virtual ~IMutableLabeledDirectedGraph() = 0;
 
-            virtual void setLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;
+            virtual void setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;
 
-            virtual void setLabel(const std::string & labelName, const htd::Hyperedge & edge, htd::ILabel * label) = 0;
+            virtual void setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label) = 0;
 
-            virtual void removeLabel(const std::string & labelName, htd::vertex_t vertex) = 0;
+            virtual void removeVertexLabel(const std::string & labelName, htd::vertex_t vertex) = 0;
 
-            virtual void removeLabel(const std::string & labelName, const htd::Hyperedge & edge) = 0;
+            virtual void removeEdgeLabel(const std::string & labelName, htd::id_t edgeId) = 0;
 
-            virtual void swapLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+            virtual void swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
-            virtual void swapLabels(const htd::Hyperedge & edge1, const htd::Hyperedge & edge2) = 0;
+            virtual void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
-            virtual void swapLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+            virtual void swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
-            virtual void swapLabel(const std::string & labelName, const htd::Hyperedge & edge1, const htd::Hyperedge & edge2) = 0;
+            virtual void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
             virtual IMutableLabeledDirectedGraph * clone(void) const = 0;
     };

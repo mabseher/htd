@@ -41,6 +41,17 @@ htd::DirectedGraph::DirectedGraph(void) : base_(htd::HypergraphFactory::instance
 
 }
 
+htd::DirectedGraph::DirectedGraph(const htd::DirectedGraph & original) : base_(original.base_->clone()), incomingNeighborhood_(original.incomingNeighborhood_), outgoingNeighborhood_(original.outgoingNeighborhood_)
+{
+
+}
+
+htd::DirectedGraph::DirectedGraph(const htd::IDirectedGraph & original) : base_(htd::HypergraphFactory::instance().getHypergraph()), incomingNeighborhood_(), outgoingNeighborhood_()
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+}
+
 htd::DirectedGraph::~DirectedGraph()
 {
     if (base_ != nullptr)

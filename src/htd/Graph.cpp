@@ -47,6 +47,12 @@ htd::Graph::Graph(const htd::Graph & original) : base_(original.base_->clone())
 
 }
 
+htd::Graph::Graph(const htd::IGraph & original) : base_(htd::HypergraphFactory::instance().getHypergraph())
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+}
+
 htd::Graph::~Graph()
 {
     if (base_ != nullptr)

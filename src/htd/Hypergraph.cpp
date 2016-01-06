@@ -35,24 +35,41 @@
 #include <iterator>
 #include <vector>
 
-htd::Hypergraph::Hypergraph(void) : htd::Hypergraph::Hypergraph(0)
+htd::Hypergraph::Hypergraph(void)
+    : size_(0),
+      next_edge_(htd::Id::FIRST),
+      next_vertex_(htd::Vertex::FIRST),
+      vertices_(),
+      deletions_(),
+      edges_(),
+      neighborhood_()
 {
 
 }
 
-htd::Hypergraph::Hypergraph(std::size_t size)
-    : size_(size),
+htd::Hypergraph::Hypergraph(const htd::Hypergraph & original)
+    : size_(original.size_),
+      next_edge_(original.next_edge_),
+      next_vertex_(original.next_vertex_),
+      vertices_(original.vertices_),
+      deletions_(original.deletions_),
+      edges_(original.edges_),
+      neighborhood_(original.neighborhood_)
+{
+
+}
+
+htd::Hypergraph::Hypergraph(const htd::IHypergraph & original)
+    : size_(0),
       next_edge_(htd::Id::FIRST),
-      next_vertex_(htd::Vertex::FIRST + size),
-      vertices_(size),
+      next_vertex_(htd::Vertex::FIRST),
+      vertices_(),
       deletions_(),
       edges_(),
-      neighborhood_(size, htd::vertex_container())
+      neighborhood_()
 {
-    for (htd::vertex_t vertex = htd::Vertex::FIRST; vertex < size + htd::Vertex::FIRST; ++vertex)
-    {
-        vertices_[vertex - htd::Vertex::FIRST] = vertex;
-    }
+    //TODO Implement!
+    HTD_UNUSED(original)
 }
 
 htd::Hypergraph::~Hypergraph()

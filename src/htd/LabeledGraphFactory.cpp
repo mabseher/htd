@@ -28,15 +28,13 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/LabeledGraphFactory.hpp>
-//TODO
-//#include <htd/LabeledGraph.hpp>
+#include <htd/LabeledGraph.hpp>
 
 #include <stdexcept>
 
 htd::LabeledGraphFactory::LabeledGraphFactory(void)
 {
-    //TODO
-    //constructionTemplate_ = new htd::LabeledGraph();
+    constructionTemplate_ = new htd::LabeledGraph();
 }
 
 htd::LabeledGraphFactory::~LabeledGraphFactory()
@@ -64,7 +62,7 @@ htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(void)
 //TODO Use construction template!
 htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd::ILabeledGraph & original)
 {
-    htd::IMutableLabeledGraph * ret = nullptr; //TODO constructionTemplate_->clone();
+    htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();
 
     //TODO Copy decomposition content!
     HTD_UNUSED(original)

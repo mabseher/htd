@@ -30,19 +30,17 @@
 #include <htd/LabelingCollection.hpp>
 #include <htd/GraphLabeling.hpp>
 
-#include <htd/Collection.hpp>
-
 htd::LabeledHypergraph::LabeledHypergraph(void) : htd::Hypergraph::Hypergraph(), labelings_(new htd::LabelingCollection())
-{
-
-}
-            
-htd::LabeledHypergraph::LabeledHypergraph(std::size_t size) : htd::Hypergraph::Hypergraph(size), labelings_(new htd::LabelingCollection())
 {
 
 }
 
 htd::LabeledHypergraph::LabeledHypergraph(const htd::LabeledHypergraph & original) : htd::Hypergraph::Hypergraph(original), labelings_(original.labelings_->clone())
+{
+
+}
+
+htd::LabeledHypergraph::LabeledHypergraph(const htd::ILabeledHypergraph & original) : htd::Hypergraph::Hypergraph(original), labelings_(original.labelings().clone())
 {
 
 }

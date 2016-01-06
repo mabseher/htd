@@ -36,9 +36,11 @@ namespace htd
     {
         public:
             Hypergraph(void);
-            
-            Hypergraph(std::size_t size);
-            
+
+            Hypergraph(const Hypergraph & original);
+
+            Hypergraph(const htd::IHypergraph & original);
+
             virtual ~Hypergraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;

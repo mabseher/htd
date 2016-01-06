@@ -118,6 +118,7 @@
 #include <htd/LabelCollection.hpp>
 #include <htd/LabeledDirectedGraphFactory.hpp>
 #include <htd/LabeledGraphFactory.hpp>
+#include <htd/LabeledGraph.hpp>
 #include <htd/LabeledHypergraphFactory.hpp>
 #include <htd/LabeledHypergraph.hpp>
 #include <htd/LabeledPathFactory.hpp>

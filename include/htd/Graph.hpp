@@ -32,12 +32,14 @@
 
 namespace htd
 {
-    class Graph : public htd::IMutableGraph
+    class Graph : public virtual htd::IMutableGraph
     {
         public:
             Graph(void);
 
-            Graph(const htd::Graph & original);
+            Graph(const Graph & original);
+
+            Graph(const htd::IGraph & original);
 
             ~Graph();
             

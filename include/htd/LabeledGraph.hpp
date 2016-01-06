@@ -1,5 +1,5 @@
-/* 
- * File:   LabeledHypergraph.hpp
+/*
+ * File:   LabeledGraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,25 +22,25 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_LABELEDHYPERGRAPH_HPP
-#define	HTD_HTD_LABELEDHYPERGRAPH_HPP
+#ifndef HTD_HTD_LABELEDGRAPH_HPP
+#define	HTD_HTD_LABELEDGRAPH_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableLabeledHypergraph.hpp>
-#include <htd/Hypergraph.hpp>
+#include <htd/IMutableLabeledGraph.hpp>
+#include <htd/Graph.hpp>
 
 namespace htd
 {
-    class LabeledHypergraph : public htd::Hypergraph, public virtual htd::IMutableLabeledHypergraph
+    class LabeledGraph : public htd::Graph, public virtual htd::IMutableLabeledGraph
     {
         public:
-            LabeledHypergraph(void);
+            LabeledGraph(void);
 
-            LabeledHypergraph(const LabeledHypergraph & original);
+            LabeledGraph(const LabeledGraph & original);
 
-            LabeledHypergraph(const htd::ILabeledHypergraph & original);
+            LabeledGraph(const htd::ILabeledGraph & original);
             
-            virtual ~LabeledHypergraph();
+            virtual ~LabeledGraph();
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 
@@ -78,11 +78,11 @@ namespace htd
 
             void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2) HTD_OVERRIDE;
 
-            LabeledHypergraph * clone(void) const HTD_OVERRIDE;
+            LabeledGraph * clone(void) const HTD_OVERRIDE;
 
         private:
             htd::ILabelingCollection * labelings_;
     };
 }
 
-#endif /* HTD_HTD_LABELEDHYPERGRAPH_HPP */
+#endif /* HTD_HTD_LABELEDGRAPH_HPP */

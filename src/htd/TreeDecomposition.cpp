@@ -147,7 +147,14 @@ std::size_t htd::TreeDecomposition::vertexCount(htd::vertex_t subtreeRoot) const
 
     htd::PreOrderTreeTraversal treeTraversal;
 
-    treeTraversal.traverse(*this, [&](htd::vertex_t vertex) { HTD_UNUSED(vertex); ++ret; });
+    treeTraversal.traverse(*this, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
+    {
+        HTD_UNUSED(vertex);
+        HTD_UNUSED(parent);
+        HTD_UNUSED(distanceToSubtreeRoot);
+
+        ++ret;
+    }, subtreeRoot);
 
     return ret;
 }
@@ -1007,7 +1014,13 @@ void htd::TreeDecomposition::removeSubtree(htd::vertex_t subtreeRoot)
 
     htd::PostOrderTreeTraversal treeTraversal;
 
-    treeTraversal.traverse(*this, [&](htd::vertex_t vertex) { removeVertex(vertex); });
+    treeTraversal.traverse(*this, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
+    {
+        HTD_UNUSED(parent);
+        HTD_UNUSED(distanceToSubtreeRoot);
+
+        removeVertex(vertex);
+    }, subtreeRoot);
 }
 
 htd::vertex_t htd::TreeDecomposition::insertRoot(void)

@@ -30,6 +30,7 @@
 
 #include <stack>
 #include <stdexcept>
+#include <utility>
 
 htd::PostOrderTreeTraversal::PostOrderTreeTraversal(void)
 {
@@ -41,7 +42,7 @@ htd::PostOrderTreeTraversal::~PostOrderTreeTraversal()
 
 }
 
-void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t)> targetFunction) const
+void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
 {
     if (tree.vertexCount() > 0)
     {
@@ -49,24 +50,26 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, std::functio
     }
 }
 
-void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t)> targetFunction, htd::vertex_t startingNode) const
+void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const
 {
-    if (!tree.isVertex(startingNode))
+    if (!tree.isVertex(startingVertex))
     {
-        throw std::logic_error("void htd::PostOrderTreeTraversal::traverse(const htd::ITree &, std::function<void(htd::vertex_t)>, htd::vertex_t) const");
+        throw std::logic_error("void htd::PostOrderTreeTraversal::traverse(const htd::ITree &, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)>, htd::vertex_t) const");
     }
 
     htd::vertex_t lastNode = htd::Vertex::UNKNOWN;
 
     htd::vertex_t peekNode = htd::Vertex::UNKNOWN;
 
-    htd::vertex_t currentNode = startingNode;
+    htd::vertex_t currentNode = startingVertex;
 
     htd::index_t lastIndex = 0;
 
     htd::index_t peekIndex = 0;
 
     htd::index_t currentIndex = tree.childCount(currentNode) - 1;
+
+    std::size_t currentDepth = 0;
 
     std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
 
@@ -81,18 +84,22 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, std::functio
                 currentNode = tree.child(currentNode, currentIndex);
 
                 currentIndex = tree.childCount(currentNode) - 1;
+
+                ++currentDepth;
             }
             else
             {
                 if (parentStack.size() > 0 && parentStack.top().first != htd::Vertex::UNKNOWN)
                 {
-                    targetFunction(currentNode);
+                    targetFunction(currentNode, std::get<0>(parentStack.top()), currentDepth);
 
                     parentStack.top().second--;
+
+                    --currentDepth;
                 }
                 else
                 {
-                    targetFunction(startingNode);
+                    targetFunction(startingVertex, htd::Vertex::UNKNOWN, 0);
                 }
 
                 currentNode = htd::Vertex::UNKNOWN;
@@ -108,6 +115,8 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, std::functio
                 currentNode = tree.child(peekNode, peekIndex);
 
                 currentIndex = tree.childCount(currentNode) - 1;
+
+                ++currentDepth;
             }
             else
             {
@@ -120,13 +129,15 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, std::functio
 
                 if (parentStack.size() > 0 && parentStack.top().first != htd::Vertex::UNKNOWN)
                 {
-                    targetFunction(peekNode);
+                    targetFunction(peekNode, std::get<0>(parentStack.top()), currentDepth);
 
                     parentStack.top().second--;
+
+                    --currentDepth;
                 }
                 else
                 {
-                    targetFunction(startingNode);
+                    targetFunction(startingVertex, htd::Vertex::UNKNOWN, 0);
                 }
             }
         }

@@ -30,6 +30,8 @@
 #include <htd/PreOrderTreeTraversal.hpp>
 
 #include <stdexcept>
+#include <unordered_map>
+#include <utility>
 
 htd::InOrderTreeTraversal::InOrderTreeTraversal(void)
 {
@@ -41,38 +43,41 @@ htd::InOrderTreeTraversal::~InOrderTreeTraversal()
 
 }
 
-void htd::InOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t)> targetFunction) const
+void htd::InOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
 {
-    const htd::ConstCollection<htd::vertex_t> & vertexCollection = tree.vertices();
-
-    htd::vertex_container vertices(vertexCollection.begin(), vertexCollection.end());
-
-    std::sort(vertices.begin(), vertices.end());
-
-    for (htd::vertex_t vertex : vertices)
+    if (tree.vertexCount() > 0)
     {
-        targetFunction(vertex);
+        traverse(tree, targetFunction, tree.root());
     }
 }
 
-void htd::InOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t)> targetFunction, htd::vertex_t startingNode) const
+void htd::InOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const
 {
-    if (!tree.isVertex(startingNode))
+    if (!tree.isVertex(startingVertex))
     {
-        throw std::logic_error("void htd::InOrderTreeTraversal::traverse(const htd::ITree &, std::function<void(htd::vertex_t)>, htd::vertex_t) const");
+        throw std::logic_error("void htd::InOrderTreeTraversal::traverse(const htd::ITree &, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)>, htd::vertex_t) const");
     }
 
     htd::vertex_container vertices;
 
     htd::PreOrderTreeTraversal traversal;
 
-    traversal.traverse(tree, [&](htd::vertex_t vertex) { vertices.push_back(vertex); }, startingNode);
+    std::unordered_map<htd::vertex_t, std::pair<htd::vertex_t, std::size_t>> additionalInformation;
+
+    traversal.traverse(tree, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToStartingVertex)
+    {
+        vertices.push_back(vertex);
+
+        additionalInformation[vertex] = std::make_pair(parent, distanceToStartingVertex);
+    }, startingVertex);
 
     std::sort(vertices.begin(), vertices.end());
 
     for (htd::vertex_t vertex : vertices)
     {
-        targetFunction(vertex);
+        std::pair<htd::vertex_t, std::size_t> & information = additionalInformation[vertex];
+
+        targetFunction(vertex, information.first, information.second);
     }
 }
 

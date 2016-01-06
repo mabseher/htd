@@ -30,6 +30,7 @@
 
 #include <stack>
 #include <stdexcept>
+#include <utility>
 
 htd::PreOrderTreeTraversal::PreOrderTreeTraversal(void)
 {
@@ -41,7 +42,7 @@ htd::PreOrderTreeTraversal::~PreOrderTreeTraversal()
 
 }
 
-void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t)> targetFunction) const
+void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
 {
     if (tree.vertexCount() > 0)
     {
@@ -49,14 +50,16 @@ void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function
     }
 }
 
-void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t)> targetFunction, htd::vertex_t startingNode) const
+void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const
 {
-    if (!tree.isVertex(startingNode))
+    if (!tree.isVertex(startingVertex))
     {
-        throw std::logic_error("void htd::PreOrderTreeTraversal::traverse(const htd::ITree &, std::function<void(htd::vertex_t)>, htd::vertex_t) const");
+        throw std::logic_error("void htd::PreOrderTreeTraversal::traverse(const htd::ITree &, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)>, htd::vertex_t) const");
     }
 
-    htd::vertex_t currentNode = startingNode;
+    htd::vertex_t currentNode = startingVertex;
+
+    std::size_t currentDepth = 0;
 
     htd::index_t currentIndex = 0;
 
@@ -68,7 +71,14 @@ void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function
         {
             if (currentIndex == 0)
             {
-                targetFunction(currentNode);
+                if (parentStack.size() > 0)
+                {
+                    targetFunction(currentNode, std::get<0>(parentStack.top()), currentDepth);
+                }
+                else
+                {
+                    targetFunction(currentNode, htd::Vertex::UNKNOWN, 0);
+                }
             }
 
             if (currentIndex < tree.childCount(currentNode))
@@ -78,6 +88,8 @@ void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function
                 currentNode = tree.child(currentNode, currentIndex);
 
                 currentIndex = 0;
+
+                ++currentDepth;
             }
             else
             {
@@ -89,6 +101,8 @@ void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function
             currentNode = parentStack.top().first;
 
             currentIndex = parentStack.top().second;
+
+            --currentDepth;
 
             parentStack.pop();
         }

@@ -45,6 +45,8 @@ namespace htd
 
             Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2);
 
+            Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements);
+
             Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements);
 
             ~Hyperedge();

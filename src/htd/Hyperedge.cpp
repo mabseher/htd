@@ -40,6 +40,11 @@ htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t ver
     elements_.push_back(vertex2);
 }
 
+htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements) : id_(id), elements_(elements.begin(), elements.end())
+{
+
+}
+
 htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements) : id_(id), elements_(elements.begin(), elements.end())
 {
 

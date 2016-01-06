@@ -169,7 +169,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::isolatedVertices(voi
 
 htd::vertex_t htd::PathDecomposition::isolatedVertex(htd::index_t index) const
 {
-    HTD_UNUSED(index);
+    HTD_UNUSED(index)
 
     throw std::out_of_range("htd::vertex_t htd::PathDecomposition::isolatedVertex(htd::index_t index) const");
 }

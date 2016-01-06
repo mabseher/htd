@@ -73,7 +73,7 @@ htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::InducedSubgraphLabelingF
 
 htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::InducedSubgraphLabelingFunction::computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const
 {
-    HTD_UNUSED(labels);
+    HTD_UNUSED(labels)
 
     return computeLabel(vertices);
 }

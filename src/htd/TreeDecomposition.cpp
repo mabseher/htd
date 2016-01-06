@@ -149,9 +149,9 @@ std::size_t htd::TreeDecomposition::vertexCount(htd::vertex_t subtreeRoot) const
 
     treeTraversal.traverse(*this, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
     {
-        HTD_UNUSED(vertex);
-        HTD_UNUSED(parent);
-        HTD_UNUSED(distanceToSubtreeRoot);
+        HTD_UNUSED(vertex)
+        HTD_UNUSED(parent)
+        HTD_UNUSED(distanceToSubtreeRoot)
 
         ++ret;
     }, subtreeRoot);
@@ -417,14 +417,14 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::isolatedVertices(voi
 
 htd::vertex_t htd::TreeDecomposition::isolatedVertex(htd::index_t index) const
 {
-    HTD_UNUSED(index);
+    HTD_UNUSED(index)
 
     throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::isolatedVertex(htd::index_t index) const");
 }
 
 bool htd::TreeDecomposition::isIsolatedVertex(htd::vertex_t vertex) const
 {
-    HTD_UNUSED(vertex);
+    HTD_UNUSED(vertex)
 
     return false;
 }
@@ -1016,8 +1016,8 @@ void htd::TreeDecomposition::removeSubtree(htd::vertex_t subtreeRoot)
 
     treeTraversal.traverse(*this, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
     {
-        HTD_UNUSED(parent);
-        HTD_UNUSED(distanceToSubtreeRoot);
+        HTD_UNUSED(parent)
+        HTD_UNUSED(distanceToSubtreeRoot)
 
         removeVertex(vertex);
     }, subtreeRoot);

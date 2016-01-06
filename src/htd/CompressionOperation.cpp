@@ -49,7 +49,7 @@ void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposi
 //TODO Exploit the fact that nodes in a path have at most one child!
 void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    HTD_UNUSED(labelingFunctions);
+    HTD_UNUSED(labelingFunctions)
 
     if (decomposition.vertexCount() > 1)
     {
@@ -166,7 +166,7 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
 
 void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    HTD_UNUSED(labelingFunctions);
+    HTD_UNUSED(labelingFunctions)
 
     if (decomposition.vertexCount() > 1)
     {

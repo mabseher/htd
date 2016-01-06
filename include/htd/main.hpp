@@ -29,6 +29,7 @@
 #include <htd/AddEmptyRootOperation.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>
+#include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/Collection.hpp>
 #include <htd/CompilerDetection.hpp>
@@ -62,8 +63,8 @@
 #include <htd/IDecompositionManipulationOperation.hpp>
 #include <htd/Id.hpp>
 #include <htd/IDirectedGraph.hpp>
-#include <htd/IGraphDecomposition.hpp>
 #include <htd/IGraphDecompositionAlgorithm.hpp>
+#include <htd/IGraphDecomposition.hpp>
 #include <htd/IGraphDecompositionManipulationOperation.hpp>
 #include <htd/IGraph.hpp>
 #include <htd/IGraphLabeling.hpp>
@@ -81,8 +82,8 @@
 #include <htd/ILabelingCollection.hpp>
 #include <htd/ILabelingFunction.hpp>
 #include <htd/IMutableDirectedGraph.hpp>
-#include <htd/IMutableGraph.hpp>
 #include <htd/IMutableGraphDecomposition.hpp>
+#include <htd/IMutableGraph.hpp>
 #include <htd/IMutableHypergraph.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/IMutableLabeledDirectedGraph.hpp>
@@ -115,7 +116,12 @@
 #include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>
 #include <htd/LabelCollection.hpp>
+#include <htd/LabeledDirectedGraphFactory.hpp>
+#include <htd/LabeledGraphFactory.hpp>
+#include <htd/LabeledHypergraphFactory.hpp>
 #include <htd/LabeledHypergraph.hpp>
+#include <htd/LabeledPathFactory.hpp>
+#include <htd/LabeledTreeFactory.hpp>
 #include <htd/Label.hpp>
 #include <htd/LabelingCollection.hpp>
 #include <htd/LimitChildCountOperation.hpp>

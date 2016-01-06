@@ -88,8 +88,8 @@ htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::
 
     traversal.traverse(graph, startingVertex, [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
     {
-        HTD_UNUSED(predecessor);
-        HTD_UNUSED(distanceFromStartingVertex);
+        HTD_UNUSED(predecessor)
+        HTD_UNUSED(distanceFromStartingVertex)
 
         component.push_back(vertex);
     });

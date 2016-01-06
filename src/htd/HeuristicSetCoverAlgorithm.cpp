@@ -233,7 +233,7 @@ void htd::HeuristicSetCoverAlgorithm::populateNeighborhood(const std::vector<htd
     std::shuffle(indices2.begin(), indices2.end(), std::default_random_engine());
 
     //TODO
-    HTD_UNUSED(bestSolutionFitness);
+    HTD_UNUSED(bestSolutionFitness)
 
     if (indices1.size() > maximumNeighborhoodSize)
     {

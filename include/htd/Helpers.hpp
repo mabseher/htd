@@ -41,7 +41,7 @@
 #include <unordered_set>
 #include <vector>
 
-#define HTD_UNUSED(x) (void)(x)
+#define HTD_UNUSED(x) (void)(x);
 
 #ifdef NDEBUG
     #define DEBUGGING_CODE(x)

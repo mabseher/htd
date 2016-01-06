@@ -147,6 +147,11 @@ namespace htd
                 return base_->edgeCount(lookupVertex(vertexName));
             }
 
+            bool isEdge(const std::vector<VertexNameType> & elements)
+            {
+                return isEdge(htd::ConstCollection<VertexNameType>::getInstance(elements));
+            }
+
             bool isEdge(const htd::ConstCollection<VertexNameType> & elements)
             {
                 bool ok = true;
@@ -187,6 +192,11 @@ namespace htd
                 }
 
                 return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>());
+            }
+
+            htd::ConstCollection<htd::id_t> associatedEdgeIds(const std::vector<VertexNameType> & elements) const
+            {
+                return associatedEdgeIds(htd::ConstCollection<VertexNameType>::getInstance(elements));
             }
 
             htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<VertexNameType> & elements) const
@@ -363,6 +373,11 @@ namespace htd
                 return edgeId;
             }
 
+            htd::id_t addEdge(const std::vector<VertexNameType> & elements)
+            {
+                return addEdge(htd::ConstCollection<VertexNameType>::getInstance(elements));
+            }
+
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements)
             {
                 htd::vertex_container hyperedge;
@@ -378,6 +393,11 @@ namespace htd
                 }
 
                 return base_->addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
+            }
+
+            htd::id_t addEdge(const std::vector<VertexNameType> & elements, const EdgeNameType & name)
+            {
+                return addEdge(htd::ConstCollection<VertexNameType>::getInstance(elements), name);
             }
 
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements, const EdgeNameType & name)

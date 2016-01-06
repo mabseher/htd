@@ -306,17 +306,18 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                 std::cout << "   Bucket " << index + htd::Vertex::FIRST << ": ";
                 htd::print(buckets[index], false);
                 std::cout << std::endl;
-            })
+            }
 
-            DEBUGGING_CODE(std::cout << std::endl << "Relevant Buckets:" << std::endl;
+            std::cout << std::endl << "Relevant Buckets:" << std::endl;
             for (htd::id_t bucket : relevantBuckets)
             {
                 std::cout << "   Bucket " << bucket << ": ";
                 htd::print(buckets[bucket - htd::Vertex::FIRST], false);
                 std::cout << std::endl;
-            })
+            }
 
-            DEBUGGING_CODE(std::cout << std::endl << "Connections:" << std::endl;)
+            std::cout << std::endl << "Connections:" << std::endl;
+            )
 
             std::size_t edgeCount = 0;
 

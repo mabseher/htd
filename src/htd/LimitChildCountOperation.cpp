@@ -26,15 +26,12 @@
 #define	HTD_HTD_LIMITCHILDCOUNTOPERATION_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/LimitChildCountOperation.hpp>
 
 #include <algorithm>
 #include <stdexcept>
-
-//TODO Remove
-#include <iostream>
 #include <iterator>
-#include <htd/Helpers.hpp>
 
 htd::LimitChildCountOperation::LimitChildCountOperation(std::size_t limit) : limit_(limit)
 {
@@ -121,9 +118,6 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
                 {
                     std::vector<htd::vertex_t> newChildren2;
                     std::copy(start, finish, std::back_inserter(newChildren2));
-
-                    htd::print(newChildren2);
-                    std::cout << std::endl;
 
                     newNode = decomposition.addParent(newNode);
 

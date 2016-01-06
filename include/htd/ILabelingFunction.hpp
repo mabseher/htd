@@ -43,6 +43,8 @@ namespace htd
             virtual std::string name() const = 0;
 
             virtual htd::ILabel * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const = 0;
+
+            virtual ILabelingFunction * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::ILabelingFunction::~ILabelingFunction() { }

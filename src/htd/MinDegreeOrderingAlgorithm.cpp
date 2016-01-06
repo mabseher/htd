@@ -32,9 +32,6 @@
 
 #include <algorithm>
 
-//TODO Remove
-#include <iostream>
-
 htd::MinDegreeOrderingAlgorithm::MinDegreeOrderingAlgorithm(void)
 {
     

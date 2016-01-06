@@ -26,15 +26,12 @@
 #define	HTD_HTD_LIMITMAXIMUMINTRODUCEDVERTEXCOUNTOPERATION_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 
 #include <algorithm>
 #include <stdexcept>
-
-//TODO Remove
-#include <iostream>
 #include <iterator>
-#include <htd/Helpers.hpp>
 
 htd::LimitMaximumIntroducedVertexCountOperation::LimitMaximumIntroducedVertexCountOperation(std::size_t limit) : limit_(limit)
 {

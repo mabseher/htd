@@ -30,9 +30,6 @@
 #include <htd/PathDecomposition.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 
-//TODO Remove
-#include <iostream>
-
 htd::PathDecomposition::PathDecomposition(void) : base_(htd::TreeDecompositionFactory::instance().getTreeDecomposition())
 {
 

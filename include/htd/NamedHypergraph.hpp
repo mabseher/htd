@@ -114,8 +114,6 @@ namespace htd
             {
                 if (!nameLabeling_->isLabeledVertex(vertex))
                 {
-                    std::cout << "NOT NAMED: " << vertex << std::endl;
-
                     throw std::logic_error("const VertexNameType & htd::NamedHypergraph<VertexNameType, EdgeNameType>::vertexName(htd::vertex_t) const");
                 }
 

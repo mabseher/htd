@@ -50,6 +50,8 @@ namespace htd
 
             htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE;
 
+            InducedSubgraphLabelingFunction * clone(void) const HTD_OVERRIDE;
+
         private:
             const htd::IHypergraph & graph_;
 

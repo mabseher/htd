@@ -131,9 +131,10 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::ver
 
             history.push_back(HistoryEntry(selected, remainder, oldRelevantContainers));
 
-            DEBUGGING_CODE(std::cout << "Selected: " << oldRelevantContainers[selected] << std::endl << "   ";)
-            DEBUGGING_CODE(htd::print(containers[oldRelevantContainers[selected]], false);)
-            DEBUGGING_CODE(std::cout << std::endl << std::endl;)
+            DEBUGGING_CODE(
+            std::cout << "Selected: " << oldRelevantContainers[selected] << std::endl << "   ";
+            htd::print(containers[oldRelevantContainers[selected]], false);
+            std::cout << std::endl << std::endl;)
 
             for (htd::id_t vertex : containers[oldRelevantContainers[selected]])
             {
@@ -161,17 +162,19 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::ver
 
                 for (htd::id_t container : oldRelevantContainers)
                 {
-                    DEBUGGING_CODE(std::cout << "Container: " << container << "   ";)
-                    DEBUGGING_CODE(htd::print(containers[container], false);)
-                    DEBUGGING_CODE(std::cout << std::endl;)
+                    DEBUGGING_CODE(
+                    std::cout << "Container: " << container << "   ";
+                    htd::print(containers[container], false);
+                    std::cout << std::endl;)
 
                     std::size_t coverage = htd::compute_set_intersection_size(remainder.begin(), remainder.end(), containers[container].begin(), containers[container].end());
 
                     if (index > selected && coverage > 0)
                     {
-                        DEBUGGING_CODE(std::cout << "Relevant container: " << container << "   ";)
-                        DEBUGGING_CODE(htd::print(containers[container], false);)
-                        DEBUGGING_CODE(std::cout << std::endl;)
+                        DEBUGGING_CODE(
+                        std::cout << "Relevant container: " << container << "   ";
+                        htd::print(containers[container], false);
+                        std::cout << std::endl;)
 
                         relevantContainers.push_back(container);
 
@@ -203,14 +206,14 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::ver
 
                         history.pop_back();
 
-                        DEBUGGING_CODE(std::cout << "   Next container: " << next << std::endl;)
-                        DEBUGGING_CODE(std::cout << "   Current remainder: ";)
-                        DEBUGGING_CODE(htd::print(remainder, false);)
-                        DEBUGGING_CODE(std::cout << std::endl;)
-
-                        DEBUGGING_CODE(std::cout << "   Relevant containers: ";)
-                        DEBUGGING_CODE(htd::print(relevantContainers, false);)
-                        DEBUGGING_CODE(std::cout << std::endl << std::endl;)
+                        DEBUGGING_CODE(
+                        std::cout << "   Next container: " << next << std::endl;
+                        std::cout << "   Current remainder: ";
+                        htd::print(remainder, false);
+                        std::cout << std::endl;
+                        std::cout << "   Relevant containers: ";
+                        htd::print(relevantContainers, false);
+                        std::cout << std::endl << std::endl;)
                     }
                     else
                     {
@@ -231,11 +234,11 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::ver
 
                 std::sort(newSolution.begin(), newSolution.end());
 
-                DEBUGGING_CODE(std::cout << "Solution:   ";)
-                DEBUGGING_CODE(htd::print(newSolution, false);)
-                DEBUGGING_CODE(std::cout << std::endl << std::endl;)
-                
-                DEBUGGING_CODE(std::cout << "Backtracking ..." << std::endl;)
+                DEBUGGING_CODE(
+                std::cout << "Solution:   ";
+                htd::print(newSolution, false);
+                std::cout << std::endl << std::endl;
+                std::cout << "Backtracking ..." << std::endl;)
 
                 solutions.push_back(newSolution);
 
@@ -252,14 +255,14 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::ver
 
                 history.pop_back();
 
-                DEBUGGING_CODE(std::cout << "   Next container: " << next << std::endl;)
-                DEBUGGING_CODE(std::cout << "   Current remainder: ";)
-                DEBUGGING_CODE(htd::print(remainder, false);)
-                DEBUGGING_CODE(std::cout << std::endl;)
-
-                DEBUGGING_CODE(std::cout << "   Relevant containers: ";)
-                DEBUGGING_CODE(htd::print(relevantContainers, false);)
-                DEBUGGING_CODE(std::cout << std::endl << std::endl;)
+                DEBUGGING_CODE(
+                std::cout << "   Next container: " << next << std::endl;
+                std::cout << "   Current remainder: ";
+                htd::print(remainder, false);
+                std::cout << std::endl;
+                std::cout << "   Relevant containers: ";
+                htd::print(relevantContainers, false);
+                std::cout << std::endl << std::endl;)
             }
         }
         else
@@ -276,14 +279,14 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::ver
 
                 history.pop_back();
 
-                DEBUGGING_CODE(std::cout << "   Next container: " << next << std::endl;)
-                DEBUGGING_CODE(std::cout << "   Current remainder: ";)
-                DEBUGGING_CODE(htd::print(remainder, false);)
-                DEBUGGING_CODE(std::cout << std::endl;)
-
-                DEBUGGING_CODE(std::cout << "   Relevant containers: ";)
-                DEBUGGING_CODE(htd::print(relevantContainers, false);)
-                DEBUGGING_CODE(std::cout << std::endl << std::endl;)
+                DEBUGGING_CODE(
+                std::cout << "   Next container: " << next << std::endl;
+                std::cout << "   Current remainder: ";
+                htd::print(remainder, false);
+                std::cout << std::endl;
+                std::cout << "   Relevant containers: ";
+                htd::print(relevantContainers, false);
+                std::cout << std::endl << std::endl;)
             }
             else
             {
@@ -296,7 +299,8 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::ver
     {
         std::sort(solutions.begin(), solutions.end(), Compare());
 
-        DEBUGGING_CODE(std::size_t count = 0;
+        DEBUGGING_CODE(
+        std::size_t count = 0;
         
         for (const std::vector<htd::id_t>& solution : solutions)
         {

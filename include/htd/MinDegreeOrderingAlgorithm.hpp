@@ -33,8 +33,6 @@
 #include <algorithm>
 #include <unordered_set>
 
-#include <iostream>
-
 namespace htd
 {
     class MinDegreeOrderingAlgorithm : public virtual htd::IOrderingAlgorithm

@@ -40,6 +40,8 @@ namespace htd
             virtual void apply(htd::IMutableTreeDecomposition & decomposition) const = 0;
 
             virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+
+            virtual ITreeDecompositionManipulationOperation * clone(void) const HTD_OVERRIDE = 0;
     };
     
     inline htd::ITreeDecompositionManipulationOperation::~ITreeDecompositionManipulationOperation() { }

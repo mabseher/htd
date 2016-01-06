@@ -26,16 +26,13 @@
 #define	HTD_HTD_JOINNODEREPLACEMENTOPERATION_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>
 
 #include <algorithm>
 #include <stack>
 #include <unordered_set>
 #include <vector>
-
-//TODO Remove
-#include <iostream>
-#include <htd/Helpers.hpp>
 
 struct HistoryEntry
 {

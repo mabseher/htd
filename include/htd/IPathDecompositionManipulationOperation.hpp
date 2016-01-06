@@ -40,6 +40,8 @@ namespace htd
             virtual void apply(htd::IMutablePathDecomposition & decomposition) const = 0;
 
             virtual void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+
+            virtual IPathDecompositionManipulationOperation * clone(void) const HTD_OVERRIDE = 0;
     };
     
     inline htd::IPathDecompositionManipulationOperation::~IPathDecompositionManipulationOperation() { }

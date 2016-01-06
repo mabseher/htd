@@ -26,15 +26,12 @@
 #define	HTD_HTD_JOINNODENORMALIZATIONOPERATION_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/Collection.hpp>
 
 #include <algorithm>
-
-//TODO Remove
-#include <iostream>
-#include <htd/Helpers.hpp>
 
 htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(void) : identicalParent_(false)
 {

@@ -54,7 +54,7 @@ htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::InducedSubgraphLabelingF
 {
     htd::VectorAdapter<htd::Hyperedge> label;
 
-    for (htd::Hyperedge hyperedge : hyperedges_)
+    for (const htd::Hyperedge & hyperedge : hyperedges_)
     {
         htd::vertex_container elements(hyperedge.begin(), hyperedge.end());
 
@@ -76,6 +76,11 @@ htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::InducedSubgraphLabelingF
     HTD_UNUSED(labels);
 
     return computeLabel(vertices);
+}
+
+htd::InducedSubgraphLabelingFunction * htd::InducedSubgraphLabelingFunction::clone(void) const
+{
+    return new htd::InducedSubgraphLabelingFunction(graph_);
 }
 
 #endif /* HTD_HTD_INDUCEDSUBGRAPHLABELINGFUNCTION_CPP */

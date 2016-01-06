@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-
 #include <htd/TreeDecomposition.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabeledTree.hpp>
@@ -43,9 +42,6 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
-
-//TODO Remove
-#include <iostream>
 
 htd::TreeDecomposition::TreeDecomposition(void)
     : size_(0), root_(htd::Vertex::UNKNOWN), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_(), labelings_(new htd::LabelingCollection())

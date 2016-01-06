@@ -27,7 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
-#include <htd/ILabeledGraph.hpp>
+#include <htd/IGraphDecomposition.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
 
 #include <vector>
@@ -39,9 +39,9 @@ namespace htd
         public:
             virtual ~IGraphDecompositionAlgorithm() = 0;
             
-            virtual htd::ILabeledGraph * computeDecomposition(const htd::IHypergraph & graph) const = 0;
+            virtual htd::IGraphDecomposition * computeDecomposition(const htd::IHypergraph & graph) const = 0;
 
-            virtual htd::ILabeledGraph * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const = 0;
+            virtual htd::IGraphDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const = 0;
 
             virtual void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) = 0;
 

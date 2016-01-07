@@ -201,7 +201,7 @@ htd::ILabelCollection * htd::LabelingCollection::exportVertexLabelCollection(htd
 
     for (const std::string & labelName : labelNames_)
     {
-        htd::IGraphLabeling * labeling = content_.at(labelName);
+        const htd::IGraphLabeling * labeling = content_.at(labelName);
 
         if (labeling != nullptr && labeling->isLabeledVertex(vertex))
         {
@@ -218,7 +218,7 @@ htd::ILabelCollection * htd::LabelingCollection::exportEdgeLabelCollection(htd::
 
     for (const std::string & labelName : labelNames_)
     {
-        htd::IGraphLabeling * labeling = content_.at(labelName);
+        const htd::IGraphLabeling * labeling = content_.at(labelName);
 
         if (labeling != nullptr && labeling->isLabeledEdge(edgeId))
         {

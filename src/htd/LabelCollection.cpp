@@ -38,7 +38,15 @@ htd::LabelCollection::LabelCollection(void) : labelNames_(), content_()
 
 htd::LabelCollection::~LabelCollection()
 {
- 
+    for (auto & storedLabel : content_)
+    {
+        if (storedLabel.second != nullptr)
+        {
+            delete storedLabel.second;
+        }
+    }
+
+    content_.clear();
 }
 
 std::size_t htd::LabelCollection::labelCount(void) const

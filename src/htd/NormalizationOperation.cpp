@@ -33,13 +33,13 @@
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 
 htd::NormalizationOperation::NormalizationOperation(void)
-    : htd::SemiNormalizationOperation(), emptyRoot_(false), emptyLeaves_(false), identicalJoinNodeParent_(false)
+    : htd::SemiNormalizationOperation(), emptyRoot_(false), emptyLeaves_(false), identicalJoinNodeParent_(false), treatLeafNodesAsIntroduceNodes_(false)
 {
 
 }
 
-htd::NormalizationOperation::NormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent)
-    : htd::SemiNormalizationOperation(emptyRoot, emptyLeaves, identicalJoinNodeParent), emptyRoot_(emptyRoot), emptyLeaves_(emptyLeaves), identicalJoinNodeParent_(identicalJoinNodeParent)
+htd::NormalizationOperation::NormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent, bool treatLeafNodesAsIntroduceNodes)
+    : htd::SemiNormalizationOperation(emptyRoot, emptyLeaves, identicalJoinNodeParent), emptyRoot_(emptyRoot), emptyLeaves_(emptyLeaves), identicalJoinNodeParent_(identicalJoinNodeParent), treatLeafNodesAsIntroduceNodes_(treatLeafNodesAsIntroduceNodes)
 {
 
 }
@@ -88,14 +88,14 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
     limitMaximumForgottenVertexCountOperation.apply(decomposition, labelingFunctions);
 
-    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
+    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1, treatLeafNodesAsIntroduceNodes_);
 
     limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
 }
 
 htd::NormalizationOperation * htd::NormalizationOperation::clone(void) const
 {
-    return new htd::NormalizationOperation(emptyRoot_, emptyLeaves_, identicalJoinNodeParent_);
+    return new htd::NormalizationOperation(emptyRoot_, emptyLeaves_, identicalJoinNodeParent_, treatLeafNodesAsIntroduceNodes_);
 }
 
 #endif /* HTD_HTD_NORMALIZATIONOPERATION_CPP */

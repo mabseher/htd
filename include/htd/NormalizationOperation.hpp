@@ -36,7 +36,7 @@ namespace htd
         public:
             NormalizationOperation(void);
 
-            NormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent);
+            NormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent, bool treatLeafNodesAsIntroduceNodes);
 
             virtual ~NormalizationOperation();
 
@@ -56,6 +56,8 @@ namespace htd
             bool emptyLeaves_;
 
             bool identicalJoinNodeParent_;
+
+            bool treatLeafNodesAsIntroduceNodes_;
     };
 }
 

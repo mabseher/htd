@@ -37,6 +37,8 @@ namespace htd
         public:
             LimitMaximumIntroducedVertexCountOperation(std::size_t limit);
 
+            LimitMaximumIntroducedVertexCountOperation(std::size_t limit, bool treatLeafNodesAsIntroduceNodes);
+
             ~LimitMaximumIntroducedVertexCountOperation();
 
             void apply(htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
@@ -51,6 +53,8 @@ namespace htd
 
         private:
             std::size_t limit_;
+
+            bool treatLeafNodesAsIntroduceNodes_;
     };
 }
 

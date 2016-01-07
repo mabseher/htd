@@ -336,11 +336,6 @@ htd::vertex_t htd::PathDecomposition::addParent(htd::vertex_t vertex)
     return base_->addParent(vertex);
 }
 
-void htd::PathDecomposition::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
-{
-    base_->setParent(vertex, newParent);
-}
-
 const htd::ILabelingCollection & htd::PathDecomposition::labelings(void) const
 {
     return base_->labelings();

@@ -51,8 +51,6 @@ namespace htd
 
             virtual htd::vertex_t addParent(htd::vertex_t vertex) = 0;
 
-            virtual void setParent(htd::vertex_t vertex, htd::vertex_t newParent) = 0;
-
             virtual IMutablePath * clone(void) const = 0;
     };
 

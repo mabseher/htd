@@ -247,7 +247,7 @@ bool htd::Tree::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
     
     if (isVertex(vertex1) && isVertex(vertex2))
     {
-        auto & node = nodes_[vertex1];
+        auto & node = nodes_[vertex1 - htd::Vertex::FIRST];
 
         if (node != nullptr)
         {
@@ -303,14 +303,12 @@ std::size_t htd::Tree::neighborCount(htd::vertex_t vertex) const
 
         if (node != nullptr)
         {
-            auto & children = node->children;
-            
             if (node->parent != htd::Vertex::UNKNOWN)
             {
                 ret++;
             }
 
-            ret += children.size();
+            ret += node->children.size();
         }
     }
     
@@ -345,46 +343,26 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::neighbors(htd::vertex_t vertex) c
         }
     }
 
+    std::sort(result.begin(), result.end());
+
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::Tree::neighbor(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
-    
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
-
-        if (node != nullptr)
-        {
-            std::size_t currentIndex = 0;
-            
-            auto & children = node->children;
-            
-            if (node->parent != htd::Vertex::UNKNOWN)
-            {
-                if (currentIndex == index)
-                {
-                    ret = node->parent;
-                }
-                
-                ++currentIndex;
-            }
-
-            for (auto child = children.begin(); currentIndex <= index && child != children.end(); child++)
-            {
-                if (currentIndex == index)
-                {
-                    ret = *child;
-                }
-                
-                ++currentIndex;
-            }
-        }
+        throw std::logic_error("htd::vertex_t htd::Tree::neighbor(htd::vertex_t, htd::index_t) const");
     }
-    
-    return ret;
+
+    const htd::ConstCollection<htd::vertex_t> & currentNeighbors = neighbors(vertex);
+
+    if (index >= currentNeighbors.size())
+    {
+        throw std::out_of_range("htd::vertex_t htd::Tree::neighbor(htd::vertex_t, htd::index_t) const");
+    }
+
+    return currentNeighbors[index];
 }
 
 htd::ConstCollection<htd::vertex_t> htd::Tree::vertices(void) const
@@ -798,7 +776,7 @@ bool htd::Tree::isChild(htd::vertex_t vertex, htd::vertex_t child) const
     }
     else
     {
-        throw std::out_of_range("bool htd::Tree::isChild(htd::vertex_t vertex, htd::vertex_t child) const");
+        throw std::logic_error("bool htd::Tree::isChild(htd::vertex_t, htd::vertex_t) const");
     }
 
     return ret;
@@ -1116,7 +1094,7 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::Tree::addIntermediateParent(htd::vertex_t)");
+        throw std::out_of_range("htd::vertex_t htd::Tree::addParent(htd::vertex_t)");
     }
 
     return ret;

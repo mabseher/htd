@@ -1766,6 +1766,10 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vert
 
             return htd::ConstCollection<htd::vertex_t>(vertexLabel);
         }
+        else
+        {
+            return htd::ConstCollection<htd::vertex_t>();
+        }
     }
     else
     {

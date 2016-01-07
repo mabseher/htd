@@ -25,6 +25,8 @@
 #ifndef HTD_HTD_ILABEL_HPP
 #define	HTD_HTD_ILABEL_HPP
 
+#include <ostream>
+
 namespace htd
 {
     class ILabel
@@ -37,6 +39,8 @@ namespace htd
             virtual ILabel * clone(void) const = 0;
 
             virtual bool operator==(const ILabel & rhs) const = 0;
+
+            virtual std::string toString(void) const = 0;
     };
 
     inline htd::ILabel::~ILabel() { }

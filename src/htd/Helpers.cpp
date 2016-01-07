@@ -27,6 +27,15 @@
 
 #include <htd/Helpers.hpp>
 
+std::ostream & operator<<(std::ostream & stream, const htd::ILabel & label)
+{
+    //TODO Implement
+
+    HTD_UNUSED(label)
+
+    return stream;
+}
+
 void htd::print(bool input)
 {
     if (input)

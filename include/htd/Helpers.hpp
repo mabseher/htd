@@ -65,6 +65,8 @@
 
 namespace std
 {
+    std::ostream & operator<<(std::ostream & stream, const htd::ILabel & label);
+
     template<typename T>
     void hash_combine(std::size_t & seed, const T & v)
     {

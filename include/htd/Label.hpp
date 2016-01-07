@@ -81,6 +81,13 @@ namespace htd
                 return new Label<T>(*value_);
             }
 
+            std::string toString(void) const
+            {
+                //TODO Implement
+
+                return "";
+            }
+
         private:
             std::shared_ptr<T> value_;
     };

@@ -74,7 +74,7 @@ namespace htd
                 return ret;
             }
 
-            bool operator==(const ConstIteratorBase<T> & other) const
+            bool operator==(const ConstIteratorBase<T> & other) const HTD_OVERRIDE
             {
                 const ConstIteratorWrapper<Iter, T> * o = dynamic_cast<const ConstIteratorWrapper<Iter, T> *>(&other);
 
@@ -86,7 +86,7 @@ namespace htd
                 return baseIterator_ == other.baseIterator_;
             }
 
-            bool operator!=(const ConstIteratorBase<T> & other) const
+            bool operator!=(const ConstIteratorBase<T> & other) const HTD_OVERRIDE
             {
                 const ConstIteratorWrapper<Iter, T> * o = dynamic_cast<const ConstIteratorWrapper<Iter, T> *>(&other);
 

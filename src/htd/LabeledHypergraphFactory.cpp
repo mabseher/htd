@@ -22,10 +22,11 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_TREEDECOMPOSITIONFACTORY_CPP
-#define HTD_HTD_TREEDECOMPOSITIONFACTORY_CPP
+#ifndef HTD_HTD_LABELEDHYPERGRAPHFACTORY_CPP
+#define HTD_HTD_LABELEDHYPERGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/LabeledHypergraphFactory.hpp>
 #include <htd/LabeledHypergraph.hpp>
 
@@ -64,6 +65,7 @@ htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHyperg
     htd::IMutableLabeledHypergraph * ret = nullptr; //new htd::LabeledHypergraph(original); //TODO constructionTemplate_->clone();
 
     //TODO Copy decomposition content!
+    HTD_UNUSED(original)
 
     return ret;
 }
@@ -100,4 +102,4 @@ const htd::IMutableLabeledHypergraph & htd::LabeledHypergraphFactory::accessMuta
     return *(dynamic_cast<const htd::IMutableLabeledHypergraph *>(&original));
 }
 
-#endif /* HTD_HTD_TREEDECOMPOSITIONFACTORY_CPP */
+#endif /* HTD_HTD_LABELEDHYPERGRAPHFACTORY_CPP */

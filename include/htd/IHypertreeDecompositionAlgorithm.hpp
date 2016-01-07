@@ -43,7 +43,7 @@ namespace htd
 
             virtual htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE = 0;
 
-            virtual IHypertreeDecompositionAlgorithm * clone(void) const = 0;
+            virtual IHypertreeDecompositionAlgorithm * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::IHypertreeDecompositionAlgorithm::~IHypertreeDecompositionAlgorithm() { }

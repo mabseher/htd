@@ -83,7 +83,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
                 {
                     htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newVertex);
 
-                    htd::ILabel * newLabel = labelingFunction->computeLabel(bag, *labelCollection);
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(rememberedVertices, *labelCollection);
 
                     delete labelCollection;
 

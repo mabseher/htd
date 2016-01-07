@@ -242,7 +242,7 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
             {
                 std::vector<htd::vertex_t> children;
 
-                const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(currentNode);
+                const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
                 const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(vertex);
 
@@ -250,7 +250,7 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
 
                 for (htd::vertex_t child : children)
                 {
-                    const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(currentNode);
+                    const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(child);
 
                     if (std::includes(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
                     {

@@ -145,6 +145,7 @@
 #include <htd/SetCoverAlgorithm.hpp>
 #include <htd/StronglyConnectedComponentAlgorithmFactory.hpp>
 #include <htd/TarjanStronglyConnectedComponentAlgorithm.hpp>
+#include <htd/Tree.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/TreeDecomposition.hpp>

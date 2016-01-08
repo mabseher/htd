@@ -278,7 +278,7 @@ namespace htd
             PathDecomposition * clone(void) const HTD_OVERRIDE;
 
         private:
-            htd::IMutableTreeDecomposition * base_;
+            htd::IMutablePathDecomposition * base_;
     };
 }
 

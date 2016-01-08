@@ -28,9 +28,9 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/PathDecomposition.hpp>
-#include <htd/TreeDecompositionFactory.hpp>
+#include <htd/PathDecompositionFactory.hpp>
 
-htd::PathDecomposition::PathDecomposition(void) : base_(htd::TreeDecompositionFactory::instance().getTreeDecomposition())
+htd::PathDecomposition::PathDecomposition(void) : base_(htd::PathDecompositionFactory::instance().getPathDecomposition())
 {
 
 }
@@ -40,7 +40,7 @@ htd::PathDecomposition::PathDecomposition(const htd::PathDecomposition & origina
 
 }
 
-htd::PathDecomposition::PathDecomposition(const htd::IPathDecomposition & original) : base_(htd::TreeDecompositionFactory::instance().getTreeDecomposition())
+htd::PathDecomposition::PathDecomposition(const htd::IPathDecomposition & original) : base_(htd::PathDecompositionFactory::instance().getPathDecomposition())
 {
     if (original.vertexCount() > 0)
     {
@@ -296,7 +296,7 @@ void htd::PathDecomposition::removeVertex(htd::vertex_t vertex)
 
 void htd::PathDecomposition::removeSubpath(htd::vertex_t subpathRoot)
 {
-    base_->removeSubtree(subpathRoot);
+    base_->removeSubpath(subpathRoot);
 }
 
 htd::vertex_t htd::PathDecomposition::insertRoot(void)

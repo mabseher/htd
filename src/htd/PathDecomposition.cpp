@@ -406,21 +406,6 @@ void htd::PathDecomposition::removeEdgeLabel(const std::string & labelName, htd:
     base_->removeEdgeLabel(labelName, edgeId);
 }
 
-htd::PathDecomposition & htd::PathDecomposition::operator=(const htd::PathDecomposition & other)
-{
-    if (this != &other)
-    {
-        if (base_ != nullptr)
-        {
-            delete base_;
-        }
-
-        base_ = other.base_->clone();
-    }
-    
-    return *this;
-}
-
 std::size_t htd::PathDecomposition::leafNodeCount(void) const
 {
     return base_->leafNodeCount();
@@ -679,6 +664,30 @@ void htd::PathDecomposition::swapEdgeLabel(const std::string & labelName, htd::i
 htd::PathDecomposition * htd::PathDecomposition::clone(void) const
 {
     return new PathDecomposition(*this);
+}
+
+htd::PathDecomposition & htd::PathDecomposition::operator=(const htd::IPath & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::PathDecomposition & htd::PathDecomposition::operator=(const htd::ILabeledPath & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::PathDecomposition & htd::PathDecomposition::operator=(const htd::IPathDecomposition & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
 }
 
 #endif /* HTD_HTD_PATHDECOMPOSITION_CPP */

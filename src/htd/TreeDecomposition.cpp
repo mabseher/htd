@@ -63,7 +63,6 @@ htd::TreeDecomposition::TreeDecomposition(const htd::TreeDecomposition & origina
     }
 }
 
-//TODO Ensure correctness when htd::Vertex::FIRST does not match for this and original
 htd::TreeDecomposition::TreeDecomposition(const htd::ITreeDecomposition & original) : size_(0), root_(original.root()), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_(), labelings_(original.labelings().clone())
 {
     htd::vertex_t maximumVertex = 0;
@@ -1371,37 +1370,6 @@ void htd::TreeDecomposition::removeEdgeLabel(const std::string & labelName, htd:
     }
 }
 
-htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::TreeDecomposition & other)
-{
-    if (this != &other)
-    {
-        if (this->root_ != htd::Vertex::UNKNOWN)
-        {
-            removeRoot();
-        }
-        
-        nodes_.reserve(other.nodes_.size());
-    
-        for (auto & node : other.nodes_)
-        {
-            if (node != nullptr)
-            {
-                nodes_.push_back(new TreeNode(*node));
-            }
-        }
-        
-        this->root_ = other.root_;
-        
-        this->size_ = other.size_;
-        
-        this->deletions_ = other.deletions_;
-        
-        this->labelings_ = other.labelings_;
-    }
-    
-    return *this;
-}
-
 std::size_t htd::TreeDecomposition::leafNodeCount(void) const
 {
     std::size_t ret = 0;
@@ -2441,6 +2409,30 @@ void htd::TreeDecomposition::swapEdgeLabel(const std::string & labelName, htd::i
 htd::TreeDecomposition * htd::TreeDecomposition::clone(void) const
 {
     return new TreeDecomposition(*this);
+}
+
+htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::ITree & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::ILabeledTree & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::ITreeDecomposition & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
 }
 
 #endif /* HTD_HTD_TREEDECOMPOSITION_CPP */

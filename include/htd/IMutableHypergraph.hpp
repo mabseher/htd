@@ -48,6 +48,8 @@ namespace htd
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
             virtual IMutableHypergraph * clone(void) const = 0;
+
+            virtual IMutableHypergraph & operator=(const htd::IHypergraph & original) = 0;
     };
 
     inline htd::IMutableHypergraph::~IMutableHypergraph() { }

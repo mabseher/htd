@@ -59,13 +59,11 @@ htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(void)
     return constructionTemplate_->clone();
 }
 
-//TODO Use construction template!
 htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd::ILabeledGraph & original)
 {
     htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();
 
-    //TODO Copy decomposition content!
-    HTD_UNUSED(original)
+    *ret = original;
 
     return ret;
 }

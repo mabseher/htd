@@ -28,14 +28,13 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/LabeledPathFactory.hpp>
-//TODO
-//#include <htd/LabeledPath.hpp>
+#include <htd/LabeledPath.hpp>
 
 #include <stdexcept>
 
 htd::LabeledPathFactory::LabeledPathFactory(void)
 {
-    constructionTemplate_ = nullptr; //new htd::LabeledPath();
+    constructionTemplate_ = new htd::LabeledPath();
 }
 
 htd::LabeledPathFactory::~LabeledPathFactory()
@@ -60,13 +59,11 @@ htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(void)
     return constructionTemplate_->clone();
 }
 
-//TODO Use construction template!
 htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(const htd::ILabeledPath & original)
 {
-    htd::IMutableLabeledPath * ret = nullptr; //new htd::LabeledPath(original); //TODO constructionTemplate_->clone();
+    htd::IMutableLabeledPath * ret = constructionTemplate_->clone();
 
-    //TODO Copy decomposition content!
-    HTD_UNUSED(original)
+    *ret = original;
 
     return ret;
 }

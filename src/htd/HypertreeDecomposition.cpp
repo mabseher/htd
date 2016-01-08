@@ -109,4 +109,37 @@ htd::HypertreeDecomposition * htd::HypertreeDecomposition::clone(void) const
     return new htd::HypertreeDecomposition(*this);
 }
 
+
+htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::ITree & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::ILabeledTree & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::ITreeDecomposition & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::IHypertreeDecomposition & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITION_CPP */

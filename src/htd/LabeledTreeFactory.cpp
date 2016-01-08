@@ -28,15 +28,13 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/LabeledTreeFactory.hpp>
-//TODO
-//#include <htd/LabeledTree.hpp>
+#include <htd/LabeledTree.hpp>
 
 #include <stdexcept>
 
 htd::LabeledTreeFactory::LabeledTreeFactory(void)
 {
-    //TODO
-    //constructionTemplate_ = new htd::TreeDecomposition();
+    constructionTemplate_ = new htd::LabeledTree();
 }
 
 htd::LabeledTreeFactory::~LabeledTreeFactory()
@@ -61,13 +59,11 @@ htd::IMutableLabeledTree * htd::LabeledTreeFactory::getLabeledTree(void)
     return constructionTemplate_->clone();
 }
 
-//TODO Use construction template!
 htd::IMutableLabeledTree * htd::LabeledTreeFactory::getLabeledTree(const htd::ILabeledTree & original)
 {
-    htd::IMutableLabeledTree * ret = nullptr; //new htd::TreeDecomposition(original); //TODO constructionTemplate_->clone();
+    htd::IMutableLabeledTree * ret = htd::LabeledTreeFactory::getLabeledTree();
 
-    //TODO Copy decomposition content!
-    HTD_UNUSED(original)
+    *ret = original;
 
     return ret;
 }

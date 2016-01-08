@@ -53,6 +53,8 @@ namespace htd
             virtual void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
             virtual IMutableLabeledDirectedGraph * clone(void) const = 0;
+
+            virtual IMutableLabeledDirectedGraph & operator=(const htd::ILabeledDirectedGraph & original) = 0;
     };
 
     inline htd::IMutableLabeledDirectedGraph::~IMutableLabeledDirectedGraph() { }

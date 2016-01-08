@@ -752,4 +752,12 @@ htd::Hypergraph * htd::Hypergraph::clone(void) const
     return new htd::Hypergraph(*this);
 }
 
+htd::Hypergraph & htd::Hypergraph::operator=(const htd::IHypergraph & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
 #endif /* HTD_HTD_HYPERGRAPH_CPP */

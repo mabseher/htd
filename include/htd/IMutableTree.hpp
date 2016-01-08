@@ -52,6 +52,8 @@ namespace htd
             virtual void setParent(htd::vertex_t vertex, htd::vertex_t newParent) = 0;
 
             virtual IMutableTree * clone(void) const = 0;
+
+            virtual IMutableTree & operator=(const htd::ITree & original) = 0;
     };
 
     inline htd::IMutableTree::~IMutableTree() { }

@@ -585,4 +585,27 @@ htd::DirectedGraph * htd::DirectedGraph::clone(void) const
     return new DirectedGraph(*this);
 }
 
+htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::IDirectedGraph & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::DirectedGraph & other)
+{
+    if (this != &other)
+    {
+        delete base_;
+
+        base_ = other.base_->clone();
+
+        incomingNeighborhood_ = other.incomingNeighborhood_;
+        outgoingNeighborhood_ = other.outgoingNeighborhood_;
+    }
+
+    return *this;
+}
+
 #endif /* HTD_HTD_DIRECTEDGRAPH_CPP */

@@ -41,6 +41,8 @@ namespace htd
             virtual void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) = 0;
 
             virtual IMutableTreeDecomposition * clone(void) const = 0;
+
+            virtual IMutableTreeDecomposition & operator=(const htd::ITreeDecomposition & original) = 0;
     };
 
     inline htd::IMutableTreeDecomposition::~IMutableTreeDecomposition() { }

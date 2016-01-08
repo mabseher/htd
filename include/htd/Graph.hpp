@@ -119,8 +119,9 @@ namespace htd
 
             Graph * clone(void) const HTD_OVERRIDE;
 
-        protected:
-            Graph & operator=(const Graph &) { return *this; }
+            Graph & operator=(const htd::Graph & original);
+
+            Graph & operator=(const htd::IGraph & original) HTD_OVERRIDE;
 
         private:
             htd::IMutableHypergraph * base_;

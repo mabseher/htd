@@ -113,8 +113,7 @@ namespace htd
 
             Hypergraph * clone(void) const HTD_OVERRIDE;
 
-        protected:
-            Hypergraph & operator=(const Hypergraph &) { return *this; }
+            Hypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
 
         private:
             std::size_t size_;

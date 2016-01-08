@@ -78,6 +78,10 @@ namespace htd
 
             LabeledPath * clone(void) const HTD_OVERRIDE;
 
+            LabeledPath & operator=(const htd::IPath & original) HTD_OVERRIDE;
+
+            LabeledPath & operator=(const htd::ILabeledPath & original) HTD_OVERRIDE;
+
         private:
             htd::ILabelingCollection * labelings_;
     };

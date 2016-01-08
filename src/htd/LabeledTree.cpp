@@ -173,4 +173,20 @@ htd::LabeledTree * htd::LabeledTree::clone(void) const
     return new htd::LabeledTree(*this);
 }
 
+htd::LabeledTree & htd::LabeledTree::operator=(const htd::ITree & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::LabeledTree & htd::LabeledTree::operator=(const htd::ILabeledTree & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
 #endif /* HTD_HTD_LABELEDTREE_CPP */

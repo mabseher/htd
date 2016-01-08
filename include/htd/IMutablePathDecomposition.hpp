@@ -41,6 +41,8 @@ namespace htd
             virtual void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) = 0;
 
             virtual IMutablePathDecomposition * clone(void) const = 0;
+
+            virtual IMutablePathDecomposition & operator=(const htd::IPathDecomposition & original) = 0;
     };
 
     inline htd::IMutablePathDecomposition::~IMutablePathDecomposition() { }

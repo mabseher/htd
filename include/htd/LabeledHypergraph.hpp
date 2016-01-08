@@ -80,6 +80,10 @@ namespace htd
 
             LabeledHypergraph * clone(void) const HTD_OVERRIDE;
 
+            LabeledHypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
+
+            LabeledHypergraph & operator=(const htd::ILabeledHypergraph & original) HTD_OVERRIDE;
+
         private:
             htd::ILabelingCollection * labelings_;
     };

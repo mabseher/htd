@@ -80,6 +80,10 @@ namespace htd
 
             LabeledGraph * clone(void) const HTD_OVERRIDE;
 
+            LabeledGraph & operator=(const htd::IGraph & original) HTD_OVERRIDE;
+
+            LabeledGraph & operator=(const htd::ILabeledGraph & original) HTD_OVERRIDE;
+
         private:
             htd::ILabelingCollection * labelings_;
     };

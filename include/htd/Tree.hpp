@@ -152,11 +152,11 @@ namespace htd
 
             void removeChild(htd::vertex_t vertex, htd::vertex_t child) HTD_OVERRIDE;
 
+            Tree * clone(void) const HTD_OVERRIDE;
+
             Tree & operator=(const Tree & other);
 
             Tree & operator=(const htd::ITree & other);
-
-            Tree * clone(void) const HTD_OVERRIDE;
 
         protected:
 

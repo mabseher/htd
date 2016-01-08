@@ -28,8 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/LabeledDirectedGraphFactory.hpp>
-//TODO
-//#include <htd/LabeledDirectedGraph.hpp>
+#include <htd/LabeledDirectedGraph.hpp>
 
 #include <stdexcept>
 
@@ -60,13 +59,11 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
     return constructionTemplate_->clone();
 }
 
-//TODO Use construction template!
 htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original)
 {
-    htd::IMutableLabeledDirectedGraph * ret = nullptr; //TODO new htd::TreeDecomposition(original); //TODO constructionTemplate_->clone();
+    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
 
-    //TODO Copy decomposition content!
-    HTD_UNUSED(original)
+    *ret = original;
 
     return ret;
 }

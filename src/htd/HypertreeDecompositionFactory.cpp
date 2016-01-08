@@ -61,12 +61,11 @@ htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHyp
     return constructionTemplate_->clone();
 }
 
-//TODO Use construction template!
 htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHypertreeDecomposition(const htd::ITreeDecomposition & original)
 {
-    htd::IMutableHypertreeDecomposition * ret = new htd::HypertreeDecomposition(original); //TODO constructionTemplate_->clone();
+    htd::IMutableHypertreeDecomposition * ret = constructionTemplate_->clone();
 
-    //TODO Copy decomposition content!
+    *ret = original;
 
     return ret;
 }

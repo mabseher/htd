@@ -180,4 +180,20 @@ htd::LabeledDirectedGraph * htd::LabeledDirectedGraph::clone(void) const
     return new htd::LabeledDirectedGraph(*this);
 }
 
+htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::IDirectedGraph & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::ILabeledDirectedGraph & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
 #endif /* HTD_HTD_LABELEDDIRECTEDGRAPH_CPP */

@@ -271,11 +271,13 @@ namespace htd
 
             std::size_t maximumBagSize(void) const HTD_OVERRIDE;
 
-            TreeDecomposition & operator=(const TreeDecomposition & other);
-
-            TreeDecomposition & operator=(const htd::ITreeDecomposition & other);
-
             TreeDecomposition * clone(void) const HTD_OVERRIDE;
+
+            TreeDecomposition & operator=(const htd::ITree & original) HTD_OVERRIDE;
+
+            TreeDecomposition & operator=(const htd::ILabeledTree & original) HTD_OVERRIDE;
+
+            TreeDecomposition & operator=(const htd::ITreeDecomposition & original) HTD_OVERRIDE;
 
         protected:
 

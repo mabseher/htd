@@ -58,12 +58,11 @@ htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposi
     return constructionTemplate_->clone();
 }
 
-//TODO Use construction template!
 htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposition(const htd::IPathDecomposition & original)
 {
-    htd::IMutablePathDecomposition * ret = new htd::PathDecomposition(original); //TODO constructionTemplate_->clone();
+    htd::IMutablePathDecomposition * ret = constructionTemplate_->clone();
 
-    //TODO Copy decomposition content!
+    *ret = original;
 
     return ret;
 }

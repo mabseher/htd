@@ -44,7 +44,6 @@
 #include <utility>
 #include <vector>
 
-//TODO Use also as graph decomposition algorithm!
 htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(void) : labelingFunctions_(), postProcessingOperations_()
 {
 

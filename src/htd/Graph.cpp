@@ -396,4 +396,24 @@ htd::Graph * htd::Graph::clone(void) const
     return new Graph(*this);
 }
 
+htd::Graph & htd::Graph::operator=(const htd::IGraph & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::Graph & htd::Graph::operator=(const htd::Graph & other)
+{
+    if (this != &other)
+    {
+        delete base_;
+
+        base_ = other.base_->clone();
+    }
+
+    return *this;
+}
+
 #endif /* HTD_HTD_GRAPH_CPP */

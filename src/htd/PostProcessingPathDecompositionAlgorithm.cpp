@@ -137,7 +137,6 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
         {
             htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
-            //TODO Optimize
             htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
             delete labelCollection;
@@ -152,7 +151,6 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
         {
             htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
-            //TODO Optimize
             htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
             delete labelCollection;

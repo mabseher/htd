@@ -41,6 +41,8 @@ namespace htd
             virtual void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) = 0;
 
             virtual IMutableGraphDecomposition * clone(void) const = 0;
+
+            virtual IMutableGraphDecomposition & operator=(const htd::IGraphDecomposition & original) = 0;
     };
 
     inline htd::IMutableGraphDecomposition::~IMutableGraphDecomposition() { }

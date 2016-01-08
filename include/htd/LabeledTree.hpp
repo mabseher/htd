@@ -78,6 +78,10 @@ namespace htd
 
             LabeledTree * clone(void) const HTD_OVERRIDE;
 
+            LabeledTree & operator=(const htd::ITree & original) HTD_OVERRIDE;
+
+            LabeledTree & operator=(const htd::ILabeledTree & original) HTD_OVERRIDE;
+
         private:
             htd::ILabelingCollection * labelings_;
     };

@@ -180,4 +180,20 @@ htd::LabeledHypergraph * htd::LabeledHypergraph::clone(void) const
     return new htd::LabeledHypergraph(*this);
 }
 
+htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::IHypergraph & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::ILabeledHypergraph & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
 #endif /* HTD_HTD_LABELEDHYPERGRAPH_CPP */

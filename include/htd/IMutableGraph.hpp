@@ -46,6 +46,8 @@ namespace htd
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
             virtual IMutableGraph * clone(void) const = 0;
+
+            virtual IMutableGraph & operator=(const htd::IGraph & original) = 0;
     };
 
     inline htd::IMutableGraph::~IMutableGraph() { }

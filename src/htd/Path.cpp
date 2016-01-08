@@ -133,7 +133,14 @@ std::size_t htd::Path::vertexCount(htd::vertex_t subPathRoot) const
 
     std::size_t ret = 0;
 
-    //TODO
+    htd::vertex_t currentVertex = subPathRoot;
+
+    while (currentVertex != htd::Vertex::UNKNOWN)
+    {
+        ++ret;
+
+        currentVertex = nodes_[currentVertex - htd::Vertex::FIRST]->child;
+    }
 
     return ret;
 }
@@ -1066,35 +1073,6 @@ htd::vertex_t htd::Path::addParent(htd::vertex_t vertex)
     return ret;
 }
 
-htd::Path & htd::Path::operator=(const htd::Path & other)
-{
-    if (this != &other)
-    {
-        if (this->root_ != htd::Vertex::UNKNOWN)
-        {
-            removeRoot();
-        }
-        
-        nodes_.reserve(other.nodes_.size());
-    
-        for (auto & node : other.nodes_)
-        {
-            if (node != nullptr)
-            {
-                nodes_.push_back(new htd::Path::Node(*node));
-            }
-        }
-        
-        this->root_ = other.root_;
-        
-        this->size_ = other.size_;
-        
-        this->deletions_ = other.deletions_;
-    }
-    
-    return *this;
-}
-
 std::size_t htd::Path::leafNodeCount(void) const
 {
     std::size_t ret = 0;
@@ -1238,6 +1216,43 @@ void htd::Path::deleteNode(htd::Path::Node * node)
 htd::Path * htd::Path::clone(void) const
 {
     return new Path(*this);
+}
+
+htd::Path & htd::Path::operator=(const htd::IPath & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::Path & htd::Path::operator=(const htd::Path & other)
+{
+    if (this != &other)
+    {
+        if (this->root_ != htd::Vertex::UNKNOWN)
+        {
+            removeRoot();
+        }
+
+        nodes_.reserve(other.nodes_.size());
+
+        for (auto & node : other.nodes_)
+        {
+            if (node != nullptr)
+            {
+                nodes_.push_back(new htd::Path::Node(*node));
+            }
+        }
+
+        this->root_ = other.root_;
+
+        this->size_ = other.size_;
+
+        this->deletions_ = other.deletions_;
+    }
+
+    return *this;
 }
 
 #endif /* HTD_HTD_PATH_CPP */

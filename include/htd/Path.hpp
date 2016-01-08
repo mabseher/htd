@@ -156,11 +156,11 @@ namespace htd
 
             void removeChild(htd::vertex_t vertex, htd::vertex_t child) HTD_OVERRIDE;
 
+            Path * clone(void) const HTD_OVERRIDE;
+
             Path & operator=(const Path & other);
 
             Path & operator=(const htd::IPath & other);
-
-            Path * clone(void) const HTD_OVERRIDE;
 
         protected:
 

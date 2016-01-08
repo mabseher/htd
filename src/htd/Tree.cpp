@@ -57,7 +57,6 @@ htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(origi
     }
 }
 
-//TODO Ensure correctness when htd::Vertex::FIRST does not match for this and original
 htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(original.root()), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_()
 {
     htd::vertex_t maximumVertex = 0;
@@ -1152,35 +1151,6 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
     }
 }
 
-htd::Tree & htd::Tree::operator=(const htd::Tree & other)
-{
-    if (this != &other)
-    {
-        if (this->root_ != htd::Vertex::UNKNOWN)
-        {
-            removeRoot();
-        }
-        
-        nodes_.reserve(other.nodes_.size());
-    
-        for (auto & node : other.nodes_)
-        {
-            if (node != nullptr)
-            {
-                nodes_.push_back(new htd::Tree::Node(*node));
-            }
-        }
-        
-        this->root_ = other.root_;
-        
-        this->size_ = other.size_;
-        
-        this->deletions_ = other.deletions_;
-    }
-    
-    return *this;
-}
-
 std::size_t htd::Tree::leafNodeCount(void) const
 {
     std::size_t ret = 0;
@@ -1320,6 +1290,43 @@ void htd::Tree::deleteNode(htd::Tree::Node * node)
 htd::Tree * htd::Tree::clone(void) const
 {
     return new Tree(*this);
+}
+
+htd::Tree & htd::Tree::operator=(const htd::ITree & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::Tree & htd::Tree::operator=(const htd::Tree & other)
+{
+    if (this != &other)
+    {
+        if (this->root_ != htd::Vertex::UNKNOWN)
+        {
+            removeRoot();
+        }
+
+        nodes_.reserve(other.nodes_.size());
+
+        for (auto & node : other.nodes_)
+        {
+            if (node != nullptr)
+            {
+                nodes_.push_back(new htd::Tree::Node(*node));
+            }
+        }
+
+        this->root_ = other.root_;
+
+        this->size_ = other.size_;
+
+        this->deletions_ = other.deletions_;
+    }
+
+    return *this;
 }
 
 #endif /* HTD_HTD_TREE_CPP */

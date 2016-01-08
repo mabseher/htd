@@ -271,11 +271,13 @@ namespace htd
 
             std::size_t maximumBagSize(void) const HTD_OVERRIDE;
 
-            PathDecomposition & operator=(const PathDecomposition & other);
-
-            PathDecomposition & operator=(const htd::IPathDecomposition & other);
-
             PathDecomposition * clone(void) const HTD_OVERRIDE;
+
+            PathDecomposition & operator=(const htd::IPath & original) HTD_OVERRIDE;
+
+            PathDecomposition & operator=(const htd::ILabeledPath & original) HTD_OVERRIDE;
+
+            PathDecomposition & operator=(const htd::IPathDecomposition & original) HTD_OVERRIDE;
 
         private:
             htd::IMutablePathDecomposition * base_;

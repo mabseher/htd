@@ -42,7 +42,6 @@
 #include <utility>
 #include <vector>
 
-//TODO Use also as graph decomposition algorithm!
 htd::BucketEliminationGraphDecompositionAlgorithm::BucketEliminationGraphDecompositionAlgorithm(void) : labelingFunctions_(), postProcessingOperations_()
 {
 
@@ -533,8 +532,6 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
     return ret;
 }
 
-//TODO Optimize (Use stack approach - Tarjan's Algorithm)
-//TODO Export as global helper function
 void htd::BucketEliminationGraphDecompositionAlgorithm::getReachableVertices(htd::vertex_t start, const htd::vertex_container & vertices, const std::vector<htd::index_t> & vertexIndices, const std::vector<htd::vertex_container> & neighbors, htd::vertex_container & output) const
 {
     std::size_t size = vertices.size();

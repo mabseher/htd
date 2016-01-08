@@ -59,13 +59,11 @@ htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHyperg
     return constructionTemplate_->clone();
 }
 
-//TODO Use construction template!
 htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHypergraph(const htd::ILabeledHypergraph & original)
 {
-    htd::IMutableLabeledHypergraph * ret = nullptr; //new htd::LabeledHypergraph(original); //TODO constructionTemplate_->clone();
+    htd::IMutableLabeledHypergraph * ret = constructionTemplate_->clone();
 
-    //TODO Copy decomposition content!
-    HTD_UNUSED(original)
+    *ret = original;
 
     return ret;
 }

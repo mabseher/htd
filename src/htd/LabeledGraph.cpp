@@ -180,4 +180,20 @@ htd::LabeledGraph * htd::LabeledGraph::clone(void) const
     return new htd::LabeledGraph(*this);
 }
 
+htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::IGraph & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::ILabeledGraph & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
 #endif /* HTD_HTD_LABELEDGRAPH_CPP */

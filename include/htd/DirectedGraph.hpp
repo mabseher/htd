@@ -137,12 +137,11 @@ namespace htd
 
             DirectedGraph * clone(void) const HTD_OVERRIDE;
 
-        protected:
-            DirectedGraph & operator=(const DirectedGraph &) { return *this; }
+            DirectedGraph & operator=(const htd::DirectedGraph & original);
+
+            DirectedGraph & operator=(const htd::IDirectedGraph & original) HTD_OVERRIDE;
 
         private:
-
-    private:
             htd::IMutableHypergraph * base_;
 
             std::vector<std::unordered_set<htd::vertex_t>> incomingNeighborhood_;

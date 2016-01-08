@@ -173,4 +173,20 @@ htd::LabeledPath * htd::LabeledPath::clone(void) const
     return new htd::LabeledPath(*this);
 }
 
+htd::LabeledPath & htd::LabeledPath::operator=(const htd::IPath & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
+htd::LabeledPath & htd::LabeledPath::operator=(const htd::ILabeledPath & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
+
+    return *this;
+}
+
 #endif /* HTD_HTD_LABELEDPATH_CPP */

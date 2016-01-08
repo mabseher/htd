@@ -50,6 +50,14 @@ namespace htd
             void setCoveringEdges(htd::vertex_t vertex, const htd::ConstCollection<htd::Hyperedge> & content) HTD_OVERRIDE;
 
             HypertreeDecomposition * clone(void) const HTD_OVERRIDE;
+
+            HypertreeDecomposition & operator=(const htd::ITree & original) HTD_OVERRIDE;
+
+            HypertreeDecomposition & operator=(const htd::ILabeledTree & original) HTD_OVERRIDE;
+
+            HypertreeDecomposition & operator=(const htd::ITreeDecomposition & original) HTD_OVERRIDE;
+
+            HypertreeDecomposition & operator=(const htd::IHypertreeDecomposition & original) HTD_OVERRIDE;
     };
 }
 

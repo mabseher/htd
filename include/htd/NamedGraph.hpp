@@ -1,5 +1,5 @@
 /* 
- * File:   NamedHypergraph.hpp
+ * File:   NamedGraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,12 +22,12 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_NAMEDHYPERGRAPH_HPP
-#define	HTD_HTD_NAMEDHYPERGRAPH_HPP
+#ifndef HTD_HTD_NAMEDGRAPH_HPP
+#define	HTD_HTD_NAMEDGRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/LabeledHypergraphFactory.hpp>
+#include <htd/LabeledGraphFactory.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/Label.hpp>
 #include <htd/VectorAdapter.hpp>
@@ -39,20 +39,20 @@
 namespace htd
 {
     template<typename VertexNameType, typename EdgeNameType>
-    class NamedHypergraph
+    class NamedGraph
     {
         public:
-            NamedHypergraph(void) : base_(htd::LabeledHypergraphFactory::instance().getLabeledHypergraph()), nameLabeling_(new htd::BidirectionalGraphLabeling())
+            NamedGraph(void) : base_(htd::LabeledGraphFactory::instance().getLabeledGraph()), nameLabeling_(new htd::BidirectionalGraphLabeling())
             {
 
             }
 
-            NamedHypergraph(const NamedHypergraph<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), nameLabeling_(original.nameLabeling_->clone())
+            NamedGraph(const NamedGraph<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), nameLabeling_(original.nameLabeling_->clone())
             {
 
             }
 
-            ~NamedHypergraph()
+            ~NamedGraph()
             {
                 if (base_ != nullptr)
                 {
@@ -88,7 +88,7 @@ namespace htd
             {
                 if (!base_->isVertex(vertex))
                 {
-                    throw std::logic_error("void htd::NamedHypergraph<VertexNameType, EdgeNameType>::setVertexName(htd::vertex_t, const VertexNameType &)");
+                    throw std::logic_error("void htd::NamedGraph<VertexNameType, EdgeNameType>::setVertexName(htd::vertex_t, const VertexNameType &)");
                 }
 
                 nameLabeling_->setVertexLabel(vertex, new htd::Label<VertexNameType>(vertexName));
@@ -103,7 +103,7 @@ namespace htd
             {
                 if (!base_->isEdge(edgeId))
                 {
-                    throw std::logic_error("void htd::NamedHypergraph<VertexNameType, EdgeNameType>::setEdgeName(htd::id_t, const EdgeNameType &)");
+                    throw std::logic_error("void htd::NamedGraph<VertexNameType, EdgeNameType>::setEdgeName(htd::id_t, const EdgeNameType &)");
                 }
 
                 nameLabeling_->setEdgeLabel(edgeId, new htd::Label<VertexNameType>(edgeName));
@@ -113,7 +113,7 @@ namespace htd
             {
                 if (!nameLabeling_->isLabeledVertex(vertex))
                 {
-                    throw std::logic_error("const VertexNameType & htd::NamedHypergraph<VertexNameType, EdgeNameType>::vertexName(htd::vertex_t) const");
+                    throw std::logic_error("const VertexNameType & htd::NamedGraph<VertexNameType, EdgeNameType>::vertexName(htd::vertex_t) const");
                 }
 
                 return dynamic_cast<const htd::Label<VertexNameType> *>(&(nameLabeling_->vertexLabel(vertex)))->value();
@@ -123,7 +123,7 @@ namespace htd
             {
                 if (!nameLabeling_->isLabeledEdge(edgeId))
                 {
-                    throw std::logic_error("const EdgeNameType & htd::NamedHypergraph<VertexNameType, EdgeNameType>::edgeName(htd::id_t) const");
+                    throw std::logic_error("const EdgeNameType & htd::NamedGraph<VertexNameType, EdgeNameType>::edgeName(htd::id_t) const");
                 }
 
                 return dynamic_cast<const htd::Label<VertexNameType> *>(&(nameLabeling_->edgeLabel(edgeId)))->value();
@@ -135,7 +135,7 @@ namespace htd
 
                 if (!nameLabeling_->isVertexLabel(label))
                 {
-                    throw std::logic_error("htd::vertex_t htd::NamedHypergraph<VertexNameType, EdgeNameType>::lookupVertex(const VertexNameType &) const");
+                    throw std::logic_error("htd::vertex_t htd::NamedGraph<VertexNameType, EdgeNameType>::lookupVertex(const VertexNameType &) const");
                 }
 
                 return nameLabeling_->lookupVertex(label);
@@ -177,7 +177,7 @@ namespace htd
 
                 if (!nameLabeling_->isEdgeLabel(label))
                 {
-                    throw std::logic_error("htd::id_t htd::NamedHypergraph<VertexNameType, EdgeNameType>::correspondingEdgeId(const EdgeNameType &) const");
+                    throw std::logic_error("htd::id_t htd::NamedGraph<VertexNameType, EdgeNameType>::correspondingEdgeId(const EdgeNameType &) const");
                 }
 
                 return nameLabeling_->lookupEdge(label);
@@ -425,54 +425,6 @@ namespace htd
                 return edgeId;
             }
 
-            htd::id_t addEdge(const std::vector<VertexNameType> & elements)
-            {
-                return addEdge(htd::ConstCollection<VertexNameType>::getInstance(elements));
-            }
-
-            htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements)
-            {
-                htd::vertex_container hyperedge;
-
-                for (auto & vertex : elements)
-                {
-                    if (!isVertexName(vertex))
-                    {
-                        addVertex(vertex);
-                    }
-
-                    hyperedge.push_back(lookupVertex(vertex));
-                }
-
-                return base_->addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
-            }
-
-            htd::id_t addEdge(const std::vector<VertexNameType> & elements, const EdgeNameType & name)
-            {
-                return addEdge(htd::ConstCollection<VertexNameType>::getInstance(elements), name);
-            }
-
-            htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements, const EdgeNameType & name)
-            {
-                htd::vertex_container hyperedge;
-
-                for (auto & vertex : elements)
-                {
-                    if (!isVertexName(vertex))
-                    {
-                        addVertex(vertex);
-                    }
-
-                    hyperedge.push_back(lookupVertex(vertex));
-                }
-
-                htd::id_t edgeId = base_->addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
-
-                setEdgeName(edgeId, name);
-
-                return edgeId;
-            }
-
             htd::id_t addEdge(const std::pair<VertexNameType, VertexNameType> & edge)
             {
                 return addEdge(edge.first, edge.second);
@@ -592,9 +544,9 @@ namespace htd
                 base_->swapEdgeLabel(labelName, lookupHyperedge(edgeName1), lookupHyperedge(edgeName2));
             }
 
-            NamedHypergraph<VertexNameType, EdgeNameType> * clone(void) const
+            NamedGraph<VertexNameType, EdgeNameType> * clone(void) const
             {
-                return new NamedHypergraph<VertexNameType, EdgeNameType>(*this);
+                return new NamedGraph<VertexNameType, EdgeNameType>(*this);
             }
 
             const htd::ILabeledHypergraph & internalGraph(void) const
@@ -603,10 +555,10 @@ namespace htd
             }
 
         private:
-            htd::IMutableLabeledHypergraph * base_;
+            htd::IMutableLabeledGraph * base_;
 
             htd::IBidirectionalGraphLabeling * nameLabeling_;
     };
 }
 
-#endif /* HTD_HTD_NAMEDHYPERGRAPH_HPP */
+#endif /* HTD_HTD_NAMEDGRAPH_HPP */

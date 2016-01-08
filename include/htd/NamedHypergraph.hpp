@@ -27,13 +27,13 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/LabeledHypergraph.hpp>
+#include <htd/LabeledHypergraphFactory.hpp>
 #include <htd/IMutableLabeledHypergraph.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/Label.hpp>
 #include <htd/VectorAdapter.hpp>
+#include <htd/NamedVertexHyperedge.hpp>
 
-#include <set>
 #include <vector>
 #include <stdexcept>
 
@@ -43,142 +43,7 @@ namespace htd
     class NamedHypergraph
     {
         public:
-            class NamedVertexHyperedge
-            {
-                public:
-                    typedef VertexNameType value_type;
-
-                    NamedVertexHyperedge(htd::id_t id) : id_(id), elements_()
-                    {
-
-                    }
-
-                    NamedVertexHyperedge(htd::id_t id, const VertexNameType & vertex1, const VertexNameType & vertex2) : id_(id), elements_()
-                    {
-                        elements_.push_back(vertex1);
-                        elements_.push_back(vertex2);
-                    }
-
-                    NamedVertexHyperedge(htd::id_t id, const std::vector<VertexNameType> & elements) : id_(id), elements_(elements.begin(), elements.end())
-                    {
-
-                    }
-
-                    NamedVertexHyperedge(htd::id_t id, const htd::ConstCollection<VertexNameType> & elements) : id_(id), elements_(elements.begin(), elements.end())
-                    {
-
-                    }
-
-                    ~NamedVertexHyperedge()
-                    {
-
-                    }
-
-                    htd::id_t id() const
-                    {
-                        return id_;
-                    }
-
-                    htd::Collection<VertexNameType> elements()
-                    {
-                        return htd::Collection<VertexNameType>::getInstance(elements_);
-                    }
-
-                    htd::ConstCollection<VertexNameType> elements() const
-                    {
-                        return htd::ConstCollection<VertexNameType>::getInstance(elements_);
-                    }
-
-                    bool empty() const
-                    {
-                        return elements_.empty();
-                    }
-
-                    std::size_t size() const
-                    {
-                        return elements_.size();
-                    }
-
-                    bool containsVertex(const VertexNameType & vertex) const
-                    {
-                        return std::find(elements_.begin(), elements_.end(), vertex) != elements_.end();
-                    }
-
-                    void push_back(const VertexNameType & vertex)
-                    {
-                        elements_.push_back(vertex);
-                    }
-
-                    void erase(const VertexNameType & vertex)
-                    {
-                        elements_.erase(std::remove(elements_.begin(), elements_.end(), vertex), elements_.end());
-                    }
-
-                    htd::Iterator<VertexNameType> begin(void)
-                    {
-                        return htd::Iterator<VertexNameType>(elements_.begin());
-                    }
-
-                    const htd::ConstIterator<VertexNameType> begin(void) const
-                    {
-                        return htd::ConstIterator<VertexNameType>(elements_.begin());
-                    }
-
-                    htd::Iterator<VertexNameType> end(void)
-                    {
-                        return htd::Iterator<VertexNameType>(elements_.end());
-                    }
-
-                    const htd::ConstIterator<VertexNameType> end(void) const
-                    {
-                        return htd::ConstIterator<VertexNameType>(elements_.end());
-                    }
-
-                    const VertexNameType & operator[](htd::index_t index) const
-                    {
-                        htd::ConstIterator<VertexNameType> position = begin();
-
-                        std::advance(position, index);
-
-                        return *position;
-                    }
-
-                    NamedVertexHyperedge & operator=(const NamedVertexHyperedge & other)
-                    {
-                        id_ = other.id_;
-
-                        elements_ = other.elements_;
-
-                        return *this;
-                    }
-
-                    bool operator<(const NamedVertexHyperedge & other) const
-                    {
-                        return std::tie(elements_, id_) < std::tie(other.elements_, other.id_);
-                    }
-
-                    bool operator>(const NamedVertexHyperedge & other) const
-                    {
-                        return std::tie(elements_, id_) > std::tie(other.elements_, other.id_);
-                    }
-
-                    bool operator==(const NamedVertexHyperedge & other) const
-                    {
-                        return other.id_ == id_ && other.elements_ == elements_;
-                    }
-
-                    bool operator!=(const NamedVertexHyperedge & other) const
-                    {
-                        return other.id_ != id_ || other.elements_ != elements_;
-                    }
-
-                private:
-                    htd::id_t id_;
-
-                    std::vector<VertexNameType> elements_;
-            };
-
-            NamedHypergraph(void) : base_(new htd::LabeledHypergraph()), nameLabeling_(new htd::BidirectionalGraphLabeling())
+            NamedHypergraph(void) : base_(htd::LabeledHypergraphFactory::instance().getLabeledHypergraph()), nameLabeling_(new htd::BidirectionalGraphLabeling())
             {
 
             }
@@ -421,17 +286,17 @@ namespace htd
                 return base_->isIsolatedVertex(lookupVertex(vertexName));
             }
 
-            htd::ConstCollection<NamedVertexHyperedge> hyperedges(void) const
+            htd::ConstCollection<NamedVertexHyperedge<VertexNameType>> hyperedges(void) const
             {
-                htd::VectorAdapter<NamedVertexHyperedge> ret;
+                htd::VectorAdapter<NamedVertexHyperedge<VertexNameType>> ret;
 
-                std::vector<NamedVertexHyperedge> & container = ret.container();
+                std::vector<NamedVertexHyperedge<VertexNameType>> & container = ret.container();
 
                 for (const htd::Hyperedge & hyperedge : base_->hyperedges())
                 {
-                    container.push_back(NamedVertexHyperedge(hyperedge.id()));
+                    container.push_back(NamedVertexHyperedge<VertexNameType>(hyperedge.id()));
 
-                    NamedVertexHyperedge & newHyperedge = container[container.size() - 1];
+                    NamedVertexHyperedge<VertexNameType> & newHyperedge = container[container.size() - 1];
 
                     for (htd::vertex_t vertex : hyperedge)
                     {
@@ -439,20 +304,20 @@ namespace htd
                     }
                 }
 
-                return htd::ConstCollection<NamedVertexHyperedge>::getInstance(ret);
+                return htd::ConstCollection<NamedVertexHyperedge<VertexNameType>>::getInstance(ret);
             }
 
-            htd::ConstCollection<NamedVertexHyperedge> hyperedges(const VertexNameType & vertexName) const
+            htd::ConstCollection<NamedVertexHyperedge<VertexNameType>> hyperedges(const VertexNameType & vertexName) const
             {
-                htd::VectorAdapter<NamedVertexHyperedge> ret;
+                htd::VectorAdapter<NamedVertexHyperedge<VertexNameType>> ret;
 
-                std::vector<NamedVertexHyperedge> & container = ret.container();
+                std::vector<NamedVertexHyperedge<VertexNameType>> & container = ret.container();
 
                 for (const htd::Hyperedge & hyperedge : base_->hyperedges(lookupVertex(vertexName)))
                 {
-                    container.push_back(NamedVertexHyperedge(hyperedge.id()));
+                    container.push_back(NamedVertexHyperedge<VertexNameType>(hyperedge.id()));
 
-                    NamedVertexHyperedge & newHyperedge = container[container.size() - 1];
+                    NamedVertexHyperedge<VertexNameType> & newHyperedge = container[container.size() - 1];
 
                     for (htd::vertex_t vertex : hyperedge)
                     {
@@ -460,12 +325,12 @@ namespace htd
                     }
                 }
 
-                return htd::ConstCollection<NamedVertexHyperedge>::getInstance(ret);
+                return htd::ConstCollection<NamedVertexHyperedge<VertexNameType>>::getInstance(ret);
             }
 
-            NamedVertexHyperedge hyperedge(htd::id_t edgeId) const
+            NamedVertexHyperedge<VertexNameType> hyperedge(htd::id_t edgeId) const
             {
-                NamedVertexHyperedge ret(edgeId);
+                NamedVertexHyperedge<VertexNameType> ret(edgeId);
 
                 for (htd::vertex_t vertex : base_->hyperedge(edgeId))
                 {
@@ -475,11 +340,11 @@ namespace htd
                 return ret;
             }
 
-            NamedVertexHyperedge hyperedgeAtPosition(htd::index_t index, const VertexNameType & vertexName) const
+            NamedVertexHyperedge<VertexNameType> hyperedgeAtPosition(htd::index_t index, const VertexNameType & vertexName) const
             {
                 const htd::Hyperedge & hyperedge = base_->hyperedgeAtPosition(index, lookupVertex(vertexName));
 
-                NamedVertexHyperedge ret(hyperedge.id());
+                NamedVertexHyperedge<VertexNameType> ret(hyperedge.id());
 
                 for (htd::vertex_t vertex : hyperedge)
                 {

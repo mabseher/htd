@@ -1,5 +1,5 @@
 /* 
- * File:   NamedHypergraph.hpp
+ * File:   NamedTree.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,16 +22,17 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_NAMEDHYPERGRAPH_HPP
-#define	HTD_HTD_NAMEDHYPERGRAPH_HPP
+#ifndef HTD_HTD_NAMEDTREE_HPP
+#define	HTD_HTD_NAMEDTREE_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/LabeledHypergraphFactory.hpp>
+#include <htd/LabeledTreeFactory.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/Label.hpp>
 #include <htd/VectorAdapter.hpp>
 #include <htd/NamedVertexHyperedge.hpp>
+#include <htd/PostOrderTreeTraversal.hpp>
 
 #include <vector>
 #include <stdexcept>
@@ -39,20 +40,20 @@
 namespace htd
 {
     template<typename VertexNameType, typename EdgeNameType>
-    class NamedHypergraph
+    class NamedTree
     {
         public:
-            NamedHypergraph(void) : base_(htd::LabeledHypergraphFactory::instance().getLabeledHypergraph()), nameLabeling_(new htd::BidirectionalGraphLabeling())
+            NamedTree(void) : base_(htd::LabeledTreeFactory::instance().getLabeledTree()), nameLabeling_(new htd::BidirectionalGraphLabeling())
             {
 
             }
 
-            NamedHypergraph(const NamedHypergraph<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), nameLabeling_(original.nameLabeling_->clone())
+            NamedTree(const NamedTree<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), nameLabeling_(original.nameLabeling_->clone())
             {
 
             }
 
-            ~NamedHypergraph()
+            ~NamedTree()
             {
                 if (base_ != nullptr)
                 {
@@ -88,7 +89,7 @@ namespace htd
             {
                 if (!base_->isVertex(vertex))
                 {
-                    throw std::logic_error("void htd::NamedHypergraph<VertexNameType, EdgeNameType>::setVertexName(htd::vertex_t, const VertexNameType &)");
+                    throw std::logic_error("void htd::NamedTree<VertexNameType, EdgeNameType>::setVertexName(htd::vertex_t, const VertexNameType &)");
                 }
 
                 nameLabeling_->setVertexLabel(vertex, new htd::Label<VertexNameType>(vertexName));
@@ -103,7 +104,7 @@ namespace htd
             {
                 if (!base_->isEdge(edgeId))
                 {
-                    throw std::logic_error("void htd::NamedHypergraph<VertexNameType, EdgeNameType>::setEdgeName(htd::id_t, const EdgeNameType &)");
+                    throw std::logic_error("void htd::NamedTree<VertexNameType, EdgeNameType>::setEdgeName(htd::id_t, const EdgeNameType &)");
                 }
 
                 nameLabeling_->setEdgeLabel(edgeId, new htd::Label<VertexNameType>(edgeName));
@@ -113,7 +114,7 @@ namespace htd
             {
                 if (!nameLabeling_->isLabeledVertex(vertex))
                 {
-                    throw std::logic_error("const VertexNameType & htd::NamedHypergraph<VertexNameType, EdgeNameType>::vertexName(htd::vertex_t) const");
+                    throw std::logic_error("const VertexNameType & htd::NamedTree<VertexNameType, EdgeNameType>::vertexName(htd::vertex_t) const");
                 }
 
                 return dynamic_cast<const htd::Label<VertexNameType> *>(&(nameLabeling_->vertexLabel(vertex)))->value();
@@ -123,7 +124,7 @@ namespace htd
             {
                 if (!nameLabeling_->isLabeledEdge(edgeId))
                 {
-                    throw std::logic_error("const EdgeNameType & htd::NamedHypergraph<VertexNameType, EdgeNameType>::edgeName(htd::id_t) const");
+                    throw std::logic_error("const EdgeNameType & htd::NamedTree<VertexNameType, EdgeNameType>::edgeName(htd::id_t) const");
                 }
 
                 return dynamic_cast<const htd::Label<VertexNameType> *>(&(nameLabeling_->edgeLabel(edgeId)))->value();
@@ -135,7 +136,7 @@ namespace htd
 
                 if (!nameLabeling_->isVertexLabel(label))
                 {
-                    throw std::logic_error("htd::vertex_t htd::NamedHypergraph<VertexNameType, EdgeNameType>::lookupVertex(const VertexNameType &) const");
+                    throw std::logic_error("htd::vertex_t htd::NamedTree<VertexNameType, EdgeNameType>::lookupVertex(const VertexNameType &) const");
                 }
 
                 return nameLabeling_->lookupVertex(label);
@@ -177,7 +178,7 @@ namespace htd
 
                 if (!nameLabeling_->isEdgeLabel(label))
                 {
-                    throw std::logic_error("htd::id_t htd::NamedHypergraph<VertexNameType, EdgeNameType>::correspondingEdgeId(const EdgeNameType &) const");
+                    throw std::logic_error("htd::id_t htd::NamedTree<VertexNameType, EdgeNameType>::correspondingEdgeId(const EdgeNameType &) const");
                 }
 
                 return nameLabeling_->lookupEdge(label);
@@ -196,35 +197,6 @@ namespace htd
             htd::ConstCollection<htd::id_t> associatedEdgeIds(std::pair<VertexNameType, VertexNameType> vertexNames) const
             {
                 return associatedEdgeIds(vertexNames.first, vertexNames.second);
-            }
-
-            htd::ConstCollection<htd::id_t> associatedEdgeIds(const std::vector<VertexNameType> & elements) const
-            {
-                return associatedEdgeIds(htd::ConstCollection<VertexNameType>::getInstance(elements));
-            }
-
-            htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<VertexNameType> & elements) const
-            {
-                htd::vertex_container hyperedge;
-
-                bool ok = true;
-
-                for (auto it = elements.begin(); ok && it != elements.end(); ++it)
-                {
-                    ok = isVertexName(*it);
-
-                    if (ok)
-                    {
-                        hyperedge.push_back(lookupVertex(*it));
-                    }
-                }
-
-                if (!ok)
-                {
-                    return htd::ConstCollection<htd::id_t>();;
-                }
-
-                return base_->associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
             }
 
             bool isConnected(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
@@ -358,153 +330,109 @@ namespace htd
                 return ret;
             }
 
-            htd::vertex_t addVertex(const VertexNameType & vertexName)
-            {
-                htd::vertex_t ret = htd::Vertex::UNKNOWN;
-
-                if (isVertexName(vertexName))
-                {
-                    ret = lookupVertex(vertexName);
-                }
-                else
-                {
-                    ret = base_->addVertex();
-
-                    nameLabeling_->setVertexLabel(ret, new htd::Label<VertexNameType>(vertexName));
-                }
-
-                return ret;
-            }
-
             void removeVertex(const VertexNameType & vertexName)
             {
                 if (isVertexName(vertexName))
                 {
                     htd::vertex_t locatedVertex = lookupVertex(vertexName);
 
-                    base_->removeVertex(locatedVertex);
-
                     nameLabeling_->removeVertexLabel(locatedVertex);
+
+                    base_->removeVertex(locatedVertex);
                 }
             }
 
-            htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
+            void removeSubtree(const VertexNameType & vertexName)
             {
-                htd::vertex_t locatedVertex1 = lookupVertex(vertexName1);
-
-                if (locatedVertex1 == htd::Vertex::UNKNOWN)
+                if (isVertexName(vertexName))
                 {
-                    locatedVertex1 = addVertex(vertexName1);
-                }
+                    htd::vertex_t locatedVertex = lookupVertex(vertexName);
 
-                htd::vertex_t locatedVertex2 = lookupVertex(vertexName2);
+                    htd::PostOrderTreeTraversal treeTraversal;
 
-                if (locatedVertex2 == htd::Vertex::UNKNOWN)
-                {
-                    locatedVertex2 = addVertex(vertexName2);
-                }
-
-                return base_->addEdge(locatedVertex1, locatedVertex2);
-            }
-
-            htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2, const EdgeNameType & name)
-            {
-                htd::vertex_t locatedVertex1 = lookupVertex(vertexName1);
-
-                if (locatedVertex1 == htd::Vertex::UNKNOWN)
-                {
-                    locatedVertex1 = addVertex(vertexName1);
-                }
-
-                htd::vertex_t locatedVertex2 = lookupVertex(vertexName2);
-
-                if (locatedVertex2 == htd::Vertex::UNKNOWN)
-                {
-                    locatedVertex2 = addVertex(vertexName2);
-                }
-
-                htd::id_t edgeId = base_->addEdge(locatedVertex1, locatedVertex2);
-
-                setEdgeName(edgeId, name);
-
-                return edgeId;
-            }
-
-            htd::id_t addEdge(const std::vector<VertexNameType> & elements)
-            {
-                return addEdge(htd::ConstCollection<VertexNameType>::getInstance(elements));
-            }
-
-            htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements)
-            {
-                htd::vertex_container hyperedge;
-
-                for (auto & vertex : elements)
-                {
-                    if (!isVertexName(vertex))
+                    treeTraversal.traverse(*this, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
                     {
-                        addVertex(vertex);
-                    }
+                        HTD_UNUSED(parent)
+                        HTD_UNUSED(distanceToSubtreeRoot)
 
-                    hyperedge.push_back(lookupVertex(vertex));
+                        nameLabeling_->removeVertexLabel(vertex);
+                    }, locatedVertex);
+
+                    base_->removeSubtree(locatedVertex);
                 }
-
-                return base_->addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
             }
 
-            htd::id_t addEdge(const std::vector<VertexNameType> & elements, const EdgeNameType & name)
+            htd::vertex_t insertRoot(const VertexNameType & vertexName)
             {
-                return addEdge(htd::ConstCollection<VertexNameType>::getInstance(elements), name);
-            }
-
-            htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements, const EdgeNameType & name)
-            {
-                htd::vertex_container hyperedge;
-
-                for (auto & vertex : elements)
+                if (base_->vertexCount() > 0)
                 {
-                    if (!isVertexName(vertex))
-                    {
-                        addVertex(vertex);
-                    }
+                    nameLabeling_->clear();
 
-                    hyperedge.push_back(lookupVertex(vertex));
+                    base_->removeSubtree(base_->root());
                 }
 
-                htd::id_t edgeId = base_->addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
+                htd::vertex_t ret = base_->insertRoot();
 
-                setEdgeName(edgeId, name);
+                nameLabeling_->setVertexLabel(ret, new htd::Label<VertexNameType>(vertexName));
 
-                return edgeId;
+                return ret;
             }
 
-            htd::id_t addEdge(const std::pair<VertexNameType, VertexNameType> & edge)
+            void removeRoot(void)
             {
-                return addEdge(edge.first, edge.second);
-            }
-
-            htd::id_t addEdge(const std::pair<VertexNameType, VertexNameType> & edge, const EdgeNameType & name)
-            {
-                return addEdge(edge.first, edge.second, name);
-            }
-
-            void removeEdge(htd::id_t edgeId)
-            {
-                base_->removeEdge(edgeId);
-
-                nameLabeling_->removeEdgeLabel(edgeId);
-            }
-
-            void removeEdge(const EdgeNameType & edgeName)
-            {
-                if (isVertexName(edgeName))
+                if (base_->vertexCount() > 0)
                 {
-                    htd::id_t edgeId = lookupHyperedge(edgeName);
+                    nameLabeling_->clear();
 
-                    base_->removeEdge(edgeId);
-
-                    nameLabeling_->removeEdgeLabel(edgeId);
+                    base_->removeSubtree(base_->root());
                 }
+            }
+
+            htd::vertex_t addChild(const VertexNameType & vertexName, const VertexNameType & childName)
+            {
+                if (!isVertexName(vertexName) || isVertexName(childName))
+                {
+                    throw std::logic_error("htd::vertex_t addChild(const VertexNameType &, const VertexNameType &)");
+                }
+
+                htd::vertex_t ret = base_->addChild(lookupVertex(vertexName));
+
+                nameLabeling_->setVertexLabel(ret, new htd::Label<VertexNameType>(childName));
+
+                return ret;
+            }
+
+            void removeChild(const VertexNameType & vertexName, const VertexNameType & childName)
+            {
+                if (!isVertexName(vertexName) || !isVertexName(childName))
+                {
+                    throw std::logic_error("void removeChild(const VertexNameType &, const VertexNameType &)");
+                }
+
+                htd::vertex_t child = lookupVertex(childName);
+
+                base_->removeChild(lookupVertex(vertexName), child);
+
+                nameLabeling_->removeVertexLabel(child);
+            }
+
+            htd::vertex_t addParent(const VertexNameType & vertexName, const VertexNameType & parentName)
+            {
+                if (!isVertexName(vertexName) || isVertexName(parentName))
+                {
+                    throw std::logic_error("htd::vertex_t addParent(const VertexNameType &, const VertexNameType &)");
+                }
+
+                htd::vertex_t ret = base_->addParent(lookupVertex(vertexName));
+
+                nameLabeling_->setVertexLabel(ret, new htd::Label<VertexNameType>(parentName));
+
+                return ret;
+            }
+
+            void setParent(const VertexNameType & vertexName, const VertexNameType & newParentName)
+            {
+                base_->setParent(lookupVertex(vertexName), lookupVertex(newParentName));
             }
 
             std::size_t labelCount(void) const
@@ -597,21 +525,21 @@ namespace htd
                 base_->swapEdgeLabel(labelName, lookupHyperedge(edgeName1), lookupHyperedge(edgeName2));
             }
 
-            NamedHypergraph<VertexNameType, EdgeNameType> * clone(void) const
+            NamedTree<VertexNameType, EdgeNameType> * clone(void) const
             {
-                return new NamedHypergraph<VertexNameType, EdgeNameType>(*this);
+                return new NamedTree<VertexNameType, EdgeNameType>(*this);
             }
 
-            const htd::ILabeledHypergraph & internalGraph(void) const
+            const htd::ILabeledTree & internalGraph(void) const
             {
                 return *base_;
             }
 
         private:
-            htd::IMutableLabeledHypergraph * base_;
+            htd::IMutableLabeledTree * base_;
 
             htd::IBidirectionalGraphLabeling * nameLabeling_;
     };
 }
 
-#endif /* HTD_HTD_NAMEDHYPERGRAPH_HPP */
+#endif /* HTD_HTD_NAMEDTREE_HPP */

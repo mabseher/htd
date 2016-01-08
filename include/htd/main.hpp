@@ -135,6 +135,7 @@
 #include <htd/MinFillOrderingAlgorithm.hpp>
 #include <htd/NamedGraph.hpp>
 #include <htd/NamedHypergraph.hpp>
+#include <htd/NamedTree.hpp>
 #include <htd/NamedVertexHyperedge.hpp>
 #include <htd/NaturalOrderingAlgorithm.hpp>
 #include <htd/NormalizationOperation.hpp>

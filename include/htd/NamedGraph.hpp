@@ -193,6 +193,11 @@ namespace htd
                 return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>());
             }
 
+            htd::ConstCollection<htd::id_t> associatedEdgeIds(std::pair<VertexNameType, VertexNameType> vertexNames) const
+            {
+                return associatedEdgeIds(vertexNames.first, vertexNames.second);
+            }
+
             htd::ConstCollection<htd::id_t> associatedEdgeIds(const std::vector<VertexNameType> & elements) const
             {
                 return associatedEdgeIds(htd::ConstCollection<VertexNameType>::getInstance(elements));
@@ -549,7 +554,7 @@ namespace htd
                 return new NamedGraph<VertexNameType, EdgeNameType>(*this);
             }
 
-            const htd::ILabeledHypergraph & internalGraph(void) const
+            const htd::ILabeledGraph & internalGraph(void) const
             {
                 return *base_;
             }

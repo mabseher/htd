@@ -27,25 +27,28 @@
 
 #include <htd/Hyperedge.hpp>
 
-#include <tuple>
-
-htd::Hyperedge::Hyperedge(htd::id_t id) : id_(id), elements_()
+htd::Hyperedge::Hyperedge(htd::id_t id) : written_(true), id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>())
 {
 
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2) : id_(id), elements_()
+htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2) : written_(true), id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>())
 {
-    elements_.push_back(vertex1);
-    elements_.push_back(vertex2);
+    elements_->push_back(vertex1);
+    elements_->push_back(vertex2);
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements) : id_(id), elements_(elements.begin(), elements.end())
+htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements) : written_(true), id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>(elements.begin(), elements.end()))
 {
 
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements) : id_(id), elements_(elements.begin(), elements.end())
+htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements) : written_(true), id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>(elements.begin(), elements.end()))
+{
+
+}
+
+htd::Hyperedge::Hyperedge(htd::id_t id, const htd::Hyperedge & original) : written_(false), id_(id), elements_(original.elements_)
 {
 
 }
@@ -62,57 +65,92 @@ htd::id_t htd::Hyperedge::id() const
 
 htd::Collection<htd::vertex_t> htd::Hyperedge::elements()
 {
-    return htd::Collection<htd::vertex_t>::getInstance(elements_);
+    if (!written_)
+    {
+        elements_ = std::make_shared<std::vector<htd::vertex_t>>(*elements_);
+
+        written_ = true;
+    }
+
+    return htd::Collection<htd::vertex_t>::getInstance(*elements_);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::Hyperedge::elements() const
 {
-    return htd::ConstCollection<htd::vertex_t>::getInstance(elements_);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(*elements_);
 }
 
 bool htd::Hyperedge::empty() const
 {
-    return elements_.empty();
+    return elements_->empty();
 }
 
 std::size_t htd::Hyperedge::size() const
 {
-    return elements_.size();
+    return elements_->size();
 }
 
 bool htd::Hyperedge::containsVertex(htd::vertex_t vertex) const
 {
-    return std::find(elements_.begin(), elements_.end(), vertex) != elements_.end();
+    return std::find(elements_->begin(), elements_->end(), vertex) != elements_->end();
 }
 
 void htd::Hyperedge::push_back(htd::vertex_t vertex)
 {
-    elements_.push_back(vertex);
+    if (!written_)
+    {
+        elements_ = std::make_shared<std::vector<htd::vertex_t>>(*elements_);
+
+        written_ = true;
+    }
+
+    elements_->push_back(vertex);
 }
 
 void htd::Hyperedge::erase(htd::vertex_t vertex)
 {
-    elements_.erase(std::remove(elements_.begin(), elements_.end(), vertex), elements_.end());
+    if (!written_)
+    {
+        elements_ = std::make_shared<std::vector<htd::vertex_t>>(*elements_);
+
+        written_ = true;
+    }
+
+    elements_->erase(std::remove(elements_->begin(), elements_->end(), vertex), elements_->end());
 }
 
 htd::Iterator<htd::vertex_t> htd::Hyperedge::begin(void)
 {
-    return htd::Iterator<htd::vertex_t>(elements_.begin());
+    if (!written_)
+    {
+        elements_ = std::make_shared<std::vector<htd::vertex_t>>(*elements_);
+
+        written_ = true;
+    }
+
+    return htd::Iterator<htd::vertex_t>(elements_->begin());
 }
 
 const htd::ConstIterator<htd::vertex_t> htd::Hyperedge::begin(void) const
 {
-    return htd::ConstIterator<htd::vertex_t>(elements_.begin());
+    return htd::ConstIterator<htd::vertex_t>(elements_->begin());
 }
 
 htd::Iterator<htd::vertex_t> htd::Hyperedge::end(void)
 {
-    return htd::Iterator<htd::vertex_t>(elements_.end());
+    if (!written_)
+    {
+        elements_ = std::make_shared<std::vector<htd::vertex_t>>(*elements_);
+
+        written_ = true;
+    }
+
+    return htd::Iterator<htd::vertex_t>(elements_->end());
 }
 
 const htd::ConstIterator<htd::vertex_t> htd::Hyperedge::end(void) const
 {
-    return htd::ConstIterator<htd::vertex_t>(elements_.end());
+    return htd::ConstIterator<htd::vertex_t>(elements_->end());
 }
 
 const htd::vertex_t & htd::Hyperedge::operator[](htd::index_t index) const
@@ -128,6 +166,8 @@ htd::Hyperedge & htd::Hyperedge::operator=(const htd::Hyperedge & other)
 {
     id_ = other.id_;
 
+    written_ = false;
+
     elements_ = other.elements_;
 
     return *this;
@@ -135,22 +175,22 @@ htd::Hyperedge & htd::Hyperedge::operator=(const htd::Hyperedge & other)
 
 bool htd::Hyperedge::operator<(const htd::Hyperedge & other) const
 {
-    return std::tie(elements_, id_) < std::tie(other.elements_, other.id_);
+    return std::tie(*elements_, id_) < std::tie(*(other.elements_), other.id_);
 }
 
 bool htd::Hyperedge::operator>(const htd::Hyperedge & other) const
 {
-    return std::tie(elements_, id_) > std::tie(other.elements_, other.id_);
+    return std::tie(*elements_, id_) > std::tie(*(other.elements_), other.id_);
 }
 
 bool htd::Hyperedge::operator==(const htd::Hyperedge & other) const
 {
-    return other.id_ == id_ && other.elements_ == elements_;
+    return other.id_ == id_ && *(other.elements_) == *elements_;
 }
 
 bool htd::Hyperedge::operator!=(const htd::Hyperedge & other) const
 {
-    return other.id_ != id_ || other.elements_ != elements_;
+    return other.id_ != id_ || *(other.elements_) != *elements_;
 }
 
 #endif /* HTD_HTD_HYPEREDGE_CPP */

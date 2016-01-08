@@ -32,10 +32,10 @@
 #include <htd/ConstCollection.hpp>
 
 #include <vector>
+#include <memory>
 
 namespace htd
 {
-    //TODO Implement copy on write to improve (memory) efficiency!
     class Hyperedge
     {
         public:
@@ -48,6 +48,8 @@ namespace htd
             Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements);
 
             Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements);
+
+            Hyperedge(htd::id_t id, const htd::Hyperedge & original);
 
             ~Hyperedge();
 
@@ -88,9 +90,11 @@ namespace htd
             bool operator!=(const Hyperedge & other) const;
 
         private:
+            bool written_;
+
             htd::id_t id_;
 
-            htd::vertex_container elements_;
+            std::shared_ptr<std::vector<htd::vertex_t>> elements_;
     };
 
     /**

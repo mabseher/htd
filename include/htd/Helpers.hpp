@@ -63,141 +63,43 @@
     #endif
 #endif
 
-namespace std
-{
-    std::ostream & operator<<(std::ostream & stream, const htd::ILabel & label);
-
-    template<typename T>
-    void hash_combine(std::size_t & seed, const T & v)
-    {
-        std::hash<T> hashFunction;
-
-        seed ^= hashFunction(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-    }
-
-    template<>
-    struct hash<htd::Hyperedge>
-    {
-        public:
-            std::size_t operator()(const htd::Hyperedge & data) const
-            {
-                std::size_t ret = 31 * data.id();
-
-                for (htd::vertex_t vertex : data)
-                {
-                    std::hash_combine(ret, vertex);
-                }
-
-                return ret;
-            }
-    };
-
-    template<>
-    struct hash<htd::Collection<htd::vertex_t>>
-    {
-        public:
-            std::size_t operator()(const htd::ConstCollection<htd::vertex_t> & data) const
-            {
-                std::size_t ret = 31;
-
-                for (htd::vertex_t vertex : data)
-                {
-                    std::hash_combine(ret, vertex);
-                }
-
-                return ret;
-            }
-    };
-
-    template<>
-    struct hash<htd::ConstCollection<htd::vertex_t>>
-    {
-        public:
-            std::size_t operator()(const htd::ConstCollection<htd::vertex_t> & data) const
-            {
-                std::size_t ret = 31;
-
-                for (htd::vertex_t vertex : data)
-                {
-                    std::hash_combine(ret, vertex);
-                }
-
-                return ret;
-            }
-    };
-
-    template<>
-    struct hash<htd::Collection<htd::Hyperedge>>
-    {
-        public:
-            std::size_t operator()(const htd::ConstCollection<htd::Hyperedge> & data) const
-            {
-                std::size_t ret = 31;
-
-                std::hash<htd::Hyperedge> hashFunction;
-
-                for (const htd::Hyperedge & hyperedge : data)
-                {
-                    std::hash_combine(ret, hashFunction(hyperedge));
-                }
-
-                return ret;
-            }
-    };
-
-    template<>
-    struct hash<htd::ConstCollection<htd::Hyperedge>>
-    {
-        public:
-            std::size_t operator()(const htd::ConstCollection<htd::Hyperedge> & data) const
-            {
-                std::size_t ret = 31;
-
-                std::hash<htd::Hyperedge> hashFunction;
-
-                for (const htd::Hyperedge & hyperedge : data)
-                {
-                    std::hash_combine(ret, hashFunction(hyperedge));
-                }
-
-                return ret;
-            }
-    };
-
-    template<>
-    struct hash<htd::vertex_container>
-    {
-        public:
-            std::size_t operator()(const htd::vertex_container & data) const
-            {
-                std::size_t ret = 31;
-
-                for (htd::vertex_t vertex : data)
-                {
-                    std::hash_combine(ret, vertex);
-                }
-
-                return ret;
-            }
-    };
-}
-
 namespace htd
 {   
     void print(bool input);
+
+    void print(bool input, std::ostream & stream);
+
+    void print(const htd::Hyperedge & input);
+
+    void print(const htd::Hyperedge & input, std::ostream & stream);
     
     template < typename T >
     void print(const T & input)
     {
-        std::cout << input;
+        print(input, std::cout);
+    }
+
+    template < typename T >
+    void print(const T & input, std::ostream & stream)
+    {
+        stream << input;
     }
     
     template < >
     void print<std::string>(const std::string& input);
 
+    template < >
+    void print<std::string>(const std::string& input, std::ostream & stream);
+
     template < typename T >
     void print(const htd::ConstCollection<T> & input, bool sorted = false)
     {
+        print(input, std::cout, sorted);
+    }
+
+    template < typename T >
+    void print(const htd::ConstCollection<T> & input, std::ostream & stream, bool sorted = false)
+    {
         std::vector<T> tmp(input.begin(), input.end());
 
         if (tmp.size() > 0)
@@ -207,32 +109,38 @@ namespace htd
                 std::sort(tmp.begin(), tmp.end());
             }
 
-            std::cout << "[ ";
+            stream << "[ ";
 
             for (auto it = tmp.cbegin(); it != tmp.cend();)
             {
-                print(*it);
+                print(*it, stream);
 
                 if (++it != tmp.cend())
                 {
-                    std::cout << ", ";
+                    stream << ", ";
                 }
             }
 
-            std::cout << " ] (SIZE: " << input.size() << ")";
+            stream << " ] (SIZE: " << input.size() << ")";
         }
         else
         {
-            std::cout << "<EMPTY>";
+            stream << "<EMPTY>";
         }
     }
-    
+
     template < typename T >
     void print(const std::vector<T> & input, bool sorted = false)
     {
+        print(input, std::cout, sorted);
+    }
+    
+    template < typename T >
+    void print(const std::vector<T> & input, std::ostream & stream, bool sorted = false)
+    {
         std::vector<T> tmp(input);
         
-        std::cout << "std::vector ";
+        stream << "std::vector ";
         
         if (tmp.size() > 0)
         {
@@ -241,59 +149,71 @@ namespace htd
                 std::sort(tmp.begin(), tmp.end());
             }
         
-            std::cout << "[ ";
+            stream << "[ ";
         
             for (auto it = tmp.cbegin(); it != tmp.cend();)
             {
-                print(*it);
+                print(*it, stream);
                 
                 if (++it != tmp.cend())
                 {
-                    std::cout << ", ";
+                    stream << ", ";
                 }
             }
             
-            std::cout << " ] (SIZE: " << input.size() << ")";
+            stream << " ] (SIZE: " << input.size() << ")";
         }
         else
         {
-            std::cout << "<EMPTY>";
+            stream << "<EMPTY>";
         }
     }
-    
+
     template < typename T >
     void print(const std::set<T> & input)
     {
-        std::cout << "std::set ";
-        
-        if (input.size() > 0)
-        {
-            std::cout << "[ ";
-        
-            for (auto it = input.cbegin(); it != input.cend();)
-            {
-                print(*it);
-                
-                if (++it != input.cend())
-                {
-                    std::cout << ", ";
-                }
-            }
-            
-            std::cout << " ] (SIZE: " << input.size() << ")";
-        }
-        else
-        {
-            std::cout << "<EMPTY>";
-        }
+        print(input, std::cout);
     }
     
     template < typename T >
+    void print(const std::set<T> & input, std::ostream & stream)
+    {
+        stream << "std::set ";
+        
+        if (input.size() > 0)
+        {
+            stream << "[ ";
+        
+            for (auto it = input.cbegin(); it != input.cend();)
+            {
+                print(*it, stream);
+                
+                if (++it != input.cend())
+                {
+                    stream << ", ";
+                }
+            }
+            
+            stream << " ] (SIZE: " << input.size() << ")";
+        }
+        else
+        {
+            stream << "<EMPTY>";
+        }
+    }
+
+    template < typename T >
     void print(const std::unordered_set<T> & input, bool sorted = true)
+    {
+        print(input, std::cout, sorted);
+    }
+    
+    template < typename T >
+    void print(const std::unordered_set<T> & input, std::ostream & stream, bool sorted = true)
     {
         std::vector<T> tmp(input.begin(), input.end());
         
-        std::cout << "std::unordered_set ";
+        stream << "std::unordered_set ";
         
         if (input.size() > 0)
         {
@@ -302,54 +222,60 @@ namespace htd
                 std::sort(tmp.begin(), tmp.end());
             }
             
-            std::cout << "[ ";
+            stream << "[ ";
             
             for (auto it = tmp.cbegin(); it != tmp.cend();)
             {
-                print(*it);
+                print(*it, stream);
                 
                 if (++it != tmp.cend())
                 {
-                    std::cout << ", ";
+                    stream << ", ";
                 }
             }
             
-            std::cout << " ] (SIZE: " << input.size() << ")";
+            stream << " ] (SIZE: " << input.size() << ")";
         }
         else
         {
-            std::cout << "<EMPTY>";
+            stream << "<EMPTY>";
         }
     }
-    
+
     template < typename Key, typename T >
     void print(const std::map<Key, T> & input)
     {
-        std::cout << "std::map ";
+        print(input, std::cout);
+    }
+    
+    template < typename Key, typename T >
+    void print(const std::map<Key, T> & input, std::ostream & stream)
+    {
+        stream << "std::map ";
         
         if (input.size() > 0)
         {
-            std::cout << "[ ";
+            stream << "[ ";
         
             for (auto it = input.cbegin(); it != input.cend();)
             {
-                print((*it).first);
+                print((*it).first, stream);
                         
-                std::cout << " => ";
+                stream << " => ";
                 
-                print((*it).second);
+                print((*it).second, stream);
                 
                 if (++it != input.cend())
                 {
-                    std::cout << ", ";
+                    stream << ", ";
                 }
             }
             
-            std::cout << " ] (SIZE: " << input.size() << ")";
+            stream << " ] (SIZE: " << input.size() << ")";
         }
         else
         {
-            std::cout << "<EMPTY>";
+            stream << "<EMPTY>";
         }
     }
     
@@ -768,6 +694,131 @@ namespace htd
     {
         return *(dynamic_cast<const OutputType *>(&input));
     }
+}
+
+namespace std
+{
+    template<typename T>
+    ostream & operator<<(std::ostream & stream, const htd::ConstCollection<T> input)
+    {
+        htd::print(input, stream);
+
+        return stream;
+    }
+
+    template<typename T>
+    void hash_combine(std::size_t & seed, const T & v)
+    {
+        std::hash<T> hashFunction;
+
+        seed ^= hashFunction(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+    }
+
+    template<>
+    struct hash<htd::Hyperedge>
+    {
+        public:
+            std::size_t operator()(const htd::Hyperedge & data) const
+            {
+                std::size_t ret = 31 * data.id();
+
+                for (htd::vertex_t vertex : data)
+                {
+                    std::hash_combine(ret, vertex);
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    struct hash<htd::Collection<htd::vertex_t>>
+    {
+        public:
+            std::size_t operator()(const htd::ConstCollection<htd::vertex_t> & data) const
+            {
+                std::size_t ret = 31;
+
+                for (htd::vertex_t vertex : data)
+                {
+                    std::hash_combine(ret, vertex);
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    struct hash<htd::ConstCollection<htd::vertex_t>>
+    {
+        public:
+            std::size_t operator()(const htd::ConstCollection<htd::vertex_t> & data) const
+            {
+                std::size_t ret = 31;
+
+                for (htd::vertex_t vertex : data)
+                {
+                    std::hash_combine(ret, vertex);
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    struct hash<htd::Collection<htd::Hyperedge>>
+    {
+        public:
+            std::size_t operator()(const htd::ConstCollection<htd::Hyperedge> & data) const
+            {
+                std::size_t ret = 31;
+
+                std::hash<htd::Hyperedge> hashFunction;
+
+                for (const htd::Hyperedge & hyperedge : data)
+                {
+                    std::hash_combine(ret, hashFunction(hyperedge));
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    struct hash<htd::ConstCollection<htd::Hyperedge>>
+    {
+        public:
+            std::size_t operator()(const htd::ConstCollection<htd::Hyperedge> & data) const
+            {
+                std::size_t ret = 31;
+
+                std::hash<htd::Hyperedge> hashFunction;
+
+                for (const htd::Hyperedge & hyperedge : data)
+                {
+                    std::hash_combine(ret, hashFunction(hyperedge));
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    struct hash<htd::vertex_container>
+    {
+        public:
+            std::size_t operator()(const htd::vertex_container & data) const
+            {
+                std::size_t ret = 31;
+
+                for (htd::vertex_t vertex : data)
+                {
+                    std::hash_combine(ret, vertex);
+                }
+
+                return ret;
+            }
+    };
 }
 
 #endif /* HTD_HTD_HELPERS_HPP */

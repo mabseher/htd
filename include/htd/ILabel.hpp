@@ -40,7 +40,7 @@ namespace htd
 
             virtual bool operator==(const ILabel & rhs) const = 0;
 
-            virtual std::string toString(void) const = 0;
+            virtual void print(std::ostream & stream) const = 0;
     };
 
     inline htd::ILabel::~ILabel() { }

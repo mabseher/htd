@@ -57,18 +57,16 @@ namespace htd
                 return *value_;
             }
 
-            std::size_t hash(void) const
+            std::size_t hash(void) const HTD_OVERRIDE
             {
                 std::hash<T> hash_function;
 
                 return hash_function(*value_);
             }
 
-            bool operator==(const htd::ILabel & other) const
+            Label<T> * clone(void) const HTD_OVERRIDE
             {
-                 const Label<T> * o = dynamic_cast<const Label<T> *>(&other);
-
-                 return o != nullptr && *value_ == o->value();
+                return new Label<T>(*value_);
             }
 
             bool operator==(const Label<T> & other) const
@@ -76,16 +74,16 @@ namespace htd
                 return *value_ == other.value();
             }
 
-            Label<T> * clone(void) const
+            bool operator==(const htd::ILabel & other) const HTD_OVERRIDE
             {
-                return new Label<T>(*value_);
+                 const Label<T> * o = dynamic_cast<const Label<T> *>(&other);
+
+                 return o != nullptr && *value_ == o->value();
             }
 
-            std::string toString(void) const
+            void print(std::ostream & stream) const HTD_OVERRIDE
             {
-                //TODO Implement
-
-                return "";
+                stream << *value_;
             }
 
         private:

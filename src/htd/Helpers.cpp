@@ -27,31 +27,45 @@
 
 #include <htd/Helpers.hpp>
 
-std::ostream & operator<<(std::ostream & stream, const htd::ILabel & label)
+void htd::print(bool input)
 {
-    //TODO Implement
-
-    HTD_UNUSED(label)
-
-    return stream;
+    print(input, std::cout);
 }
 
-void htd::print(bool input)
+void htd::print(bool input, std::ostream & stream)
 {
     if (input)
     {
-        std::cout << "true";
+        stream << "true";
     }
     else
     {
-        std::cout << "false";
+        stream << "false";
     }
 }
 
 template < >
 void htd::print<std::string>(const std::string & input)
 {
-    std::cout << "\"" << input << "\"";
+    print(input, std::cout);
+}
+
+template < >
+void htd::print<std::string>(const std::string & input, std::ostream & stream)
+{
+    stream << "\"" << input << "\"";
+}
+
+void htd::print(const htd::Hyperedge & input)
+{
+    print(input, std::cout);
+}
+
+void htd::print(const htd::Hyperedge & input, std::ostream & stream)
+{
+    stream << "Hyperedge " << input.id() << ": ";
+
+    htd::print(input.elements());
 }
 
 #endif /* HTD_HTD_HELPERS_CPP */

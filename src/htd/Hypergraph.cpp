@@ -68,8 +68,7 @@ htd::Hypergraph::Hypergraph(const htd::IHypergraph & original)
       edges_(),
       neighborhood_()
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    *this = original;
 }
 
 htd::Hypergraph::~Hypergraph()

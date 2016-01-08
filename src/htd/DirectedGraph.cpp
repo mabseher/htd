@@ -48,8 +48,7 @@ htd::DirectedGraph::DirectedGraph(const htd::DirectedGraph & original) : base_(o
 
 htd::DirectedGraph::DirectedGraph(const htd::IDirectedGraph & original) : base_(htd::HypergraphFactory::instance().getHypergraph()), incomingNeighborhood_(), outgoingNeighborhood_()
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    *this = original;
 }
 
 htd::DirectedGraph::~DirectedGraph()

@@ -79,7 +79,7 @@ htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLa
 {
     std::vector<htd::id_t> relevantContainerIds;
 
-    std::vector<htd::vertex_container> relevantContainers;
+    std::vector<htd::ConstCollection<htd::id_t>> relevantContainers;
 
     //TODO Exploit sortedness of hyperedges here and also at other places!
     for (auto it1 = hyperedges_.begin(); it1 < hyperedges_.end(); it1++)
@@ -100,26 +100,22 @@ htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLa
 
         if (maximal)
         {
-            relevantContainers.push_back(htd::vertex_container(elements1.begin(), elements1.end()));
+            relevantContainers.push_back(htd::ConstCollection<htd::id_t>::getInstance(elements1));
 
             relevantContainerIds.push_back(it1->id());
         }
     }
 
-    std::vector<htd::index_t> setCoverResult;
-
     htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm();
-
-    setCoverAlgorithm->computeSetCover(vertices, relevantContainers, setCoverResult);
-
-    delete setCoverAlgorithm;
 
     htd::VectorAdapter<htd::Hyperedge> selectedHyperedges;
 
-    for (htd::index_t selectedHyperedgeIndex : setCoverResult)
+    for (htd::index_t selectedHyperedgeIndex : setCoverAlgorithm->computeSetCover(vertices, htd::ConstCollection<htd::ConstCollection<htd::id_t>>::getInstance(relevantContainers)))
     {
         selectedHyperedges.container().push_back(htd::Hyperedge(relevantContainerIds[selectedHyperedgeIndex], htd::ConstCollection<htd::vertex_t>::getInstance(relevantContainers[selectedHyperedgeIndex])));
     }
+
+    delete setCoverAlgorithm;
 
     return new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(selectedHyperedges));
 }

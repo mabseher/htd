@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/HeuristicSetCoverAlgorithm.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <cstdlib>
 #include <algorithm>
@@ -43,11 +44,23 @@ htd::HeuristicSetCoverAlgorithm::~HeuristicSetCoverAlgorithm()
     
 }
 
-void htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container> & containers, std::vector<htd::index_t> & result) const
+htd::ConstCollection<htd::index_t> htd::HeuristicSetCoverAlgorithm::computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers) const
+{
+    std::vector<htd::ConstCollection<htd::id_t>> wrappedContainers;
+
+    for (const std::vector<htd::id_t> & container : containers)
+    {
+        wrappedContainers.push_back(htd::ConstCollection<htd::id_t>::getInstance(container));
+    }
+
+    return computeSetCover(htd::ConstCollection<htd::id_t>::getInstance(elements), htd::ConstCollection<htd::ConstCollection<htd::id_t>>::getInstance(wrappedContainers));
+}
+
+htd::ConstCollection<htd::index_t> htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers) const
 {
     std::vector<htd::id_t> relevantContainers;
 
-    std::unordered_set<htd::id_t> remainder(vertices.begin(), vertices.end());
+    std::unordered_set<htd::id_t> remainder(elements.begin(), elements.end());
 
     std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> oldNeighborhood;
 
@@ -57,7 +70,7 @@ void htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::ConstCollection
 
     for (htd::index_t index = 0; index < containers.size(); index++)
     {
-        if (htd::has_non_empty_set_intersection(vertices.begin(), vertices.end(), containers[index].begin(), containers[index].end()))
+        if (htd::has_non_empty_set_intersection(elements.begin(), elements.end(), containers[index].begin(), containers[index].end()))
         {
             relevantContainers.push_back(index);
         }
@@ -179,8 +192,10 @@ void htd::HeuristicSetCoverAlgorithm::computeSetCover(const htd::ConstCollection
         std::cout << "Total solutions: " << count << std::endl << std::endl;
         )
 
-        std::copy(solutions[0].begin(), solutions[0].end(), std::back_inserter(result));
+        return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>(solutions[0]));
     }
+
+    return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>());
 }
 
 htd::HeuristicSetCoverAlgorithm * htd::HeuristicSetCoverAlgorithm::clone(void) const
@@ -188,7 +203,7 @@ htd::HeuristicSetCoverAlgorithm * htd::HeuristicSetCoverAlgorithm::clone(void) c
     return new htd::HeuristicSetCoverAlgorithm();
 }
 
-void htd::HeuristicSetCoverAlgorithm::populateNeighborhood(const std::vector<htd::vertex_container>& containers, std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & origin) const
+void htd::HeuristicSetCoverAlgorithm::populateNeighborhood(const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers, std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & origin) const
 {
     if (origin.size() > 0)
     {
@@ -221,7 +236,7 @@ void htd::HeuristicSetCoverAlgorithm::populateNeighborhood(const std::vector<htd
     }
 }
 
-void htd::HeuristicSetCoverAlgorithm::populateNeighborhood(const std::vector<htd::vertex_container>& containers, std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const htd::HeuristicSetCoverAlgorithm::HistoryEntry & individual) const
+void htd::HeuristicSetCoverAlgorithm::populateNeighborhood(const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers, std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const htd::HeuristicSetCoverAlgorithm::HistoryEntry & individual) const
 {
     std::vector<htd::index_t> indices1(individual.availableChoices.size());
     std::vector<htd::index_t> indices2(individual.selection.size());

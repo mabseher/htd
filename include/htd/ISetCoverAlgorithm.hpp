@@ -28,6 +28,8 @@
 #include <htd/Globals.hpp>
 #include <htd/ConstCollection.hpp>
 
+#include <vector>
+
 namespace htd
 {
     class ISetCoverAlgorithm
@@ -35,7 +37,9 @@ namespace htd
         public:
             virtual ~ISetCoverAlgorithm() = 0;
 
-            virtual void computeSetCover(const htd::ConstCollection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container> & containers, std::vector<htd::index_t> & result) const = 0;
+            virtual htd::ConstCollection<htd::index_t> computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers) const = 0;
+
+            virtual htd::ConstCollection<htd::index_t> computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers) const = 0;
 
             virtual ISetCoverAlgorithm * clone(void) const = 0;
     };

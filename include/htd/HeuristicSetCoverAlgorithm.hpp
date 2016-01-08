@@ -39,8 +39,10 @@ namespace htd
             HeuristicSetCoverAlgorithm(void);
             
             ~HeuristicSetCoverAlgorithm();
-            
-            void computeSetCover(const htd::ConstCollection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container> & containers, std::vector<htd::index_t> & result) const HTD_OVERRIDE;
+
+            htd::ConstCollection<htd::index_t> computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers) const HTD_OVERRIDE;
+
+            htd::ConstCollection<htd::index_t> computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers) const HTD_OVERRIDE;
 
             HeuristicSetCoverAlgorithm * clone(void) const HTD_OVERRIDE;
 
@@ -88,9 +90,9 @@ namespace htd
                     }
             };
 
-            void populateNeighborhood(const std::vector<htd::vertex_container>& containers, std::vector<HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const std::vector<HistoryEntry> & origin) const;
+            void populateNeighborhood(const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers, std::vector<HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const std::vector<HistoryEntry> & origin) const;
 
-            void populateNeighborhood(const std::vector<htd::vertex_container>& containers, std::vector<HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const HistoryEntry & individual) const;
+            void populateNeighborhood(const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers, std::vector<HistoryEntry> & newNeighborhood, std::size_t bestSolutionFitness, const HistoryEntry & individual) const;
     };
 }
 

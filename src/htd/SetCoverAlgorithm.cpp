@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/SetCoverAlgorithm.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <deque>
 #include <iterator>
@@ -45,7 +46,19 @@ htd::SetCoverAlgorithm::~SetCoverAlgorithm()
     
 }
 
-void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::vertex_t> & vertices, const std::vector<htd::vertex_container>& containers, std::vector<htd::index_t> & result) const
+htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers) const
+{
+    std::vector<htd::ConstCollection<htd::id_t>> wrappedContainers;
+
+    for (const std::vector<htd::id_t> & container : containers)
+    {
+        wrappedContainers.push_back(htd::ConstCollection<htd::id_t>::getInstance(container));
+    }
+
+    return computeSetCover(htd::ConstCollection<htd::id_t>::getInstance(elements), htd::ConstCollection<htd::ConstCollection<htd::id_t>>::getInstance(wrappedContainers));
+}
+
+htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers) const
 {
     htd::id_t next = 0;
     
@@ -57,7 +70,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::ver
     
     std::vector<std::vector<htd::id_t>> solutions;
     
-    std::vector<htd::id_t> remainder(vertices.begin(), vertices.end());
+    std::vector<htd::id_t> remainder(elements.begin(), elements.end());
 
     std::unordered_map<htd::id_t, std::size_t> additionalCoverage;
 
@@ -326,9 +339,11 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::ver
         
         std::cout << "Total solutions: " << count << std::endl << std::endl;
         )
-    
-        std::copy(solutions[0].begin(), solutions[0].end(), std::back_inserter(result));
+
+        return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>(solutions[0]));
     }
+
+    return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>());
 }
 
 htd::SetCoverAlgorithm * htd::SetCoverAlgorithm::clone(void) const

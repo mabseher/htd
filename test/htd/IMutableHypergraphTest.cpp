@@ -103,9 +103,9 @@ TEST_P(IMutableHypergraphTest, ManipulationTest)
 }
 
 INSTANTIATE_TEST_CASE_P(VertexCountTest, IMutableHypergraphTest, ::testing::Values(
-    VertexCountTestInput(new htd::Hypergraph(), 0),
-    VertexCountTestInput(new htd::Hypergraph(5), 5)
+    VertexCountTestInput(new htd::Hypergraph(), 0)
     /* TODO
+    VertexCountTestInput(new htd::Hypergraph(5), 5)
     VertexCountTestInput(new htd::LabeledHypergraph<std::string, std::string>(), 0),
     VertexCountTestInput(new htd::LabeledHypergraph<std::string, std::string>(5), 5)
     */

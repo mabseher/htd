@@ -30,7 +30,11 @@
 
 TEST(ITreeDecompositionAlgorithmTest, DecompositionTest01)
 {
-    htd::Hypergraph graph(3);
+    htd::Hypergraph graph;
+
+    graph.addVertex();
+    graph.addVertex();
+    graph.addVertex();
 
     std::vector<htd::vertex_t> vertices;
 

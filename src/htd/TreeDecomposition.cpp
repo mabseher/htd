@@ -195,6 +195,11 @@ bool htd::TreeDecomposition::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2
     return isNeighbor(vertex1, vertex2);
 }
 
+bool htd::TreeDecomposition::isEdge(const std::vector<htd::vertex_t> & elements) const
+{
+    return isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
+}
+
 bool htd::TreeDecomposition::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     bool ret = false;
@@ -222,6 +227,11 @@ htd::ConstCollection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(htd::v
     }
 
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
+}
+
+htd::ConstCollection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const
+{
+    return associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
 }
 
 htd::ConstCollection<htd::id_t> htd::TreeDecomposition::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const

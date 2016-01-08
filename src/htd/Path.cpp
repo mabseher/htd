@@ -174,6 +174,11 @@ bool htd::Path::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
     return isNeighbor(vertex1, vertex2);
 }
 
+bool htd::Path::isEdge(const std::vector<htd::vertex_t> & elements) const
+{
+    return isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
+}
+
 bool htd::Path::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     bool ret = false;
@@ -201,6 +206,11 @@ htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(htd::vertex_t verte
     }
 
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
+}
+
+htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const
+{
+    return associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
 }
 
 htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const

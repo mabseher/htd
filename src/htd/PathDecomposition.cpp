@@ -102,6 +102,11 @@ bool htd::PathDecomposition::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2
     return base_->isNeighbor(vertex1, vertex2);
 }
 
+bool htd::PathDecomposition::isEdge(const std::vector<htd::vertex_t> & elements) const
+{
+    return isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
+}
+
 bool htd::PathDecomposition::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     return base_->isEdge(elements);
@@ -110,6 +115,11 @@ bool htd::PathDecomposition::isEdge(const htd::ConstCollection<htd::vertex_t> & 
 htd::ConstCollection<htd::id_t> htd::PathDecomposition::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     return base_->associatedEdgeIds(vertex1, vertex2);
+}
+
+htd::ConstCollection<htd::id_t> htd::PathDecomposition::associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const
+{
+    return associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
 }
 
 htd::ConstCollection<htd::id_t> htd::PathDecomposition::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const

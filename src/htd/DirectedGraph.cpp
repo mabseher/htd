@@ -87,6 +87,11 @@ bool htd::DirectedGraph::isEdge(htd::id_t edgeId) const
     return base_->isEdge(edgeId);
 }
 
+bool htd::DirectedGraph::isEdge(const std::vector<htd::vertex_t> & elements) const
+{
+    return isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
+}
+
 bool htd::DirectedGraph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     return base_->isEdge(vertex1, vertex2);
@@ -119,6 +124,11 @@ htd::ConstCollection<htd::id_t> htd::DirectedGraph::associatedEdgeIds(htd::verte
     }
 
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
+}
+
+htd::ConstCollection<htd::id_t> htd::DirectedGraph::associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const
+{
+    return associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
 }
 
 htd::ConstCollection<htd::id_t> htd::DirectedGraph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const

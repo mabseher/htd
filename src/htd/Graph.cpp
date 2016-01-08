@@ -93,6 +93,11 @@ bool htd::Graph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
     return base_->isEdge(vertex1, vertex2);
 }
 
+bool htd::Graph::isEdge(const std::vector<htd::vertex_t> & elements) const
+{
+    return isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
+}
+
 bool htd::Graph::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     bool ret = false;
@@ -120,6 +125,11 @@ htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(htd::vertex_t vert
     }
 
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
+}
+
+htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const
+{
+    return associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
 }
 
 htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const

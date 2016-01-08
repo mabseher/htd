@@ -27,7 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
-#include <htd/Collection.hpp>
 
 namespace htd
 {
@@ -41,6 +40,8 @@ namespace htd
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+
+            virtual htd::id_t addEdge(const std::vector<htd::vertex_t> & elements) = 0;
 
             virtual htd::id_t addEdge(const htd::ConstCollection<htd::vertex_t> & elements) = 0;
 

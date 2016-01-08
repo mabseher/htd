@@ -643,6 +643,11 @@ htd::id_t htd::Hypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
     return next_edge_++;
 }
 
+htd::id_t htd::Hypergraph::addEdge(const std::vector<htd::vertex_t> & elements)
+{
+    return addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
+}
+
 htd::id_t htd::Hypergraph::addEdge(const htd::ConstCollection<htd::vertex_t> & elements)
 {
     if (elements.empty())

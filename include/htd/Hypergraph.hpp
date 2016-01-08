@@ -105,6 +105,8 @@ namespace htd
 
             htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
+            htd::id_t addEdge(const std::vector<htd::vertex_t> & elements) HTD_OVERRIDE;
+
             htd::id_t addEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
 
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;

@@ -63,6 +63,11 @@ htd::id_t htd::Hyperedge::id() const
     return id_;
 }
 
+void htd::Hyperedge::setId(htd::id_t newId)
+{
+    id_ = newId;
+}
+
 htd::Collection<htd::vertex_t> htd::Hyperedge::elements()
 {
     if (!written_)

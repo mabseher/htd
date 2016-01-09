@@ -644,14 +644,21 @@ htd::id_t htd::Hypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 
 htd::id_t htd::Hypergraph::addEdge(const std::vector<htd::vertex_t> & elements)
 {
-    return addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
+    return addEdge(htd::Hyperedge(htd::Id::UNKNOWN, elements));
 }
 
 htd::id_t htd::Hypergraph::addEdge(const htd::ConstCollection<htd::vertex_t> & elements)
 {
+    return addEdge(htd::Hyperedge(htd::Id::UNKNOWN, elements));
+}
+
+htd::id_t htd::Hypergraph::addEdge(const htd::Hyperedge & hyperedge)
+{
+    const htd::ConstCollection<htd::vertex_t> & elements = hyperedge.elements();
+
     if (elements.empty())
     {
-        throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(const htd::IConstCollection<htd::vertex_t> &)");
+        throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(const htd::Hyperedge &)");
     }
 
     bool ok = true;
@@ -666,7 +673,11 @@ htd::id_t htd::Hypergraph::addEdge(const htd::ConstCollection<htd::vertex_t> & e
         throw std::logic_error("htd::id_t htd::Hypergraph::addEdge(const htd::IConstCollection<htd::vertex_t> &)");
     }
 
-    edges_.push_back(htd::Hyperedge(next_edge_, elements));
+    htd::Hyperedge newHyperedge(hyperedge);
+
+    newHyperedge.setId(next_edge_);
+
+    edges_.push_back(newHyperedge);
 
     std::array<htd::vertex_t, 1> currentVertex;
 
@@ -813,7 +824,7 @@ htd::Hypergraph & htd::Hypergraph::operator=(const htd::IHypergraph & original)
         {
             next_edge_ = hyperedge.id();
 
-            addEdge(hyperedge.elements());
+            addEdge(hyperedge);
         }
     }
 

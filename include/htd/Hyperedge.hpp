@@ -55,6 +55,8 @@ namespace htd
 
             htd::id_t id() const;
 
+            void setId(htd::id_t newId);
+
             htd::Collection<htd::vertex_t> elements();
 
             htd::ConstCollection<htd::vertex_t> elements() const;

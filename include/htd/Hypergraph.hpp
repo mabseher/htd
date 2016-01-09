@@ -109,6 +109,8 @@ namespace htd
 
             htd::id_t addEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
 
+            htd::id_t addEdge(const htd::Hyperedge & hyperedge) HTD_OVERRIDE;
+
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
             Hypergraph * clone(void) const HTD_OVERRIDE;

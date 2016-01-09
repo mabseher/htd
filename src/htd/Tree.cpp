@@ -1323,8 +1323,23 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
 
 htd::Tree & htd::Tree::operator=(const htd::ITree & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        if (this->root_ != htd::Vertex::UNKNOWN)
+        {
+            removeRoot();
+        }
+
+        htd::PreOrderTreeTraversal treeTraversal;
+
+        treeTraversal.traverse(*this, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
+        {
+            HTD_UNUSED(parent)
+            HTD_UNUSED(distanceToSubtreeRoot)
+
+
+        });
+    }
 
     return *this;
 }

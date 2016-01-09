@@ -142,6 +142,27 @@ namespace htd
                 return nameLabeling_->lookupVertex(label);
             }
 
+            htd::NamedVertexHyperedge<VertexNameType> lookupHyperedge(const EdgeNameType & edgeName) const
+            {
+                htd::Label<EdgeNameType> label(edgeName);
+
+                if (!nameLabeling_->isEdgeLabel(label))
+                {
+                    throw std::logic_error("htd::NamedVertexHyperedge<VertexNameType> htd::NamedPath<VertexNameType, EdgeNameType>::lookupHyperedge(const EdgeNameType &) const");
+                }
+
+                htd::id_t edgeId = nameLabeling_->lookupEdge(label);
+
+                NamedVertexHyperedge<VertexNameType> ret(edgeId);
+
+                for (htd::vertex_t vertex : base_->hyperedge(edgeId))
+                {
+                    ret.push_back(vertexName(vertex));
+                }
+
+                return ret;
+            }
+
             std::size_t edgeCount(const VertexNameType & vertexName) const
             {
                 return base_->edgeCount(lookupVertex(vertexName));
@@ -197,6 +218,20 @@ namespace htd
             htd::ConstCollection<htd::id_t> associatedEdgeIds(std::pair<VertexNameType, VertexNameType> vertexNames) const
             {
                 return associatedEdgeIds(vertexNames.first, vertexNames.second);
+            }
+
+            htd::ConstCollection<VertexNameType> vertices(void) const
+            {
+                htd::VectorAdapter<VertexNameType> ret;
+
+                std::vector<VertexNameType> & container = ret.container();
+
+                for (htd::vertex_t vertex : base_->vertices())
+                {
+                    container.push_back(vertexName(vertex));
+                }
+
+                return htd::ConstCollection<VertexNameType>::getInstance(ret);
             }
 
             bool isConnected(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
@@ -476,7 +511,7 @@ namespace htd
 
             const htd::ILabel & edgeLabel(const std::string & labelName, const EdgeNameType & edgeName) const
             {
-                return base_->edgeLabel(labelName, lookupEdge(edgeName));
+                return base_->edgeLabel(labelName, nameLabeling_->lookupEdge(edgeName));
             }
 
             void setVertexLabel(const std::string & labelName, const VertexNameType & vertexName, htd::ILabel * label)
@@ -491,7 +526,7 @@ namespace htd
 
             void setEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName, htd::ILabel * label)
             {
-                base_->setEdgeLabel(labelName, lookupHyperedge(edgeName), label);
+                base_->setEdgeLabel(labelName, nameLabeling_->lookupEdge(edgeName), label);
             }
 
             void removeVertexLabel(const std::string & labelName, const VertexNameType & vertexName)
@@ -506,7 +541,7 @@ namespace htd
 
             void removeEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName)
             {
-                base_->removeEdgeLabel(labelName, lookupHyperedge(edgeName));
+                base_->removeEdgeLabel(labelName, nameLabeling_->lookupEdge(edgeName));
             }
 
             void swapVertexLabels(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
@@ -521,7 +556,7 @@ namespace htd
 
             void swapEdgeLabels(const EdgeNameType & edgeName1, const EdgeNameType & edgeName2)
             {
-                base_->swapEdgeLabels(lookupHyperedge(edgeName1), lookupHyperedge(edgeName2));
+                base_->swapEdgeLabels(nameLabeling_->lookupEdge(edgeName1), nameLabeling_->lookupEdge(edgeName2));
             }
 
             void swapVertexLabel(const std::string & labelName, const VertexNameType & vertexName1, const VertexNameType & vertexName2)
@@ -536,7 +571,7 @@ namespace htd
 
             void swapEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName1, const EdgeNameType & edgeName2)
             {
-                base_->swapEdgeLabel(labelName, lookupHyperedge(edgeName1), lookupHyperedge(edgeName2));
+                base_->swapEdgeLabel(labelName, nameLabeling_->lookupEdge(edgeName1), nameLabeling_->lookupEdge(edgeName2));
             }
 
             NamedPath<VertexNameType, EdgeNameType> * clone(void) const

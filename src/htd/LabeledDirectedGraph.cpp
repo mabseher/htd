@@ -40,6 +40,11 @@ htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::LabeledDirectedGraph 
 
 }
 
+htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::IDirectedGraph & original) : htd::DirectedGraph::DirectedGraph(original), labelings_(new htd::LabelingCollection())
+{
+
+}
+
 htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) : htd::DirectedGraph::DirectedGraph(original), labelings_(original.labelings().clone())
 {
 
@@ -180,18 +185,44 @@ htd::LabeledDirectedGraph * htd::LabeledDirectedGraph::clone(void) const
     return new htd::LabeledDirectedGraph(*this);
 }
 
+htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::LabeledDirectedGraph & original)
+{
+    if (this != &original)
+    {
+        htd::DirectedGraph::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = original.labelings_->clone();
+    }
+
+    return *this;
+}
+
 htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::IDirectedGraph & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::DirectedGraph::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = new htd::LabelingCollection();
+    }
 
     return *this;
 }
 
 htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::ILabeledDirectedGraph & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::DirectedGraph::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = original.labelings().clone();
+    }
 
     return *this;
 }

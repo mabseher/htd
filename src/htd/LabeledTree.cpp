@@ -40,6 +40,11 @@ htd::LabeledTree::LabeledTree(const htd::LabeledTree & original) : htd::Tree::Tr
 
 }
 
+htd::LabeledTree::LabeledTree(const htd::ITree & original) : htd::Tree::Tree(original), labelings_(new htd::LabelingCollection())
+{
+
+}
+
 htd::LabeledTree::LabeledTree(const htd::ILabeledTree & original) : htd::Tree::Tree(original), labelings_(original.labelings().clone())
 {
 
@@ -173,18 +178,44 @@ htd::LabeledTree * htd::LabeledTree::clone(void) const
     return new htd::LabeledTree(*this);
 }
 
+htd::LabeledTree & htd::LabeledTree::operator=(const htd::LabeledTree & original)
+{
+    if (this != &original)
+    {
+        htd::Tree::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = original.labelings_->clone();
+    }
+
+    return *this;
+}
+
 htd::LabeledTree & htd::LabeledTree::operator=(const htd::ITree & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::Tree::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = new htd::LabelingCollection();
+    }
 
     return *this;
 }
 
 htd::LabeledTree & htd::LabeledTree::operator=(const htd::ILabeledTree & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::Tree::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = original.labelings().clone();
+    }
 
     return *this;
 }

@@ -38,6 +38,8 @@ namespace htd
 
             LabeledGraph(const LabeledGraph & original);
 
+            LabeledGraph(const htd::IGraph & original);
+
             LabeledGraph(const htd::ILabeledGraph & original);
             
             virtual ~LabeledGraph();
@@ -79,6 +81,8 @@ namespace htd
             void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2) HTD_OVERRIDE;
 
             LabeledGraph * clone(void) const HTD_OVERRIDE;
+
+            LabeledGraph & operator=(const LabeledGraph & original);
 
             LabeledGraph & operator=(const htd::IGraph & original) HTD_OVERRIDE;
 

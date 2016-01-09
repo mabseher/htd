@@ -38,6 +38,8 @@ namespace htd
 
             LabeledDirectedGraph(const LabeledDirectedGraph & original);
 
+            LabeledDirectedGraph(const htd::IDirectedGraph & original);
+
             LabeledDirectedGraph(const htd::ILabeledDirectedGraph & original);
             
             virtual ~LabeledDirectedGraph();
@@ -79,6 +81,8 @@ namespace htd
             void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2) HTD_OVERRIDE;
 
             LabeledDirectedGraph * clone(void) const HTD_OVERRIDE;
+
+            LabeledDirectedGraph & operator=(const LabeledDirectedGraph & original);
 
             LabeledDirectedGraph & operator=(const htd::IDirectedGraph & original) HTD_OVERRIDE;
 

@@ -40,6 +40,11 @@ htd::LabeledHypergraph::LabeledHypergraph(const htd::LabeledHypergraph & origina
 
 }
 
+htd::LabeledHypergraph::LabeledHypergraph(const htd::IHypergraph & original) : htd::Hypergraph::Hypergraph(original), labelings_(new htd::LabelingCollection())
+{
+
+}
+
 htd::LabeledHypergraph::LabeledHypergraph(const htd::ILabeledHypergraph & original) : htd::Hypergraph::Hypergraph(original), labelings_(original.labelings().clone())
 {
 
@@ -180,18 +185,44 @@ htd::LabeledHypergraph * htd::LabeledHypergraph::clone(void) const
     return new htd::LabeledHypergraph(*this);
 }
 
+htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::LabeledHypergraph & original)
+{
+    if (this != &original)
+    {
+        htd::Hypergraph::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = original.labelings_->clone();
+    }
+
+    return *this;
+}
+
 htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::IHypergraph & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::Hypergraph::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = new htd::LabelingCollection();
+    }
 
     return *this;
 }
 
 htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::ILabeledHypergraph & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::Hypergraph::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = original.labelings().clone();
+    }
 
     return *this;
 }

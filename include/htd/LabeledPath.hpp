@@ -38,6 +38,8 @@ namespace htd
 
             LabeledPath(const LabeledPath & original);
 
+            LabeledPath(const htd::IPath & original);
+
             LabeledPath(const htd::ILabeledPath & original);
             
             virtual ~LabeledPath();
@@ -77,6 +79,8 @@ namespace htd
             void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2) HTD_OVERRIDE;
 
             LabeledPath * clone(void) const HTD_OVERRIDE;
+
+            LabeledPath & operator=(const LabeledPath & original);
 
             LabeledPath & operator=(const htd::IPath & original) HTD_OVERRIDE;
 

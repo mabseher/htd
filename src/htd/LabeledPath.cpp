@@ -40,6 +40,11 @@ htd::LabeledPath::LabeledPath(const htd::LabeledPath & original) : htd::Path::Pa
 
 }
 
+htd::LabeledPath::LabeledPath(const htd::IPath & original) : htd::Path::Path(original), labelings_(new htd::LabelingCollection())
+{
+
+}
+
 htd::LabeledPath::LabeledPath(const htd::ILabeledPath & original) : htd::Path::Path(original), labelings_(original.labelings().clone())
 {
 
@@ -173,18 +178,44 @@ htd::LabeledPath * htd::LabeledPath::clone(void) const
     return new htd::LabeledPath(*this);
 }
 
+htd::LabeledPath & htd::LabeledPath::operator=(const htd::LabeledPath & original)
+{
+    if (this != &original)
+    {
+        htd::Path::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = original.labelings_->clone();
+    }
+
+    return *this;
+}
+
 htd::LabeledPath & htd::LabeledPath::operator=(const htd::IPath & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::Path::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = new htd::LabelingCollection();
+    }
 
     return *this;
 }
 
 htd::LabeledPath & htd::LabeledPath::operator=(const htd::ILabeledPath & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::Path::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = original.labelings().clone();
+    }
 
     return *this;
 }

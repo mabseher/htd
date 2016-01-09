@@ -39,6 +39,7 @@
 #include <map>
 #include <set>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 #define HTD_UNUSED(x) (void)(x);
@@ -362,6 +363,56 @@ namespace htd
         }
         
         return ret + count1 - index1;
+    }
+
+    template <class InputIterator1,
+              class InputIterator2>
+    std::pair<std::size_t, std::size_t> compute_symmetric_difference_sizes(InputIterator1 firstSet1, InputIterator1 lastSet1,
+                                                                           InputIterator2 firstSet2, InputIterator2 lastSet2)
+    {
+        std::pair<std::size_t, std::size_t> ret = std::make_pair(0, 0);
+
+        std::size_t count1 = std::distance(firstSet1, lastSet1);
+        std::size_t count2 = std::distance(firstSet2, lastSet2);
+
+        htd::index_t index1 = 0;
+        htd::index_t index2 = 0;
+
+        while (index1 < count1 && index2 < count2)
+        {
+            auto value1 = *firstSet1;
+            auto value2 = *firstSet2;
+
+            if (value1 < value2)
+            {
+                ++(ret.first);
+
+                index1++;
+
+                ++firstSet1;
+            }
+            else
+            {
+                if (!(value2 < value1))
+                {
+                    index1++;
+
+                    ++firstSet1;
+                }
+                else
+                {
+                    ++(ret.second);
+                }
+
+                index2++;
+
+                ++firstSet2;
+            }
+        }
+
+        ret.first += count1 - index1;
+
+        return ret;
     }
     
     template <class InputIterator1, 

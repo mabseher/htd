@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/CompressionOperation.hpp>
+#include <htd/PostOrderTreeTraversal.hpp>
 
 #include <stack>
 
@@ -46,116 +47,37 @@ void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposi
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-//TODO Exploit the fact that nodes in a path have at most one child!
 void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     HTD_UNUSED(labelingFunctions)
 
     if (decomposition.vertexCount() > 1)
     {
-        std::size_t childCount = 0;
+        htd::PostOrderTreeTraversal treeTraversal;
 
-        htd::index_t currentIndex = 0;
-
-        htd::vertex_t oldNode = htd::Vertex::UNKNOWN;
-
-        htd::vertex_t currentNode = decomposition.root();
-
-        std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
-
-        htd::vertex_container unneededVertices;
-
-        while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
+        treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
         {
-            if (currentNode != htd::Vertex::UNKNOWN)
+            HTD_UNUSED(distanceToSubtreeRoot)
+
+            if (parent != htd::Vertex::UNKNOWN)
             {
-                childCount = decomposition.childCount(currentNode);
+                const htd::ConstCollection<htd::vertex_t> & currentBag = decomposition.bagContent(vertex);
+                const htd::ConstCollection<htd::vertex_t> & parentBag = decomposition.bagContent(parent);
 
-                if (currentIndex < childCount)
+                std::pair<std::size_t, std::size_t> result = compute_symmetric_difference_sizes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end());
+
+                if (result.first > 0 && result.second == 0)
                 {
-                    oldNode = currentNode;
-
-                    const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(currentNode);
-
-                    parentStack.push(std::make_pair(currentNode, currentIndex + 1));
-
-                    currentNode = decomposition.child(currentNode);
-
-                    currentIndex = 0;
-
-                    const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(currentNode);
-
-                    if (childBag.size() < bag.size())
-                    {
-                        if (std::find(unneededVertices.begin(), unneededVertices.end(), currentNode) == unneededVertices.end() && std::includes(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
-                        {
-                            unneededVertices.push_back(currentNode);
-                        }
-                    }
-                    else
-                    {
-                        if (std::find(unneededVertices.begin(), unneededVertices.end(), oldNode) == unneededVertices.end() && std::includes(childBag.begin(), childBag.end(), bag.begin(), bag.end()))
-                        {
-                            unneededVertices.push_back(oldNode);
-                        }
-                    }
+                    decomposition.removeVertex(vertex);
                 }
-                else
+                else if (result.first == 0 && result.second > 0)
                 {
-                    currentNode = htd::Vertex::UNKNOWN;
+                    decomposition.swapVertexLabels(vertex, parent);
+
+                    decomposition.removeVertex(vertex);
                 }
             }
-            else
-            {
-                currentNode = parentStack.top().first;
-
-                currentIndex = parentStack.top().second;
-
-                parentStack.pop();
-            }
-        }
-
-        for (htd::vertex_t vertex : unneededVertices)
-        {
-            if (decomposition.childCount(vertex) <= 1)
-            {
-                decomposition.removeVertex(vertex);
-            }
-            else
-            {
-                std::vector<htd::vertex_t> children;
-
-                const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
-
-                const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(vertex);
-
-                std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
-
-                for (htd::vertex_t child : children)
-                {
-                    const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(child);
-
-                    if (std::includes(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
-                    {
-                        decomposition.removeVertex(child);
-                    }
-                    else
-                    {
-                        /*
-                        if (std::includes(childLabel.begin(), childLabel.end(), label.begin(), label.end()))
-                        {
-                            std::cout << "SWAP NODES " << child << " AND " << vertex << " (ERASE NODE " << vertex << ")" << std::endl;
-
-                            //TODO Optimize
-                            decomposition.swapLabels(vertex, child);
-
-                            decomposition.removeVertex(child);
-                        }
-                        */
-                    }
-                }
-            }
-        }
+        });
     }
 }
 
@@ -170,109 +92,34 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
 
     if (decomposition.vertexCount() > 1)
     {
-        std::size_t childCount = 0;
+        htd::PostOrderTreeTraversal treeTraversal;
 
-        htd::index_t currentIndex = 0;
-
-        htd::vertex_t oldNode = htd::Vertex::UNKNOWN;
-
-        htd::vertex_t currentNode = decomposition.root();
-
-        std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
-
-        htd::vertex_container unneededVertices;
-
-        while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
+        treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
         {
-            if (currentNode != htd::Vertex::UNKNOWN)
+            HTD_UNUSED(distanceToSubtreeRoot)
+
+            if (parent != htd::Vertex::UNKNOWN)
             {
-                childCount = decomposition.childCount(currentNode);
+                const htd::ConstCollection<htd::vertex_t> & currentBag = decomposition.bagContent(vertex);
+                const htd::ConstCollection<htd::vertex_t> & parentBag = decomposition.bagContent(parent);
 
-                if (currentIndex < childCount)
+                if (std::includes(parentBag.begin(), parentBag.end(), currentBag.begin(), currentBag.end()))
                 {
-                    oldNode = currentNode;
-
-                    const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(currentNode);
-
-                    parentStack.push(std::make_pair(currentNode, currentIndex + 1));
-
-                    currentNode = decomposition.child(currentNode, currentIndex);
-
-                    currentIndex = 0;
-
-                    const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(currentNode);
-
-                    if (childBag.size() < bag.size())
-                    {
-                        if (std::find(unneededVertices.begin(), unneededVertices.end(), currentNode) == unneededVertices.end() && std::includes(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
-                        {
-                            unneededVertices.push_back(currentNode);
-                        }
-                    }
-                    else
-                    {
-                        if (std::find(unneededVertices.begin(), unneededVertices.end(), oldNode) == unneededVertices.end() && std::includes(childBag.begin(), childBag.end(), bag.begin(), bag.end()))
-                        {
-                            unneededVertices.push_back(oldNode);
-                        }
-                    }
+                    decomposition.removeVertex(vertex);
                 }
-                else
+                else if (std::includes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end()))
                 {
-                    currentNode = htd::Vertex::UNKNOWN;
+                    decomposition.swapVertexLabels(vertex, parent);
+
+                    for (htd::vertex_t child : decomposition.children(vertex))
+                    {
+                        decomposition.setParent(child, parent);
+                    }
+
+                    decomposition.removeVertex(vertex);
                 }
             }
-            else
-            {
-                currentNode = parentStack.top().first;
-
-                currentIndex = parentStack.top().second;
-
-                parentStack.pop();
-            }
-        }
-
-        for (htd::vertex_t vertex : unneededVertices)
-        {
-            if (decomposition.childCount(vertex) <= 1)
-            {
-                decomposition.removeVertex(vertex);
-            }
-            else
-            {
-                std::vector<htd::vertex_t> children;
-
-                const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
-
-                const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(vertex);
-
-                std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
-
-                for (htd::vertex_t child : children)
-                {
-                    const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(child);
-
-                    if (std::includes(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
-                    {
-                        //decomposition.removeVertex(child);
-                    }
-                    else
-                    {
-                        /*
-                        if (std::includes(childBag.begin(), childBag.end(), bag.begin(), bag.end()))
-                        {
-                            std::cout << "SWAP NODES " << child << " AND " << vertex << " (ERASE NODE " << vertex << ")" << std::endl;
-
-                            //TODO Optimize
-                            decomposition.swapLabels(vertex, child);
-
-                            decomposition.removeVertex(child);
-                        }
-                        */
-                    }
-                }
-            }
-        }
+        });
     }
 }
 

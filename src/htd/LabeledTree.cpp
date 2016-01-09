@@ -62,7 +62,7 @@ htd::LabeledTree::~LabeledTree()
 
 void htd::LabeledTree::removeVertex(htd::vertex_t vertex)
 {
-    htd::LabeledTree::removeVertex(vertex);
+    htd::Tree::removeVertex(vertex);
 
     labelings_->removeVertexLabels(vertex);
 }

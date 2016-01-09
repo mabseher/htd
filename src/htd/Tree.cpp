@@ -760,7 +760,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                 }
             }
 
-            deleteNode(&node);
+            deleteNode(nodes_.at(vertex));
         }
         else
         {
@@ -778,7 +778,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                     nodes_.at(root_)->parent = htd::Vertex::UNKNOWN;
 
-                    deleteNode(&node);
+                    deleteNode(nodes_.at(vertex));
 
                     break;
                 }
@@ -806,7 +806,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                         }
                     }
 
-                    deleteNode(&node);
+                    deleteNode(nodes_.at(vertex));
 
                     break;
                 }

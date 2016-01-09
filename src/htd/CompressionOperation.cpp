@@ -254,7 +254,7 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
 
                     if (std::includes(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
                     {
-                        decomposition.removeVertex(child);
+                        //decomposition.removeVertex(child);
                     }
                     else
                     {

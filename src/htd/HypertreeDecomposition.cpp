@@ -59,14 +59,9 @@ htd::ConstCollection<htd::Hyperedge> htd::HypertreeDecomposition::coveringEdges(
 {
     if (isVertex(vertex))
     {
-        auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
+        auto & edgeLabel = dynamic_cast<const htd::Label<htd::ConstCollection<htd::Hyperedge>> *>(&(vertexLabel(htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER, vertex)))->value();
 
-        if (edgeLabeling.isLabeledVertex(vertex))
-        {
-            auto & edgeLabel = dynamic_cast<const htd::Label<htd::ConstCollection<htd::Hyperedge>> *>(&(edgeLabeling.vertexLabel(vertex)))->value();
-
-            return htd::ConstCollection<htd::Hyperedge>(edgeLabel);
-        }
+        return htd::ConstCollection<htd::Hyperedge>(edgeLabel);
     }
     else
     {
@@ -80,9 +75,7 @@ void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const h
 {
     if (isVertex(vertex))
     {
-        auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
-
-        edgeLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(htd::VectorAdapter<htd::Hyperedge>(content))));
+        setVertexLabel(htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(htd::VectorAdapter<htd::Hyperedge>(content))));
     }
     else
     {
@@ -94,9 +87,7 @@ void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const h
 {
     if (isVertex(vertex))
     {
-        auto & edgeLabeling = (*labelings_)[htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER];
-
-        edgeLabeling.setVertexLabel(vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(htd::VectorAdapter<htd::Hyperedge>(content))));
+        setVertexLabel(htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(htd::VectorAdapter<htd::Hyperedge>(content))));
     }
     else
     {

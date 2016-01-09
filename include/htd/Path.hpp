@@ -160,7 +160,7 @@ namespace htd
 
             Path & operator=(const Path & other);
 
-            Path & operator=(const htd::IPath & other);
+            Path & operator=(const htd::IPath & other) HTD_OVERRIDE;
 
         protected:
 

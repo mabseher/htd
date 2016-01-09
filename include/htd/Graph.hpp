@@ -119,7 +119,7 @@ namespace htd
 
             Graph * clone(void) const HTD_OVERRIDE;
 
-            Graph & operator=(const htd::Graph & original);
+            Graph & operator=(const Graph & original);
 
             Graph & operator=(const htd::IGraph & original) HTD_OVERRIDE;
 

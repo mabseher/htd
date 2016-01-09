@@ -1218,14 +1218,6 @@ htd::Path * htd::Path::clone(void) const
     return new Path(*this);
 }
 
-htd::Path & htd::Path::operator=(const htd::IPath & original)
-{
-    //TODO Implement!
-    HTD_UNUSED(original)
-
-    return *this;
-}
-
 htd::Path & htd::Path::operator=(const htd::Path & other)
 {
     if (this != &other)
@@ -1251,6 +1243,14 @@ htd::Path & htd::Path::operator=(const htd::Path & other)
 
         this->deletions_ = other.deletions_;
     }
+
+    return *this;
+}
+
+htd::Path & htd::Path::operator=(const htd::IPath & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
 
     return *this;
 }

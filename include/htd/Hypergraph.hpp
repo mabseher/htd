@@ -113,7 +113,7 @@ namespace htd
 
             Hypergraph * clone(void) const HTD_OVERRIDE;
 
-            Hypergraph & operator=(const htd::Hypergraph & original);
+            Hypergraph & operator=(const Hypergraph & original);
 
             Hypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
 

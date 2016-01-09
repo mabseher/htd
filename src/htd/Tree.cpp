@@ -1292,14 +1292,6 @@ htd::Tree * htd::Tree::clone(void) const
     return new Tree(*this);
 }
 
-htd::Tree & htd::Tree::operator=(const htd::ITree & original)
-{
-    //TODO Implement!
-    HTD_UNUSED(original)
-
-    return *this;
-}
-
 htd::Tree & htd::Tree::operator=(const htd::Tree & other)
 {
     if (this != &other)
@@ -1325,6 +1317,14 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & other)
 
         this->deletions_ = other.deletions_;
     }
+
+    return *this;
+}
+
+htd::Tree & htd::Tree::operator=(const htd::ITree & original)
+{
+    //TODO Implement!
+    HTD_UNUSED(original)
 
     return *this;
 }

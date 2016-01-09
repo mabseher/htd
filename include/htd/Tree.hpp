@@ -156,7 +156,7 @@ namespace htd
 
             Tree & operator=(const Tree & other);
 
-            Tree & operator=(const htd::ITree & other);
+            Tree & operator=(const htd::ITree & other) HTD_OVERRIDE;
 
         protected:
 

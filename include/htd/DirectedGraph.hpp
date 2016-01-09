@@ -137,7 +137,7 @@ namespace htd
 
             DirectedGraph * clone(void) const HTD_OVERRIDE;
 
-            DirectedGraph & operator=(const htd::DirectedGraph & original);
+            DirectedGraph & operator=(const DirectedGraph & original);
 
             DirectedGraph & operator=(const htd::IDirectedGraph & original) HTD_OVERRIDE;
 

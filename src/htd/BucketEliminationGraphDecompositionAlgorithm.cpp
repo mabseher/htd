@@ -395,7 +395,12 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             std::cout << std::endl;
         })
 
-        //TODO Fill ret!
+        *ret = result.internalGraph();
+
+        for (htd::vertex_t vertex : result.vertices())
+        {
+            ret->setBagContent(result.lookupVertex(vertex), buckets[vertex - htd::Vertex::FIRST]);
+        }
     }
 
     return ret;

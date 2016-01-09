@@ -42,6 +42,10 @@ namespace htd
 
             virtual IMutableGraphDecomposition * clone(void) const = 0;
 
+            virtual IMutableGraphDecomposition & operator=(const htd::IGraph & original) = 0;
+
+            virtual IMutableGraphDecomposition & operator=(const htd::ILabeledGraph & original) = 0;
+
             virtual IMutableGraphDecomposition & operator=(const htd::IGraphDecomposition & original) = 0;
     };
 

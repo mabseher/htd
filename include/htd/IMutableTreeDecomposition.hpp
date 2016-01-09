@@ -42,6 +42,10 @@ namespace htd
 
             virtual IMutableTreeDecomposition * clone(void) const = 0;
 
+            virtual IMutableTreeDecomposition & operator=(const htd::ITree & original) = 0;
+
+            virtual IMutableTreeDecomposition & operator=(const htd::ILabeledTree & original) = 0;
+
             virtual IMutableTreeDecomposition & operator=(const htd::ITreeDecomposition & original) = 0;
     };
 

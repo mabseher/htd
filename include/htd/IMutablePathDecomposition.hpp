@@ -42,6 +42,10 @@ namespace htd
 
             virtual IMutablePathDecomposition * clone(void) const = 0;
 
+            virtual IMutablePathDecomposition & operator=(const htd::IPath & original) = 0;
+
+            virtual IMutablePathDecomposition & operator=(const htd::ILabeledPath & original) = 0;
+
             virtual IMutablePathDecomposition & operator=(const htd::IPathDecomposition & original) = 0;
     };
 

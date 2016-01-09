@@ -162,35 +162,35 @@ const htd::vertex_t & htd::Hyperedge::operator[](htd::index_t index) const
     return *position;
 }
 
-htd::Hyperedge & htd::Hyperedge::operator=(const htd::Hyperedge & other)
+htd::Hyperedge & htd::Hyperedge::operator=(const htd::Hyperedge & original)
 {
-    id_ = other.id_;
+    id_ = original.id_;
 
     written_ = false;
 
-    elements_ = other.elements_;
+    elements_ = original.elements_;
 
     return *this;
 }
 
-bool htd::Hyperedge::operator<(const htd::Hyperedge & other) const
+bool htd::Hyperedge::operator<(const htd::Hyperedge & rhs) const
 {
-    return std::tie(*elements_, id_) < std::tie(*(other.elements_), other.id_);
+    return std::tie(*elements_, id_) < std::tie(*(rhs.elements_), rhs.id_);
 }
 
-bool htd::Hyperedge::operator>(const htd::Hyperedge & other) const
+bool htd::Hyperedge::operator>(const htd::Hyperedge & rhs) const
 {
-    return std::tie(*elements_, id_) > std::tie(*(other.elements_), other.id_);
+    return std::tie(*elements_, id_) > std::tie(*(rhs.elements_), rhs.id_);
 }
 
-bool htd::Hyperedge::operator==(const htd::Hyperedge & other) const
+bool htd::Hyperedge::operator==(const htd::Hyperedge & rhs) const
 {
-    return other.id_ == id_ && *(other.elements_) == *elements_;
+    return rhs.id_ == id_ && *(rhs.elements_) == *elements_;
 }
 
-bool htd::Hyperedge::operator!=(const htd::Hyperedge & other) const
+bool htd::Hyperedge::operator!=(const htd::Hyperedge & rhs) const
 {
-    return other.id_ != id_ || *(other.elements_) != *elements_;
+    return rhs.id_ != id_ || *(rhs.elements_) != *elements_;
 }
 
 #endif /* HTD_HTD_HYPEREDGE_CPP */

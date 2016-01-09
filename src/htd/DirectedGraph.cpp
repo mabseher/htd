@@ -584,16 +584,16 @@ htd::DirectedGraph * htd::DirectedGraph::clone(void) const
     return new DirectedGraph(*this);
 }
 
-htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::DirectedGraph & other)
+htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::DirectedGraph & original)
 {
-    if (this != &other)
+    if (this != &original)
     {
         delete base_;
 
-        base_ = other.base_->clone();
+        base_ = original.base_->clone();
 
-        incomingNeighborhood_ = other.incomingNeighborhood_;
-        outgoingNeighborhood_ = other.outgoingNeighborhood_;
+        incomingNeighborhood_ = original.incomingNeighborhood_;
+        outgoingNeighborhood_ = original.outgoingNeighborhood_;
     }
 
     return *this;

@@ -75,7 +75,7 @@ namespace htd
                 }
             }
 
-            ConstIterator & operator=(htd::Iterator<T> & other)
+            ConstIterator & operator=(htd::Iterator<T> & original)
             {
                 if (baseIterator_ != nullptr)
                 {
@@ -84,15 +84,15 @@ namespace htd
                     baseIterator_ = nullptr;
                 }
 
-                if (other.baseIterator_ != nullptr)
+                if (original.baseIterator_ != nullptr)
                 {
-                    baseIterator_ = other;
+                    baseIterator_ = original;
                 }
 
                 return *this;
             }
 
-            ConstIterator & operator=(ConstIterator<T> & other)
+            ConstIterator & operator=(ConstIterator<T> & original)
             {
                 if (baseIterator_ != nullptr)
                 {
@@ -101,9 +101,9 @@ namespace htd
                     baseIterator_ = nullptr;
                 }
 
-                if (other.baseIterator_ != nullptr)
+                if (original.baseIterator_ != nullptr)
                 {
-                    baseIterator_ = other.baseIterator_->clone();
+                    baseIterator_ = original.baseIterator_->clone();
                 }
 
                 return *this;
@@ -128,23 +128,23 @@ namespace htd
                 return ret;
             }
 
-            ConstIterator<T> & operator=(const ConstIterator<T> & other)
+            ConstIterator<T> & operator=(const ConstIterator<T> & original)
             {
                 if (baseIterator_!= nullptr)
                 {
                     delete baseIterator_;
                 }
 
-                baseIterator_ = other.baseIterator_->clone();
+                baseIterator_ = original.baseIterator_->clone();
 
                 return *this;
             }
 
-            bool operator==(const htd::ConstIteratorBase<T> & other) const HTD_OVERRIDE
+            bool operator==(const htd::ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
             {
                 bool ret = false;
 
-                const ConstIterator<T> * o = dynamic_cast<const ConstIterator<T> *>(&other);
+                const ConstIterator<T> * o = dynamic_cast<const ConstIterator<T> *>(&rhs);
 
                 if (o != nullptr)
                 {
@@ -161,30 +161,30 @@ namespace htd
                 return ret;
             }
 
-            bool operator==(const ConstIterator<T> & other) const
+            bool operator==(const ConstIterator<T> & rhs) const
             {
                 bool ret = false;
 
                 if (baseIterator_ == nullptr)
                 {
-                    ret = other.baseIterator_ == nullptr;
+                    ret = rhs.baseIterator_ == nullptr;
                 }
-                else if (other.baseIterator_ != nullptr)
+                else if (rhs.baseIterator_ != nullptr)
                 {
-                    ret = *baseIterator_ == *(other.baseIterator_ );
+                    ret = *baseIterator_ == *(rhs.baseIterator_ );
                 }
 
                 return ret;
             }
 
-            bool operator!=(const htd::ConstIteratorBase<T> & other) const HTD_OVERRIDE
+            bool operator!=(const htd::ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
             {
-                return !(*this == other);
+                return !(*this == rhs);
             }
 
-            bool operator!=(const ConstIterator<T> & other) const
+            bool operator!=(const ConstIterator<T> & rhs) const
             {
-                return !(*this == other);
+                return !(*this == rhs);
             }
 
             const T * operator->(void) const HTD_OVERRIDE

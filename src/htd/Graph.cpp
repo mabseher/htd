@@ -395,13 +395,13 @@ htd::Graph * htd::Graph::clone(void) const
     return new Graph(*this);
 }
 
-htd::Graph & htd::Graph::operator=(const htd::Graph & other)
+htd::Graph & htd::Graph::operator=(const htd::Graph & original)
 {
-    if (this != &other)
+    if (this != &original)
     {
         delete base_;
 
-        base_ = other.base_->clone();
+        base_ = original.base_->clone();
     }
 
     return *this;

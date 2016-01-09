@@ -53,9 +53,9 @@ namespace htd
 
             }
 
-            IteratorWrapper & operator=(IteratorWrapper & other)
+            IteratorWrapper & operator=(IteratorWrapper & original)
             {
-                baseIterator_ = other.baseIterator_;
+                baseIterator_ = original.baseIterator_;
 
                 return *this;
             }
@@ -76,28 +76,28 @@ namespace htd
                 return ret;
             }
 
-            bool operator==(const htd::ConstIteratorBase<T> & other) const HTD_OVERRIDE
+            bool operator==(const htd::ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
             {
-                const IteratorWrapper<Iter, T> * o = dynamic_cast<const IteratorWrapper<Iter, T> *>(&other);
+                const IteratorWrapper<Iter, T> * o = dynamic_cast<const IteratorWrapper<Iter, T> *>(&rhs);
 
                 return o != nullptr && baseIterator_ == o->baseIterator_;
             }
 
-            bool operator==(const IteratorWrapper<Iter, T> & other) const
+            bool operator==(const IteratorWrapper<Iter, T> & rhs) const
             {
-                return baseIterator_ == other.baseIterator_;
+                return baseIterator_ == rhs.baseIterator_;
             }
 
-            bool operator!=(const htd::ConstIteratorBase<T> & other) const HTD_OVERRIDE
+            bool operator!=(const htd::ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
             {
-                const IteratorWrapper<Iter, T> * o = dynamic_cast<const IteratorWrapper<Iter, T> *>(&other);
+                const IteratorWrapper<Iter, T> * o = dynamic_cast<const IteratorWrapper<Iter, T> *>(&rhs);
 
                 return o != nullptr && baseIterator_ != o->baseIterator_;
             }
 
-            bool operator!=(const IteratorWrapper<Iter, T> & other) const
+            bool operator!=(const IteratorWrapper<Iter, T> & rhs) const
             {
-                return baseIterator_ != other.baseIterator_;
+                return baseIterator_ != rhs.baseIterator_;
             }
 
             T * operator->(void) HTD_OVERRIDE

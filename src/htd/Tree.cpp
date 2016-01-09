@@ -1292,18 +1292,18 @@ htd::Tree * htd::Tree::clone(void) const
     return new Tree(*this);
 }
 
-htd::Tree & htd::Tree::operator=(const htd::Tree & other)
+htd::Tree & htd::Tree::operator=(const htd::Tree & original)
 {
-    if (this != &other)
+    if (this != &original)
     {
         if (this->root_ != htd::Vertex::UNKNOWN)
         {
             removeRoot();
         }
 
-        nodes_.reserve(other.nodes_.size());
+        nodes_.reserve(original.nodes_.size());
 
-        for (auto & node : other.nodes_)
+        for (auto & node : original.nodes_)
         {
             if (node != nullptr)
             {
@@ -1311,11 +1311,11 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & other)
             }
         }
 
-        this->root_ = other.root_;
+        this->root_ = original.root_;
 
-        this->size_ = other.size_;
+        this->size_ = original.size_;
 
-        this->deletions_ = other.deletions_;
+        this->deletions_ = original.deletions_;
     }
 
     return *this;

@@ -69,14 +69,14 @@ namespace htd
                 return new Label<T>(*value_);
             }
 
-            bool operator==(const Label<T> & other) const
+            bool operator==(const Label<T> & rhs) const
             {
-                return *value_ == other.value();
+                return *value_ == rhs.value();
             }
 
-            bool operator==(const htd::ILabel & other) const HTD_OVERRIDE
+            bool operator==(const htd::ILabel & rhs) const HTD_OVERRIDE
             {
-                 const Label<T> * o = dynamic_cast<const Label<T> *>(&other);
+                 const Label<T> * o = dynamic_cast<const Label<T> *>(&rhs);
 
                  return o != nullptr && *value_ == o->value();
             }

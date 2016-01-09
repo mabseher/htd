@@ -51,9 +51,9 @@ namespace htd
 
             }
 
-            ConstIteratorWrapper & operator=(ConstIteratorWrapper & other)
+            ConstIteratorWrapper & operator=(ConstIteratorWrapper & original)
             {
-                baseIterator_ = other.baseIterator_;
+                baseIterator_ = original.baseIterator_;
 
                 return *this;
             }
@@ -74,28 +74,28 @@ namespace htd
                 return ret;
             }
 
-            bool operator==(const ConstIteratorBase<T> & other) const HTD_OVERRIDE
+            bool operator==(const ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
             {
-                const ConstIteratorWrapper<Iter, T> * o = dynamic_cast<const ConstIteratorWrapper<Iter, T> *>(&other);
+                const ConstIteratorWrapper<Iter, T> * o = dynamic_cast<const ConstIteratorWrapper<Iter, T> *>(&rhs);
 
                 return o != nullptr && baseIterator_ == o->baseIterator_;
             }
 
-            bool operator==(const ConstIteratorWrapper<Iter, T> & other) const
+            bool operator==(const ConstIteratorWrapper<Iter, T> & rhs) const
             {
-                return baseIterator_ == other.baseIterator_;
+                return baseIterator_ == rhs.baseIterator_;
             }
 
-            bool operator!=(const ConstIteratorBase<T> & other) const HTD_OVERRIDE
+            bool operator!=(const ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
             {
-                const ConstIteratorWrapper<Iter, T> * o = dynamic_cast<const ConstIteratorWrapper<Iter, T> *>(&other);
+                const ConstIteratorWrapper<Iter, T> * o = dynamic_cast<const ConstIteratorWrapper<Iter, T> *>(&rhs);
 
                 return o != nullptr && baseIterator_ != o->baseIterator_;
             }
 
-            bool operator!=(const ConstIteratorWrapper<Iter, T> & other) const
+            bool operator!=(const ConstIteratorWrapper<Iter, T> & rhs) const
             {
-                return baseIterator_ != other.baseIterator_;
+                return baseIterator_ != rhs.baseIterator_;
             }
 
             const T * operator->(void) const HTD_OVERRIDE

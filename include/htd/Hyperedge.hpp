@@ -79,15 +79,15 @@ namespace htd
 
             const htd::vertex_t & operator[](htd::index_t index) const;
 
-            Hyperedge & operator=(const Hyperedge & other);
+            Hyperedge & operator=(const Hyperedge & original);
 
-            bool operator<(const Hyperedge & other) const;
+            bool operator<(const Hyperedge & rhs) const;
 
-            bool operator>(const Hyperedge & other) const;
+            bool operator>(const Hyperedge & rhs) const;
 
-            bool operator==(const Hyperedge & other) const;
+            bool operator==(const Hyperedge & rhs) const;
 
-            bool operator!=(const Hyperedge & other) const;
+            bool operator!=(const Hyperedge & rhs) const;
 
         private:
             bool written_;

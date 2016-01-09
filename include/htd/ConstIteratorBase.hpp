@@ -41,9 +41,9 @@ namespace htd
 
             virtual const T & operator*(void) const = 0;
 
-            virtual bool operator==(const ConstIteratorBase<T> & other) const = 0;
+            virtual bool operator==(const ConstIteratorBase<T> & rhs) const = 0;
 
-            virtual bool operator!=(const ConstIteratorBase<T> & other) const = 0;
+            virtual bool operator!=(const ConstIteratorBase<T> & rhs) const = 0;
 
             virtual ConstIteratorBase<T> * clone(void) const = 0;
     };

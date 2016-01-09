@@ -751,23 +751,23 @@ htd::Hypergraph * htd::Hypergraph::clone(void) const
     return new htd::Hypergraph(*this);
 }
 
-htd::Hypergraph & htd::Hypergraph::operator=(const htd::Hypergraph & other)
+htd::Hypergraph & htd::Hypergraph::operator=(const htd::Hypergraph & original)
 {
-    if (this != &other)
+    if (this != &original)
     {
-        size_ = other.size_;
+        size_ = original.size_;
 
-        next_edge_ = other.next_edge_;
+        next_edge_ = original.next_edge_;
 
-        next_vertex_ = other.next_vertex_;
+        next_vertex_ = original.next_vertex_;
 
-        vertices_ = other.vertices_;
+        vertices_ = original.vertices_;
 
-        deletions_ = other.deletions_;
+        deletions_ = original.deletions_;
 
-        edges_ = other.edges_;
+        edges_ = original.edges_;
 
-        neighborhood_ = other.neighborhood_;
+        neighborhood_ = original.neighborhood_;
     }
 
     return *this;

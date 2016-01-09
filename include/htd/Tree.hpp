@@ -154,9 +154,9 @@ namespace htd
 
             Tree * clone(void) const HTD_OVERRIDE;
 
-            Tree & operator=(const Tree & other);
+            Tree & operator=(const Tree & original);
 
-            Tree & operator=(const htd::ITree & other) HTD_OVERRIDE;
+            Tree & operator=(const htd::ITree & original) HTD_OVERRIDE;
 
         protected:
 

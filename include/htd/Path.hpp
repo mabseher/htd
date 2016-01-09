@@ -158,9 +158,9 @@ namespace htd
 
             Path * clone(void) const HTD_OVERRIDE;
 
-            Path & operator=(const Path & other);
+            Path & operator=(const Path & original);
 
-            Path & operator=(const htd::IPath & other) HTD_OVERRIDE;
+            Path & operator=(const htd::IPath & original) HTD_OVERRIDE;
 
         protected:
 

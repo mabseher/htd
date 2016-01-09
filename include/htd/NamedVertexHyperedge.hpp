@@ -137,33 +137,33 @@ namespace htd
                 return *position;
             }
 
-            NamedVertexHyperedge & operator=(const NamedVertexHyperedge & other)
+            NamedVertexHyperedge & operator=(const NamedVertexHyperedge & original)
             {
-                id_ = other.id_;
+                id_ = original.id_;
 
-                elements_ = other.elements_;
+                elements_ = original.elements_;
 
                 return *this;
             }
 
-            bool operator<(const NamedVertexHyperedge & other) const
+            bool operator<(const NamedVertexHyperedge & rhs) const
             {
-                return std::tie(elements_, id_) < std::tie(other.elements_, other.id_);
+                return std::tie(elements_, id_) < std::tie(rhs.elements_, rhs.id_);
             }
 
-            bool operator>(const NamedVertexHyperedge & other) const
+            bool operator>(const NamedVertexHyperedge & rhs) const
             {
-                return std::tie(elements_, id_) > std::tie(other.elements_, other.id_);
+                return std::tie(elements_, id_) > std::tie(rhs.elements_, rhs.id_);
             }
 
-            bool operator==(const NamedVertexHyperedge & other) const
+            bool operator==(const NamedVertexHyperedge & rhs) const
             {
-                return other.id_ == id_ && other.elements_ == elements_;
+                return rhs.id_ == id_ && rhs.elements_ == elements_;
             }
 
-            bool operator!=(const NamedVertexHyperedge & other) const
+            bool operator!=(const NamedVertexHyperedge & rhs) const
             {
-                return other.id_ != id_ || other.elements_ != elements_;
+                return rhs.id_ != id_ || rhs.elements_ != elements_;
             }
 
         private:

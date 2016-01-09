@@ -31,7 +31,6 @@
 
 #include <string>
 #include <unordered_map>
-#include <unordered_set>
 
 namespace htd
 {
@@ -182,9 +181,7 @@ namespace htd
 
             htd::vertex_container vertices_;
 
-            std::vector<Node *> nodes_;
-
-            std::unordered_set<htd::vertex_t> deletions_;
+            std::unordered_map<htd::id_t, Node *> nodes_;
 
             void deleteNode(htd::Tree::Node * node);
     };

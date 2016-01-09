@@ -39,64 +39,24 @@
 #include <utility>
 #include <vector>
 
-htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_()
+htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_vertex_(htd::Vertex::FIRST), nodes_()
 {
 
 }
 
-htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_vertex_(htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), deletions_(original.deletions_)
+htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_vertex_(htd::Vertex::FIRST), vertices_(original.vertices_), nodes_()
 {
     nodes_.reserve(original.nodes_.size());
     
-    for (auto & node : original.nodes_)
+    for (const auto & node : original.nodes_)
     {
-        if (node != nullptr)
-        {
-            nodes_.push_back(new htd::Tree::Node(*node));
-        }
+        nodes_.insert(std::make_pair(node.first, new htd::Tree::Node(*(node.second))));
     }
 }
 
-htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(original.root()), next_vertex_(htd::Vertex::FIRST), nodes_(), deletions_()
+htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_vertex_(htd::Vertex::FIRST), nodes_()
 {
-    htd::vertex_t maximumVertex = 0;
-
-    for (auto & node : original.vertices())
-    {
-        if (node - htd::Vertex::FIRST > nodes_.size())
-        {
-            nodes_.insert(nodes_.end(), node - nodes_.size() - htd::Vertex::FIRST, nullptr);
-
-            for (htd::index_t index = nodes_.size(); index < node; index++)
-            {
-                deletions_.insert(index);
-            }
-        }
-
-        size_++;
-
-        nodes_.push_back(new htd::Tree::Node(node, original.parent(node)));
-
-        const htd::ConstCollection<htd::vertex_t> & childContainer = original.children(node);
-
-        std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(nodes_[node - htd::Vertex::FIRST]->children));
-
-        if (node > maximumVertex)
-        {
-            maximumVertex = node;
-        }
-
-        vertices_.push_back(node);
-    }
-
-    if (maximumVertex >= htd::Vertex::FIRST)
-    {
-        next_vertex_ = maximumVertex + 1;
-    }
-    else
-    {
-        next_vertex_ = htd::Vertex::FIRST;
-    }
+    *this = original;
 }
 
 htd::Tree::~Tree()
@@ -105,12 +65,7 @@ htd::Tree::~Tree()
     {
         for (auto it = nodes_.begin(); it != nodes_.end(); it++)
         {
-            if (*it != nullptr)
-            {
-                delete *it;
-
-                *it = nullptr;
-            }
+            delete it->second;
         }
 
         nodes_.clear();
@@ -168,7 +123,7 @@ std::size_t htd::Tree::edgeCount(htd::vertex_t vertex) const
 
 bool htd::Tree::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && deletions_.find(vertex) == deletions_.end();
+    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && nodes_.find(vertex) != nodes_.end();
 }
 
 bool htd::Tree::isEdge(htd::id_t edgeId) const
@@ -256,34 +211,31 @@ bool htd::Tree::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
     
     if (isVertex(vertex1) && isVertex(vertex2))
     {
-        auto & node = nodes_[vertex1 - htd::Vertex::FIRST];
+        const auto & node = *(nodes_.at(vertex1));
 
-        if (node != nullptr)
-        {
-            auto & children = node->children;
+        const auto & children = node.children;
             
-            if (node->parent != htd::Vertex::UNKNOWN)
+        if (node.parent != htd::Vertex::UNKNOWN)
+        {
+            if (node.parent == vertex2)
             {
-                if (node->parent == vertex2)
+                ret = true;
+            }
+        }
+
+        if (!ret)
+        {
+            for (auto it = children.begin(); it != children.end();)
+            {
+                if (*it == vertex2)
                 {
                     ret = true;
+
+                    it = children.end();
                 }
-            }
-
-            if (!ret)
-            {
-                for (auto it = children.begin(); it != children.end();)
+                else
                 {
-                    if (*it == vertex2)
-                    {
-                        ret = true;
-
-                        it = children.end();
-                    }
-                    else
-                    {
-                        it++;
-                    }
+                    it++;
                 }
             }
         }
@@ -308,17 +260,14 @@ std::size_t htd::Tree::neighborCount(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+        const auto & node = *(nodes_.at(vertex));
 
-        if (node != nullptr)
+        if (node.parent != htd::Vertex::UNKNOWN)
         {
-            if (node->parent != htd::Vertex::UNKNOWN)
-            {
-                ret++;
-            }
-
-            ret += node->children.size();
+            ret++;
         }
+
+        ret += node.children.size();
     }
     
     return ret;
@@ -335,22 +284,16 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::neighbors(htd::vertex_t vertex) c
 
     auto & result = ret.container();
 
-    auto & node = nodes_[vertex - htd::Vertex::FIRST];
+    const auto & node = *(nodes_.at(vertex));
 
-    if (node != nullptr)
+    const auto & children = node.children;
+
+    if (node.parent != htd::Vertex::UNKNOWN)
     {
-        auto & children = node->children;
-
-        if (node->parent != htd::Vertex::UNKNOWN)
-        {
-            result.push_back(node->parent);
-        }
-
-        for (auto child : children)
-        {
-            result.push_back(child);
-        }
+        result.push_back(node.parent);
     }
+
+    std::copy(children.begin(), children.end(), std::back_inserter(result));
 
     std::sort(result.begin(), result.end());
 
@@ -409,29 +352,26 @@ htd::ConstCollection<htd::edge_t> htd::Tree::edges(void) const
 
     auto & result = ret.container();
 
-    for (auto & currentNode : nodes_)
+    for (const auto & currentNode : nodes_)
     {
-        if (currentNode != nullptr)
+        const auto & children = currentNode.second->children;
+
+        for (auto child : children)
         {
-            auto & children = currentNode->children;
+            htd::edge_t edge;
 
-            for (auto child : children)
+            if (currentNode.first < child)
             {
-                htd::edge_t edge;
-
-                if (currentNode->id < child)
-                {
-                    edge.first = currentNode->id;
-                    edge.second = child;
-                }
-                else
-                {
-                    edge.first = child;
-                    edge.second = currentNode->id;
-                }
-
-                result.push_back(edge);
+                edge.first = currentNode.first;
+                edge.second = child;
             }
+            else
+            {
+                edge.first = child;
+                edge.second = currentNode.first;
+            }
+
+            result.push_back(edge);
         }
     }
 
@@ -446,47 +386,44 @@ htd::ConstCollection<htd::edge_t> htd::Tree::edges(htd::vertex_t vertex) const
 
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+        const auto & node = *(nodes_.at(vertex));
 
-        if (node != nullptr)
+        const auto & children = node.children;
+
+        if (node.parent != htd::Vertex::UNKNOWN)
         {
-            auto & children = node->children;
+            htd::edge_t edge;
 
-            if (node->parent != htd::Vertex::UNKNOWN)
+            if (node.parent < node.id)
             {
-                htd::edge_t edge;
-
-                if (node->parent < node->id)
-                {
-                    edge.first = node->parent;
-                    edge.second = node->id;
-                }
-                else
-                {
-                    edge.first = node->id;
-                    edge.second = node->parent;
-                }
-
-                result.push_back(edge);
+                edge.first = node.parent;
+                edge.second = node.id;
+            }
+            else
+            {
+                edge.first = node.id;
+                edge.second = node.parent;
             }
 
-            for (auto child : children)
+            result.push_back(edge);
+        }
+
+        for (auto child : children)
+        {
+            htd::edge_t edge;
+
+            if (node.id < child)
             {
-                htd::edge_t edge;
-
-                if (node->id < child)
-                {
-                    edge.first = node->id;
-                    edge.second = child;
-                }
-                else
-                {
-                    edge.first = child;
-                    edge.second = node->id;
-                }
-
-                result.push_back(edge);
+                edge.first = node.id;
+                edge.second = child;
             }
+            else
+            {
+                edge.first = child;
+                edge.second = node.id;
+            }
+
+            result.push_back(edge);
         }
     }
     else
@@ -537,31 +474,28 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(void) const
 
     htd::id_t id = 0;
 
-    for (auto & currentNode : nodes_)
+    for (const auto & currentNode : nodes_)
     {
-        if (currentNode != nullptr)
+        const auto & children = currentNode.second->children;
+
+        for (auto child : children)
         {
-            auto & children = currentNode->children;
+            htd::Hyperedge hyperedge(id);
 
-            for (auto child : children)
+            if (currentNode.first < child)
             {
-                htd::Hyperedge hyperedge(id);
-
-                if (currentNode->id < child)
-                {
-                    hyperedge.push_back(currentNode->id);
-                    hyperedge.push_back(child);
-                }
-                else
-                {
-                    hyperedge.push_back(child);
-                    hyperedge.push_back(currentNode->id);
-                }
-
-                result.push_back(hyperedge);
-
-                ++id;
+                hyperedge.push_back(currentNode.first);
+                hyperedge.push_back(child);
             }
+            else
+            {
+                hyperedge.push_back(child);
+                hyperedge.push_back(currentNode.first);
+            }
+
+            result.push_back(hyperedge);
+
+            ++id;
         }
     }
 
@@ -576,20 +510,15 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t vertex)
 
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+        const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = htd::Tree::hyperedges();
 
-        if (node != nullptr)
+        for (auto it = hyperedgeCollection.begin(); it != hyperedgeCollection.end(); ++it)
         {
-            const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = htd::Tree::hyperedges();
+            const htd::Hyperedge & currentHyperedge = *it;
 
-            for (auto it = hyperedgeCollection.begin(); it != hyperedgeCollection.end(); ++it)
+            if (std::find(currentHyperedge.begin(), currentHyperedge.end(), vertex) != currentHyperedge.end())
             {
-                const htd::Hyperedge & currentHyperedge = *it;
-
-                if (std::find(currentHyperedge.begin(), currentHyperedge.end(), vertex) != currentHyperedge.end())
-                {
-                    result.push_back(currentHyperedge);
-                }
+                result.push_back(currentHyperedge);
             }
         }
     }
@@ -675,12 +604,7 @@ htd::vertex_t htd::Tree::parent(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
-
-        if (node != nullptr)
-        {
-            ret = node->parent;
-        }
+        ret = nodes_.at(vertex)->parent;
     }
     
     return ret;
@@ -692,12 +616,7 @@ bool htd::Tree::isParent(htd::vertex_t vertex, htd::vertex_t parent) const
 
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
-
-        if (node != nullptr)
-        {
-            ret = node->parent == parent;
-        }
+        ret = nodes_.at(vertex)->parent == parent;
     }
     else
     {
@@ -713,12 +632,11 @@ std::size_t htd::Tree::childCount(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];;
-
-        if (node != nullptr)
-        {
-            ret = node->children.size();
-        }
+        ret = nodes_.at(vertex)->children.size();
+    }
+    else
+    {
+        throw std::out_of_range("std::size_t htd::Tree::childCount(htd::vertex_t) const");
     }
 
     return ret;
@@ -731,7 +649,7 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::children(htd::vertex_t vertex) co
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::Tree::children(htd::vertex_t) const");
     }
 
-    return htd::ConstCollection<htd::vertex_t>::getInstance(nodes_[vertex - htd::Vertex::FIRST]->children);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(nodes_.at(vertex)->children);
 }
 
 htd::vertex_t htd::Tree::child(htd::vertex_t vertex, htd::index_t index) const
@@ -740,20 +658,13 @@ htd::vertex_t htd::Tree::child(htd::vertex_t vertex, htd::index_t index) const
     
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+        const auto & node = *(nodes_.at(vertex));
 
-        if (node != nullptr)
+        const auto & children = node.children;
+
+        if (index < children.size())
         {
-            auto & children = node->children;
-            
-            if (index < children.size())
-            {
-                ret = children[index];
-            }
-            else
-            {
-                throw std::out_of_range("bool htd::Tree::child(htd::vertex_t, htd::index_t) const");
-            }
+            ret = children[index];
         }
         else
         {
@@ -774,14 +685,9 @@ bool htd::Tree::isChild(htd::vertex_t vertex, htd::vertex_t child) const
 
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+        const auto & children = nodes_.at(vertex)->children;
 
-        if (node != nullptr)
-        {
-            auto & children = node->children;
-
-            ret = std::find(children.begin(), children.end(), child) != children.end();
-        }
+        ret = std::find(children.begin(), children.end(), child) != children.end();
     }
     else
     {
@@ -795,15 +701,15 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 {
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+        const auto & node = nodes_.at(vertex);
 
         if (node != nullptr)
         {
-            auto & children = node->children;
+            const auto & children = node->children;
 
             if (node->parent != htd::Vertex::UNKNOWN)
             {
-                auto & parent = nodes_[node->parent  - htd::Vertex::FIRST];
+                auto & parent = nodes_.at(node->parent);
 
                 auto & siblings = parent->children;
 
@@ -815,7 +721,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                     }
                     case 1:
                     {
-                        nodes_[children[0] - htd::Vertex::FIRST]->parent = node->parent;
+                        nodes_.at(children[0])->parent = node->parent;
 
                         siblings.push_back(children[0]);
 
@@ -825,9 +731,9 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                     {
                         htd::vertex_t selectedChild = children[0];
 
-                        auto & selectedChildNode = *(nodes_[selectedChild - htd::Vertex::FIRST]);
+                        auto & selectedChildNode = *(nodes_.at(selectedChild));
 
-                        nodes_[selectedChild - htd::Vertex::FIRST]->parent = node->parent;
+                        nodes_.at(selectedChild)->parent = node->parent;
 
                         htd::vertex_container & selectedGrandChildren = selectedChildNode.children;
 
@@ -842,7 +748,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                         {
                             htd::vertex_t child = *it;
 
-                            nodes_[child - htd::Vertex::FIRST]->parent = selectedChild;
+                            nodes_.at(child)->parent = selectedChild;
 
                             auto position = std::lower_bound(selectedGrandChildren.begin(), selectedGrandChildren.end(), child);
 
@@ -872,7 +778,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                     {
                         root_ = children[0];
 
-                        nodes_[root_ - htd::Vertex::FIRST]->parent = htd::Vertex::UNKNOWN;
+                        nodes_.at(root_)->parent = htd::Vertex::UNKNOWN;
 
                         deleteNode(node);
 
@@ -882,7 +788,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                     {
                         root_ = children[0];
 
-                        auto & newRootNode = *(nodes_[root_ - htd::Vertex::FIRST]);
+                        auto & newRootNode = *(nodes_.at(root_));
 
                         htd::vertex_container & newRootChildren = newRootNode.children;
 
@@ -892,7 +798,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                         {
                             htd::vertex_t child = *it;
 
-                            nodes_[child - htd::Vertex::FIRST]->parent = root_;
+                            nodes_.at(child)->parent = root_;
 
                             auto position = std::lower_bound(newRootChildren.begin(), newRootChildren.end(), child);
 
@@ -940,16 +846,11 @@ htd::vertex_t htd::Tree::insertRoot(void)
 
         for (auto it = nodes_.begin(); it != nodes_.end(); it++)
         {
-            if (*it != nullptr)
-            {
-                delete *it;
-
-                *it = nullptr;
-            }
+            delete it->second;
         }
 
         nodes_.clear();
-        nodes_.push_back(new htd::Tree::Node(root_, htd::Vertex::UNKNOWN));
+        nodes_.insert(std::make_pair(root_, new htd::Tree::Node(root_, htd::Vertex::UNKNOWN)));
 
         vertices_.push_back(root_);
 
@@ -967,12 +868,7 @@ void htd::Tree::removeRoot(void)
     
         for (auto it = nodes_.begin(); it != nodes_.end(); it++)
         {
-            if (*it != nullptr)
-            {
-                delete *it;
-
-                *it = nullptr;
-            }
+            delete it->second;
         }
     }
         
@@ -981,8 +877,6 @@ void htd::Tree::removeRoot(void)
     nodes_.clear();
 
     vertices_.clear();
-    
-    deletions_.clear();
 }
 
 htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
@@ -991,7 +885,7 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
     
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_.at(vertex);
 
         if (node != nullptr)
         {
@@ -999,7 +893,7 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
             node->children.push_back(ret);
 
-            nodes_.push_back(new htd::Tree::Node(ret, vertex));
+            nodes_.insert(std::make_pair(ret, new htd::Tree::Node(ret, vertex)));
 
             vertices_.push_back(ret);
 
@@ -1016,7 +910,7 @@ void htd::Tree::removeChild(htd::vertex_t vertex, htd::vertex_t child)
 {
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
+        auto & node = nodes_.at(vertex);
 
         if (node != nullptr)
         {
@@ -1051,7 +945,7 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
     {
         if (isRoot(vertex))
         {
-            auto & node = nodes_[vertex - htd::Vertex::FIRST];
+            auto & node = nodes_.at(vertex);
 
             if (node != nullptr)
             {
@@ -1063,7 +957,7 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
                 newRootNode->children.push_back(vertex);
 
-                nodes_.push_back(newRootNode);
+                nodes_.insert(std::make_pair(ret, newRootNode));
 
                 vertices_.push_back(ret);
 
@@ -1080,9 +974,9 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
             ret = addChild(parentVertex);
 
-            auto & parentNode = nodes_[parentVertex - htd::Vertex::FIRST];
-            auto & selectedNode = nodes_[vertex - htd::Vertex::FIRST];
-            auto & intermediateNode = nodes_[ret - htd::Vertex::FIRST];
+            auto & parentNode = nodes_.at(parentVertex);
+            auto & selectedNode = nodes_.at(vertex);
+            auto & intermediateNode = nodes_.at(ret);
 
             if (parentNode != nullptr && selectedNode != nullptr && intermediateNode != nullptr)
             {
@@ -1121,11 +1015,11 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
         throw std::logic_error("htd::vertex_t htd::Tree::setParent(htd::vertex_t, htd::vertex_t)");
     }
 
-    auto & node = nodes_[vertex - htd::Vertex::FIRST];
+    auto & node = nodes_.at(vertex);
 
     if (node->parent != newParent)
     {
-        auto & newParentNode = nodes_[newParent - htd::Vertex::FIRST];
+        auto & newParentNode = nodes_.at(newParent);
 
         if (isRoot(vertex))
         {
@@ -1133,7 +1027,7 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
         }
         else
         {
-            auto & parentNode = nodes_[node->parent - htd::Vertex::FIRST];
+            auto & parentNode = nodes_.at(node->parent);
 
             auto position = std::find(parentNode->children.begin(), parentNode->children.end(), vertex);
 
@@ -1155,14 +1049,11 @@ std::size_t htd::Tree::leafNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (auto & node : nodes_)
+    for (const auto & node : nodes_)
     {
-        if (node != nullptr)
+        if (node.second->children.empty())
         {
-            if (node->children.empty())
-            {
-                ret++;
-            }
+            ret++;
         }
     }
 
@@ -1175,14 +1066,11 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::leafNodes(void) const
 
     auto & result = ret.container();
 
-    for (auto & node : nodes_)
+    for (const auto & node : nodes_)
     {
-        if (node != nullptr)
+        if (node.second->children.empty())
         {
-            if (node->children.empty())
-            {
-                result.push_back(node->id);
-            }
+            result.push_back(node.first);
         }
     }
 
@@ -1211,12 +1099,7 @@ bool htd::Tree::isLeafNode(htd::vertex_t vertex) const
 
     if (isVertex(vertex))
     {
-        auto & node = nodes_[vertex - htd::Vertex::FIRST];
-
-        if (node != nullptr)
-        {
-            ret = node->children.empty();
-        }
+        ret = nodes_.at(vertex)->children.empty();
     }
     else
     {
@@ -1236,7 +1119,7 @@ void htd::Tree::deleteNode(htd::Tree::Node * node)
                 
         if (parent != htd::Vertex::UNKNOWN)
         {
-            auto & children = nodes_[parent - htd::Vertex::FIRST]->children;
+            auto & children = nodes_.at(parent)->children;
 
             if (children.size() > 0)
             {
@@ -1256,16 +1139,11 @@ void htd::Tree::deleteNode(htd::Tree::Node * node)
 
                     children.erase(position);
 
-                    deletions_.insert(nodeIdentifier);
-
-                    if (nodes_[nodeIdentifier - htd::Vertex::FIRST] != nullptr)
-                    {
-                        delete nodes_[nodeIdentifier - htd::Vertex::FIRST];
+                    delete nodes_.at(nodeIdentifier);
                         
-                        nodes_[nodeIdentifier - htd::Vertex::FIRST] = nullptr;
+                    nodes_.erase(nodeIdentifier);
 
-                        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), nodeIdentifier));
-                    }
+                    vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), nodeIdentifier));
                 }
             }
         }
@@ -1273,16 +1151,11 @@ void htd::Tree::deleteNode(htd::Tree::Node * node)
         {
             size_--;
 
-            deletions_.insert(nodeIdentifier);
+            delete nodes_.at(nodeIdentifier);
 
-            if (nodes_[nodeIdentifier - htd::Vertex::FIRST] != nullptr)
-            {
-                delete nodes_[nodeIdentifier - htd::Vertex::FIRST];
+            nodes_.erase(nodeIdentifier);
 
-                nodes_[nodeIdentifier - htd::Vertex::FIRST] = nullptr;
-
-                vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), nodeIdentifier));
-            }
+            vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), nodeIdentifier));
         }
     }
 }
@@ -1303,19 +1176,14 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
 
         nodes_.reserve(original.nodes_.size());
 
-        for (auto & node : original.nodes_)
+        for (const auto & node : original.nodes_)
         {
-            if (node != nullptr)
-            {
-                nodes_.push_back(new htd::Tree::Node(*node));
-            }
+            nodes_.insert(std::make_pair(node.first, new htd::Tree::Node(*(node.second))));
         }
 
         this->root_ = original.root_;
 
         this->size_ = original.size_;
-
-        this->deletions_ = original.deletions_;
     }
 
     return *this;
@@ -1330,15 +1198,47 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
             removeRoot();
         }
 
-        htd::PreOrderTreeTraversal treeTraversal;
+        size_ = original.vertexCount();
 
-        treeTraversal.traverse(*this, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
+        if (size_ > 0)
         {
-            HTD_UNUSED(parent)
-            HTD_UNUSED(distanceToSubtreeRoot)
+            root_ = original.root();
 
+            htd::vertex_t maximumVertex = root_;
 
-        });
+            const htd::ConstCollection<htd::vertex_t> & vertexCollection = original.vertices();
+
+            std::copy(vertexCollection.begin(), vertexCollection.end(), std::back_inserter(vertices_));
+
+            for (htd::vertex_t vertex : vertices_)
+            {
+                htd::Tree::Node * newNode = nullptr;
+
+                if (original.isRoot(vertex))
+                {
+                    newNode = new htd::Tree::Node(vertex, htd::Vertex::UNKNOWN);
+                }
+                else
+                {
+                    newNode = new htd::Tree::Node(vertex, original.parent(vertex));
+                }
+
+                const htd::ConstCollection<htd::vertex_t> & childCollection = original.children(vertex);
+
+                std::copy(childCollection.begin(), childCollection.end(), std::back_inserter(newNode->children));
+
+                nodes_.insert(std::make_pair(vertex, newNode));
+            }
+
+            if (maximumVertex >= htd::Vertex::FIRST)
+            {
+                next_vertex_ = maximumVertex + 1;
+            }
+            else
+            {
+                next_vertex_ = htd::Vertex::FIRST;
+            }
+        }
     }
 
     return *this;

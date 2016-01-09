@@ -47,9 +47,9 @@ htd::Graph::Graph(const htd::Graph & original) : base_(original.base_->clone())
 
 }
 
-htd::Graph::Graph(const htd::IGraph & original) : base_(htd::HypergraphFactory::instance().getHypergraph())
+htd::Graph::Graph(const htd::IGraph & original) : base_(htd::HypergraphFactory::instance().getHypergraph(original))
 {
-    *this = original;
+
 }
 
 htd::Graph::~Graph()
@@ -397,8 +397,12 @@ htd::Graph * htd::Graph::clone(void) const
 
 htd::Graph & htd::Graph::operator=(const htd::IGraph & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        delete base_;
+
+        base_ = htd::HypergraphFactory::instance().getHypergraph(original);
+    }
 
     return *this;
 }

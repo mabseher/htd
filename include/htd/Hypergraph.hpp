@@ -115,6 +115,8 @@ namespace htd
 
             Hypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
 
+            Hypergraph & operator=(const htd::Hypergraph & original);
+
         private:
             std::size_t size_;
 

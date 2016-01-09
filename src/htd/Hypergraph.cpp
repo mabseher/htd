@@ -753,8 +753,69 @@ htd::Hypergraph * htd::Hypergraph::clone(void) const
 
 htd::Hypergraph & htd::Hypergraph::operator=(const htd::IHypergraph & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        size_ = 0;
+
+        next_edge_ = htd::Id::FIRST;
+
+        next_vertex_ = htd::Vertex::FIRST;
+
+        vertices_.clear();
+
+        deletions_.clear();
+
+        edges_.clear();
+
+        neighborhood_.clear();
+
+        for (htd::vertex_t vertex : original.vertices())
+        {
+            while (vertex > next_vertex_)
+            {
+                deletions_.insert(next_vertex_);
+
+                neighborhood_.push_back(htd::vertex_container());
+
+                next_vertex_++;
+            }
+
+            size_++;
+
+            neighborhood_.push_back(htd::vertex_container());
+
+            vertices_.push_back(vertex);
+        }
+
+        for (const htd::Hyperedge & hyperedge : original.hyperedges())
+        {
+            next_edge_ = hyperedge.id();
+
+            addEdge(hyperedge.elements());
+        }
+    }
+
+    return *this;
+}
+
+htd::Hypergraph & htd::Hypergraph::operator=(const htd::Hypergraph & other)
+{
+    if (this != &other)
+    {
+        size_ = other.size_;
+
+        next_edge_ = other.next_edge_;
+
+        next_vertex_ = other.next_vertex_;
+
+        vertices_ = other.vertices_;
+
+        deletions_ = other.deletions_;
+
+        edges_ = other.edges_;
+
+        neighborhood_ = other.neighborhood_;
+    }
 
     return *this;
 }

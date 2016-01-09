@@ -565,7 +565,7 @@ htd::id_t htd::DirectedGraph::addEdge(const htd::edge_t & edge)
 
 void htd::DirectedGraph::removeEdge(htd::id_t edgeId)
 {
-    htd::Hyperedge selectedEdge = base_->hyperedge(edgeId);
+    const htd::Hyperedge & selectedEdge = base_->hyperedge(edgeId);
 
     htd::vertex_t vertex1 = selectedEdge[0];
     htd::vertex_t vertex2 = selectedEdge[1];

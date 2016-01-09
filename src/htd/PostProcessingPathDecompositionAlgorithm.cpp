@@ -49,12 +49,12 @@ htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAl
 
 htd::PostProcessingPathDecompositionAlgorithm::~PostProcessingPathDecompositionAlgorithm()
 {
-    for (auto labelingFunction : labelingFunctions_)
+    for (auto & labelingFunction : labelingFunctions_)
     {
         delete labelingFunction;
     }
 
-    for (auto postProcessingOperation : postProcessingOperations_)
+    for (auto & postProcessingOperation : postProcessingOperations_)
     {
         delete postProcessingOperation;
     }
@@ -131,7 +131,17 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
         }
     }
 
-    for (auto & labelingFunction : labelingFunctions_)
+    for (const auto & operation : postProcessingOperations_)
+    {
+        operation->apply(*ret);
+    }
+
+    for (const auto & operation : postProcessingOperations)
+    {
+        operation->apply(*ret);
+    }
+
+    for (const auto & labelingFunction : labelingFunctions_)
     {
         for (htd::vertex_t vertex : ret->vertices())
         {
@@ -145,7 +155,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
         }
     }
 
-    for (auto & labelingFunction : labelingFunctions)
+    for (const auto & labelingFunction : labelingFunctions)
     {
         for (htd::vertex_t vertex : ret->vertices())
         {
@@ -157,16 +167,6 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
             ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
         }
-    }
-
-    for (auto & operation : postProcessingOperations_)
-    {
-        operation->apply(*ret);
-    }
-
-    for (auto & operation : postProcessingOperations)
-    {
-        operation->apply(*ret);
     }
 
     return ret;
@@ -244,12 +244,12 @@ htd::PostProcessingPathDecompositionAlgorithm * htd::PostProcessingPathDecomposi
 {
     std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
 
-    for (auto & labelingFunction : labelingFunctions_)
+    for (const auto & labelingFunction : labelingFunctions_)
     {
         manipulationOperations.push_back(labelingFunction->clone());
     }
 
-    for (auto & postProcessingOperation : postProcessingOperations_)
+    for (const auto & postProcessingOperation : postProcessingOperations_)
     {
         manipulationOperations.push_back(postProcessingOperation->clone());
     }

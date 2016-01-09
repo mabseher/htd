@@ -56,12 +56,12 @@ htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecomposi
 
 htd::BucketEliminationTreeDecompositionAlgorithm::~BucketEliminationTreeDecompositionAlgorithm()
 {
-    for (auto labelingFunction : labelingFunctions_)
+    for (auto & labelingFunction : labelingFunctions_)
     {
         delete labelingFunction;
     }
 
-    for (auto postProcessingOperation : postProcessingOperations_)
+    for (auto & postProcessingOperation : postProcessingOperations_)
     {
         delete postProcessingOperation;
     }
@@ -99,7 +99,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
     if (ret != nullptr)
     {
-        for (auto & labelingFunction : labelingFunctions_)
+        for (const auto & labelingFunction : labelingFunctions_)
         {
             for (htd::vertex_t vertex : ret->vertices())
             {
@@ -113,7 +113,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
             }
         }
 
-        for (auto & labelingFunction : labelingFunctions)
+        for (const auto & labelingFunction : labelingFunctions)
         {
             for (htd::vertex_t vertex : ret->vertices())
             {
@@ -127,12 +127,12 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
             }
         }
 
-        for (auto & operation : postProcessingOperations_)
+        for (const auto & operation : postProcessingOperations_)
         {
             operation->apply(*ret);
         }
 
-        for (auto & operation : postProcessingOperations)
+        for (const auto & operation : postProcessingOperations)
         {
             operation->apply(*ret);
         }
@@ -185,12 +185,12 @@ htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDec
 {
     std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
 
-    for (auto & labelingFunction : labelingFunctions_)
+    for (const auto & labelingFunction : labelingFunctions_)
     {
         manipulationOperations.push_back(labelingFunction->clone());
     }
 
-    for (auto & postProcessingOperation : postProcessingOperations_)
+    for (const auto & postProcessingOperation : postProcessingOperations_)
     {
         manipulationOperations.push_back(postProcessingOperation->clone());
     }
@@ -248,7 +248,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                 buckets[index].push_back(index + htd::Vertex::FIRST);
             }
 
-            for (htd::Hyperedge edge : graph.hyperedges())
+            for (const htd::Hyperedge & edge : graph.hyperedges())
             {
                 htd::vertex_container elements = htd::vertex_container(edge.begin(), edge.end());
 

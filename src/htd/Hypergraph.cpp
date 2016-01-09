@@ -710,13 +710,13 @@ void htd::Hypergraph::removeEdge(htd::id_t edgeId)
 
     if (found)
     {
-        htd::Hyperedge edge = *position;
+        const htd::Hyperedge & hyperedge = *position;
 
         edges_.erase(position);
 
-        for (htd::vertex_t vertex : edge)
+        for (htd::vertex_t vertex : hyperedge)
         {
-            std::unordered_set<htd::vertex_t> missing(edge.begin(), edge.end());
+            std::unordered_set<htd::vertex_t> missing(hyperedge.begin(), hyperedge.end());
 
             for (auto it = edges_.begin(); !missing.empty() && it != edges_.end(); it++)
             {

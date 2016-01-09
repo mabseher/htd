@@ -133,6 +133,7 @@
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
+#include <htd/NamedDirectedGraph.hpp>
 #include <htd/NamedGraph.hpp>
 #include <htd/NamedHypergraph.hpp>
 #include <htd/NamedPath.hpp>

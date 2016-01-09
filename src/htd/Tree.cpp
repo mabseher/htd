@@ -701,117 +701,114 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 {
     if (isVertex(vertex))
     {
-        const auto & node = nodes_.at(vertex);
+        auto & node = *(nodes_.at(vertex));
 
-        if (node != nullptr)
+        const auto & children = node.children;
+
+        if (node.parent != htd::Vertex::UNKNOWN)
         {
-            const auto & children = node->children;
+            auto & parent = nodes_.at(node.parent);
 
-            if (node->parent != htd::Vertex::UNKNOWN)
+            auto & siblings = parent->children;
+
+            switch (children.size())
             {
-                auto & parent = nodes_.at(node->parent);
-
-                auto & siblings = parent->children;
-
-                switch (children.size())
+                case 0:
                 {
-                    case 0:
-                    {
-                        break;
-                    }
-                    case 1:
-                    {
-                        nodes_.at(children[0])->parent = node->parent;
-
-                        siblings.push_back(children[0]);
-
-                        break;
-                    }
-                    default:
-                    {
-                        htd::vertex_t selectedChild = children[0];
-
-                        auto & selectedChildNode = *(nodes_.at(selectedChild));
-
-                        nodes_.at(selectedChild)->parent = node->parent;
-
-                        htd::vertex_container & selectedGrandChildren = selectedChildNode.children;
-
-                        auto position = std::lower_bound(siblings.begin(), siblings.end(), selectedChild);
-
-                        if (position == siblings.end() || *position != selectedChild)
-                        {
-                            siblings.insert(position, selectedChild);
-                        }
-
-                        for (auto it = children.begin() + 1; it != children.end(); ++it)
-                        {
-                            htd::vertex_t child = *it;
-
-                            nodes_.at(child)->parent = selectedChild;
-
-                            auto position = std::lower_bound(selectedGrandChildren.begin(), selectedGrandChildren.end(), child);
-
-                            if (position == selectedGrandChildren.end() || *position != child)
-                            {
-                                selectedGrandChildren.insert(position, child);
-                            }
-                        }
-
-                        break;
-                    }
+                    break;
                 }
-
-                deleteNode(node);
-            }
-            else
-            {
-                switch (children.size())
+                case 1:
                 {
-                    case 0:
-                    {
-                        removeRoot();
+                    nodes_.at(children[0])->parent = node.parent;
 
-                        break;
+                    siblings.push_back(children[0]);
+
+                    break;
+                }
+                default:
+                {
+                    htd::vertex_t selectedChild = children[0];
+
+                    auto & selectedChildNode = *(nodes_.at(selectedChild));
+
+                    nodes_.at(selectedChild)->parent = node.parent;
+
+                    htd::vertex_container & selectedGrandChildren = selectedChildNode.children;
+
+                    auto position = std::lower_bound(siblings.begin(), siblings.end(), selectedChild);
+
+                    if (position == siblings.end() || *position != selectedChild)
+                    {
+                        siblings.insert(position, selectedChild);
                     }
-                    case 1:
+
+                    for (auto it = children.begin() + 1; it != children.end(); ++it)
                     {
-                        root_ = children[0];
+                        htd::vertex_t child = *it;
 
-                        nodes_.at(root_)->parent = htd::Vertex::UNKNOWN;
+                        nodes_.at(child)->parent = selectedChild;
 
-                        deleteNode(node);
+                        auto position = std::lower_bound(selectedGrandChildren.begin(), selectedGrandChildren.end(), child);
 
-                        break;
-                    }
-                    default:
-                    {
-                        root_ = children[0];
-
-                        auto & newRootNode = *(nodes_.at(root_));
-
-                        htd::vertex_container & newRootChildren = newRootNode.children;
-
-                        newRootNode.parent = htd::Vertex::UNKNOWN;
-
-                        for (auto it = children.begin() + 1; it != children.end(); ++it)
+                        if (position == selectedGrandChildren.end() || *position != child)
                         {
-                            htd::vertex_t child = *it;
-
-                            nodes_.at(child)->parent = root_;
-
-                            auto position = std::lower_bound(newRootChildren.begin(), newRootChildren.end(), child);
-
-                            if (position == newRootChildren.end() || *position != child)
-                            {
-                                newRootChildren.insert(position, child);
-                            }
+                            selectedGrandChildren.insert(position, child);
                         }
-
-                        deleteNode(node);
-
-                        break;
                     }
+
+                    break;
+                }
+            }
+
+            deleteNode(&node);
+        }
+        else
+        {
+            switch (children.size())
+            {
+                case 0:
+                {
+                    removeRoot();
+
+                    break;
+                }
+                case 1:
+                {
+                    root_ = children[0];
+
+                    nodes_.at(root_)->parent = htd::Vertex::UNKNOWN;
+
+                    deleteNode(&node);
+
+                    break;
+                }
+                default:
+                {
+                    root_ = children[0];
+
+                    auto & newRootNode = *(nodes_.at(root_));
+
+                    htd::vertex_container & newRootChildren = newRootNode.children;
+
+                    newRootNode.parent = htd::Vertex::UNKNOWN;
+
+                    for (auto it = children.begin() + 1; it != children.end(); ++it)
+                    {
+                        htd::vertex_t child = *it;
+
+                        nodes_.at(child)->parent = root_;
+
+                        auto position = std::lower_bound(newRootChildren.begin(), newRootChildren.end(), child);
+
+                        if (position == newRootChildren.end() || *position != child)
+                        {
+                            newRootChildren.insert(position, child);
+                        }
+                    }
+
+                    deleteNode(&node);
+
+                    break;
                 }
             }
         }
@@ -910,28 +907,25 @@ void htd::Tree::removeChild(htd::vertex_t vertex, htd::vertex_t child)
 {
     if (isVertex(vertex))
     {
-        auto & node = nodes_.at(vertex);
+        auto & node = *(nodes_.at(vertex));
 
-        if (node != nullptr)
+        auto & children = node.children;
+
+        if (children.size() > 0)
         {
-            auto & children = node->children;
-            
-            if (children.size() > 0)
-            {
-                auto position = children.end();
-                
-                for (auto it = children.begin(); position == children.end() && it != children.end(); it++)
-                {
-                    if (*it == child)
-                    {
-                        position = it;
-                    }
-                }
+            auto position = children.end();
 
-                if (position != children.end())
+            for (auto it = children.begin(); position == children.end() && it != children.end(); it++)
+            {
+                if (*it == child)
                 {
-                    removeVertex(child);
+                    position = it;
                 }
+            }
+
+            if (position != children.end())
+            {
+                removeVertex(child);
             }
         }
     }

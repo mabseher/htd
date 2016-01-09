@@ -49,7 +49,7 @@ namespace htd
 
             Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements);
 
-            Hyperedge(htd::id_t id, const htd::Hyperedge & original);
+            Hyperedge(const htd::Hyperedge & original);
 
             ~Hyperedge();
 

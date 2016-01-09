@@ -48,7 +48,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t
 
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, const htd::Hyperedge & original) : written_(false), id_(id), elements_(original.elements_)
+htd::Hyperedge::Hyperedge(const htd::Hyperedge & original) : written_(false), id_(original.id_), elements_(original.elements_)
 {
 
 }

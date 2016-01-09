@@ -323,34 +323,39 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             //TODO Implement and use htd::NamedGraph<int,int>!
             //htd::NamedGraph<int, int> result = htd::GraphFactory::instance().getGraph();
 
-            std::vector<htd::vertex_t> tmp;
+            //std::vector<htd::vertex_t> tmp;
+            std::array<htd::vertex_t, 1> filterSet;
             std::vector<std::vector<htd::vertex_t>> neighbors(size);
 
             for (htd::index_t index = 0; index < size; index++)
             {
-                tmp.clear();
+                //tmp.clear();
 
                 htd::vertex_t selection = ordering[index];
 
                 DEBUGGING_CODE(std::cout << std::endl << "   Processing bucket " << selection << " ..." << std::endl;)
 
-                for (htd::vertex_t vertex : buckets[selection - htd::Vertex::FIRST])
+                const htd::vertex_container & bucket = buckets[selection - htd::Vertex::FIRST];
+
+                /*
+                for (htd::vertex_t vertex : bucket)
                 {
                     if (vertex != selection)
                     {
                         tmp.push_back(vertex);
                     }
                 }
+                */
 
-                if (tmp.size() > 0)
+                if (bucket.size() > 1)
                 {
                     DEBUGGING_CODE(
                         std::cout << "      Bucket " << selection << ": ";
-                        htd::print(tmp, false);
+                        htd::print(bucket, false);
                         std::cout << std::endl;
                     )
 
-                    htd::vertex_t minimumVertex = getMinimumVertex(tmp, indices);
+                    htd::vertex_t minimumVertex = getMinimumVertex(bucket, indices, selection);
 
                     DEBUGGING_CODE(
                         std::cout << "      Minimum Vertex: " << minimumVertex << std::endl;
@@ -370,7 +375,9 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                     std::vector<htd::vertex_t> newBucketContent;
                     newBucketContent.reserve(selectedBucket.size());
 
-                    std::set_union(selectedBucket.begin(), selectedBucket.end(), tmp.begin(), tmp.end(), std::back_inserter(newBucketContent));
+                    filterSet[0] = selection;
+
+                    htd::filtered_set_union(selectedBucket.begin(), selectedBucket.end(), bucket.begin(), bucket.end(), filterSet.begin(), filterSet.end(), std::back_inserter(newBucketContent));
 
                     std::swap(selectedBucket, newBucketContent);
 
@@ -665,6 +672,39 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
         }
     }
     
+    return ret;
+}
+
+htd::vertex_t htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices, htd::vertex_t excludedVertex) const
+{
+    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+
+    if (vertices.size() > 0)
+    {
+        std::size_t minimum = (std::size_t)-1;
+
+        std::size_t currentIndex = (std::size_t)-1;
+
+        for (htd::vertex_t vertex : vertices)
+        {
+            if (vertex != excludedVertex)
+            {
+                currentIndex = vertexIndices[vertex - htd::Vertex::FIRST];
+
+                if (currentIndex < minimum)
+                {
+                    ret = vertex;
+
+                    minimum = currentIndex;
+                }
+            }
+        }
+    }
+    else
+    {
+        throw std::out_of_range("htd::BucketEliminationTreeDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::vector<htd::index_t> &, htd::vertex_t) const");
+    }
+
     return ret;
 }
 

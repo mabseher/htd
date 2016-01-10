@@ -26,7 +26,6 @@
 #define	HTD_HTD_JOINNODENORMALIZATIONOPERATION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 namespace htd

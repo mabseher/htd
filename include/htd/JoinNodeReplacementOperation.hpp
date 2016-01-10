@@ -26,7 +26,6 @@
 #define	HTD_HTD_JOINNODEREPLACEMENTOPERATION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 namespace htd
@@ -34,7 +33,7 @@ namespace htd
     class JoinNodeReplacementOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
-            JoinNodeReplacementOperation(const htd::IHypergraph & graph);
+            JoinNodeReplacementOperation(void);
 
             ~JoinNodeReplacementOperation();
 
@@ -45,8 +44,6 @@ namespace htd
             JoinNodeReplacementOperation * clone(void) const HTD_OVERRIDE;
 
         private:
-            const htd::IHypergraph & graph_;
-
             void getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, htd::vertex_container & output) const;
     };
 }

@@ -102,7 +102,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
     compressionOperation.apply(mutableTreeDecomposition);
 
-    htd::JoinNodeReplacementOperation joinNodeReplacementOperation(graph);
+    htd::JoinNodeReplacementOperation joinNodeReplacementOperation;
 
     joinNodeReplacementOperation.apply(mutableTreeDecomposition);
 

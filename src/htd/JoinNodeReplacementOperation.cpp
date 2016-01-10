@@ -49,7 +49,7 @@ struct HistoryEntry
     }
 };
 
-htd::JoinNodeReplacementOperation::JoinNodeReplacementOperation(const htd::IHypergraph & graph) : graph_(graph)
+htd::JoinNodeReplacementOperation::JoinNodeReplacementOperation(void)
 {
 
 }
@@ -72,7 +72,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
         htd::vertex_t currentNode = decomposition.root();
 
-       htd::vertex_t attachmentPoint = htd::Vertex::UNKNOWN;
+        htd::vertex_t attachmentPoint = htd::Vertex::UNKNOWN;
 
         std::stack<HistoryEntry> parentStack;
 
@@ -321,7 +321,7 @@ void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd
 
 htd::JoinNodeReplacementOperation * htd::JoinNodeReplacementOperation::clone(void) const
 {
-    return new htd::JoinNodeReplacementOperation(graph_);
+    return new htd::JoinNodeReplacementOperation();
 }
 
 #endif /* HTD_HTD_JOINNODEREPLACEMENTOPERATION_CPP */

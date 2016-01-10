@@ -29,12 +29,6 @@
 #include <htd/Helpers.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/LabeledTree.hpp>
-#include <htd/IGraphLabeling.hpp>
-#include <htd/ILabelingCollection.hpp>
-
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
 
 namespace htd
 {

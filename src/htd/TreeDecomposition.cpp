@@ -28,20 +28,11 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/TreeDecomposition.hpp>
-#include <htd/GraphLabeling.hpp>
-#include <htd/ILabeledTree.hpp>
-#include <htd/Label.hpp>
-#include <htd/LabelingCollection.hpp>
 #include <htd/VectorAdapter.hpp>
-#include <htd/PreOrderTreeTraversal.hpp>
-#include <htd/PostOrderTreeTraversal.hpp>
+#include <htd/Label.hpp>
 
 #include <algorithm>
-#include <iterator>
-#include <stack>
 #include <stdexcept>
-#include <utility>
-#include <vector>
 
 htd::TreeDecomposition::TreeDecomposition(void) : htd::LabeledTree::LabeledTree()
 {

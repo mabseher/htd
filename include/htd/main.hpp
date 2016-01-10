@@ -99,6 +99,7 @@
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/IMutableTree.hpp>
 #include <htd/InducedSubgraphLabelingFunction.hpp>
+#include <htd/InducedSubgraphLabelingOperation.hpp>
 #include <htd/InOrderTreeTraversal.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
 #include <htd/IPathDecompositionAlgorithm.hpp>

@@ -34,6 +34,11 @@ namespace htd
     class IPathDecomposition : public virtual htd::ILabeledPath, public virtual htd::ITreeDecomposition
     {
         public:
+            /**
+             *  Constant for the identifier of the bag label.
+             */
+            static constexpr const char * BAG_LABEL_IDENTIFIER = "Bag";
+
             virtual ~IPathDecomposition() = 0;
 
             virtual std::size_t forgetNodeCount(void) const = 0;

@@ -36,7 +36,7 @@ namespace htd
         public:
             virtual ~IMutablePathDecomposition() = 0;
 
-            virtual void setBagContent(htd::vertex_t vertex, const htd::vertex_container & content) = 0;
+            virtual void setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content) = 0;
 
             virtual void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) = 0;
 

@@ -75,7 +75,7 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void setBagContent(htd::vertex_t vertex, const htd::vertex_container & content) HTD_OVERRIDE;
+            void setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content) HTD_OVERRIDE;
 
             void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) HTD_OVERRIDE;
 

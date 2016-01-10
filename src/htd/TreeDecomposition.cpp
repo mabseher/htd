@@ -331,7 +331,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::bagContent(htd::vert
     return htd::ConstCollection<htd::vertex_t>();
 }
 
-void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::vertex_container & content)
+void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content)
 {
     if (isVertex(vertex))
     {
@@ -339,7 +339,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::vert
     }
     else
     {
-        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const htd::vertex_container &)");
+        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const std::vector<htd::vertex_t> &)");
     }
 }
 
@@ -407,6 +407,10 @@ std::size_t htd::TreeDecomposition::forgottenVertexCount(htd::vertex_t vertex) c
 
         ret = htd::compute_set_difference_size(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end());
     }
+    else
+    {
+        throw std::logic_error("std::size_t htd::TreeDecomposition::forgottenVertexCount(htd::vertex_t) const");
+    }
 
     return ret;
 }
@@ -415,13 +419,16 @@ std::size_t htd::TreeDecomposition::forgottenVertexCount(htd::vertex_t vertex, h
 {
     std::size_t ret = 0;
 
-    if (isVertex(vertex))
+    if (isVertex(vertex) && isChild(vertex, child))
     {
         const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-
         const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
         ret = htd::compute_set_difference_size(childBag.begin(), childBag.end(), bag.begin(), bag.end());
+    }
+    else
+    {
+        throw std::logic_error("std::size_t htd::TreeDecomposition::forgottenVertexCount(htd::vertex_t, htd::vertex_t) const");
     }
 
     return ret;
@@ -457,10 +464,9 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(ht
 
     auto & result = ret.container();
 
-    if (isVertex(vertex))
+    if (isVertex(vertex) && isChild(vertex, child))
     {
         const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-
         const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
         std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(result));
@@ -533,6 +539,10 @@ std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t vertex) 
 
         ret = htd::compute_set_difference_size(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end());
     }
+    else
+    {
+        throw std::logic_error("std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t) const");
+    }
 
     return ret;
 }
@@ -541,13 +551,16 @@ std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t vertex, 
 {
     std::size_t ret = 0;
 
-    if (isVertex(vertex))
+    if (isVertex(vertex) && isChild(vertex, child))
     {
         const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-
         const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
         ret = htd::compute_set_difference_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
+    }
+    else
+    {
+        throw std::logic_error("std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t, htd::vertex_t) const");
     }
 
     return ret;
@@ -583,10 +596,9 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(h
 
     auto & result = ret.container();
 
-    if (isVertex(vertex))
+    if (isVertex(vertex) && isChild(vertex, child))
     {
         const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-
         const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
         std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(result));
@@ -659,6 +671,10 @@ std::size_t htd::TreeDecomposition::rememberedVertexCount(htd::vertex_t vertex) 
 
         ret = htd::compute_set_intersection_size(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end());
     }
+    else
+    {
+        throw std::logic_error("std::size_t htd::TreeDecomposition::rememberedVertexCount(htd::vertex_t) const");
+    }
 
     return ret;
 }
@@ -667,13 +683,16 @@ std::size_t htd::TreeDecomposition::rememberedVertexCount(htd::vertex_t vertex, 
 {
     std::size_t ret = 0;
 
-    if (isVertex(vertex))
+    if (isVertex(vertex) && isChild(vertex, child))
     {
         const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-
         const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
         ret = htd::compute_set_intersection_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
+    }
+    else
+    {
+        throw std::logic_error("std::size_t htd::TreeDecomposition::rememberedVertexCount(htd::vertex_t, htd::vertex_t) const");
     }
 
     return ret;
@@ -709,10 +728,9 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(h
 
     auto & result = ret.container();
 
-    if (isVertex(vertex))
+    if (isVertex(vertex) && isChild(vertex, child))
     {
         const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-
         const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
 
         std::set_intersection(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(result));
@@ -785,6 +803,10 @@ void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex
         std::sort(output.begin(), output.end());
 
         output.erase(std::unique(output.begin(), output.end()), output.end());
+    }
+    else
+    {
+        throw std::logic_error("void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t, htd::vertex_container &) const");
     }
 }
 

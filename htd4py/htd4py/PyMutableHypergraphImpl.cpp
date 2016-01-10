@@ -37,16 +37,15 @@ namespace py = boost::python;
 //  RuntimeError: void htd::MutableHypergraphImpl::addEdge(const htd::hyperedge_t &)
 
 namespace htd {
-  void (htd::Hypergraph::*addEdge_)(htd::vertex_t, htd::vertex_t) = &htd::Hypergraph::addEdge;
+  htd::id_t (htd::Hypergraph::*addEdge_)(htd::vertex_t, htd::vertex_t) = &htd::Hypergraph::addEdge;
   std::size_t (htd::Hypergraph::*edgeCount_1)(void) const = &htd::Hypergraph::edgeCount;
   std::size_t (htd::Hypergraph::*edgeCount_2)(htd::vertex_t) const = &htd::Hypergraph::edgeCount;
-  void (htd::Hypergraph::*removeEdge_1)(htd::vertex_t, htd::vertex_t) = &htd::Hypergraph::removeEdge;
-  void (htd::Hypergraph::*removeEdge_2)(const htd::edge_t &) = &htd::Hypergraph::removeEdge;
-  void (htd::Hypergraph::*removeVertex_1)(htd::vertex_t) = &htd::Hypergraph::removeVertex;
-  void (htd::Hypergraph::*removeVertex_2)(htd::vertex_t, bool) = &htd::Hypergraph::removeVertex;
+  //void (htd::Hypergraph::*removeEdge_1)(htd::vertex_t, htd::vertex_t) = &htd::Hypergraph::removeEdge;
+  void (htd::Hypergraph::*removeEdge_2)(htd::id_t) = &htd::Hypergraph::removeEdge;
+  void (htd::Hypergraph::*removeVertex)(htd::vertex_t) = &htd::Hypergraph::removeVertex;
 
   void export_MutableHypergraphImpl(){
-    py::class_<htd::Hypergraph>("Hypergraph", py::init<std::size_t>())
+    py::class_<htd::Hypergraph>("Hypergraph", py::init<>())
       .def("add_edge", htd::addEdge_)
       .def("add_vertex", &htd::Hypergraph::addVertex)
       .def("is_vertex", &htd::Hypergraph::isVertex)
@@ -55,7 +54,7 @@ namespace htd {
       .def("num_neighbors", &htd::Hypergraph::neighborCount)
       .def("num_vertices", &htd::Hypergraph::vertexCount)
       .def("num_isolated_vertices",&htd::Hypergraph::isolatedVertexCount)
-      .def("remove_edge", htd::removeEdge_1)
-      .def("remove_vertex", htd::removeVertex_1);
+      //.def("remove_edge", htd::removeEdge_1)
+      .def("remove_vertex", htd::removeVertex);
   }
 }

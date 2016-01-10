@@ -39,8 +39,7 @@ namespace htd {
   const HTD_OVERRIDE = &htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition;
 
     htd::BucketEliminationTreeDecompositionAlgorithm *algo_init_(const htd::MinFillOrderingAlgorithm *o) {
-        htd::BucketEliminationTreeDecompositionAlgorithm *algo = new htd::BucketEliminationTreeDecompositionAlgorithm(
-                *o);
+        htd::BucketEliminationTreeDecompositionAlgorithm *algo = new htd::BucketEliminationTreeDecompositionAlgorithm();
         return algo;
     }
 

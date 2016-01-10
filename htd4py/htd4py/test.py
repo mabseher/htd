@@ -24,7 +24,7 @@
 import sys
 
 import htd
-h=htd.Hypergraph(0)
+h=htd.Hypergraph()
 h.add_vertex()
 h.add_vertex()
 h.add_vertex()

@@ -34,7 +34,7 @@ namespace htd {
   //TODO: overhead, add iterator
   //TODO:...
   template<class T>
-  py::list std_vector_to_py_list(htd::Collection<T> vector) {
+  py::list std_vector_to_py_list(htd::ConstCollection<T> vector) {
     boost::python::list list;
     for (htd::vertex_t vertex : vector){
       list.append(vertex);
@@ -43,13 +43,13 @@ namespace htd {
   }
   
   py::list vertices_(htd::ITreeDecomposition &decomposition) {
-    htd::Collection<htd::vertex_t> vertices= decomposition.vertices();
+    htd::ConstCollection<htd::vertex_t> vertices= decomposition.vertices();
     return std_vector_to_py_list(vertices);
   }
 
   //TODO: bagContent -> smartPointer -> iterator
   py::list bags_(htd::ITreeDecomposition &decomposition, htd::vertex_t vertex) {
-    htd::Collection<htd::vertex_t> bag = decomposition.bagContent(vertex);
+    htd::ConstCollection<htd::vertex_t> bag = decomposition.bagContent(vertex);
     return std_vector_to_py_list(bag);
   }
 

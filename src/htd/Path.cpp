@@ -849,29 +849,25 @@ htd::vertex_t htd::Path::addChild(htd::vertex_t vertex)
     
     if (isVertex(vertex))
     {
-        auto & node = nodes_.at(vertex);
+        htd::vertex_t child = nodes_.at(vertex)->child;
 
-        if (node != nullptr)
+        ret = next_vertex_;
+
+        nodes_.insert(std::make_pair(ret, new htd::Path::Node(ret, vertex)));
+
+        if (child != htd::Vertex::UNKNOWN)
         {
-            ret = next_vertex_;
-
-            if (node->child != htd::Vertex::UNKNOWN)
-            {
-                auto & child = nodes_.at(node->child);
-
-                child->parent = ret;
-            }
-
-            node->child = ret;
-
-            nodes_.insert(std::make_pair(ret, new htd::Path::Node(ret, vertex)));
-
-            vertices_.push_back(ret);
-
-            next_vertex_++;
-
-            size_++;
+            nodes_.at(child)->parent = ret;
+            nodes_.at(ret)->child = child;
         }
+
+        nodes_.at(vertex)->child = ret;
+
+        vertices_.push_back(ret);
+
+        next_vertex_++;
+
+        size_++;
     }
     
     return ret;

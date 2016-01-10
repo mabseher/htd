@@ -39,7 +39,11 @@ namespace htd
 
             ~PostOrderTreeTraversal();
 
+            void traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const HTD_OVERRIDE;
+
             void traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const HTD_OVERRIDE;
+
+            void traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const HTD_OVERRIDE;
 
             void traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const HTD_OVERRIDE;
     };

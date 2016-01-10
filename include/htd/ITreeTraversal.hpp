@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ITree.hpp>
+#include <htd/IPath.hpp>
 
 #include <functional>
 
@@ -37,7 +38,11 @@ namespace htd
         public:
             virtual ~ITreeTraversal() = 0;
 
+            virtual void traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const = 0;
+
             virtual void traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const = 0;
+
+            virtual void traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const = 0;
 
             virtual void traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const = 0;
     };

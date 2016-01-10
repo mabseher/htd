@@ -42,11 +42,51 @@ htd::PreOrderTreeTraversal::~PreOrderTreeTraversal()
 
 }
 
+void htd::PreOrderTreeTraversal::traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
+{
+    if (path.vertexCount() > 0)
+    {
+        traverse(path, targetFunction, path.root());
+    }
+}
+
 void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
 {
     if (tree.vertexCount() > 0)
     {
         traverse(tree, targetFunction, tree.root());
+    }
+}
+
+void htd::PreOrderTreeTraversal::traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const
+{
+    if (!path.isVertex(startingVertex))
+    {
+        throw std::logic_error("void htd::PreOrderTreeTraversal::traverse(const htd::IPath &, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)>, htd::vertex_t) const");
+    }
+
+    htd::vertex_t currentNode = startingVertex;
+
+    htd::vertex_t parentNode = htd::Vertex::UNKNOWN;
+
+    std::size_t currentDepth = 0;
+
+    while (currentNode != htd::Vertex::UNKNOWN)
+    {
+        targetFunction(currentNode, parentNode, currentDepth);
+
+        if (path.childCount(currentNode) > 0)
+        {
+            parentNode = currentNode;
+
+            currentNode = path.child(currentNode);
+
+            ++currentDepth;
+        }
+        else
+        {
+            currentNode = htd::Vertex::UNKNOWN;
+        }
     }
 }
 

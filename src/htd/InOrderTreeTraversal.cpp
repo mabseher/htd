@@ -43,11 +43,49 @@ htd::InOrderTreeTraversal::~InOrderTreeTraversal()
 
 }
 
+void htd::InOrderTreeTraversal::traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
+{
+    if (path.vertexCount() > 0)
+    {
+        traverse(path, targetFunction, path.root());
+    }
+}
+
 void htd::InOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
 {
     if (tree.vertexCount() > 0)
     {
         traverse(tree, targetFunction, tree.root());
+    }
+}
+
+void htd::InOrderTreeTraversal::traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const
+{
+    if (!path.isVertex(startingVertex))
+    {
+        throw std::logic_error("void htd::InOrderTreeTraversal::traverse(const htd::IPath &, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)>, htd::vertex_t) const");
+    }
+
+    htd::vertex_container vertices;
+
+    htd::PreOrderTreeTraversal traversal;
+
+    std::unordered_map<htd::vertex_t, std::pair<htd::vertex_t, std::size_t>> additionalInformation;
+
+    traversal.traverse(path, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToStartingVertex)
+    {
+        vertices.push_back(vertex);
+
+        additionalInformation[vertex] = std::make_pair(parent, distanceToStartingVertex);
+    }, startingVertex);
+
+    std::sort(vertices.begin(), vertices.end());
+
+    for (htd::vertex_t vertex : vertices)
+    {
+        std::pair<htd::vertex_t, std::size_t> & information = additionalInformation[vertex];
+
+        targetFunction(vertex, information.first, information.second);
     }
 }
 

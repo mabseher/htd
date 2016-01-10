@@ -42,11 +42,71 @@ htd::PostOrderTreeTraversal::~PostOrderTreeTraversal()
 
 }
 
+void htd::PostOrderTreeTraversal::traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
+{
+    if (path.vertexCount() > 0)
+    {
+        traverse(path, targetFunction, path.root());
+    }
+}
+
 void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
 {
     if (tree.vertexCount() > 0)
     {
         traverse(tree, targetFunction, tree.root());
+    }
+}
+
+void htd::PostOrderTreeTraversal::traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const
+{
+    if (!path.isVertex(startingVertex))
+    {
+        throw std::logic_error("void htd::PostOrderTreeTraversal::traverse(const htd::IPath &, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)>, htd::vertex_t) const");
+    }
+
+    htd::vertex_t currentNode = startingVertex;
+
+    htd::vertex_t parentNode = htd::Vertex::UNKNOWN;
+
+    std::size_t currentDepth = 0;
+
+    std::stack<htd::vertex_t> parentStack;
+
+    while (currentNode != htd::Vertex::UNKNOWN)
+    {
+        parentStack.push(currentNode);
+
+        if (path.childCount(currentNode) > 0)
+        {
+            currentNode = path.child(currentNode);
+
+            ++currentDepth;
+        }
+        else
+        {
+            currentNode = htd::Vertex::UNKNOWN;
+        }
+    }
+
+    while (!parentStack.empty())
+    {
+        currentNode = parentStack.top();
+
+        parentStack.pop();
+
+        if (parentStack.empty())
+        {
+            parentNode = htd::Vertex::UNKNOWN;
+        }
+        else
+        {
+            parentNode = parentStack.top();
+        }
+
+        targetFunction(currentNode, parentNode, currentDepth);
+
+        --currentDepth;
     }
 }
 

@@ -59,8 +59,6 @@ namespace htd
 
         private:
             const htd::IHypergraph & graph_;
-
-            htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const std::vector<std::pair<htd::Hyperedge, htd::Hyperedge>> & hyperedges) const;
     };
 }
 

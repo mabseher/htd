@@ -45,6 +45,7 @@
 #include <htd/DirectedGraph.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/Globals.hpp>
+#include <htd/GraphDecompositionAlgorithmFactory.hpp>
 #include <htd/GraphDecompositionFactory.hpp>
 #include <htd/GraphDecomposition.hpp>
 #include <htd/GraphFactory.hpp>

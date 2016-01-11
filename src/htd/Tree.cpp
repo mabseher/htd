@@ -44,7 +44,7 @@ htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_vertex_(htd:
 
 }
 
-htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_vertex_(htd::Vertex::FIRST), vertices_(original.vertices_), nodes_()
+htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_()
 {
     nodes_.reserve(original.nodes_.size());
     
@@ -894,7 +894,7 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
             vertices_.push_back(ret);
 
-            next_vertex_++;
+            ++next_vertex_;
 
             size_++;
         }
@@ -955,7 +955,7 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
                 vertices_.push_back(ret);
 
-                next_vertex_++;
+                ++next_vertex_;
 
                 size_++;
 
@@ -1178,6 +1178,15 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
         this->root_ = original.root_;
 
         this->size_ = original.size_;
+
+        if (original.next_vertex_ >= htd::Vertex::FIRST)
+        {
+            next_vertex_ = original.next_vertex_;
+        }
+        else
+        {
+            next_vertex_ = htd::Vertex::FIRST;
+        }
     }
 
     return *this;
@@ -1222,6 +1231,11 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
                 std::copy(childCollection.begin(), childCollection.end(), std::back_inserter(newNode->children));
 
                 nodes_.insert(std::make_pair(vertex, newNode));
+
+                if (vertex > maximumVertex)
+                {
+                    maximumVertex = vertex;
+                }
             }
 
             if (maximumVertex >= htd::Vertex::FIRST)

@@ -30,6 +30,8 @@
 #include <htd/LabelingCollection.hpp>
 #include <htd/GraphLabeling.hpp>
 
+#include <stdexcept>
+
 htd::LabeledTree::LabeledTree(void) : htd::Tree::Tree(), labelings_(new htd::LabelingCollection())
 {
 

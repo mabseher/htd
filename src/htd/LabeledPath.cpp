@@ -30,6 +30,8 @@
 #include <htd/LabelingCollection.hpp>
 #include <htd/GraphLabeling.hpp>
 
+#include <stdexcept>
+
 htd::LabeledPath::LabeledPath(void) : htd::Path::Path(), labelings_(new htd::LabelingCollection())
 {
 

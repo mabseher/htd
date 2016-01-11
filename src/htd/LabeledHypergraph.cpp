@@ -30,6 +30,8 @@
 #include <htd/LabelingCollection.hpp>
 #include <htd/GraphLabeling.hpp>
 
+#include <stdexcept>
+
 htd::LabeledHypergraph::LabeledHypergraph(void) : htd::Hypergraph::Hypergraph(), labelings_(new htd::LabelingCollection())
 {
 

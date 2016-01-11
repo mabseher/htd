@@ -30,6 +30,8 @@
 #include <htd/LabelingCollection.hpp>
 #include <htd/GraphLabeling.hpp>
 
+#include <stdexcept>
+
 htd::LabeledGraph::LabeledGraph(void) : htd::Graph::Graph(), labelings_(new htd::LabelingCollection())
 {
 

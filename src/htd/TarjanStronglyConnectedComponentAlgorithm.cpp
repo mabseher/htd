@@ -34,6 +34,19 @@
 #include <stack>
 #include <stdexcept>
 
+struct Node
+{
+    int id;
+
+    int index;
+
+    int lowlink;
+
+    Node * caller;
+
+    unsigned int vindex;
+};
+
 htd::TarjanStronglyConnectedComponentAlgorithm::TarjanStronglyConnectedComponentAlgorithm(void)
 {
 
@@ -48,26 +61,8 @@ htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::TarjanStronglyCon
 {
     htd::VectorAdapter<htd::ConstCollection<htd::vertex_t>> ret;
 
-    std::vector<htd::ConstCollection<htd::vertex_t>> & components = ret.container();
-
-    const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
-
-    if (vertexCollection.size() > 0)
-    {
-        std::unordered_set<htd::vertex_t> unvisitedVertices(vertexCollection.begin(), vertexCollection.end());
-
-        while (unvisitedVertices.size() > 0)
-        {
-            const htd::ConstCollection<htd::vertex_t> & component = determineComponent(graph, *(unvisitedVertices.begin()));
-
-            for (htd::vertex_t visitedVertex : component)
-            {
-                unvisitedVertices.erase(visitedVertex);
-            }
-
-            components.push_back(component);
-        }
-    }
+    //TODO Implement!
+    HTD_UNUSED(graph)
 
     return htd::ConstCollection<htd::ConstCollection<htd::vertex_t>>::getInstance(ret);
 }
@@ -76,26 +71,8 @@ htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::TarjanStronglyCon
 {
     htd::VectorAdapter<htd::ConstCollection<htd::vertex_t>> ret;
 
-    std::vector<htd::ConstCollection<htd::vertex_t>> & components = ret.container();
-
-    const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
-
-    if (vertexCollection.size() > 0)
-    {
-        std::unordered_set<htd::vertex_t> unvisitedVertices(vertexCollection.begin(), vertexCollection.end());
-
-        while (unvisitedVertices.size() > 0)
-        {
-            const htd::ConstCollection<htd::vertex_t> & component = determineComponent(graph, *(unvisitedVertices.begin()));
-
-            for (htd::vertex_t visitedVertex : component)
-            {
-                unvisitedVertices.erase(visitedVertex);
-            }
-
-            components.push_back(component);
-        }
-    }
+    //TODO Implement!
+    HTD_UNUSED(graph)
 
     return htd::ConstCollection<htd::ConstCollection<htd::vertex_t>>::getInstance(ret);
 }
@@ -107,37 +84,9 @@ htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorit
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph &, htd::vertex_t) const");
     }
 
-    std::stack<htd::vertex_t> originStack;
-
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    std::unordered_set<htd::vertex_t> visitedVertices;
-
-    std::vector<htd::vertex_t> & component = ret.container();
-
-    htd::vertex_t currentVertex = startingVertex;
-
-    originStack.push(currentVertex);
-
-    while (!originStack.empty())
-    {
-        currentVertex = originStack.top();
-
-        component.push_back(currentVertex);
-        visitedVertices.insert(currentVertex);
-
-        originStack.pop();
-
-        for (htd::vertex_t neighbor : graph.neighbors(currentVertex))
-        {
-            if (visitedVertices.count(neighbor) == 0)
-            {
-                originStack.push(neighbor);
-            }
-        }
-    }
-
-    std::sort(component.begin(), component.end());
+    //TODO Implement!
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
@@ -149,37 +98,9 @@ htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorit
         throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IDirectedGraph &, htd::vertex_t) const");
     }
 
-    std::stack<htd::vertex_t> originStack;
-
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    std::unordered_set<htd::vertex_t> visitedVertices;
-
-    std::vector<htd::vertex_t> & component = ret.container();
-
-    htd::vertex_t currentVertex = startingVertex;
-
-    originStack.push(currentVertex);
-
-    while (!originStack.empty())
-    {
-        currentVertex = originStack.top();
-
-        component.push_back(currentVertex);
-        visitedVertices.insert(currentVertex);
-
-        originStack.pop();
-
-        for (htd::vertex_t neighbor : graph.neighbors(currentVertex))
-        {
-            if (visitedVertices.count(neighbor) == 0)
-            {
-                originStack.push(neighbor);
-            }
-        }
-    }
-
-    std::sort(component.begin(), component.end());
+    //TODO Implement!
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }

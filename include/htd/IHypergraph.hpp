@@ -1,5 +1,5 @@
 /* 
- * File:   Hypergraph.hpp
+ * File:   IHypergraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -26,16 +26,14 @@
 #define	HTD_HTD_IHYPERGRAPH_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Collection.hpp>
-#include <htd/ConstCollection.hpp>
-#include <htd/Hyperedge.hpp>
+#include <htd/IMultiHypergraph.hpp>
 
 #include <cstdlib>
 #include <vector>
 
 namespace htd
 {
-    class IHypergraph
+    class IHypergraph : public virtual htd::IMultiHypergraph
     {
         public:
             virtual ~IHypergraph() = 0;

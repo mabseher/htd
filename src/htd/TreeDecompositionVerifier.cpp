@@ -207,7 +207,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsCo
 
             ok = reachableVertices.size() == currentContainers.size();
         }
-        
+
         if (!ok)
         {
             result.push_back(vertex);

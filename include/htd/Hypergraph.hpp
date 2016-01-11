@@ -26,6 +26,7 @@
 #define	HTD_HTD_HYPERGRAPH_HPP
 
 #include <htd/IMutableHypergraph.hpp>
+#include <htd/IMutableMultiHypergraph.hpp>
 
 #include <vector>
 #include <unordered_set>
@@ -113,6 +114,14 @@ namespace htd
 
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
+            void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+
+            void removeEdge(const std::vector<htd::vertex_t> & elements) HTD_OVERRIDE;
+
+            void removeEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
+
+            void removeEdge(const htd::Hyperedge & hyperedge) HTD_OVERRIDE;
+
             Hypergraph * clone(void) const HTD_OVERRIDE;
 
             Hypergraph & operator=(const Hypergraph & original);
@@ -120,19 +129,7 @@ namespace htd
             Hypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
 
         private:
-            std::size_t size_;
-
-            htd::index_t next_edge_;
-
-            htd::vertex_t next_vertex_;
-
-            htd::vertex_container vertices_;
-
-            std::unordered_set<htd::vertex_t> deletions_;
-
-            htd::hyperedge_container edges_;
-
-            std::vector<htd::vertex_container> neighborhood_;
+            htd::IMutableMultiHypergraph * base_;
     };
 }
 

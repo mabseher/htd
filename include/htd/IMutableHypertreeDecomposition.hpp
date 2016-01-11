@@ -40,7 +40,7 @@ namespace htd
 
             virtual void setCoveringEdges(htd::vertex_t vertex, const htd::ConstCollection<htd::Hyperedge> & content) = 0;
 
-            virtual IMutableHypertreeDecomposition * clone(void) const = 0;
+            virtual IMutableHypertreeDecomposition * clone(void) const HTD_OVERRIDE = 0;
 
             virtual IMutableHypertreeDecomposition & operator=(const htd::ITreeDecomposition & original) HTD_OVERRIDE = 0;
 

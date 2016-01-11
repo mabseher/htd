@@ -417,7 +417,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             })
 
             //TODO Selection of root
-            htd::vertex_t root = relevantBuckets[0];
+            htd::vertex_t root = relevantBuckets[rand() % relevantBuckets.size()];
 
             if (edgeCount < relevantBuckets.size() - 1)
             {

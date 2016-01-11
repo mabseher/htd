@@ -30,6 +30,8 @@
 #include <htd/LabelingCollection.hpp>
 #include <htd/GraphLabeling.hpp>
 
+#include <stdexcept>
+
 htd::LabeledDirectedGraph::LabeledDirectedGraph(void) : htd::DirectedGraph::DirectedGraph(), labelings_(new htd::LabelingCollection())
 {
 

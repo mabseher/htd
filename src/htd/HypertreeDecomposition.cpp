@@ -34,6 +34,7 @@
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
+#include <stdexcept>
 
 htd::HypertreeDecomposition::HypertreeDecomposition(void) : htd::TreeDecomposition()
 {

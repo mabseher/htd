@@ -65,16 +65,6 @@ namespace htd
             std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
 
             htd::IMutableTreeDecomposition * computeMutableDecomposition(const htd::IHypergraph & graph) const;
-
-            htd::vertex_t getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices) const;
-
-            htd::vertex_t getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices, htd::vertex_t excludedVertex) const;
-
-            void getReachableVertices(htd::vertex_t start, const htd::vertex_container & vertices, const std::vector<htd::index_t> & vertexIndices, const std::vector<htd::vertex_container> & neighbors, htd::vertex_container & output) const;
-            
-            void getUnreachableVertices(htd::vertex_t start, const htd::vertex_container & vertices, const std::vector<htd::index_t> & vertexIndices, const std::vector<htd::vertex_container> & neighbors, htd::vertex_container & output) const;
-
-            htd::IMutableTreeDecomposition * createRootedTreeDecomposition(htd::vertex_t vertex, const std::vector<htd::vertex_container> & neighbors, const std::vector<htd::vertex_container> & buckets) const;
     };
 }
 

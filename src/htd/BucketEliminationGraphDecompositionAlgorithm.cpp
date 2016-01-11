@@ -31,6 +31,7 @@
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabelingFunction.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
+#include <htd/GraphDecompositionFactory.hpp>
 #include <htd/NamedGraph.hpp>
 
 #include <algorithm>
@@ -200,7 +201,7 @@ htd::BucketEliminationGraphDecompositionAlgorithm * htd::BucketEliminationGraphD
 
 htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph & graph) const
 {
-    htd::IMutableGraphDecomposition * ret = nullptr;
+    htd::IMutableGraphDecomposition * ret = htd::GraphDecompositionFactory::instance().getGraphDecomposition();
 
     std::size_t size = graph.vertexCount();
 

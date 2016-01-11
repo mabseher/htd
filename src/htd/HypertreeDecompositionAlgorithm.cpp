@@ -36,6 +36,7 @@
 #include <htd/SetCoverAlgorithmFactory.hpp>
 
 #include <cstdarg>
+#include <stdexcept>
 #include <vector>
 
 htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(void) : labelingFunctions_(), postProcessingOperations_()

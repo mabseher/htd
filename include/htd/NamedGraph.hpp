@@ -425,16 +425,24 @@ namespace htd
 
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
-                htd::vertex_t locatedVertex1 = lookupVertex(vertexName1);
+                htd::vertex_t locatedVertex1 = htd::Vertex::UNKNOWN;
 
-                if (locatedVertex1 == htd::Vertex::UNKNOWN)
+                if (isVertexName(vertexName1))
+                {
+                    locatedVertex1 = lookupVertex(vertexName1);
+                }
+                else
                 {
                     locatedVertex1 = addVertex(vertexName1);
                 }
 
-                htd::vertex_t locatedVertex2 = lookupVertex(vertexName2);
+                htd::vertex_t locatedVertex2 = htd::Vertex::UNKNOWN;
 
-                if (locatedVertex2 == htd::Vertex::UNKNOWN)
+                if (isVertexName(vertexName2))
+                {
+                    locatedVertex2 = lookupVertex(vertexName2);
+                }
+                else
                 {
                     locatedVertex2 = addVertex(vertexName2);
                 }
@@ -444,16 +452,24 @@ namespace htd
 
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2, const EdgeNameType & name)
             {
-                htd::vertex_t locatedVertex1 = lookupVertex(vertexName1);
+                htd::vertex_t locatedVertex1 = htd::Vertex::UNKNOWN;
 
-                if (locatedVertex1 == htd::Vertex::UNKNOWN)
+                if (isVertexName(vertexName1))
+                {
+                    locatedVertex1 = lookupVertex(vertexName1);
+                }
+                else
                 {
                     locatedVertex1 = addVertex(vertexName1);
                 }
 
-                htd::vertex_t locatedVertex2 = lookupVertex(vertexName2);
+                htd::vertex_t locatedVertex2 = htd::Vertex::UNKNOWN;
 
-                if (locatedVertex2 == htd::Vertex::UNKNOWN)
+                if (isVertexName(vertexName2))
+                {
+                    locatedVertex2 = lookupVertex(vertexName2);
+                }
+                else
                 {
                     locatedVertex2 = addVertex(vertexName2);
                 }

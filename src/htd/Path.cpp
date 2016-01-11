@@ -1106,6 +1106,15 @@ htd::Path & htd::Path::operator=(const htd::Path & original)
         this->root_ = original.root_;
 
         this->size_ = original.size_;
+
+        if (original.next_vertex_ >= htd::Vertex::FIRST)
+        {
+            next_vertex_ = original.next_vertex_;
+        }
+        else
+        {
+            next_vertex_ = htd::Vertex::FIRST;
+        }
     }
 
     return *this;
@@ -1151,6 +1160,11 @@ htd::Path & htd::Path::operator=(const htd::IPath & original)
                 }
 
                 nodes_.insert(std::make_pair(vertex, newNode));
+
+                if (vertex > maximumVertex)
+                {
+                    maximumVertex = vertex;
+                }
             }
 
             if (maximumVertex >= htd::Vertex::FIRST)

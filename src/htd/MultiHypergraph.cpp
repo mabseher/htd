@@ -112,7 +112,7 @@ std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t vertex) const
 
 bool htd::MultiHypergraph::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && !std::binary_search(deletions_.begin(), deletions_.end(), vertex);
+    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && deletions_.find(vertex) == deletions_.end();
 }
 
 bool htd::MultiHypergraph::isEdge(htd::id_t edgeId) const
@@ -809,11 +809,11 @@ htd::MultiHypergraph & htd::MultiHypergraph::operator=(const htd::IMultiHypergra
                 deletions_.insert(next_vertex_);
 
                 neighborhood_.push_back(htd::vertex_container());
-
-                next_vertex_++;
             }
 
             size_++;
+
+            next_vertex_++;
 
             neighborhood_.push_back(htd::vertex_container());
 

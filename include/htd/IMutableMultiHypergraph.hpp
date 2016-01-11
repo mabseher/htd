@@ -1,5 +1,5 @@
 /* 
- * File:   IMutableHypergraph.hpp
+ * File:   IMutableMultiHypergraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,18 +22,18 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_IMUTABLEHYPERGRAPH_HPP
-#define	HTD_HTD_IMUTABLEHYPERGRAPH_HPP
+#ifndef HTD_HTD_IMUTABLEMULTIHYPERGRAPH_HPP
+#define	HTD_HTD_IMUTABLEMULTIHYPERGRAPH_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IHypergraph.hpp>
+#include <htd/IMultiHypergraph.hpp>
 
 namespace htd
 {
-    class IMutableHypergraph : public virtual htd::IHypergraph
+    class IMutableMultiHypergraph : public virtual htd::IMultiHypergraph
     {
         public:
-            virtual ~IMutableHypergraph() = 0;
+            virtual ~IMutableMultiHypergraph() = 0;
 
             virtual htd::vertex_t addVertex(void) = 0;
 
@@ -49,20 +49,12 @@ namespace htd
 
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
-            virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+            virtual IMutableMultiHypergraph * clone(void) const = 0;
 
-            virtual void removeEdge(const std::vector<htd::vertex_t> & elements) = 0;
-
-            virtual void removeEdge(const htd::ConstCollection<htd::vertex_t> & elements) = 0;
-
-            virtual void removeEdge(const htd::Hyperedge & hyperedge) = 0;
-
-            virtual IMutableHypergraph * clone(void) const = 0;
-
-            virtual IMutableHypergraph & operator=(const htd::IHypergraph & original) = 0;
+            virtual IMutableMultiHypergraph & operator=(const htd::IMultiHypergraph & original) = 0;
     };
 
-    inline htd::IMutableHypergraph::~IMutableHypergraph() { }
+    inline htd::IMutableMultiHypergraph::~IMutableMultiHypergraph() { }
 }
 
-#endif /* HTD_HTD_IMUTABLEHYPERGRAPH_HPP */
+#endif /* HTD_HTD_IMUTABLEMULTIHYPERGRAPH_HPP */

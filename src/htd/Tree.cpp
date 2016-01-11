@@ -721,38 +721,26 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                 {
                     nodes_.at(children[0])->parent = node.parent;
 
-                    siblings.push_back(children[0]);
+                    auto position = std::lower_bound(siblings.begin(), siblings.end(), children[0]);
+
+                    if (position == siblings.end() || *position != children[0])
+                    {
+                        siblings.insert(position, children[0]);
+                    }
 
                     break;
                 }
                 default:
                 {
-                    htd::vertex_t selectedChild = children[0];
-
-                    auto & selectedChildNode = *(nodes_.at(selectedChild));
-
-                    nodes_.at(selectedChild)->parent = node.parent;
-
-                    htd::vertex_container & selectedGrandChildren = selectedChildNode.children;
-
-                    auto position = std::lower_bound(siblings.begin(), siblings.end(), selectedChild);
-
-                    if (position == siblings.end() || *position != selectedChild)
+                    for (htd::vertex_t child : children)
                     {
-                        siblings.insert(position, selectedChild);
-                    }
+                        nodes_.at(child)->parent = node.parent;
 
-                    for (auto it = children.begin() + 1; it != children.end(); ++it)
-                    {
-                        htd::vertex_t child = *it;
+                        auto position = std::lower_bound(siblings.begin(), siblings.end(), child);
 
-                        nodes_.at(child)->parent = selectedChild;
-
-                        auto position = std::lower_bound(selectedGrandChildren.begin(), selectedGrandChildren.end(), child);
-
-                        if (position == selectedGrandChildren.end() || *position != child)
+                        if (position == siblings.end() || *position != child)
                         {
-                            selectedGrandChildren.insert(position, child);
+                            siblings.insert(position, child);
                         }
                     }
 

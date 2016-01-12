@@ -116,7 +116,6 @@
 #include <htd/ITreeTraversal.hpp>
 #include <htd/Id.hpp>
 #include <htd/InOrderTreeTraversal.hpp>
-#include <htd/InducedSubgraphLabelingFunction.hpp>
 #include <htd/InducedSubgraphLabelingOperation.hpp>
 #include <htd/Iterator.hpp>
 #include <htd/IteratorBase.hpp>

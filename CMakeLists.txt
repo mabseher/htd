@@ -26,7 +26,9 @@ if (DEFINED HTD_DEBUG_OUTPUT)
 endif()
 
 if (NOT DEFINED HTD_BUILD_TESTS)
-    set(HTD_BUILD_TESTS ON)
+    message("Tests are disabled!")
+
+    set(HTD_BUILD_TESTS OFF)
 endif()
 
 subdirs(src/htd)

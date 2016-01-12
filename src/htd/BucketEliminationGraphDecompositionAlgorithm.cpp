@@ -68,12 +68,12 @@ htd::BucketEliminationGraphDecompositionAlgorithm::~BucketEliminationGraphDecomp
     }
 }
 
-htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph) const
+htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph) const
 {
     return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>());
 }
 
-htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
+htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
     htd::IMutableGraphDecomposition * ret = computeMutableDecomposition(graph);
 
@@ -142,7 +142,7 @@ htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::co
     return ret;
 }
 
-htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const
+htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, int manipulationOperationCount, ...) const
 {
     va_list arguments;
 
@@ -199,7 +199,7 @@ htd::BucketEliminationGraphDecompositionAlgorithm * htd::BucketEliminationGraphD
     return new BucketEliminationGraphDecompositionAlgorithm(manipulationOperations);
 }
 
-htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph & graph) const
+htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeMutableDecomposition(const htd::IMultiHypergraph & graph) const
 {
     htd::IMutableGraphDecomposition * ret = htd::GraphDecompositionFactory::instance().getGraphDecomposition();
 

@@ -27,7 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ILabelingFunction.hpp>
-#include <htd/IHypergraph.hpp>
+#include <htd/IMultiHypergraph.hpp>
 #include <htd/Label.hpp>
 
 namespace htd
@@ -35,7 +35,7 @@ namespace htd
     class HypertreeDecompositionLabelingFunction : public virtual htd::ILabelingFunction
     {
         public:
-            HypertreeDecompositionLabelingFunction(const htd::IHypergraph & graph);
+            HypertreeDecompositionLabelingFunction(const htd::IMultiHypergraph & graph);
 
             ~HypertreeDecompositionLabelingFunction();
 	    
@@ -48,7 +48,7 @@ namespace htd
             HypertreeDecompositionLabelingFunction * clone(void) const HTD_OVERRIDE;
 
         private:
-            const htd::IHypergraph & graph_;
+            const htd::IMultiHypergraph & graph_;
 
             htd::hyperedge_container hyperedges_;
     };

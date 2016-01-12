@@ -39,9 +39,9 @@ namespace htd
         public:
             virtual ~ITreeDecompositionAlgorithm() = 0;
             
-            virtual htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE = 0;
+            virtual htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE = 0;
 
-            virtual htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE = 0;
+            virtual htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE = 0;
 
             virtual ITreeDecompositionAlgorithm * clone(void) const HTD_OVERRIDE = 0;
     };

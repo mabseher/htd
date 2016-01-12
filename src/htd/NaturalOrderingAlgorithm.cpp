@@ -41,7 +41,7 @@ htd::NaturalOrderingAlgorithm::~NaturalOrderingAlgorithm()
     
 }
 
-htd::ConstCollection<htd::vertex_t> htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph) const
+htd::ConstCollection<htd::vertex_t> htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const
 {
     htd::VectorAdapter<htd::vertex_t> ret(graph.vertices());
 

@@ -39,7 +39,7 @@
 #include <algorithm>
 #include <string>
 
-htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunction(const htd::IHypergraph & graph) : graph_(graph), hyperedges_()
+htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunction(const htd::IMultiHypergraph & graph) : graph_(graph), hyperedges_()
 {
     const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = graph.hyperedges();
 

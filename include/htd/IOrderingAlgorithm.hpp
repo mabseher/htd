@@ -36,7 +36,7 @@ namespace htd
         public:
             virtual ~IOrderingAlgorithm() = 0;
             
-            virtual htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IHypergraph & graph) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const = 0;
 
             virtual IOrderingAlgorithm * clone(void) const = 0;
     };

@@ -42,7 +42,7 @@ htd::MinDegreeOrderingAlgorithm::~MinDegreeOrderingAlgorithm()
     
 }
 
-htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IHypergraph & graph) const
+htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 

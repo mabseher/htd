@@ -42,7 +42,7 @@ namespace htd
             
             ~MinDegreeOrderingAlgorithm();
             
-            htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IHypergraph & graph) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
             MinDegreeOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 

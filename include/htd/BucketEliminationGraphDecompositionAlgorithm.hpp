@@ -46,11 +46,11 @@ namespace htd
 
             ~BucketEliminationGraphDecompositionAlgorithm();
             
-            htd::IGraphDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE;
+            htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
-            htd::IGraphDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
+            htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
 
-            htd::IGraphDecomposition * computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const;
+            htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, int manipulationOperationCount, ...) const;
 
             void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) HTD_OVERRIDE;
 
@@ -64,7 +64,7 @@ namespace htd
 
             std::vector<htd::IGraphDecompositionManipulationOperation *> postProcessingOperations_;
 
-            htd::IMutableGraphDecomposition * computeMutableDecomposition(const htd::IHypergraph & graph) const;
+            htd::IMutableGraphDecomposition * computeMutableDecomposition(const htd::IMultiHypergraph & graph) const;
 
             htd::vertex_t getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices) const;
 

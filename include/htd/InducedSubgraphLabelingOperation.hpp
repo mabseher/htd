@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
-#include <htd/IHypergraph.hpp>
+#include <htd/IMultiHypergraph.hpp>
 #include <htd/Label.hpp>
 
 #include <utility>
@@ -43,7 +43,7 @@ namespace htd
              */
             static constexpr const char * INDUCED_SUBGRAPH_LABEL_IDENTIFIER = "Induced Subgraph";
 
-            InducedSubgraphLabelingOperation(const htd::IHypergraph & graph);
+            InducedSubgraphLabelingOperation(const htd::IMultiHypergraph & graph);
 
             ~InducedSubgraphLabelingOperation();
 
@@ -58,7 +58,7 @@ namespace htd
             InducedSubgraphLabelingOperation * clone(void) const HTD_OVERRIDE;
 
         private:
-            const htd::IHypergraph & graph_;
+            const htd::IMultiHypergraph & graph_;
     };
 }
 

@@ -37,19 +37,19 @@ namespace htd
                         
             ~TreeDecompositionVerifier();
                         
-            bool verify(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
+            bool verify(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            bool verifyVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
+            bool verifyVertexExistence(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            bool verifyHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
+            bool verifyHyperEdgeCoverage(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            bool verifyConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
+            bool verifyConnectednessCriterion(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            htd::ConstCollection<htd::vertex_t> violationsVertexExistence(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> violationsVertexExistence(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            htd::ConstCollection<htd::Hyperedge> violationsHyperEdgeCoverage(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::Hyperedge> violationsHyperEdgeCoverage(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             
-            htd::ConstCollection<htd::vertex_t> violationsConnectednessCriterion(const htd::IHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> violationsConnectednessCriterion(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
 
         protected:
             TreeDecompositionVerifier & operator=(const TreeDecompositionVerifier &) { return *this; }

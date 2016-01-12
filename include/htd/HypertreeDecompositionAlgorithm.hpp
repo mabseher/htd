@@ -44,11 +44,11 @@ namespace htd
 
             ~HypertreeDecompositionAlgorithm();
             
-            htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE;
+            htd::IHypertreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
-            htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
+            htd::IHypertreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
 
-            htd::IHypertreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const;
+            htd::IHypertreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, int manipulationOperationCount, ...) const;
 
             void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) HTD_OVERRIDE;
 

@@ -34,7 +34,7 @@
 #include <algorithm>
 #include <unordered_set>
 
-htd::InducedSubgraphLabelingOperation::InducedSubgraphLabelingOperation(const htd::IHypergraph & graph) : graph_(graph)
+htd::InducedSubgraphLabelingOperation::InducedSubgraphLabelingOperation(const htd::IMultiHypergraph & graph) : graph_(graph)
 {
 
 }

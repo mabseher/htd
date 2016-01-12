@@ -39,9 +39,9 @@ namespace htd
         public:
             virtual ~IGraphDecompositionAlgorithm() = 0;
             
-            virtual htd::IGraphDecomposition * computeDecomposition(const htd::IHypergraph & graph) const = 0;
+            virtual htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const = 0;
 
-            virtual htd::IGraphDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const = 0;
+            virtual htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const = 0;
 
             virtual void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) = 0;
 

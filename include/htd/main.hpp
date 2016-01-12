@@ -79,6 +79,7 @@
 #include <htd/ILabeledDirectedGraph.hpp>
 #include <htd/ILabeledGraph.hpp>
 #include <htd/ILabeledHypergraph.hpp>
+#include <htd/ILabeledMultiHypergraph.hpp>
 #include <htd/ILabeledPath.hpp>
 #include <htd/ILabeledTree.hpp>
 #include <htd/ILabelingCollection.hpp>
@@ -92,6 +93,7 @@
 #include <htd/IMutableLabeledDirectedGraph.hpp>
 #include <htd/IMutableLabeledGraph.hpp>
 #include <htd/IMutableLabeledHypergraph.hpp>
+#include <htd/IMutableLabeledMultiHypergraph.hpp>
 #include <htd/IMutableLabeledPath.hpp>
 #include <htd/IMutableLabeledTree.hpp>
 #include <htd/IMutableMultiHypergraph.hpp>
@@ -129,6 +131,8 @@
 #include <htd/LabeledGraphFactory.hpp>
 #include <htd/LabeledHypergraph.hpp>
 #include <htd/LabeledHypergraphFactory.hpp>
+#include <htd/LabeledMultiHypergraph.hpp>
+#include <htd/LabeledMultiHypergraphFactory.hpp>
 #include <htd/LabeledPath.hpp>
 #include <htd/LabeledPathFactory.hpp>
 #include <htd/LabeledTree.hpp>
@@ -144,6 +148,7 @@
 #include <htd/NamedDirectedGraph.hpp>
 #include <htd/NamedGraph.hpp>
 #include <htd/NamedHypergraph.hpp>
+#include <htd/NamedMultiHypergraph.hpp>
 #include <htd/NamedPath.hpp>
 #include <htd/NamedTree.hpp>
 #include <htd/NamedVertexHyperedge.hpp>

@@ -46,11 +46,11 @@ namespace htd
 
             ~BucketEliminationTreeDecompositionAlgorithm();
             
-            htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph) const HTD_OVERRIDE;
+            htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
-            htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
+            htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
 
-            htd::ITreeDecomposition * computeDecomposition(const htd::IHypergraph & graph, int manipulationOperationCount, ...) const;
+            htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, int manipulationOperationCount, ...) const;
 
             void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) HTD_OVERRIDE;
 
@@ -66,7 +66,7 @@ namespace htd
 
             std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
 
-            htd::IMutableTreeDecomposition * computeMutableDecomposition(const htd::IHypergraph & graph) const;
+            htd::IMutableTreeDecomposition * computeMutableDecomposition(const htd::IMultiHypergraph & graph) const;
     };
 }
 

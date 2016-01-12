@@ -40,9 +40,9 @@ namespace htd
     class BucketEliminationTreeDecompositionAlgorithm : public virtual htd::ITreeDecompositionAlgorithm
     {
         public:
-            BucketEliminationTreeDecompositionAlgorithm(void);
+            BucketEliminationTreeDecompositionAlgorithm(bool compressed = true);
 
-            BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
+            BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, bool compressed = true);
 
             ~BucketEliminationTreeDecompositionAlgorithm();
             
@@ -60,6 +60,8 @@ namespace htd
             BucketEliminationTreeDecompositionAlgorithm & operator=(const BucketEliminationTreeDecompositionAlgorithm &) { return *this; }
 
         private:
+            bool compressed_;
+
             std::vector<htd::ILabelingFunction *> labelingFunctions_;
 
             std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;

@@ -37,6 +37,8 @@ namespace htd
 
             virtual htd::vertex_t addVertex(void) = 0;
 
+            virtual htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) = 0;
+
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;

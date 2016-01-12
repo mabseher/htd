@@ -41,6 +41,11 @@ htd::Hypergraph::Hypergraph(void) : base_(htd::MultiHypergraphFactory::instance(
 
 }
 
+htd::Hypergraph::Hypergraph(std::size_t initialSize) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph(initialSize))
+{
+
+}
+
 htd::Hypergraph::Hypergraph(const htd::Hypergraph & original) : base_(original.base_->clone())
 {
 
@@ -204,6 +209,11 @@ const htd::Hyperedge & htd::Hypergraph::hyperedgeAtPosition(htd::index_t index, 
 htd::vertex_t htd::Hypergraph::addVertex(void)
 {
     return base_->addVertex();
+}
+
+htd::ConstCollection<htd::vertex_t> htd::Hypergraph::addVertices(std::size_t count)
+{
+    return base_->addVertices(count);
 }
 
 void htd::Hypergraph::removeVertex(htd::vertex_t vertex)

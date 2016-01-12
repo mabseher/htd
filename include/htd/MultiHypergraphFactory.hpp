@@ -39,6 +39,8 @@ namespace htd
 
             htd::IMutableMultiHypergraph * getMultiHypergraph(void);
 
+            htd::IMutableMultiHypergraph * getMultiHypergraph(std::size_t initialSize);
+
             htd::IMutableMultiHypergraph * getMultiHypergraph(const htd::IMultiHypergraph & original);
 
             void setConstructionTemplate(htd::IMutableMultiHypergraph * original);

@@ -81,7 +81,7 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
 
         for (htd::vertex_t child : decomposition.children(vertex))
         {
-            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex);
+            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex, child);
 
             for (const htd::Hyperedge & hyperedge : dynamic_cast<const htd::Label<htd::ConstCollection<htd::Hyperedge>> *>(&(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))->value())
             {
@@ -102,15 +102,15 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
                     }
                 }
             }
+        }
 
-            const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
-            for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : relevantHyperedges)
+        for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : relevantHyperedges)
+        {
+            if (childHyperedgeSelection.count(hyperedge.first.id()) == 0 && std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
             {
-                if (childHyperedgeSelection.count(hyperedge.first.id()) == 0 && std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
-                {
-                    labelContent.push_back(hyperedge.second);
-                }
+                labelContent.push_back(hyperedge.second);
             }
         }
 
@@ -175,7 +175,7 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
 
         for (htd::vertex_t child : decomposition.children(vertex))
         {
-            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex);
+            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex, child);
 
             for (const htd::Hyperedge & hyperedge : dynamic_cast<const htd::Label<htd::ConstCollection<htd::Hyperedge>> *>(&(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))->value())
             {
@@ -196,15 +196,15 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
                     }
                 }
             }
+        }
 
-            const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
-            for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : relevantHyperedges)
+        for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : relevantHyperedges)
+        {
+            if (childHyperedgeSelection.count(hyperedge.first.id()) == 0 && std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
             {
-                if (childHyperedgeSelection.count(hyperedge.first.id()) == 0 && std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
-                {
-                    labelContent.push_back(hyperedge.second);
-                }
+                labelContent.push_back(hyperedge.second);
             }
         }
 

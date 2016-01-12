@@ -30,6 +30,7 @@
 #include <htd/Collection.hpp>
 #include <htd/ConstCollection.hpp>
 #include <htd/ILabel.hpp>
+#include <htd/Label.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -743,7 +744,7 @@ namespace htd
     template<typename OutputType>
     const OutputType & accessLabel(const htd::ILabel & input)
     {
-        return *(dynamic_cast<const OutputType *>(&input));
+        return dynamic_cast<const htd::Label<OutputType> *>(&input)->value();
     }
 }
 

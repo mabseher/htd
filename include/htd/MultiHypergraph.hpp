@@ -37,6 +37,8 @@ namespace htd
         public:
             MultiHypergraph(void);
 
+            MultiHypergraph(std::size_t initialSize);
+
             MultiHypergraph(const MultiHypergraph & original);
 
             MultiHypergraph(const htd::IMultiHypergraph & original);
@@ -100,6 +102,8 @@ namespace htd
             const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
+
+            htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) HTD_OVERRIDE;
             
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 

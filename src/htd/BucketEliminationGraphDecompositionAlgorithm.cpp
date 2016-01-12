@@ -378,6 +378,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                 result.addEdge(selection, minimumVertex);
             }
+            else
+            {
+                result.addVertex(selection);
+            }
         }
 
         DEBUGGING_CODE(std::cout << std::endl << "Buckets:" << std::endl;

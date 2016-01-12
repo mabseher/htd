@@ -268,7 +268,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         const htd::ConstCollection<htd::vertex_t> & vertexCollection = graphDecomposition->vertices();
 
-        graphTraversal.traverse(*graphDecomposition, vertexCollection[rand() & vertexCollection.size()], [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
+        graphTraversal.traverse(*graphDecomposition, vertexCollection[rand() % vertexCollection.size()], [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
         {
             HTD_UNUSED(distanceFromStartingVertex)
 

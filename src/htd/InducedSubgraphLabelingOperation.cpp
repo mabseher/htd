@@ -32,7 +32,8 @@
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
-#include <unordered_set>
+#include <unordered_map>
+#include <vector>
 
 htd::InducedSubgraphLabelingOperation::InducedSubgraphLabelingOperation(const htd::IMultiHypergraph & graph) : graph_(graph)
 {
@@ -50,92 +51,135 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
 }
 
 void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
-{
-    HTD_UNUSED(labelingFunctions);
+{    HTD_UNUSED(labelingFunctions);
 
-    std::vector<std::pair<htd::Hyperedge, htd::Hyperedge>> relevantHyperedges;
+     htd::index_t index = 0;
 
-    for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
-    {
-        htd::vertex_container elements(hyperedge.begin(), hyperedge.end());
+     htd::vertex_t nextParent = htd::Vertex::UNKNOWN;
 
-        std::sort(elements.begin(), elements.end());
+     std::vector<std::pair<htd::Hyperedge, htd::Hyperedge>> hyperedges;
 
-        elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
+     for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
+     {
+         htd::vertex_container elements(hyperedge.begin(), hyperedge.end());
 
-        relevantHyperedges.push_back(std::make_pair(htd::Hyperedge(hyperedge.id(), elements), hyperedge));
-    }
+         std::sort(elements.begin(), elements.end());
 
-    htd::PostOrderTreeTraversal treeTraversal;
+         elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
 
-    treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
-    {
-        HTD_UNUSED(parent)
-        HTD_UNUSED(distanceToSubtreeRoot)
+         hyperedges.push_back(std::make_pair(htd::Hyperedge(hyperedge.id(), elements), hyperedge));
 
-        htd::VectorAdapter<htd::Hyperedge> label;
+         ++index;
+     }
 
-        std::vector<htd::Hyperedge> & labelContent = label.container();
+     std::vector<char> hyperedgeState(hyperedges.size(), 0);
 
-        std::unordered_set<htd::vertex_t> childHyperedgeSelection;
+     htd::PostOrderTreeTraversal treeTraversal;
 
-        for (htd::vertex_t child : decomposition.children(vertex))
-        {
-            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex, child);
+     treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
+     {
+         HTD_UNUSED(parent)
+         HTD_UNUSED(distanceToSubtreeRoot)
 
-            for (const htd::Hyperedge & hyperedge : dynamic_cast<const htd::Label<htd::ConstCollection<htd::Hyperedge>> *>(&(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))->value())
-            {
-                if (childHyperedgeSelection.count(hyperedge.id()) == 0)
-                {
-                    bool ok = true;
+         htd::VectorAdapter<htd::Hyperedge> label;
 
-                    for (auto it = forgottenVertexCollection.begin(); ok && it != forgottenVertexCollection.end(); ++it)
-                    {
-                        ok = std::find(hyperedge.begin(), hyperedge.end(), *it) == hyperedge.end();
-                    }
+         std::vector<htd::Hyperedge> & labelContent = label.container();
 
-                    if (ok)
-                    {
-                        childHyperedgeSelection.insert(hyperedge.id());
+         const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
-                        labelContent.push_back(hyperedge);
-                    }
-                }
-            }
-        }
+         if (!decomposition.isRoot(vertex))
+         {
+             const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(parent, vertex);
 
-        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+             index = 0;
 
-        for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : relevantHyperedges)
-        {
-            if (childHyperedgeSelection.count(hyperedge.first.id()) == 0 && std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
-            {
-                labelContent.push_back(hyperedge.second);
-            }
-        }
+             bool edgeIntroductionCheckNeeded = decomposition.isJoinNode(vertex) || decomposition.isIntroduceNode(vertex);
 
-        if (!decomposition.isRoot(vertex))
-        {
-            std::unordered_set<htd::vertex_t> irrelevantHyperedges;
+             for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : hyperedges)
+             {
+                 if (hyperedgeState[index] == 0)
+                 {
+                     if (edgeIntroductionCheckNeeded)
+                     {
+                         if (std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
+                         {
+                             labelContent.push_back(hyperedge.second);
 
-            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(decomposition.parent(vertex), vertex);
+                             hyperedgeState[index] |= 1;
 
-            for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : relevantHyperedges)
-            {
-                if (htd::has_non_empty_set_intersection(hyperedge.first.begin(), hyperedge.first.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
-                {
-                    irrelevantHyperedges.insert(hyperedge.first.id());
-                }
-            }
+                             if (htd::has_non_empty_set_intersection(hyperedge.first.begin(), hyperedge.first.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
+                             {
+                                 hyperedgeState[index] |= 2;
+                             }
+                         }
+                     }
+                 }
+                 else if (hyperedgeState[index] == 1)
+                 {
+                     if (edgeIntroductionCheckNeeded)
+                     {
+                         if (std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
+                         {
+                             labelContent.push_back(hyperedge.second);
+                         }
+                     }
 
-            relevantHyperedges.erase(std::remove_if(relevantHyperedges.begin(), relevantHyperedges.end(), [&](const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge)
-            {
-                return irrelevantHyperedges.count(hyperedge.first.id()) > 0;
-            }), relevantHyperedges.end());
-        }
+                     if (vertex == nextParent)
+                     {
+                         if (htd::has_non_empty_set_intersection(hyperedge.first.begin(), hyperedge.first.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
+                         {
+                             hyperedgeState[index] |= 2;
+                         }
+                     }
+                 }
+                 else if (hyperedgeState[index] == 3)
+                 {
+                     hyperedgeState[index] = 2;
+                 }
 
-        decomposition.setVertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(label)));
-    });
+                 ++index;
+             }
+         }
+         else
+         {
+             index = 0;
+
+             for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : hyperedges)
+             {
+                 if (hyperedgeState[index] < 2)
+                 {
+                     labelContent.push_back(hyperedge.second);
+                 }
+
+                 hyperedgeState[index] = 2;
+
+                 ++index;
+             }
+         }
+
+         /*
+         std::cout << "VERTEX: " << vertex << std::endl;
+         for (htd::index_t index = 0; index < hyperedges.size(); ++index)
+         {
+             std::cout << (int)hyperedgeState[index] << " ";
+         }
+         std::cout << std::endl << std::endl;
+
+         if (vertex == nextParent)
+         {
+             std::cout << "PARENT: " << vertex << std::endl;
+             for (htd::index_t index = 0; index < hyperedges.size(); ++index)
+             {
+                 std::cout << (int)hyperedgeState[index] << " ";
+             }
+             std::cout << std::endl << std::endl;
+         }
+         */
+
+         nextParent = parent;
+
+         decomposition.setVertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(label)));
+     });
 }
 
 void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
@@ -147,7 +191,11 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
 {
     HTD_UNUSED(labelingFunctions);
 
-    std::vector<std::pair<htd::Hyperedge, htd::Hyperedge>> relevantHyperedges;
+    htd::index_t index = 0;
+
+    htd::vertex_t nextParent = htd::Vertex::UNKNOWN;
+
+    std::vector<std::pair<htd::Hyperedge, htd::Hyperedge>> hyperedges;
 
     for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
     {
@@ -157,8 +205,12 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
 
         elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
 
-        relevantHyperedges.push_back(std::make_pair(htd::Hyperedge(hyperedge.id(), elements), hyperedge));
+        hyperedges.push_back(std::make_pair(htd::Hyperedge(hyperedge.id(), elements), hyperedge));
+
+        ++index;
     }
+
+    std::vector<char> hyperedgeState(hyperedges.size(), 0);
 
     htd::PostOrderTreeTraversal treeTraversal;
 
@@ -171,62 +223,98 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
 
         std::vector<htd::Hyperedge> & labelContent = label.container();
 
-        std::unordered_set<htd::vertex_t> childHyperedgeSelection;
-
-        for (htd::vertex_t child : decomposition.children(vertex))
-        {
-            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex, child);
-
-            for (const htd::Hyperedge & hyperedge : dynamic_cast<const htd::Label<htd::ConstCollection<htd::Hyperedge>> *>(&(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))->value())
-            {
-                if (childHyperedgeSelection.count(hyperedge.id()) == 0)
-                {
-                    bool ok = true;
-
-                    for (auto it = forgottenVertexCollection.begin(); ok && it != forgottenVertexCollection.end(); ++it)
-                    {
-                        ok = std::find(hyperedge.begin(), hyperedge.end(), *it) == hyperedge.end();
-                    }
-
-                    if (ok)
-                    {
-                        childHyperedgeSelection.insert(hyperedge.id());
-
-                        labelContent.push_back(hyperedge);
-                    }
-                }
-            }
-        }
-
         const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
-
-        for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : relevantHyperedges)
-        {
-            if (childHyperedgeSelection.count(hyperedge.first.id()) == 0 && std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
-            {
-                labelContent.push_back(hyperedge.second);
-            }
-        }
 
         if (!decomposition.isRoot(vertex))
         {
-            std::unordered_set<htd::vertex_t> irrelevantHyperedges;
+            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(parent, vertex);
 
-            const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(decomposition.parent(vertex), vertex);
+            index = 0;
 
-            for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : relevantHyperedges)
+            bool edgeIntroductionCheckNeeded = decomposition.isJoinNode(vertex) || decomposition.isIntroduceNode(vertex);
+
+            for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : hyperedges)
             {
-                if (htd::has_non_empty_set_intersection(hyperedge.first.begin(), hyperedge.first.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
+                if (hyperedgeState[index] == 0)
                 {
-                    irrelevantHyperedges.insert(hyperedge.first.id());
-                }
-            }
+                    if (edgeIntroductionCheckNeeded)
+                    {
+                        if (std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
+                        {
+                            labelContent.push_back(hyperedge.second);
 
-            relevantHyperedges.erase(std::remove_if(relevantHyperedges.begin(), relevantHyperedges.end(), [&](const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge)
-            {
-                return irrelevantHyperedges.count(hyperedge.first.id()) > 0;
-            }), relevantHyperedges.end());
+                            hyperedgeState[index] |= 1;
+
+                            if (htd::has_non_empty_set_intersection(hyperedge.first.begin(), hyperedge.first.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
+                            {
+                                hyperedgeState[index] |= 2;
+                            }
+                        }
+                    }
+                }
+                else if (hyperedgeState[index] == 1)
+                {
+                    if (edgeIntroductionCheckNeeded)
+                    {
+                        if (std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
+                        {
+                            labelContent.push_back(hyperedge.second);
+                        }
+                    }
+
+                    if (vertex == nextParent)
+                    {
+                        if (htd::has_non_empty_set_intersection(hyperedge.first.begin(), hyperedge.first.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
+                        {
+                            hyperedgeState[index] |= 2;
+                        }
+                    }
+                }
+                else if (hyperedgeState[index] == 3)
+                {
+                    hyperedgeState[index] = 2;
+                }
+
+                ++index;
+            }
         }
+        else
+        {
+            index = 0;
+
+            for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : hyperedges)
+            {
+                if (hyperedgeState[index] < 2)
+                {
+                    labelContent.push_back(hyperedge.second);
+                }
+
+                hyperedgeState[index] = 2;
+
+                ++index;
+            }
+        }
+
+        /*
+        std::cout << "VERTEX: " << vertex << std::endl;
+        for (htd::index_t index = 0; index < hyperedges.size(); ++index)
+        {
+            std::cout << (int)hyperedgeState[index] << " ";
+        }
+        std::cout << std::endl << std::endl;
+
+        if (vertex == nextParent)
+        {
+            std::cout << "PARENT: " << vertex << std::endl;
+            for (htd::index_t index = 0; index < hyperedges.size(); ++index)
+            {
+                std::cout << (int)hyperedgeState[index] << " ";
+            }
+            std::cout << std::endl << std::endl;
+        }
+        */
+
+        nextParent = parent;
 
         decomposition.setVertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(label)));
     });

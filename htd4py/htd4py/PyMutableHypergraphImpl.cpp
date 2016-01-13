@@ -45,7 +45,7 @@ namespace htd {
   void (htd::Hypergraph::*removeVertex)(htd::vertex_t) = &htd::Hypergraph::removeVertex;
 
   void export_MutableHypergraphImpl(){
-    py::class_<htd::Hypergraph>("Hypergraph", py::init<>())
+    py::class_<htd::Hypergraph>("Hypergraph", py::init<std::size_t>())
       .def("add_edge", htd::addEdge_)
       .def("add_vertex", &htd::Hypergraph::addVertex)
       .def("is_vertex", &htd::Hypergraph::isVertex)

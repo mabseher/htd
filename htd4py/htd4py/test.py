@@ -24,15 +24,19 @@
 import sys
 
 import htd
-h=htd.Hypergraph()
+h=htd.Hypergraph(0)
+h.add_vertex()
 h.add_vertex()
 h.add_vertex()
 h.add_vertex()
 h.add_edge(1,2)
 h.add_edge(2,3)
+#h.add_edge(700,3)
 #TODO:
 #catch runtime errors
 #h.add_edge(1,4)
+
+htd.set_seed(1233)
 
 print "vertices=", h.num_vertices(), "edges=", h.num_edges()
 ord = htd.MinFillOrdering()

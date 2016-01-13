@@ -20,25 +20,10 @@
  with htd4Py.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <Python.h>
-#include <boost/python.hpp>
-
-namespace py = boost::python;
-
+#include <unordered_set>
 #include <stdlib.h>
-#include <iostream>
 
-#include <PyMutableHypergraphImpl.h>
-#include <PyMinFillOrderingAlgorithmImpl.h>
-#include <PyBucketEliminationTreeDecompositionAlgorithm.h>
-#include <PyITreeDecomposition.h>
-#include <PyHtdSeed.h>
-
-
-BOOST_PYTHON_MODULE (htd) {
-  htd::export_MutableHypergraphImpl();
-  htd::export_MinFillOrderingAlgorithmImpl();
-  htd::export_BucketEliminationTreeDecompositionAlgorithm();
-  htd::export_ITreeDecomposition();
-  htd::export_srand();
+namespace htd {
+  
+  void export_srand();
 }

@@ -23,22 +23,23 @@
 #include <Python.h>
 #include <boost/python.hpp>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 namespace py = boost::python;
 
-#include <stdlib.h>
-#include <iostream>
+namespace htd {
+  void srand_1(unsigned int seed){
+    srand (seed);
+  }
 
-#include <PyMutableHypergraphImpl.h>
-#include <PyMinFillOrderingAlgorithmImpl.h>
-#include <PyBucketEliminationTreeDecompositionAlgorithm.h>
-#include <PyITreeDecomposition.h>
-#include <PyHtdSeed.h>
+  void srand_2(){
+    srand (time(NULL));
+  }
 
-
-BOOST_PYTHON_MODULE (htd) {
-  htd::export_MutableHypergraphImpl();
-  htd::export_MinFillOrderingAlgorithmImpl();
-  htd::export_BucketEliminationTreeDecompositionAlgorithm();
-  htd::export_ITreeDecomposition();
-  htd::export_srand();
+  void export_srand(){
+    py::def("set_seed", htd::srand_1);
+    py::def("set_seed2time", htd::srand_2);
+  }
 }

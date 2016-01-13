@@ -1,5 +1,5 @@
 /* 
- * File:   Assembly.cpp
+ * File:   AssemblyInfo.cpp
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_ASSEMBLY_CPP
-#define HTD_HTD_ASSEMBLY_CPP
+#ifndef HTD_HTD_ASSEMBLYINFO_CPP
+#define HTD_HTD_ASSEMBLYINFO_CPP
 
 extern "C"
 {
@@ -33,4 +33,4 @@ extern "C"
     }
 }
 
-#endif /* HTD_HTD_ASSEMBLY_CPP */
+#endif /* HTD_HTD_ASSEMBLYINFO_CPP */

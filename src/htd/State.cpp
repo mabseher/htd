@@ -1,5 +1,5 @@
 /* 
- * File:   Globals.hpp
+ * File:   State.cpp
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,32 +22,14 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_GLOBALS_HPP
-#define HTD_HTD_GLOBALS_HPP
+#ifndef HTD_HTD_STATE_CPP
+#define HTD_HTD_STATE_CPP
 
-#include <htd/Id.hpp>
 #include <htd/State.hpp>
-#include <htd/Vertex.hpp>
-#include <htd/CompilerDetection.hpp>
-
-#include <cstdlib>
 
 namespace htd
 {
-    /**
-     *  Datatype for indices.
-     */
-    typedef std::size_t index_t;
-
-    /**
-     *  Datatype for edges.
-     */
-    typedef std::pair<vertex_t, vertex_t> edge_t;
-
-    /**
-     *  Datatype for storing edges.
-     */
-    typedef std::vector<edge_t> edge_container;
+    const htd::state_t htd::State::UNKNOWN;
 }
 
-#endif /* HTD_HTD_GLOBALS_HPP */
+#endif /* HTD_HTD_STATE_CPP */

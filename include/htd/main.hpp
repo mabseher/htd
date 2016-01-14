@@ -165,6 +165,7 @@
 #include <htd/SemiNormalizationOperation.hpp>
 #include <htd/SetCoverAlgorithm.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
+#include <htd/State.hpp>
 #include <htd/StronglyConnectedComponentAlgorithmFactory.hpp>
 #include <htd/TarjanStronglyConnectedComponentAlgorithm.hpp>
 #include <htd/Tree.hpp>

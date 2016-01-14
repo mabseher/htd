@@ -117,6 +117,7 @@
 #include <htd/Id.hpp>
 #include <htd/InOrderTreeTraversal.hpp>
 #include <htd/InducedSubgraphLabelingOperation.hpp>
+#include <htd/IntroducedSubgraphLabelingOperation.hpp>
 #include <htd/Iterator.hpp>
 #include <htd/IteratorBase.hpp>
 #include <htd/IteratorWrapper.hpp>

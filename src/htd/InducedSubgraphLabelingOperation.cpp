@@ -91,45 +91,45 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
 
         const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
-        if (!decomposition.isRoot(vertex))
+        bool edgeIntroductionCheckNeeded = false;
+
+        std::fill(childHyperedgeState.begin(), childHyperedgeState.end(), 1);
+
+        if (decomposition.childCount(vertex) > 0)
         {
-            bool edgeIntroductionCheckNeeded = false;
-
-            std::fill(childHyperedgeState.begin(), childHyperedgeState.end(), 1);
-
-            if (decomposition.childCount(vertex) > 0)
+            for (htd::vertex_t child : decomposition.children(vertex))
             {
-                for (htd::vertex_t child : decomposition.children(vertex))
+                const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex, child);
+
+                for (const htd::Hyperedge & hyperedge : htd::accessLabel<htd::ConstCollection<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
                 {
-                    const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex, child);
+                    index = hyperedgeIndices[hyperedge.id()];
 
-                    for (const htd::Hyperedge & hyperedge : htd::accessLabel<htd::ConstCollection<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
+                    if (childHyperedgeState[index] == 1)
                     {
-                        index = hyperedgeIndices[hyperedge.id()];
-
-                        if (childHyperedgeState[index] == 1)
+                        if (forgottenVertexCollection.size() > 0 && htd::has_non_empty_set_intersection(hyperedges[index].first.begin(), hyperedges[index].first.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
                         {
-                            if (forgottenVertexCollection.size() > 0 && htd::has_non_empty_set_intersection(hyperedge.begin(), hyperedge.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
-                            {
-                                hyperedgeState[index] = 3;
+                            hyperedgeState[index] = 3;
 
-                                childHyperedgeState[index] = 3;
-                            }
-                            else
-                            {
-                                childHyperedgeState[index] = 2;
-                            }
+                            childHyperedgeState[index] = 3;
+                        }
+                        else
+                        {
+                            childHyperedgeState[index] = 2;
                         }
                     }
-
-                    edgeIntroductionCheckNeeded = decomposition.introducedVertexCount(vertex, child) > 0;
                 }
-            }
-            else
-            {
-                edgeIntroductionCheckNeeded = true;
-            }
 
+                edgeIntroductionCheckNeeded = edgeIntroductionCheckNeeded || decomposition.introducedVertexCount(vertex, child) > 0;
+            }
+        }
+        else
+        {
+            edgeIntroductionCheckNeeded = true;
+        }
+
+        if (!decomposition.isRoot(vertex))
+        {
             index = 0;
 
             for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : hyperedges)
@@ -145,6 +145,17 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
                         labelContent.push_back(hyperedge.second);
 
                         hyperedgeState[index] = 2;
+                    }
+                }
+                else if (hyperedgeState[index] == 2)
+                {
+                    if (childHyperedgeState[index] == 2)
+                    {
+                        labelContent.push_back(hyperedge.second);
+                    }
+                    else if (edgeIntroductionCheckNeeded && std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
+                    {
+                        labelContent.push_back(hyperedge.second);
                     }
                 }
 
@@ -218,45 +229,45 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
 
         const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
-        if (!decomposition.isRoot(vertex))
+        bool edgeIntroductionCheckNeeded = false;
+
+        std::fill(childHyperedgeState.begin(), childHyperedgeState.end(), 1);
+
+        if (decomposition.childCount(vertex) > 0)
         {
-            bool edgeIntroductionCheckNeeded = false;
-
-            std::fill(childHyperedgeState.begin(), childHyperedgeState.end(), 1);
-
-            if (decomposition.childCount(vertex) > 0)
+            for (htd::vertex_t child : decomposition.children(vertex))
             {
-                for (htd::vertex_t child : decomposition.children(vertex))
+                const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex, child);
+
+                for (const htd::Hyperedge & hyperedge : htd::accessLabel<htd::ConstCollection<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
                 {
-                    const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex, child);
+                    index = hyperedgeIndices[hyperedge.id()];
 
-                    for (const htd::Hyperedge & hyperedge : htd::accessLabel<htd::ConstCollection<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
+                    if (childHyperedgeState[index] == 1)
                     {
-                        index = hyperedgeIndices[hyperedge.id()];
-
-                        if (childHyperedgeState[index] == 1)
+                        if (forgottenVertexCollection.size() > 0 && htd::has_non_empty_set_intersection(hyperedges[index].first.begin(), hyperedges[index].first.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
                         {
-                            if (forgottenVertexCollection.size() > 0 && htd::has_non_empty_set_intersection(hyperedge.begin(), hyperedge.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
-                            {
-                                hyperedgeState[index] = 3;
+                            hyperedgeState[index] = 3;
 
-                                childHyperedgeState[index] = 3;
-                            }
-                            else
-                            {
-                                childHyperedgeState[index] = 2;
-                            }
+                            childHyperedgeState[index] = 3;
+                        }
+                        else
+                        {
+                            childHyperedgeState[index] = 2;
                         }
                     }
-
-                    edgeIntroductionCheckNeeded = decomposition.introducedVertexCount(vertex, child) > 0;
                 }
-            }
-            else
-            {
-                edgeIntroductionCheckNeeded = true;
-            }
 
+                edgeIntroductionCheckNeeded = edgeIntroductionCheckNeeded || decomposition.introducedVertexCount(vertex, child) > 0;
+            }
+        }
+        else
+        {
+            edgeIntroductionCheckNeeded = true;
+        }
+
+        if (!decomposition.isRoot(vertex))
+        {
             index = 0;
 
             for (const std::pair<htd::Hyperedge, htd::Hyperedge> & hyperedge : hyperedges)
@@ -272,6 +283,17 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
                         labelContent.push_back(hyperedge.second);
 
                         hyperedgeState[index] = 2;
+                    }
+                }
+                else if (hyperedgeState[index] == 2)
+                {
+                    if (childHyperedgeState[index] == 2)
+                    {
+                        labelContent.push_back(hyperedge.second);
+                    }
+                    else if (edgeIntroductionCheckNeeded && std::includes(bag.begin(), bag.end(), hyperedge.first.begin(), hyperedge.first.end()))
+                    {
+                        labelContent.push_back(hyperedge.second);
                     }
                 }
 

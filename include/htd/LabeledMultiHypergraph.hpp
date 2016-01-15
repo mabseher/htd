@@ -36,6 +36,8 @@ namespace htd
         public:
             LabeledMultiHypergraph(void);
 
+            LabeledMultiHypergraph(std::size_t initialSize);
+
             LabeledMultiHypergraph(const LabeledMultiHypergraph & original);
 
             LabeledMultiHypergraph(const htd::IMultiHypergraph & original);

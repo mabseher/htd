@@ -37,6 +37,11 @@ htd::LabeledHypergraph::LabeledHypergraph(void) : htd::Hypergraph::Hypergraph(),
 
 }
 
+htd::LabeledHypergraph::LabeledHypergraph(std::size_t initialSize) : htd::Hypergraph::Hypergraph(initialSize), labelings_(new htd::LabelingCollection())
+{
+
+}
+
 htd::LabeledHypergraph::LabeledHypergraph(const htd::LabeledHypergraph & original) : htd::Hypergraph::Hypergraph(original), labelings_(original.labelings_->clone())
 {
 

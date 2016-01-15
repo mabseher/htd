@@ -36,6 +36,8 @@ namespace htd
         public:
             LabeledGraph(void);
 
+            LabeledGraph(std::size_t initialSize);
+
             LabeledGraph(const LabeledGraph & original);
 
             LabeledGraph(const htd::IGraph & original);

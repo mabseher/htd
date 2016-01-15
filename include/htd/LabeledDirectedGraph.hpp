@@ -36,6 +36,8 @@ namespace htd
         public:
             LabeledDirectedGraph(void);
 
+            LabeledDirectedGraph(std::size_t initialSize);
+
             LabeledDirectedGraph(const LabeledDirectedGraph & original);
 
             LabeledDirectedGraph(const htd::IDirectedGraph & original);

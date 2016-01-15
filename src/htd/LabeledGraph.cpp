@@ -37,6 +37,11 @@ htd::LabeledGraph::LabeledGraph(void) : htd::Graph::Graph(), labelings_(new htd:
 
 }
 
+htd::LabeledGraph::LabeledGraph(std::size_t initialSize) : htd::Graph::Graph(initialSize), labelings_(new htd::LabelingCollection())
+{
+
+}
+
 htd::LabeledGraph::LabeledGraph(const htd::LabeledGraph & original) : htd::Graph::Graph(original), labelings_(original.labelings_->clone())
 {
 

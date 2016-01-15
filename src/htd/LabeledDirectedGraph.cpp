@@ -37,6 +37,11 @@ htd::LabeledDirectedGraph::LabeledDirectedGraph(void) : htd::DirectedGraph::Dire
 
 }
 
+htd::LabeledDirectedGraph::LabeledDirectedGraph(std::size_t initialSize) : htd::DirectedGraph::DirectedGraph(initialSize), labelings_(new htd::LabelingCollection())
+{
+
+}
+
 htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::LabeledDirectedGraph & original) : htd::DirectedGraph::DirectedGraph(original), labelings_(original.labelings_->clone())
 {
 

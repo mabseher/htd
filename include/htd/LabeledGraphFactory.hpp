@@ -39,6 +39,8 @@ namespace htd
 
             htd::IMutableLabeledGraph * getLabeledGraph(void);
 
+            htd::IMutableLabeledGraph * getLabeledGraph(std::size_t initialSize);
+
             htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledGraph & original);
 
             void setConstructionTemplate(htd::IMutableLabeledGraph * original);

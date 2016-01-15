@@ -59,6 +59,15 @@ htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(void)
     return constructionTemplate_->clone();
 }
 
+htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(std::size_t initialSize)
+{
+    htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();
+
+    ret->addVertices(initialSize);
+
+    return ret;
+}
+
 htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd::ILabeledGraph & original)
 {
     htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();

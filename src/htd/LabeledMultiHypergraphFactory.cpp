@@ -59,6 +59,15 @@ htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLab
     return constructionTemplate_->clone();
 }
 
+htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(std::size_t initialSize)
+{
+    htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->clone();
+
+    ret->addVertices(initialSize);
+
+    return ret;
+}
+
 htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original)
 {
     htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->clone();

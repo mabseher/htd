@@ -59,6 +59,15 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(void)
     return constructionTemplate_->clone();
 }
 
+htd::IMutableGraph * htd::GraphFactory::getGraph(std::size_t initialSize)
+{
+    htd::IMutableGraph * ret = constructionTemplate_->clone();
+
+    ret->addVertices(initialSize);
+
+    return ret;
+}
+
 htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IGraph & original)
 {
     htd::IMutableGraph * ret = constructionTemplate_->clone();

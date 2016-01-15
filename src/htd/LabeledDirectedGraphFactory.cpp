@@ -59,6 +59,15 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
     return constructionTemplate_->clone();
 }
 
+htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(std::size_t initialSize)
+{
+    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
+
+    ret->addVertices(initialSize);
+
+    return ret;
+}
+
 htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original)
 {
     htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();

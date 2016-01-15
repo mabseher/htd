@@ -59,6 +59,24 @@ htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(void)
     return constructionTemplate_->clone();
 }
 
+htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(std::size_t initialSize)
+{
+    htd::IMutableDirectedGraph * ret = constructionTemplate_->clone();
+
+    ret->addVertices(initialSize);
+
+    return ret;
+}
+
+htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(const htd::IDirectedGraph & original)
+{
+    htd::IMutableDirectedGraph * ret = constructionTemplate_->clone();
+
+    *ret = original;
+
+    return ret;
+}
+
 void htd::DirectedGraphFactory::setConstructionTemplate(htd::IMutableDirectedGraph * original)
 {
     if (original == nullptr)

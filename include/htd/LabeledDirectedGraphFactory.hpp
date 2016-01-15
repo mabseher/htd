@@ -39,6 +39,8 @@ namespace htd
 
             htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(void);
 
+            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(std::size_t initialSize);
+
             htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original);
 
             void setConstructionTemplate(htd::IMutableLabeledDirectedGraph * original);

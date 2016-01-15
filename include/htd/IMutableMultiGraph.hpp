@@ -1,5 +1,5 @@
 /* 
- * File:   IMutableGraph.hpp
+ * File:   IMutableMultiGraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,18 +22,18 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_IMUTABLEGRAPH_HPP
-#define	HTD_HTD_IMUTABLEGRAPH_HPP
+#ifndef HTD_HTD_IMUTABLEMULTIGRAPH_HPP
+#define	HTD_HTD_IMUTABLEMULTIGRAPH_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IGraph.hpp>
+#include <htd/IMultiGraph.hpp>
 
 namespace htd
 {
-    class IMutableGraph : public virtual htd::IGraph
+    class IMutableMultiGraph : public virtual htd::IMultiGraph
     {
         public:
-            virtual ~IMutableGraph() = 0;
+            virtual ~IMutableMultiGraph() = 0;
 
             virtual htd::vertex_t addVertex(void) = 0;
 
@@ -47,16 +47,12 @@ namespace htd
             
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
-            virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+            virtual IMutableMultiGraph * clone(void) const = 0;
 
-            virtual void removeEdge(const htd::edge_t & edge) = 0;
-
-            virtual IMutableGraph * clone(void) const = 0;
-
-            virtual IMutableGraph & operator=(const htd::IGraph & original) = 0;
+            virtual IMutableMultiGraph & operator=(const htd::IMultiGraph & original) = 0;
     };
 
-    inline htd::IMutableGraph::~IMutableGraph() { }
+    inline htd::IMutableMultiGraph::~IMutableMultiGraph() { }
 }
 
-#endif /* HTD_HTD_IMUTABLEGRAPH_HPP */
+#endif /* HTD_HTD_IMUTABLEMULTIGRAPH_HPP */

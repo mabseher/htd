@@ -1,5 +1,5 @@
 /* 
- * File:   DirectedGraph.hpp
+ * File:   DirectedMultiGraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,28 +22,29 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_DIRECTEDGRAPH_HPP
-#define	HTD_HTD_DIRECTEDGRAPH_HPP
+#ifndef HTD_HTD_DIRECTEDMULTIGRAPH_HPP
+#define	HTD_HTD_DIRECTEDMULTIGRAPH_HPP
 
-#include <htd/IMutableDirectedGraph.hpp>
-#include <htd/IMutableHypergraph.hpp>
+#include <htd/IMutableDirectedMultiGraph.hpp>
+#include <htd/IMutableMultiHypergraph.hpp>
 
+#include <vector>
 #include <unordered_set>
 
 namespace htd
 {
-    class DirectedGraph : public virtual htd::IMutableDirectedGraph
+    class DirectedMultiGraph : public virtual htd::IMutableDirectedMultiGraph
     {
         public:
-            DirectedGraph(void);
+            DirectedMultiGraph(void);
 
-            DirectedGraph(std::size_t initialSize);
+            DirectedMultiGraph(std::size_t initialSize);
 
-            DirectedGraph(const DirectedGraph & original);
+            DirectedMultiGraph(const DirectedMultiGraph & original);
 
-            DirectedGraph(const htd::IDirectedGraph & original);
+            DirectedMultiGraph(const htd::IDirectedMultiGraph & original);
 
-            ~DirectedGraph();
+            ~DirectedMultiGraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -139,22 +140,18 @@ namespace htd
             
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
-            void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+            DirectedMultiGraph * clone(void) const HTD_OVERRIDE;
 
-            void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
+            DirectedMultiGraph & operator=(const DirectedMultiGraph & original);
 
-            DirectedGraph * clone(void) const HTD_OVERRIDE;
-
-            DirectedGraph & operator=(const DirectedGraph & original);
-
-            DirectedGraph & operator=(const htd::IDirectedGraph & original) HTD_OVERRIDE;
+            DirectedMultiGraph & operator=(const htd::IDirectedMultiGraph & original) HTD_OVERRIDE;
 
         private:
-            htd::IMutableHypergraph * base_;
+            htd::IMutableMultiHypergraph * base_;
 
             std::vector<std::unordered_set<htd::vertex_t>> incomingNeighborhood_;
             std::vector<std::unordered_set<htd::vertex_t>> outgoingNeighborhood_;
     };
 }
 
-#endif /* HTD_HTD_DIRECTEDGRAPH_HPP */
+#endif /* HTD_HTD_DIRECTEDMULTIGRAPH_HPP */

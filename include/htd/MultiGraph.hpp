@@ -1,5 +1,5 @@
 /* 
- * File:   DirectedGraph.hpp
+ * File:   MultiGraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,28 +22,28 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_DIRECTEDGRAPH_HPP
-#define	HTD_HTD_DIRECTEDGRAPH_HPP
+#ifndef HTD_HTD_MULTIGRAPH_HPP
+#define	HTD_HTD_MULTIGRAPH_HPP
 
-#include <htd/IMutableDirectedGraph.hpp>
-#include <htd/IMutableHypergraph.hpp>
+#include <htd/Globals.hpp>
+#include <htd/IMutableMultiGraph.hpp>
 
-#include <unordered_set>
+#include <htd/IMutableMultiHypergraph.hpp>
 
 namespace htd
 {
-    class DirectedGraph : public virtual htd::IMutableDirectedGraph
+    class MultiGraph : public virtual htd::IMutableMultiGraph
     {
         public:
-            DirectedGraph(void);
+            MultiGraph(void);
 
-            DirectedGraph(std::size_t initialSize);
+            MultiGraph(std::size_t initialSize);
 
-            DirectedGraph(const DirectedGraph & original);
+            MultiGraph(const MultiGraph & original);
 
-            DirectedGraph(const htd::IDirectedGraph & original);
+            MultiGraph(const htd::IMultiGraph & original);
 
-            ~DirectedGraph();
+            ~MultiGraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -72,32 +72,14 @@ namespace htd
             bool isConnected(void) const HTD_OVERRIDE;
             
             bool isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
-            
-            bool isReachable(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
-            
-            bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
+            bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
+            
             std::size_t neighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::vertex_t neighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
-
-            std::size_t incomingNeighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
-
-            htd::ConstCollection<htd::vertex_t> incomingNeighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
-
-            htd::vertex_t incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
-
-            bool isIncomingNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
-
-            std::size_t outgoingNeighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
-
-            htd::ConstCollection<htd::vertex_t> outgoingNeighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
-
-            htd::vertex_t outgoingNeighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
-
-            bool isOutgoingNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
 
@@ -139,22 +121,15 @@ namespace htd
             
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
-            void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+            MultiGraph * clone(void) const HTD_OVERRIDE;
 
-            void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
+            MultiGraph & operator=(const MultiGraph & original);
 
-            DirectedGraph * clone(void) const HTD_OVERRIDE;
-
-            DirectedGraph & operator=(const DirectedGraph & original);
-
-            DirectedGraph & operator=(const htd::IDirectedGraph & original) HTD_OVERRIDE;
+            MultiGraph & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;
 
         private:
-            htd::IMutableHypergraph * base_;
-
-            std::vector<std::unordered_set<htd::vertex_t>> incomingNeighborhood_;
-            std::vector<std::unordered_set<htd::vertex_t>> outgoingNeighborhood_;
+            htd::IMutableMultiHypergraph * base_;
     };
 }
 
-#endif /* HTD_HTD_DIRECTEDGRAPH_HPP */
+#endif /* HTD_HTD_MULTIGRAPH_HPP */

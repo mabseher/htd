@@ -25,9 +25,7 @@
 #ifndef HTD_HTD_GRAPH_HPP
 #define	HTD_HTD_GRAPH_HPP
 
-#include <htd/Globals.hpp>
 #include <htd/IMutableGraph.hpp>
-
 #include <htd/IMutableHypergraph.hpp>
 
 namespace htd
@@ -36,6 +34,8 @@ namespace htd
     {
         public:
             Graph(void);
+
+            Graph(std::size_t initialSize);
 
             Graph(const Graph & original);
 
@@ -109,6 +109,8 @@ namespace htd
 
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
 
+            htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) HTD_OVERRIDE;
+
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 
             htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
@@ -116,6 +118,10 @@ namespace htd
             htd::id_t addEdge(const htd::edge_t & edge) HTD_OVERRIDE;
             
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
+
+            void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+
+            void removeEdge(const htd::edge_t & edge) HTD_OVERRIDE;
 
             Graph * clone(void) const HTD_OVERRIDE;
 

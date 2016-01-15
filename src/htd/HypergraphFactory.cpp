@@ -58,6 +58,15 @@ htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(void)
     return constructionTemplate_->clone();
 }
 
+htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(std::size_t initialSize)
+{
+    htd::IMutableHypergraph * ret = constructionTemplate_->clone();
+
+    ret->addVertices(initialSize);
+
+    return ret;
+}
+
 htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IHypergraph & original)
 {
     htd::IMutableHypergraph * ret = constructionTemplate_->clone();

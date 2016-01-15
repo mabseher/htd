@@ -1,5 +1,5 @@
 /* 
- * File:   IMutableGraph.hpp
+ * File:   IMutableDirectedMultiGraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,18 +22,17 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_IMUTABLEGRAPH_HPP
-#define	HTD_HTD_IMUTABLEGRAPH_HPP
+#ifndef HTD_HTD_IMUTABLEDIRECTEDMULTIGRAPH_HPP
+#define	HTD_HTD_IMUTABLEDIRECTEDMULTIGRAPH_HPP
 
-#include <htd/Globals.hpp>
-#include <htd/IGraph.hpp>
+#include <htd/IDirectedMultiGraph.hpp>
 
 namespace htd
 {
-    class IMutableGraph : public virtual htd::IGraph
+    class IMutableDirectedMultiGraph : public virtual htd::IDirectedMultiGraph
     {
         public:
-            virtual ~IMutableGraph() = 0;
+            virtual ~IMutableDirectedMultiGraph() = 0;
 
             virtual htd::vertex_t addVertex(void) = 0;
 
@@ -42,21 +41,17 @@ namespace htd
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
-            
+
             virtual htd::id_t addEdge(const htd::edge_t & edge) = 0;
-            
+
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
-            virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+            virtual IMutableDirectedMultiGraph * clone(void) const = 0;
 
-            virtual void removeEdge(const htd::edge_t & edge) = 0;
-
-            virtual IMutableGraph * clone(void) const = 0;
-
-            virtual IMutableGraph & operator=(const htd::IGraph & original) = 0;
+            virtual IMutableDirectedMultiGraph & operator=(const htd::IDirectedMultiGraph & original) = 0;
     };
 
-    inline htd::IMutableGraph::~IMutableGraph() { }
+    inline htd::IMutableDirectedMultiGraph::~IMutableDirectedMultiGraph() { }
 }
 
-#endif /* HTD_HTD_IMUTABLEGRAPH_HPP */
+#endif /* HTD_HTD_IMUTABLEDIRECTEDMULTIGRAPH_HPP */

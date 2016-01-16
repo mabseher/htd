@@ -175,6 +175,28 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::setManipulationOperations
 
     postProcessingOperations_.clear();
 
+    addManipulationOperations(manipulationOperations);
+}
+
+void htd::BucketEliminationTreeDecompositionAlgorithm::addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation)
+{
+    htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(manipulationOperation);
+
+    if (labelingFunction != nullptr)
+    {
+        labelingFunctions_.push_back(labelingFunction);
+    }
+
+    htd::ITreeDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(manipulationOperation);
+
+    if (newManipulationOperation != nullptr)
+    {
+        postProcessingOperations_.push_back(newManipulationOperation);
+    }
+}
+
+void htd::BucketEliminationTreeDecompositionAlgorithm::addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
     for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
         htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
@@ -207,7 +229,7 @@ htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDec
         manipulationOperations.push_back(postProcessingOperation->clone());
     }
 
-    return new BucketEliminationTreeDecompositionAlgorithm(manipulationOperations, compressed_);
+    return new htd::BucketEliminationTreeDecompositionAlgorithm(manipulationOperations, compressed_);
 }
 
 htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IMultiHypergraph & graph) const

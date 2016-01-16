@@ -32,9 +32,9 @@
 #include <memory>
 #include <stdexcept>
 
-htd::GraphDecompositionAlgorithmFactory::GraphDecompositionAlgorithmFactory(void)
+htd::GraphDecompositionAlgorithmFactory::GraphDecompositionAlgorithmFactory(void) : constructionTemplate_(new htd::BucketEliminationGraphDecompositionAlgorithm()), labelingFunctions_(), postProcessingOperations_()
 {
-    constructionTemplate_ = new htd::BucketEliminationGraphDecompositionAlgorithm();
+
 }
 
 htd::GraphDecompositionAlgorithmFactory::~GraphDecompositionAlgorithmFactory()
@@ -45,6 +45,20 @@ htd::GraphDecompositionAlgorithmFactory::~GraphDecompositionAlgorithmFactory()
 
         constructionTemplate_ = nullptr;
     }
+
+    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    {
+        delete labelingFunction;
+    }
+
+    labelingFunctions_.clear();
+
+    for (htd::IGraphDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    {
+        delete postProcessingOperation;
+    }
+
+    postProcessingOperations_.clear();
 }
 
 htd::GraphDecompositionAlgorithmFactory & htd::GraphDecompositionAlgorithmFactory::instance(void)
@@ -56,7 +70,19 @@ htd::GraphDecompositionAlgorithmFactory & htd::GraphDecompositionAlgorithmFactor
 
 htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::getGraphDecompositionAlgorithm(void)
 {
-    return constructionTemplate_->clone();
+    htd::IGraphDecompositionAlgorithm * ret = constructionTemplate_->clone();
+
+    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    {
+        ret->addManipulationOperation(labelingFunction->clone());
+    }
+
+    for (htd::IGraphDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    {
+        ret->addManipulationOperation(postProcessingOperation->clone());
+    }
+
+    return ret;
 }
 
 void htd::GraphDecompositionAlgorithmFactory::setConstructionTemplate(htd::IGraphDecompositionAlgorithm * original)
@@ -78,7 +104,48 @@ void htd::GraphDecompositionAlgorithmFactory::setConstructionTemplate(htd::IGrap
 
 void htd::GraphDecompositionAlgorithmFactory::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
-    constructionTemplate_->setManipulationOperations(manipulationOperations);
+    labelingFunctions_.clear();
+
+    postProcessingOperations_.clear();
+
+    addManipulationOperations(manipulationOperations);
+}
+
+void htd::GraphDecompositionAlgorithmFactory::addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation)
+{
+    htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(manipulationOperation);
+
+    if (labelingFunction != nullptr)
+    {
+        labelingFunctions_.push_back(labelingFunction);
+    }
+
+    htd::IGraphDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::IGraphDecompositionManipulationOperation *>(manipulationOperation);
+
+    if (newManipulationOperation != nullptr)
+    {
+        postProcessingOperations_.push_back(newManipulationOperation);
+    }
+}
+
+void htd::GraphDecompositionAlgorithmFactory::addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    {
+        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+
+        if (labelingFunction != nullptr)
+        {
+            labelingFunctions_.push_back(labelingFunction);
+        }
+
+        htd::IGraphDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IGraphDecompositionManipulationOperation *>(operation);
+
+        if (manipulationOperation != nullptr)
+        {
+            postProcessingOperations_.push_back(manipulationOperation);
+        }
+    }
 }
 
 #endif /* HTD_HTD_GRAPHDECOMPOSITIONALGORITHMFACTORY_CPP */

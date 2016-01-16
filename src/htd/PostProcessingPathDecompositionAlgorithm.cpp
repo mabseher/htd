@@ -223,6 +223,28 @@ void htd::PostProcessingPathDecompositionAlgorithm::setManipulationOperations(co
 
     postProcessingOperations_.clear();
 
+    addManipulationOperations(manipulationOperations);
+}
+
+void htd::PostProcessingPathDecompositionAlgorithm::addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation)
+{
+    htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(manipulationOperation);
+
+    if (labelingFunction != nullptr)
+    {
+        labelingFunctions_.push_back(labelingFunction);
+    }
+
+    htd::IPathDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(manipulationOperation);
+
+    if (newManipulationOperation != nullptr)
+    {
+        postProcessingOperations_.push_back(newManipulationOperation);
+    }
+}
+
+void htd::PostProcessingPathDecompositionAlgorithm::addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
     for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
         htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
@@ -255,7 +277,7 @@ htd::PostProcessingPathDecompositionAlgorithm * htd::PostProcessingPathDecomposi
         manipulationOperations.push_back(postProcessingOperation->clone());
     }
 
-    return new PostProcessingPathDecompositionAlgorithm(manipulationOperations);
+    return new htd::PostProcessingPathDecompositionAlgorithm(manipulationOperations);
 }
 
 #endif /* HTD_HTD_POSTPROCESSINGPATHDECOMPOSITIONALGORITHM_CPP */

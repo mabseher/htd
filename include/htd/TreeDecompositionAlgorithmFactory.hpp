@@ -27,6 +27,8 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
+#include <htd/ILabelingFunction.hpp>
+#include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 namespace htd
 {
@@ -43,8 +45,16 @@ namespace htd
 
             void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
+            void addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation);
+
+            void addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
+
         private:
             htd::ITreeDecompositionAlgorithm * constructionTemplate_;
+
+            std::vector<htd::ILabelingFunction *> labelingFunctions_;
+
+            std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
 
             TreeDecompositionAlgorithmFactory(void);
 

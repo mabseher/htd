@@ -32,9 +32,9 @@
 #include <memory>
 #include <stdexcept>
 
-htd::PathDecompositionAlgorithmFactory::PathDecompositionAlgorithmFactory(void)
+htd::PathDecompositionAlgorithmFactory::PathDecompositionAlgorithmFactory(void) : constructionTemplate_(new htd::PostProcessingPathDecompositionAlgorithm()), labelingFunctions_(), postProcessingOperations_()
 {
-    constructionTemplate_ = new htd::PostProcessingPathDecompositionAlgorithm();
+
 }
 
 htd::PathDecompositionAlgorithmFactory::~PathDecompositionAlgorithmFactory()
@@ -45,6 +45,20 @@ htd::PathDecompositionAlgorithmFactory::~PathDecompositionAlgorithmFactory()
 
         constructionTemplate_ = nullptr;
     }
+
+    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    {
+        delete labelingFunction;
+    }
+
+    labelingFunctions_.clear();
+
+    for (htd::IPathDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    {
+        delete postProcessingOperation;
+    }
+
+    postProcessingOperations_.clear();
 }
 
 htd::PathDecompositionAlgorithmFactory & htd::PathDecompositionAlgorithmFactory::instance(void)
@@ -56,7 +70,19 @@ htd::PathDecompositionAlgorithmFactory & htd::PathDecompositionAlgorithmFactory:
 
 htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPathDecompositionAlgorithm(void)
 {
-    return constructionTemplate_->clone();
+    htd::IPathDecompositionAlgorithm * ret = constructionTemplate_->clone();
+
+    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    {
+        ret->addManipulationOperation(labelingFunction->clone());
+    }
+
+    for (htd::IPathDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    {
+        ret->addManipulationOperation(postProcessingOperation->clone());
+    }
+
+    return ret;
 }
 
 void htd::PathDecompositionAlgorithmFactory::setConstructionTemplate(htd::IPathDecompositionAlgorithm * original)
@@ -78,7 +104,48 @@ void htd::PathDecompositionAlgorithmFactory::setConstructionTemplate(htd::IPathD
 
 void htd::PathDecompositionAlgorithmFactory::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
-    constructionTemplate_->setManipulationOperations(manipulationOperations);
+    labelingFunctions_.clear();
+
+    postProcessingOperations_.clear();
+
+    addManipulationOperations(manipulationOperations);
+}
+
+void htd::PathDecompositionAlgorithmFactory::addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation)
+{
+    htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(manipulationOperation);
+
+    if (labelingFunction != nullptr)
+    {
+        labelingFunctions_.push_back(labelingFunction);
+    }
+
+    htd::IPathDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(manipulationOperation);
+
+    if (newManipulationOperation != nullptr)
+    {
+        postProcessingOperations_.push_back(newManipulationOperation);
+    }
+}
+
+void htd::PathDecompositionAlgorithmFactory::addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    {
+        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+
+        if (labelingFunction != nullptr)
+        {
+            labelingFunctions_.push_back(labelingFunction);
+        }
+
+        htd::IPathDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(operation);
+
+        if (manipulationOperation != nullptr)
+        {
+            postProcessingOperations_.push_back(manipulationOperation);
+        }
+    }
 }
 
 #endif /* HTD_HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP */

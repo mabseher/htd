@@ -164,6 +164,28 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::setManipulationOperation
 
     postProcessingOperations_.clear();
 
+    addManipulationOperations(manipulationOperations);
+}
+
+void htd::BucketEliminationGraphDecompositionAlgorithm::addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation)
+{
+    htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(manipulationOperation);
+
+    if (labelingFunction != nullptr)
+    {
+        labelingFunctions_.push_back(labelingFunction);
+    }
+
+    htd::IGraphDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::IGraphDecompositionManipulationOperation *>(manipulationOperation);
+
+    if (newManipulationOperation != nullptr)
+    {
+        postProcessingOperations_.push_back(newManipulationOperation);
+    }
+}
+
+void htd::BucketEliminationGraphDecompositionAlgorithm::addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
     for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
         htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
@@ -196,7 +218,7 @@ htd::BucketEliminationGraphDecompositionAlgorithm * htd::BucketEliminationGraphD
         manipulationOperations.push_back(postProcessingOperation->clone());
     }
 
-    return new BucketEliminationGraphDecompositionAlgorithm(manipulationOperations);
+    return new htd::BucketEliminationGraphDecompositionAlgorithm(manipulationOperations);
 }
 
 htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeMutableDecomposition(const htd::IMultiHypergraph & graph) const

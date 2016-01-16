@@ -54,6 +54,10 @@ namespace htd
 
             void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) HTD_OVERRIDE;
 
+            void addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation) HTD_OVERRIDE;
+
+            void addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) HTD_OVERRIDE;
+
             BucketEliminationGraphDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:

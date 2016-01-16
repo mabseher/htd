@@ -182,6 +182,28 @@ void htd::HypertreeDecompositionAlgorithm::setManipulationOperations(const std::
 
     postProcessingOperations_.clear();
 
+    addManipulationOperations(manipulationOperations);
+}
+
+void htd::HypertreeDecompositionAlgorithm::addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation)
+{
+    htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(manipulationOperation);
+
+    if (labelingFunction != nullptr)
+    {
+        labelingFunctions_.push_back(labelingFunction);
+    }
+
+    htd::ITreeDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(manipulationOperation);
+
+    if (newManipulationOperation != nullptr)
+    {
+        postProcessingOperations_.push_back(newManipulationOperation);
+    }
+}
+
+void htd::HypertreeDecompositionAlgorithm::addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
     for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
         htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
@@ -214,7 +236,7 @@ htd::HypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithm::clo
         manipulationOperations.push_back(postProcessingOperation->clone());
     }
 
-    return new HypertreeDecompositionAlgorithm(manipulationOperations);
+    return new htd::HypertreeDecompositionAlgorithm(manipulationOperations);
 }
 
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_CPP */

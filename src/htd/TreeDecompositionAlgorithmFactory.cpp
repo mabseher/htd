@@ -33,9 +33,9 @@
 #include <memory>
 #include <stdexcept>
 
-htd::TreeDecompositionAlgorithmFactory::TreeDecompositionAlgorithmFactory(void)
+htd::TreeDecompositionAlgorithmFactory::TreeDecompositionAlgorithmFactory(void) : constructionTemplate_(new htd::BucketEliminationTreeDecompositionAlgorithm()), labelingFunctions_(), postProcessingOperations_()
 {
-    constructionTemplate_ = new htd::BucketEliminationTreeDecompositionAlgorithm();
+
 }
 
 htd::TreeDecompositionAlgorithmFactory::~TreeDecompositionAlgorithmFactory()
@@ -46,6 +46,20 @@ htd::TreeDecompositionAlgorithmFactory::~TreeDecompositionAlgorithmFactory()
 
         constructionTemplate_ = nullptr;
     }
+
+    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    {
+        delete labelingFunction;
+    }
+
+    labelingFunctions_.clear();
+
+    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    {
+        delete postProcessingOperation;
+    }
+
+    postProcessingOperations_.clear();
 }
 
 htd::TreeDecompositionAlgorithmFactory & htd::TreeDecompositionAlgorithmFactory::instance(void)
@@ -57,7 +71,19 @@ htd::TreeDecompositionAlgorithmFactory & htd::TreeDecompositionAlgorithmFactory:
 
 htd::ITreeDecompositionAlgorithm * htd::TreeDecompositionAlgorithmFactory::getTreeDecompositionAlgorithm(void)
 {
-    return constructionTemplate_->clone();
+    htd::ITreeDecompositionAlgorithm * ret = constructionTemplate_->clone();
+
+    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    {
+        ret->addManipulationOperation(labelingFunction->clone());
+    }
+
+    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    {
+        ret->addManipulationOperation(postProcessingOperation->clone());
+    }
+
+    return ret;
 }
 
 void htd::TreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::ITreeDecompositionAlgorithm * original)
@@ -79,7 +105,48 @@ void htd::TreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::ITreeD
 
 void htd::TreeDecompositionAlgorithmFactory::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
-    constructionTemplate_->setManipulationOperations(manipulationOperations);
+    labelingFunctions_.clear();
+
+    postProcessingOperations_.clear();
+
+    addManipulationOperations(manipulationOperations);
+}
+
+void htd::TreeDecompositionAlgorithmFactory::addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation)
+{
+    htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(manipulationOperation);
+
+    if (labelingFunction != nullptr)
+    {
+        labelingFunctions_.push_back(labelingFunction);
+    }
+
+    htd::ITreeDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(manipulationOperation);
+
+    if (newManipulationOperation != nullptr)
+    {
+        postProcessingOperations_.push_back(newManipulationOperation);
+    }
+}
+
+void htd::TreeDecompositionAlgorithmFactory::addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
+{
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    {
+        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+
+        if (labelingFunction != nullptr)
+        {
+            labelingFunctions_.push_back(labelingFunction);
+        }
+
+        htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
+
+        if (manipulationOperation != nullptr)
+        {
+            postProcessingOperations_.push_back(manipulationOperation);
+        }
+    }
 }
 
 #endif /* HTD_HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP */

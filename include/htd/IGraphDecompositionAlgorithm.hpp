@@ -45,6 +45,10 @@ namespace htd
 
             virtual void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) = 0;
 
+            virtual void addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation) = 0;
+
+            virtual void addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) = 0;
+
             virtual IGraphDecompositionAlgorithm * clone(void) const = 0;
     };
 

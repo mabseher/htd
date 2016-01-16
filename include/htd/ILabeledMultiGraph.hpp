@@ -1,5 +1,5 @@
 /* 
- * File:   IHypergraph.hpp
+ * File:   ILabeledMultiGraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,26 +22,26 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_IHYPERGRAPH_HPP
-#define	HTD_HTD_IHYPERGRAPH_HPP
+#ifndef HTD_HTD_ILABELEDMULTIGRAPH_HPP
+#define	HTD_HTD_ILABELEDMULTIGRAPH_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMultiHypergraph.hpp>
+#include <htd/IMultiGraph.hpp>
+#include <htd/ILabeledMultiHypergraph.hpp>
 
-#include <cstdlib>
-#include <vector>
+#include <string>
 
 namespace htd
 {
-    class IHypergraph : public virtual htd::IMultiHypergraph
+    class ILabeledMultiGraph : public virtual htd::IMultiGraph, public virtual htd::ILabeledMultiHypergraph
     {
         public:
-            virtual ~IHypergraph() = 0;
+            virtual ~ILabeledMultiGraph() = 0;
 
-            virtual IHypergraph * clone(void) const = 0;
+            virtual ILabeledMultiGraph * clone(void) const = 0;
     };
 
-    inline htd::IHypergraph::~IHypergraph() { }
+    inline htd::ILabeledMultiGraph::~ILabeledMultiGraph() { }
 }
 
-#endif /* HTD_HTD_IHYPERGRAPH_HPP */
+#endif /* HTD_HTD_ILABELEDMULTIGRAPH_HPP */

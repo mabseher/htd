@@ -34,7 +34,7 @@
 
 htd::LabeledDirectedGraphFactory::LabeledDirectedGraphFactory(void)
 {
-    constructionTemplate_ = nullptr; //new htd::TreeDecomposition();
+    constructionTemplate_ = new htd::LabeledDirectedGraph();
 }
 
 htd::LabeledDirectedGraphFactory::~LabeledDirectedGraphFactory()

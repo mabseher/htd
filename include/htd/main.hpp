@@ -80,8 +80,10 @@
 #include <htd/IHypertreeDecomposition.hpp>
 #include <htd/ILabelCollection.hpp>
 #include <htd/ILabeledDirectedGraph.hpp>
+#include <htd/ILabeledDirectedMultiGraph.hpp>
 #include <htd/ILabeledGraph.hpp>
 #include <htd/ILabeledHypergraph.hpp>
+#include <htd/ILabeledMultiGraph.hpp>
 #include <htd/ILabeledMultiHypergraph.hpp>
 #include <htd/ILabeledPath.hpp>
 #include <htd/ILabeledTree.hpp>
@@ -97,8 +99,10 @@
 #include <htd/IMutableHypergraph.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/IMutableLabeledDirectedGraph.hpp>
+#include <htd/IMutableLabeledDirectedMultiGraph.hpp>
 #include <htd/IMutableLabeledGraph.hpp>
 #include <htd/IMutableLabeledHypergraph.hpp>
+#include <htd/IMutableLabeledMultiGraph.hpp>
 #include <htd/IMutableLabeledMultiHypergraph.hpp>
 #include <htd/IMutableLabeledPath.hpp>
 #include <htd/IMutableLabeledTree.hpp>
@@ -132,10 +136,14 @@
 #include <htd/LabelCollection.hpp>
 #include <htd/LabeledDirectedGraphFactory.hpp>
 #include <htd/LabeledDirectedGraph.hpp>
+#include <htd/LabeledDirectedMultiGraphFactory.hpp>
+#include <htd/LabeledDirectedMultiGraph.hpp>
 #include <htd/LabeledGraphFactory.hpp>
 #include <htd/LabeledGraph.hpp>
 #include <htd/LabeledHypergraphFactory.hpp>
 #include <htd/LabeledHypergraph.hpp>
+#include <htd/LabeledMultiGraphFactory.hpp>
+#include <htd/LabeledMultiGraph.hpp>
 #include <htd/LabeledMultiHypergraphFactory.hpp>
 #include <htd/LabeledMultiHypergraph.hpp>
 #include <htd/LabeledPathFactory.hpp>

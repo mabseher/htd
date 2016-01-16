@@ -522,7 +522,7 @@ namespace htd
 
             void removeEdge(const EdgeNameType & edgeName)
             {
-                if (isVertexName(edgeName))
+                if (isEdgeName(edgeName))
                 {
                     htd::id_t edgeId = nameLabeling_->lookupEdge(edgeName);
 
@@ -530,6 +530,21 @@ namespace htd
 
                     nameLabeling_->removeEdgeLabel(edgeId);
                 }
+            }
+
+            void removeEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
+            {
+                if (!isVertexName(vertexName1) || !isVertexName(vertexName2))
+                {
+                    throw std::logic_error("void htd::NamedDirectedGraph<VertexNameType, EdgeNameType>::removeEdge(const VertexNameType &, const VertexNameType &) const");
+                }
+
+                base_->removeEdge(lookupVertex(vertexName1), lookupVertex(vertexName2));
+            }
+
+            void removeEdge(const std::pair<VertexNameType, VertexNameType> & edge)
+            {
+                removeEdge(edge.first, edge.second);
             }
 
             std::size_t labelCount(void) const

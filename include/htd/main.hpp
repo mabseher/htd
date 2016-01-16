@@ -162,8 +162,10 @@
 #include <htd/MultiHypergraphFactory.hpp>
 #include <htd/MultiHypergraph.hpp>
 #include <htd/NamedDirectedGraph.hpp>
+#include <htd/NamedDirectedMultiGraph.hpp>
 #include <htd/NamedGraph.hpp>
 #include <htd/NamedHypergraph.hpp>
+#include <htd/NamedMultiGraph.hpp>
 #include <htd/NamedMultiHypergraph.hpp>
 #include <htd/NamedPath.hpp>
 #include <htd/NamedTree.hpp>

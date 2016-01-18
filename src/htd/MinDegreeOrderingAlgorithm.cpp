@@ -141,19 +141,20 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
         htd::print(pool, false);
         std::cout << std::endl;
         )
-        
-        //TODO
-        std::vector<htd::vertex_t> minDegreePool(pool.begin(), pool.end());
-        std::sort(minDegreePool.begin(), minDegreePool.end());
-        
-        htd::vertex_t selectedVertex = minDegreePool[rand() % minDegreePool.size()];
+
+        auto it = pool.begin();
+
+        std::advance(it, rand() % pool.size());
+
+        htd::vertex_t selectedVertex = *it;
+
         auto & selectedNeighborhood = neighborhood[selectedVertex - htd::Vertex::FIRST];
         
         pool.erase(pool.find(selectedVertex));
         
         affectedVertices.clear();
         
-        if (neighborhood[selectedVertex - htd::Vertex::FIRST].size() > 1)
+        if (selectedNeighborhood.size() > 1)
         {
             for (auto neighbor : selectedNeighborhood)
             {

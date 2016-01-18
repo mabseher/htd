@@ -22,13 +22,13 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_ORDERINGALGORITHM_HPP
-#define	HTD_HTD_ORDERINGALGORITHM_HPP
+#ifndef HTD_HTD_NATURALORDERINGALGORITHM_HPP
+#define	HTD_HTD_NATURALORDERINGALGORITHM_HPP
 
 #include <vector>
 
 #include <htd/Globals.hpp>
-#include <htd/IHypergraph.hpp>
+#include <htd/IMultiHypergraph.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
 
 namespace htd
@@ -49,4 +49,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_ORDERINGALGORITHM_HPP */
+#endif /* HTD_HTD_NATURALORDERINGALGORITHM_HPP */

@@ -735,8 +735,6 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 
     edges_.push_back(newHyperedge);
 
-    std::array<htd::vertex_t, 1> currentVertex;
-
     std::vector<htd::vertex_t> sortedElements(elements.begin(), elements.end());
 
     std::sort(sortedElements.begin(), sortedElements.end());
@@ -745,13 +743,11 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 
     for (htd::vertex_t vertex : sortedElements)
     {
-        currentVertex[0] = vertex;
-
         auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
 
         htd::vertex_container newNeighborhood;
 
-        htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(), sortedElements.begin(), sortedElements.end(), currentVertex.begin(), currentVertex.end(), std::back_inserter(newNeighborhood));
+        htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(), sortedElements.begin(), sortedElements.end(), vertex, std::back_inserter(newNeighborhood));
 
         currentNeighborhood.swap(newNeighborhood);
     }
@@ -784,8 +780,6 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
 
     edges_.push_back(newHyperedge);
 
-    std::array<htd::vertex_t, 1> currentVertex;
-
     std::vector<htd::vertex_t> sortedElements(newHyperedge.begin(), newHyperedge.end());
 
     std::sort(sortedElements.begin(), sortedElements.end());
@@ -794,13 +788,11 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
 
     for (htd::vertex_t vertex : sortedElements)
     {
-        currentVertex[0] = vertex;
-
         auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
 
         htd::vertex_container newNeighborhood;
 
-        htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(), sortedElements.begin(), sortedElements.end(), currentVertex.begin(), currentVertex.end(), std::back_inserter(newNeighborhood));
+        htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(), sortedElements.begin(), sortedElements.end(), vertex, std::back_inserter(newNeighborhood));
 
         currentNeighborhood.swap(newNeighborhood);
     }

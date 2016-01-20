@@ -710,6 +710,56 @@ namespace htd
         return result;
     }
 
+    template <class InputIterator1,
+              class InputIterator2,
+              class T,
+              class OutputIterator>
+    OutputIterator filtered_set_union(InputIterator1 firstSet1, InputIterator1 lastSet1,
+                                      InputIterator2 firstSet2, InputIterator2 lastSet2,
+                                      T ignoredValue, OutputIterator result)
+    {
+        while (firstSet1 != lastSet1 && firstSet2 != lastSet2)
+        {
+            auto value1 = *firstSet1;
+            auto value2 = *firstSet2;
+
+            if (value2 < value1)
+            {
+                if (value2 != ignoredValue)
+                {
+                    *result++ = value2;
+                }
+
+                ++firstSet2;
+            }
+            else
+            {
+                if (value1 != ignoredValue)
+                {
+                    *result++ = value1;
+                }
+
+                if (!(value1 < value2))
+                {
+                    ++firstSet2;
+                }
+
+                ++firstSet1;
+            }
+        }
+
+        if (firstSet1 != lastSet1)
+        {
+            std::copy_if(firstSet1, lastSet1, result, [&](const T & value) { return value != ignoredValue; });
+        }
+        else if (firstSet2 != lastSet2)
+        {
+            std::copy_if(firstSet2, lastSet2, result, [&](const T & value) { return value != ignoredValue; });
+        }
+
+        return result;
+    }
+
     template <typename T>
     void inplace_set_union(std::vector<T> & set1, const std::vector<T> & set2)
     {

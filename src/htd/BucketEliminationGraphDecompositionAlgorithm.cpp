@@ -302,8 +302,6 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
         std::cout << std::endl << "Connections:" << std::endl;
         )
 
-        std::array<htd::vertex_t, 1> filterSet;
-
         htd::NamedGraph<htd::vertex_t, htd::id_t> result;
 
         for (htd::index_t index = 0; index < size; index++)
@@ -342,9 +340,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 std::vector<htd::vertex_t> newBucketContent;
                 newBucketContent.reserve(selectedBucket.size());
 
-                filterSet[0] = selection;
-
-                htd::filtered_set_union(selectedBucket.begin(), selectedBucket.end(), bucket.begin(), bucket.end(), filterSet.begin(), filterSet.end(), std::back_inserter(newBucketContent));
+                htd::filtered_set_union(selectedBucket.begin(), selectedBucket.end(), bucket.begin(), bucket.end(), selection, std::back_inserter(newBucketContent));
 
                 std::swap(selectedBucket, newBucketContent);
 

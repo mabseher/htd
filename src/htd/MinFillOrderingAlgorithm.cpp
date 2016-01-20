@@ -31,6 +31,7 @@
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
+#include <unordered_map>
 
 htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(void)
 {
@@ -64,18 +65,17 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 
     std::vector<htd::vertex_t> vertices;
     vertices.reserve(size);
-
     std::copy(graph.vertices().begin(), graph.vertices().end(), std::back_inserter(vertices));
 
-    std::vector<char> updateStatus(size, 0);
-    
-    std::vector<std::size_t> requiredFillAmount(size, (std::size_t)-1);
-    
-    std::vector<htd::vertex_container> neighborhood(size, htd::vertex_container());
+    std::unordered_map<htd::vertex_t, htd::state_t> updateStatus(size);
 
-    std::vector<std::vector<htd::vertex_t>> existingNeighbors(size, htd::vertex_container());
-    std::vector<std::vector<htd::vertex_t>> additionalNeighbors(size, htd::vertex_container());
-    std::vector<std::vector<htd::vertex_t>> unaffectedNeighbors(size, htd::vertex_container());
+    std::unordered_map<htd::vertex_t, std::size_t> requiredFillAmount(size);
+    
+    std::unordered_map<htd::vertex_t, htd::vertex_container> neighborhood(size);
+
+    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> existingNeighbors(size);
+    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> additionalNeighbors(size);
+    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> unaffectedNeighbors(size);
     
     htd::vertex_container newNeighborhood;
     
@@ -84,7 +84,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 
     for (htd::vertex_t vertex : graph.vertices())
     {
-        auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = neighborhood[vertex];
 
         const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
 
@@ -98,11 +98,13 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
         {
             currentNeighborhood.insert(position, vertex);
         }
+
+        updateStatus[vertex] = htd::State::UNKNOWN;
     }
 
     for (htd::vertex_t vertex : vertices)
     {
-        auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = neighborhood.at(vertex);
         
         tmp = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
         
@@ -118,7 +120,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
             pool.insert(vertex);
         }
         
-        requiredFillAmount[vertex - htd::Vertex::FIRST] = tmp;
+        requiredFillAmount[vertex] = tmp;
         
         DEBUGGING_CODE_LEVEL2(
         std::cout << "Vertex " << vertex << ":" << std::endl;
@@ -139,7 +141,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
     
             for (htd::vertex_t vertex : vertices)
             {
-                tmp = requiredFillAmount[vertex - htd::Vertex::FIRST];
+                tmp = requiredFillAmount.at(vertex);
 
                 if (tmp <= minFill)
                 {
@@ -165,7 +167,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
         
         for (htd::vertex_t vertex : pool)
         {
-            currentDegree = neighborhood[vertex - htd::Vertex::FIRST].size() - 1;
+            currentDegree = neighborhood.at(vertex).size() - 1;
             
             if (currentDegree <= minDegree)
             {
@@ -181,21 +183,21 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
         }
         
         htd::vertex_t selectedVertex = minDegreePool[rand() % minDegreePool.size()];
-        auto & selectedNeighborhood = neighborhood[selectedVertex - htd::Vertex::FIRST];
+        auto & selectedNeighborhood = neighborhood.at(selectedVertex);
         
         pool.erase(pool.find(selectedVertex));
         
-        updateStatus[selectedVertex - htd::Vertex::FIRST] = 4;
+        updateStatus.at(selectedVertex) = 4;
         
         affectedVertices.clear();
         
-        if (requiredFillAmount[selectedVertex - htd::Vertex::FIRST] == 0)
+        if (requiredFillAmount.at(selectedVertex) == 0)
         {
             for (auto vertex : selectedNeighborhood)
             {
                 if (vertex != selectedVertex)
                 {
-                    auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
+                    auto & currentNeighborhood = neighborhood.at(vertex);
                     
                     currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
                 }
@@ -207,46 +209,45 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
             {
                 if (neighbor != selectedVertex)
                 {
-                    if (updateStatus[neighbor - htd::Vertex::FIRST] == 0)
+                    if (updateStatus.at(neighbor) == 0)
                     {
-                        decompose_sets(selectedNeighborhood, neighborhood[neighbor - htd::Vertex::FIRST], selectedVertex,
-                                       additionalNeighbors[neighbor - htd::Vertex::FIRST],
-                                       unaffectedNeighbors[neighbor - htd::Vertex::FIRST],
-                                       existingNeighbors[neighbor - htd::Vertex::FIRST]);
+                        decompose_sets(selectedNeighborhood, neighborhood.at(neighbor), selectedVertex,
+                                       additionalNeighbors[neighbor],
+                                       unaffectedNeighbors[neighbor],
+                                       existingNeighbors[neighbor]);
                     }
 
-                    updateStatus[neighbor - htd::Vertex::FIRST] |= 1;
+                    updateStatus.at(neighbor) |= 1;
 
-                    for (auto affectedVertex : neighborhood[neighbor - htd::Vertex::FIRST])
+                    for (auto affectedVertex : neighborhood.at(neighbor))
                     {
-                        //TODO Change into status_t
-                        char currentUpdateStatus = updateStatus[affectedVertex - htd::Vertex::FIRST];
+                        htd::state_t currentUpdateStatus = updateStatus.at(affectedVertex);
 
                         if (currentUpdateStatus < 2)
                         {
                             if (currentUpdateStatus == 0)
                             {
-                                decompose_sets(selectedNeighborhood, neighborhood[affectedVertex - htd::Vertex::FIRST], selectedVertex,
-                                               additionalNeighbors[affectedVertex - htd::Vertex::FIRST],
-                                               unaffectedNeighbors[affectedVertex - htd::Vertex::FIRST],
-                                               existingNeighbors[affectedVertex - htd::Vertex::FIRST]);
+                                decompose_sets(selectedNeighborhood, neighborhood.at(affectedVertex), selectedVertex,
+                                               additionalNeighbors[affectedVertex],
+                                               unaffectedNeighbors[affectedVertex],
+                                               existingNeighbors[affectedVertex]);
                             }
 
                             affectedVertices.push_back(affectedVertex);
                             
-                            updateStatus[affectedVertex - htd::Vertex::FIRST] |= 2;
+                            updateStatus.at(affectedVertex) |= 2;
                         }
                     }
                 }
             }
 
-            for (auto vertex : selectedNeighborhood)
+            for (htd::vertex_t vertex : selectedNeighborhood)
             {
                 if (vertex != selectedVertex)
                 {
-                    auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
-                    auto & currentUnaffectedNeighborhood = unaffectedNeighbors[vertex - htd::Vertex::FIRST];
-                    auto & currentAdditionalNeighborhood = additionalNeighbors[vertex - htd::Vertex::FIRST];
+                    auto & currentNeighborhood = neighborhood.at(vertex);
+                    auto & currentUnaffectedNeighborhood = unaffectedNeighbors.at(vertex);
+                    auto & currentAdditionalNeighborhood = additionalNeighbors.at(vertex);
 
                     std::size_t additionalNeighborCount = currentAdditionalNeighborhood.size();
 
@@ -304,7 +305,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
                         currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
                     }
 
-                    tmp = requiredFillAmount[vertex - htd::Vertex::FIRST];
+                    tmp = requiredFillAmount.at(vertex);
 
                     if (additionalNeighborCount > 0 || tmp > 0)
                     {
@@ -314,7 +315,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
                         {
                             if (additionalNeighborCount == 0)
                             {
-                                auto & relevantNeighborhood = existingNeighbors[vertex - htd::Vertex::FIRST];
+                                auto & relevantNeighborhood = existingNeighbors.at(vertex);
 
                                 auto last = relevantNeighborhood.end();
 
@@ -325,7 +326,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
                                 {
                                     htd::vertex_t vertex2 = *it;
 
-                                    auto & currentAdditionalNeighborhood2 = additionalNeighbors[vertex2 - htd::Vertex::FIRST];
+                                    auto & currentAdditionalNeighborhood2 = additionalNeighbors.at(vertex2);
 
                                     it++;
 
@@ -335,7 +336,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
                                 tmp -= unaffectedNeighborCount;
 
                                 //TODO
-                                updateStatus[vertex - htd::Vertex::FIRST] = 0;
+                                updateStatus.at(vertex) = 0;
 
                                 if (tmp <= minFill)
                                 {
@@ -356,16 +357,16 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 
                                 for (htd::vertex_t unaffectedVertex : currentUnaffectedNeighborhood)
                                 {
-                                    auto & affectedVertices = existingNeighbors[unaffectedVertex - htd::Vertex::FIRST];
+                                    auto & affectedVertices = existingNeighbors.at(unaffectedVertex);
 
                                     tmp += htd::compute_set_difference_size(first, last, affectedVertices.begin(), affectedVertices.end());
 
                                     tmp--;
                                 }
 
-                                updateStatus[vertex - htd::Vertex::FIRST] &= ~1;
+                                updateStatus.at(vertex) &= ~1;
 
-                                if (updateStatus[vertex - htd::Vertex::FIRST] == 0)
+                                if (updateStatus.at(vertex) == 0)
                                 {
                                     if (tmp <= minFill)
                                     {
@@ -386,7 +387,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
                             tmp = 0;
 
                             //TODO
-                            updateStatus[vertex - htd::Vertex::FIRST] = 0;
+                            updateStatus.at(vertex) = 0;
 
                             if (tmp < minFill)
                             {
@@ -398,11 +399,11 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
                             pool.insert(vertex);
                         }
 
-                        requiredFillAmount[vertex - htd::Vertex::FIRST] = tmp;
+                        requiredFillAmount.at(vertex) = tmp;
                     }
                     else
                     {
-                        updateStatus[vertex - htd::Vertex::FIRST] = 0;
+                        updateStatus.at(vertex) = 0;
                     }
                 }
             }
@@ -457,13 +458,13 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 
             for (auto vertex : affectedVertices)
             {
-                if (updateStatus[vertex - htd::Vertex::FIRST] == 2)
+                if (updateStatus.at(vertex) == 2)
                 {
-                    tmp = requiredFillAmount[vertex - htd::Vertex::FIRST];
+                    tmp = requiredFillAmount.at(vertex);
 
-                    if (unaffectedNeighbors[vertex - htd::Vertex::FIRST].size() > 0 && tmp > 0)
+                    if (unaffectedNeighbors.at(vertex).size() > 0 && tmp > 0)
                     {
-                        auto & relevantNeighborhood = existingNeighbors[vertex - htd::Vertex::FIRST];
+                        auto & relevantNeighborhood = existingNeighbors.at(vertex);
 
                         auto last = relevantNeighborhood.end();
 
@@ -474,7 +475,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
                         {
                             htd::vertex_t vertex2 = *it;
 
-                            auto & currentAdditionalNeighborhood2 = additionalNeighbors[vertex2 - htd::Vertex::FIRST];
+                            auto & currentAdditionalNeighborhood2 = additionalNeighbors.at(vertex2);
 
                             it++;
                             index++;
@@ -508,26 +509,26 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
                         pool.insert(vertex);
                     }
 
-                    requiredFillAmount[vertex - htd::Vertex::FIRST] = tmp;
+                    requiredFillAmount.at(vertex) = tmp;
                 }
             }
 
             for (auto vertex : selectedNeighborhood)
             {
-                additionalNeighbors[vertex - htd::Vertex::FIRST].clear();
-                unaffectedNeighbors[vertex - htd::Vertex::FIRST].clear();
-                existingNeighbors[vertex - htd::Vertex::FIRST].clear();
+                additionalNeighbors[vertex].clear();
+                unaffectedNeighbors[vertex].clear();
+                existingNeighbors[vertex].clear();
             }
 
             for (auto vertex : affectedVertices)
             {
-                if (updateStatus[vertex - htd::Vertex::FIRST] == 2)
+                if (updateStatus.at(vertex) == 2)
                 {
-                    additionalNeighbors[vertex - htd::Vertex::FIRST].clear();
-                    unaffectedNeighbors[vertex - htd::Vertex::FIRST].clear();
-                    existingNeighbors[vertex - htd::Vertex::FIRST].clear();
+                    additionalNeighbors[vertex].clear();
+                    unaffectedNeighbors[vertex].clear();
+                    existingNeighbors[vertex].clear();
 
-                    updateStatus[vertex - htd::Vertex::FIRST] = 0;
+                    updateStatus.at(vertex) = 0;
                 }
             }
         }
@@ -604,28 +605,28 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
-std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::vector<htd::vertex_container> & availableNeighborhoods, const htd::vertex_container & vertices) const
+std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::unordered_map<htd::vertex_t, htd::vertex_container> & availableNeighborhoods, const htd::vertex_container & vertices) const
 {
     std::size_t ret = 0;
-    
+
     htd::vertex_t vertex = htd::Vertex::UNKNOWN;
-    
+
     DEBUGGING_CODE_LEVEL2(
     std::cout << "COMPUTE EDGE COUNT:" << std::endl << "   ";
     htd::print(vertices, false);
     std::cout << std::endl;
     )
-    
+
     auto last = vertices.end();
-    
+
     std::size_t count = vertices.size();
     htd::index_t index = 0;
-    
+
     for (auto it = vertices.begin(); index < count; index++)
     {
-        vertex = *it - htd::Vertex::FIRST;
+        vertex = *it;
 
-        auto & currentNeighborhood = availableNeighborhoods[vertex];
+        auto & currentNeighborhood = availableNeighborhoods.at(vertex);
 
         it++;
 

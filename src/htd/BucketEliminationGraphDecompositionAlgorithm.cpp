@@ -242,13 +242,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         std::vector<htd::index_t> indices(size);
 
-        //std::vector<htd::vertex_t> vertexLabels(size, htd::Vertex::UNKNOWN);
-
         std::vector<htd::vertex_container> buckets(size);
-
-        std::vector<htd::id_t> relevantBuckets;
-
-        std::unordered_set<htd::vertex_t> isolatedVertices(ordering.begin(), ordering.end());
 
         DEBUGGING_CODE(std::cout << "Ordering:" << std::endl;
 
@@ -284,41 +278,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             std::vector<htd::vertex_t> newBucketContent;
             newBucketContent.reserve(selectedBucket.size());
 
-            /*
-            if (vertexLabels[minimumVertex - htd::Vertex::FIRST] == htd::unknown_id)
-            {
-                relevantBuckets.push_back(minimumVertex);
-            }
-            */
-
-            if (elements.size() > 1)
-            {
-                for (htd::vertex_t vertex : elements)
-                {
-                    isolatedVertices.erase(vertex);
-                }
-            }
-
-            //vertexLabels[minimumVertex - htd::Vertex::FIRST] = minimumVertex;
-
             std::set_union(selectedBucket.begin(), selectedBucket.end(), elements.begin(), elements.end(), std::back_inserter(newBucketContent));
 
             std::swap(selectedBucket, newBucketContent);
         }
-
-        if (isolatedVertices.size() > 0)
-        {
-            for (htd::vertex_t vertex : isolatedVertices)
-            {
-                relevantBuckets.push_back(vertex);
-            }
-        }
-
-        //TODO
-        relevantBuckets.clear();
-        std::copy(ordering.begin(), ordering.end(), std::back_inserter(relevantBuckets));
-
-        std::sort(relevantBuckets.begin(), relevantBuckets.end());
 
         DEBUGGING_CODE(std::cout << std::endl << "Buckets:" << std::endl;
         for (std::size_t index = 0; index < size; index++)
@@ -384,19 +347,6 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 htd::filtered_set_union(selectedBucket.begin(), selectedBucket.end(), bucket.begin(), bucket.end(), filterSet.begin(), filterSet.end(), std::back_inserter(newBucketContent));
 
                 std::swap(selectedBucket, newBucketContent);
-
-                //TODO
-                /*
-                htd::id_t selectionLabel = labels[selection];
-                htd::id_t minimumVertexLabel = labels[minimumVertex];
-
-                if (minimumVertexLabel != htd::unknown_id && selectionLabel != htd::unknown_id)
-                {
-                    ++edgeCount;
-
-                    result.addEdge(selectionLabel, minimumVertexLabel);
-                }
-                */
 
                 result.addEdge(selection, minimumVertex);
             }

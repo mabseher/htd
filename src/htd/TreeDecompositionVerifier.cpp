@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
+#include <htd/PostOrderTreeTraversal.hpp>
 #include <htd/VectorAdapter.hpp>
 
 #include <map>
@@ -109,6 +110,8 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
     std::size_t edgeCount = graph.edgeCount();
 
+    std::unordered_set<htd::vertex_t> missingEdges(edgeCount);
+
     htd::hyperedge_container edges;
 
     edges.reserve(edgeCount);
@@ -126,40 +129,30 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
         edges.push_back(htd::Hyperedge(edge.id(), htd::ConstCollection<htd::vertex_t>::getInstance(elements)));
     }
 
-    std::unordered_set<htd::vertex_t> missingEdges(edgeCount);
-    
-    for (htd::index_t index = 0; index < edgeCount; index++)
-    {
-        missingEdges.insert(index);
-    }
-    
-    std::vector<htd::index_t> coveredEdges;
-        
-    for (auto it1 = decomposition.vertices().begin(); !ok && it1 != decomposition.vertices().end(); it1++)
-    {
-        htd::vertex_t node = *it1;
+    htd::PostOrderTreeTraversal treeTraversal;
 
-        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
+    treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
+    {
+        HTD_UNUSED(parent)
+        HTD_UNUSED(distanceToSubtreeRoot)
 
-        for (auto it2 = missingEdges.begin(); !ok && it2 != missingEdges.end(); it2++)
+        if (!ok)
         {
-            auto & edge = edges[*it2];
-        
-            if (std::includes(bag.begin(), bag.end(), edge.begin(), edge.end()))
+            const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+
+            for (auto it = edges.begin(); !ok && it != edges.end(); ++it)
             {
-                coveredEdges.push_back(*it2);
+                const htd::Hyperedge & edge = *it;
+
+                if (missingEdges.count(edge.id()) > 0 && std::includes(bag.begin(), bag.end(), edge.begin(), edge.end()))
+                {
+                    missingEdges.erase(edge.id());
+                }
+
+                ok = missingEdges.empty();
             }
         }
-        
-        for (htd::index_t coveredEdge : coveredEdges)
-        {
-            missingEdges.erase(coveredEdge);
-        }
-        
-        ok = missingEdges.empty();
-        
-        coveredEdges.clear();
-    }
+    });
 
     if (!ok)
     {
@@ -180,101 +173,46 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsCo
 
     auto & result = ret.container();
 
-    bool ok = false;
+    std::unordered_set<htd::vertex_t> forgottenVertices(graph.vertexCount());
 
-    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> containers;
+    htd::PostOrderTreeTraversal treeTraversal;
 
-    for (htd::vertex_t node : decomposition.vertices())
+    treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
+        HTD_UNUSED(distanceToSubtreeRoot)
 
-        for (htd::vertex_t vertex : bag)
-        {
-            containers[vertex].push_back(node);
-        }
-    }
-    
-    for (htd::vertex_t vertex : graph.vertices())
-    {
-        ok = true;
-        
-        auto & currentContainers = containers[vertex];
-        
-        if (currentContainers.size() > 1)
-        {
-            htd::vertex_container reachableVertices;
-            getReachableVertices(currentContainers[0], decomposition, containers[vertex], reachableVertices);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
-            ok = reachableVertices.size() == currentContainers.size();
-        }
-
-        if (!ok)
+        if (parent != htd::Vertex::UNKNOWN)
         {
-            result.push_back(vertex);
+            const htd::ConstCollection<htd::vertex_t> & forgottenBagContent = decomposition.forgottenVertices(parent, vertex);
+
+            for (htd::vertex_t bagElement : bag)
+            {
+                if (forgottenVertices.count(bagElement) > 0)
+                {
+                    result.push_back(bagElement);
+                }
+            }
+
+            for (htd::vertex_t forgottenVertex : forgottenBagContent)
+            {
+                forgottenVertices.insert(forgottenVertex);
+            }
         }
-    }
+        else
+        {
+            for (htd::vertex_t bagElement : bag)
+            {
+                if (forgottenVertices.count(bagElement) > 0)
+                {
+                    result.push_back(bagElement);
+                }
+            }
+        }
+    });
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
-}
-
-void htd::TreeDecompositionVerifier::getReachableVertices(htd::vertex_t start, const htd::ITreeDecomposition & decomposition, const htd::vertex_container & filter, htd::vertex_container & output) const
-{
-    std::size_t size = decomposition.vertexCount();
-    
-    if (size > 0)
-    {
-        std::map<htd::index_t, htd::vertex_container> neighbors;
-
-        for (auto & edge : decomposition.edges())
-        {
-            if (std::binary_search(filter.begin(), filter.end(), edge.first) && std::binary_search(filter.begin(), filter.end(), edge.second))
-            {
-                auto & currentNeighborhood1 = neighbors[edge.first];
-                auto & currentNeighborhood2 = neighbors[edge.second];
-                
-                if (!std::binary_search(currentNeighborhood1.begin(), currentNeighborhood1.end(), edge.second))
-                {
-                    currentNeighborhood1.push_back(edge.second);
-                }
-                
-                if (!std::binary_search(currentNeighborhood2.begin(), currentNeighborhood2.end(), edge.first))
-                {
-                    currentNeighborhood2.push_back(edge.first);
-                }
-            }
-        }
-
-        std::vector<htd::vertex_t> newVertices;
-        std::vector<htd::vertex_t> tmpVertices;
-
-        std::set<htd::vertex_t> result;
-        
-        result.insert(start);
-
-        newVertices.push_back(start);
-
-        while (newVertices.size() > 0) 
-        {
-            std::swap(tmpVertices, newVertices);
-
-            newVertices.clear();
-
-            for (auto vertex : tmpVertices)
-            {
-                for (htd::vertex_t neighbor : neighbors[vertex])
-                {
-                    if (result.find(neighbor) == result.end())
-                    {
-                        result.insert(neighbor);
-
-                        newVertices.push_back(neighbor);
-                    }
-                }
-            }
-        }
-        
-        std::copy(result.begin(), result.end(), std::back_inserter(output));
-    }
 }
 
 #endif /* HTD_HTD_TREEDECOMPOSITIONVERIFIER_CPP */

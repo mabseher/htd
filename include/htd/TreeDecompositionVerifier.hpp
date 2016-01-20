@@ -53,9 +53,6 @@ namespace htd
 
         protected:
             TreeDecompositionVerifier & operator=(const TreeDecompositionVerifier &) { return *this; }
-
-        private:
-            void getReachableVertices(htd::vertex_t start, const htd::ITreeDecomposition & decomposition, const htd::vertex_container & filter, htd::vertex_container & output) const;
     };
 }
 

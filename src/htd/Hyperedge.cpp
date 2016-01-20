@@ -53,6 +53,11 @@ htd::Hyperedge::Hyperedge(const htd::Hyperedge & original) : written_(false), id
 
 }
 
+htd::Hyperedge::Hyperedge(htd::Hyperedge && original) : written_(original.written_), id_(original.id_), elements_(std::move(original.elements_))
+{
+
+}
+
 htd::Hyperedge::~Hyperedge()
 {
 
@@ -174,6 +179,17 @@ htd::Hyperedge & htd::Hyperedge::operator=(const htd::Hyperedge & original)
     written_ = false;
 
     elements_ = original.elements_;
+
+    return *this;
+}
+
+htd::Hyperedge & htd::Hyperedge::operator=(htd::Hyperedge && original)
+{
+    id_ = original.id_;
+
+    written_ = original.written_;
+
+    elements_ = std::move(original.elements_);
 
     return *this;
 }

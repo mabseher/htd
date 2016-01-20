@@ -66,6 +66,16 @@ namespace htd
                 }
             }
 
+            Iterator<T>(Iterator<T> && original) : baseIterator_(nullptr)
+            {
+                if (original.baseIterator_ != nullptr)
+                {
+                    baseIterator_ = std::move(original.baseIterator_);
+
+                    original.baseIterator_ = nullptr;
+                }
+            }
+
             virtual ~Iterator()
             {
                 if (baseIterator_ != nullptr)
@@ -74,23 +84,6 @@ namespace htd
 
                     baseIterator_ = nullptr;
                 }
-            }
-
-            Iterator & operator=(Iterator & original)
-            {
-                if (baseIterator_ != nullptr)
-                {
-                    delete baseIterator_;
-
-                    baseIterator_ = nullptr;
-                }
-
-                if (original.baseIterator_ != nullptr)
-                {
-                    baseIterator_ = original.baseIterator_->clone();
-                }
-
-                return *this;
             }
 
             Iterator<T> & operator++(void) HTD_OVERRIDE
@@ -119,7 +112,27 @@ namespace htd
                     delete baseIterator_;
                 }
 
-                baseIterator_ = original.baseIterator_->clone();
+                if (original.baseIterator_ != nullptr)
+                {
+                    baseIterator_ = original.baseIterator_->clone();
+                }
+
+                return *this;
+            }
+
+            Iterator<T> & operator=(Iterator<T> && original)
+            {
+                if (baseIterator_!= nullptr)
+                {
+                    delete baseIterator_;
+                }
+
+                if (original.baseIterator_ != nullptr)
+                {
+                    baseIterator_ = std::move(original.baseIterator_);
+
+                    original.baseIterator_ = nullptr;
+                }
 
                 return *this;
             }

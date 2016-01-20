@@ -48,12 +48,17 @@ namespace htd
 
             }
 
+            IteratorWrapper<Iter, T>(IteratorWrapper<Iter, T> && original) : baseIterator_(std::move(original.baseIterator_))
+            {
+
+            }
+
             virtual ~IteratorWrapper()
             {
 
             }
 
-            IteratorWrapper & operator=(IteratorWrapper & original)
+            IteratorWrapper & operator=(const IteratorWrapper & original)
             {
                 baseIterator_ = original.baseIterator_;
 

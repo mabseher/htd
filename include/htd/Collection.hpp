@@ -50,6 +50,16 @@ namespace htd
 
             }
 
+            Collection(const htd::Collection<T> & original) : begin_(original.begin_), end_(original.end_)
+            {
+
+            }
+
+            Collection(htd::Collection<T> && original) : begin_(std::move(original.begin_)), end_(std::move(original.end_))
+            {
+
+            }
+
             ~Collection()
             {
 

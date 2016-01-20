@@ -65,6 +65,16 @@ namespace htd
                 }
             }
 
+            ConstIterator<T>(ConstIterator<T> && original) : baseIterator_(nullptr)
+            {
+                if (original.baseIterator_ != nullptr)
+                {
+                    baseIterator_ = std::move(original.baseIterator_);
+
+                    original.baseIterator_ = nullptr;
+                }
+            }
+
             virtual ~ConstIterator()
             {
                 if (baseIterator_ != nullptr)
@@ -73,40 +83,6 @@ namespace htd
 
                     baseIterator_ = nullptr;
                 }
-            }
-
-            ConstIterator & operator=(htd::Iterator<T> & original)
-            {
-                if (baseIterator_ != nullptr)
-                {
-                    delete baseIterator_;
-
-                    baseIterator_ = nullptr;
-                }
-
-                if (original.baseIterator_ != nullptr)
-                {
-                    baseIterator_ = original;
-                }
-
-                return *this;
-            }
-
-            ConstIterator & operator=(ConstIterator<T> & original)
-            {
-                if (baseIterator_ != nullptr)
-                {
-                    delete baseIterator_;
-
-                    baseIterator_ = nullptr;
-                }
-
-                if (original.baseIterator_ != nullptr)
-                {
-                    baseIterator_ = original.baseIterator_->clone();
-                }
-
-                return *this;
             }
 
             ConstIterator<T> & operator++(void) HTD_OVERRIDE
@@ -128,14 +104,55 @@ namespace htd
                 return ret;
             }
 
+            ConstIterator & operator=(htd::Iterator<T> & original)
+            {
+                if (baseIterator_ != nullptr)
+                {
+                    delete baseIterator_;
+
+                    baseIterator_ = nullptr;
+                }
+
+                if (original.baseIterator_ != nullptr)
+                {
+                    baseIterator_ = original;
+                }
+
+                return *this;
+            }
+
             ConstIterator<T> & operator=(const ConstIterator<T> & original)
             {
                 if (baseIterator_!= nullptr)
                 {
                     delete baseIterator_;
+
+                    baseIterator_ = nullptr;
                 }
 
-                baseIterator_ = original.baseIterator_->clone();
+                if (original.baseIterator_ != nullptr)
+                {
+                    baseIterator_ = original.baseIterator_->clone();
+                }
+
+                return *this;
+            }
+
+            ConstIterator<T> & operator=(ConstIterator<T> && original)
+            {
+                if (baseIterator_!= nullptr)
+                {
+                    delete baseIterator_;
+
+                    baseIterator_ = nullptr;
+                }
+
+                if (original.baseIterator_ != nullptr)
+                {
+                    baseIterator_ = std::move(original.baseIterator_);
+
+                    original.baseIterator_ = nullptr;
+                }
 
                 return *this;
             }

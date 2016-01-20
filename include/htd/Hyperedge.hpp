@@ -49,7 +49,9 @@ namespace htd
 
             Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements);
 
-            Hyperedge(const htd::Hyperedge & original);
+            Hyperedge(const Hyperedge & original);
+
+            Hyperedge(Hyperedge && original);
 
             ~Hyperedge();
 
@@ -82,6 +84,8 @@ namespace htd
             const htd::vertex_t & operator[](htd::index_t index) const;
 
             Hyperedge & operator=(const Hyperedge & original);
+
+            Hyperedge & operator=(Hyperedge && original);
 
             bool operator<(const Hyperedge & rhs) const;
 

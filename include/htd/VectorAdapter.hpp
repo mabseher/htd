@@ -57,6 +57,16 @@ namespace htd
 
             }
 
+            VectorAdapter(const VectorAdapter<T> & collection) : container_(collection.container_)
+            {
+
+            }
+
+            VectorAdapter(VectorAdapter<T> && collection) : container_(std::move(collection.container_))
+            {
+
+            }
+
             virtual ~VectorAdapter()
             {
 

@@ -46,6 +46,11 @@ namespace htd
 
             }
 
+            ConstIteratorWrapper<Iter, T>(ConstIteratorWrapper<Iter, T> && original) : baseIterator_(std::move(original.baseIterator_))
+            {
+
+            }
+
             virtual ~ConstIteratorWrapper()
             {
 

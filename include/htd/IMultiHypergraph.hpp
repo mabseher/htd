@@ -60,6 +60,8 @@ namespace htd
 
             virtual htd::ConstCollection<htd::id_t> associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const = 0;
 
+            virtual htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const = 0;
+
             virtual htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const = 0;
 
             virtual std::size_t isolatedVertexCount(void) const = 0;

@@ -49,6 +49,8 @@ namespace htd
 
             virtual htd::id_t addEdge(const htd::Hyperedge & hyperedge) = 0;
 
+            virtual htd::id_t addEdge(htd::Hyperedge && hyperedge) = 0;
+
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
             virtual IMutableMultiHypergraph * clone(void) const = 0;

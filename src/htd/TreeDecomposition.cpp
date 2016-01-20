@@ -812,7 +812,7 @@ void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex
 
 htd::TreeDecomposition * htd::TreeDecomposition::clone(void) const
 {
-    return new TreeDecomposition(*this);
+    return new htd::TreeDecomposition(*this);
 }
 
 htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::TreeDecomposition & original)

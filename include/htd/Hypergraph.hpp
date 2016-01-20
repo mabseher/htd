@@ -66,6 +66,8 @@ namespace htd
 
             htd::ConstCollection<htd::id_t> associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
+            htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const HTD_OVERRIDE;
+
             htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
             htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
@@ -115,6 +117,8 @@ namespace htd
             htd::id_t addEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
 
             htd::id_t addEdge(const htd::Hyperedge & hyperedge) HTD_OVERRIDE;
+
+            htd::id_t addEdge(htd::Hyperedge && hyperedge) HTD_OVERRIDE;
 
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 

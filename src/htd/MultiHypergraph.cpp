@@ -183,6 +183,23 @@ htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(const st
     return associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
 }
 
+htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
+{
+    htd::VectorAdapter<htd::id_t> ret;
+
+    auto & result = ret.container();
+
+    for (const htd::Hyperedge & edge : hyperedges())
+    {
+        if (edge.size() == elements.size() && std::equal(edge.begin(), edge.end(), elements.begin()))
+        {
+            result.push_back(edge.id());
+        }
+    }
+
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
+}
+
 htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     htd::VectorAdapter<htd::id_t> ret;
@@ -721,6 +738,55 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
     std::array<htd::vertex_t, 1> currentVertex;
 
     std::vector<htd::vertex_t> sortedElements(elements.begin(), elements.end());
+
+    std::sort(sortedElements.begin(), sortedElements.end());
+
+    sortedElements.erase(std::unique(sortedElements.begin(), sortedElements.end()), sortedElements.end());
+
+    for (htd::vertex_t vertex : sortedElements)
+    {
+        currentVertex[0] = vertex;
+
+        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+
+        htd::vertex_container newNeighborhood;
+
+        htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(), sortedElements.begin(), sortedElements.end(), currentVertex.begin(), currentVertex.end(), std::back_inserter(newNeighborhood));
+
+        currentNeighborhood.swap(newNeighborhood);
+    }
+
+    return next_edge_++;
+}
+
+htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
+{
+    if (hyperedge.empty())
+    {
+        throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &&)");
+    }
+
+    bool ok = true;
+
+    for (auto it = hyperedge.begin(); ok && it != hyperedge.end(); it++)
+    {
+        ok = isVertex(*it);
+    }
+
+    if (!ok)
+    {
+        throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &&)");
+    }
+
+    htd::Hyperedge newHyperedge(std::move(hyperedge));
+
+    newHyperedge.setId(next_edge_);
+
+    edges_.push_back(newHyperedge);
+
+    std::array<htd::vertex_t, 1> currentVertex;
+
+    std::vector<htd::vertex_t> sortedElements(newHyperedge.begin(), newHyperedge.end());
 
     std::sort(sortedElements.begin(), sortedElements.end());
 

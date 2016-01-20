@@ -136,6 +136,26 @@ htd::ConstCollection<htd::id_t> htd::MultiGraph::associatedEdgeIds(const std::ve
     return associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
 }
 
+htd::ConstCollection<htd::id_t> htd::MultiGraph::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
+{
+    htd::VectorAdapter<htd::id_t> ret;
+
+    if (elements.size() == 2)
+    {
+        auto & result = ret.container();
+
+        for (const htd::Hyperedge & edge : hyperedges())
+        {
+            if (std::equal(edge.begin(), edge.end(), elements.begin()))
+            {
+                result.push_back(edge.id());
+            }
+        }
+    }
+
+    return htd::ConstCollection<htd::id_t>::getInstance(ret);
+}
+
 htd::ConstCollection<htd::id_t> htd::MultiGraph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     htd::VectorAdapter<htd::id_t> ret;

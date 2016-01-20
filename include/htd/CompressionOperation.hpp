@@ -29,6 +29,8 @@
 #include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
+#include <tuple>
+
 namespace htd
 {
     class CompressionOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
@@ -47,6 +49,9 @@ namespace htd
             void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
             CompressionOperation * clone(void) const HTD_OVERRIDE;
+
+        private:
+            std::tuple<std::size_t, std::size_t, std::size_t> analyze_sets(const htd::ConstCollection<htd::vertex_t> & set1, const htd::ConstCollection<htd::vertex_t> & set2) const;
     };
 }
 

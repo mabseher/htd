@@ -103,11 +103,13 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
                 const htd::ConstCollection<htd::vertex_t> & currentBag = decomposition.bagContent(vertex);
                 const htd::ConstCollection<htd::vertex_t> & parentBag = decomposition.bagContent(parent);
 
-                if (std::includes(parentBag.begin(), parentBag.end(), currentBag.begin(), currentBag.end()))
+                std::tuple<std::size_t, std::size_t, std::size_t> result = analyze_sets(currentBag, parentBag);
+
+                if (std::get<0>(result) == 0)
                 {
                     decomposition.removeVertex(vertex);
                 }
-                else if (std::includes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end()))
+                else if (std::get<2>(result) == 0)
                 {
                     decomposition.swapVertexLabels(vertex, parent);
 
@@ -126,6 +128,65 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
 htd::CompressionOperation * htd::CompressionOperation::clone(void) const
 {
     return new htd::CompressionOperation();
+}
+
+std::tuple<std::size_t, std::size_t, std::size_t> htd::CompressionOperation::analyze_sets(const htd::ConstCollection<htd::vertex_t> & set1, const htd::ConstCollection<htd::vertex_t> & set2) const
+{
+    auto first1 = set1.begin();
+    auto first2 = set2.begin();
+    auto last1 = set1.end();
+    auto last2 = set2.end();
+
+    std::size_t count1 = set1.size();
+    std::size_t count2 = set2.size();
+
+    htd::index_t index1 = 0;
+    htd::index_t index2 = 0;
+
+    std::tuple<std::size_t, std::size_t, std::size_t> ret(0, 0, 0);
+
+    while (index1 < count1 && index2 < count2)
+    {
+        auto value1 = *first1;
+        auto value2 = *first2;
+
+        if (value1 < value2)
+        {
+            std::get<0>(ret)++;
+
+            index1++;
+            ++first1;
+        }
+        else if (value2 < value1)
+        {
+            std::get<2>(ret)++;
+
+            index2++;
+            ++first2;
+        }
+        else
+        {
+            std::get<1>(ret)++;
+
+            index1++;
+            ++first1;
+
+            //Skip common value in set 2.
+            index2++;
+            ++first2;
+        }
+    }
+
+    if (index1 < count1)
+    {
+        std::get<0>(ret) += std::distance(first1, last1);
+    }
+    else if (index2 < count2)
+    {
+        std::get<2>(ret) += std::distance(first2, last2);
+    }
+
+    return ret;
 }
 
 #endif /* HTD_HTD_COMPRESSIONOPERATION_CPP */

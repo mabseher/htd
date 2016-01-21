@@ -151,6 +151,8 @@ namespace htd
 
             DirectedGraph & operator=(const htd::IDirectedGraph & original) HTD_OVERRIDE;
 
+            DirectedGraph & operator=(const htd::IDirectedMultiGraph & original) HTD_OVERRIDE;
+
         private:
             htd::IMutableHypergraph * base_;
 

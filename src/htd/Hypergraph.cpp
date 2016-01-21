@@ -360,4 +360,16 @@ htd::Hypergraph & htd::Hypergraph::operator=(const htd::IHypergraph & original)
     return *this;
 }
 
+htd::Hypergraph & htd::Hypergraph::operator=(const htd::IMultiHypergraph & original)
+{
+    if (this != &original)
+    {
+        delete base_;
+
+        base_ = htd::MultiHypergraphFactory::instance().getMultiHypergraph(original);
+    }
+
+    return *this;
+}
+
 #endif /* HTD_HTD_HYPERGRAPH_CPP */

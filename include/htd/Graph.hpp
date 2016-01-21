@@ -131,6 +131,8 @@ namespace htd
 
             Graph & operator=(const htd::IGraph & original) HTD_OVERRIDE;
 
+            Graph & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;
+
         private:
             htd::IMutableHypergraph * base_;
     };

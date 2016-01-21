@@ -220,6 +220,17 @@ htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::IDir
     return *this;
 }
 
+htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::IDirectedMultiGraph & original)
+{
+    htd::DirectedGraph::operator=(original);
+
+    delete labelings_;
+
+    labelings_ = new htd::LabelingCollection();
+
+    return *this;
+}
+
 htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::ILabeledDirectedGraph & original)
 {
     if (this != &original)
@@ -230,6 +241,17 @@ htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::ILab
 
         labelings_ = original.labelings().clone();
     }
+
+    return *this;
+}
+
+htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::ILabeledDirectedMultiGraph & original)
+{
+    htd::DirectedGraph::operator=(original);
+
+    delete labelings_;
+
+    labelings_ = original.labelings().clone();
 
     return *this;
 }

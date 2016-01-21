@@ -32,7 +32,7 @@
 #include <htd/ILabelingFunction.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/GraphDecompositionFactory.hpp>
-#include <htd/NamedGraph.hpp>
+#include <htd/NamedMultiGraph.hpp>
 
 #include <algorithm>
 #include <array>
@@ -347,7 +347,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
         std::cout << std::endl << "Connections:" << std::endl;
         )
 
-        htd::NamedGraph<htd::vertex_t, htd::id_t> result;
+        htd::NamedMultiGraph<htd::vertex_t, htd::id_t> result;
 
         for (htd::index_t index = 0; index < size; index++)
         {

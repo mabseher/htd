@@ -77,6 +77,15 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
     return ret;
 }
 
+htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original)
+{
+    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
+
+    *ret = original;
+
+    return ret;
+}
+
 void htd::LabeledDirectedGraphFactory::setConstructionTemplate(htd::IMutableLabeledDirectedGraph * original)
 {
     if (original == nullptr)

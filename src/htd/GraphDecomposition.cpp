@@ -214,12 +214,26 @@ htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::IGraph &
     return *this;
 }
 
+htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::IMultiGraph & original)
+{
+    htd::LabeledGraph::operator=(original);
+
+    return *this;
+}
+
 htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::ILabeledGraph & original)
 {
     if (this != &original)
     {
         htd::LabeledGraph::operator=(original);
     }
+
+    return *this;
+}
+
+htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::ILabeledMultiGraph & original)
+{
+    htd::LabeledGraph::operator=(original);
 
     return *this;
 }

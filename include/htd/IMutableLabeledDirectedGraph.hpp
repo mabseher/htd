@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/IMutableDirectedGraph.hpp>
 #include <htd/ILabeledDirectedGraph.hpp>
+#include <htd/ILabeledDirectedMultiGraph.hpp>
 
 namespace htd
 {
@@ -55,6 +56,8 @@ namespace htd
             virtual IMutableLabeledDirectedGraph * clone(void) const = 0;
 
             virtual IMutableLabeledDirectedGraph & operator=(const htd::ILabeledDirectedGraph & original) = 0;
+
+            virtual IMutableLabeledDirectedGraph & operator=(const htd::ILabeledDirectedMultiGraph & original) = 0;
     };
 
     inline htd::IMutableLabeledDirectedGraph::~IMutableLabeledDirectedGraph() { }

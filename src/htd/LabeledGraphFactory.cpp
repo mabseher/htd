@@ -77,6 +77,15 @@ htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd:
     return ret;
 }
 
+htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd::ILabeledMultiGraph & original)
+{
+    htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();
+
+    *ret = original;
+
+    return ret;
+}
+
 void htd::LabeledGraphFactory::setConstructionTemplate(htd::IMutableLabeledGraph * original)
 {
     if (original == nullptr)

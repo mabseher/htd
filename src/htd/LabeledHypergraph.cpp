@@ -220,6 +220,20 @@ htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::IHypergrap
     return *this;
 }
 
+htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::IMultiHypergraph & original)
+{
+    if (this != &original)
+    {
+        htd::Hypergraph::operator=(original);
+
+        delete labelings_;
+
+        labelings_ = new htd::LabelingCollection();
+    }
+
+    return *this;
+}
+
 htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::ILabeledHypergraph & original)
 {
     if (this != &original)
@@ -230,6 +244,17 @@ htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::ILabeledHy
 
         labelings_ = original.labelings().clone();
     }
+
+    return *this;
+}
+
+htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::ILabeledMultiHypergraph & original)
+{
+    htd::Hypergraph::operator=(original);
+
+    delete labelings_;
+
+    labelings_ = original.labelings().clone();
 
     return *this;
 }

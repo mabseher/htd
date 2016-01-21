@@ -50,6 +50,8 @@ namespace htd
 
             virtual IMutableGraphDecomposition & operator=(const htd::ILabeledGraph & original) = 0;
 
+            virtual IMutableGraphDecomposition & operator=(const htd::ILabeledMultiGraph & original) = 0;
+
             virtual IMutableGraphDecomposition & operator=(const htd::IGraphDecomposition & original) = 0;
     };
 

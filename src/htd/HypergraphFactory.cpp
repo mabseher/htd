@@ -76,6 +76,15 @@ htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IHype
     return ret;
 }
 
+htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IMultiHypergraph & original)
+{
+    htd::IMutableHypergraph * ret = constructionTemplate_->clone();
+
+    *ret = original;
+
+    return ret;
+}
+
 void htd::HypergraphFactory::setConstructionTemplate(htd::IMutableHypergraph * original)
 {
     if (original == nullptr)

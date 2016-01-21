@@ -88,7 +88,11 @@ namespace htd
 
             LabeledGraph & operator=(const htd::IGraph & original) HTD_OVERRIDE;
 
+            LabeledGraph & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;
+
             LabeledGraph & operator=(const htd::ILabeledGraph & original) HTD_OVERRIDE;
+
+            LabeledGraph & operator=(const htd::ILabeledMultiGraph & original) HTD_OVERRIDE;
 
         private:
             htd::ILabelingCollection * labelings_;

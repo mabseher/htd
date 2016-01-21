@@ -77,6 +77,15 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IGraph & original)
     return ret;
 }
 
+htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IMultiGraph & original)
+{
+    htd::IMutableGraph * ret = constructionTemplate_->clone();
+
+    *ret = original;
+
+    return ret;
+}
+
 void htd::GraphFactory::setConstructionTemplate(htd::IMutableGraph * original)
 {
     if (original == nullptr)

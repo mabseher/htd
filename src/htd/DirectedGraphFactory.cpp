@@ -77,6 +77,15 @@ htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(const h
     return ret;
 }
 
+htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(const htd::IDirectedMultiGraph & original)
+{
+    htd::IMutableDirectedGraph * ret = constructionTemplate_->clone();
+
+    *ret = original;
+
+    return ret;
+}
+
 void htd::DirectedGraphFactory::setConstructionTemplate(htd::IMutableDirectedGraph * original)
 {
     if (original == nullptr)

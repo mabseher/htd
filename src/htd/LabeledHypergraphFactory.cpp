@@ -77,6 +77,15 @@ htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHyperg
     return ret;
 }
 
+htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHypergraph(const htd::ILabeledMultiHypergraph & original)
+{
+    htd::IMutableLabeledHypergraph * ret = constructionTemplate_->clone();
+
+    *ret = original;
+
+    return ret;
+}
+
 void htd::LabeledHypergraphFactory::setConstructionTemplate(htd::IMutableLabeledHypergraph * original)
 {
     if (original == nullptr)

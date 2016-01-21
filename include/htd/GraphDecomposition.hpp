@@ -69,7 +69,11 @@ namespace htd
 
             GraphDecomposition & operator=(const htd::IGraph & original) HTD_OVERRIDE;
 
+            GraphDecomposition & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;
+
             GraphDecomposition & operator=(const htd::ILabeledGraph & original) HTD_OVERRIDE;
+
+            GraphDecomposition & operator=(const htd::ILabeledMultiGraph & original) HTD_OVERRIDE;
 
             GraphDecomposition & operator=(const htd::IGraphDecomposition & original) HTD_OVERRIDE;
     };

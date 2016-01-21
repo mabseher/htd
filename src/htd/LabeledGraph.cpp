@@ -220,6 +220,17 @@ htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::IGraph & original)
     return *this;
 }
 
+htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::IMultiGraph & original)
+{
+    htd::Graph::operator=(original);
+
+    delete labelings_;
+
+    labelings_ = new htd::LabelingCollection();
+
+    return *this;
+}
+
 htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::ILabeledGraph & original)
 {
     if (this != &original)
@@ -230,6 +241,17 @@ htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::ILabeledGraph & orig
 
         labelings_ = original.labelings().clone();
     }
+
+    return *this;
+}
+
+htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::ILabeledMultiGraph & original)
+{
+    htd::Graph::operator=(original);
+
+    delete labelings_;
+
+    labelings_ = original.labelings().clone();
 
     return *this;
 }

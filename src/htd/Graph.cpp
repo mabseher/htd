@@ -493,4 +493,13 @@ htd::Graph & htd::Graph::operator=(const htd::IGraph & original)
     return *this;
 }
 
+htd::Graph & htd::Graph::operator=(const htd::IMultiGraph & original)
+{
+    delete base_;
+
+    base_ = htd::HypergraphFactory::instance().getHypergraph(original);
+
+    return *this;
+}
+
 #endif /* HTD_HTD_GRAPH_CPP */

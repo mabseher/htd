@@ -43,6 +43,8 @@ namespace htd
 
             htd::IMutableLabeledHypergraph * getLabeledHypergraph(const htd::ILabeledHypergraph & original);
 
+            htd::IMutableLabeledHypergraph * getLabeledHypergraph(const htd::ILabeledMultiHypergraph & original);
+
             void setConstructionTemplate(htd::IMutableLabeledHypergraph * original);
 
             htd::IMutableLabeledHypergraph & accessMutableLabeledHypergraph(htd::ILabeledHypergraph & original);

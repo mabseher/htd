@@ -88,7 +88,11 @@ namespace htd
 
             LabeledHypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
 
+            LabeledHypergraph & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+
             LabeledHypergraph & operator=(const htd::ILabeledHypergraph & original) HTD_OVERRIDE;
+
+            LabeledHypergraph & operator=(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
 
         private:
             htd::ILabelingCollection * labelings_;

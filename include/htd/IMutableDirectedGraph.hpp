@@ -26,6 +26,7 @@
 #define	HTD_HTD_IMUTABLEDIRECTEDGRAPH_HPP
 
 #include <htd/IDirectedGraph.hpp>
+#include <htd/IDirectedMultiGraph.hpp>
 
 namespace htd
 {
@@ -53,6 +54,8 @@ namespace htd
             virtual IMutableDirectedGraph * clone(void) const = 0;
 
             virtual IMutableDirectedGraph & operator=(const htd::IDirectedGraph & original) = 0;
+
+            virtual IMutableDirectedGraph & operator=(const htd::IDirectedMultiGraph & original) = 0;
     };
 
     inline htd::IMutableDirectedGraph::~IMutableDirectedGraph() { }

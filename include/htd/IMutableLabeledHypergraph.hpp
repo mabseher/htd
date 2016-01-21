@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/IMutableHypergraph.hpp>
 #include <htd/ILabeledHypergraph.hpp>
+#include <htd/ILabeledMultiHypergraph.hpp>
 
 namespace htd
 {
@@ -55,6 +56,8 @@ namespace htd
             virtual IMutableLabeledHypergraph * clone(void) const = 0;
 
             virtual IMutableLabeledHypergraph & operator=(const htd::ILabeledHypergraph & original) = 0;
+
+            virtual IMutableLabeledHypergraph & operator=(const htd::ILabeledMultiHypergraph & original) = 0;
     };
 
     inline htd::IMutableLabeledHypergraph::~IMutableLabeledHypergraph() { }

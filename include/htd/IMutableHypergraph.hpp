@@ -64,6 +64,8 @@ namespace htd
             virtual IMutableHypergraph * clone(void) const = 0;
 
             virtual IMutableHypergraph & operator=(const htd::IHypergraph & original) = 0;
+
+            virtual IMutableHypergraph & operator=(const htd::IMultiHypergraph & original) = 0;
     };
 
     inline htd::IMutableHypergraph::~IMutableHypergraph() { }

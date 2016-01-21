@@ -88,7 +88,11 @@ namespace htd
 
             LabeledDirectedGraph & operator=(const htd::IDirectedGraph & original) HTD_OVERRIDE;
 
+            LabeledDirectedGraph & operator=(const htd::IDirectedMultiGraph & original) HTD_OVERRIDE;
+
             LabeledDirectedGraph & operator=(const htd::ILabeledDirectedGraph & original) HTD_OVERRIDE;
+
+            LabeledDirectedGraph & operator=(const htd::ILabeledDirectedMultiGraph & original) HTD_OVERRIDE;
 
         private:
             htd::ILabelingCollection * labelings_;

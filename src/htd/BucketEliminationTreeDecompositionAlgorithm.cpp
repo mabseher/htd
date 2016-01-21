@@ -274,10 +274,10 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         std::size_t componentCount = components.size();
 
+        htd::IMutableGraphDecomposition & mutableGraphDecomposition = htd::GraphDecompositionFactory::instance().accessMutableGraphDecomposition(*graphDecomposition);
+
         if (componentCount > 1)
         {
-            htd::IMutableGraphDecomposition & mutableGraphDecomposition = htd::GraphDecompositionFactory::instance().accessMutableGraphDecomposition(*graphDecomposition);
-
             for (htd::index_t index = 0; index < componentCount - 1; ++index)
             {
                 const htd::ConstCollection<htd::vertex_t> & component1 = components[index];
@@ -313,7 +313,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
             vertexMapping[vertex] = node;
 
-            ret->setBagContent(node, graphDecomposition->bagContent(vertex));
+            ret->setVertexLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, node, mutableGraphDecomposition.transferVertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex));
         });
 
         delete graphDecomposition;

@@ -68,4 +68,85 @@ void htd::print(const htd::Hyperedge & input, std::ostream & stream)
     htd::print(input.elements());
 }
 
+void htd::set_union(const std::vector<htd::vertex_t> & set1,
+                    const std::vector<htd::vertex_t> & set2,
+                    htd::vertex_t ignoredVertex,
+                    std::vector<htd::vertex_t> & result)
+{
+    auto first1 = set1.begin();
+    auto first2 = set2.begin();
+    auto last1 = set1.end();
+    auto last2 = set2.end();
+
+    std::size_t count1 = set1.size();
+    std::size_t count2 = set2.size();
+
+    htd::index_t index1 = 0;
+    htd::index_t index2 = 0;
+
+    while (index1 < count1 && index2 < count2)
+    {
+        auto value1 = *first1;
+        auto value2 = *first2;
+
+        if (value1 < value2)
+        {
+            if (value1 != ignoredVertex)
+            {
+                result.push_back(value1);
+            }
+
+            index1++;
+            ++first1;
+        }
+        else if (value2 < value1)
+        {
+            if (value2 != ignoredVertex)
+            {
+                result.push_back(value2);
+            }
+
+            index2++;
+            ++first2;
+        }
+        else
+        {
+            if (value1 != ignoredVertex)
+            {
+                result.push_back(value1);
+            }
+
+            index1++;
+            ++first1;
+
+            //Skip common value in set 2.
+            index2++;
+            ++first2;
+        }
+    }
+
+    if (index1 < count1)
+    {
+        if (*first1 <= ignoredVertex)
+        {
+            std::copy_if(first1, last1, std::back_inserter(result), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
+        }
+        else
+        {
+            std::copy(first1, last1, std::back_inserter(result));
+        }
+    }
+    else if (index2 < count2)
+    {
+        if (*first2 <= ignoredVertex)
+        {
+            std::copy_if(first2, last2, std::back_inserter(result), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
+        }
+        else
+        {
+            std::copy(first2, last2, std::back_inserter(result));
+        }
+    }
+}
+
 #endif /* HTD_HTD_HELPERS_CPP */

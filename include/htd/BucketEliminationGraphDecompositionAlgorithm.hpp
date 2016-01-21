@@ -33,6 +33,7 @@
 #include <htd/IGraphDecompositionManipulationOperation.hpp>
 
 #include <vector>
+#include <unordered_map>
 #include <unordered_set>
 
 namespace htd
@@ -70,9 +71,9 @@ namespace htd
 
             htd::IMutableGraphDecomposition * computeMutableDecomposition(const htd::IMultiHypergraph & graph) const;
 
-            htd::vertex_t getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices) const;
+            htd::vertex_t getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::unordered_map<htd::vertex_t, htd::index_t> & vertexIndices) const;
 
-            htd::vertex_t getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices, htd::vertex_t excludedVertex) const;
+            htd::vertex_t getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::unordered_map<htd::vertex_t, htd::index_t> & vertexIndices, htd::vertex_t excludedVertex) const;
     };
 }
 

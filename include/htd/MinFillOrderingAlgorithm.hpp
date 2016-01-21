@@ -52,11 +52,6 @@ namespace htd
         private:
             std::size_t computeEdgeCount(const std::unordered_map<htd::vertex_t, htd::vertex_container> & availableNeighborhoods, const htd::vertex_container & vertices) const;
 
-            void set_union(const std::vector<htd::vertex_t> & set1,
-                           const std::vector<htd::vertex_t> & set2,
-                           htd::vertex_t ignoredVertex,
-                           std::vector<htd::vertex_t> & result) const;
-
             void decompose_sets(const std::vector<htd::vertex_t> & set1,
                                 const std::vector<htd::vertex_t> & set2,
                                 htd::vertex_t ignoredVertex,

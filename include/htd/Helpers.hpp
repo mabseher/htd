@@ -280,6 +280,11 @@ namespace htd
             stream << "<EMPTY>";
         }
     }
+
+    void set_union(const std::vector<htd::vertex_t> & set1,
+                   const std::vector<htd::vertex_t> & set2,
+                   htd::vertex_t ignoredVertex,
+                   std::vector<htd::vertex_t> & result);
     
     template <class InputIterator1, 
               class InputIterator2>

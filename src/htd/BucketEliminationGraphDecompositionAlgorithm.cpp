@@ -41,6 +41,7 @@
 #include <stack>
 #include <stdexcept>
 #include <tuple>
+#include <unordered_map>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -240,12 +241,11 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         delete algorithm;
 
-        std::vector<htd::index_t> indices(size);
+        std::unordered_map<htd::vertex_t, htd::index_t> indices(size);
 
-        std::vector<htd::vertex_container> buckets(size);
+        std::unordered_map<htd::vertex_t, htd::vertex_container> buckets(size);
 
         DEBUGGING_CODE(std::cout << "Ordering:" << std::endl;
-
         for (htd::vertex_t vertex : ordering)
         {
             std::cout << vertex << std::endl;
@@ -255,12 +255,9 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         for (htd::vertex_t vertex : ordering)
         {
-            indices[vertex - htd::Vertex::FIRST] = index++;
-        }
+            indices[vertex] = index++;
 
-        for (std::size_t index = 0; index < size; index++)
-        {
-            buckets[index].push_back(index + htd::Vertex::FIRST);
+            buckets[vertex].push_back(vertex);
         }
 
         for (const htd::Hyperedge & edge : graph.hyperedges())
@@ -278,9 +275,9 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     if (vertex1 != vertex2)
                     {
-                        if (indices[vertex1 - htd::Vertex::FIRST] < indices[vertex2 - htd::Vertex::FIRST])
+                        if (indices.at(vertex1) < indices.at(vertex2))
                         {
-                            auto & selectedBucket = buckets[vertex1 - htd::Vertex::FIRST];
+                            auto & selectedBucket = buckets[vertex1];
 
                             auto position = std::lower_bound(selectedBucket.begin(), selectedBucket.end(), vertex2);
 
@@ -291,7 +288,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                         }
                         else
                         {
-                            auto & selectedBucket = buckets[vertex2 - htd::Vertex::FIRST];
+                            auto & selectedBucket = buckets[vertex2];
 
                             auto position = std::lower_bound(selectedBucket.begin(), selectedBucket.end(), vertex1);
 
@@ -314,7 +311,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     htd::vertex_t minimumVertex = getMinimumVertex(elements, indices);
 
-                    auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
+                    auto & selectedBucket = buckets[minimumVertex];
 
                     std::vector<htd::vertex_t> newBucketContent;
                     newBucketContent.reserve(selectedBucket.size());
@@ -340,7 +337,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
         for (htd::id_t bucket : relevantBuckets)
         {
             std::cout << "   Bucket " << bucket << ": ";
-            htd::print(buckets[bucket - htd::Vertex::FIRST], false);
+            htd::print(buckets[bucket], false);
             std::cout << std::endl;
         }
 
@@ -355,7 +352,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             DEBUGGING_CODE(std::cout << std::endl << "   Processing bucket " << selection << " ..." << std::endl;)
 
-            const htd::vertex_container & bucket = buckets[selection - htd::Vertex::FIRST];
+            const htd::vertex_container & bucket = buckets[selection];
 
             if (bucket.size() > 1)
             {
@@ -380,12 +377,12 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                     }
                 )
 
-                auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
+                auto & selectedBucket = buckets[minimumVertex];
 
                 std::vector<htd::vertex_t> newBucketContent;
                 newBucketContent.reserve(selectedBucket.size() + bucket.size());
 
-                htd::filtered_set_union(selectedBucket.begin(), selectedBucket.end(), bucket.begin(), bucket.end(), selection, std::back_inserter(newBucketContent));
+                htd::set_union(selectedBucket, bucket, selection, newBucketContent);
 
                 std::swap(selectedBucket, newBucketContent);
 
@@ -409,7 +406,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
         for (htd::id_t bucket : relevantBuckets)
         {
             std::cout << "   Bucket " << bucket << ": ";
-            htd::print(buckets[bucket - htd::Vertex::FIRST], false);
+            htd::print(buckets[bucket], false);
             std::cout << std::endl;
         })
 
@@ -417,14 +414,14 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         for (htd::vertex_t vertex : result.vertices())
         {
-            ret->setBagContent(result.lookupVertex(vertex), std::move(buckets[vertex - htd::Vertex::FIRST]));
+            ret->setBagContent(result.lookupVertex(vertex), std::move(buckets[vertex]));
         }
     }
 
     return ret;
 }
 
-htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices) const
+htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::unordered_map<htd::vertex_t, htd::index_t> & vertexIndices) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
@@ -432,7 +429,7 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
     {
         case 0:
         {
-            throw std::out_of_range("htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::vector<htd::index_t> &) const");
+            throw std::out_of_range("htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::unordered_map<htd::vertex_t, htd::index_t> &) const");
         }
         case 1:
         {
@@ -442,7 +439,7 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
         }
         case 2:
         {
-            if (vertexIndices[vertices[0] - htd::Vertex::FIRST] <= vertexIndices[vertices[1] - htd::Vertex::FIRST])
+            if (vertexIndices.at(vertices[0]) <= vertexIndices.at(vertices[1]))
             {
                 ret = vertices[0];
             }
@@ -461,7 +458,7 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
 
             for (htd::vertex_t vertex : vertices)
             {
-                currentIndex = vertexIndices[vertex - htd::Vertex::FIRST];
+                currentIndex = vertexIndices.at(vertex);
 
                 if (currentIndex < minimum)
                 {
@@ -478,7 +475,7 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
     return ret;
 }
 
-htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::index_t> & vertexIndices, htd::vertex_t excludedVertex) const
+htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::unordered_map<htd::vertex_t, htd::index_t> & vertexIndices, htd::vertex_t excludedVertex) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
@@ -486,13 +483,13 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
     {
         case 0:
         {
-            throw std::out_of_range("htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::vector<htd::index_t> &, htd::vertex_t) const");
+            throw std::out_of_range("htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::unordered_map<htd::vertex_t, htd::index_t> &, htd::vertex_t) const");
         }
         case 1:
         {
             if (vertices[0] == excludedVertex)
             {
-                throw std::out_of_range("htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::vector<htd::index_t> &, htd::vertex_t) const");
+                throw std::out_of_range("htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::unordered_map<htd::vertex_t, htd::index_t> &, htd::vertex_t) const");
             }
 
             ret = vertices[0];
@@ -501,7 +498,7 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
         }
         case 2:
         {
-            if (vertices[1] == excludedVertex || vertexIndices[vertices[0] - htd::Vertex::FIRST] <= vertexIndices[vertices[1] - htd::Vertex::FIRST])
+            if (vertices[1] == excludedVertex || vertexIndices.at(vertices[0]) <= vertexIndices.at(vertices[1]))
             {
                 ret = vertices[0];
             }
@@ -522,7 +519,7 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
             {
                 if (vertex != excludedVertex)
                 {
-                    currentIndex = vertexIndices[vertex - htd::Vertex::FIRST];
+                    currentIndex = vertexIndices.at(vertex);
 
                     if (currentIndex < minimum)
                     {

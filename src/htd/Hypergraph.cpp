@@ -250,6 +250,18 @@ htd::id_t htd::Hypergraph::addEdge(const std::vector<htd::vertex_t> & elements)
     return base_->addEdge(elements);
 }
 
+htd::id_t htd::Hypergraph::addEdge(std::vector<htd::vertex_t> && elements)
+{
+    const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(elements);
+
+    if (associatedIds.size() > 0)
+    {
+        return associatedIds[0];
+    }
+
+    return base_->addEdge(std::move(elements));
+}
+
 htd::id_t htd::Hypergraph::addEdge(const htd::ConstCollection<htd::vertex_t> & elements)
 {
     const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(elements);

@@ -703,6 +703,11 @@ htd::id_t htd::MultiHypergraph::addEdge(const std::vector<htd::vertex_t> & eleme
     return addEdge(htd::Hyperedge(htd::Id::UNKNOWN, elements));
 }
 
+htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
+{
+    return addEdge(htd::Hyperedge(htd::Id::UNKNOWN, std::move(elements)));
+}
+
 htd::id_t htd::MultiHypergraph::addEdge(const htd::ConstCollection<htd::vertex_t> & elements)
 {
     return addEdge(htd::Hyperedge(htd::Id::UNKNOWN, elements));

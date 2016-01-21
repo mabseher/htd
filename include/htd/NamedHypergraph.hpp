@@ -500,7 +500,7 @@ namespace htd
                     hyperedge.push_back(lookupVertex(vertex));
                 }
 
-                return base_->addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
+                return base_->addEdge(hyperedge);
             }
 
             htd::id_t addEdge(const std::vector<VertexNameType> & elements, const EdgeNameType & name)
@@ -522,7 +522,7 @@ namespace htd
                     hyperedge.push_back(lookupVertex(vertex));
                 }
 
-                htd::id_t edgeId = base_->addEdge(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
+                htd::id_t edgeId = base_->addEdge(hyperedge);
 
                 setEdgeName(edgeId, name);
 

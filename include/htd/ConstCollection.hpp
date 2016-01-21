@@ -39,22 +39,22 @@ namespace htd
         public:
             typedef T value_type;
 
-            ConstCollection(void) : begin_(), end_()
+            ConstCollection(void) : begin_(), end_(), size_(0)
             {
 
             }
 
-            ConstCollection(const htd::ConstIterator<T> & begin, const htd::ConstIterator<T> & end) : begin_(begin), end_(end)
+            ConstCollection(const htd::ConstIterator<T> & begin, const htd::ConstIterator<T> & end) : begin_(begin), end_(end), size_(std::distance(begin, end))
             {
 
             }
 
-            ConstCollection(const htd::ConstCollection<T> & original) : begin_(original.begin_), end_(original.end_)
+            ConstCollection(const htd::ConstCollection<T> & original) : begin_(original.begin_), end_(original.end_), size_(original.size_)
             {
 
             }
 
-            ConstCollection(htd::ConstCollection<T> && original) : begin_(std::move(original.begin_)), end_(std::move(original.end_))
+            ConstCollection(htd::ConstCollection<T> && original) : begin_(std::move(original.begin_)), end_(std::move(original.end_)), size_(original.size_)
             {
 
             }
@@ -71,7 +71,7 @@ namespace htd
 
             std::size_t size() const
             {
-                return std::distance(begin(), end());
+                return size_;
             }
 
             htd::ConstIterator<T> begin(void) const
@@ -123,12 +123,19 @@ namespace htd
             template <typename CollectionType>
             static ConstCollection<T> getInstance(const CollectionType & collection)
             {
-                return ConstCollection<T>(std::begin(collection), std::end(collection));
+                return ConstCollection<T>(std::begin(collection), std::end(collection), collection.size());
             }
 
         private:
             htd::ConstIterator<T> begin_;
             htd::ConstIterator<T> end_;
+
+            std::size_t size_;
+
+            ConstCollection(const htd::ConstIterator<T> & begin, const htd::ConstIterator<T> & end, std::size_t size) : begin_(begin), end_(end), size_(size)
+            {
+
+            }
     };
 }
 

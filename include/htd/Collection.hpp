@@ -72,7 +72,7 @@ namespace htd
 
             std::size_t size() const
             {
-                return std::distance(begin(), end());
+                return std::distance(begin_, end_);
             }
 
             htd::Iterator<T> begin(void)

@@ -126,7 +126,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
         elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
 
-        edges.push_back(htd::Hyperedge(edge.id(), htd::ConstCollection<htd::vertex_t>::getInstance(elements)));
+        edges.push_back(htd::Hyperedge(edge.id(), std::move(elements)));
     }
 
     htd::PostOrderTreeTraversal treeTraversal;

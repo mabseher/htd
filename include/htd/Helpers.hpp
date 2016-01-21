@@ -795,6 +795,14 @@ namespace htd
 namespace std
 {
     template<typename T>
+    ostream & operator<<(std::ostream & stream, const std::vector<T> input)
+    {
+        htd::print(input, stream);
+
+        return stream;
+    }
+
+    template<typename T>
     ostream & operator<<(std::ostream & stream, const htd::ConstCollection<T> input)
     {
         htd::print(input, stream);

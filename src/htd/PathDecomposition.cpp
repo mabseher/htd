@@ -261,7 +261,10 @@ std::size_t htd::PathDecomposition::bagSize(htd::vertex_t vertex) const
 
     if (isVertex(vertex))
     {
-        ret = bagContent(vertex).size();
+        if (isLabeledVertex(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex))
+        {
+            ret = dynamic_cast<const htd::Label<std::vector<htd::vertex_t>> *>(&(vertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->value().size();
+        }
     }
     else
     {
@@ -277,9 +280,9 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::bagContent(htd::vert
     {
         if (isLabeledVertex(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex))
         {
-            auto & bagLabel = dynamic_cast<const htd::Label<htd::ConstCollection<htd::vertex_t>> *>(&(vertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->value();
+            auto & bagLabel = dynamic_cast<const htd::Label<std::vector<htd::vertex_t>> *>(&(vertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->value();
 
-            return htd::ConstCollection<htd::vertex_t>(bagLabel);
+            return htd::ConstCollection<htd::vertex_t>::getInstance(bagLabel);
         }
         else
         {
@@ -298,7 +301,7 @@ void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const std::vect
 {
     if (isVertex(vertex))
     {
-        setVertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>(content))));
+        setVertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<std::vector<htd::vertex_t>>(std::vector<htd::vertex_t>(content)));
     }
     else
     {
@@ -310,7 +313,7 @@ void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd
 {
     if (isVertex(vertex))
     {
-        setVertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>(std::move(content)))));
+        setVertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<std::vector<htd::vertex_t>>(std::move(content)));
     }
     else
     {
@@ -322,7 +325,7 @@ void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const htd::Cons
 {
     if (isVertex(vertex))
     {
-        setVertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>(content))));
+        setVertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<std::vector<htd::vertex_t>>(std::vector<htd::vertex_t>(content.begin(), content.end())));
     }
     else
     {
@@ -334,7 +337,7 @@ void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, htd::ConstColle
 {
     if (isVertex(vertex))
     {
-        setVertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>(content))));
+        setVertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<std::vector<htd::vertex_t>>(std::vector<htd::vertex_t>(content.begin(), content.end())));
     }
     else
     {

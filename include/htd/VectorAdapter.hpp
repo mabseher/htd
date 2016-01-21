@@ -52,6 +52,11 @@ namespace htd
 
             }
 
+            VectorAdapter(std::vector<T> && collection) : container_(std::make_shared<std::vector<T, Allocator>>())
+            {
+                std::swap(collection, *container_);
+            }
+
             VectorAdapter(const htd::ConstCollection<T> & collection) : container_(std::make_shared<std::vector<T, Allocator>>(collection.begin(), collection.end()))
             {
 
@@ -120,6 +125,27 @@ namespace htd
             const T & operator[](htd::index_t index) const
             {
                 return container_->at(index);
+            }
+
+            VectorAdapter<T, Allocator> & operator=(std::vector<T, Allocator> && rhs)
+            {
+                std::swap(rhs, *container_);
+
+                return *this;
+            }
+
+            VectorAdapter<T, Allocator> & operator=(const VectorAdapter<T, Allocator> & rhs)
+            {
+                std::swap(rhs, *container_);
+
+                return *this;
+            }
+
+            VectorAdapter<T, Allocator> & operator=(VectorAdapter<T, Allocator> && rhs)
+            {
+                container_ = std::move(rhs.container_);
+
+                return *this;
             }
 
             VectorAdapter<T, Allocator> & operator=(htd::Collection<T> & rhs)

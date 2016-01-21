@@ -43,6 +43,11 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & eleme
 
 }
 
+htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) : written_(true), id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>())
+{
+    std::swap(elements, *elements_);
+}
+
 htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements) : written_(true), id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>(elements.begin(), elements.end()))
 {
 
@@ -165,11 +170,7 @@ const htd::ConstIterator<htd::vertex_t> htd::Hyperedge::end(void) const
 
 const htd::vertex_t & htd::Hyperedge::operator[](htd::index_t index) const
 {
-    htd::ConstIterator<htd::vertex_t> position = begin();
-
-    std::advance(position, index);
-
-    return *position;
+    return elements_->at(index);
 }
 
 htd::Hyperedge & htd::Hyperedge::operator=(const htd::Hyperedge & original)

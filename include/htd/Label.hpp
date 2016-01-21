@@ -42,7 +42,12 @@ namespace htd
 
             }
 
-            Label(const Label<T> & original) : value_(std::make_shared<T>(original.value()))
+            Label(const Label<T> & original) : value_(std::make_shared<T>(*(original.value_)))
+            {
+
+            }
+
+            Label(Label<T> && original) : value_(std::move(original.value_))
             {
 
             }
@@ -67,6 +72,20 @@ namespace htd
             Label<T> * clone(void) const HTD_OVERRIDE
             {
                 return new Label<T>(*value_);
+            }
+
+            Label<T> & operator=(const Label<T> & rhs) const
+            {
+                value_ = rhs.value_;
+
+                return *this;
+            }
+
+            Label<T> & operator=(Label<T> && rhs) const
+            {
+                value_ = std::move(rhs.value_);
+
+                return *this;
             }
 
             bool operator==(const Label<T> & rhs) const

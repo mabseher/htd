@@ -710,16 +710,40 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::ConstCollection<htd::vertex_t
 
 htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 {
-    const htd::ConstCollection<htd::vertex_t> & elements = hyperedge.elements();
-
-    if (elements.empty())
+    switch (hyperedge.size())
     {
-        throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &)");
+        case 0:
+        {
+            throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &)");
+        }
+        case 1:
+        {
+            if (!isVertex(hyperedge[0]))
+            {
+                throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &)");
+            }
+
+            htd::Hyperedge newHyperedge(hyperedge);
+
+            newHyperedge.setId(next_edge_);
+
+            edges_.push_back(newHyperedge);
+
+            return next_edge_++;
+        }
+        case 2:
+        {
+            return addEdge(hyperedge[0], hyperedge[1]);
+        }
+        default:
+        {
+            break;
+        }
     }
 
     bool ok = true;
 
-    for (auto it = elements.begin(); ok && it != elements.end(); it++)
+    for (auto it = hyperedge.begin(); ok && it != hyperedge.end(); it++)
     {
         ok = isVertex(*it);
     }
@@ -735,7 +759,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 
     edges_.push_back(newHyperedge);
 
-    std::vector<htd::vertex_t> sortedElements(elements.begin(), elements.end());
+    std::vector<htd::vertex_t> sortedElements(newHyperedge.begin(), newHyperedge.end());
 
     std::sort(sortedElements.begin(), sortedElements.end());
 
@@ -757,9 +781,35 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 
 htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
 {
-    if (hyperedge.empty())
+    switch (hyperedge.size())
     {
-        throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &&)");
+        case 0:
+        {
+            throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge &&)");
+        }
+        case 1:
+        {
+            if (!isVertex(hyperedge[0]))
+            {
+                throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge &&)");
+            }
+
+            htd::Hyperedge newHyperedge(std::move(hyperedge));
+
+            newHyperedge.setId(next_edge_);
+
+            edges_.push_back(newHyperedge);
+
+            return next_edge_++;
+        }
+        case 2:
+        {
+            return addEdge(hyperedge[0], hyperedge[1]);
+        }
+        default:
+        {
+            break;
+        }
     }
 
     bool ok = true;
@@ -771,7 +821,7 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
 
     if (!ok)
     {
-        throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &&)");
+        throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge &&)");
     }
 
     htd::Hyperedge newHyperedge(std::move(hyperedge));

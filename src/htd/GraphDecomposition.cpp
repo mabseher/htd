@@ -115,6 +115,18 @@ void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const std::vec
     }
 }
 
+void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd::vertex_t> && content)
+{
+    if (isVertex(vertex))
+    {
+        setVertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>(std::move(content)))));
+    }
+    else
+    {
+        throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, std::vector<htd::vertex_t> &&)");
+    }
+}
+
 void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
 {
     if (isVertex(vertex))
@@ -124,6 +136,18 @@ void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const htd::Con
     else
     {
         throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, const htd::IConstCollection<htd::vertex_t> &)");
+    }
+}
+
+void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content)
+{
+    if (isVertex(vertex))
+    {
+        setVertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>(content))));
+    }
+    else
+    {
+        throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, htd::IConstCollection<htd::vertex_t> &&)");
     }
 }
 

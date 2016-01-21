@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/IMutableLabeledTree.hpp>
 #include <htd/ITreeDecomposition.hpp>
+#include <htd/Label.hpp>
 
 namespace htd
 {
@@ -36,9 +37,13 @@ namespace htd
         public:
             virtual ~IMutableTreeDecomposition() = 0;
 
-            virtual void setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content) = 0;
+            virtual void setBagContent(htd::vertex_t vertex, const htd::vertex_container & content) = 0;
+
+            virtual void setBagContent(htd::vertex_t vertex, htd::vertex_container && content) = 0;
 
             virtual void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) = 0;
+
+            virtual void setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content) = 0;
 
             virtual IMutableTreeDecomposition * clone(void) const = 0;
 

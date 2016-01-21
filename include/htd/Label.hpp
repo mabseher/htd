@@ -108,6 +108,12 @@ namespace htd
         private:
             std::shared_ptr<T> value_;
     };
+
+    template<typename OutputType>
+    const OutputType & accessLabel(const htd::ILabel & input)
+    {
+        return dynamic_cast<const htd::Label<OutputType> *>(&input)->value();
+    }
 }
 
 #endif /* HTD_HTD_LABEL_HPP */

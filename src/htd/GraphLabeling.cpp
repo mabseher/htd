@@ -136,6 +136,38 @@ void htd::GraphLabeling::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
     }
 }
 
+htd::ILabel * htd::GraphLabeling::transferVertexLabel(htd::vertex_t vertex)
+{
+    auto position = vertexLabels_.find(vertex);
+
+    if (position == vertexLabels_.end())
+    {
+        throw std::logic_error("htd::ILabel * htd::GraphLabeling::transferVertexLabel(htd::vertex_t)");
+    }
+
+    htd::ILabel * ret = position->second;
+
+    vertexLabels_.erase(vertex);
+
+    return ret;
+}
+
+htd::ILabel * htd::GraphLabeling::transferEdgeLabel(htd::id_t edgeId)
+{
+    auto position = edgeLabels_.find(edgeId);
+
+    if (position == edgeLabels_.end())
+    {
+        throw std::logic_error("htd::ILabel * htd::GraphLabeling::transferEdgeLabel(htd::id_t)");
+    }
+
+    htd::ILabel * ret = position->second;
+
+    edgeLabels_.erase(edgeId);
+
+    return ret;
+}
+
 void htd::GraphLabeling::removeVertexLabel(htd::vertex_t vertex)
 {
     auto position = vertexLabels_.find(vertex);

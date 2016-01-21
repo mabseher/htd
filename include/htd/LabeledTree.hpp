@@ -78,6 +78,10 @@ namespace htd
 
             void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2) HTD_OVERRIDE;
 
+            htd::ILabel * transferVertexLabel(const std::string & labelName, htd::vertex_t vertex) HTD_OVERRIDE;
+
+            htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId) HTD_OVERRIDE;
+
             LabeledTree * clone(void) const HTD_OVERRIDE;
 
             LabeledTree & operator=(const LabeledTree & original);

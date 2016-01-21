@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/IMutableLabeledGraph.hpp>
 #include <htd/IGraphDecomposition.hpp>
+#include <htd/Label.hpp>
 
 namespace htd
 {

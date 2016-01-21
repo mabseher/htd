@@ -187,6 +187,26 @@ void htd::LabeledDirectedMultiGraph::swapEdgeLabel(const std::string & labelName
     labelings_->labeling(labelName).swapEdgeLabels(edgeId1, edgeId2);
 }
 
+htd::ILabel * htd::LabeledDirectedMultiGraph::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
+{
+    if (!labelings_->isLabelingName(labelName))
+    {
+        throw std::logic_error("htd::ILabel * htd::LabeledDirectedMultiGraph::transferVertexLabel(const std::string &, htd::vertex_t)");
+    }
+
+    return labelings_->labeling(labelName).transferVertexLabel(vertex);
+}
+
+htd::ILabel * htd::LabeledDirectedMultiGraph::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
+{
+    if (!labelings_->isLabelingName(labelName))
+    {
+        throw std::logic_error("htd::ILabel * htd::LabeledDirectedMultiGraph::transferEdgeLabel(const std::string &, htd::id_t)");
+    }
+
+    return labelings_->labeling(labelName).transferEdgeLabel(edgeId);
+}
+
 htd::LabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraph::clone(void) const
 {
     return new htd::LabeledDirectedMultiGraph(*this);

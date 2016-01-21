@@ -61,6 +61,10 @@ namespace htd
 
             void swapEdgeLabels(htd::id_t id1, htd::id_t id2) HTD_OVERRIDE;
 
+            htd::ILabel * transferVertexLabel(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            htd::ILabel * transferEdgeLabel(htd::id_t edgeId) HTD_OVERRIDE;
+
             void removeVertexLabel(htd::vertex_t vertex) HTD_OVERRIDE;
 
             void removeEdgeLabel(htd::id_t id) HTD_OVERRIDE;

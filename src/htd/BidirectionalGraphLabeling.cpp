@@ -175,6 +175,42 @@ void htd::BidirectionalGraphLabeling::swapEdgeLabels(htd::id_t edgeId1, htd::id_
     }
 }
 
+htd::ILabel * htd::BidirectionalGraphLabeling::transferVertexLabel(htd::vertex_t vertex)
+{
+    auto position = vertexLabels_.find(vertex);
+
+    if (position == vertexLabels_.end())
+    {
+        throw std::logic_error("htd::ILabel * htd::BidirectionalGraphLabeling::transferVertexLabel(htd::vertex_t)");
+    }
+
+    htd::ILabel * ret = position->second;
+
+    vertexLabels_.erase(vertex);
+
+    vertexLabelsReverseMap_.erase(ret);
+
+    return ret;
+}
+
+htd::ILabel * htd::BidirectionalGraphLabeling::transferEdgeLabel(htd::id_t edgeId)
+{
+    auto position = edgeLabels_.find(edgeId);
+
+    if (position == edgeLabels_.end())
+    {
+        throw std::logic_error("htd::ILabel * htd::BidirectionalGraphLabeling::transferEdgeLabel(htd::id_t)");
+    }
+
+    htd::ILabel * ret = position->second;
+
+    edgeLabels_.erase(edgeId);
+
+    edgeLabelsReverseMap_.erase(ret);
+
+    return ret;
+}
+
 void htd::BidirectionalGraphLabeling::removeVertexLabel(htd::vertex_t vertex)
 {
     auto position = vertexLabels_.find(vertex);

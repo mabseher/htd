@@ -187,6 +187,26 @@ void htd::LabeledGraph::swapEdgeLabel(const std::string & labelName, htd::id_t e
     labelings_->labeling(labelName).swapEdgeLabels(edgeId1, edgeId2);
 }
 
+htd::ILabel * htd::LabeledGraph::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
+{
+    if (!labelings_->isLabelingName(labelName))
+    {
+        throw std::logic_error("htd::ILabel * htd::LabeledGraph::transferVertexLabel(const std::string &, htd::vertex_t)");
+    }
+
+    return labelings_->labeling(labelName).transferVertexLabel(vertex);
+}
+
+htd::ILabel * htd::LabeledGraph::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
+{
+    if (!labelings_->isLabelingName(labelName))
+    {
+        throw std::logic_error("htd::ILabel * htd::LabeledGraph::transferEdgeLabel(const std::string &, htd::id_t)");
+    }
+
+    return labelings_->labeling(labelName).transferEdgeLabel(edgeId);
+}
+
 htd::LabeledGraph * htd::LabeledGraph::clone(void) const
 {
     return new htd::LabeledGraph(*this);

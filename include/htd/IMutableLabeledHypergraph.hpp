@@ -53,6 +53,10 @@ namespace htd
 
             virtual void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
+            virtual htd::ILabel * transferVertexLabel(const std::string & labelName, htd::vertex_t vertex) = 0;
+
+            virtual htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId) = 0;
+
             virtual IMutableLabeledHypergraph * clone(void) const = 0;
 
             virtual IMutableLabeledHypergraph & operator=(const htd::ILabeledHypergraph & original) = 0;

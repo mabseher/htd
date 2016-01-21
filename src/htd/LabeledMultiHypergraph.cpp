@@ -182,6 +182,26 @@ void htd::LabeledMultiHypergraph::swapEdgeLabel(const std::string & labelName, h
     labelings_->labeling(labelName).swapEdgeLabels(edgeId1, edgeId2);
 }
 
+htd::ILabel * htd::LabeledMultiHypergraph::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
+{
+    if (!labelings_->isLabelingName(labelName))
+    {
+        throw std::logic_error("htd::ILabel * htd::LabeledMultiHypergraph::transferVertexLabel(const std::string &, htd::vertex_t)");
+    }
+
+    return labelings_->labeling(labelName).transferVertexLabel(vertex);
+}
+
+htd::ILabel * htd::LabeledMultiHypergraph::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
+{
+    if (!labelings_->isLabelingName(labelName))
+    {
+        throw std::logic_error("htd::ILabel * htd::LabeledMultiHypergraph::transferEdgeLabel(const std::string &, htd::id_t)");
+    }
+
+    return labelings_->labeling(labelName).transferEdgeLabel(edgeId);
+}
+
 htd::LabeledMultiHypergraph * htd::LabeledMultiHypergraph::clone(void) const
 {
     return new htd::LabeledMultiHypergraph(*this);

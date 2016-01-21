@@ -306,6 +306,18 @@ void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const std::vect
     }
 }
 
+void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd::vertex_t> && content)
+{
+    if (isVertex(vertex))
+    {
+        setVertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>(std::move(content)))));
+    }
+    else
+    {
+        throw std::logic_error("void htd::PathDecomposition::setBagContent(htd::vertex_t, std::vector<htd::vertex_t> &&)");
+    }
+}
+
 void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
 {
     if (isVertex(vertex))
@@ -315,6 +327,18 @@ void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const htd::Cons
     else
     {
         throw std::logic_error("void htd::PathDecomposition::setBagContent(htd::vertex_t, const htd::IConstCollection<htd::vertex_t> &)");
+    }
+}
+
+void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content)
+{
+    if (isVertex(vertex))
+    {
+        setVertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::vertex_t>>(htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>(content))));
+    }
+    else
+    {
+        throw std::logic_error("void htd::PathDecomposition::setBagContent(htd::vertex_t, htd::IConstCollection<htd::vertex_t> &&)");
     }
 }
 
@@ -736,7 +760,7 @@ bool htd::PathDecomposition::isRememberedVertex(htd::vertex_t vertex, htd::verte
 
 htd::PathDecomposition * htd::PathDecomposition::clone(void) const
 {
-    return new PathDecomposition(*this);
+    return new htd::PathDecomposition(*this);
 }
 
 htd::PathDecomposition & htd::PathDecomposition::operator=(const htd::PathDecomposition & original)

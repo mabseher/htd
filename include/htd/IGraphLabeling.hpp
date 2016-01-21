@@ -55,6 +55,10 @@ namespace htd
 
             virtual void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
+            virtual htd::ILabel * transferVertexLabel(htd::vertex_t vertex) = 0;
+
+            virtual htd::ILabel * transferEdgeLabel(htd::id_t edgeId) = 0;
+
             virtual void removeVertexLabel(htd::vertex_t vertex) = 0;
 
             virtual void removeEdgeLabel(htd::id_t edgeId) = 0;

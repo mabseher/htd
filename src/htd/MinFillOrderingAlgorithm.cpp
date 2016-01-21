@@ -32,6 +32,7 @@
 
 #include <algorithm>
 #include <unordered_map>
+#include <unordered_set>
 
 htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(void)
 {
@@ -63,9 +64,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 
     std::unordered_set<htd::vertex_t> pool(size);
 
-    std::vector<htd::vertex_t> vertices;
-    vertices.reserve(size);
-    std::copy(graph.vertices().begin(), graph.vertices().end(), std::back_inserter(vertices));
+    std::unordered_set<htd::vertex_t> vertices(graph.vertices().begin(), graph.vertices().end());
 
     std::unordered_map<htd::vertex_t, htd::state_t> updateStatus(size);
 
@@ -535,7 +534,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
         
         selectedNeighborhood.clear();
         
-        vertices.erase(std::lower_bound(vertices.begin(), vertices.end(), selectedVertex));
+        vertices.erase(selectedVertex);
         
         size--;
 

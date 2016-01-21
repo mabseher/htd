@@ -265,22 +265,67 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         for (const htd::Hyperedge & edge : graph.hyperedges())
         {
-            htd::vertex_container elements(edge.begin(), edge.end());
+            switch (edge.size())
+            {
+                case 1:
+                {
+                    break;
+                }
+                case 2:
+                {
+                    htd::vertex_t vertex1 = edge[0];
+                    htd::vertex_t vertex2 = edge[1];
 
-            std::sort(elements.begin(), elements.end());
+                    if (vertex1 != vertex2)
+                    {
+                        if (indices[vertex1 - htd::Vertex::FIRST] < indices[vertex2 - htd::Vertex::FIRST])
+                        {
+                            auto & selectedBucket = buckets[vertex1 - htd::Vertex::FIRST];
 
-            elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
+                            auto position = std::lower_bound(selectedBucket.begin(), selectedBucket.end(), vertex2);
 
-            htd::vertex_t minimumVertex = getMinimumVertex(elements, indices);
+                            if (position == selectedBucket.end() || *position != vertex2)
+                            {
+                                selectedBucket.insert(position, vertex2);
+                            }
+                        }
+                        else
+                        {
+                            auto & selectedBucket = buckets[vertex2 - htd::Vertex::FIRST];
 
-            auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
+                            auto position = std::lower_bound(selectedBucket.begin(), selectedBucket.end(), vertex1);
 
-            std::vector<htd::vertex_t> newBucketContent;
-            newBucketContent.reserve(selectedBucket.size());
+                            if (position == selectedBucket.end() || *position != vertex1)
+                            {
+                                selectedBucket.insert(position, vertex1);
+                            }
+                        }
+                    }
 
-            std::set_union(selectedBucket.begin(), selectedBucket.end(), elements.begin(), elements.end(), std::back_inserter(newBucketContent));
+                    break;
+                }
+                default:
+                {
+                    htd::vertex_container elements(edge.begin(), edge.end());
 
-            std::swap(selectedBucket, newBucketContent);
+                    std::sort(elements.begin(), elements.end());
+
+                    elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
+
+                    htd::vertex_t minimumVertex = getMinimumVertex(elements, indices);
+
+                    auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
+
+                    std::vector<htd::vertex_t> newBucketContent;
+                    newBucketContent.reserve(selectedBucket.size());
+
+                    std::set_union(selectedBucket.begin(), selectedBucket.end(), elements.begin(), elements.end(), std::back_inserter(newBucketContent));
+
+                    std::swap(selectedBucket, newBucketContent);
+
+                    break;
+                }
+            }
         }
 
         DEBUGGING_CODE(std::cout << std::endl << "Buckets:" << std::endl;
@@ -338,7 +383,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 auto & selectedBucket = buckets[minimumVertex - htd::Vertex::FIRST];
 
                 std::vector<htd::vertex_t> newBucketContent;
-                newBucketContent.reserve(selectedBucket.size());
+                newBucketContent.reserve(selectedBucket.size() + bucket.size());
 
                 htd::filtered_set_union(selectedBucket.begin(), selectedBucket.end(), bucket.begin(), bucket.end(), selection, std::back_inserter(newBucketContent));
 

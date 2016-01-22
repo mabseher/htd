@@ -498,7 +498,15 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
         }
         case 2:
         {
-            if (vertices[1] == excludedVertex || vertexIndices.at(vertices[0]) <= vertexIndices.at(vertices[1]))
+            if (vertices[0] == excludedVertex)
+            {
+                ret = vertices[1];
+            }
+            else if (vertices[1] == excludedVertex)
+            {
+                ret = vertices[0];
+            }
+            else if (vertexIndices.at(vertices[0]) <= vertexIndices.at(vertices[1]))
             {
                 ret = vertices[0];
             }

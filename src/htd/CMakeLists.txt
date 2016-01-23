@@ -5,7 +5,7 @@ write_compiler_detection_header(
   FILE "${PROJECT_SOURCE_DIR}/include/htd/CompilerDetection.hpp"
   PREFIX HTD
   COMPILERS GNU Clang
-  FEATURES cxx_override
+  FEATURES cxx_noexcept cxx_override
 )
 
 set(CMAKE_REQUIRED_INCLUDES "${PROJECT_SOURCE_DIR}/include")

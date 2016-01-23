@@ -47,13 +47,13 @@ namespace htd
 
             Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements);
 
-            Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements);
+            Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT;
 
             Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements);
 
             Hyperedge(const Hyperedge & original);
 
-            Hyperedge(Hyperedge && original);
+            Hyperedge(Hyperedge && original) HTD_NOEXCEPT;
 
             ~Hyperedge();
 
@@ -87,7 +87,7 @@ namespace htd
 
             Hyperedge & operator=(const Hyperedge & original);
 
-            Hyperedge & operator=(Hyperedge && original);
+            Hyperedge & operator=(Hyperedge && original) HTD_NOEXCEPT;
 
             bool operator<(const Hyperedge & rhs) const;
 

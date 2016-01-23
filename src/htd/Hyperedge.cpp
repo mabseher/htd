@@ -43,7 +43,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & eleme
 
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) : written_(true), id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>())
+htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : written_(true), id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>())
 {
     std::swap(elements, *elements_);
 }
@@ -58,7 +58,7 @@ htd::Hyperedge::Hyperedge(const htd::Hyperedge & original) : written_(false), id
 
 }
 
-htd::Hyperedge::Hyperedge(htd::Hyperedge && original) : written_(original.written_), id_(original.id_), elements_(std::move(original.elements_))
+htd::Hyperedge::Hyperedge(htd::Hyperedge && original) HTD_NOEXCEPT : written_(original.written_), id_(original.id_), elements_(std::move(original.elements_))
 {
 
 }
@@ -184,7 +184,7 @@ htd::Hyperedge & htd::Hyperedge::operator=(const htd::Hyperedge & original)
     return *this;
 }
 
-htd::Hyperedge & htd::Hyperedge::operator=(htd::Hyperedge && original)
+htd::Hyperedge & htd::Hyperedge::operator=(htd::Hyperedge && original) HTD_NOEXCEPT
 {
     id_ = original.id_;
 

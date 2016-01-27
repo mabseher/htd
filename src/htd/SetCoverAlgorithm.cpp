@@ -68,7 +68,7 @@ htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const
     
     std::vector<htd::id_t> oldRelevantContainers;
     
-    std::vector<std::vector<htd::id_t>> solutions;
+    std::vector<std::vector<htd::index_t>> solutions;
     
     std::vector<htd::id_t> remainder(elements.begin(), elements.end());
 
@@ -236,11 +236,11 @@ htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const
             }
             else
             {
-                std::vector<htd::id_t> newSolution;
+                std::vector<htd::index_t> newSolution;
 
                 newSolution.reserve(history.size());
 
-                for (HistoryEntry& entry : history)
+                for (const HistoryEntry & entry : history)
                 {
                     newSolution.push_back(entry.containers[entry.selectedIndex]);
                 }
@@ -340,10 +340,10 @@ htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const
         std::cout << "Total solutions: " << count << std::endl << std::endl;
         )
 
-        return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>(solutions[0]));
+        return htd::ConstCollection<htd::index_t>::getInstance(htd::VectorAdapter<htd::index_t>(solutions[0]));
     }
 
-    return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>());
+    return htd::ConstCollection<htd::index_t>::getInstance(htd::VectorAdapter<htd::index_t>());
 }
 
 htd::SetCoverAlgorithm * htd::SetCoverAlgorithm::clone(void) const

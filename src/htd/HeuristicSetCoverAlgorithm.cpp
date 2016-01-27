@@ -66,7 +66,7 @@ htd::ConstCollection<htd::index_t> htd::HeuristicSetCoverAlgorithm::computeSetCo
 
     std::vector<htd::HeuristicSetCoverAlgorithm::HistoryEntry> newNeighborhood;
 
-    std::vector<std::vector<htd::id_t>> solutions;
+    std::vector<std::vector<htd::index_t>> solutions;
 
     for (htd::index_t index = 0; index < containers.size(); index++)
     {
@@ -117,7 +117,7 @@ htd::ConstCollection<htd::index_t> htd::HeuristicSetCoverAlgorithm::computeSetCo
         std::cout << std::endl;
     })
 
-    newNeighborhood.push_back(htd::HeuristicSetCoverAlgorithm::HistoryEntry(std::vector<htd::id_t>(), remainder, relevantContainers));
+    newNeighborhood.push_back(htd::HeuristicSetCoverAlgorithm::HistoryEntry(std::vector<htd::index_t>(), remainder, relevantContainers));
 
     std::size_t oldSolutionCount = 0;
 
@@ -192,10 +192,10 @@ htd::ConstCollection<htd::index_t> htd::HeuristicSetCoverAlgorithm::computeSetCo
         std::cout << "Total solutions: " << count << std::endl << std::endl;
         )
 
-        return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>(solutions[0]));
+        return htd::ConstCollection<htd::index_t>::getInstance(htd::VectorAdapter<htd::index_t>(solutions[0]));
     }
 
-    return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>());
+    return htd::ConstCollection<htd::index_t>::getInstance(htd::VectorAdapter<htd::index_t>());
 }
 
 htd::HeuristicSetCoverAlgorithm * htd::HeuristicSetCoverAlgorithm::clone(void) const

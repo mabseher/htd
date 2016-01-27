@@ -8,6 +8,8 @@ write_compiler_detection_header(
   FEATURES cxx_noexcept cxx_override
 )
 
+configure_file("${PROJECT_SOURCE_DIR}/cmake/Id.hpp.in" "${PROJECT_SOURCE_DIR}/include/htd/Id.hpp")
+
 set(CMAKE_REQUIRED_INCLUDES "${PROJECT_SOURCE_DIR}/include")
 
 check_include_file_cxx(htd/CompilerDetection.hpp HTD_HAVE_COMPILER_DETECTION)

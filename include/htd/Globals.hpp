@@ -31,6 +31,7 @@
 #include <htd/CompilerDetection.hpp>
 
 #include <cstdlib>
+#include <vector>
 
 namespace htd
 {
@@ -48,6 +49,11 @@ namespace htd
      *  Datatype for storing edges.
      */
     typedef std::vector<edge_t> edge_container;
+
+    /**
+     *  Datatype for storing vertices.
+     */
+    typedef std::vector<vertex_t> vertex_container;
 }
 
 #endif /* HTD_HTD_GLOBALS_HPP */

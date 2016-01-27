@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Datatype for IDs.
      */
-    typedef std::uint_least32_t id_t;
+    typedef @HTD_ID_TYPE@ id_t;
 
     struct Id
     {

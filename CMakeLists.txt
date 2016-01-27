@@ -25,6 +25,18 @@ if (DEFINED HTD_DEBUG_OUTPUT)
     endif()
 endif()
 
+if (DEFINED HTD_USE_EXTENDED_IDENTIFIERS)
+    if (HTD_USE_EXTENDED_IDENTIFIERS)
+        message("Extended identifiers will be used!")
+
+        set(HTD_ID_TYPE "std::size_t" )
+    else()
+        set(HTD_ID_TYPE "std::uint_least32_t" )
+    endif()
+else()
+    set(HTD_ID_TYPE "std::uint_least32_t" )
+endif()
+
 if (NOT DEFINED HTD_BUILD_TESTS)
     message("Tests are disabled!")
 

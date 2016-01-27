@@ -58,7 +58,7 @@ namespace htd
 
             struct HistoryEntry
             {
-                std::vector<htd::id_t> selection;
+                std::vector<htd::index_t> selection;
 
                 std::unordered_set<htd::id_t> remainder;
 
@@ -69,7 +69,7 @@ namespace htd
 
                 }
 
-                HistoryEntry(const std::vector<htd::id_t>& selection, const std::unordered_set<htd::id_t>& remainder, std::vector<htd::id_t> availableChoices) : selection(selection), remainder(remainder), availableChoices(availableChoices)
+                HistoryEntry(const std::vector<htd::index_t> & selection, const std::unordered_set<htd::id_t> & remainder, std::vector<htd::id_t> availableChoices) : selection(selection), remainder(remainder), availableChoices(availableChoices)
                 {
 
                 }
@@ -84,7 +84,7 @@ namespace htd
                         return solution1.remainder.size() < solution2.remainder.size();
                     }
 
-                    bool operator() (const std::vector<htd::id_t>& solution1, const std::vector<htd::id_t>& solution2)
+                    bool operator() (const std::vector<htd::index_t> & solution1, const std::vector<htd::index_t> & solution2)
                     {
                         return solution1.size() < solution2.size();
                     }

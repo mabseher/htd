@@ -25,15 +25,16 @@
 #ifndef HTD_HTD_VERTEX_HPP
 #define HTD_HTD_VERTEX_HPP
 
+#include <htd/Id.hpp>
+
 #include <cstdlib>
-#include <vector>
 
 namespace htd
 {
     /**
      *  Datatype for vertices.
      */
-    typedef std::size_t vertex_t;
+    typedef htd::id_t vertex_t;
 
     struct Vertex
     {
@@ -45,11 +46,6 @@ namespace htd
         private:
             Vertex(void);
     };
-
-    /**
-     *  Datatype for storing vertices.
-     */
-    typedef std::vector<vertex_t> vertex_container;
 }
 
 #endif /* HTD_HTD_VERTEX_HPP */

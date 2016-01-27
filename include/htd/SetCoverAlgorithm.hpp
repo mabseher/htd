@@ -52,13 +52,13 @@ namespace htd
 
             struct HistoryEntry
             {
-                htd::id_t selectedIndex;
+                htd::index_t selectedIndex;
 
                 std::vector<htd::id_t> remainder;
 
                 std::vector<htd::id_t> containers;
 
-                HistoryEntry(htd::id_t selectedIndex, const std::vector<htd::id_t> & remainder, const std::vector<htd::id_t> & containers) : selectedIndex(selectedIndex), remainder(remainder), containers(containers)
+                HistoryEntry(htd::index_t selectedIndex, const std::vector<htd::id_t> & remainder, const std::vector<htd::id_t> & containers) : selectedIndex(selectedIndex), remainder(remainder), containers(containers)
                 {
 
                 }
@@ -67,7 +67,7 @@ namespace htd
             class Compare
             {
                 public:
-                    bool operator() (const std::vector<htd::id_t>& solution1, const std::vector<htd::id_t>& solution2)
+                    bool operator() (const std::vector<htd::index_t> & solution1, const std::vector<htd::index_t> & solution2)
                     {
                         return solution1.size() < solution2.size();
                     }

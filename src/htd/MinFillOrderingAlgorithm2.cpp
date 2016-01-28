@@ -1,5 +1,5 @@
 /* 
- * File:   MinFillOrderingAlgorithm.cpp
+ * File:   MinFillOrderingAlgorithm2.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,29 +22,30 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MINFILLORDERINGALGORITHM_CPP
-#define	HTD_HTD_MINFILLORDERINGALGORITHM_CPP
+#ifndef HTD_HTD_MINFILLORDERINGALGORITHM2_CPP
+#define	HTD_HTD_MINFILLORDERINGALGORITHM2_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/MinFillOrderingAlgorithm.hpp>
+#include <htd/MinFillOrderingAlgorithm2.hpp>
+#include <htd/SortedVertexSet.hpp>
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
 
-htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(void)
+htd::MinFillOrderingAlgorithm2::MinFillOrderingAlgorithm2(void)
 {
     
 }
             
-htd::MinFillOrderingAlgorithm::~MinFillOrderingAlgorithm()
+htd::MinFillOrderingAlgorithm2::~MinFillOrderingAlgorithm2()
 {
     
 }
 
-htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const
+htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm2::computeOrdering(const htd::IMultiHypergraph & graph) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -70,14 +71,12 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 
     std::unordered_map<htd::vertex_t, std::size_t> requiredFillAmount(size);
     
-    std::unordered_map<htd::vertex_t, htd::vertex_container> neighborhood(size);
+    std::unordered_map<htd::vertex_t, htd::SortedVertexSet> neighborhood(size);
 
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> existingNeighbors(size);
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> additionalNeighbors(size);
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> unaffectedNeighbors(size);
-    
-    htd::vertex_container newNeighborhood;
-    
+
     htd::vertex_container affectedVertices;
     affectedVertices.reserve(size);
 
@@ -85,18 +84,9 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
     {
         auto & currentNeighborhood = neighborhood[vertex];
 
-        const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
+        currentNeighborhood.insert(vertex);
 
-        currentNeighborhood.reserve(neighborCollection.size());
-
-        std::copy(neighborCollection.begin(), neighborCollection.end(), std::back_inserter(currentNeighborhood));
-
-        auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
-        
-        if (position == currentNeighborhood.end() || *position != vertex)
-        {
-            currentNeighborhood.insert(position, vertex);
-        }
+        currentNeighborhood.merge(graph.neighbors(vertex));
 
         updateStatus[vertex] = htd::State::UNKNOWN;
     }
@@ -123,7 +113,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 
         DEBUGGING_CODE_LEVEL2(
         std::cout << "Vertex " << vertex << ":" << std::endl;
-        htd::print(currentNeighborhood, std::cout, false);
+        htd::print(htd::ConstCollection<htd::vertex_t>::getInstance(currentNeighborhood), std::cout, false);
         std::cout << std::endl;
         std::size_t neighborhoodSize = currentNeighborhood.size();
         std::cout << "   INITIAL EDGE COUNT " << vertex << ": " << computeEdgeCount(neighborhood, neighborhood[vertex]) << std::endl;
@@ -131,7 +121,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
         std::cout << "   INITIAL FILL VALUE " << vertex << ": " << requiredFillAmount[vertex] << std::endl;
         )
     }
-    
+
     while (size > 0)
     {
         if (pool.size() == 0)
@@ -198,7 +188,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
                 {
                     auto & currentNeighborhood = neighborhood.at(vertex);
                     
-                    currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
+                    currentNeighborhood.erase(selectedVertex);
                 }
             }
         }
@@ -252,57 +242,10 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 
                     if (additionalNeighborCount > 0)
                     {
-                        if (additionalNeighborCount == 1)
-                        {
-                            auto first = currentNeighborhood.begin();
-                            auto last = currentNeighborhood.end();
-                            
-                            htd::vertex_t newVertex = currentAdditionalNeighborhood[0];
-
-                            if (newVertex < selectedVertex)
-                            {
-                                if (selectedVertex - newVertex == 1)
-                                {
-                                    *std::lower_bound(first, last, selectedVertex) = newVertex;
-                                }
-                                else
-                                {
-                                    htd::index_t position1 = std::distance(first, std::lower_bound(first, last, newVertex));
-                                    htd::index_t position2 = std::distance(first, std::lower_bound(first + position1, last, selectedVertex));
-                                    
-                                    currentNeighborhood.erase(first + position2);
-                                    currentNeighborhood.insert(currentNeighborhood.begin() + position1, newVertex);
-                                }
-                            }
-                            else
-                            {
-                                if (newVertex - selectedVertex == 1)
-                                {
-                                    *std::lower_bound(first, last, selectedVertex) = newVertex;
-                                }
-                                else
-                                {
-                                    htd::index_t position1 = std::distance(first, std::lower_bound(first, last, selectedVertex));
-                                    htd::index_t position2 = std::distance(first, std::lower_bound(first + position1, last, newVertex));
-                                    
-                                    currentNeighborhood.erase(first + position1);
-                                    currentNeighborhood.insert(currentNeighborhood.begin() + position2 - 1, newVertex);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            htd::set_union(currentNeighborhood, currentAdditionalNeighborhood, selectedVertex, newNeighborhood);
-                            
-                            std::swap(currentNeighborhood, newNeighborhood);
-
-                            newNeighborhood.clear();
-                        }
+                        currentNeighborhood.merge(currentAdditionalNeighborhood);
                     }
-                    else
-                    {
-                        currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
-                    }
+
+                    currentNeighborhood.erase(selectedVertex);
 
                     tmp = requiredFillAmount.at(vertex);
 
@@ -604,7 +547,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
-std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::unordered_map<htd::vertex_t, htd::vertex_container> & availableNeighborhoods, const htd::vertex_container & vertices) const
+std::size_t htd::MinFillOrderingAlgorithm2::computeEdgeCount(const std::unordered_map<htd::vertex_t, htd::SortedVertexSet> & availableNeighborhoods, const htd::SortedVertexSet & vertices) const
 {
     std::size_t ret = 0;
 
@@ -631,16 +574,16 @@ std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::unordered
 
         ret += htd::compute_set_intersection_size(it, last, std::upper_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), currentNeighborhood.end());
     }
-    
+
     return ret;
 }
             
-void htd::MinFillOrderingAlgorithm::decompose_sets(const std::vector<htd::vertex_t> & set1,
-                                                   const std::vector<htd::vertex_t> & set2,
-                                                   htd::vertex_t ignoredVertex,
-                                                   std::vector<htd::vertex_t> & resultOnlySet1,
-                                                   std::vector<htd::vertex_t> & resultOnlySet2,
-                                                   std::vector<htd::vertex_t> & resultIntersection) const
+void htd::MinFillOrderingAlgorithm2::decompose_sets(const htd::SortedVertexSet & set1,
+                                                    const htd::SortedVertexSet & set2,
+                                                    htd::vertex_t ignoredVertex,
+                                                    std::vector<htd::vertex_t> & resultOnlySet1,
+                                                    std::vector<htd::vertex_t> & resultOnlySet2,
+                                                    std::vector<htd::vertex_t> & resultIntersection) const
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();
@@ -718,9 +661,9 @@ void htd::MinFillOrderingAlgorithm::decompose_sets(const std::vector<htd::vertex
     }
 }
 
-htd::MinFillOrderingAlgorithm * htd::MinFillOrderingAlgorithm::clone(void) const
+htd::MinFillOrderingAlgorithm2 * htd::MinFillOrderingAlgorithm2::clone(void) const
 {
-    return new htd::MinFillOrderingAlgorithm();
+    return new htd::MinFillOrderingAlgorithm2();
 }
 
-#endif /* HTD_HTD_MINFILLORDERINGALGORITHM_CPP */
+#endif /* HTD_HTD_MINFILLORDERINGALGORITHM2_CPP */

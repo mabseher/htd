@@ -31,6 +31,8 @@
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
 
 htd::MinDegreeOrderingAlgorithm::MinDegreeOrderingAlgorithm(void)
 {
@@ -56,22 +58,16 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
     
     std::unordered_set<htd::vertex_t> pool(size);
 
-    std::vector<htd::vertex_t> vertices;
-    vertices.reserve(size);
+    std::unordered_set<htd::vertex_t> vertices(graph.vertices().begin(), graph.vertices().end());
 
-    std::copy(graph.vertices().begin(), graph.vertices().end(), std::back_inserter(vertices));
-
-    std::vector<htd::vertex_container> neighborhood(size, htd::vertex_container());
+    std::unordered_map<htd::vertex_t, htd::vertex_container> neighborhood(size);
 
     htd::vertex_container newNeighborhood;
     htd::vertex_container difference;
-    
-    htd::vertex_container affectedVertices;
-    affectedVertices.reserve(size);
 
     for (htd::vertex_t vertex : vertices)
     {
-        auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = neighborhood[vertex];
 
         const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
 
@@ -85,14 +81,9 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
         {
             currentNeighborhood.insert(position, vertex);
         }
-    }
-    
-    for (htd::vertex_t vertex : vertices)
-    {
-        auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
-        
+
         tmp = currentNeighborhood.size() - 1;
-        
+
         if (tmp <= minDegree)
         {
             if (tmp < minDegree)
@@ -101,10 +92,10 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
 
                 pool.clear();
             }
-            
+
             pool.insert(vertex);
         }
-        
+
         DEBUGGING_CODE_LEVEL2(
         std::cout << "Vertex " << vertex << ":" << std::endl;
         htd::print(currentNeighborhood, false);
@@ -121,7 +112,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
     
             for (htd::vertex_t vertex : vertices)
             {
-                tmp = neighborhood[vertex - htd::Vertex::FIRST].size() - 1;
+                tmp = neighborhood.at(vertex).size() - 1;
 
                 if (tmp <= minDegree)
                 {
@@ -136,7 +127,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
                 } 
             }
         }
-        
+
         DEBUGGING_CODE_LEVEL2(
         std::cout << "POOL (DEGREE=" << min << "): ";
         htd::print(pool, false);
@@ -149,11 +140,9 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
 
         htd::vertex_t selectedVertex = *it;
 
-        auto & selectedNeighborhood = neighborhood[selectedVertex - htd::Vertex::FIRST];
+        auto & selectedNeighborhood = neighborhood[selectedVertex];
         
-        pool.erase(pool.find(selectedVertex));
-        
-        affectedVertices.clear();
+        pool.erase(selectedVertex);
         
         if (selectedNeighborhood.size() > 1)
         {
@@ -161,7 +150,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
             {
                 if (neighbor != selectedVertex)
                 {
-                    auto & currentNeighborhood = neighborhood[neighbor - htd::Vertex::FIRST];
+                    auto & currentNeighborhood = neighborhood[neighbor];
 
                     htd::set_difference(selectedNeighborhood, currentNeighborhood, difference);
                     
@@ -212,6 +201,11 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
                             std::swap(currentNeighborhood, newNeighborhood);
 
                             newNeighborhood.clear();
+
+                            if (currentNeighborhood.size() - 1 > minDegree)
+                            {
+                                pool.erase(neighbor);
+                            }
                         }
 
                         difference.clear();
@@ -220,23 +214,13 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
                     {
                         currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
                     }
-                    
-                    if (currentNeighborhood.size() - 1 > minDegree)
-                    {
-                        auto position = pool.find(neighbor);
-                        
-                        if (position != pool.end())
-                        {
-                            pool.erase(position);
-                        }
-                    }
                 }
             }
         }
         
         selectedNeighborhood.clear();
         
-        vertices.erase(std::lower_bound(vertices.begin(), vertices.end(), selectedVertex));
+        vertices.erase(selectedVertex);
         
         size--;
 

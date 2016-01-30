@@ -184,7 +184,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
         htd::vertex_t selectedVertex = minDegreePool[rand() % minDegreePool.size()];
         auto & selectedNeighborhood = neighborhood.at(selectedVertex);
         
-        pool.erase(pool.find(selectedVertex));
+        pool.erase(selectedVertex);
         
         updateStatus.at(selectedVertex) = 4;
         

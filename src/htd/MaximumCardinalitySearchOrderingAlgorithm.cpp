@@ -56,6 +56,10 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 
     std::size_t tmp = 0;
 
+    std::size_t minDegree = (std::size_t)-1;
+
+    std::unordered_set<htd::vertex_t> pool(size);
+
     std::size_t maxCardinality = 0;
 
     std::unordered_set<htd::vertex_t> selected(size);
@@ -65,8 +69,6 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
     std::unordered_map<htd::vertex_t, htd::vertex_container> neighborhood(size);
 
     std::unordered_map<htd::vertex_t, std::size_t> weights(size);
-
-    std::unordered_set<htd::vertex_t> pool(vertices);
 
     for (htd::vertex_t vertex : vertices)
     {
@@ -79,6 +81,20 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
         std::copy(neighborCollection.begin(), neighborCollection.end(), std::back_inserter(currentNeighborhood));
 
         weights[vertex] = 0;
+
+        tmp = currentNeighborhood.size();
+
+        if (tmp <= minDegree)
+        {
+            if (tmp < minDegree)
+            {
+                minDegree = tmp;
+
+                pool.clear();
+            }
+
+            pool.insert(vertex);
+        }
     }
 
     while (size > 0)

@@ -64,6 +64,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
     std::vector<htd::vertex_container> neighborhood(size, htd::vertex_container());
 
     htd::vertex_container newNeighborhood;
+    htd::vertex_container difference;
     
     htd::vertex_container affectedVertices;
     affectedVertices.reserve(size);
@@ -161,12 +162,64 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
                 if (neighbor != selectedVertex)
                 {
                     auto & currentNeighborhood = neighborhood[neighbor - htd::Vertex::FIRST];
+
+                    htd::set_difference(selectedNeighborhood, currentNeighborhood, difference);
                     
-                    htd::set_union(currentNeighborhood, selectedNeighborhood, selectedVertex, newNeighborhood);
+                    if (!difference.empty())
+                    {
+                        if (difference.size() == 1)
+                        {
+                            auto first = currentNeighborhood.begin();
+                            auto last = currentNeighborhood.end();
 
-                    std::swap(currentNeighborhood, newNeighborhood);
+                            htd::vertex_t newVertex = difference[0];
 
-                    newNeighborhood.clear();
+                            if (newVertex < selectedVertex)
+                            {
+                                if (selectedVertex - newVertex == 1)
+                                {
+                                    *std::lower_bound(first, last, selectedVertex) = newVertex;
+                                }
+                                else
+                                {
+                                    htd::index_t position1 = std::distance(first, std::lower_bound(first, last, newVertex));
+                                    htd::index_t position2 = std::distance(first, std::lower_bound(first + position1, last, selectedVertex));
+
+                                    currentNeighborhood.erase(first + position2);
+                                    currentNeighborhood.insert(currentNeighborhood.begin() + position1, newVertex);
+                                }
+                            }
+                            else
+                            {
+                                if (newVertex - selectedVertex == 1)
+                                {
+                                    *std::lower_bound(first, last, selectedVertex) = newVertex;
+                                }
+                                else
+                                {
+                                    htd::index_t position1 = std::distance(first, std::lower_bound(first, last, selectedVertex));
+                                    htd::index_t position2 = std::distance(first, std::lower_bound(first + position1, last, newVertex));
+
+                                    currentNeighborhood.erase(first + position1);
+                                    currentNeighborhood.insert(currentNeighborhood.begin() + position2 - 1, newVertex);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            htd::set_union(currentNeighborhood, difference, selectedVertex, newNeighborhood);
+
+                            std::swap(currentNeighborhood, newNeighborhood);
+
+                            newNeighborhood.clear();
+                        }
+
+                        difference.clear();
+                    }
+                    else
+                    {
+                        currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
+                    }
                     
                     if (currentNeighborhood.size() - 1 > minDegree)
                     {

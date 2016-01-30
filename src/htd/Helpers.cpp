@@ -149,4 +149,52 @@ void htd::set_union(const std::vector<htd::vertex_t> & set1,
     }
 }
 
+void htd::set_difference(const std::vector<htd::vertex_t> & set1,
+                         const std::vector<htd::vertex_t> & set2,
+                         std::vector<htd::vertex_t> & result)
+{
+    auto first1 = set1.begin();
+    auto first2 = set2.begin();
+    auto last1 = set1.end();
+
+    std::size_t count1 = set1.size();
+    std::size_t count2 = set2.size();
+
+    htd::index_t index1 = 0;
+    htd::index_t index2 = 0;
+
+    while (index1 < count1 && index2 < count2)
+    {
+        auto value1 = *first1;
+        auto value2 = *first2;
+
+        if (value1 < value2)
+        {
+            result.push_back(value1);
+
+            index1++;
+            ++first1;
+        }
+        else if (value2 < value1)
+        {
+            index2++;
+            ++first2;
+        }
+        else
+        {
+            index1++;
+            ++first1;
+
+            //Skip common value in set 2.
+            index2++;
+            ++first2;
+        }
+    }
+
+    if (index1 < count1)
+    {
+        std::copy(first1, last1, std::back_inserter(result));
+    }
+}
+
 #endif /* HTD_HTD_HELPERS_CPP */

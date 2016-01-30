@@ -30,7 +30,11 @@
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
+#include <unordered_map>
 #include <unordered_set>
+
+//TODO Remove!
+#include <iostream>
 
 htd::MaximumCardinalitySearchOrderingAlgorithm::MaximumCardinalitySearchOrderingAlgorithm(void)
 {
@@ -54,20 +58,19 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 
     std::size_t maxCardinality = 0;
 
-    std::unordered_set<htd::vertex_t> pool(size);
+    std::unordered_set<htd::vertex_t> selected(size);
 
-    std::vector<std::size_t> weights(size, 0);
+    std::unordered_set<htd::vertex_t> vertices(graph.vertices().begin(), graph.vertices().end());
 
-    std::vector<htd::vertex_t> vertices;
-    vertices.reserve(size);
+    std::unordered_map<htd::vertex_t, htd::vertex_container> neighborhood(size);
 
-    std::copy(graph.vertices().begin(), graph.vertices().end(), std::back_inserter(vertices));
+    std::unordered_map<htd::vertex_t, std::size_t> weights(size);
 
-    std::vector<htd::vertex_container> neighborhood(size, htd::vertex_container());
+    std::unordered_set<htd::vertex_t> pool(vertices);
 
     for (htd::vertex_t vertex : vertices)
     {
-        auto & currentNeighborhood = neighborhood[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = neighborhood[vertex];
 
         const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
 
@@ -75,7 +78,7 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 
         std::copy(neighborCollection.begin(), neighborCollection.end(), std::back_inserter(currentNeighborhood));
 
-        pool.insert(vertex);
+        weights[vertex] = 0;
     }
 
     while (size > 0)
@@ -86,7 +89,7 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 
             for (htd::vertex_t vertex : vertices)
             {
-                tmp = weights[vertex - htd::Vertex::FIRST];
+                tmp = weights.at(vertex);
 
                 if (tmp >= maxCardinality)
                 {
@@ -108,9 +111,11 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 
         htd::vertex_t selectedVertex = *it;
 
-        auto & selectedNeighborhood = neighborhood[selectedVertex - htd::Vertex::FIRST];
+        auto & selectedNeighborhood = neighborhood.at(selectedVertex);
 
-        pool.erase(pool.find(selectedVertex));
+        pool.erase(selectedVertex);
+
+        selected.insert(selectedVertex);
 
         if (selectedNeighborhood.size() > 1)
         {
@@ -118,13 +123,11 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
             {
                 if (neighbor != selectedVertex)
                 {
-                    weights[neighbor - htd::Vertex::FIRST] += 1;
-
-                    auto position = pool.find(neighbor);
-
-                    if (position != pool.end())
+                    if (selected.count(neighbor) == 0)
                     {
-                        pool.erase(position);
+                        weights[neighbor] += 1;
+
+                        pool.erase(neighbor);
                     }
                 }
             }
@@ -132,14 +135,12 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 
         selectedNeighborhood.clear();
 
-        vertices.erase(std::lower_bound(vertices.begin(), vertices.end(), selectedVertex));
+        vertices.erase(selectedVertex);
 
         size--;
 
         ordering.push_back(selectedVertex);
     }
-
-    std::reverse(ordering.begin(), ordering.end());
 
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }

@@ -33,9 +33,6 @@
 #include <unordered_map>
 #include <unordered_set>
 
-//TODO Remove!
-#include <iostream>
-
 htd::MaximumCardinalitySearchOrderingAlgorithm::MaximumCardinalitySearchOrderingAlgorithm(void)
 {
     

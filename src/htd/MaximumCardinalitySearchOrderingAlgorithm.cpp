@@ -26,6 +26,7 @@
 #define	HTD_HTD_MAXIMUMCARDINALITYSEARCHORDERINGALGORITHM_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/MaximumCardinalitySearchOrderingAlgorithm.hpp>
 #include <htd/VectorAdapter.hpp>
 
@@ -51,15 +52,9 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 
     std::size_t size = graph.vertexCount();
 
-    std::size_t tmp = 0;
-
     std::size_t minDegree = (std::size_t)-1;
 
     std::unordered_set<htd::vertex_t> pool(size);
-
-    std::size_t maxCardinality = 0;
-
-    std::unordered_set<htd::vertex_t> selected(size);
 
     std::unordered_set<htd::vertex_t> vertices(graph.vertices().begin(), graph.vertices().end());
 
@@ -79,7 +74,7 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 
         weights[vertex] = 0;
 
-        tmp = currentNeighborhood.size();
+        std::size_t tmp = currentNeighborhood.size();
 
         if (tmp <= minDegree)
         {
@@ -98,11 +93,11 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
     {
         if (pool.size() == 0)
         {
-            maxCardinality = 0;
+            std::size_t maxCardinality = 0;
 
             for (htd::vertex_t vertex : vertices)
             {
-                tmp = weights.at(vertex);
+                std::size_t tmp = weights.at(vertex);
 
                 if (tmp >= maxCardinality)
                 {
@@ -128,15 +123,13 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 
         pool.erase(selectedVertex);
 
-        selected.insert(selectedVertex);
-
         if (selectedNeighborhood.size() > 1)
         {
             for (auto neighbor : selectedNeighborhood)
             {
                 if (neighbor != selectedVertex)
                 {
-                    if (selected.count(neighbor) == 0)
+                    if (vertices.count(neighbor) == 1)
                     {
                         weights[neighbor] += 1;
 

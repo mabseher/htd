@@ -289,6 +289,10 @@ namespace htd
     void set_difference(const std::vector<htd::vertex_t> & set1,
                         const std::vector<htd::vertex_t> & set2,
                         std::vector<htd::vertex_t> & result);
+
+    void set_intersection(const std::vector<htd::vertex_t> & set1,
+                          const std::vector<htd::vertex_t> & set2,
+                          std::vector<htd::vertex_t> & result);
     
     template <class InputIterator1, 
               class InputIterator2>

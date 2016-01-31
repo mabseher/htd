@@ -52,8 +52,6 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
 
     std::size_t size = graph.vertexCount();
 
-    std::size_t tmp = 0;
-
     std::size_t minDegree = (std::size_t)-1;
     
     std::unordered_set<htd::vertex_t> pool(size);
@@ -63,6 +61,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
     std::unordered_map<htd::vertex_t, htd::vertex_container> neighborhood(size);
 
     htd::vertex_container newNeighborhood;
+
     htd::vertex_container difference;
 
     for (htd::vertex_t vertex : vertices)
@@ -71,7 +70,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
 
         const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
 
-        currentNeighborhood.reserve(neighborCollection.size());
+        currentNeighborhood.reserve(neighborCollection.size() + 1);
 
         std::copy(neighborCollection.begin(), neighborCollection.end(), std::back_inserter(currentNeighborhood));
 
@@ -82,7 +81,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
             currentNeighborhood.insert(position, vertex);
         }
 
-        tmp = currentNeighborhood.size() - 1;
+        std::size_t tmp = currentNeighborhood.size() - 1;
 
         if (tmp <= minDegree)
         {
@@ -112,7 +111,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
     
             for (htd::vertex_t vertex : vertices)
             {
-                tmp = neighborhood.at(vertex).size() - 1;
+                std::size_t tmp = neighborhood.at(vertex).size() - 1;
 
                 if (tmp <= minDegree)
                 {

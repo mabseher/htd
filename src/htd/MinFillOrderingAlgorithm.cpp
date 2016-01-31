@@ -52,17 +52,11 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 
     std::size_t size = graph.vertexCount();
 
-    std::size_t tmp = 0;
-
     std::size_t minFill = (std::size_t)-1;
-    
-    std::size_t minDegree = (std::size_t)-1;
-        
-    std::size_t currentDegree = (std::size_t)-1;
-        
-    std::vector<htd::vertex_t> minDegreePool;
 
     std::unordered_set<htd::vertex_t> pool(size);
+
+    std::vector<htd::vertex_t> minDegreePool;
 
     std::unordered_set<htd::vertex_t> vertices(graph.vertices().begin(), graph.vertices().end());
 
@@ -87,7 +81,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 
         const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
 
-        currentNeighborhood.reserve(neighborCollection.size());
+        currentNeighborhood.reserve(neighborCollection.size() + 1);
 
         std::copy(neighborCollection.begin(), neighborCollection.end(), std::back_inserter(currentNeighborhood));
 
@@ -105,7 +99,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
     {
         auto & currentNeighborhood = neighborhood.at(vertex);
         
-        tmp = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
+        std::size_t tmp = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
         
         if (tmp <= minFill)
         {
@@ -140,7 +134,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
     
             for (htd::vertex_t vertex : vertices)
             {
-                tmp = requiredFillAmount.at(vertex);
+                std::size_t tmp = requiredFillAmount.at(vertex);
 
                 if (tmp <= minFill)
                 {
@@ -161,12 +155,12 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
         htd::print(pool, false);
         std::cout << std::endl;
         )
-        
-        minDegree = (std::size_t)-1;
+
+        std::size_t minDegree = (std::size_t)-1;
         
         for (htd::vertex_t vertex : pool)
         {
-            currentDegree = neighborhood.at(vertex).size() - 1;
+            std::size_t currentDegree = neighborhood.at(vertex).size() - 1;
             
             if (currentDegree <= minDegree)
             {
@@ -304,7 +298,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
                         currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
                     }
 
-                    tmp = requiredFillAmount.at(vertex);
+                    std::size_t tmp = requiredFillAmount.at(vertex);
 
                     if (additionalNeighborCount > 0 || tmp > 0)
                     {
@@ -459,7 +453,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
             {
                 if (updateStatus.at(vertex) == 2)
                 {
-                    tmp = requiredFillAmount.at(vertex);
+                    std::size_t tmp = requiredFillAmount.at(vertex);
 
                     if (unaffectedNeighbors.at(vertex).size() > 0 && tmp > 0)
                     {

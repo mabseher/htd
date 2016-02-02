@@ -434,19 +434,9 @@ std::size_t htd::MultiHypergraph::isolatedVertexCount(void) const
 
     for (std::size_t vertex = htd::Vertex::FIRST; vertex < size_ + htd::Vertex::FIRST; vertex++)
     {
-        if (isVertex(vertex))
+        if (isVertex(vertex) && neighborhood_[vertex - htd::Vertex::FIRST].empty())
         {
-            bool isolated = true;
-
-            for (auto it = edges_.begin(); isolated && it != edges_.end(); it++)
-            {
-                isolated = (*it).size() <= 1 || std::find((*it).begin(), (*it).end(), vertex) == (*it).end();
-            }
-
-            if (isolated)
-            {
-                ret++;
-            }
+            ret++;
         }
     }
 

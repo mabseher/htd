@@ -249,32 +249,35 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
         }
 
-        htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = htd::ConnectedComponentAlgorithmFactory::instance().getConnectedComponentAlgorithm();
-
-        if (connectedComponentAlgorithm == nullptr)
-        {
-            throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
-        }
-
-        htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> components = connectedComponentAlgorithm->determineComponents(*graphDecomposition);
-
-        delete connectedComponentAlgorithm;
-
-        std::size_t componentCount = components.size();
-
         htd::IMutableGraphDecomposition & mutableGraphDecomposition = htd::GraphDecompositionFactory::instance().accessMutableGraphDecomposition(*graphDecomposition);
 
-        if (componentCount > 1)
+        if (mutableGraphDecomposition.edgeCount() + 1 != mutableGraphDecomposition.vertexCount() || mutableGraphDecomposition.isolatedVertexCount() > 0)
         {
-            for (htd::index_t index = 0; index < componentCount - 1; ++index)
+            htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = htd::ConnectedComponentAlgorithmFactory::instance().getConnectedComponentAlgorithm();
+
+            if (connectedComponentAlgorithm == nullptr)
             {
-                const htd::ConstCollection<htd::vertex_t> & component1 = components[index];
-                const htd::ConstCollection<htd::vertex_t> & component2 = components[index + 1];
+                throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
+            }
 
-                htd::vertex_t vertex1 = component1[rand() % component1.size()];
-                htd::vertex_t vertex2 = component2[rand() % component2.size()];
+            htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> components = connectedComponentAlgorithm->determineComponents(*graphDecomposition);
 
-                mutableGraphDecomposition.addEdge(vertex1, vertex2);
+            delete connectedComponentAlgorithm;
+
+            std::size_t componentCount = components.size();
+
+            if (componentCount > 1)
+            {
+                for (htd::index_t index = 0; index < componentCount - 1; ++index)
+                {
+                    const htd::ConstCollection<htd::vertex_t> & component1 = components[index];
+                    const htd::ConstCollection<htd::vertex_t> & component2 = components[index + 1];
+
+                    htd::vertex_t vertex1 = component1[rand() % component1.size()];
+                    htd::vertex_t vertex2 = component2[rand() % component2.size()];
+
+                    mutableGraphDecomposition.addEdge(vertex1, vertex2);
+                }
             }
         }
 

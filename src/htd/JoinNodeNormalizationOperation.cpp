@@ -93,9 +93,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
         for (htd::vertex_t child : children)
         {
-            const htd::ConstCollection<htd::vertex_t> & childBag = decomposition.bagContent(child);
-
-            if (childBag != bag)
+            if (decomposition.bagContent(child) != bag)
             {
                 DEBUGGING_CODE(
                 std::cout << "   ADDING INTERMEDIATE NODE BETWEEN NODES " << node << " AND " << child << " ..." << std::endl;

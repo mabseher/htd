@@ -166,7 +166,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
                     std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                    decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>::getInstance(newContent));
+                    decomposition.setBagContent(newNode, newContent);
 
                     for (auto & labelingFunction : labelingFunctions)
                     {
@@ -193,7 +193,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                                 newContent.push_back(*it);
                             }
 
-                            decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>::getInstance(newContent));
+                            decomposition.setBagContent(newNode, newContent);
 
                             for (auto & labelingFunction : labelingFunctions)
                             {
@@ -341,7 +341,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                     std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                    decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>::getInstance(newContent));
+                    decomposition.setBagContent(newNode, newContent);
 
                     for (auto & labelingFunction : labelingFunctions)
                     {
@@ -368,7 +368,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                                 newContent.push_back(*it);
                             }
 
-                            decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>::getInstance(newContent));
+                            decomposition.setBagContent(newNode, newContent);
 
                             for (auto & labelingFunction : labelingFunctions)
                             {

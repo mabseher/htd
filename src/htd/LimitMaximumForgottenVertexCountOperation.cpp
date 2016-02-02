@@ -109,7 +109,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
                 std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>::getInstance(newContent));
+                decomposition.setBagContent(newNode, newContent);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -137,7 +137,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
-                        decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>::getInstance(newContent));
+                        decomposition.setBagContent(newNode, newContent);
 
                         for (auto & labelingFunction : labelingFunctions)
                         {

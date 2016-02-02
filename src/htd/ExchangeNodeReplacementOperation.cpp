@@ -77,7 +77,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
-                decomposition.setBagContent(newVertex, htd::ConstCollection<htd::vertex_t>(rememberedVertices));
+                decomposition.setBagContent(newVertex, rememberedVertices);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -131,7 +131,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
-                decomposition.setBagContent(newVertex, htd::ConstCollection<htd::vertex_t>(rememberedVertices));
+                decomposition.setBagContent(newVertex, rememberedVertices);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {

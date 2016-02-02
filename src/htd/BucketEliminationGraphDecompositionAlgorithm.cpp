@@ -346,10 +346,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         htd::NamedMultiGraph<htd::vertex_t, htd::id_t> result;
 
-        for (htd::index_t index = 0; index < size; index++)
+        for (htd::vertex_t selection : ordering)
         {
-            htd::vertex_t selection = ordering[index];
-
             DEBUGGING_CODE(std::cout << std::endl << "   Processing bucket " << selection << " ..." << std::endl;)
 
             const htd::vertex_container & bucket = buckets[selection];
@@ -399,14 +397,6 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
         {
             std::cout << "   Bucket " << index + htd::Vertex::FIRST << ": ";
             htd::print(buckets[index], false);
-            std::cout << std::endl;
-        })
-
-        DEBUGGING_CODE(std::cout << std::endl << "Relevant Buckets:" << std::endl;
-        for (htd::id_t bucket : relevantBuckets)
-        {
-            std::cout << "   Bucket " << bucket << ": ";
-            htd::print(buckets[bucket], false);
             std::cout << std::endl;
         })
 

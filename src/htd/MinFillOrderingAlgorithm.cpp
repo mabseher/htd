@@ -80,7 +80,6 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
         auto & currentNeighborhood = neighborhood[vertex];
 
         const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
-
         currentNeighborhood.reserve(neighborCollection.size() + 1);
 
         std::copy(neighborCollection.begin(), neighborCollection.end(), std::back_inserter(currentNeighborhood));
@@ -638,8 +637,6 @@ void htd::MinFillOrderingAlgorithm::decompose_sets(const std::vector<htd::vertex
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();
-    auto last1 = set1.end();
-    auto last2 = set2.end();
     
     std::size_t count1 = set1.size();
     std::size_t count2 = set2.size();
@@ -692,22 +689,22 @@ void htd::MinFillOrderingAlgorithm::decompose_sets(const std::vector<htd::vertex
     {
         if (*first1 <= ignoredVertex)
         {
-            std::copy_if(first1, last1, std::back_inserter(resultOnlySet1), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
+            std::copy_if(first1, set1.end(), std::back_inserter(resultOnlySet1), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
         }
         else
         {
-            std::copy(first1, last1, std::back_inserter(resultOnlySet1));
+            std::copy(first1, set1.end(), std::back_inserter(resultOnlySet1));
         }
     }
     else if (index2 < count2)
     {
         if (*first2 <= ignoredVertex)
         {
-            std::copy_if(first2, last2, std::back_inserter(resultOnlySet2), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
+            std::copy_if(first2, set2.end(), std::back_inserter(resultOnlySet2), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
         }
         else
         {
-            std::copy(first2, last2, std::back_inserter(resultOnlySet2));
+            std::copy(first2, set2.end(), std::back_inserter(resultOnlySet2));
         }
     }
 }

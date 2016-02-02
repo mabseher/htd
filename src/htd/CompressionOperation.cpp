@@ -100,10 +100,7 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
 
             if (parent != htd::Vertex::UNKNOWN)
             {
-                const htd::ConstCollection<htd::vertex_t> & currentBag = decomposition.bagContent(vertex);
-                const htd::ConstCollection<htd::vertex_t> & parentBag = decomposition.bagContent(parent);
-
-                std::tuple<std::size_t, std::size_t, std::size_t> result = analyze_sets(currentBag, parentBag);
+                const std::tuple<std::size_t, std::size_t, std::size_t> & result = analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
 
                 if (std::get<0>(result) == 0)
                 {
@@ -134,8 +131,6 @@ std::tuple<std::size_t, std::size_t, std::size_t> htd::CompressionOperation::ana
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();
-    auto last1 = set1.end();
-    auto last2 = set2.end();
 
     std::size_t count1 = set1.size();
     std::size_t count2 = set2.size();
@@ -143,7 +138,9 @@ std::tuple<std::size_t, std::size_t, std::size_t> htd::CompressionOperation::ana
     htd::index_t index1 = 0;
     htd::index_t index2 = 0;
 
-    std::tuple<std::size_t, std::size_t, std::size_t> ret(0, 0, 0);
+    std::size_t onlySet1 = 0;
+    std::size_t onlySet2 = 0;
+    std::size_t overlap = 0;
 
     while (index1 < count1 && index2 < count2)
     {
@@ -152,21 +149,21 @@ std::tuple<std::size_t, std::size_t, std::size_t> htd::CompressionOperation::ana
 
         if (value1 < value2)
         {
-            std::get<0>(ret)++;
+            onlySet1++;
 
             index1++;
             ++first1;
         }
         else if (value2 < value1)
         {
-            std::get<2>(ret)++;
+            onlySet2++;
 
             index2++;
             ++first2;
         }
         else
         {
-            std::get<1>(ret)++;
+            overlap++;
 
             index1++;
             ++first1;
@@ -179,14 +176,14 @@ std::tuple<std::size_t, std::size_t, std::size_t> htd::CompressionOperation::ana
 
     if (index1 < count1)
     {
-        std::get<0>(ret) += std::distance(first1, last1);
+        onlySet1 += count1 - index1;
     }
     else if (index2 < count2)
     {
-        std::get<2>(ret) += std::distance(first2, last2);
+        onlySet2 += count2 - index2;
     }
 
-    return ret;
+    return std::tuple<std::size_t, std::size_t, std::size_t>(onlySet1, overlap, onlySet2);
 }
 
 #endif /* HTD_HTD_COMPRESSIONOPERATION_CPP */

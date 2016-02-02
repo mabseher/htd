@@ -240,19 +240,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
     if (size > 0)
     {
-        std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
-
-        for (const auto & labelingFunction : labelingFunctions_)
-        {
-            manipulationOperations.push_back(labelingFunction->clone());
-        }
-
-        for (const auto & postProcessingOperation : postProcessingOperations_)
-        {
-            manipulationOperations.push_back(postProcessingOperation->clone());
-        }
-
-        htd::BucketEliminationGraphDecompositionAlgorithm graphDecompositionAlgorithm(manipulationOperations);
+        htd::BucketEliminationGraphDecompositionAlgorithm graphDecompositionAlgorithm;
 
         htd::IGraphDecomposition * graphDecomposition = graphDecompositionAlgorithm.computeDecomposition(graph);
 

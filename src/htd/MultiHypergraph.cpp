@@ -402,7 +402,7 @@ htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::neighbors(htd::vertex_
     return htd::ConstCollection<htd::vertex_t>::getInstance(neighborhood_[vertex - htd::Vertex::FIRST]);
 }
 
-htd::vertex_t htd::MultiHypergraph::neighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::MultiHypergraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
@@ -416,7 +416,7 @@ htd::vertex_t htd::MultiHypergraph::neighbor(htd::vertex_t vertex, htd::index_t 
         }
         else
         {
-            throw std::out_of_range("htd::vertex_t htd::MultiHypergraph::neighbor(htd::vertex_t, htd::index_t) const");
+            throw std::out_of_range("htd::vertex_t htd::MultiHypergraph::neighborAtPosition(htd::vertex_t, htd::index_t) const");
         }
     }
 
@@ -470,13 +470,13 @@ htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::isolatedVertices(void)
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::MultiHypergraph::isolatedVertex(htd::index_t index) const
+htd::vertex_t htd::MultiHypergraph::isolatedVertexAtPosition(htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & isolatedVertexCollection = isolatedVertices();
 
     if (index >= isolatedVertexCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::MultiHypergraph::isolatedVertex(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::MultiHypergraph::isolatedVertexAtPosition(htd::index_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = isolatedVertexCollection.begin();

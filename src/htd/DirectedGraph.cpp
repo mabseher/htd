@@ -293,9 +293,9 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::neighbors(htd::vertex_t 
     return base_->neighbors(vertex);
 }
 
-htd::vertex_t htd::DirectedGraph::neighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::DirectedGraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    return base_->neighbor(vertex, index);
+    return base_->neighborAtPosition(vertex, index);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::incomingNeighbors(htd::vertex_t vertex) const
@@ -334,7 +334,7 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::outgoingNeighbors(htd::v
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::DirectedGraph::incomingNeighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
@@ -352,18 +352,18 @@ htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t vertex, htd::in
         }
         else
         {
-            throw std::out_of_range("htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t, htd::index_t) const");
+            throw std::out_of_range("htd::vertex_t htd::DirectedGraph::incomingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
         }
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::DirectedGraph::incomingNeighbor(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::DirectedGraph::incomingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
     }
 
     return ret;
 }
 
-htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::DirectedGraph::outgoingNeighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
 
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
@@ -382,12 +382,12 @@ htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t vertex, htd::in
         }
         else
         {
-            throw std::out_of_range("htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t, htd::index_t) const");
+            throw std::out_of_range("htd::vertex_t htd::DirectedGraph::outgoingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
         }
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::DirectedGraph::outgoingNeighbor(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::DirectedGraph::outgoingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
     }
 
     return ret;
@@ -408,9 +408,9 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::isolatedVertices(void) c
     return base_->isolatedVertices();
 }
 
-htd::vertex_t htd::DirectedGraph::isolatedVertex(htd::index_t index) const
+htd::vertex_t htd::DirectedGraph::isolatedVertexAtPosition(htd::index_t index) const
 {
-    return base_->isolatedVertex(index);
+    return base_->isolatedVertexAtPosition(index);
 }
 
 bool htd::DirectedGraph::isIsolatedVertex(htd::vertex_t vertex) const

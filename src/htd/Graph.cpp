@@ -211,9 +211,9 @@ htd::ConstCollection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t vertex) 
     return base_->neighbors(vertex);
 }
 
-htd::vertex_t htd::Graph::neighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::Graph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    return base_->neighbor(vertex, index);
+    return base_->neighborAtPosition(vertex, index);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::Graph::vertices(void) const
@@ -231,9 +231,9 @@ htd::ConstCollection<htd::vertex_t> htd::Graph::isolatedVertices(void) const
     return base_->isolatedVertices();
 }
 
-htd::vertex_t htd::Graph::isolatedVertex(htd::index_t index) const
+htd::vertex_t htd::Graph::isolatedVertexAtPosition(htd::index_t index) const
 {
-    return base_->isolatedVertex(index);
+    return base_->isolatedVertexAtPosition(index);
 }
 
 bool htd::Graph::isIsolatedVertex(htd::vertex_t vertex) const

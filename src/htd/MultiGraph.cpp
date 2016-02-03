@@ -211,9 +211,9 @@ htd::ConstCollection<htd::vertex_t> htd::MultiGraph::neighbors(htd::vertex_t ver
     return base_->neighbors(vertex);
 }
 
-htd::vertex_t htd::MultiGraph::neighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::MultiGraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    return base_->neighbor(vertex, index);
+    return base_->neighborAtPosition(vertex, index);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::MultiGraph::vertices(void) const
@@ -231,9 +231,9 @@ htd::ConstCollection<htd::vertex_t> htd::MultiGraph::isolatedVertices(void) cons
     return base_->isolatedVertices();
 }
 
-htd::vertex_t htd::MultiGraph::isolatedVertex(htd::index_t index) const
+htd::vertex_t htd::MultiGraph::isolatedVertexAtPosition(htd::index_t index) const
 {
-    return base_->isolatedVertex(index);
+    return base_->isolatedVertexAtPosition(index);
 }
 
 bool htd::MultiGraph::isIsolatedVertex(htd::vertex_t vertex) const

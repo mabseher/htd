@@ -48,7 +48,7 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> leafNodes(void) const = 0;
 
-            virtual htd::vertex_t leafNode(htd::index_t index) const = 0;
+            virtual htd::vertex_t leafNodeAtPosition(htd::index_t index) const = 0;
 
             virtual bool isLeafNode(htd::vertex_t vertex) const = 0;
 

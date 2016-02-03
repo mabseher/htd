@@ -96,13 +96,13 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::joinNodes(void) cons
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::TreeDecomposition::joinNode(htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::joinNodeAtPosition(htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & joinNodeCollection = joinNodes();
 
     if (index >= joinNodeCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::joinNode(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::joinNodeAtPosition(htd::index_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = joinNodeCollection.begin();
@@ -172,13 +172,13 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) co
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::TreeDecomposition::forgetNode(htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::forgetNodeAtPosition(htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = forgetNodes();
 
     if (index >= forgetNodeCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgetNode(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgetNodeAtPosition(htd::index_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = forgetNodeCollection.begin();
@@ -254,13 +254,13 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void)
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::TreeDecomposition::introduceNode(htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::introduceNodeAtPosition(htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = introduceNodes();
 
     if (index >= introduceNodeCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introduceNode(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introduceNodeAtPosition(htd::index_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = introduceNodeCollection.begin();

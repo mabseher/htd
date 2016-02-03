@@ -84,9 +84,9 @@ htd::ConstCollection<std::string> htd::LabeledPath::labelNames(void) const
     return labelings_->labelNames();
 }
 
-const std::string & htd::LabeledPath::labelName(htd::index_t index) const
+const std::string & htd::LabeledPath::labelNameAtPosition(htd::index_t index) const
 {
-    return labelings_->labelName(index);
+    return labelings_->labelNameAtPosition(index);
 }
 
 bool htd::LabeledPath::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const

@@ -39,7 +39,7 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> incomingNeighbors(htd::vertex_t vertex) const = 0;
 
-            virtual htd::vertex_t incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const = 0;
+            virtual htd::vertex_t incomingNeighborAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
             virtual bool isIncomingNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const = 0;
 
@@ -47,7 +47,7 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> outgoingNeighbors(htd::vertex_t vertex) const = 0;
 
-            virtual htd::vertex_t outgoingNeighbor(htd::vertex_t vertex, htd::index_t index) const = 0;
+            virtual htd::vertex_t outgoingNeighborAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
             virtual bool isOutgoingNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const = 0;
 

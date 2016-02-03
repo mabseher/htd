@@ -35,7 +35,7 @@ namespace htd
         public:
             virtual ~IPath() = 0;
 
-            using htd::ITree::leafNode;
+            using htd::ITree::leafNodeAtPosition;
             using htd::ITree::child;
 
             virtual htd::vertex_t leafNode(void) const = 0;

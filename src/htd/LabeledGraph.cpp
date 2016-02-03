@@ -96,9 +96,9 @@ htd::ConstCollection<std::string> htd::LabeledGraph::labelNames(void) const
     return labelings_->labelNames();
 }
 
-const std::string & htd::LabeledGraph::labelName(htd::index_t index) const
+const std::string & htd::LabeledGraph::labelNameAtPosition(htd::index_t index) const
 {
-    return labelings_->labelName(index);
+    return labelings_->labelNameAtPosition(index);
 }
 
 bool htd::LabeledGraph::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const

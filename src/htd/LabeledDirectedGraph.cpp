@@ -96,9 +96,9 @@ htd::ConstCollection<std::string> htd::LabeledDirectedGraph::labelNames(void) co
     return labelings_->labelNames();
 }
 
-const std::string & htd::LabeledDirectedGraph::labelName(htd::index_t index) const
+const std::string & htd::LabeledDirectedGraph::labelNameAtPosition(htd::index_t index) const
 {
-    return labelings_->labelName(index);
+    return labelings_->labelNameAtPosition(index);
 }
 
 bool htd::LabeledDirectedGraph::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const

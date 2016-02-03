@@ -293,9 +293,9 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedMultiGraph::neighbors(htd::vert
     return base_->neighbors(vertex);
 }
 
-htd::vertex_t htd::DirectedMultiGraph::neighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::DirectedMultiGraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    return base_->neighbor(vertex, index);
+    return base_->neighborAtPosition(vertex, index);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::DirectedMultiGraph::incomingNeighbors(htd::vertex_t vertex) const
@@ -408,9 +408,9 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedMultiGraph::isolatedVertices(vo
     return base_->isolatedVertices();
 }
 
-htd::vertex_t htd::DirectedMultiGraph::isolatedVertex(htd::index_t index) const
+htd::vertex_t htd::DirectedMultiGraph::isolatedVertexAtPosition(htd::index_t index) const
 {
-    return base_->isolatedVertex(index);
+    return base_->isolatedVertexAtPosition(index);
 }
 
 bool htd::DirectedMultiGraph::isIsolatedVertex(htd::vertex_t vertex) const

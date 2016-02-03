@@ -82,7 +82,7 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::vertex_t neighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
             bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
@@ -92,7 +92,7 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const HTD_OVERRIDE;
 
-            htd::vertex_t isolatedVertex(htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t isolatedVertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
@@ -124,7 +124,7 @@ namespace htd
 
             htd::vertex_t leafNode(void) const HTD_OVERRIDE;
 
-            htd::vertex_t leafNode(htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t leafNodeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             bool isLeafNode(htd::vertex_t vertex) const HTD_OVERRIDE;
 

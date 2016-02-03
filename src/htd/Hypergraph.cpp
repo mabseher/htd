@@ -156,9 +156,9 @@ htd::ConstCollection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t ver
     return base_->neighbors(vertex);
 }
 
-htd::vertex_t htd::Hypergraph::neighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::Hypergraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    return base_->neighbor(vertex, index);
+    return base_->neighborAtPosition(vertex, index);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::Hypergraph::vertices(void) const
@@ -176,9 +176,9 @@ htd::ConstCollection<htd::vertex_t> htd::Hypergraph::isolatedVertices(void) cons
     return base_->isolatedVertices();
 }
 
-htd::vertex_t htd::Hypergraph::isolatedVertex(htd::index_t index) const
+htd::vertex_t htd::Hypergraph::isolatedVertexAtPosition(htd::index_t index) const
 {
-    return base_->isolatedVertex(index);
+    return base_->isolatedVertexAtPosition(index);
 }
 
 bool htd::Hypergraph::isIsolatedVertex(htd::vertex_t vertex) const

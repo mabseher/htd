@@ -265,7 +265,7 @@ namespace htd
 
             const VertexNameType & neighborAtPosition(const VertexNameType & vertexName, htd::index_t index) const
             {
-                return vertexName(base_->neighbor(lookupVertex(vertexName), index));
+                return vertexName(base_->neighborAtPosition(lookupVertex(vertexName), index));
             }
 
             std::size_t isolatedVertexCount(void) const
@@ -289,7 +289,7 @@ namespace htd
 
             const VertexNameType & isolatedVertexAtPosition(htd::index_t index) const
             {
-                return vertexName(base_->isolatedVertex(index));
+                return vertexName(base_->isolatedVertexAtPosition(index));
             }
 
             bool isIsolatedVertex(const VertexNameType & vertexName) const
@@ -482,7 +482,7 @@ namespace htd
 
             const std::string & labelNameAtPosition(htd::index_t index) const
             {
-                return base_->labelName(index);
+                return base_->labelNameAtPosition(index);
             }
 
             const htd::ILabel & vertexLabel(const std::string & labelName, const VertexNameType & vertexName) const

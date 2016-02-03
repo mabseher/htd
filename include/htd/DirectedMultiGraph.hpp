@@ -84,7 +84,7 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::vertex_t neighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
             std::size_t incomingNeighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
@@ -108,7 +108,7 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const HTD_OVERRIDE;
 
-            htd::vertex_t isolatedVertex(htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t isolatedVertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 

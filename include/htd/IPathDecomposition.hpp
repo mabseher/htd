@@ -45,7 +45,7 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> forgetNodes(void) const = 0;
 
-            virtual htd::vertex_t forgetNode(htd::index_t index) const = 0;
+            virtual htd::vertex_t forgetNodeAtPosition(htd::index_t index) const = 0;
 
             virtual bool isForgetNode(htd::vertex_t vertex) const = 0;
 
@@ -53,7 +53,7 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> introduceNodes(void) const = 0;
 
-            virtual htd::vertex_t introduceNode(htd::index_t index) const = 0;
+            virtual htd::vertex_t introduceNodeAtPosition(htd::index_t index) const = 0;
 
             virtual bool isIntroduceNode(htd::vertex_t vertex) const = 0;
 

@@ -91,9 +91,9 @@ htd::ConstCollection<std::string> htd::LabeledMultiHypergraph::labelNames(void) 
     return labelings_->labelNames();
 }
 
-const std::string & htd::LabeledMultiHypergraph::labelName(htd::index_t index) const
+const std::string & htd::LabeledMultiHypergraph::labelNameAtPosition(htd::index_t index) const
 {
-    return labelings_->labelName(index);
+    return labelings_->labelNameAtPosition(index);
 }
 
 bool htd::LabeledMultiHypergraph::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const

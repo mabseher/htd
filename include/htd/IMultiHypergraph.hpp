@@ -68,7 +68,7 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const = 0;
 
-            virtual htd::vertex_t isolatedVertex(htd::index_t index) const = 0;
+            virtual htd::vertex_t isolatedVertexAtPosition(htd::index_t index) const = 0;
 
             virtual bool isIsolatedVertex(htd::vertex_t vertex) const = 0;
 
@@ -76,7 +76,7 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const = 0;
 
-            virtual htd::vertex_t neighbor(htd::vertex_t vertex, htd::index_t index) const = 0;
+            virtual htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
             virtual std::size_t edgeCount(void) const = 0;
 

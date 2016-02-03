@@ -56,7 +56,7 @@ namespace htd
 
             htd::ConstCollection<std::string> labelNames(void) const HTD_OVERRIDE;
 
-            const std::string & labelName(htd::index_t index) const HTD_OVERRIDE;
+            const std::string & labelNameAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             bool isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const HTD_OVERRIDE;
 

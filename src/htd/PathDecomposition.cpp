@@ -74,11 +74,11 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::joinNodes(void) cons
     return htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>());
 }
 
-htd::vertex_t htd::PathDecomposition::joinNode(htd::index_t index) const
+htd::vertex_t htd::PathDecomposition::joinNodeAtPosition(htd::index_t index) const
 {
     HTD_UNUSED(index)
 
-    throw std::out_of_range("htd::vertex_t htd::PathDecomposition::joinNode(htd::index_t) const");
+    throw std::out_of_range("htd::vertex_t htd::PathDecomposition::joinNodeAtPosition(htd::index_t) const");
 }
 
 bool htd::PathDecomposition::isJoinNode(htd::vertex_t vertex) const
@@ -135,13 +135,13 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgetNodes(void) co
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::PathDecomposition::forgetNode(htd::index_t index) const
+htd::vertex_t htd::PathDecomposition::forgetNodeAtPosition(htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = forgetNodes();
 
     if (index >= forgetNodeCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::PathDecomposition::forgetNode(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::PathDecomposition::forgetNodeAtPosition(htd::index_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = forgetNodeCollection.begin();
@@ -217,13 +217,13 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introduceNodes(void)
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::PathDecomposition::introduceNode(htd::index_t index) const
+htd::vertex_t htd::PathDecomposition::introduceNodeAtPosition(htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = introduceNodes();
 
     if (index >= introduceNodeCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::PathDecomposition::introduceNode(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::PathDecomposition::introduceNodeAtPosition(htd::index_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = introduceNodeCollection.begin();

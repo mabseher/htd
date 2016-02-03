@@ -51,7 +51,7 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> joinNodes(void) const HTD_OVERRIDE;
 
-            htd::vertex_t joinNode(htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t joinNodeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             bool isJoinNode(htd::vertex_t vertex) const HTD_OVERRIDE;
 
@@ -59,7 +59,7 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> forgetNodes(void) const HTD_OVERRIDE;
 
-            htd::vertex_t forgetNode(htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t forgetNodeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             bool isForgetNode(htd::vertex_t vertex) const HTD_OVERRIDE;
 
@@ -67,7 +67,7 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> introduceNodes(void) const HTD_OVERRIDE;
 
-            htd::vertex_t introduceNode(htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t introduceNodeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             bool isIntroduceNode(htd::vertex_t vertex) const HTD_OVERRIDE;
 

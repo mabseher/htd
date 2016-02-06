@@ -49,6 +49,8 @@ namespace htd
 
             std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            std::vector<htd::vertex_t> bagContentVector(htd::vertex_t vertex) const HTD_OVERRIDE;
+
             htd::ConstCollection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             void setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content) HTD_OVERRIDE;

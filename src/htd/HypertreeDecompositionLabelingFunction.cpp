@@ -75,13 +75,17 @@ std::string htd::HypertreeDecompositionLabelingFunction::name() const
     return htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER;
 }
 
+htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const std::vector<htd::vertex_t> & vertices) const
+{
+    return computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(vertices));
+}
+
 htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices) const
 {
     std::vector<htd::id_t> relevantContainerIds;
 
     std::vector<htd::ConstCollection<htd::id_t>> relevantContainers;
 
-    //TODO Exploit sortedness of hyperedges here and also at other places!
     for (auto it1 = hyperedges_.begin(); it1 < hyperedges_.end(); it1++)
     {
         const htd::ConstCollection<htd::vertex_t> & elements1 = it1->elements();
@@ -118,6 +122,13 @@ htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLa
     delete setCoverAlgorithm;
 
     return new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(selectedHyperedges));
+}
+
+htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const std::vector<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const
+{
+    HTD_UNUSED(labels)
+
+    return computeLabel(vertices);
 }
 
 htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLabelingFunction::computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const

@@ -40,6 +40,10 @@ namespace htd
             ~HypertreeDecompositionLabelingFunction();
 	    
             std::string name() const HTD_OVERRIDE;
+
+            htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const std::vector<htd::vertex_t> & vertices) const;
+
+            htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const std::vector<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE;
 	        
             htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices) const;
 

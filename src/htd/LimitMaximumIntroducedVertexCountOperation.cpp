@@ -67,7 +67,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
         {
             htd::vertex_container bagContent;
 
-            const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(node);
 
             std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
@@ -110,13 +110,13 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
                     htd::vertex_t newNode = decomposition.addChild(node);
 
-                    decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(start, finish));
+                    decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
 
                     for (auto & labelingFunction : labelingFunctions)
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newNode), *labelCollection);
 
                         delete labelCollection;
 
@@ -131,13 +131,13 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                         {
                             newNode = decomposition.addParent(newNode);
 
-                            decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(start, finish));
+                            decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
 
                             for (auto & labelingFunction : labelingFunctions)
                             {
                                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+                                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newNode), *labelCollection);
 
                                 delete labelCollection;
 
@@ -162,7 +162,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
                     std::vector<htd::vertex_t> newContent;
 
-                    const htd::ConstCollection<htd::vertex_t> & bagContent = decomposition.bagContent(child);
+                    const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(child);
 
                     std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
@@ -172,7 +172,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(newContent), *labelCollection);
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(newContent, *labelCollection);
 
                         delete labelCollection;
 
@@ -199,7 +199,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                             {
                                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                                htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(newContent), *labelCollection);
+                                htd::ILabel * newLabel = labelingFunction->computeLabel(newContent, *labelCollection);
 
                                 delete labelCollection;
 
@@ -242,7 +242,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
         {
             htd::vertex_container bagContent;
 
-            const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(node);
 
             std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
@@ -285,13 +285,13 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                     htd::vertex_t newNode = decomposition.addChild(node);
 
-                    decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(start, finish));
+                    decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
 
                     for (auto & labelingFunction : labelingFunctions)
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newNode), *labelCollection);
 
                         delete labelCollection;
 
@@ -306,13 +306,13 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                         {
                             newNode = decomposition.addParent(newNode);
 
-                            decomposition.setBagContent(newNode, htd::ConstCollection<htd::vertex_t>(start, finish));
+                            decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
 
                             for (auto & labelingFunction : labelingFunctions)
                             {
                                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+                                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newNode), *labelCollection);
 
                                 delete labelCollection;
 
@@ -337,7 +337,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                     std::vector<htd::vertex_t> newContent;
 
-                    const htd::ConstCollection<htd::vertex_t> & bagContent = decomposition.bagContent(child);
+                    const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(child);
 
                     std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
@@ -347,7 +347,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(newContent), *labelCollection);
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(newContent, *labelCollection);
 
                         delete labelCollection;
 
@@ -374,7 +374,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                             {
                                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                                htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(newContent), *labelCollection);
+                                htd::ILabel * newLabel = labelingFunction->computeLabel(newContent, *labelCollection);
 
                                 delete labelCollection;
 

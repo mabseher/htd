@@ -59,7 +59,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
     for (htd::vertex_t node : joinNodeCollection)
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
+        const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(node);
 
         DEBUGGING_CODE(
         std::cout << "JOIN NODE: " << node << std::endl;
@@ -72,7 +72,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
         {
             if (!decomposition.isRoot(node))
             {
-                const htd::ConstCollection<htd::vertex_t> & parentBag = decomposition.bagContent(decomposition.parent(node));
+                const std::vector<htd::vertex_t> & parentBag = decomposition.bagContentVector(decomposition.parent(node));
 
                 if (parentBag != bag)
                 {
@@ -89,7 +89,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
         for (htd::vertex_t child : children)
         {
-            if (decomposition.bagContent(child) != bag)
+            if (decomposition.bagContentVector(child) != bag)
             {
                 DEBUGGING_CODE(
                 std::cout << "   ADDING INTERMEDIATE NODE BETWEEN NODES " << node << " AND " << child << " ..." << std::endl;

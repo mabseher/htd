@@ -30,6 +30,7 @@
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 #include <tuple>
+#include <vector>
 
 namespace htd
 {
@@ -51,7 +52,7 @@ namespace htd
             CompressionOperation * clone(void) const HTD_OVERRIDE;
 
         private:
-            std::tuple<std::size_t, std::size_t, std::size_t> analyze_sets(const htd::ConstCollection<htd::vertex_t> & set1, const htd::ConstCollection<htd::vertex_t> & set2) const;
+            std::tuple<std::size_t, std::size_t, std::size_t> analyze_sets(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2) const;
     };
 }
 

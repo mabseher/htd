@@ -81,7 +81,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsVe
     
     for (auto it1 = decomposition.vertices().begin(); !ok && it1 != decomposition.vertices().end(); it1++)
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(*it1);
+        const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(*it1);
 
         for (auto it2 = bag.begin(); !ok && it2 != bag.end(); it2++)
         {
@@ -144,7 +144,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
         if (!ok)
         {
-            const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(vertex);
 
             index = 0;
 
@@ -194,7 +194,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsCo
     {
         HTD_UNUSED(distanceToSubtreeRoot)
 
-        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+        const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(vertex);
 
         if (parent != htd::Vertex::UNKNOWN)
         {

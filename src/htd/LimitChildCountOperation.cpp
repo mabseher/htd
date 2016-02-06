@@ -64,13 +64,13 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
         {
             htd::vertex_t newNode = decomposition.addChild(node);
 
-            decomposition.setBagContent(newNode, decomposition.bagContent(node));
+            decomposition.setBagContent(newNode, decomposition.bagContentVector(node));
 
             for (auto & labelingFunction : labelingFunctions)
             {
                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newNode), *labelCollection);
 
                 delete labelCollection;
 
@@ -121,7 +121,7 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
                     newNode = decomposition.addParent(newNode);
 
-                    decomposition.setBagContent(newNode, decomposition.bagContent(node));
+                    decomposition.setBagContent(newNode, decomposition.bagContentVector(node));
 
                     for (auto it = start; it != finish; ++it)
                     {
@@ -132,7 +132,7 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newNode), *labelCollection);
 
                         delete labelCollection;
 

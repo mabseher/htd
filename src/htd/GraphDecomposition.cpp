@@ -83,6 +83,27 @@ std::size_t htd::GraphDecomposition::bagSize(htd::vertex_t vertex) const
     return ret;
 }
 
+std::vector<htd::vertex_t> htd::GraphDecomposition::bagContentVector(htd::vertex_t vertex) const
+{
+    if (isVertex(vertex))
+    {
+        if (isLabeledVertex(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex))
+        {
+            return dynamic_cast<const htd::Label<std::vector<htd::vertex_t>> *>(&(vertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->value();
+        }
+        else
+        {
+            return std::vector<htd::vertex_t>();
+        }
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::GraphDecomposition::bagContentVector(htd::vertex_t) const");
+    }
+
+    return std::vector<htd::vertex_t>();
+}
+
 htd::ConstCollection<htd::vertex_t> htd::GraphDecomposition::bagContent(htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
@@ -100,7 +121,7 @@ htd::ConstCollection<htd::vertex_t> htd::GraphDecomposition::bagContent(htd::ver
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::GraphDecomposition::bagContent(htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::GraphDecomposition::bagContent(htd::vertex_t) const");
     }
 
     return htd::ConstCollection<htd::vertex_t>();

@@ -31,6 +31,7 @@
 #include <htd/PostOrderTreeTraversal.hpp>
 
 #include <stack>
+#include <vector>
 
 htd::CompressionOperation::CompressionOperation(void)
 {
@@ -61,8 +62,8 @@ void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposi
 
             if (parent != htd::Vertex::UNKNOWN)
             {
-                const htd::ConstCollection<htd::vertex_t> & currentBag = decomposition.bagContent(vertex);
-                const htd::ConstCollection<htd::vertex_t> & parentBag = decomposition.bagContent(parent);
+                const std::vector<htd::vertex_t> & currentBag = decomposition.bagContentVector(vertex);
+                const std::vector<htd::vertex_t> & parentBag = decomposition.bagContentVector(parent);
 
                 std::pair<std::size_t, std::size_t> result = compute_symmetric_difference_sizes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end());
 
@@ -100,7 +101,7 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
 
             if (parent != htd::Vertex::UNKNOWN)
             {
-                const std::tuple<std::size_t, std::size_t, std::size_t> & result = analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
+                const std::tuple<std::size_t, std::size_t, std::size_t> & result = analyze_sets(decomposition.bagContentVector(vertex), decomposition.bagContentVector(parent));
 
                 if (std::get<0>(result) == 0)
                 {
@@ -127,7 +128,7 @@ htd::CompressionOperation * htd::CompressionOperation::clone(void) const
     return new htd::CompressionOperation();
 }
 
-std::tuple<std::size_t, std::size_t, std::size_t> htd::CompressionOperation::analyze_sets(const htd::ConstCollection<htd::vertex_t> & set1, const htd::ConstCollection<htd::vertex_t> & set2) const
+std::tuple<std::size_t, std::size_t, std::size_t> htd::CompressionOperation::analyze_sets(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2) const
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();

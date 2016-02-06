@@ -99,8 +99,8 @@ std::size_t htd::PathDecomposition::forgetNodeCount(void) const
     {
         if (childCount(node) > 0)
         {
-            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node);
-            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(node));
+            const std::vector<htd::vertex_t> & bag = bagContentVector(node);
+            const std::vector<htd::vertex_t> & childBag = bagContentVector(child(node));
 
             if (htd::has_non_empty_set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end()))
             {
@@ -122,8 +122,8 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgetNodes(void) co
     {
         if (childCount(node) > 0)
         {
-            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node);
-            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(node));
+            const std::vector<htd::vertex_t> & bag = bagContentVector(node);
+            const std::vector<htd::vertex_t> & childBag = bagContentVector(child(node));
 
             if (htd::has_non_empty_set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end()))
             {
@@ -159,8 +159,8 @@ bool htd::PathDecomposition::isForgetNode(htd::vertex_t vertex) const
     {
         if (childCount(vertex) > 0)
         {
-            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(vertex));
+            const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+            const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
 
             ret = htd::has_non_empty_set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end());
         }
@@ -181,8 +181,8 @@ std::size_t htd::PathDecomposition::introduceNodeCount(void) const
     {
         if (childCount(node) > 0)
         {
-            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node);
-            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(node));
+            const std::vector<htd::vertex_t> & bag = bagContentVector(node);
+            const std::vector<htd::vertex_t> & childBag = bagContentVector(child(node));
 
             if (htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
             {
@@ -204,8 +204,8 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introduceNodes(void)
     {
         if (childCount(node) > 0)
         {
-            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(node);
-            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(node));
+            const std::vector<htd::vertex_t> & bag = bagContentVector(node);
+            const std::vector<htd::vertex_t> & childBag = bagContentVector(child(node));
 
             if (htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
             {
@@ -241,8 +241,8 @@ bool htd::PathDecomposition::isIntroduceNode(htd::vertex_t vertex) const
     {
         if (childCount(vertex) > 0)
         {
-            const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-            const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(vertex));
+            const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+            const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
 
             ret = htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end());
         }
@@ -274,6 +274,27 @@ std::size_t htd::PathDecomposition::bagSize(htd::vertex_t vertex) const
     return ret;
 }
 
+std::vector<htd::vertex_t> htd::PathDecomposition::bagContentVector(htd::vertex_t vertex) const
+{
+    if (isVertex(vertex))
+    {
+        if (isLabeledVertex(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex))
+        {
+            return dynamic_cast<const htd::Label<std::vector<htd::vertex_t>> *>(&(vertexLabel(htd::IPathDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->value();
+        }
+        else
+        {
+            return std::vector<htd::vertex_t>();
+        }
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::bagContentVector(htd::vertex_t) const");
+    }
+
+    return std::vector<htd::vertex_t>();
+}
+
 htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::bagContent(htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
@@ -291,7 +312,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::bagContent(htd::vert
     }
     else
     {
-        throw std::logic_error("const htd::Collection<htd::vertex_t> htd::PathDecomposition::bagContent(htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::bagContent(htd::vertex_t) const");
     }
 
     return htd::ConstCollection<htd::vertex_t>();
@@ -389,8 +410,8 @@ std::size_t htd::PathDecomposition::forgottenVertexCount(htd::vertex_t vertex) c
 
     if (isVertex(vertex))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(vertex));
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
 
         ret = htd::compute_set_difference_size(childBag.begin(), childBag.end(), bag.begin(), bag.end());
     }
@@ -408,8 +429,8 @@ std::size_t htd::PathDecomposition::forgottenVertexCount(htd::vertex_t vertex, h
 
     if (isVertex(vertex) && isChild(vertex, child))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
 
         ret = htd::compute_set_difference_size(childBag.begin(), childBag.end(), bag.begin(), bag.end());
     }
@@ -429,8 +450,8 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgottenVertices(ht
 
     if (isVertex(vertex))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(vertex));
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
 
         std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(result));
     }
@@ -450,8 +471,8 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgottenVertices(ht
 
     if (isVertex(vertex) && isChild(vertex, child))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
 
         std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(result));
     }
@@ -515,8 +536,8 @@ std::size_t htd::PathDecomposition::introducedVertexCount(htd::vertex_t vertex) 
 
     if (isVertex(vertex))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(vertex));
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
 
         ret = htd::compute_set_difference_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
     }
@@ -534,8 +555,8 @@ std::size_t htd::PathDecomposition::introducedVertexCount(htd::vertex_t vertex, 
 
     if (isVertex(vertex) && isChild(vertex, child))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
 
         ret = htd::compute_set_difference_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
     }
@@ -555,8 +576,8 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introducedVertices(h
 
     if (isVertex(vertex))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(vertex));
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
 
         std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(result));
     }
@@ -576,8 +597,8 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introducedVertices(h
 
     if (isVertex(vertex) && isChild(vertex, child))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
 
         std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(result));
     }
@@ -641,8 +662,8 @@ std::size_t htd::PathDecomposition::rememberedVertexCount(htd::vertex_t vertex) 
 
     if (isVertex(vertex))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(vertex));
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
 
         ret = htd::compute_set_intersection_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
     }
@@ -660,8 +681,8 @@ std::size_t htd::PathDecomposition::rememberedVertexCount(htd::vertex_t vertex, 
 
     if (isVertex(vertex) && isChild(vertex, child))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
 
         ret = htd::compute_set_intersection_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
     }
@@ -681,8 +702,8 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::rememberedVertices(h
 
     if (isVertex(vertex))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child(vertex));
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
 
         std::set_intersection(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(result));
     }
@@ -702,8 +723,8 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::rememberedVertices(h
 
     if (isVertex(vertex) && isChild(vertex, child))
     {
-        const htd::ConstCollection<htd::vertex_t> & bag = bagContent(vertex);
-        const htd::ConstCollection<htd::vertex_t> & childBag = bagContent(child);
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
 
         std::set_intersection(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(result));
     }

@@ -172,7 +172,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     if (requiredVertices.size() > 0)
                     {
-                        const htd::ConstCollection<htd::vertex_t> & bagContent = decomposition.bagContent(currentNode);
+                        const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(currentNode);
 
                         htd::vertex_container newBagContent;
 
@@ -196,7 +196,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
                         {
                             htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(currentNode);
 
-                            htd::ILabel * newLabel = labelingFunction->computeLabel(htd::ConstCollection<htd::vertex_t>::getInstance(newBagContent), *labelCollection);
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(newBagContent, *labelCollection);
 
                             delete labelCollection;
 
@@ -253,7 +253,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     for (htd::vertex_t child : availableChildren)
                     {
-                        const htd::ConstCollection<htd::vertex_t> & childBagContent = decomposition.bagContent(child);
+                        const std::vector<htd::vertex_t> & childBagContent = decomposition.bagContentVector(child);
 
                         DEBUGGING_CODE(
                         std::cout << "   SIBLING: " << child << std::endl;
@@ -305,7 +305,7 @@ void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd
 
     for (htd::vertex_t child : decomposition.children(vertex))
     {
-        const htd::ConstCollection<htd::vertex_t> & childLabel = decomposition.bagContent(child);
+        const std::vector<htd::vertex_t> & childLabel = decomposition.bagContentVector(child);
 
         result.insert(childLabel.begin(), childLabel.end());
     }

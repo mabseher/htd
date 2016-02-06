@@ -56,7 +56,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomp
 
     for (htd::vertex_t leaf : leafNodes)
     {
-        if (decomposition.bagContent(leaf).size() > 0)
+        if (decomposition.bagSize(leaf) > 0)
         {
             htd::vertex_t newLeaf = decomposition.addChild(leaf);
 
@@ -64,7 +64,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomp
             {
                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newLeaf);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newLeaf), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newLeaf), *labelCollection);
 
                 delete labelCollection;
 
@@ -89,7 +89,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
 
     for (htd::vertex_t leaf : leafNodes)
     {
-        if (decomposition.bagContent(leaf).size() > 0)
+        if (decomposition.bagSize(leaf) > 0)
         {
             htd::vertex_t newLeaf = decomposition.addChild(leaf);
 
@@ -97,7 +97,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
             {
                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newLeaf);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newLeaf), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newLeaf), *labelCollection);
 
                 delete labelCollection;
 

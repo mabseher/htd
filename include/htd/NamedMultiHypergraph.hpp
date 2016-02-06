@@ -425,56 +425,12 @@ namespace htd
 
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
-                htd::vertex_t locatedVertex1 = htd::Vertex::UNKNOWN;
-
-                if (isVertexName(vertexName1))
-                {
-                    locatedVertex1 = lookupVertex(vertexName1);
-                }
-                else
-                {
-                    locatedVertex1 = addVertex(vertexName1);
-                }
-
-                htd::vertex_t locatedVertex2 = htd::Vertex::UNKNOWN;
-
-                if (isVertexName(vertexName2))
-                {
-                    locatedVertex2 = lookupVertex(vertexName2);
-                }
-                else
-                {
-                    locatedVertex2 = addVertex(vertexName2);
-                }
-
-                return base_->addEdge(locatedVertex1, locatedVertex2);
+                return base_->addEdge(addVertex(vertexName1), addVertex(vertexName2));
             }
 
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2, const EdgeNameType & name)
             {
-                htd::vertex_t locatedVertex1 = htd::Vertex::UNKNOWN;
-
-                if (isVertexName(vertexName1))
-                {
-                    locatedVertex1 = lookupVertex(vertexName1);
-                }
-                else
-                {
-                    locatedVertex1 = addVertex(vertexName1);
-                }
-
-                htd::vertex_t locatedVertex2 = htd::Vertex::UNKNOWN;
-
-                if (isVertexName(vertexName2))
-                {
-                    locatedVertex2 = lookupVertex(vertexName2);
-                }
-                else
-                {
-                    locatedVertex2 = addVertex(vertexName2);
-                }
-
-                htd::id_t edgeId = base_->addEdge(locatedVertex1, locatedVertex2);
+                htd::id_t edgeId = base_->addEdge(addVertex(vertexName1), addVertex(vertexName2));
 
                 setEdgeName(edgeId, name);
 
@@ -487,12 +443,7 @@ namespace htd
 
                for (auto & vertex : elements)
                {
-                   if (!isVertexName(vertex))
-                   {
-                       addVertex(vertex);
-                   }
-
-                   hyperedge.push_back(lookupVertex(vertex));
+                   hyperedge.push_back(addVertex(vertex));
                }
 
                return base_->addEdge(std::move(hyperedge));
@@ -504,12 +455,7 @@ namespace htd
 
                 for (auto & vertex : elements)
                 {
-                    if (!isVertexName(vertex))
-                    {
-                        addVertex(vertex);
-                    }
-
-                    hyperedge.push_back(lookupVertex(vertex));
+                    hyperedge.push_back(addVertex(vertex));
                 }
 
                 return base_->addEdge(std::move(hyperedge));
@@ -517,7 +463,18 @@ namespace htd
 
             htd::id_t addEdge(const std::vector<VertexNameType> & elements, const EdgeNameType & name)
             {
-                return addEdge(htd::ConstCollection<VertexNameType>::getInstance(elements), name);
+                htd::vertex_container hyperedge;
+
+                for (auto & vertex : elements)
+                {
+                    hyperedge.push_back(addVertex(vertex));
+                }
+
+                htd::id_t edgeId = base_->addEdge(std::move(hyperedge));
+
+                setEdgeName(edgeId, name);
+
+                return edgeId;
             }
 
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements, const EdgeNameType & name)
@@ -526,12 +483,7 @@ namespace htd
 
                 for (auto & vertex : elements)
                 {
-                    if (!isVertexName(vertex))
-                    {
-                        addVertex(vertex);
-                    }
-
-                    hyperedge.push_back(lookupVertex(vertex));
+                    hyperedge.push_back(addVertex(vertex));
                 }
 
                 htd::id_t edgeId = base_->addEdge(std::move(hyperedge));

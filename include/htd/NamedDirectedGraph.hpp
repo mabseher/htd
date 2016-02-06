@@ -463,40 +463,12 @@ namespace htd
 
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
-                htd::vertex_t locatedVertex1 = lookupVertex(vertexName1);
-
-                if (locatedVertex1 == htd::Vertex::UNKNOWN)
-                {
-                    locatedVertex1 = addVertex(vertexName1);
-                }
-
-                htd::vertex_t locatedVertex2 = lookupVertex(vertexName2);
-
-                if (locatedVertex2 == htd::Vertex::UNKNOWN)
-                {
-                    locatedVertex2 = addVertex(vertexName2);
-                }
-
-                return base_->addEdge(locatedVertex1, locatedVertex2);
+                return base_->addEdge(addVertex(vertexName1), addVertex(vertexName2));
             }
 
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2, const EdgeNameType & name)
             {
-                htd::vertex_t locatedVertex1 = lookupVertex(vertexName1);
-
-                if (locatedVertex1 == htd::Vertex::UNKNOWN)
-                {
-                    locatedVertex1 = addVertex(vertexName1);
-                }
-
-                htd::vertex_t locatedVertex2 = lookupVertex(vertexName2);
-
-                if (locatedVertex2 == htd::Vertex::UNKNOWN)
-                {
-                    locatedVertex2 = addVertex(vertexName2);
-                }
-
-                htd::id_t edgeId = base_->addEdge(locatedVertex1, locatedVertex2);
+                htd::id_t edgeId = base_->addEdge(addVertex(vertexName1), addVertex(vertexName2));
 
                 setEdgeName(edgeId, name);
 

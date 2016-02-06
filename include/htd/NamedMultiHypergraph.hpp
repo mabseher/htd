@@ -483,7 +483,19 @@ namespace htd
 
             htd::id_t addEdge(const std::vector<VertexNameType> & elements)
             {
-                return addEdge(htd::ConstCollection<VertexNameType>::getInstance(elements));
+               htd::vertex_container hyperedge;
+
+               for (auto & vertex : elements)
+               {
+                   if (!isVertexName(vertex))
+                   {
+                       addVertex(vertex);
+                   }
+
+                   hyperedge.push_back(lookupVertex(vertex));
+               }
+
+               return base_->addEdge(std::move(hyperedge));
             }
 
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements)

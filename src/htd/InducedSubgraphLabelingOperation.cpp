@@ -62,7 +62,9 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
 
     for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
     {
-        htd::vertex_container elements(hyperedge.begin(), hyperedge.end());
+        htd::vertex_container elements;
+
+        hyperedge.copyTo(elements);
 
         std::sort(elements.begin(), elements.end());
 
@@ -200,7 +202,9 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
 
     for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
     {
-        htd::vertex_container elements(hyperedge.begin(), hyperedge.end());
+        htd::vertex_container elements;
+
+        hyperedge.copyTo(elements);
 
         std::sort(elements.begin(), elements.end());
 

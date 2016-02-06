@@ -95,6 +95,11 @@ htd::ConstCollection<htd::vertex_t> htd::Hyperedge::elements() const
     return htd::ConstCollection<htd::vertex_t>::getInstance(*elements_);
 }
 
+void htd::Hyperedge::copyTo(std::vector<htd::vertex_t> target) const
+{
+    std::copy(elements_->begin(), elements_->end(), std::back_inserter(target));
+}
+
 bool htd::Hyperedge::empty() const
 {
     return elements_->empty();

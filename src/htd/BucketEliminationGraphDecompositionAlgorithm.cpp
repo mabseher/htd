@@ -303,7 +303,9 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 }
                 default:
                 {
-                    htd::vertex_container elements(edge.begin(), edge.end());
+                    htd::vertex_container elements;
+
+                    edge.copyTo(elements);
 
                     std::sort(elements.begin(), elements.end());
 

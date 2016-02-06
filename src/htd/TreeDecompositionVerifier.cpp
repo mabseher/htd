@@ -48,7 +48,7 @@ htd::TreeDecompositionVerifier::~TreeDecompositionVerifier()
 
 bool htd::TreeDecompositionVerifier::verify(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
 {
-    return verifyVertexExistence(graph, decomposition) && verifyHyperEdgeCoverage(graph, decomposition) && verifyConnectednessCriterion(graph, decomposition);
+    return verifyVertexExistence(graph, decomposition) && verifyHyperedgeCoverage(graph, decomposition) && verifyConnectednessCriterion(graph, decomposition);
 }
 
 //Ensure that every vertex of the original graph is contained in at least one node of the tree decomposition.
@@ -58,9 +58,9 @@ bool htd::TreeDecompositionVerifier::verifyVertexExistence(const htd::IMultiHype
 }
 
 //Ensure that the vertices of an edge in the input graph occur jointly in at least on of the tree decomposition.
-bool htd::TreeDecompositionVerifier::verifyHyperEdgeCoverage(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
+bool htd::TreeDecompositionVerifier::verifyHyperedgeCoverage(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
 {
-    return violationsHyperEdgeCoverage(graph, decomposition).empty();
+    return violationsHyperedgeCoverage(graph, decomposition).empty();
 }
 
 //Ensure for each vertex of the input graph that the bags containing the specific vertex are connected.
@@ -81,9 +81,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsVe
     
     for (auto it1 = decomposition.vertices().begin(); !ok && it1 != decomposition.vertices().end(); it1++)
     {
-        htd::vertex_t node = *it1;
-
-        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
+        const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(*it1);
 
         for (auto it2 = bag.begin(); !ok && it2 != bag.end(); it2++)
         {
@@ -100,7 +98,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsVe
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
             
-htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsHyperEdgeCoverage(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
+htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsHyperedgeCoverage(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
 {
     htd::VectorAdapter<htd::Hyperedge> ret;
 
@@ -112,21 +110,29 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
     std::unordered_set<htd::vertex_t> missingEdges(edgeCount);
 
-    htd::hyperedge_container edges;
+    std::vector<htd::id_t> identifiers(edgeCount);
 
-    edges.reserve(edgeCount);
+    std::vector<htd::vertex_container> sortedEdges(edgeCount);
 
-    for (const htd::Hyperedge & edge : graph.hyperedges())
+    htd::index_t index = 0;
+
+    const htd::ConstCollection<htd::Hyperedge> & hyperedges = graph.hyperedges();
+
+    for (const htd::Hyperedge & hyperedge : hyperedges)
     {
-        const htd::ConstCollection<htd::vertex_t> & elementCollection = edge.elements();
+        htd::vertex_container & elements = sortedEdges[index];
 
-        htd::vertex_container elements(elementCollection.begin(), elementCollection.end());
+        hyperedge.copyTo(elements);
 
         std::sort(elements.begin(), elements.end());
 
         elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
 
-        edges.push_back(htd::Hyperedge(edge.id(), std::move(elements)));
+        identifiers[index] = hyperedge.id();
+
+        missingEdges.insert(index);
+
+        index++;
     }
 
     htd::PostOrderTreeTraversal treeTraversal;
@@ -140,13 +146,17 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
         {
             const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
-            for (auto it = edges.begin(); !ok && it != edges.end(); ++it)
-            {
-                const htd::Hyperedge & edge = *it;
+            index = 0;
 
-                if (missingEdges.count(edge.id()) > 0 && std::includes(bag.begin(), bag.end(), edge.begin(), edge.end()))
+            for (index = 0; !ok && index < edgeCount; ++index)
+            {
+                htd::id_t id = identifiers[index];
+
+                const htd::vertex_container & edge = sortedEdges[index];
+
+                if (missingEdges.count(id) > 0 && std::includes(bag.begin(), bag.end(), edge.begin(), edge.end()))
                 {
-                    missingEdges.erase(edge.id());
+                    missingEdges.erase(id);
                 }
 
                 ok = missingEdges.empty();
@@ -156,9 +166,12 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
     if (!ok)
     {
-        for (htd::index_t missingEdge : missingEdges)
+        for (const htd::Hyperedge & hyperedge : hyperedges)
         {
-            result.push_back(edges[missingEdge]);
+            if (missingEdges.count(index) > 0)
+            {
+                result.push_back(hyperedge);
+            }
         }
 
         std::sort(result.begin(), result.end());

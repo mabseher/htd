@@ -65,6 +65,8 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> elements() const;
 
+            void copyTo(std::vector<htd::vertex_t> target) const;
+
             bool empty() const;
 
             std::size_t size() const;

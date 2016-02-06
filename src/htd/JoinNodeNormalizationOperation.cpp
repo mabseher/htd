@@ -55,13 +55,9 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
 void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::vertex_container joinNodes;
-
     const htd::ConstCollection<htd::vertex_t> & joinNodeCollection = decomposition.joinNodes();
 
-    std::copy(joinNodeCollection.begin(), joinNodeCollection.end(), std::back_inserter(joinNodes));
-
-    for (htd::vertex_t node : joinNodes)
+    for (htd::vertex_t node : joinNodeCollection)
     {
         const htd::ConstCollection<htd::vertex_t> & bag = decomposition.bagContent(node);
 

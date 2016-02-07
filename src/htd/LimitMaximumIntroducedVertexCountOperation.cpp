@@ -77,9 +77,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
             {
                 htd::vertex_container introducedVertices;
 
-                const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = decomposition.introducedVertices(node);
-
-                std::copy(introducedVertexCollection.begin(), introducedVertexCollection.end(), std::back_inserter(introducedVertices));
+                decomposition.copyIntroducedVerticesTo(introducedVertices, node);
 
                 std::size_t remainder = introducedVertexCount % limit_;
 
@@ -252,9 +250,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
             {
                 htd::vertex_container introducedVertices;
 
-                const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = decomposition.introducedVertices(node);
-
-                std::copy(introducedVertexCollection.begin(), introducedVertexCollection.end(), std::back_inserter(introducedVertices));
+                decomposition.copyIntroducedVerticesTo(introducedVertices, node);
 
                 std::size_t remainder = introducedVertexCount % limit_;
 

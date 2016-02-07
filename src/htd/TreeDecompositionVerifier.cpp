@@ -190,6 +190,8 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsCo
 
     htd::PostOrderTreeTraversal treeTraversal;
 
+    std::vector<htd::vertex_t> forgottenBagContent;
+
     treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
     {
         HTD_UNUSED(distanceToSubtreeRoot)
@@ -198,7 +200,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsCo
 
         if (parent != htd::Vertex::UNKNOWN)
         {
-            const htd::ConstCollection<htd::vertex_t> & forgottenBagContent = decomposition.forgottenVertices(parent, vertex);
+            decomposition.copyForgottenVerticesTo(forgottenBagContent, parent, vertex);
 
             for (htd::vertex_t bagElement : bag)
             {
@@ -212,6 +214,8 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsCo
             {
                 forgottenVertices.insert(forgottenVertex);
             }
+
+            forgottenBagContent.clear();
         }
         else
         {

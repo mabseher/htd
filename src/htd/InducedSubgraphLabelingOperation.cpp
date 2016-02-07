@@ -101,7 +101,9 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
         {
             for (htd::vertex_t child : decomposition.children(vertex))
             {
-                const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex, child);
+                htd::vertex_container forgottenVertices;
+
+                decomposition.copyForgottenVerticesTo(forgottenVertices, vertex, child);
 
                 for (const htd::Hyperedge & hyperedge : htd::accessLabel<htd::ConstCollection<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
                 {
@@ -109,7 +111,7 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
 
                     if (childHyperedgeState[index] == 1)
                     {
-                        if (forgottenVertexCollection.size() > 0 && htd::has_non_empty_set_intersection(hyperedges[index].first.begin(), hyperedges[index].first.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
+                        if (forgottenVertices.size() > 0 && htd::has_non_empty_set_intersection(hyperedges[index].first.begin(), hyperedges[index].first.end(), forgottenVertices.begin(), forgottenVertices.end()))
                         {
                             hyperedgeState[index] = 3;
 
@@ -241,7 +243,9 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
         {
             for (htd::vertex_t child : decomposition.children(vertex))
             {
-                const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = decomposition.forgottenVertices(vertex, child);
+                htd::vertex_container forgottenVertices;
+
+                decomposition.copyForgottenVerticesTo(forgottenVertices, vertex, child);
 
                 for (const htd::Hyperedge & hyperedge : htd::accessLabel<htd::ConstCollection<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
                 {
@@ -249,7 +253,7 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
 
                     if (childHyperedgeState[index] == 1)
                     {
-                        if (forgottenVertexCollection.size() > 0 && htd::has_non_empty_set_intersection(hyperedges[index].first.begin(), hyperedges[index].first.end(), forgottenVertexCollection.begin(), forgottenVertexCollection.end()))
+                        if (forgottenVertices.size() > 0 && htd::has_non_empty_set_intersection(hyperedges[index].first.begin(), hyperedges[index].first.end(), forgottenVertices.begin(), forgottenVertices.end()))
                         {
                             hyperedgeState[index] = 3;
 

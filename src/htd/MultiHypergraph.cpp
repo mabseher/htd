@@ -106,9 +106,7 @@ std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t vertex) const
     {
         for (auto & edge : edges_)
         {
-            const htd::ConstCollection<htd::vertex_t> & elements = edge.elements();
-
-            if (std::find(elements.begin(), elements.end(), vertex) != elements.end())
+            if (edge.containsVertex(vertex))
             {
                 ret++;
             }

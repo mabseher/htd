@@ -527,6 +527,39 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(ht
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
+void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+{
+    if (isVertex(vertex))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+
+        htd::vertex_container childBagContent;
+
+        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+
+        std::set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+    }
+}
+
+void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+{
+    if (isVertex(vertex) && isChild(vertex, child))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
+
+        std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+    }
+}
+
 htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = forgottenVertices(vertex);
@@ -659,6 +692,39 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
+void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+{
+    if (isVertex(vertex))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+
+        htd::vertex_container childBagContent;
+
+        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+
+        std::set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+    }
+}
+
+void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+{
+    if (isVertex(vertex) && isChild(vertex, child))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
+
+        std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+    }
+}
+
 htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex);
@@ -789,6 +855,39 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(h
     }
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+{
+    if (isVertex(vertex))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+
+        htd::vertex_container childBagContent;
+
+        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+
+        std::set_intersection(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+    }
+}
+
+void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+{
+    if (isVertex(vertex) && isChild(vertex, child))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
+
+        std::set_intersection(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+    }
 }
 
 htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index) const

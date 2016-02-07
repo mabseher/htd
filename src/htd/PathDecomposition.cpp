@@ -484,6 +484,36 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgottenVertices(ht
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
+void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+{
+    if (isVertex(vertex))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
+
+        std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+    }
+}
+
+void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+{
+    if (isVertex(vertex) && isChild(vertex, child))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
+
+        std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+    }
+}
+
 htd::vertex_t htd::PathDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = forgottenVertices(vertex);
@@ -610,6 +640,36 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introducedVertices(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
+void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+{
+    if (isVertex(vertex))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
+
+        std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+    }
+}
+
+void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+{
+    if (isVertex(vertex) && isChild(vertex, child))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
+
+        std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+    }
+}
+
 htd::vertex_t htd::PathDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex);
@@ -734,6 +794,36 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::rememberedVertices(h
     }
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+{
+    if (isVertex(vertex))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child(vertex));
+
+        std::set_intersection(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+    }
+}
+
+void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+{
+    if (isVertex(vertex) && isChild(vertex, child))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContentVector(child);
+
+        std::set_intersection(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+    }
 }
 
 htd::vertex_t htd::PathDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index) const

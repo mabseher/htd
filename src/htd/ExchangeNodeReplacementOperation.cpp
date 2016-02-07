@@ -69,9 +69,11 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
 
         std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
+        std::vector<htd::vertex_t> rememberedVertices;
+
         for (htd::vertex_t child : children)
         {
-            const htd::ConstCollection<htd::vertex_t> & rememberedVertices = decomposition.rememberedVertices(node, child);
+            decomposition.copyRememberedVerticesTo(rememberedVertices, node, child);
 
             if (bag.size() != rememberedVertices.size() || !std::equal(bag.begin(), bag.end(), rememberedVertices.begin()))
             {
@@ -90,6 +92,8 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
                     decomposition.setVertexLabel(labelingFunction->name(), newVertex, newLabel);
                 }
             }
+
+            rememberedVertices.clear();
         }
     }
 }
@@ -123,9 +127,11 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
         std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
 
+        std::vector<htd::vertex_t> rememberedVertices;
+
         for (htd::vertex_t child : children)
         {
-            const htd::ConstCollection<htd::vertex_t> & rememberedVertices = decomposition.rememberedVertices(node, child);
+            decomposition.copyRememberedVerticesTo(rememberedVertices, node, child);
 
             if (bag.size() != rememberedVertices.size() || !std::equal(bag.begin(), bag.end(), rememberedVertices.begin()))
             {
@@ -145,6 +151,8 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
                 }
             }
         }
+
+        rememberedVertices.clear();
     }
 }
 

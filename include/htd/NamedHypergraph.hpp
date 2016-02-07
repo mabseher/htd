@@ -395,20 +395,16 @@ namespace htd
 
             htd::vertex_t addVertex(const VertexNameType & vertexName)
             {
-                htd::vertex_t ret = htd::Vertex::UNKNOWN;
+                htd::ILabel * label = new htd::Label<VertexNameType>(vertexName);
 
-                if (isVertexName(vertexName))
-                {
-                    ret = lookupVertex(vertexName);
-                }
-                else
-                {
-                    ret = base_->addVertex();
+                std::pair<htd::vertex_t, bool> inserted = nameLabeling_->insertVertex(label, [&] { return base_->addVertex(); });
 
-                    nameLabeling_->setVertexLabel(ret, new htd::Label<VertexNameType>(vertexName));
+                if (!inserted.second)
+                {
+                    delete label;
                 }
 
-                return ret;
+                return inserted.first;
             }
 
             void removeVertex(const VertexNameType & vertexName)

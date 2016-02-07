@@ -395,20 +395,16 @@ namespace htd
 
             htd::vertex_t addVertex(const VertexNameType & vertexName)
             {
-                htd::vertex_t ret = htd::Vertex::UNKNOWN;
+                htd::ILabel * label = new htd::Label<VertexNameType>(vertexName);
 
-                if (isVertexName(vertexName))
-                {
-                    ret = lookupVertex(vertexName);
-                }
-                else
-                {
-                    ret = base_->addVertex();
+                std::pair<htd::vertex_t, bool> inserted = nameLabeling_->insertVertex(label, [&] { return base_->addVertex(); });
 
-                    nameLabeling_->setVertexLabel(ret, new htd::Label<VertexNameType>(vertexName));
+                if (!inserted.second)
+                {
+                    delete label;
                 }
 
-                return ret;
+                return inserted.first;
             }
 
             void removeVertex(const VertexNameType & vertexName)
@@ -425,56 +421,12 @@ namespace htd
 
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
-                htd::vertex_t locatedVertex1 = htd::Vertex::UNKNOWN;
-
-                if (isVertexName(vertexName1))
-                {
-                    locatedVertex1 = lookupVertex(vertexName1);
-                }
-                else
-                {
-                    locatedVertex1 = addVertex(vertexName1);
-                }
-
-                htd::vertex_t locatedVertex2 = htd::Vertex::UNKNOWN;
-
-                if (isVertexName(vertexName2))
-                {
-                    locatedVertex2 = lookupVertex(vertexName2);
-                }
-                else
-                {
-                    locatedVertex2 = addVertex(vertexName2);
-                }
-
-                return base_->addEdge(locatedVertex1, locatedVertex2);
+                return base_->addEdge(addVertex(vertexName1), addVertex(vertexName2));
             }
 
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2, const EdgeNameType & name)
             {
-                htd::vertex_t locatedVertex1 = htd::Vertex::UNKNOWN;
-
-                if (isVertexName(vertexName1))
-                {
-                    locatedVertex1 = lookupVertex(vertexName1);
-                }
-                else
-                {
-                    locatedVertex1 = addVertex(vertexName1);
-                }
-
-                htd::vertex_t locatedVertex2 = htd::Vertex::UNKNOWN;
-
-                if (isVertexName(vertexName2))
-                {
-                    locatedVertex2 = lookupVertex(vertexName2);
-                }
-                else
-                {
-                    locatedVertex2 = addVertex(vertexName2);
-                }
-
-                htd::id_t edgeId = base_->addEdge(locatedVertex1, locatedVertex2);
+                htd::id_t edgeId = base_->addEdge(addVertex(vertexName1), addVertex(vertexName2));
 
                 setEdgeName(edgeId, name);
 

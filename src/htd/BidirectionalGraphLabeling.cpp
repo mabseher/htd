@@ -175,6 +175,32 @@ void htd::BidirectionalGraphLabeling::swapEdgeLabels(htd::id_t edgeId1, htd::id_
     }
 }
 
+std::pair<htd::id_t, bool> htd::BidirectionalGraphLabeling::insertVertex(htd::ILabel * label, std::function<htd::vertex_t(void)> vertexCreationFunction)
+{
+    std::pair<htd::id_t, bool> ret(0, false);
+
+    auto result = vertexLabelsReverseMap_.insert(std::make_pair(label, 0));
+
+    if (result.second)
+    {
+        htd::vertex_t newVertex = vertexCreationFunction();
+
+        ret.first = newVertex;
+
+        ret.second = true;
+
+        result.first->second = newVertex;
+
+        vertexLabels_[newVertex] = label;
+    }
+    else
+    {
+        ret.first = result.first->second;
+    }
+
+    return ret;
+}
+
 htd::ILabel * htd::BidirectionalGraphLabeling::transferVertexLabel(htd::vertex_t vertex)
 {
     auto position = vertexLabels_.find(vertex);

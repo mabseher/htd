@@ -60,6 +60,8 @@ namespace htd
 
             void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) HTD_OVERRIDE;
 
+            std::pair<htd::id_t, bool> insertVertex(htd::ILabel * label, std::function<htd::vertex_t(void)> vertexCreationFunction) HTD_OVERRIDE;
+
             htd::ILabel * transferVertexLabel(htd::vertex_t vertex) HTD_OVERRIDE;
 
             htd::ILabel * transferEdgeLabel(htd::id_t edgeId) HTD_OVERRIDE;

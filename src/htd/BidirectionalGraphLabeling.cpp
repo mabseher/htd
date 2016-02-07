@@ -279,7 +279,7 @@ void htd::BidirectionalGraphLabeling::removeEdgeLabel(htd::id_t edgeId)
     }
     else
     {
-        throw std::out_of_range("htd::BidirectionalGraphLabeling::removeEdgeLabel(const htd::Hyperedge &)");
+        throw std::out_of_range("htd::BidirectionalGraphLabeling::removeEdgeLabel(htd::id_t edgeId)");
     }
 }
 

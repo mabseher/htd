@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   NamedTree.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/LabeledTreeFactory.hpp>
-#include <htd/BidirectionalGraphLabeling.hpp>
+#include <htd/BidirectionalGraphNaming.hpp>
 #include <htd/Label.hpp>
 #include <htd/VectorAdapter.hpp>
 #include <htd/NamedVertexHyperedge.hpp>
@@ -43,12 +43,12 @@ namespace htd
     class NamedTree
     {
         public:
-            NamedTree(void) : base_(htd::LabeledTreeFactory::instance().getLabeledTree()), nameLabeling_(new htd::BidirectionalGraphLabeling())
+            NamedTree(void) : base_(htd::LabeledTreeFactory::instance().getLabeledTree()), names_()
             {
 
             }
 
-            NamedTree(const NamedTree<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), nameLabeling_(original.nameLabeling_->clone())
+            NamedTree(const NamedTree<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), names_(original.names_)
             {
 
             }
@@ -60,13 +60,6 @@ namespace htd
                     delete base_;
 
                     base_ = nullptr;
-                }
-
-                if (nameLabeling_ != nullptr)
-                {
-                    delete nameLabeling_;
-
-                    nameLabeling_ = nullptr;
                 }
             }
 
@@ -82,7 +75,7 @@ namespace htd
 
             bool isVertexName(const VertexNameType & vertexName) const
             {
-                return nameLabeling_->isVertexLabel(Label<VertexNameType>(vertexName));
+                return names_.isVertexName(vertexName);
             }
 
             void setVertexName(htd::vertex_t vertex, const VertexNameType & vertexName)
@@ -92,12 +85,12 @@ namespace htd
                     throw std::logic_error("void htd::NamedTree<VertexNameType, EdgeNameType>::setVertexName(htd::vertex_t, const VertexNameType &)");
                 }
 
-                nameLabeling_->setVertexLabel(vertex, new htd::Label<VertexNameType>(vertexName));
+                names_.setVertexName(vertex, vertexName);
             }
 
             bool isEdgeName(const EdgeNameType & edgeName) const
             {
-                return nameLabeling_->isEdgeLabel(Label<EdgeNameType>(edgeName));
+                return names_.isEdgeName(edgeName);
             }
 
             void setEdgeName(htd::id_t edgeId, const EdgeNameType & edgeName)
@@ -107,51 +100,47 @@ namespace htd
                     throw std::logic_error("void htd::NamedTree<VertexNameType, EdgeNameType>::setEdgeName(htd::id_t, const EdgeNameType &)");
                 }
 
-                nameLabeling_->setEdgeLabel(edgeId, new htd::Label<VertexNameType>(edgeName));
+                names_.setEdgeName(edgeId, edgeName);
             }
 
             const VertexNameType & vertexName(htd::vertex_t vertex) const
             {
-                if (!nameLabeling_->isLabeledVertex(vertex))
+                if (!names_.isNamedVertex(vertex))
                 {
                     throw std::logic_error("const VertexNameType & htd::NamedTree<VertexNameType, EdgeNameType>::vertexName(htd::vertex_t) const");
                 }
 
-                return dynamic_cast<const htd::Label<VertexNameType> *>(&(nameLabeling_->vertexLabel(vertex)))->value();
+                return names_.vertexName(vertex);
             }
 
             const EdgeNameType & edgeName(htd::id_t edgeId) const
             {
-                if (!nameLabeling_->isLabeledEdge(edgeId))
+                if (!names_.isNamedEdge(edgeId))
                 {
                     throw std::logic_error("const EdgeNameType & htd::NamedTree<VertexNameType, EdgeNameType>::edgeName(htd::id_t) const");
                 }
 
-                return dynamic_cast<const htd::Label<VertexNameType> *>(&(nameLabeling_->edgeLabel(edgeId)))->value();
+                return names_.edgeName(edgeId);
             }
 
             htd::vertex_t lookupVertex(const VertexNameType & vertexName) const
             {
-                htd::Label<VertexNameType> label(vertexName);
-
-                if (!nameLabeling_->isVertexLabel(label))
+                if (!names_.isVertexName(vertexName))
                 {
                     throw std::logic_error("htd::vertex_t htd::NamedTree<VertexNameType, EdgeNameType>::lookupVertex(const VertexNameType &) const");
                 }
 
-                return nameLabeling_->lookupVertex(label);
+                return names_.lookupVertex(vertexName);
             }
 
             htd::NamedVertexHyperedge<VertexNameType> lookupHyperedge(const EdgeNameType & edgeName) const
             {
-                htd::Label<EdgeNameType> label(edgeName);
-
-                if (!nameLabeling_->isEdgeLabel(label))
+                if (!names_.isEdgeName(edgeName))
                 {
                     throw std::logic_error("htd::NamedVertexHyperedge<VertexNameType> htd::NamedTree<VertexNameType, EdgeNameType>::lookupHyperedge(const EdgeNameType &) const");
                 }
 
-                htd::id_t edgeId = nameLabeling_->lookupEdge(label);
+                htd::id_t edgeId = names_.lookupEdge(edgeName);
 
                 NamedVertexHyperedge<VertexNameType> ret(edgeId);
 
@@ -195,14 +184,12 @@ namespace htd
 
             htd::id_t associatedEdgeId(const EdgeNameType & edgeName) const
             {
-                htd::Label<EdgeNameType> label(edgeName);
-
-                if (!nameLabeling_->isEdgeLabel(label))
+                if (!names_.isEdgeName(edgeName))
                 {
-                    throw std::logic_error("htd::id_t htd::NamedTree<VertexNameType, EdgeNameType>::correspondingEdgeId(const EdgeNameType &) const");
+                    throw std::logic_error("htd::id_t htd::NamedTree<VertexNameType, EdgeNameType>::associatedEdgeId(const EdgeNameType &) const");
                 }
 
-                return nameLabeling_->lookupEdge(label);
+                return names_.lookupEdge(edgeName);
             }
 
             htd::ConstCollection<htd::id_t> associatedEdgeIds(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
@@ -371,7 +358,7 @@ namespace htd
                 {
                     htd::vertex_t locatedVertex = lookupVertex(vertexName);
 
-                    nameLabeling_->removeVertexLabel(locatedVertex);
+                    names_.removeVertexName(locatedVertex);
 
                     base_->removeVertex(locatedVertex);
                 }
@@ -390,7 +377,7 @@ namespace htd
                         HTD_UNUSED(parent)
                         HTD_UNUSED(distanceToSubtreeRoot)
 
-                        nameLabeling_->removeVertexLabel(vertex);
+                        names_.removeVertexName(vertex);
                     }, locatedVertex);
 
                     base_->removeSubtree(locatedVertex);
@@ -401,14 +388,14 @@ namespace htd
             {
                 if (base_->vertexCount() > 0)
                 {
-                    nameLabeling_->clear();
+                    names_.clear();
 
                     base_->removeSubtree(base_->root());
                 }
 
                 htd::vertex_t ret = base_->insertRoot();
 
-                nameLabeling_->setVertexLabel(ret, new htd::Label<VertexNameType>(vertexName));
+                names_.setVertexName(ret, vertexName);
 
                 return ret;
             }
@@ -417,7 +404,7 @@ namespace htd
             {
                 if (base_->vertexCount() > 0)
                 {
-                    nameLabeling_->clear();
+                    names_.clear();
 
                     base_->removeRoot();
                 }
@@ -432,7 +419,7 @@ namespace htd
 
                 htd::vertex_t ret = base_->addChild(lookupVertex(vertexName));
 
-                nameLabeling_->setVertexLabel(ret, new htd::Label<VertexNameType>(childName));
+                names_.setVertexName(ret, childName);
 
                 return ret;
             }
@@ -448,7 +435,7 @@ namespace htd
 
                 base_->removeChild(lookupVertex(vertexName), child);
 
-                nameLabeling_->removeVertexLabel(child);
+                names_.removeVertexName(child);
             }
 
             htd::vertex_t addParent(const VertexNameType & vertexName, const VertexNameType & parentName)
@@ -460,7 +447,7 @@ namespace htd
 
                 htd::vertex_t ret = base_->addParent(lookupVertex(vertexName));
 
-                nameLabeling_->setVertexLabel(ret, new htd::Label<VertexNameType>(parentName));
+                names_.setVertexName(ret, parentName);
 
                 return ret;
             }
@@ -497,7 +484,7 @@ namespace htd
 
             const htd::ILabel & edgeLabel(const std::string & labelName, const EdgeNameType & edgeName) const
             {
-                return base_->edgeLabel(labelName, nameLabeling_->lookupEdge(edgeName));
+                return base_->edgeLabel(labelName, names_.lookupEdge(edgeName));
             }
 
             void setVertexLabel(const std::string & labelName, const VertexNameType & vertexName, htd::ILabel * label)
@@ -512,7 +499,7 @@ namespace htd
 
             void setEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName, htd::ILabel * label)
             {
-                base_->setEdgeLabel(labelName, nameLabeling_->lookupEdge(edgeName), label);
+                base_->setEdgeLabel(labelName, names_.lookupEdge(edgeName), label);
             }
 
             void removeVertexLabel(const std::string & labelName, const VertexNameType & vertexName)
@@ -527,7 +514,7 @@ namespace htd
 
             void removeEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName)
             {
-                base_->removeEdgeLabel(labelName, nameLabeling_->lookupEdge(edgeName));
+                base_->removeEdgeLabel(labelName, names_.lookupEdge(edgeName));
             }
 
             void swapVertexLabels(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
@@ -542,7 +529,7 @@ namespace htd
 
             void swapEdgeLabels(const EdgeNameType & edgeName1, const EdgeNameType & edgeName2)
             {
-                base_->swapEdgeLabels(nameLabeling_->lookupEdge(edgeName1), nameLabeling_->lookupEdge(edgeName2));
+                base_->swapEdgeLabels(names_.lookupEdge(edgeName1), names_.lookupEdge(edgeName2));
             }
 
             void swapVertexLabel(const std::string & labelName, const VertexNameType & vertexName1, const VertexNameType & vertexName2)
@@ -557,7 +544,7 @@ namespace htd
 
             void swapEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName1, const EdgeNameType & edgeName2)
             {
-                base_->swapEdgeLabel(labelName, nameLabeling_->lookupEdge(edgeName1), nameLabeling_->lookupEdge(edgeName2));
+                base_->swapEdgeLabel(labelName, names_.lookupEdge(edgeName1), names_.lookupEdge(edgeName2));
             }
 
             NamedTree<VertexNameType, EdgeNameType> * clone(void) const
@@ -573,7 +560,7 @@ namespace htd
         private:
             htd::IMutableLabeledTree * base_;
 
-            htd::IBidirectionalGraphLabeling * nameLabeling_;
+            htd::BidirectionalGraphNaming<VertexNameType, EdgeNameType> names_;
     };
 }
 

@@ -68,11 +68,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
     {
         auto & currentNeighborhood = neighborhood[vertex];
 
-        const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
-
-        currentNeighborhood.reserve(neighborCollection.size() + 1);
-
-        std::copy(neighborCollection.begin(), neighborCollection.end(), std::back_inserter(currentNeighborhood));
+        graph.copyNeighborsTo(currentNeighborhood, vertex);
 
         auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
         

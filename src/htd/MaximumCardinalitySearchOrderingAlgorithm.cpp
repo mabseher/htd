@@ -66,11 +66,7 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
     {
         auto & currentNeighborhood = neighborhood[vertex];
 
-        const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
-
-        currentNeighborhood.reserve(neighborCollection.size());
-
-        std::copy(neighborCollection.begin(), neighborCollection.end(), std::back_inserter(currentNeighborhood));
+        graph.copyNeighborsTo(currentNeighborhood, vertex);
 
         weights[vertex] = 0;
 

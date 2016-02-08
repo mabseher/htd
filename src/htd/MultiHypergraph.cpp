@@ -122,7 +122,7 @@ std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t vertex) const
 
 bool htd::MultiHypergraph::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && deletions_.find(vertex) == deletions_.end();
+    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && deletions_.count(vertex) == 0;
 }
 
 bool htd::MultiHypergraph::isEdge(htd::id_t edgeId) const
@@ -744,9 +744,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
     sortedElements.erase(std::unique(sortedElements.begin(), sortedElements.end()), sortedElements.end());
 
-    htd::Hyperedge newHyperedge(next_edge_, std::move(elements));
-
-    edges_.push_back(newHyperedge);
+    edges_.push_back(htd::Hyperedge(next_edge_, std::move(elements)));
 
     for (htd::vertex_t vertex : sortedElements)
     {

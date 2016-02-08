@@ -42,7 +42,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & eleme
 
 htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : written_(true), id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>())
 {
-    std::swap(elements, *elements_);
+    elements_->swap(elements);
 
     elements_->shrink_to_fit();
 }
@@ -59,7 +59,7 @@ htd::Hyperedge::Hyperedge(const htd::Hyperedge & original) : written_(false), id
 
 htd::Hyperedge::Hyperedge(htd::Hyperedge && original) HTD_NOEXCEPT : written_(original.written_), id_(original.id_), elements_(std::move(original.elements_))
 {
-    elements_->shrink_to_fit();
+
 }
 
 htd::Hyperedge::~Hyperedge()

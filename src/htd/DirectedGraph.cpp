@@ -290,7 +290,22 @@ std::size_t htd::DirectedGraph::outgoingNeighborCount(htd::vertex_t vertex) cons
 
 htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::neighbors(htd::vertex_t vertex) const
 {
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::neighbors(htd::vertex_t) const");
+    }
+
     return base_->neighbors(vertex);
+}
+
+void htd::DirectedGraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("void htd::DirectedGraph::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
+    }
+
+    base_->copyNeighborsTo(target, vertex);
 }
 
 htd::vertex_t htd::DirectedGraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const

@@ -527,7 +527,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(ht
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -541,11 +541,11 @@ void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> 
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
     }
 }
 
-void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
 {
     if (isVertex(vertex) && isChild(vertex, child))
     {
@@ -556,7 +556,7 @@ void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> 
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t, htd::vertex_t) const");
     }
 }
 
@@ -692,7 +692,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -706,11 +706,11 @@ void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
     }
 }
 
-void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
 {
     if (isVertex(vertex) && isChild(vertex, child))
     {
@@ -721,7 +721,7 @@ void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t, htd::vertex_t) const");
     }
 }
 
@@ -857,7 +857,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -871,11 +871,11 @@ void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
     }
 }
 
-void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
 {
     if (isVertex(vertex) && isChild(vertex, child))
     {
@@ -886,7 +886,7 @@ void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t, htd::vertex_t) const");
     }
 }
 

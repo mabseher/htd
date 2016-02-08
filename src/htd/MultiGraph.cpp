@@ -211,6 +211,16 @@ htd::ConstCollection<htd::vertex_t> htd::MultiGraph::neighbors(htd::vertex_t ver
     return base_->neighbors(vertex);
 }
 
+void htd::MultiGraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("void htd::MultiGraph::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
+    }
+
+    base_->copyNeighborsTo(target, vertex);
+}
+
 htd::vertex_t htd::MultiGraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     return base_->neighborAtPosition(vertex, index);

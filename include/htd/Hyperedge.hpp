@@ -41,8 +41,6 @@ namespace htd
         public:
             typedef htd::vertex_t value_type;
 
-            Hyperedge(htd::id_t id);
-
             Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2);
 
             Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements);
@@ -61,11 +59,9 @@ namespace htd
 
             void setId(htd::id_t newId);
 
-            htd::Collection<htd::vertex_t> elements();
-
             htd::ConstCollection<htd::vertex_t> elements() const;
 
-            void copyTo(std::vector<htd::vertex_t> target) const;
+            void copyTo(std::vector<htd::vertex_t> & target) const;
 
             bool empty() const;
 
@@ -73,15 +69,9 @@ namespace htd
 
             bool containsVertex(htd::vertex_t vertex) const;
 
-            void push_back(htd::vertex_t vertex);
-
             void erase(htd::vertex_t vertex);
 
-            htd::Iterator<htd::vertex_t> begin(void);
-
             const htd::ConstIterator<htd::vertex_t> begin(void) const;
-
-            htd::Iterator<htd::vertex_t> end(void);
 
             const htd::ConstIterator<htd::vertex_t> end(void) const;
 

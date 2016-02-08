@@ -76,6 +76,8 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const = 0;
 
+            virtual void copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
+
             virtual htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
             virtual std::size_t edgeCount(void) const = 0;

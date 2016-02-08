@@ -153,7 +153,22 @@ bool htd::Hypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) 
 
 htd::ConstCollection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t vertex) const
 {
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t) const");
+    }
+
     return base_->neighbors(vertex);
+}
+
+void htd::Hypergraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("void htd::Hypergraph::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
+    }
+
+    base_->copyNeighborsTo(target, vertex);
 }
 
 htd::vertex_t htd::Hypergraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const

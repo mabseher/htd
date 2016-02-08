@@ -400,6 +400,16 @@ htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::neighbors(htd::vertex_
     return htd::ConstCollection<htd::vertex_t>::getInstance(neighborhood_[vertex - htd::Vertex::FIRST]);
 }
 
+void htd::MultiHypergraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("void htd::MultiHypergraph::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
+    }
+
+    std::copy(neighborhood_[vertex - htd::Vertex::FIRST].begin(), neighborhood_[vertex - htd::Vertex::FIRST].end(), std::back_inserter(target));
+}
+
 htd::vertex_t htd::MultiHypergraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;

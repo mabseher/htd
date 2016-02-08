@@ -75,9 +75,9 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual void copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const = 0;
+            virtual void copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
 
-            virtual void copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual void copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual htd::vertex_t forgottenVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
 
@@ -95,9 +95,9 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual void copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const = 0;
+            virtual void copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
 
-            virtual void copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual void copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual htd::vertex_t introducedVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
 
@@ -115,9 +115,9 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual void copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const = 0;
+            virtual void copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
 
-            virtual void copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual void copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             virtual htd::vertex_t rememberedVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
 

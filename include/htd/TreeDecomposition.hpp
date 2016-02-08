@@ -93,9 +93,9 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            void copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const HTD_OVERRIDE;
+            void copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
+            void copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             htd::vertex_t forgottenVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
@@ -113,9 +113,9 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            void copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const HTD_OVERRIDE;
+            void copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
+            void copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             htd::vertex_t introducedVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
@@ -133,9 +133,9 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            void copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const HTD_OVERRIDE;
+            void copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
+            void copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
             htd::vertex_t rememberedVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 

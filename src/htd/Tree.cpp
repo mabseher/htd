@@ -320,6 +320,29 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::neighbors(htd::vertex_t vertex) c
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
+void htd::Tree::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("void htd::Tree::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
+    }
+
+    std::size_t size = target.size();
+
+    const auto & node = *(nodes_.at(vertex));
+
+    const auto & children = node.children;
+
+    if (node.parent != htd::Vertex::UNKNOWN)
+    {
+        target.push_back(node.parent);
+    }
+
+    std::copy(children.begin(), children.end(), std::back_inserter(target));
+
+    std::sort(target.begin() + size, target.end());
+}
+
 htd::vertex_t htd::Tree::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     if (!isVertex(vertex))
@@ -500,20 +523,14 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(void) const
 
         for (auto child : children)
         {
-            htd::Hyperedge hyperedge(id);
-
             if (currentNode.first < child)
             {
-                hyperedge.push_back(currentNode.first);
-                hyperedge.push_back(child);
+                result.push_back(htd::Hyperedge(id, currentNode.first, child));
             }
             else
             {
-                hyperedge.push_back(child);
-                hyperedge.push_back(currentNode.first);
+                result.push_back(htd::Hyperedge(id, child, currentNode.first));
             }
-
-            result.push_back(hyperedge);
 
             ++id;
         }

@@ -484,7 +484,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgottenVertices(ht
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -495,11 +495,11 @@ void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> 
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
     }
 }
 
-void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
 {
     if (isVertex(vertex) && isChild(vertex, child))
     {
@@ -510,7 +510,7 @@ void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> 
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t, htd::vertex_t) const");
     }
 }
 
@@ -640,7 +640,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introducedVertices(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -651,11 +651,11 @@ void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
     }
 }
 
-void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
 {
     if (isVertex(vertex) && isChild(vertex, child))
     {
@@ -666,7 +666,7 @@ void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t, htd::vertex_t) const");
     }
 }
 
@@ -796,7 +796,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::rememberedVertices(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex) const
+void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
     if (isVertex(vertex))
     {
@@ -807,11 +807,11 @@ void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
     }
 }
 
-void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
 {
     if (isVertex(vertex) && isChild(vertex, child))
     {
@@ -822,7 +822,7 @@ void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>
     }
     else
     {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>, htd::vertex_t, htd::vertex_t) const");
+        throw std::logic_error("std::vector<htd::vertex_t> htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> &, htd::vertex_t, htd::vertex_t) const");
     }
 }
 

@@ -79,6 +79,8 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            void copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const HTD_OVERRIDE;
+
             htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;

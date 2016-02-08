@@ -211,6 +211,16 @@ htd::ConstCollection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t vertex) 
     return base_->neighbors(vertex);
 }
 
+void htd::Graph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("void htd::Graph::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
+    }
+
+    base_->copyNeighborsTo(target, vertex);
+}
+
 htd::vertex_t htd::Graph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     return base_->neighborAtPosition(vertex, index);

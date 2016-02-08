@@ -296,6 +296,30 @@ htd::ConstCollection<htd::vertex_t> htd::Path::neighbors(htd::vertex_t vertex) c
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
+void htd::Path::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("void htd::Path::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
+    }
+
+    std::size_t size = target.size();
+
+    const auto & node = nodes_.at(vertex);
+
+    if (node->parent != htd::Vertex::UNKNOWN)
+    {
+        target.push_back(node->parent);
+    }
+
+    if (node->child != htd::Vertex::UNKNOWN)
+    {
+        target.push_back(node->child);
+    }
+
+    std::sort(target.begin() + size, target.end());
+}
+
 htd::vertex_t htd::Path::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     if (!isVertex(vertex))
@@ -503,40 +527,28 @@ htd::ConstCollection<htd::Hyperedge> htd::Path::hyperedges(void) const
 
         if (parent != htd::Vertex::UNKNOWN)
         {
-            htd::Hyperedge hyperedge(id);
-
             if (parent < vertex)
             {
-                hyperedge.push_back(parent);
-                hyperedge.push_back(vertex);
+                result.push_back(htd::Hyperedge(id, parent, vertex));
             }
             else
             {
-                hyperedge.push_back(vertex);
-                hyperedge.push_back(parent);
+                result.push_back(htd::Hyperedge(id, vertex, parent));
             }
-
-            result.push_back(hyperedge);
 
             ++id;
         }
 
         if (child != htd::Vertex::UNKNOWN)
         {
-            htd::Hyperedge hyperedge(id);
-
             if (child < vertex)
             {
-                hyperedge.push_back(child);
-                hyperedge.push_back(vertex);
+                result.push_back(htd::Hyperedge(id, child, vertex));
             }
             else
             {
-                hyperedge.push_back(vertex);
-                hyperedge.push_back(child);
+                result.push_back(htd::Hyperedge(id, vertex, child));
             }
-
-            result.push_back(hyperedge);
 
             ++id;
         }

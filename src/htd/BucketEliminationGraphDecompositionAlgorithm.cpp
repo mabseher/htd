@@ -237,7 +237,9 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             throw std::logic_error("htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
         }
 
-        const htd::ConstCollection<htd::vertex_t> & ordering = algorithm->computeOrdering(graph);
+        std::vector<htd::vertex_t> ordering;
+
+        algorithm->writeOrderingTo(graph, ordering);
 
         delete algorithm;
 
@@ -260,8 +262,16 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             buckets[vertex].push_back(vertex);
         }
 
-        for (const htd::Hyperedge & edge : graph.hyperedges())
+        std::size_t edgeCount = graph.edgeCount();
+
+        const htd::ConstCollection<htd::Hyperedge> & hyperedges = graph.hyperedges();
+
+        auto it = hyperedges.begin();
+
+        for (htd::index_t index = 0; index < edgeCount; ++index)
         {
+            const htd::Hyperedge & edge = *it;
+
             switch (edge.size())
             {
                 case 1:
@@ -325,6 +335,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                     break;
                 }
             }
+
+            ++it;
         }
 
         DEBUGGING_CODE(std::cout << std::endl << "Buckets:" << std::endl;

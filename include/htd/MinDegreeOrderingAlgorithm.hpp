@@ -44,6 +44,8 @@ namespace htd
             
             htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
+            void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+
             MinDegreeOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:

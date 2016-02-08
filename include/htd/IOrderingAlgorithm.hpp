@@ -38,6 +38,8 @@ namespace htd
             
             virtual htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const = 0;
 
+            virtual void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const = 0;
+
             virtual IOrderingAlgorithm * clone(void) const = 0;
     };
 

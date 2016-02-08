@@ -48,8 +48,13 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    std::vector<htd::vertex_t> & ordering = ret.container();
+    writeOrderingTo(graph, ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const
+{
     std::size_t size = graph.vertexCount();
 
     std::size_t minFill = (std::size_t)-1;
@@ -528,7 +533,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
         
         size--;
 
-        ordering.push_back(selectedVertex);
+        target.push_back(selectedVertex);
         
 #ifdef TESTOUTPUT
         std::cout << "STATUS AFTER: ";
@@ -590,8 +595,6 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
     }
     
     DEBUGGING_CODE_LEVEL2(std::cout << std::endl;)
-
-    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::unordered_map<htd::vertex_t, htd::vertex_container> & availableNeighborhoods, const htd::vertex_container & vertices) const

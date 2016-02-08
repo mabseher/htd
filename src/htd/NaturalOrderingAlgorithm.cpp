@@ -45,11 +45,14 @@ htd::ConstCollection<htd::vertex_t> htd::NaturalOrderingAlgorithm::computeOrderi
 {
     htd::VectorAdapter<htd::vertex_t> ret(graph.vertices());
 
-    std::vector<htd::vertex_t> & ordering = ret.container();
-
-    std::sort(ordering.begin(), ordering.end());
-
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
+}
+
+void htd::NaturalOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const
+{
+    const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
+
+    std::copy(vertexCollection.begin(), vertexCollection.end(), std::back_inserter(target));
 }
 
 htd::NaturalOrderingAlgorithm * htd::NaturalOrderingAlgorithm::clone(void) const

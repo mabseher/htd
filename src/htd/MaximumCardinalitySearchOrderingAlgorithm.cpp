@@ -48,8 +48,13 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    std::vector<htd::vertex_t> & ordering = ret.container();
+    writeOrderingTo(graph, ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const
+{
     std::size_t size = graph.vertexCount();
 
     std::size_t minDegree = (std::size_t)-1;
@@ -141,10 +146,8 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
 
         size--;
 
-        ordering.push_back(selectedVertex);
+        target.push_back(selectedVertex);
     }
-
-    return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
 htd::MaximumCardinalitySearchOrderingAlgorithm * htd::MaximumCardinalitySearchOrderingAlgorithm::clone(void) const

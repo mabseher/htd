@@ -413,19 +413,23 @@ namespace htd
 
             htd::id_t addEdge(const std::vector<VertexNameType> & elements)
             {
-               htd::vertex_container hyperedge;
+                htd::vertex_container hyperedge;
 
-               for (auto & vertex : elements)
-               {
-                   hyperedge.push_back(addVertex(vertex));
-               }
+                hyperedge.reserve(elements.size());
 
-               return base_->addEdge(std::move(hyperedge));
+                for (auto & vertex : elements)
+                {
+                    hyperedge.push_back(addVertex(vertex));
+                }
+
+                return base_->addEdge(std::move(hyperedge));
             }
 
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements)
             {
                 htd::vertex_container hyperedge;
+
+                hyperedge.reserve(elements.size());
 
                 for (auto & vertex : elements)
                 {
@@ -438,6 +442,8 @@ namespace htd
             htd::id_t addEdge(const std::vector<VertexNameType> & elements, const EdgeNameType & name)
             {
                 htd::vertex_container hyperedge;
+
+                hyperedge.reserve(elements.size());
 
                 for (auto & vertex : elements)
                 {
@@ -454,6 +460,8 @@ namespace htd
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements, const EdgeNameType & name)
             {
                 htd::vertex_container hyperedge;
+
+                hyperedge.reserve(elements.size());
 
                 for (auto & vertex : elements)
                 {

@@ -33,6 +33,7 @@
 #include <htd/VectorAdapter.hpp>
 #include <htd/NamedVertexHyperedge.hpp>
 
+#include <functional>
 #include <vector>
 #include <stdexcept>
 
@@ -42,12 +43,12 @@ namespace htd
     class NamedHypergraph
     {
         public:
-            NamedHypergraph(void) : base_(htd::LabeledHypergraphFactory::instance().getLabeledHypergraph()), names_()
+            NamedHypergraph(void) : base_(htd::LabeledHypergraphFactory::instance().getLabeledHypergraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledHypergraph::addVertex, base_))
             {
 
             }
 
-            NamedHypergraph(const NamedHypergraph<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), names_(original.names_)
+            NamedHypergraph(const NamedHypergraph<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), names_(original.names_), vertexCreationFunction_(std::bind(&htd::IMutableLabeledHypergraph::addVertex, base_))
             {
 
             }
@@ -382,7 +383,7 @@ namespace htd
 
             htd::vertex_t addVertex(const VertexNameType & vertexName)
             {
-                return names_.insertVertex(vertexName, [&] { return base_->addVertex(); }).first;
+                return names_.insertVertex(vertexName, vertexCreationFunction_).first;
             }
 
             void removeVertex(const VertexNameType & vertexName)
@@ -657,6 +658,8 @@ namespace htd
             htd::IMutableLabeledHypergraph * base_;
 
             htd::BidirectionalGraphNaming<VertexNameType, EdgeNameType> names_;
+
+            std::function<htd::vertex_t(void)> vertexCreationFunction_;
     };
 }
 

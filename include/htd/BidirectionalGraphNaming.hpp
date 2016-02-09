@@ -135,7 +135,7 @@ namespace htd
                 }
             }
 
-            std::pair<htd::id_t, bool> insertVertex(const VertexNameType & name, std::function<htd::vertex_t(void)> vertexCreationFunction)
+            std::pair<htd::id_t, bool> insertVertex(const VertexNameType & name, const std::function<htd::vertex_t(void)> & vertexCreationFunction)
             {
                 std::pair<htd::id_t, bool> ret(0, false);
 

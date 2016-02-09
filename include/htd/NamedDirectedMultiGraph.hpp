@@ -33,6 +33,7 @@
 #include <htd/VectorAdapter.hpp>
 #include <htd/NamedVertexHyperedge.hpp>
 
+#include <functional>
 #include <vector>
 #include <stdexcept>
 
@@ -42,12 +43,12 @@ namespace htd
     class NamedDirectedMultiGraph
     {
         public:
-            NamedDirectedMultiGraph(void) : base_(htd::LabeledDirectedMultiGraphFactory::instance().getLabeledDirectedMultiGraph()), names_()
+            NamedDirectedMultiGraph(void) : base_(htd::LabeledDirectedMultiGraphFactory::instance().getLabeledDirectedMultiGraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledDirectedMultiGraph::addVertex, base_))
             {
 
             }
 
-            NamedDirectedMultiGraph(const NamedDirectedMultiGraph<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), names_(original.names_)
+            NamedDirectedMultiGraph(const NamedDirectedMultiGraph<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), names_(original.names_), vertexCreationFunction_(std::bind(&htd::IMutableLabeledDirectedMultiGraph::addVertex, base_))
             {
 
             }
@@ -420,7 +421,7 @@ namespace htd
 
             htd::vertex_t addVertex(const VertexNameType & vertexName)
             {
-                return names_.insertVertex(vertexName, [&] { return base_->addVertex(); }).first;
+                return names_.insertVertex(vertexName, vertexCreationFunction_).first;
             }
 
             void removeVertex(const VertexNameType & vertexName)
@@ -582,6 +583,8 @@ namespace htd
             htd::IMutableLabeledDirectedMultiGraph * base_;
 
             htd::BidirectionalGraphNaming<VertexNameType, EdgeNameType> names_;
+
+            std::function<htd::vertex_t(void)> vertexCreationFunction_;
     };
 }
 

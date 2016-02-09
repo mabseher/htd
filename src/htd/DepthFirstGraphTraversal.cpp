@@ -43,11 +43,11 @@ htd::DepthFirstGraphTraversal::~DepthFirstGraphTraversal()
 
 }
 
-void htd::DepthFirstGraphTraversal::traverse(const htd::IHypergraph & graph, htd::vertex_t startingVertex, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
+void htd::DepthFirstGraphTraversal::traverse(const htd::IHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const
 {
     if (!graph.isVertex(startingVertex))
     {
-        throw std::logic_error("void htd::DepthFirstGraphTraversal::traverse(const htd::IHypergraph &, htd::vertex_t, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const");
+        throw std::logic_error("void htd::DepthFirstGraphTraversal::traverse(const htd::IHypergraph &, htd::vertex_t, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const");
     }
 
     std::stack<std::tuple<htd::vertex_t, htd::vertex_t, std::size_t>> originStack;

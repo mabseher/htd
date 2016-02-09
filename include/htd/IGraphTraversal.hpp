@@ -35,7 +35,7 @@ namespace htd
         public:
             virtual ~IGraphTraversal() = 0;
 
-            virtual void traverse(const htd::IHypergraph & graph, htd::vertex_t startingVertex, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const = 0;
+            virtual void traverse(const htd::IHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const = 0;
     };
 
     inline htd::IGraphTraversal::~IGraphTraversal() { }

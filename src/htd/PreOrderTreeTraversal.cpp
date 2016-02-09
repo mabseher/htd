@@ -42,7 +42,7 @@ htd::PreOrderTreeTraversal::~PreOrderTreeTraversal()
 
 }
 
-void htd::PreOrderTreeTraversal::traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
+void htd::PreOrderTreeTraversal::traverse(const htd::IPath & path, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const
 {
     if (path.vertexCount() > 0)
     {
@@ -50,19 +50,11 @@ void htd::PreOrderTreeTraversal::traverse(const htd::IPath & path, std::function
     }
 }
 
-void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction) const
-{
-    if (tree.vertexCount() > 0)
-    {
-        traverse(tree, targetFunction, tree.root());
-    }
-}
-
-void htd::PreOrderTreeTraversal::traverse(const htd::IPath & path, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const
+void htd::PreOrderTreeTraversal::traverse(const htd::IPath & path, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction, htd::vertex_t startingVertex) const
 {
     if (!path.isVertex(startingVertex))
     {
-        throw std::logic_error("void htd::PreOrderTreeTraversal::traverse(const htd::IPath &, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)>, htd::vertex_t) const");
+        throw std::logic_error("void htd::PreOrderTreeTraversal::traverse(const htd::IPath &, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> &, htd::vertex_t) const");
     }
 
     htd::vertex_t currentNode = startingVertex;
@@ -90,11 +82,19 @@ void htd::PreOrderTreeTraversal::traverse(const htd::IPath & path, std::function
     }
 }
 
-void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> targetFunction, htd::vertex_t startingVertex) const
+void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const
+{
+    if (tree.vertexCount() > 0)
+    {
+        traverse(tree, targetFunction, tree.root());
+    }
+}
+
+void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction, htd::vertex_t startingVertex) const
 {
     if (!tree.isVertex(startingVertex))
     {
-        throw std::logic_error("void htd::PreOrderTreeTraversal::traverse(const htd::ITree &, std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)>, htd::vertex_t) const");
+        throw std::logic_error("void htd::PreOrderTreeTraversal::traverse(const htd::ITree &, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> &, htd::vertex_t) const");
     }
 
     htd::vertex_t currentNode = startingVertex;

@@ -281,7 +281,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         htd::vertex_t node = htd::Vertex::UNKNOWN;
 
-        std::unordered_map<htd::vertex_t, char> vertexMapping;
+        std::unordered_map<htd::vertex_t, htd::vertex_t> vertexMapping;
 
         htd::BreadthFirstGraphTraversal graphTraversal;
 

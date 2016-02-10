@@ -386,6 +386,16 @@ namespace htd
                 return names_.insertVertex(vertexName, vertexCreationFunction_).first;
             }
 
+            std::vector<htd::vertex_t> addVertices(const std::vector<VertexNameType> & vertexNames)
+            {
+                return names_.insertVertices(vertexNames, vertexCreationFunction_);
+            }
+
+            std::vector<htd::vertex_t> addVertices(const htd::ConstCollection<VertexNameType> & vertexNames)
+            {
+                return names_.insertVertices(vertexNames, vertexCreationFunction_);
+            }
+
             void removeVertex(const VertexNameType & vertexName)
             {
                 if (isVertexName(vertexName))
@@ -400,12 +410,12 @@ namespace htd
 
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
-                return base_->addEdge(addVertex(vertexName1), addVertex(vertexName2));
+                return base_->addEdge(addVertices(std::vector<VertexNameType> { vertexName1, vertexName2 }));
             }
 
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2, const EdgeNameType & name)
             {
-                htd::id_t edgeId = base_->addEdge(addVertex(vertexName1), addVertex(vertexName2));
+                htd::id_t edgeId = base_->addEdge(addVertices(std::vector<VertexNameType> { vertexName1, vertexName2 }));
 
                 setEdgeName(edgeId, name);
 
@@ -414,44 +424,17 @@ namespace htd
 
             htd::id_t addEdge(const std::vector<VertexNameType> & elements)
             {
-                htd::vertex_container hyperedge;
-
-                hyperedge.reserve(elements.size());
-
-                for (auto & vertex : elements)
-                {
-                    hyperedge.push_back(addVertex(vertex));
-                }
-
-                return base_->addEdge(std::move(hyperedge));
+                return base_->addEdge(addVertices(elements));
             }
 
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements)
             {
-                htd::vertex_container hyperedge;
-
-                hyperedge.reserve(elements.size());
-
-                for (auto & vertex : elements)
-                {
-                    hyperedge.push_back(addVertex(vertex));
-                }
-
-                return base_->addEdge(std::move(hyperedge));
+                return base_->addEdge(addVertices(elements));
             }
 
             htd::id_t addEdge(const std::vector<VertexNameType> & elements, const EdgeNameType & name)
             {
-                htd::vertex_container hyperedge;
-
-                hyperedge.reserve(elements.size());
-
-                for (auto & vertex : elements)
-                {
-                    hyperedge.push_back(addVertex(vertex));
-                }
-
-                htd::id_t edgeId = base_->addEdge(std::move(hyperedge));
+                htd::id_t edgeId = base_->addEdge(addVertices(elements));
 
                 setEdgeName(edgeId, name);
 
@@ -460,16 +443,7 @@ namespace htd
 
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements, const EdgeNameType & name)
             {
-                htd::vertex_container hyperedge;
-
-                hyperedge.reserve(elements.size());
-
-                for (auto & vertex : elements)
-                {
-                    hyperedge.push_back(addVertex(vertex));
-                }
-
-                htd::id_t edgeId = base_->addEdge(std::move(hyperedge));
+                htd::id_t edgeId = base_->addEdge(addVertices(elements));
 
                 setEdgeName(edgeId, name);
 

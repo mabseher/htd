@@ -236,9 +236,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 {
     htd::IMutableTreeDecomposition * ret = htd::TreeDecompositionFactory::instance().getTreeDecomposition();
 
-    std::size_t size = graph.vertexCount();
-
-    if (size > 0)
+    if (graph.vertexCount() > 0)
     {
         htd::BucketEliminationGraphDecompositionAlgorithm graphDecompositionAlgorithm;
 
@@ -283,7 +281,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         htd::vertex_t node = htd::Vertex::UNKNOWN;
 
-        std::unordered_map<int, int> vertexMapping;
+        std::unordered_map<htd::vertex_t, char> vertexMapping;
 
         htd::BreadthFirstGraphTraversal graphTraversal;
 

@@ -161,6 +161,64 @@ namespace htd
                 return ret;
             }
 
+            std::vector<htd::id_t> insertVertices(const std::vector<VertexNameType> & names, const std::function<htd::vertex_t(void)> & vertexCreationFunction)
+            {
+                std::vector<htd::id_t> ret;
+
+                ret.reserve(names.size());
+
+                for (const VertexNameType & name : names)
+                {
+                    auto result = vertexNamesReverseMap_.insert(std::make_pair(name, 0));
+
+                    if (result.second)
+                    {
+                        htd::vertex_t newVertex = vertexCreationFunction();
+
+                        ret.push_back(newVertex);
+
+                        result.first->second = newVertex;
+
+                        vertexNames_[newVertex] = name;
+                    }
+                    else
+                    {
+                        ret.push_back(result.first->second);
+                    }
+                }
+
+                return ret;
+            }
+
+            std::vector<htd::id_t> insertVertices(const htd::ConstCollection<VertexNameType> & names, const std::function<htd::vertex_t(void)> & vertexCreationFunction)
+            {
+                std::vector<htd::id_t> ret;
+
+                ret.reserve(names.size());
+
+                for (const VertexNameType & name : names)
+                {
+                    auto result = vertexNamesReverseMap_.insert(std::make_pair(name, 0));
+
+                    if (result.second)
+                    {
+                        htd::vertex_t newVertex = vertexCreationFunction();
+
+                        ret.push_back(newVertex);
+
+                        result.first->second = newVertex;
+
+                        vertexNames_[newVertex] = name;
+                    }
+                    else
+                    {
+                        ret.push_back(result.first->second);
+                    }
+                }
+
+                return ret;
+            }
+
             void removeVertexName(htd::vertex_t vertex)
             {
                 auto position = vertexNames_.find(vertex);

@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   NamedMultiGraph.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
@@ -384,6 +384,16 @@ namespace htd
             htd::vertex_t addVertex(const VertexNameType & vertexName)
             {
                 return names_.insertVertex(vertexName, vertexCreationFunction_).first;
+            }
+
+            std::vector<htd::vertex_t> addVertices(const std::vector<VertexNameType> & vertexNames)
+            {
+                return names_.insertVertices(vertexNames, vertexCreationFunction_);
+            }
+
+            std::vector<htd::vertex_t> addVertices(const htd::ConstCollection<VertexNameType> & vertexNames)
+            {
+                return names_.insertVertices(vertexNames, vertexCreationFunction_);
             }
 
             void removeVertex(const VertexNameType & vertexName)

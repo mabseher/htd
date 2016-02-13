@@ -159,7 +159,7 @@ void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const htd::Con
     }
     else
     {
-        throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, const htd::IConstCollection<htd::vertex_t> &)");
+        throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, const htd::ConstCollection<htd::vertex_t> &)");
     }
 }
 

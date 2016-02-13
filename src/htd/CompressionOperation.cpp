@@ -65,7 +65,7 @@ void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposi
                 const std::vector<htd::vertex_t> & currentBag = decomposition.bagContentVector(vertex);
                 const std::vector<htd::vertex_t> & parentBag = decomposition.bagContentVector(parent);
 
-                std::pair<std::size_t, std::size_t> result = compute_symmetric_difference_sizes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end());
+                std::pair<std::size_t, std::size_t> result = htd::compute_symmetric_difference_sizes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end());
 
                 if (result.first > 0 && result.second == 0)
                 {
@@ -101,7 +101,7 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
 
             if (parent != htd::Vertex::UNKNOWN)
             {
-                const std::tuple<std::size_t, std::size_t, std::size_t> & result = analyze_sets(decomposition.bagContentVector(vertex), decomposition.bagContentVector(parent));
+                const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContentVector(vertex), decomposition.bagContentVector(parent));
 
                 if (std::get<0>(result) == 0)
                 {
@@ -126,65 +126,6 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
 htd::CompressionOperation * htd::CompressionOperation::clone(void) const
 {
     return new htd::CompressionOperation();
-}
-
-std::tuple<std::size_t, std::size_t, std::size_t> htd::CompressionOperation::analyze_sets(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2) const
-{
-    auto first1 = set1.begin();
-    auto first2 = set2.begin();
-
-    std::size_t count1 = set1.size();
-    std::size_t count2 = set2.size();
-
-    htd::index_t index1 = 0;
-    htd::index_t index2 = 0;
-
-    std::size_t onlySet1 = 0;
-    std::size_t onlySet2 = 0;
-    std::size_t overlap = 0;
-
-    while (index1 < count1 && index2 < count2)
-    {
-        auto value1 = *first1;
-        auto value2 = *first2;
-
-        if (value1 < value2)
-        {
-            onlySet1++;
-
-            index1++;
-            ++first1;
-        }
-        else if (value2 < value1)
-        {
-            onlySet2++;
-
-            index2++;
-            ++first2;
-        }
-        else
-        {
-            overlap++;
-
-            index1++;
-            ++first1;
-
-            //Skip common value in set 2.
-            index2++;
-            ++first2;
-        }
-    }
-
-    if (index1 < count1)
-    {
-        onlySet1 += count1 - index1;
-    }
-    else if (index2 < count2)
-    {
-        onlySet2 += count2 - index2;
-    }
-
-    return std::tuple<std::size_t, std::size_t, std::size_t>(onlySet1, overlap, onlySet2);
 }
 
 #endif /* HTD_HTD_COMPRESSIONOPERATION_CPP */

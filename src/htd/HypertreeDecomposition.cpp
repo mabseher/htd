@@ -92,7 +92,7 @@ void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const h
     }
     else
     {
-        throw std::logic_error("void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t, const htd::IConstCollection<htd::Hyperedge> &)");
+        throw std::logic_error("void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t, const htd::ConstCollection<htd::Hyperedge> &)");
     }
 }
 

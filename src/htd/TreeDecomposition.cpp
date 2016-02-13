@@ -387,7 +387,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::Cons
     }
     else
     {
-        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const htd::IConstCollection<htd::vertex_t> &)");
+        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const htd::ConstCollection<htd::vertex_t> &)");
     }
 }
 

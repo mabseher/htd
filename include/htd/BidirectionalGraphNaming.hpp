@@ -232,8 +232,6 @@ namespace htd
                         vertexNamesReverseMap_.erase(position2);
                     }
 
-                    delete position->second;
-
                     vertexNames_.erase(position);
                 }
                 else
@@ -254,8 +252,6 @@ namespace htd
                     {
                         edgeNamesReverseMap_.erase(position2);
                     }
-
-                    delete position->second;
 
                     edgeNames_.erase(position);
                 }

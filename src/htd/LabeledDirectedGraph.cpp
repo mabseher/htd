@@ -69,14 +69,14 @@ htd::LabeledDirectedGraph::~LabeledDirectedGraph()
 
 void htd::LabeledDirectedGraph::removeVertex(htd::vertex_t vertex)
 {
-    htd::LabeledDirectedGraph::removeVertex(vertex);
+    htd::DirectedGraph::removeVertex(vertex);
 
     labelings_->removeVertexLabels(vertex);
 }
 
 void htd::LabeledDirectedGraph::removeEdge(htd::id_t edgeId)
 {
-    htd::LabeledDirectedGraph::removeEdge(edgeId);
+    htd::DirectedGraph::removeEdge(edgeId);
 
     labelings_->removeEdgeLabels(edgeId);
 }

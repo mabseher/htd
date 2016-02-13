@@ -64,7 +64,7 @@ htd::LabeledPath::~LabeledPath()
 
 void htd::LabeledPath::removeVertex(htd::vertex_t vertex)
 {
-    htd::LabeledPath::removeVertex(vertex);
+    htd::Path::removeVertex(vertex);
 
     labelings_->removeVertexLabels(vertex);
 }

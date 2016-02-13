@@ -69,14 +69,14 @@ htd::LabeledGraph::~LabeledGraph()
 
 void htd::LabeledGraph::removeVertex(htd::vertex_t vertex)
 {
-    htd::LabeledGraph::removeVertex(vertex);
+    htd::Graph::removeVertex(vertex);
 
     labelings_->removeVertexLabels(vertex);
 }
 
 void htd::LabeledGraph::removeEdge(htd::id_t edgeId)
 {
-    htd::LabeledGraph::removeEdge(edgeId);
+    htd::Graph::removeEdge(edgeId);
 
     labelings_->removeEdgeLabels(edgeId);
 }

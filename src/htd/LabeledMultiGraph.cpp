@@ -69,14 +69,14 @@ htd::LabeledMultiGraph::~LabeledMultiGraph()
 
 void htd::LabeledMultiGraph::removeVertex(htd::vertex_t vertex)
 {
-    htd::LabeledMultiGraph::removeVertex(vertex);
+    htd::MultiGraph::removeVertex(vertex);
 
     labelings_->removeVertexLabels(vertex);
 }
 
 void htd::LabeledMultiGraph::removeEdge(htd::id_t edgeId)
 {
-    htd::LabeledMultiGraph::removeEdge(edgeId);
+    htd::MultiGraph::removeEdge(edgeId);
 
     labelings_->removeEdgeLabels(edgeId);
 }

@@ -273,7 +273,7 @@ namespace htd
 
                 for (htd::vertex_t neighbor : base_->neighbors(lookupVertex(vertexName)))
                 {
-                    container.push_back(vertexName(neighbor));
+                    container.push_back(this->vertexName(neighbor));
                 }
 
                 return htd::ConstCollection<VertexNameType>::getInstance(ret);
@@ -292,7 +292,7 @@ namespace htd
 
                 for (htd::vertex_t neighbor : base_->incomingNeighbors(lookupVertex(vertexName)))
                 {
-                    container.push_back(vertexName(neighbor));
+                    container.push_back(this->vertexName(neighbor));
                 }
 
                 return htd::ConstCollection<VertexNameType>::getInstance(ret);
@@ -311,7 +311,7 @@ namespace htd
 
                 for (htd::vertex_t neighbor : base_->outgoingNeighbors(lookupVertex(vertexName)))
                 {
-                    container.push_back(vertexName(neighbor));
+                    container.push_back(this->vertexName(neighbor));
                 }
 
                 return htd::ConstCollection<VertexNameType>::getInstance(ret);

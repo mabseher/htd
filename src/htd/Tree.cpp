@@ -471,7 +471,7 @@ htd::ConstCollection<htd::edge_t> htd::Tree::edges(htd::vertex_t vertex) const
     }
     else
     {
-        throw std::logic_error("const htd::IConstCollection<htd::edge_t> htd::Tree::edges(htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::edge_t> htd::Tree::edges(htd::vertex_t) const");
     }
 
     return htd::ConstCollection<htd::edge_t>::getInstance(ret);
@@ -513,8 +513,27 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(void) const
 {
     htd::VectorAdapter<htd::Hyperedge> ret;
 
-    auto & result = ret.container();
+    copyHyperedgesTo(ret.container());
 
+    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
+}
+
+htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t) const");
+    }
+
+    htd::VectorAdapter<htd::Hyperedge> ret;
+
+    copyHyperedgesTo(ret.container(), vertex);
+
+    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
+}
+
+void htd::Tree::copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const
+{
     htd::id_t id = 0;
 
     for (const auto & currentNode : nodes_)
@@ -525,46 +544,36 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(void) const
         {
             if (currentNode.first < child)
             {
-                result.push_back(htd::Hyperedge(id, currentNode.first, child));
+                target.push_back(htd::Hyperedge(id, currentNode.first, child));
             }
             else
             {
-                result.push_back(htd::Hyperedge(id, child, currentNode.first));
+                target.push_back(htd::Hyperedge(id, child, currentNode.first));
             }
 
             ++id;
         }
     }
-
-    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
 }
 
-htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t vertex) const
+void htd::Tree::copyHyperedgesTo(std::vector<htd::Hyperedge> & target, htd::vertex_t vertex) const
 {
-    htd::VectorAdapter<htd::Hyperedge> ret;
-
-    auto & result = ret.container();
-
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = htd::Tree::hyperedges();
+        throw std::logic_error("void htd::Tree::copyHyperedgesTo(std::vector<htd::Hyperedge> &, htd::vertex_t) const");
+    }
 
-        for (auto it = hyperedgeCollection.begin(); it != hyperedgeCollection.end(); ++it)
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = htd::Tree::hyperedges();
+
+    for (auto it = hyperedgeCollection.begin(); it != hyperedgeCollection.end(); ++it)
+    {
+        const htd::Hyperedge & currentHyperedge = *it;
+
+        if (std::find(currentHyperedge.begin(), currentHyperedge.end(), vertex) != currentHyperedge.end())
         {
-            const htd::Hyperedge & currentHyperedge = *it;
-
-            if (std::find(currentHyperedge.begin(), currentHyperedge.end(), vertex) != currentHyperedge.end())
-            {
-                result.push_back(currentHyperedge);
-            }
+            target.push_back(currentHyperedge);
         }
     }
-    else
-    {
-        throw std::logic_error("const htd::IConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t) const");
-    }
-
-    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
 }
 
 const htd::Hyperedge & htd::Tree::hyperedge(htd::id_t edgeId) const

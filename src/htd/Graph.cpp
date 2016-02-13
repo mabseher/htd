@@ -368,6 +368,21 @@ const htd::Hyperedge & htd::Graph::hyperedge(htd::id_t edgeId) const
     return base_->hyperedge(edgeId);
 }
 
+void htd::Graph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const
+{
+    return base_->copyHyperedgesTo(target);
+}
+
+void htd::Graph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target, htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("void htd::Graph::copyHyperedgesTo(std::vector<htd::Hyperedge> &, htd::vertex_t) const");
+    }
+
+    return base_->copyHyperedgesTo(target, vertex);
+}
+
 const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t index) const
 {
     const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();

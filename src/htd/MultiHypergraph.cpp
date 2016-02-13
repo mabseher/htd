@@ -518,22 +518,45 @@ htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(void) cons
 
 htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(htd::vertex_t vertex) const
 {
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(htd::vertex_t) const");
+    }
+
     htd::VectorAdapter<htd::Hyperedge> ret;
 
     auto & result = ret.container();
 
-    if (isVertex(vertex))
+    for (auto & edge : edges_)
     {
-        for (auto & edge : edges_)
+        if (edge.containsVertex(vertex))
         {
-            if (std::find(edge.begin(), edge.end(), vertex) != edge.end())
-            {
-                result.push_back(edge);
-            }
+            result.push_back(edge);
         }
     }
 
     return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
+}
+
+void htd::MultiHypergraph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const
+{
+    std::copy(edges_.begin(), edges_.end(), std::back_inserter(target));
+}
+
+void htd::MultiHypergraph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target, htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("void htd::MultiHypergraph::copyHyperedgesTo(std::vector<htd::Hyperedge> &, htd::vertex_t) const");
+    }
+
+    for (auto & edge : edges_)
+    {
+        if (edge.containsVertex(vertex))
+        {
+            target.push_back(edge);
+        }
+    }
 }
 
 const htd::Hyperedge & htd::MultiHypergraph::hyperedge(htd::id_t edgeId) const
@@ -654,14 +677,24 @@ void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)
             ++currentIndex;
         }
 
-        std::size_t count = emptyEdges.size();
-        
-        for (currentIndex = 0; currentIndex < count; currentIndex++)
+        for (auto it = emptyEdges.rbegin(); it != emptyEdges.rend(); ++it)
         {
-            emptyEdges.erase(emptyEdges.begin() + count - currentIndex - 1);
+            edges_.erase(edges_.begin() + *it);
         }
         
         deletions_.insert(vertex);
+
+        for (htd::vertex_t neighbor : neighborhood_[vertex - htd::Vertex::FIRST])
+        {
+            if (neighbor != vertex)
+            {
+                auto & currentNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
+
+                currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex));
+            }
+        }
+
+        neighborhood_[vertex - htd::Vertex::FIRST].clear();
 
         vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
     }
@@ -804,7 +837,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 
     for (auto it = hyperedge.begin(); ok && it != hyperedge.end(); it++)
     {
-        ok = isVertex(*it);
+        isVertex(*it);
     }
 
     if (!ok)
@@ -1011,6 +1044,8 @@ htd::MultiHypergraph & htd::MultiHypergraph::operator=(const htd::IMultiHypergra
                 deletions_.insert(next_vertex_);
 
                 neighborhood_.push_back(htd::vertex_container());
+
+                ++next_vertex_;
             }
 
             size_++;

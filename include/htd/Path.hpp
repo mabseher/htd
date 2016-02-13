@@ -110,6 +110,10 @@ namespace htd
 
             htd::ConstCollection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            void copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const HTD_OVERRIDE;
+
+            void copyHyperedgesTo(std::vector<htd::Hyperedge> & target, htd::vertex_t vertex) const HTD_OVERRIDE;
+
             const htd::Hyperedge & hyperedge(htd::id_t edgeId) const HTD_OVERRIDE;
 
             const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index) const HTD_OVERRIDE;

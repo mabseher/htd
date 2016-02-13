@@ -406,6 +406,16 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                 std::swap(selectedBucket, newBucketContent);
 
+                /*
+                std::cout << std::endl;
+                std::cout << "   Bucket " << selection << ": ";
+                htd::print(buckets[selection], std::cout, false);
+                std::cout << std::endl;
+                std::cout << "   Bucket " << minimumVertex << ": ";
+                htd::print(buckets[minimumVertex], std::cout, false);
+                std::cout << std::endl;
+                */
+
                 if (!htd::has_non_empty_set_difference(selectedBucket.begin(), selectedBucket.end(), bucket.begin(), bucket.end()))
                 {
                     /*
@@ -422,23 +432,25 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     superset[minimumVertex] = superset[selection];
 
-                    if (superset[selection] == selection && attachmentPoint[minimumVertex] != selection)
+                    if (superset[selection] == selection && attachmentPoint[minimumVertex] != attachmentPoint[selection])
                     {
-                        //std::cout << "CONNECTING 1: " << selection << " - " << attachmentPoint[minimumVertex] << std::endl;
+                        //std::cout << "CONNECTING 1: " << attachmentPoint[selection] << " - " << attachmentPoint[minimumVertex] << std::endl;
 
-                        result.addEdge(selection, attachmentPoint[minimumVertex]);
+                        result.addEdge(attachmentPoint[selection], attachmentPoint[minimumVertex]);
                     }
 
                     /*
-                    std::cout << "ATTACHMENT POINT " << minimumVertex << ": " << attachmentPoint[minimumVertex] << std::endl;
-                    std::cout << "ATTACHMENT POINT " << selection << ": " << attachmentPoint[selection] << std::endl;
+                    std::cout << "ATTACHMENT POINT " << minimumVertex << ": " << attachmentPoint[minimumVertex] << "   (" << superset[attachmentPoint[minimumVertex]] << ")" << std::endl;
+                    std::cout << "ATTACHMENT POINT " << selection << ": " << attachmentPoint[selection] << "   (" << superset[attachmentPoint[selection]] << ")" << std::endl;
                     */
                 }
                 else
                 {
                     //std::cout << "CONNECTING 2: " << superset[minimumVertex] << " - " << superset[selection] << std::endl;
 
-                    result.addEdge(superset[selection], superset[minimumVertex]);
+                    result.addEdge(superset[selection], minimumVertex);
+
+                    superset[minimumVertex] = minimumVertex;
                 }
             }
             else

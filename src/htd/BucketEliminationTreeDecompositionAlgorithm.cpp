@@ -49,12 +49,12 @@
 #include <utility>
 #include <vector>
 
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(bool compressed) : compressed_(compressed), labelingFunctions_(), postProcessingOperations_()
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(void) : labelingFunctions_(), postProcessingOperations_()
 {
 
 }
 
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, bool compressed) : compressed_(compressed), labelingFunctions_(), postProcessingOperations_()
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : labelingFunctions_(), postProcessingOperations_()
 {
     setManipulationOperations(manipulationOperations);
 }
@@ -104,13 +104,6 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
     if (ret != nullptr)
     {
-        if (compressed_)
-        {
-            htd::CompressionOperation compressionOperation;
-
-            compressionOperation.apply(*ret);
-        }
-
         for (const auto & labelingFunction : labelingFunctions_)
         {
             for (htd::vertex_t vertex : ret->vertices())
@@ -229,7 +222,7 @@ htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDec
         manipulationOperations.push_back(postProcessingOperation->clone());
     }
 
-    return new htd::BucketEliminationTreeDecompositionAlgorithm(manipulationOperations, compressed_);
+    return new htd::BucketEliminationTreeDecompositionAlgorithm(manipulationOperations);
 }
 
 htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IMultiHypergraph & graph) const

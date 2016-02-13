@@ -245,6 +245,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         std::unordered_map<htd::vertex_t, htd::index_t> indices(size);
 
+        std::unordered_map<htd::vertex_t, htd::vertex_t> superset(size);
+
+        std::unordered_map<htd::vertex_t, htd::vertex_t> attachmentPoint(size);
+
         std::unordered_map<htd::vertex_t, htd::vertex_container> buckets(size);
 
         DEBUGGING_CODE(std::cout << "Ordering:" << std::endl;
@@ -259,7 +263,11 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
         {
             indices[vertex] = index++;
 
+            superset[vertex] = vertex;
+
             buckets[vertex].push_back(vertex);
+
+            attachmentPoint[vertex] = vertex;
         }
 
         std::size_t edgeCount = graph.edgeCount();
@@ -398,21 +406,61 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                 std::swap(selectedBucket, newBucketContent);
 
-                result.addEdge(selection, minimumVertex);
+                if (!htd::has_non_empty_set_difference(selectedBucket.begin(), selectedBucket.end(), bucket.begin(), bucket.end()))
+                {
+                    /*
+                    std::cout << "NON EMPTY: " << selection << "   " << minimumVertex << std::endl;
+
+                    std::cout << "ATTACHMENT POINT " << minimumVertex << ": " << attachmentPoint[minimumVertex] << std::endl;
+                    std::cout << "ATTACHMENT POINT " << selection << ": " << attachmentPoint[selection] << std::endl;
+                    */
+
+                    if (superset[minimumVertex] == minimumVertex)
+                    {
+                        attachmentPoint[minimumVertex] = selection;
+                    }
+
+                    superset[minimumVertex] = superset[selection];
+
+                    if (superset[selection] == selection && attachmentPoint[minimumVertex] != selection)
+                    {
+                        //std::cout << "CONNECTING 1: " << selection << " - " << attachmentPoint[minimumVertex] << std::endl;
+
+                        result.addEdge(selection, attachmentPoint[minimumVertex]);
+                    }
+
+                    /*
+                    std::cout << "ATTACHMENT POINT " << minimumVertex << ": " << attachmentPoint[minimumVertex] << std::endl;
+                    std::cout << "ATTACHMENT POINT " << selection << ": " << attachmentPoint[selection] << std::endl;
+                    */
+                }
+                else
+                {
+                    //std::cout << "CONNECTING 2: " << superset[minimumVertex] << " - " << superset[selection] << std::endl;
+
+                    result.addEdge(superset[selection], superset[minimumVertex]);
+                }
             }
             else
             {
-                result.addVertex(selection);
+                if (superset[selection] == selection)
+                {
+                    result.addVertex(selection);
+                }
             }
         }
 
-        DEBUGGING_CODE(std::cout << std::endl << "Buckets:" << std::endl;
-        for (std::size_t index = 0; index < size; index++)
+        /*
+        std::cout << "Buckets:" << std::endl;
+        for (htd::vertex_t vertex : graph.vertices())
         {
-            std::cout << "   Bucket " << index + htd::Vertex::FIRST << ": ";
-            htd::print(buckets[index], false);
+            std::cout << "   Bucket " << vertex << ": ";
+            htd::print(buckets[vertex], std::cout, false);
             std::cout << std::endl;
-        })
+            std::cout << "      SUPERSET: " << superset[vertex] << std::endl;
+        }
+        std::cout << std::endl << std::endl << std::endl;
+        */
 
         *ret = result.internalGraph();
 

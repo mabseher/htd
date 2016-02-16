@@ -28,15 +28,15 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>
-#include <htd/GraphLabeling.hpp>
+#include <htd/BidirectionalGraphNaming.hpp>
 #include <htd/ILabelingFunction.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/GraphDecompositionFactory.hpp>
-#include <htd/NamedMultiGraph.hpp>
 
 #include <algorithm>
 #include <array>
 #include <cstdarg>
+#include <functional>
 #include <memory>
 #include <stack>
 #include <stdexcept>
@@ -382,8 +382,6 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
         std::cout << std::endl << std::endl << std::endl;
         */
 
-        htd::NamedMultiGraph<htd::vertex_t, htd::id_t> result;
-
         for (htd::vertex_t selection : ordering)
         {
             DEBUGGING_CODE(std::cout << std::endl << "   Processing bucket " << selection << " ..." << std::endl;)
@@ -446,6 +444,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
         std::cout << std::endl << std::endl << std::endl;
         */
 
+        htd::BidirectionalGraphNaming<htd::vertex_t, htd::id_t> graphNaming;
+
+        std::function<htd::vertex_t(void)> vertexCreationFunction(std::bind(&htd::IMutableGraphDecomposition::addVertex, ret));
+
         for (htd::vertex_t vertex : ordering)
         {
             auto & currentNeighborhood = neighbors[vertex];
@@ -490,7 +492,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                         if (superset[neighbor1] && superset[neighbor2])
                         {
-                            result.addEdge(neighbor1, neighbor2);
+                            ret->addEdge(graphNaming.insertVertex(neighbor1, vertexCreationFunction).first,
+                                         graphNaming.insertVertex(neighbor2, vertexCreationFunction).first);
                         }
 
                         break;
@@ -525,7 +528,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                                 if (superset[replacement] && superset[neighbor])
                                 {
-                                    result.addEdge(replacement, neighbor);
+                                    ret->addEdge(graphNaming.insertVertex(replacement, vertexCreationFunction).first,
+                                                 graphNaming.insertVertex(neighbor, vertexCreationFunction).first);
 
                                     /*
                                     if (replacement < neighbor)
@@ -555,7 +559,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 {
                     if (superset[neighbor])
                     {
-                        result.addEdge(vertex, neighbor);
+                        ret->addEdge(graphNaming.insertVertex(vertex, vertexCreationFunction).first,
+                                     graphNaming.insertVertex(neighbor, vertexCreationFunction).first);
 
                         connected = true;
                     }
@@ -563,7 +568,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                 if (!connected)
                 {
-                    result.addVertex(vertex);
+                    graphNaming.insertVertex(vertex, vertexCreationFunction);
                 }
             }
 
@@ -586,27 +591,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             */
         }
 
-        /*
-        std::cout << "Buckets:" << std::endl;
-        for (htd::vertex_t vertex : graph.vertices())
-        {
-            if (superset[vertex])
-            {
-                std::cout << "   Bucket " << vertex << ": ";
-                htd::print(buckets[vertex], std::cout, false);
-                std::cout << std::endl;
-                std::cout << "      SUPERSET: " << superset[vertex] << std::endl;
-                std::cout << "      NEIGHBORS: ";
-                htd::print(neighbors[vertex], std::cout, false);
-                std::cout << std::endl << std::endl;
-            }
-        }
-        std::cout << std::endl << std::endl << std::endl;
-        */
-
-        *ret = result.internalGraph();
-
-        for (htd::vertex_t vertex : result.vertices())
+        for (htd::vertex_t vertex : ret->vertices())
         {
             /*
             std::cout << "SET BAG CONTENT " << vertex << " (" << result.lookupVertex(vertex) << "): ";
@@ -614,7 +599,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             std::cout << std::endl;
             */
 
-            ret->setBagContent(result.lookupVertex(vertex), std::move(buckets[vertex]));
+            ret->setBagContent(vertex, std::move(buckets[graphNaming.vertexName(vertex)]));
         }
     }
 

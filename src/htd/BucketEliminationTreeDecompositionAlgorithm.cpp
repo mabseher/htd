@@ -85,9 +85,6 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
     std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations;
 
-    htd::CompressionOperation compressionOperation;
-    compressionOperation.apply(*ret);
-
     for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
         htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);

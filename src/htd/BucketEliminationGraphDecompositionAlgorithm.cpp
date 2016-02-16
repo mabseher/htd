@@ -1,21 +1,21 @@
-/* 
+/*
  * File:   BucketEliminationGraphDecompositionAlgorithm.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
- * 
+ *
  * Copyright 2015-2016, Michael Abseher
  *    E-Mail: <abseher@dbai.tuwien.ac.at>
- * 
+ *
  * This file is part of htd.
- * 
- * htd is free software: you can redistribute it and/or modify it under 
- * the terms of the GNU General Public License as published by the Free 
- * Software Foundation, either version 3 of the License, or (at your 
+ *
+ * htd is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your
  * option) any later version.
- * 
- * htd is distributed in the hope that it will be useful, but WITHOUT 
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public 
+ *
+ * htd is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
  * License for more details.
 
  * You should have received a copy of the GNU General Public License
@@ -245,11 +245,11 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         std::unordered_map<htd::vertex_t, htd::index_t> indices(size);
 
-        std::unordered_map<htd::vertex_t, htd::vertex_t> superset(size);
-
-        std::unordered_map<htd::vertex_t, htd::vertex_t> attachmentPoint(size);
-
         std::unordered_map<htd::vertex_t, htd::vertex_container> buckets(size);
+
+        std::unordered_map<htd::vertex_t, bool> superset(size);
+
+        std::unordered_map<htd::vertex_t, htd::vertex_container> neighbors(size);
 
         DEBUGGING_CODE(std::cout << "Ordering:" << std::endl;
         for (htd::vertex_t vertex : ordering)
@@ -263,11 +263,9 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
         {
             indices[vertex] = index++;
 
-            superset[vertex] = vertex;
+            superset[vertex] = true;
 
             buckets[vertex].push_back(vertex);
-
-            attachmentPoint[vertex] = vertex;
         }
 
         std::size_t edgeCount = graph.edgeCount();
@@ -426,108 +424,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                 std::swap(selectedBucket, newBucketContent);
 
-                result.addEdge(selection, minimumVertex);
+                neighbors[selection].push_back(minimumVertex);
+                neighbors[minimumVertex].push_back(selection);
 
-                /*
-                std::cout << "   Bucket " << selection << ": ";
-                htd::print(bucket, std::cout, false);
-                std::cout << std::endl;
-                std::cout << "   Bucket " << minimumVertex << ": ";
-                htd::print(selectedBucket, std::cout, false);
-                std::cout << std::endl;
-
-                if (!htd::has_non_empty_set_difference(selectedBucket.begin(), selectedBucket.end(), bucket.begin(), bucket.end()))
-                {
-                    std::cout << "NON EMPTY: " << selection << "   " << minimumVertex << std::endl;
-
-                    std::cout << "SUPERSET " << selection << ": " << superset[selection] << std::endl;
-                    std::cout << "SUPERSET " << minimumVertex << ": " << superset[minimumVertex] << std::endl;
-
-                    std::cout << "ATTACHMENT POINT " << selection << ": " << attachmentPoint[selection] << std::endl;
-                    std::cout << "ATTACHMENT POINT " << minimumVertex << ": " << attachmentPoint[minimumVertex] << std::endl;
-                    std::cout << std::endl;
-
-                    if (superset[minimumVertex] == minimumVertex)
-                    {
-                        std::cout << "SETTING ATTACHMENT POINT " << minimumVertex << ": " << attachmentPoint[selection] << std::endl;
-
-                        //attachmentPoint[minimumVertex] = selection;
-                        attachmentPoint[minimumVertex] = attachmentPoint[selection];
-                    }
-
-                    if (superset[selection] == selection && attachmentPoint[minimumVertex] != attachmentPoint[selection])
-                    {
-                        //std::cout << "CONNECTING 1: " << attachmentPoint[selection] << " - " << attachmentPoint[minimumVertex] << std::endl;
-                        std::cout << "CONNECTING 1: " << attachmentPoint[selection] << " - " << attachmentPoint[superset[minimumVertex]] << std::endl;
-
-                        //result.addEdge(attachmentPoint[selection], attachmentPoint[minimumVertex]);
-                        result.addEdge(attachmentPoint[selection], attachmentPoint[superset[minimumVertex]]);
-
-                        //std::cout << "SETTING ATTACHMENT POINT " << minimumVertex << ": " << attachmentPoint[selection] << std::endl;
-
-                        //attachmentPoint[minimumVertex] = attachmentPoint[selection];
-                    }
-
-                    std::cout << "SETTING SUPERSET " << minimumVertex << ": " << superset[selection] << std::endl;
-
-                    superset[minimumVertex] = superset[selection];
-
-                    std::cout << std::endl;
-                    std::cout << "SUPERSET " << selection << ": " << superset[selection] << std::endl;
-                    std::cout << "SUPERSET " << minimumVertex << ": " << superset[minimumVertex] << std::endl;
-
-                    std::cout << "ATTACHMENT POINT " << selection << ": " << attachmentPoint[selection] << std::endl;
-                    std::cout << "ATTACHMENT POINT " << minimumVertex << ": " << attachmentPoint[minimumVertex] << std::endl;
-                }
-                else
-                {
-                    std::cout << "SUPERSET " << selection << ": " << superset[selection] << std::endl;
-                    std::cout << "SUPERSET " << minimumVertex << ": " << superset[minimumVertex] << std::endl;
-
-                    std::cout << "ATTACHMENT POINT " << selection << ": " << attachmentPoint[selection] << std::endl;
-                    std::cout << "ATTACHMENT POINT " << minimumVertex << ": " << attachmentPoint[minimumVertex] << std::endl;
-                    std::cout << std::endl;
-
-                    if (superset[selection] == selection)
-                    {
-                        //std::cout << "CONNECTING 2: " << superset[minimumVertex] << " - " << superset[selection] << std::endl;
-                        std::cout << "CONNECTING 2: " << minimumVertex << " - " << selection << std::endl;
-
-                        result.addEdge(selection, minimumVertex);
-
-                        if (attachmentPoint[minimumVertex] != minimumVertex && superset[minimumVertex] == minimumVertex)
-                        {
-                            std::cout << "CONNECTING 4: " << attachmentPoint[minimumVertex] << " - " << minimumVertex << std::endl;
-
-                            result.addEdge(attachmentPoint[minimumVertex], minimumVertex);
-
-                            attachmentPoint[minimumVertex] = minimumVertex;
-                        }
-                    }
-                    else if (superset[minimumVertex] == minimumVertex)
-                    {
-                        std::cout << "CONNECTING 5: " << minimumVertex << " - " << superset[selection] << std::endl;
-
-                        result.addEdge(superset[selection], minimumVertex);
-                    }
-
-                    superset[minimumVertex] = minimumVertex;
-
-                    std::cout << std::endl;
-                    std::cout << "SUPERSET " << selection << ": " << superset[selection] << std::endl;
-                    std::cout << "SUPERSET " << minimumVertex << ": " << superset[minimumVertex] << std::endl;
-
-                    std::cout << "ATTACHMENT POINT " << selection << ": " << attachmentPoint[selection] << std::endl;
-                    std::cout << "ATTACHMENT POINT " << minimumVertex << ": " << attachmentPoint[minimumVertex] << std::endl;
-                }
-                */
-            }
-            else
-            {
-                if (superset[selection] == selection)
-                {
-                    result.addVertex(selection);
-                }
+                superset[minimumVertex] = selectedBucket.size() + 1 > bucket.size();
             }
         }
 
@@ -539,7 +439,167 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             htd::print(buckets[vertex], std::cout, false);
             std::cout << std::endl;
             std::cout << "      SUPERSET: " << superset[vertex] << std::endl;
-            std::cout << "      NEIGHBOR: " << attachmentPoint[vertex] << std::endl;
+            std::cout << "      NEIGHBORS: ";
+            htd::print(neighbors[vertex], std::cout, false);
+            std::cout << std::endl << std::endl;
+        }
+        std::cout << std::endl << std::endl << std::endl;
+        */
+
+        for (htd::vertex_t vertex : graph.vertices())
+        {
+            auto & currentNeighborhood = neighbors[vertex];
+
+            if (!superset[vertex])
+            {
+                /*
+                std::cout << "REMOVING " << vertex << " ..." << std::endl;
+                std::cout << "   Bucket " << vertex << ": ";
+                htd::print(buckets[vertex], std::cout, false);
+                std::cout << std::endl;
+                std::cout << "      SUPERSET: " << superset[vertex] << std::endl;
+                std::cout << "      NEIGHBORS: ";
+                htd::print(neighbors[vertex], std::cout, false);
+                std::cout << std::endl << std::endl;
+                */
+
+                switch (currentNeighborhood.size())
+                {
+                    case 0:
+                    {
+                        break;
+                    }
+                    case 1:
+                    {
+                        auto & twoHopNeighborhood = neighbors[currentNeighborhood[0]];
+
+                        twoHopNeighborhood.erase(std::find(twoHopNeighborhood.begin(), twoHopNeighborhood.end(), vertex));
+
+                        break;
+                    }
+                    case 2:
+                    {
+                        htd::vertex_t neighbor1 = currentNeighborhood[0];
+                        htd::vertex_t neighbor2 = currentNeighborhood[1];
+
+                        auto & twoHopNeighborhood1 = neighbors[neighbor1];
+                        auto & twoHopNeighborhood2 = neighbors[neighbor2];
+
+                        *(std::find(twoHopNeighborhood1.begin(), twoHopNeighborhood1.end(), vertex)) = neighbor2;
+                        *(std::find(twoHopNeighborhood2.begin(), twoHopNeighborhood2.end(), vertex)) = neighbor1;
+
+                        if (superset[neighbor1] && superset[neighbor2])
+                        {
+                            result.addEdge(neighbor1, neighbor2);
+                        }
+
+                        break;
+                    }
+                    default:
+                    {
+                        htd::vertex_t replacement = htd::Vertex::UNKNOWN;
+
+                        for (auto it = currentNeighborhood.begin(); replacement == htd::Vertex::UNKNOWN && it != currentNeighborhood.end(); ++it)
+                        {
+                            if (std::includes(buckets[*it].begin(), buckets[*it].end(), buckets[vertex].begin(), buckets[vertex].end()))
+                            {
+                                replacement = *it;
+                            }
+                        }
+
+                        //std::cout << "REPLACEMENT: " << replacement << std::endl;
+
+                        auto & replacementNeighborhood = neighbors[replacement];
+
+                        replacementNeighborhood.erase(std::find(replacementNeighborhood.begin(), replacementNeighborhood.end(), vertex));
+
+                        std::copy_if(currentNeighborhood.begin(), currentNeighborhood.end(), std::back_inserter(replacementNeighborhood), [&](htd::vertex_t neighbor) { return neighbor != replacement; });
+
+                        for (htd::vertex_t neighbor : currentNeighborhood)
+                        {
+                            if (neighbor != replacement)
+                            {
+                                auto & currentNeighborhood2 = neighbors[neighbor];
+
+                                *(std::find(currentNeighborhood2.begin(), currentNeighborhood2.end(), vertex)) = replacement;
+
+                                if (superset[replacement] && superset[neighbor])
+                                {
+                                    result.addEdge(replacement, neighbor);
+
+                                    /*
+                                    if (replacement < neighbor)
+                                    {
+                                        std::cout << "EDGE: " << replacement << " - " << neighbor << std::endl;
+                                    }
+                                    else
+                                    {
+                                        std::cout << "EDGE: " << neighbor << " - " << replacement << std::endl;
+                                    }
+                                    */
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+                }
+
+                neighbors.erase(vertex);
+            }
+            else
+            {
+                bool connected = false;
+
+                for (htd::vertex_t neighbor : currentNeighborhood)
+                {
+                    if (superset[neighbor])
+                    {
+                        result.addEdge(vertex, neighbor);
+
+                        connected = true;
+                    }
+                }
+
+                if (!connected)
+                {
+                    result.addVertex(vertex);
+                }
+            }
+
+            /*
+            std::cout << "Buckets:" << std::endl;
+            for (htd::vertex_t vertex : graph.vertices())
+            {
+                if (superset[vertex])
+                {
+                    std::cout << "   Bucket " << vertex << ": ";
+                    htd::print(buckets[vertex], std::cout, false);
+                    std::cout << std::endl;
+                    std::cout << "      SUPERSET: " << superset[vertex] << std::endl;
+                    std::cout << "      NEIGHBORS: ";
+                    htd::print(neighbors[vertex], std::cout, false);
+                    std::cout << std::endl << std::endl;
+                }
+            }
+            std::cout << std::endl << std::endl << std::endl;
+            */
+        }
+
+        /*
+        std::cout << "Buckets:" << std::endl;
+        for (htd::vertex_t vertex : graph.vertices())
+        {
+            if (superset[vertex])
+            {
+                std::cout << "   Bucket " << vertex << ": ";
+                htd::print(buckets[vertex], std::cout, false);
+                std::cout << std::endl;
+                std::cout << "      SUPERSET: " << superset[vertex] << std::endl;
+                std::cout << "      NEIGHBORS: ";
+                htd::print(neighbors[vertex], std::cout, false);
+                std::cout << std::endl << std::endl;
+            }
         }
         std::cout << std::endl << std::endl << std::endl;
         */

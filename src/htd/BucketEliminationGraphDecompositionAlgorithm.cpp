@@ -446,7 +446,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
         std::cout << std::endl << std::endl << std::endl;
         */
 
-        for (htd::vertex_t vertex : graph.vertices())
+        for (htd::vertex_t vertex : ordering)
         {
             auto & currentNeighborhood = neighbors[vertex];
 

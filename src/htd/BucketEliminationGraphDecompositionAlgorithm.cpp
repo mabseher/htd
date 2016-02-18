@@ -272,6 +272,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         std::size_t edgeCount = graph.edgeCount();
 
+        htd::vertex_container elements;
+
         const htd::ConstCollection<htd::Hyperedge> & hyperedges = graph.hyperedges();
 
         auto it = hyperedges.begin();
@@ -333,8 +335,6 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 }
                 default:
                 {
-                    htd::vertex_container elements;
-
                     edge.copyTo(elements);
 
                     std::sort(elements.begin(), elements.end());
@@ -353,6 +353,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                     std::swap(selectedBucket, newBucketContent);
 
                     edgeTarget[index] = minimumVertex;
+
+                    elements.clear();
 
                     break;
                 }
@@ -632,13 +634,11 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         std::unordered_map<htd::vertex_t, std::vector<htd::index_t>> inducedEdges(ret->vertexCount());
 
-        index = 0;
+        it = hyperedges.begin();
 
-        for (const htd::Hyperedge & hyperedge : graph.hyperedges())
+        for (index = 0; index < edgeCount; ++index)
         {
-            htd::vertex_container elements;
-
-            hyperedge.copyTo(elements);
+            it->copyTo(elements);
 
             std::sort(elements.begin(), elements.end());
 
@@ -646,7 +646,9 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             distributeEdge(index, elements, superset[edgeTarget[index]], buckets, neighbors, inducedEdges);
 
-            ++index;
+            elements.clear();
+
+            ++it;
         }
 
         /*
@@ -848,7 +850,7 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::distributeEdge(htd::inde
 
                 originStack.pop();
 
-                if (std::includes(currentBucketContent.begin(), currentBucketContent.end(), edge.begin(), edge.end()))
+                if (std::includes(std::lower_bound(currentBucketContent.begin(), currentBucketContent.end(), edge[0]), currentBucketContent.end(), edge.begin(), edge.end()))
                 {
                     inducedEdges[currentBucket].push_back(edgeIndex);
 

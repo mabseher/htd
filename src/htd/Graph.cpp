@@ -415,6 +415,11 @@ const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t index, htd::
     return *it;
 }
 
+htd::FilteredHyperedgeCollection htd::Graph::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
+{
+    return base_->hyperedgesAtPositions(indices);
+}
+
 htd::vertex_t htd::Graph::addVertex(void)
 {
     return base_->addVertex();

@@ -403,6 +403,53 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, htd::ConstColle
     }
 }
 
+htd::FilteredHyperedgeCollection htd::TreeDecomposition::inducedHyperedges(htd::vertex_t vertex) const
+{
+    if (isVertex(vertex))
+    {
+        if (isLabeledVertex(htd::ITreeDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, vertex))
+        {
+            auto & inducedEdgesLabel = dynamic_cast<const htd::Label<htd::FilteredHyperedgeCollection> *>(&(vertexLabel(htd::ITreeDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, vertex)))->value();
+
+            return inducedEdgesLabel;
+        }
+        else
+        {
+            return htd::FilteredHyperedgeCollection();
+        }
+    }
+    else
+    {
+        throw std::logic_error("htd::FilteredHyperedgeCollection htd::TreeDecomposition::inducedHyperedges(htd::vertex_t) const");
+    }
+
+    return htd::FilteredHyperedgeCollection();
+}
+
+void htd::TreeDecomposition::setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    if (isVertex(vertex))
+    {
+        setVertexLabel(htd::ITreeDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, vertex, new htd::Label<htd::FilteredHyperedgeCollection>(inducedEdges));
+    }
+    else
+    {
+        throw std::logic_error("void htd::TreeDecomposition::setInducedHyperedges(htd::vertex_t, const htd::FilteredHyperedgeCollection &)");
+    }
+}
+
+void htd::TreeDecomposition::setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    if (isVertex(vertex))
+    {
+        setVertexLabel(htd::ITreeDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, vertex, new htd::Label<htd::FilteredHyperedgeCollection>(std::move(inducedEdges)));
+    }
+    else
+    {
+        throw std::logic_error("void htd::TreeDecomposition::setInducedHyperedges(htd::vertex_t, htd::FilteredHyperedgeCollection &&)");
+    }
+}
+
 std::size_t htd::TreeDecomposition::minimumBagSize(void) const
 {
     bool start = true;

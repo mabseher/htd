@@ -296,6 +296,8 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             vertexMapping[vertex] = node;
 
             ret->setVertexLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, node, mutableGraphDecomposition.transferVertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex));
+
+            ret->setVertexLabel(htd::ITreeDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, node, mutableGraphDecomposition.transferVertexLabel(htd::IGraphDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, vertex));
         });
 
         delete graphDecomposition;

@@ -109,6 +109,8 @@ namespace htd
 
             const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            htd::FilteredHyperedgeCollection hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const HTD_OVERRIDE;
+
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) HTD_OVERRIDE;
@@ -146,7 +148,7 @@ namespace htd
 
             std::unordered_set<htd::vertex_t> deletions_;
 
-            htd::hyperedge_container edges_;
+            std::shared_ptr<htd::hyperedge_container> edges_;
 
             std::vector<htd::vertex_container> neighborhood_;
     };

@@ -31,6 +31,7 @@
 #include <htd/ConstCollection.hpp>
 #include <htd/ILabel.hpp>
 #include <htd/Label.hpp>
+#include <htd/FilteredHyperedgeCollection.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -75,7 +76,11 @@ namespace htd
     void print(const htd::Hyperedge & input);
 
     void print(const htd::Hyperedge & input, std::ostream & stream);
-    
+
+    void print(const htd::FilteredHyperedgeCollection & input);
+
+    void print(const htd::FilteredHyperedgeCollection & input, std::ostream & stream);
+
     template < typename T >
     void print(const T & input)
     {
@@ -939,7 +944,7 @@ namespace htd
 namespace std
 {
     template<typename T>
-    ostream & operator<<(std::ostream & stream, const std::vector<T> input)
+    ostream & operator<<(std::ostream & stream, const std::vector<T> & input)
     {
         htd::print(input, stream);
 
@@ -947,12 +952,14 @@ namespace std
     }
 
     template<typename T>
-    ostream & operator<<(std::ostream & stream, const htd::ConstCollection<T> input)
+    ostream & operator<<(std::ostream & stream, const htd::ConstCollection<T> & input)
     {
         htd::print(input, stream);
 
         return stream;
     }
+
+    std::ostream & operator<<(std::ostream & stream, const htd::FilteredHyperedgeCollection & input);
 
     template<typename T>
     void hash_combine(std::size_t & seed, const T & v)
@@ -973,6 +980,23 @@ namespace std
                 for (htd::vertex_t vertex : data)
                 {
                     std::hash_combine(ret, vertex);
+                }
+
+                return ret;
+            }
+    };
+
+    template<>
+    struct hash<htd::FilteredHyperedgeCollection>
+    {
+        public:
+            std::size_t operator()(const htd::FilteredHyperedgeCollection & data) const
+            {
+                std::size_t ret = 31;
+
+                for (const htd::Hyperedge & hyperedge : data)
+                {
+                    std::hash_combine(ret, hyperedge);
                 }
 
                 return ret;

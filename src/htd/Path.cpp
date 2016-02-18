@@ -652,6 +652,15 @@ const htd::Hyperedge & htd::Path::hyperedgeAtPosition(htd::index_t index, htd::v
     return *it;
 }
 
+htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
+{
+    std::shared_ptr<std::vector<htd::Hyperedge>> hyperedges = std::make_shared<std::vector<htd::Hyperedge>>();
+
+    copyHyperedgesTo(*hyperedges);
+
+    return htd::FilteredHyperedgeCollection(hyperedges, indices);
+}
+
 htd::vertex_t htd::Path::root(void) const
 {
     return root_;

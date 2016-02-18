@@ -85,6 +85,12 @@ namespace htd
 
             void setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content) HTD_OVERRIDE;
 
+            htd::FilteredHyperedgeCollection inducedHyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
+
+            void setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;
+
+            void setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges) HTD_OVERRIDE;
+
             std::size_t forgottenVertexCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             std::size_t forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;

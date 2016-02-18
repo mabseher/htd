@@ -45,6 +45,10 @@ namespace htd
 
             virtual void setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content) = 0;
 
+            virtual void setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
+
+            virtual void setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
+
             virtual IMutablePathDecomposition * clone(void) const = 0;
 
             virtual IMutablePathDecomposition & operator=(const htd::IPath & original) = 0;

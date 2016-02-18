@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Collection.hpp>
 #include <htd/ConstCollection.hpp>
+#include <htd/FilteredHyperedgeCollection.hpp>
 #include <htd/Hyperedge.hpp>
 
 #include <cstdlib>
@@ -89,6 +90,8 @@ namespace htd
             virtual const htd::Hyperedge & hyperedge(htd::id_t edgeId) const = 0;
 
             virtual const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index) const = 0;
+
+            virtual htd::FilteredHyperedgeCollection hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const = 0;
 
             virtual std::size_t edgeCount(htd::vertex_t vertex) const = 0;
 

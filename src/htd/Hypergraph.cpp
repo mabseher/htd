@@ -211,6 +211,11 @@ htd::ConstCollection<htd::Hyperedge> htd::Hypergraph::hyperedges(htd::vertex_t v
     return base_->hyperedges(vertex);
 }
 
+htd::FilteredHyperedgeCollection htd::Hypergraph::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
+{
+    return base_->hyperedgesAtPositions(indices);
+}
+
 void htd::Hypergraph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const
 {
     return base_->copyHyperedgesTo(target);

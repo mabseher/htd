@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/ILabeledGraph.hpp>
 #include <htd/ConstCollection.hpp>
+#include <htd/FilteredHyperedgeCollection.hpp>
 
 #include <vector>
 
@@ -41,6 +42,11 @@ namespace htd
              */
             static constexpr const char * BAG_LABEL_IDENTIFIER = "Bag";
 
+            /**
+             *  Constant for the identifier of the label for induced edges.
+             */
+            static constexpr const char * INDUCED_EDGES_LABEL_IDENTIFIER = "Induced Edges";
+
             virtual ~IGraphDecomposition() = 0;
 
             virtual std::size_t bagSize(htd::vertex_t vertex) const = 0;
@@ -48,6 +54,8 @@ namespace htd
             virtual std::vector<htd::vertex_t> bagContentVector(htd::vertex_t vertex) const = 0;
 
             virtual htd::ConstCollection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
+
+            virtual htd::FilteredHyperedgeCollection inducedHyperedges(htd::vertex_t vertex) const = 0;
 
             virtual std::size_t minimumBagSize(void) const = 0;
 

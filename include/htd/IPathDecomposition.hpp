@@ -39,6 +39,11 @@ namespace htd
              */
             static constexpr const char * BAG_LABEL_IDENTIFIER = "Bag";
 
+            /**
+             *  Constant for the identifier of the label for induced edges.
+             */
+            static constexpr const char * INDUCED_EDGES_LABEL_IDENTIFIER = "Induced Edges";
+
             virtual ~IPathDecomposition() = 0;
 
             virtual std::size_t forgetNodeCount(void) const = 0;

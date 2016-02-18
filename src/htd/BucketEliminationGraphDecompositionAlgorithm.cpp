@@ -681,7 +681,11 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             std::cout << std::endl;
             */
 
-            ret->setBagContent(vertex, std::move(buckets[graphNaming.vertexName(vertex)]));
+            htd::vertex_t vertexName = graphNaming.vertexName(vertex);
+
+            ret->setBagContent(vertex, std::move(buckets[vertexName]));
+
+            ret->setInducedHyperedges(vertex, graph.hyperedgesAtPositions(inducedEdges[vertexName]));
         }
     }
 

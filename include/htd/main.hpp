@@ -46,6 +46,7 @@
 #include <htd/DirectedMultiGraph.hpp>
 #include <htd/DirectedMultiGraphFactory.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
+#include <htd/FilteredHyperedgeCollection.hpp>
 #include <htd/Globals.hpp>
 #include <htd/Graph.hpp>
 #include <htd/GraphDecomposition.hpp>

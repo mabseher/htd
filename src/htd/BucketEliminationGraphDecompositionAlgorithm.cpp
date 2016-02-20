@@ -806,6 +806,8 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
 
 void htd::BucketEliminationGraphDecompositionAlgorithm::distributeEdge(htd::index_t edgeIndex, const std::vector<htd::vertex_t> & edge, htd::vertex_t startBucket, const std::unordered_map<htd::vertex_t, htd::vertex_container> & buckets, const std::unordered_map<htd::vertex_t, htd::vertex_container> & neighbors, std::unordered_map<htd::vertex_t, std::vector<htd::index_t>> & inducedEdges, std::vector<htd::id_t> & lastAssignedEdge, std::stack<htd::vertex_t, std::vector<htd::vertex_t>> & originStack) const
 {
+    htd::vertex_t lastBucket = startBucket;
+
     htd::vertex_t currentBucket = startBucket;
 
     lastAssignedEdge[currentBucket] = edgeIndex;
@@ -824,6 +826,8 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::distributeEdge(htd::inde
 
     while (!originStack.empty())
     {
+        lastBucket = currentBucket;
+
         currentBucket = originStack.top();
 
         originStack.pop();
@@ -834,11 +838,14 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::distributeEdge(htd::inde
 
         for (htd::vertex_t neighbor : neighbors.at(currentBucket))
         {
-            const htd::vertex_container & neighborBucketContent = buckets.at(neighbor);
-
-            if (lastAssignedEdge[neighbor] != edgeIndex && std::includes(std::lower_bound(neighborBucketContent.begin(), neighborBucketContent.end(), edge[0]), neighborBucketContent.end(), edge.begin(), edge.end()))
+            if (neighbor != lastBucket)
             {
-                originStack.push(neighbor);
+                const htd::vertex_container & neighborBucketContent = buckets.at(neighbor);
+
+                if (lastAssignedEdge[neighbor] != edgeIndex && std::includes(std::lower_bound(neighborBucketContent.begin(), neighborBucketContent.end(), edge[0]), neighborBucketContent.end(), edge.begin(), edge.end()))
+                {
+                    originStack.push(neighbor);
+                }
             }
         }
     }

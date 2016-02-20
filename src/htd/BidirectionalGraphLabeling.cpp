@@ -175,7 +175,7 @@ void htd::BidirectionalGraphLabeling::swapEdgeLabels(htd::id_t edgeId1, htd::id_
     }
 }
 
-std::pair<htd::id_t, bool> htd::BidirectionalGraphLabeling::insertVertex(htd::ILabel * label, std::function<htd::vertex_t(void)> vertexCreationFunction)
+std::pair<htd::id_t, bool> htd::BidirectionalGraphLabeling::insertVertex(htd::ILabel * label, const std::function<htd::vertex_t(void)> & vertexCreationFunction)
 {
     std::pair<htd::id_t, bool> ret(0, false);
 

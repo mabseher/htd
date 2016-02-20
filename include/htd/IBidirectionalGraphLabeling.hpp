@@ -38,7 +38,7 @@ namespace htd
         public:
             virtual ~IBidirectionalGraphLabeling() = 0;
 
-            virtual std::pair<htd::id_t, bool> insertVertex(htd::ILabel * label, std::function<htd::vertex_t(void)> vertexCreationFunction) = 0;
+            virtual std::pair<htd::id_t, bool> insertVertex(htd::ILabel * label, const std::function<htd::vertex_t(void)> & vertexCreationFunction) = 0;
 
             virtual bool isVertexLabel(const htd::ILabel & label) const = 0;
 

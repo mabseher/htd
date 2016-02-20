@@ -272,8 +272,6 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         std::size_t edgeCount = graph.edgeCount();
 
-        htd::vertex_container elements;
-
         const htd::ConstCollection<htd::Hyperedge> & hyperedges = graph.hyperedges();
 
         auto it = hyperedges.begin();
@@ -288,18 +286,20 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             std::cout << std::endl;
             */
 
-            switch (edge.size())
+            const std::vector<htd::vertex_t> & elements = edge.sortedElements();
+
+            switch (elements.size())
             {
                 case 1:
                 {
-                    edgeTarget[index] = edge[0];
+                    edgeTarget[index] = elements[0];
 
                     break;
                 }
                 case 2:
                 {
-                    htd::vertex_t vertex1 = edge[0];
-                    htd::vertex_t vertex2 = edge[1];
+                    htd::vertex_t vertex1 = elements[0];
+                    htd::vertex_t vertex2 = elements[1];
 
                     if (vertex1 != vertex2)
                     {
@@ -335,12 +335,6 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 }
                 default:
                 {
-                    edge.copyTo(elements);
-
-                    std::sort(elements.begin(), elements.end());
-
-                    elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
-
                     htd::vertex_t minimumVertex = getMinimumVertex(elements, indices);
 
                     auto & selectedBucket = buckets[minimumVertex];
@@ -353,8 +347,6 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                     std::swap(selectedBucket, newBucketContent);
 
                     edgeTarget[index] = minimumVertex;
-
-                    elements.clear();
 
                     break;
                 }
@@ -636,17 +628,11 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         it = hyperedges.begin();
 
+        std::vector<htd::id_t> lastAssignedEdge(buckets.size() + 1, (htd::id_t)-1);
+
         for (index = 0; index < edgeCount; ++index)
         {
-            it->copyTo(elements);
-
-            std::sort(elements.begin(), elements.end());
-
-            elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
-
-            distributeEdge(index, elements, superset[edgeTarget[index]], buckets, neighbors, inducedEdges);
-
-            elements.clear();
+            distributeEdge(index, it->sortedElements(), superset[edgeTarget[index]], buckets, neighbors, inducedEdges, lastAssignedEdge);
 
             ++it;
         }
@@ -816,63 +802,44 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
     return ret;
 }
 
-void htd::BucketEliminationGraphDecompositionAlgorithm::distributeEdge(htd::index_t edgeIndex, const std::vector<htd::vertex_t> & edge, htd::vertex_t startBucket, const std::unordered_map<htd::vertex_t, htd::vertex_container> & buckets, const std::unordered_map<htd::vertex_t, htd::vertex_container> & neighbors, std::unordered_map<htd::vertex_t, std::vector<htd::index_t>> & inducedEdges) const
+void htd::BucketEliminationGraphDecompositionAlgorithm::distributeEdge(htd::index_t edgeIndex, const std::vector<htd::vertex_t> & edge, htd::vertex_t startBucket, const std::unordered_map<htd::vertex_t, htd::vertex_container> & buckets, const std::unordered_map<htd::vertex_t, htd::vertex_container> & neighbors, std::unordered_map<htd::vertex_t, std::vector<htd::index_t>> & inducedEdges, std::vector<htd::id_t> & lastAssignedEdge) const
 {
-    std::stack<std::pair<htd::vertex_t, htd::vertex_t>> originStack;
-
-    std::unordered_set<htd::vertex_t> visitedVertices;
+    std::stack<htd::vertex_t, std::vector<htd::vertex_t>> originStack;
 
     htd::vertex_t currentBucket = startBucket;
 
-    originStack.push(std::make_pair(currentBucket, htd::Vertex::UNKNOWN));
+    lastAssignedEdge[currentBucket] = edgeIndex;
+
+    inducedEdges[currentBucket].push_back(edgeIndex);
+
+    for (htd::vertex_t neighbor : neighbors.at(currentBucket))
+    {
+        const htd::vertex_container & neighborBucketContent = buckets.at(neighbor);
+
+        if (lastAssignedEdge[neighbor] != edgeIndex && std::includes(std::lower_bound(neighborBucketContent.begin(), neighborBucketContent.end(), edge[0]), neighborBucketContent.end(), edge.begin(), edge.end()))
+        {
+            originStack.push(neighbor);
+        }
+    }
 
     while (!originStack.empty())
     {
-        currentBucket = originStack.top().first;
+        currentBucket = originStack.top();
 
-        if (visitedVertices.count(currentBucket) == 0)
+        originStack.pop();
+
+        lastAssignedEdge[currentBucket] = edgeIndex;
+
+        inducedEdges[currentBucket].push_back(edgeIndex);
+
+        for (htd::vertex_t neighbor : neighbors.at(currentBucket))
         {
-            htd::vertex_t predecessorBucket = originStack.top().second;
+            const htd::vertex_container & neighborBucketContent = buckets.at(neighbor);
 
-            if (predecessorBucket == htd::Vertex::UNKNOWN)
+            if (lastAssignedEdge[neighbor] != edgeIndex && std::includes(std::lower_bound(neighborBucketContent.begin(), neighborBucketContent.end(), edge[0]), neighborBucketContent.end(), edge.begin(), edge.end()))
             {
-                inducedEdges[currentBucket].push_back(edgeIndex);
-
-                originStack.pop();
-
-                for (htd::vertex_t neighbor : neighbors.at(currentBucket))
-                {
-                    if (visitedVertices.count(neighbor) == 0)
-                    {
-                        originStack.push(std::make_pair(neighbor, currentBucket));
-                    }
-                }
+                originStack.push(neighbor);
             }
-            else
-            {
-                const htd::vertex_container & currentBucketContent = buckets.at(currentBucket);
-
-                originStack.pop();
-
-                if (std::includes(std::lower_bound(currentBucketContent.begin(), currentBucketContent.end(), edge[0]), currentBucketContent.end(), edge.begin(), edge.end()))
-                {
-                    inducedEdges[currentBucket].push_back(edgeIndex);
-
-                    for (htd::vertex_t neighbor : neighbors.at(currentBucket))
-                    {
-                        if (visitedVertices.count(neighbor) == 0)
-                        {
-                            originStack.push(std::make_pair(neighbor, currentBucket));
-                        }
-                    }
-                }
-            }
-
-            visitedVertices.insert(currentBucket);
-        }
-        else
-        {
-            originStack.pop();
         }
     }
 }

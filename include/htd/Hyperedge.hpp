@@ -59,9 +59,9 @@ namespace htd
 
             void setId(htd::id_t newId);
 
-            htd::ConstCollection<htd::vertex_t> elements() const;
+            const std::vector<htd::vertex_t> & elements() const;
 
-            void copyTo(std::vector<htd::vertex_t> & target) const;
+            const std::vector<htd::vertex_t> & sortedElements() const;
 
             bool empty() const;
 
@@ -71,9 +71,9 @@ namespace htd
 
             void erase(htd::vertex_t vertex);
 
-            const htd::ConstIterator<htd::vertex_t> begin(void) const;
+            std::vector<htd::vertex_t>::const_iterator begin(void) const;
 
-            const htd::ConstIterator<htd::vertex_t> end(void) const;
+            std::vector<htd::vertex_t>::const_iterator end(void) const;
 
             const htd::vertex_t & operator[](htd::index_t index) const;
 
@@ -95,6 +95,8 @@ namespace htd
             htd::id_t id_;
 
             std::shared_ptr<std::vector<htd::vertex_t>> elements_;
+
+            std::shared_ptr<std::vector<htd::vertex_t>> sortedElements_;
     };
 
     /**

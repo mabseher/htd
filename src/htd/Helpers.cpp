@@ -65,7 +65,7 @@ void htd::print(const htd::Hyperedge & input, std::ostream & stream)
 {
     stream << "Hyperedge " << input.id() << ": ";
 
-    htd::print(input.elements());
+    htd::print(input.elements(), std::cout, false);
 }
 
 void htd::print(const htd::FilteredHyperedgeCollection & input)

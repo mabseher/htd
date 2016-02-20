@@ -122,11 +122,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
     {
         htd::vertex_container & elements = sortedEdges[index];
 
-        hyperedge.copyTo(elements);
-
-        std::sort(elements.begin(), elements.end());
-
-        elements.erase(std::unique(elements.begin(), elements.end()), elements.end());
+        std::copy(hyperedge.sortedElements().begin(), hyperedge.sortedElements().end(), std::back_inserter(elements));
 
         identifiers[index] = hyperedge.id();
 

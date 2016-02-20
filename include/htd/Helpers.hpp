@@ -68,19 +68,7 @@
 #endif
 
 namespace htd
-{   
-    void print(bool input);
-
-    void print(bool input, std::ostream & stream);
-
-    void print(const htd::Hyperedge & input);
-
-    void print(const htd::Hyperedge & input, std::ostream & stream);
-
-    void print(const htd::FilteredHyperedgeCollection & input);
-
-    void print(const htd::FilteredHyperedgeCollection & input, std::ostream & stream);
-
+{
     template < typename T >
     void print(const T & input)
     {
@@ -286,6 +274,18 @@ namespace htd
             stream << "<EMPTY>";
         }
     }
+
+    void print(bool input);
+
+    void print(bool input, std::ostream & stream);
+
+    void print(const htd::Hyperedge & input);
+
+    void print(const htd::Hyperedge & input, std::ostream & stream);
+
+    void print(const htd::FilteredHyperedgeCollection & input);
+
+    void print(const htd::FilteredHyperedgeCollection & input, std::ostream & stream);
 
     template <typename T>
     void set_union(const std::vector<T> & set1,

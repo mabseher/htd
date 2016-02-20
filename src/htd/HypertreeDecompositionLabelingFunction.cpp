@@ -38,6 +38,7 @@
 
 #include <algorithm>
 #include <string>
+#include <vector>
 
 htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunction(const htd::IMultiHypergraph & graph) : graph_(graph), hyperedges_()
 {
@@ -47,7 +48,7 @@ htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunct
 
     for (const htd::Hyperedge & originalHyperedge : hyperedgeCollection)
     {
-        const htd::ConstCollection<htd::vertex_t> & elementCollection = originalHyperedge.elements();
+        const std::vector<htd::vertex_t> & elementCollection = originalHyperedge.elements();
 
         htd::vertex_container elements(elementCollection.begin(), elementCollection.end());
 
@@ -88,13 +89,13 @@ htd::Label<htd::ConstCollection<htd::Hyperedge>> * htd::HypertreeDecompositionLa
 
     for (auto it1 = hyperedges_.begin(); it1 < hyperedges_.end(); it1++)
     {
-        const htd::ConstCollection<htd::vertex_t> & elements1 = it1->elements();
+        const std::vector<htd::vertex_t> & elements1 = it1->elements();
 
         bool maximal = true;
 
         for (auto it2 = it1 + 1; it2 < hyperedges_.end(); it2++)
         {
-            const htd::ConstCollection<htd::vertex_t> & elements2 = it2->elements();
+            const std::vector<htd::vertex_t> & elements2 = it2->elements();
 
             if (std::includes(elements2.begin(), elements2.end(), elements1.begin(), elements1.end()))
             {

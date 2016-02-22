@@ -81,6 +81,12 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
 
                 decomposition.setBagContent(newVertex, rememberedVertices);
 
+                htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                newInducedHyperedges.restrictTo(rememberedVertices);
+
+                decomposition.setInducedHyperedges(newVertex, newInducedHyperedges);
+
                 for (auto & labelingFunction : labelingFunctions)
                 {
                     htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newVertex);
@@ -138,6 +144,12 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
                 decomposition.setBagContent(newVertex, rememberedVertices);
+
+                htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                newInducedHyperedges.restrictTo(rememberedVertices);
+
+                decomposition.setInducedHyperedges(newVertex, newInducedHyperedges);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {

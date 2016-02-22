@@ -68,15 +68,19 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
         std::cout << std::endl << std::endl;
         )
 
+        const htd::FilteredHyperedgeCollection & inducedHyperedges = decomposition.inducedHyperedges(node);
+
         if (identicalParent_)
         {
             if (!decomposition.isRoot(node))
             {
-                const std::vector<htd::vertex_t> & parentBag = decomposition.bagContentVector(decomposition.parent(node));
-
-                if (parentBag != bag)
+                if (decomposition.bagContentVector(decomposition.parent(node)) != bag)
                 {
-                    decomposition.setBagContent(decomposition.addParent(node), bag);
+                    htd::vertex_t newParent = decomposition.addParent(node);
+
+                    decomposition.setBagContent(newParent, bag);
+
+                    decomposition.setInducedHyperedges(newParent, inducedHyperedges);
                 }
             }
         }
@@ -101,6 +105,8 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
                 htd::vertex_t intermediateVertex = decomposition.addParent(child);
 
                 decomposition.setBagContent(intermediateVertex, bag);
+
+                decomposition.setInducedHyperedges(intermediateVertex, inducedHyperedges);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {

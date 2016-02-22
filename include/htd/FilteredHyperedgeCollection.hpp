@@ -104,6 +104,10 @@ namespace htd
 
             FilteredHyperedgeCollection(std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection, std::vector<htd::index_t> && relevantIndices);
 
+            FilteredHyperedgeCollection(const FilteredHyperedgeCollection & hyperedges);
+
+            FilteredHyperedgeCollection(FilteredHyperedgeCollection && hyperedges);
+
             virtual ~FilteredHyperedgeCollection();
 
             std::size_t size(void) const;
@@ -112,9 +116,15 @@ namespace htd
 
             FilteredHyperedgeCollectionConstIterator end(void) const;
 
+            FilteredHyperedgeCollection & operator=(const FilteredHyperedgeCollection & rhs);
+
+            FilteredHyperedgeCollection & operator=(FilteredHyperedgeCollection && rhs);
+
             bool operator==(const FilteredHyperedgeCollection & rhs) const;
 
             bool operator!=(const FilteredHyperedgeCollection & rhs) const;
+
+            void restrictTo(const std::vector<htd::vertex_t> & vertices);
 
         private:
             std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection_;

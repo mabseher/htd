@@ -110,6 +110,12 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
                     decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
 
+                    htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                    newInducedHyperedges.restrictTo(std::vector<htd::vertex_t>(start, finish));
+
+                    decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
+
                     for (auto & labelingFunction : labelingFunctions)
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
@@ -130,6 +136,12 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                             newNode = decomposition.addParent(newNode);
 
                             decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
+
+                            htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                            newInducedHyperedges.restrictTo(std::vector<htd::vertex_t>(start, finish));
+
+                            decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
 
                             for (auto & labelingFunction : labelingFunctions)
                             {
@@ -166,6 +178,12 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
                     decomposition.setBagContent(newNode, newContent);
 
+                    htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                    newInducedHyperedges.restrictTo(newContent);
+
+                    decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
+
                     for (auto & labelingFunction : labelingFunctions)
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
@@ -192,6 +210,12 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                             }
 
                             decomposition.setBagContent(newNode, newContent);
+
+                            htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                            newInducedHyperedges.restrictTo(newContent);
+
+                            decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
 
                             for (auto & labelingFunction : labelingFunctions)
                             {
@@ -283,6 +307,12 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                     decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
 
+                    htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                    newInducedHyperedges.restrictTo(std::vector<htd::vertex_t>(start, finish));
+
+                    decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
+
                     for (auto & labelingFunction : labelingFunctions)
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
@@ -303,6 +333,12 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                             newNode = decomposition.addParent(newNode);
 
                             decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
+
+                            htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                            newInducedHyperedges.restrictTo(std::vector<htd::vertex_t>(start, finish));
+
+                            decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
 
                             for (auto & labelingFunction : labelingFunctions)
                             {
@@ -339,6 +375,12 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                     decomposition.setBagContent(newNode, newContent);
 
+                    htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                    newInducedHyperedges.restrictTo(newContent);
+
+                    decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
+
                     for (auto & labelingFunction : labelingFunctions)
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
@@ -359,12 +401,16 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                         {
                             newNode = decomposition.addParent(newNode);
 
-                            for (auto it = start; it != finish; it++)
-                            {
-                                newContent.push_back(*it);
-                            }
+                            std::copy(start, finish, std::back_inserter(newContent));
+                            std::inplace_merge(newContent.begin(), newContent.end() - std::distance(start, finish), newContent.end());
 
                             decomposition.setBagContent(newNode, newContent);
+
+                            htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                            newInducedHyperedges.restrictTo(newContent);
+
+                            decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
 
                             for (auto & labelingFunction : labelingFunctions)
                             {

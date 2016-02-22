@@ -58,6 +58,16 @@ htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(std::shared_ptr<st
 
 }
 
+htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(const htd::FilteredHyperedgeCollection & hyperedges) : baseCollection_(hyperedges.baseCollection_), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(*(hyperedges.relevantIndices_)))
+{
+
+}
+
+htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(htd::FilteredHyperedgeCollection && hyperedges) : baseCollection_(std::move(hyperedges.baseCollection_)), relevantIndices_(std::move(hyperedges.relevantIndices_))
+{
+
+}
+
 htd::FilteredHyperedgeCollection::~FilteredHyperedgeCollection()
 {
 
@@ -68,6 +78,27 @@ std::size_t htd::FilteredHyperedgeCollection::size(void) const
     return relevantIndices_->size();
 }
 
+htd::FilteredHyperedgeCollection & htd::FilteredHyperedgeCollection::operator=(const htd::FilteredHyperedgeCollection & original)
+{
+    if (this != &original)
+    {
+        baseCollection_ = original.baseCollection_;
+
+        *relevantIndices_ = *(original.relevantIndices_);
+    }
+
+    return *this;
+}
+
+htd::FilteredHyperedgeCollection & htd::FilteredHyperedgeCollection::operator=(htd::FilteredHyperedgeCollection && original)
+{
+    baseCollection_ = std::move(original.baseCollection_);
+
+    relevantIndices_ = std::move(original.relevantIndices_);
+
+    return *this;
+}
+
 bool htd::FilteredHyperedgeCollection::operator==(const htd::FilteredHyperedgeCollection & rhs) const
 {
     return baseCollection_ == rhs.baseCollection_ && relevantIndices_ == rhs.relevantIndices_;
@@ -76,6 +107,15 @@ bool htd::FilteredHyperedgeCollection::operator==(const htd::FilteredHyperedgeCo
 bool htd::FilteredHyperedgeCollection::operator!=(const htd::FilteredHyperedgeCollection & rhs) const
 {
     return baseCollection_ != rhs.baseCollection_ || relevantIndices_ != rhs.relevantIndices_;
+}
+
+void htd::FilteredHyperedgeCollection::restrictTo(const std::vector<htd::vertex_t> & vertices)
+{
+    relevantIndices_->erase(std::remove_if(relevantIndices_->begin(), relevantIndices_->end(), [&](htd::index_t index) {
+        const std::vector<htd::vertex_t> & sortedElements = baseCollection_->at(index).sortedElements();
+
+        return htd::has_non_empty_set_difference(sortedElements.begin(), sortedElements.end(), vertices.begin(), vertices.end());
+    }), relevantIndices_->end());
 }
 
 htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator htd::FilteredHyperedgeCollection::begin(void) const

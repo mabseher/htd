@@ -105,9 +105,15 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
                 const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(child);
 
+                htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
                 std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
                 decomposition.setBagContent(newNode, newContent);
+
+                newInducedHyperedges.restrictTo(newContent);
+
+                decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -136,6 +142,10 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
                         decomposition.setBagContent(newNode, newContent);
+
+                        newInducedHyperedges.restrictTo(newContent);
+
+                        decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
 
                         for (auto & labelingFunction : labelingFunctions)
                         {
@@ -228,9 +238,15 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                 const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(child);
 
+                htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(child);
+
                 std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
                 decomposition.setBagContent(newNode, newContent);
+
+                newInducedHyperedges.restrictTo(newContent);
+
+                decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -259,6 +275,10 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
                         decomposition.setBagContent(newNode, newContent);
+
+                        newInducedHyperedges.restrictTo(newContent);
+
+                        decomposition.setInducedHyperedges(newNode, newInducedHyperedges);
 
                         for (auto & labelingFunction : labelingFunctions)
                         {

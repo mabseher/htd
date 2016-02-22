@@ -58,7 +58,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
     {
         htd::vertex_container bagContent;
 
-        const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(node);
+        const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
@@ -103,7 +103,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
                 std::vector<htd::vertex_t> newContent;
 
-                const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(child);
+                const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(child);
 
                 htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
@@ -133,7 +133,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
                     for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                     {
-                        const std::vector<htd::vertex_t> & bagContent2 = decomposition.bagContentVector(newNode);
+                        const std::vector<htd::vertex_t> & bagContent2 = decomposition.bagContent(newNode);
 
                         newNode = decomposition.addParent(newNode);
 
@@ -191,7 +191,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
     {
         htd::vertex_container bagContent;
 
-        const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(node);
+        const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
@@ -236,7 +236,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                 std::vector<htd::vertex_t> newContent;
 
-                const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(child);
+                const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(child);
 
                 htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(child);
 
@@ -266,7 +266,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                     for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                     {
-                        const std::vector<htd::vertex_t> & bagContent2 = decomposition.bagContentVector(newNode);
+                        const std::vector<htd::vertex_t> & bagContent2 = decomposition.bagContent(newNode);
 
                         newNode = decomposition.addParent(newNode);
 

@@ -172,7 +172,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     if (requiredVertices.size() > 0)
                     {
-                        const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(currentNode);
+                        const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(currentNode);
 
                         htd::vertex_container newBagContent;
 
@@ -253,7 +253,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
 
                     for (htd::vertex_t child : availableChildren)
                     {
-                        const std::vector<htd::vertex_t> & childBagContent = decomposition.bagContentVector(child);
+                        const std::vector<htd::vertex_t> & childBagContent = decomposition.bagContent(child);
 
                         DEBUGGING_CODE(
                         std::cout << "   SIBLING: " << child << std::endl;
@@ -305,7 +305,7 @@ void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd
 
     for (htd::vertex_t child : decomposition.children(vertex))
     {
-        const std::vector<htd::vertex_t> & childLabel = decomposition.bagContentVector(child);
+        const std::vector<htd::vertex_t> & childLabel = decomposition.bagContent(child);
 
         result.insert(childLabel.begin(), childLabel.end());
     }

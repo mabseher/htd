@@ -62,10 +62,6 @@ namespace htd
 
             virtual bool isIntroduceNode(htd::vertex_t vertex) const = 0;
 
-            virtual std::size_t bagSize(htd::vertex_t vertex) const = 0;
-
-            virtual htd::ConstCollection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
-
             virtual std::size_t forgottenVertexCount(htd::vertex_t vertex) const = 0;
 
             virtual std::size_t forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;

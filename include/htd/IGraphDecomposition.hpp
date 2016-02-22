@@ -51,11 +51,9 @@ namespace htd
 
             virtual std::size_t bagSize(htd::vertex_t vertex) const = 0;
 
-            virtual std::vector<htd::vertex_t> bagContentVector(htd::vertex_t vertex) const = 0;
+            virtual const std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) const = 0;
 
-            virtual htd::ConstCollection<htd::vertex_t> bagContent(htd::vertex_t vertex) const = 0;
-
-            virtual htd::FilteredHyperedgeCollection inducedHyperedges(htd::vertex_t vertex) const = 0;
+            virtual const htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) const = 0;
 
             virtual std::size_t minimumBagSize(void) const = 0;
 

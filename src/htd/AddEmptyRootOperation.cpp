@@ -55,7 +55,7 @@ void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decompos
         {
             htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newRoot);
 
-            const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(newRoot);
+            const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(newRoot);
 
             htd::ILabel * newLabel = labelingFunction->computeLabel(bagContent, *labelCollection);
 
@@ -83,7 +83,7 @@ void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decompos
         {
             htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newRoot);
 
-            const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(newRoot);
+            const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(newRoot);
 
             htd::ILabel * newLabel = labelingFunction->computeLabel(bagContent, *labelCollection);
 

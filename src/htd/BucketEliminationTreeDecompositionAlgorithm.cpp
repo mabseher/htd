@@ -110,7 +110,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
             {
                 htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContentVector(vertex), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 
@@ -124,7 +124,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
             {
                 htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContentVector(vertex), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 
@@ -295,9 +295,9 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
             vertexMapping[vertex] = node;
 
-            ret->setVertexLabel(htd::ITreeDecomposition::BAG_LABEL_IDENTIFIER, node, mutableGraphDecomposition.transferVertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex));
+            ret->setBagContent(node, mutableGraphDecomposition.bagContent(vertex));
 
-            ret->setVertexLabel(htd::ITreeDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, node, mutableGraphDecomposition.transferVertexLabel(htd::IGraphDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, vertex));
+            ret->setInducedHyperedges(node, mutableGraphDecomposition.inducedHyperedges(vertex));
         });
 
         delete graphDecomposition;

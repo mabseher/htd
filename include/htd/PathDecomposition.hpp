@@ -30,6 +30,8 @@
 #include <htd/IMutablePathDecomposition.hpp>
 #include <htd/LabeledPath.hpp>
 
+#include <unordered_map>
+
 namespace htd
 {
     class PathDecomposition : public htd::LabeledPath, public virtual htd::IMutablePathDecomposition
@@ -46,6 +48,22 @@ namespace htd
             PathDecomposition(const htd::IPathDecomposition & original);
             
             ~PathDecomposition();
+
+            void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            void removeSubpath(htd::vertex_t subpathRoot) HTD_OVERRIDE;
+
+            htd::vertex_t insertRoot(void) HTD_OVERRIDE;
+
+            void removeRoot(void) HTD_OVERRIDE;
+
+            htd::vertex_t addChild(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            htd::vertex_t addParent(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            void removeChild(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            void removeChild(htd::vertex_t vertex, htd::vertex_t child) HTD_OVERRIDE;
 
             std::size_t joinNodeCount(void) const HTD_OVERRIDE;
 
@@ -73,9 +91,7 @@ namespace htd
 
             std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            std::vector<htd::vertex_t> bagContentVector(htd::vertex_t vertex) const HTD_OVERRIDE;
-
-            htd::ConstCollection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
+            const std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             void setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content) HTD_OVERRIDE;
 
@@ -85,7 +101,7 @@ namespace htd
 
             void setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content) HTD_OVERRIDE;
 
-            htd::FilteredHyperedgeCollection inducedHyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             void setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;
 
@@ -164,6 +180,11 @@ namespace htd
             PathDecomposition & operator=(const htd::ILabeledPath & original) HTD_OVERRIDE;
 
             PathDecomposition & operator=(const htd::IPathDecomposition & original) HTD_OVERRIDE;
+
+        private:
+            std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> bagContent_;
+
+            std::unordered_map<htd::vertex_t, htd::FilteredHyperedgeCollection> inducedEdges_;
     };
 }
 

@@ -30,6 +30,8 @@
 #include <htd/IMutableGraphDecomposition.hpp>
 #include <htd/LabeledGraph.hpp>
 
+#include <unordered_map>
+
 namespace htd
 {
     class GraphDecomposition : public htd::LabeledGraph, public virtual htd::IMutableGraphDecomposition
@@ -47,11 +49,15 @@ namespace htd
             
             ~GraphDecomposition();
 
+            htd::vertex_t addVertex(void) HTD_OVERRIDE;
+
+            htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) HTD_OVERRIDE;
+
+            void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
+
             std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            std::vector<htd::vertex_t> bagContentVector(htd::vertex_t vertex) const HTD_OVERRIDE;
-
-            htd::ConstCollection<htd::vertex_t> bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
+            const std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             void setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content) HTD_OVERRIDE;
 
@@ -61,7 +67,7 @@ namespace htd
 
             void setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content) HTD_OVERRIDE;
 
-            htd::FilteredHyperedgeCollection inducedHyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
+            const htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             void setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;
 
@@ -84,6 +90,11 @@ namespace htd
             GraphDecomposition & operator=(const htd::ILabeledMultiGraph & original) HTD_OVERRIDE;
 
             GraphDecomposition & operator=(const htd::IGraphDecomposition & original) HTD_OVERRIDE;
+
+        private:
+            std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> bagContent_;
+
+            std::unordered_map<htd::vertex_t, htd::FilteredHyperedgeCollection> inducedEdges_;
     };
 }
 

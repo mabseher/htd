@@ -83,7 +83,7 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
 
         std::vector<htd::Hyperedge> & labelContent = label.container();
 
-        const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
         bool edgeIntroductionCheckNeeded = false;
 
@@ -217,7 +217,7 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
 
         std::vector<htd::Hyperedge> & labelContent = label.container();
 
-        const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(vertex);
+        const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
         bool edgeIntroductionCheckNeeded = false;
 

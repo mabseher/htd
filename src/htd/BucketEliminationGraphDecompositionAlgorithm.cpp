@@ -117,7 +117,7 @@ htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::co
             {
                 htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContentVector(vertex), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 
@@ -131,7 +131,7 @@ htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::co
             {
                 htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContentVector(vertex), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 

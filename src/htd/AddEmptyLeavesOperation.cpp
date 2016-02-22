@@ -64,7 +64,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomp
             {
                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newLeaf);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newLeaf), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newLeaf), *labelCollection);
 
                 delete labelCollection;
 
@@ -97,7 +97,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
             {
                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newLeaf);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newLeaf), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newLeaf), *labelCollection);
 
                 delete labelCollection;
 

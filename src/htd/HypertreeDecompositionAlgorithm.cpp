@@ -106,7 +106,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
         for (htd::vertex_t vertex : ret->vertices())
         {
-            htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(ret->bagContentVector(vertex));
+            htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(ret->bagContent(vertex));
 
             ret->setVertexLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
         }
@@ -148,7 +148,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
             {
                 htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContentVector(vertex), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 
@@ -162,7 +162,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
             {
                 htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContentVector(vertex), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 

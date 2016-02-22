@@ -67,7 +67,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
         {
             htd::vertex_container bagContent;
 
-            const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(node);
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
             std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
@@ -120,7 +120,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newNode), *labelCollection);
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
 
                         delete labelCollection;
 
@@ -147,7 +147,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                             {
                                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newNode), *labelCollection);
+                                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
 
                                 delete labelCollection;
 
@@ -172,7 +172,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
                     std::vector<htd::vertex_t> newContent;
 
-                    const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(child);
+                    const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(child);
 
                     std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
@@ -264,7 +264,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
         {
             htd::vertex_container bagContent;
 
-            const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(node);
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
             std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
@@ -317,7 +317,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                     {
                         htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newNode), *labelCollection);
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
 
                         delete labelCollection;
 
@@ -344,7 +344,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                             {
                                 htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
 
-                                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContentVector(newNode), *labelCollection);
+                                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
 
                                 delete labelCollection;
 
@@ -369,7 +369,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                     std::vector<htd::vertex_t> newContent;
 
-                    const std::vector<htd::vertex_t> & bagContent = decomposition.bagContentVector(child);
+                    const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(child);
 
                     std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 

@@ -29,34 +29,37 @@
 #include <htd/Helpers.hpp>
 #include <htd/GraphDecomposition.hpp>
 #include <htd/VectorAdapter.hpp>
-#include <htd/Label.hpp>
 
 #include <algorithm>
 #include <stdexcept>
 
-htd::GraphDecomposition::GraphDecomposition(void) : htd::LabeledGraph::LabeledGraph()
+htd::GraphDecomposition::GraphDecomposition(void) : htd::LabeledGraph::LabeledGraph(), bagContent_(), inducedEdges_()
 {
 
 }
 
-htd::GraphDecomposition::GraphDecomposition(const htd::GraphDecomposition & original) : htd::LabeledGraph::LabeledGraph(original)
+htd::GraphDecomposition::GraphDecomposition(const htd::GraphDecomposition & original) : htd::LabeledGraph::LabeledGraph(original), bagContent_(original.bagContent_), inducedEdges_(original.inducedEdges_)
 {
 
 }
 
-htd::GraphDecomposition::GraphDecomposition(const htd::IGraph & original) : htd::LabeledGraph::LabeledGraph(original)
+htd::GraphDecomposition::GraphDecomposition(const htd::IGraph & original) : htd::LabeledGraph::LabeledGraph(original), bagContent_(), inducedEdges_()
 {
 
 }
 
-htd::GraphDecomposition::GraphDecomposition(const htd::ILabeledGraph & original) : htd::LabeledGraph::LabeledGraph(original)
+htd::GraphDecomposition::GraphDecomposition(const htd::ILabeledGraph & original) : htd::LabeledGraph::LabeledGraph(original), bagContent_(), inducedEdges_()
 {
 
 }
 
-htd::GraphDecomposition::GraphDecomposition(const htd::IGraphDecomposition & original) : htd::LabeledGraph::LabeledGraph(original)
+htd::GraphDecomposition::GraphDecomposition(const htd::IGraphDecomposition & original) : htd::LabeledGraph::LabeledGraph(original), bagContent_(), inducedEdges_()
 {
-
+    for (htd::vertex_t vertex : original.vertices())
+    {
+        bagContent_[vertex] = original.bagContent(vertex);
+        inducedEdges_[vertex] = original.inducedHyperedges(vertex);
+    }
 }
 
 htd::GraphDecomposition::~GraphDecomposition()
@@ -64,162 +67,132 @@ htd::GraphDecomposition::~GraphDecomposition()
 
 }
 
-std::size_t htd::GraphDecomposition::bagSize(htd::vertex_t vertex) const
+htd::vertex_t htd::GraphDecomposition::addVertex(void)
 {
-    std::size_t ret = 0;
+    htd::vertex_t ret = htd::Graph::addVertex();
 
-    if (isVertex(vertex))
+    bagContent_[ret] = std::vector<htd::vertex_t>();
+
+    inducedEdges_[ret] = htd::FilteredHyperedgeCollection();
+
+    return ret;
+}
+
+htd::ConstCollection<htd::vertex_t> htd::GraphDecomposition::addVertices(std::size_t count)
+{
+    const htd::ConstCollection<htd::vertex_t> & ret = htd::Graph::addVertices(count);
+
+    auto it = ret.begin();
+
+    for (htd::index_t index = 0; index < count; ++index)
     {
-        if (isLabeledVertex(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex))
-        {
-            ret = dynamic_cast<const htd::Label<std::vector<htd::vertex_t>> *>(&(vertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->value().size();
-        }
-    }
-    else
-    {
-        throw std::logic_error("std::size_t htd::GraphDecomposition::bagSize(htd::vertex_t) const");
+        bagContent_[*it] = std::vector<htd::vertex_t>();
+
+        inducedEdges_[*it] = htd::FilteredHyperedgeCollection();
+
+        ++it;
     }
 
     return ret;
 }
 
-std::vector<htd::vertex_t> htd::GraphDecomposition::bagContentVector(htd::vertex_t vertex) const
+void htd::GraphDecomposition::removeVertex(htd::vertex_t vertex)
 {
-    if (isVertex(vertex))
-    {
-        if (isLabeledVertex(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex))
-        {
-            return dynamic_cast<const htd::Label<std::vector<htd::vertex_t>> *>(&(vertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->value();
-        }
-        else
-        {
-            return std::vector<htd::vertex_t>();
-        }
-    }
-    else
-    {
-        throw std::logic_error("std::vector<htd::vertex_t> htd::GraphDecomposition::bagContentVector(htd::vertex_t) const");
-    }
+    htd::Graph::removeVertex(vertex);
 
-    return std::vector<htd::vertex_t>();
+    bagContent_.erase(vertex);
+
+    inducedEdges_.erase(vertex);
 }
 
-htd::ConstCollection<htd::vertex_t> htd::GraphDecomposition::bagContent(htd::vertex_t vertex) const
+std::size_t htd::GraphDecomposition::bagSize(htd::vertex_t vertex) const
 {
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        if (isLabeledVertex(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex))
-        {
-            auto & bagLabel = dynamic_cast<const htd::Label<std::vector<htd::vertex_t>> *>(&(vertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex)))->value();
-
-            return htd::ConstCollection<htd::vertex_t>::getInstance(bagLabel);
-        }
-        else
-        {
-            return htd::ConstCollection<htd::vertex_t>();
-        }
-    }
-    else
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::GraphDecomposition::bagContent(htd::vertex_t) const");
+        throw std::logic_error("std::size_t htd::GraphDecomposition::bagSize(htd::vertex_t) const");
     }
 
-    return htd::ConstCollection<htd::vertex_t>();
+    return bagContent_.at(vertex).size();
+}
+
+const std::vector<htd::vertex_t> & htd::GraphDecomposition::bagContent(htd::vertex_t vertex) const
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("const std::vector<htd::vertex_t> & htd::GraphDecomposition::bagContent(htd::vertex_t) const");
+    }
+
+    return bagContent_.at(vertex);
 }
 
 void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content)
 {
-    if (isVertex(vertex))
-    {
-        setVertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<std::vector<htd::vertex_t>>(content));
-    }
-    else
+    if (!isVertex(vertex))
     {
         throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, const std::vector<htd::vertex_t> &)");
     }
+
+    bagContent_[vertex] = content;
 }
 
 void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd::vertex_t> && content)
 {
-    if (isVertex(vertex))
-    {
-        setVertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<std::vector<htd::vertex_t>>(std::move(content)));
-    }
-    else
+    if (!isVertex(vertex))
     {
         throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, std::vector<htd::vertex_t> &&)");
     }
+
+    bagContent_[vertex] = std::move(content);
 }
 
 void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
 {
-    if (isVertex(vertex))
-    {
-        setVertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<std::vector<htd::vertex_t>>(std::vector<htd::vertex_t>(content.begin(), content.end())));
-    }
-    else
+    if (!isVertex(vertex))
     {
         throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, const htd::ConstCollection<htd::vertex_t> &)");
     }
+
+    bagContent_[vertex] = std::vector<htd::vertex_t>(content.begin(), content.end());
 }
 
 void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content)
 {
-    if (isVertex(vertex))
-    {
-        setVertexLabel(htd::IGraphDecomposition::BAG_LABEL_IDENTIFIER, vertex, new htd::Label<std::vector<htd::vertex_t>>(std::vector<htd::vertex_t>(content.begin(), content.end())));
-    }
-    else
+    if (!isVertex(vertex))
     {
         throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, htd::IConstCollection<htd::vertex_t> &&)");
     }
+
+    bagContent_[vertex] = std::vector<htd::vertex_t>(content.begin(), content.end());
 }
 
-htd::FilteredHyperedgeCollection htd::GraphDecomposition::inducedHyperedges(htd::vertex_t vertex) const
+const htd::FilteredHyperedgeCollection & htd::GraphDecomposition::inducedHyperedges(htd::vertex_t vertex) const
 {
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        if (isLabeledVertex(htd::IGraphDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, vertex))
-        {
-            auto & inducedEdgesLabel = dynamic_cast<const htd::Label<htd::FilteredHyperedgeCollection> *>(&(vertexLabel(htd::IGraphDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, vertex)))->value();
-
-            return inducedEdgesLabel;
-        }
-        else
-        {
-            return htd::FilteredHyperedgeCollection();
-        }
-    }
-    else
-    {
-        throw std::logic_error("htd::FilteredHyperedgeCollection htd::GraphDecomposition::inducedHyperedges(htd::vertex_t) const");
+        throw std::logic_error("const htd::FilteredHyperedgeCollection & htd::GraphDecomposition::inducedHyperedges(htd::vertex_t) const");
     }
 
-    return htd::FilteredHyperedgeCollection();
+    return inducedEdges_.at(vertex);
 }
 
 void htd::GraphDecomposition::setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges)
 {
-    if (isVertex(vertex))
-    {
-        setVertexLabel(htd::IGraphDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, vertex, new htd::Label<htd::FilteredHyperedgeCollection>(inducedEdges));
-    }
-    else
+    if (!isVertex(vertex))
     {
         throw std::logic_error("void htd::GraphDecomposition::setInducedHyperedges(htd::vertex_t, const htd::FilteredHyperedgeCollection &)");
     }
+
+    inducedEdges_[vertex] = inducedEdges;
 }
 
 void htd::GraphDecomposition::setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges)
 {
-    if (isVertex(vertex))
-    {
-        setVertexLabel(htd::IGraphDecomposition::INDUCED_EDGES_LABEL_IDENTIFIER, vertex, new htd::Label<htd::FilteredHyperedgeCollection>(std::move(inducedEdges)));
-    }
-    else
+    if (!isVertex(vertex))
     {
         throw std::logic_error("void htd::GraphDecomposition::setInducedHyperedges(htd::vertex_t, htd::FilteredHyperedgeCollection &&)");
     }
+
+    inducedEdges_[vertex] = std::move(inducedEdges);
 }
 
 std::size_t htd::GraphDecomposition::minimumBagSize(void) const

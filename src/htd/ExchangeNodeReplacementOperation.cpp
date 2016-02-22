@@ -61,7 +61,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
 
     for (htd::vertex_t node : exchangeNodes)
     {
-        const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(node);
+        const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         htd::vertex_container children;
 
@@ -125,7 +125,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
     for (htd::vertex_t node : exchangeNodes)
     {
-        const std::vector<htd::vertex_t> & bag = decomposition.bagContentVector(node);
+        const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         htd::vertex_container children;
 

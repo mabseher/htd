@@ -28,6 +28,8 @@
 #include <htd/Globals.hpp>
 #include <htd/IHypergraph.hpp>
 
+#include <functional>
+
 namespace htd
 {
     class IGraphTraversal

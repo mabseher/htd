@@ -16,9 +16,10 @@ install:
     mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
     export PATH=${DEPENDENCIES_DIRECTORY}/cmake/bin:${PATH}
   else
-    CMAKE_URL="https://cmake.org/files/v3.1/cmake-3.1.0-Darwin64-universal.tar.gz"
-    mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-    export PATH=${DEPENDENCIES_DIRECTORY}/cmake/bin:${PATH}
+    #CMAKE_URL="https://cmake.org/files/v3.1/cmake-3.1.0-Darwin64-universal.tar.gz"
+    #mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+    #export PATH=${DEPENDENCIES_DIRECTORY}/cmake/bin:${PATH}
+    brew update && brew unlink cmake && brew install cmake
   fi
 - cd ..
 - echo ${PATH}

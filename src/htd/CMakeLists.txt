@@ -4,7 +4,7 @@ aux_source_directory(. SRC_LIST)
 write_compiler_detection_header(
   FILE "${PROJECT_SOURCE_DIR}/include/htd/CompilerDetection.hpp"
   PREFIX HTD
-  COMPILERS GNU Clang
+  COMPILERS GNU Clang AppleClang
   FEATURES cxx_noexcept cxx_override
 )
 

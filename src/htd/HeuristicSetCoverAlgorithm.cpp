@@ -32,6 +32,8 @@
 
 #include <cstdlib>
 #include <algorithm>
+#include <numeric>
+#include <random>
 #include <unordered_set>
 
 htd::HeuristicSetCoverAlgorithm::HeuristicSetCoverAlgorithm(void)

@@ -18,6 +18,7 @@ install:
   else
     brew install cmake
   fi
+- cd ..
 - echo ${PATH}
 - echo ${CXX}
 - ${CXX} --version

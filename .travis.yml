@@ -7,7 +7,18 @@ install:
 - DEPENDENCIES_DIRECTORY="${TRAVIS_BUILD_DIR}/dependencies"
 - mkdir ${DEPENDENCIES_DIRECTORY} && cd ${DEPENDENCIES_DIRECTORY}
 # /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
-- if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+- |
+  if [ "$CXX" = "g++" ]; then 
+    export CXX="g++-4.9" CC="gcc-4.9";
+    
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      LCOV_URL="http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.12.orig.tar.gz"
+      mkdir lcov && travis_retry wget --no-check-certificate --quiet -O - ${LCOV_URL} | tar --strip-components=1 -xz -C lcov
+      export PATH=${DEPENDENCIES_DIRECTORY}/lcov/bin:${PATH}
+      gem install coveralls-lcov
+      lcov --version
+    fi
+  fi
 # /usr/bin/clang is 3.4, lets override with modern one.
 - if [ "$CXX" = "clang++" ] && [ "$TRAVIS_OS_NAME" = "linux" ]; then export CXX="clang++-3.7" CC="clang-3.7"; fi
 - |
@@ -18,15 +29,8 @@ install:
   else
     brew update && brew unlink cmake && brew install cmake
   fi
-- |
-  if [ "$CXX" = "g++" ] && [ "$TRAVIS_OS_NAME" = "linux" ]; then
-    LCOV_URL="http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.12.orig.tar.gz"
-    mkdir lcov && travis_retry wget --no-check-certificate --quiet -O - ${LCOV_URL} | tar --strip-components=1 -xz -C lcov
-    export PATH=${DEPENDENCIES_DIRECTORY}/lcov/bin:${PATH}
-    gem install coveralls-lcov
-    lcov --version
-  fi
 - cd ..
+- ls ${DEPENDENCIES_DIRECTORY}
 - echo ${PATH}
 - echo ${CXX}
 - ${CXX} --version

@@ -20,6 +20,9 @@ install:
   fi
 - |
   if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
+    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90
+    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 90
+    sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-4.9 90
     LCOV_URL="http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.12.orig.tar.gz"
     mkdir lcov && travis_retry wget --no-check-certificate --quiet -O - ${LCOV_URL} | tar --strip-components=1 -xz -C lcov
     export PATH=${DEPENDENCIES_DIRECTORY}/lcov/bin:${PATH}

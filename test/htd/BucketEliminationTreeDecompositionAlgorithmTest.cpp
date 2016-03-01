@@ -52,9 +52,9 @@ class BucketEliminationTreeDecompositionAlgorithmTest : public ::testing::Test
         }
 };
 
-TEST(CheckResultEmptyGraph, BucketEliminationTreeDecompositionAlgorithmTest)
+TEST(BucketEliminationTreeDecompositionAlgorithmTest, CheckResultEmptyGraph)
 {
-    htd::Graph graph;
+    htd::MultiHypergraph graph;
 
     htd::BucketEliminationTreeDecompositionAlgorithm algorithm;
 
@@ -71,6 +71,67 @@ TEST(CheckResultEmptyGraph, BucketEliminationTreeDecompositionAlgorithmTest)
     const std::vector<htd::vertex_t> & bag = decomposition->bagContent(1);
 
     EXPECT_EQ(bag.size(), (std::size_t)0);
+
+    delete decomposition;
+}
+
+TEST(BucketEliminationTreeDecompositionAlgorithmTest, CheckResultDisconnectedGraph)
+{
+    htd::MultiHypergraph graph;
+
+    graph.addVertex();
+    graph.addVertex();
+    graph.addVertex();
+
+    htd::BucketEliminationTreeDecompositionAlgorithm algorithm;
+
+    htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(graph, *decomposition));
+
+    delete decomposition;
+}
+
+TEST(BucketEliminationTreeDecompositionAlgorithmTest, CheckResultSimpleGraph)
+{
+    htd::MultiHypergraph graph;
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    htd::BucketEliminationTreeDecompositionAlgorithm algorithm;
+
+    htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(graph, *decomposition));
 
     delete decomposition;
 }

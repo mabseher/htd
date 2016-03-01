@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -evx
-env | sort
+env | grep -v "COVERALLS_TOKEN" | sort
 
 mkdir build || true
 mkdir build/${HTD_TARGET} || true

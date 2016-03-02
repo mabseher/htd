@@ -228,29 +228,50 @@ htd::vertex_t htd::MultiHypergraph::vertexAtPosition(htd::index_t index) const
 bool htd::MultiHypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
     bool ret = false;
-    
+
     if (isVertex(vertex) && isVertex(neighbor))
     {
-        for (auto it = edges_->begin(); it != edges_->end();)
+        if (vertex != neighbor)
         {
-            const htd::Hyperedge & edge = *it;
-            
-            if (std::binary_search(edge.begin(), edge.end(), vertex))
+            for (auto it = edges_->begin(); it != edges_->end();)
             {
-                if (std::binary_search(edge.begin(), edge.end(), neighbor))
+                const htd::Hyperedge & edge = *it;
+
+                if (std::binary_search(edge.begin(), edge.end(), vertex))
                 {
-                    ret = true;
-                    
-                    it = edges_->end();
+                    if (std::binary_search(edge.begin(), edge.end(), neighbor))
+                    {
+                        ret = true;
+
+                        it = edges_->end();
+                    }
+                    else
+                    {
+                        it++;
+                    }
                 }
                 else
                 {
                     it++;
                 }
             }
-            else
+        }
+        else
+        {
+            for (auto it = edges_->begin(); it != edges_->end();)
             {
-                it++;
+                const htd::Hyperedge & edge = *it;
+
+                if (std::count_if(edge.begin(), edge.end(), [&](htd::vertex_t element) { return element == vertex; }) >= 2)
+                {
+                    ret = true;
+
+                    it = edges_->end();
+                }
+                else
+                {
+                    it++;
+                }
             }
         }
     }

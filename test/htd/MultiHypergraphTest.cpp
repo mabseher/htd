@@ -103,6 +103,118 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph1)
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
 }
 
+TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
+{
+    htd::MultiHypergraph graph(3);
+
+    ASSERT_EQ(graph.vertexCount(), (std::size_t)3);
+    ASSERT_EQ(graph.edgeCount(), (std::size_t)0);
+
+    htd::ConstCollection<htd::vertex_t> vertices = graph.vertices();
+
+    ASSERT_EQ(vertices.size(), (std::size_t)3);
+    ASSERT_EQ(graph.hyperedges().size(), (std::size_t)0);
+
+    htd::ConstCollection<htd::vertex_t> isolatedVertices = graph.isolatedVertices();
+
+    ASSERT_EQ(graph.isolatedVertexCount(), (std::size_t)3);
+    ASSERT_EQ(isolatedVertices.size(), (std::size_t)3);
+
+    ASSERT_EQ(vertices[0], (htd::vertex_t)1);
+    ASSERT_EQ(vertices[1], (htd::vertex_t)2);
+    ASSERT_EQ(vertices[2], (htd::vertex_t)3);
+    ASSERT_EQ(graph.vertexAtPosition((htd::index_t)0), (htd::vertex_t)1);
+    ASSERT_EQ(graph.vertexAtPosition((htd::index_t)1), (htd::vertex_t)2);
+    ASSERT_EQ(graph.vertexAtPosition((htd::index_t)2), (htd::vertex_t)3);
+    ASSERT_TRUE(graph.isVertex((htd::vertex_t)1));
+    ASSERT_TRUE(graph.isVertex((htd::vertex_t)2));
+    ASSERT_TRUE(graph.isVertex((htd::vertex_t)3));
+
+    ASSERT_EQ(isolatedVertices[0], (htd::vertex_t)1);
+    ASSERT_EQ(isolatedVertices[1], (htd::vertex_t)2);
+    ASSERT_EQ(isolatedVertices[2], (htd::vertex_t)3);
+    ASSERT_EQ(graph.isolatedVertexAtPosition((htd::index_t)0), (htd::vertex_t)1);
+    ASSERT_EQ(graph.isolatedVertexAtPosition((htd::index_t)1), (htd::vertex_t)2);
+    ASSERT_EQ(graph.isolatedVertexAtPosition((htd::index_t)2), (htd::vertex_t)3);
+    ASSERT_TRUE(graph.isIsolatedVertex((htd::vertex_t)1));
+    ASSERT_TRUE(graph.isIsolatedVertex((htd::vertex_t)2));
+    ASSERT_TRUE(graph.isIsolatedVertex((htd::vertex_t)3));
+
+    ASSERT_EQ(graph.edgeCount((htd::vertex_t)1), (std::size_t)0);
+    ASSERT_EQ(graph.hyperedges((htd::vertex_t)1).size(), (std::size_t)0);
+
+    ASSERT_EQ(graph.neighborCount((htd::vertex_t)1), (std::size_t)0);
+    ASSERT_EQ(graph.neighborCount((htd::vertex_t)2), (std::size_t)0);
+    ASSERT_EQ(graph.neighborCount((htd::vertex_t)3), (std::size_t)0);
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)3));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)3));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)3));
+
+    ASSERT_FALSE(graph.isConnected());
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)3));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)3));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)3));
+
+    graph.addEdge(htd::Hyperedge((htd::id_t)1, (htd::vertex_t)1, (htd::vertex_t)2));
+
+    ASSERT_TRUE(graph.isEdge((htd::id_t)1));
+
+    std::vector<htd::vertex_t> elements1 { 1, 2 };
+    std::vector<htd::vertex_t> elements2 { 2, 3 };
+
+    htd::ConstCollection<htd::vertex_t> edgeIds1 = graph.associatedEdgeIds(elements1);
+    htd::ConstCollection<htd::vertex_t> edgeIds2 = graph.associatedEdgeIds(htd::Collection<htd::vertex_t>(elements2.begin(), elements2.end()));
+
+    ASSERT_EQ(edgeIds1.size(), (std::size_t)1);
+    ASSERT_EQ(edgeIds2.size(), (std::size_t)0);
+
+    ASSERT_EQ(edgeIds1[0], (htd::id_t)1);
+
+    const htd::Hyperedge & hyperedge1 = graph.hyperedge((std::size_t)1);
+
+    ASSERT_EQ(hyperedge1.id(), (htd::id_t)1);
+    ASSERT_EQ(hyperedge1.size(), (std::size_t)2);
+    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)1));
+    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)2));
+    ASSERT_FALSE(hyperedge1.containsVertex((htd::vertex_t)3));
+
+    ASSERT_EQ(graph.neighborCount((htd::vertex_t)1), (std::size_t)1);
+    ASSERT_EQ(graph.neighborCount((htd::vertex_t)2), (std::size_t)1);
+    ASSERT_EQ(graph.neighborCount((htd::vertex_t)3), (std::size_t)0);
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)3));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)3));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)3));
+
+    ASSERT_FALSE(graph.isConnected());
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)3));
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)3));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)3));
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

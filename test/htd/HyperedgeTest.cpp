@@ -185,8 +185,11 @@ TEST(HyperedgeTest, CheckSize1Hyperedge)
     ASSERT_EQ((htd::id_t)3, hyperedge3.id());
 
     ASSERT_EQ((std::size_t)1, hyperedge1.size());
+    ASSERT_EQ((std::size_t)1, hyperedge1.sortedElements().size());
     ASSERT_EQ((std::size_t)1, hyperedge2.size());
+    ASSERT_EQ((std::size_t)1, hyperedge2.sortedElements().size());
     ASSERT_EQ((std::size_t)1, hyperedge3.size());
+    ASSERT_EQ((std::size_t)1, hyperedge3.sortedElements().size());
 
     ASSERT_FALSE(hyperedge1.empty());
     ASSERT_FALSE(hyperedge2.empty());
@@ -233,8 +236,6 @@ TEST(HyperedgeTest, CheckSize1Hyperedge)
 
     ASSERT_FALSE(hyperedge3 < hyperedge3);
     ASSERT_FALSE(hyperedge3 > hyperedge3);
-
-    std::cout << "ASSIGN" << std::endl;
 
     hyperedge2 = hyperedge1;
 
@@ -307,6 +308,88 @@ TEST(HyperedgeTest, CheckSize1Hyperedge)
     ASSERT_TRUE(hyperedge1 != hyperedge3);
     ASSERT_TRUE(hyperedge3 != hyperedge1);
     ASSERT_TRUE(hyperedge3 == hyperedge3);
+
+    ASSERT_FALSE(hyperedge1.containsVertex((htd::vertex_t)1));
+    ASSERT_TRUE(hyperedge3.containsVertex((htd::vertex_t)1));
+}
+
+TEST(HyperedgeTest, CheckSize2Hyperedge)
+{
+    htd::Hyperedge hyperedge1((htd::id_t)1, std::vector<htd::vertex_t> { 1, 2 });
+    htd::Hyperedge hyperedge2((htd::id_t)2, std::vector<htd::vertex_t> { 2, 1 });
+
+    ASSERT_EQ((htd::id_t)1, hyperedge1.id());
+    ASSERT_EQ((htd::id_t)2, hyperedge2.id());
+
+    ASSERT_EQ((std::size_t)2, hyperedge1.size());
+    ASSERT_EQ((std::size_t)2, hyperedge1.sortedElements().size());
+    ASSERT_EQ((std::size_t)2, hyperedge2.size());
+    ASSERT_EQ((std::size_t)2, hyperedge2.sortedElements().size());
+
+    ASSERT_FALSE(hyperedge1.empty());
+    ASSERT_FALSE(hyperedge2.empty());
+
+    ASSERT_TRUE(hyperedge1 == hyperedge1);
+    ASSERT_TRUE(hyperedge2 == hyperedge2);
+    ASSERT_FALSE(hyperedge1 == hyperedge2);
+    ASSERT_TRUE(hyperedge1 != hyperedge2);
+
+    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)1));
+    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)2));
+    ASSERT_TRUE(hyperedge2.containsVertex((htd::vertex_t)1));
+    ASSERT_TRUE(hyperedge2.containsVertex((htd::vertex_t)2));
+
+    ASSERT_TRUE(hyperedge1.sortedElements() == hyperedge2.sortedElements());
+
+    ASSERT_EQ((htd::vertex_t)1, hyperedge1.elements()[0]);
+    ASSERT_EQ((htd::vertex_t)2, hyperedge1.elements()[1]);
+    ASSERT_EQ((htd::vertex_t)2, hyperedge2.elements()[0]);
+    ASSERT_EQ((htd::vertex_t)1, hyperedge2.elements()[1]);
+
+    ASSERT_TRUE(hyperedge1 < hyperedge2);
+    ASSERT_FALSE(hyperedge2 < hyperedge1);
+    ASSERT_FALSE(hyperedge1 > hyperedge2);
+    ASSERT_TRUE(hyperedge2 > hyperedge1);
+}
+
+TEST(HyperedgeTest, CheckSize3Hyperedge)
+{
+    htd::Hyperedge hyperedge1((htd::id_t)1, std::vector<htd::vertex_t> { 3, 2, 2, 1 });
+
+    ASSERT_EQ((htd::id_t)1, hyperedge1.id());
+
+    ASSERT_EQ((std::size_t)4, hyperedge1.size());
+    ASSERT_EQ((std::size_t)3, hyperedge1.sortedElements().size());
+
+    ASSERT_FALSE(hyperedge1.empty());
+
+    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)1));
+    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)2));
+    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)3));
+
+    ASSERT_EQ((htd::vertex_t)3, hyperedge1.elements()[0]);
+    ASSERT_EQ((htd::vertex_t)2, hyperedge1.elements()[1]);
+    ASSERT_EQ((htd::vertex_t)2, hyperedge1.elements()[2]);
+    ASSERT_EQ((htd::vertex_t)1, hyperedge1.elements()[3]);
+
+    ASSERT_EQ((htd::vertex_t)1, hyperedge1.sortedElements()[0]);
+    ASSERT_EQ((htd::vertex_t)2, hyperedge1.sortedElements()[1]);
+    ASSERT_EQ((htd::vertex_t)3, hyperedge1.sortedElements()[2]);
+
+    hyperedge1.erase((htd::vertex_t)2);
+
+    ASSERT_EQ((std::size_t)2, hyperedge1.size());
+    ASSERT_EQ((std::size_t)2, hyperedge1.sortedElements().size());
+
+    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)1));
+    ASSERT_FALSE(hyperedge1.containsVertex((htd::vertex_t)2));
+    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)3));
+
+    ASSERT_EQ((htd::vertex_t)3, hyperedge1.elements()[0]);
+    ASSERT_EQ((htd::vertex_t)1, hyperedge1.elements()[1]);
+
+    ASSERT_EQ((htd::vertex_t)1, hyperedge1.sortedElements()[0]);
+    ASSERT_EQ((htd::vertex_t)3, hyperedge1.sortedElements()[1]);
 }
 
 int main(int argc, char **argv)

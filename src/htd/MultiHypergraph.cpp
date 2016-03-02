@@ -227,7 +227,7 @@ htd::vertex_t htd::MultiHypergraph::vertexAtPosition(htd::index_t index) const
 
 bool htd::MultiHypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
-    bool ret = 0;
+    bool ret = false;
     
     if (isVertex(vertex) && isVertex(neighbor))
     {
@@ -327,7 +327,7 @@ bool htd::MultiHypergraph::isConnected(void) const
     }
     else
     {
-        ret = false;
+        ret = true;
     }
     
     return ret;

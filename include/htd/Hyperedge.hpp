@@ -90,8 +90,6 @@ namespace htd
             bool operator!=(const Hyperedge & rhs) const;
 
         private:
-            bool written_;
-
             htd::id_t id_;
 
             std::shared_ptr<std::vector<htd::vertex_t>> elements_;

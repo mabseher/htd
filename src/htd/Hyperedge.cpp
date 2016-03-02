@@ -335,12 +335,12 @@ bool htd::Hyperedge::operator>(const htd::Hyperedge & rhs) const
 
 bool htd::Hyperedge::operator==(const htd::Hyperedge & rhs) const
 {
-    return rhs.id_ == id_ && *(rhs.elements_) == *elements_;
+    return *(rhs.elements_) == *elements_;
 }
 
 bool htd::Hyperedge::operator!=(const htd::Hyperedge & rhs) const
 {
-    return rhs.id_ != id_ || *(rhs.elements_) != *elements_;
+    return *(rhs.elements_) != *elements_;
 }
 
 #endif /* HTD_HTD_HYPEREDGE_CPP */

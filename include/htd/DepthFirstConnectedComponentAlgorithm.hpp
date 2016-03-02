@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   DepthFirstConnectedComponentAlgorithm.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)

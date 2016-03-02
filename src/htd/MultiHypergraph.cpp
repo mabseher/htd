@@ -33,6 +33,8 @@
 #include <algorithm>
 #include <array>
 #include <iterator>
+#include <stack>
+#include <unordered_set>
 #include <vector>
 
 htd::MultiHypergraph::MultiHypergraph(void)
@@ -235,11 +237,11 @@ bool htd::MultiHypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighb
         {
             for (auto it = edges_->begin(); it != edges_->end();)
             {
-                const htd::Hyperedge & edge = *it;
+                const std::vector<htd::vertex_t> & elements = it->sortedElements();
 
-                if (std::binary_search(edge.begin(), edge.end(), vertex))
+                if (std::binary_search(elements.begin(), elements.end(), vertex))
                 {
-                    if (std::binary_search(edge.begin(), edge.end(), neighbor))
+                    if (std::binary_search(elements.begin(), elements.end(), neighbor))
                     {
                         ret = true;
 
@@ -297,54 +299,39 @@ bool htd::MultiHypergraph::isConnected(void) const
     
     if (size_ > 0)
     {
-        htd::vertex_t start = 0;
-        
-        htd::vertex_container newVertices;
-        htd::vertex_container tmpVertices;
+        std::stack<htd::vertex_t> originStack;
 
-        std::vector<bool> reachableVertices(size_);
+        std::unordered_set<htd::vertex_t> visitedVertices;
 
-        for (auto deleted : deletions_)
+        htd::vertex_t currentVertex = vertices_.at(0);
+
+        originStack.push(currentVertex);
+
+        while (!originStack.empty())
         {
-            reachableVertices[deleted] = true;
-            
-            if (start == deleted)
+            currentVertex = originStack.top();
+
+            if (visitedVertices.count(currentVertex) == 0)
             {
-                start++;
-            }
-        }
-        
-        reachableVertices[start] = true;
+                visitedVertices.insert(currentVertex);
 
-        newVertices.push_back(start);
+                originStack.pop();
 
-        while (newVertices.size() > 0) 
-        {
-            std::swap(tmpVertices, newVertices);
-
-            newVertices.resize(0);
-
-            for (htd::vertex_container::const_iterator it = tmpVertices.begin(); it != tmpVertices.end(); it++)
-            {
-                for (auto & edge : *edges_)
+                for (htd::vertex_t neighbor : neighborhood_.at(currentVertex - htd::Vertex::FIRST))
                 {
-                    if (std::find(edge.begin(), edge.end(), *it) != edge.end())
+                    if (visitedVertices.count(neighbor) == 0)
                     {
-                        for (htd::vertex_t neighbor : edge)
-                        {
-                            if (neighbor != *it && !reachableVertices[neighbor])
-                            {
-                                reachableVertices[neighbor] = true;
-
-                                newVertices.push_back(neighbor);
-                            }
-                        }
+                        originStack.push(neighbor);
                     }
                 }
             }
+            else
+            {
+                originStack.pop();
+            }
         }
-        
-        ret = std::find(reachableVertices.begin(), reachableVertices.end(), false) == reachableVertices.end();
+
+        ret = visitedVertices.size() == vertices_.size();
     }
     else
     {

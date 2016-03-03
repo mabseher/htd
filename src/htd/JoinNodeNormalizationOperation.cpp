@@ -72,16 +72,13 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
         if (identicalParent_)
         {
-            if (!decomposition.isRoot(node))
+            if (decomposition.bagContent(decomposition.parent(node)) != bag)
             {
-                if (decomposition.bagContent(decomposition.parent(node)) != bag)
-                {
-                    htd::vertex_t newParent = decomposition.addParent(node);
+                htd::vertex_t newParent = decomposition.addParent(node);
 
-                    decomposition.setBagContent(newParent, bag);
+                decomposition.setBagContent(newParent, bag);
 
-                    decomposition.setInducedHyperedges(newParent, inducedHyperedges);
-                }
+                decomposition.setInducedHyperedges(newParent, inducedHyperedges);
             }
         }
 

@@ -74,9 +74,9 @@ after_success:
   - |
     if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
       cd ${TRAVIS_BUILD_DIR}
-      lcov --directory "build" --base-directory . --capture --rc lcov_branch_coverage=1 --output-file coverage.info
-      lcov --remove coverage.info 'htd/test/*' 'htd/cmake/*' '/usr/*' --rc lcov_branch_coverage=1 --output-file coverage.info
-      lcov --rc lcov_branch_coverage=1 --list coverage.info
+      lcov \-lp --directory "build" --base-directory . --capture --rc lcov_branch_coverage=1 --output-file coverage.info
+      lcov \-lp --remove coverage.info 'htd/test/*' 'htd/cmake/*' '/usr/*' --rc lcov_branch_coverage=1 --output-file coverage.info
+      lcov \-lp --rc lcov_branch_coverage=1 --list coverage.info
       coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info
     fi
 

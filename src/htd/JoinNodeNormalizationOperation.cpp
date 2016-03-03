@@ -79,6 +79,17 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
                 decomposition.setBagContent(newParent, bag);
 
                 decomposition.setInducedHyperedges(newParent, inducedHyperedges);
+
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newParent);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(bag, *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), newParent, newLabel);
+                }
             }
         }
 

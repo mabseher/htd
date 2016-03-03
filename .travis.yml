@@ -4,7 +4,7 @@
 # http://lint.travis-ci.org/
 
 install:
-- DEPENDENCIES_DIRECTORY="${TRAVIS_BUILD_DIR}/dependencies"
+- export DEPENDENCIES_DIRECTORY="${TRAVIS_BUILD_DIR}/dependencies"
 - mkdir ${DEPENDENCIES_DIRECTORY} && cd ${DEPENDENCIES_DIRECTORY}
 # /usr/bin/gcc is 4.6 always, but gcc-X.Y is available.
 - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
@@ -27,7 +27,7 @@ install:
     mkdir lcov && travis_retry wget --no-check-certificate --quiet -O - ${LCOV_URL} | tar --strip-components=1 -xz -C lcov
     export PATH=${DEPENDENCIES_DIRECTORY}/lcov/bin:${PATH}
     lcov --version
-    pip install --user cpp-coveralls
+    gem install coveralls-lcov
   fi
 - cd ${TRAVIS_BUILD_DIR}
 - echo ${PATH}
@@ -74,11 +74,12 @@ after_success:
   - |
     if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
       cd ${TRAVIS_BUILD_DIR}
-      lcov --directory "build" --base-directory . --capture --rc lcov_branch_coverage=1 --output-file coverage.info
-      lcov --remove coverage.info 'htd/test/*' 'htd/cmake/*' '/usr/*' --rc lcov_branch_coverage=1 --output-file coverage.info
-      lcov --rc lcov_branch_coverage=1 --list coverage.info
-      cd ${TRAVIS_BUILD_DIR}/build
-      coveralls --dryrun --verbose --exclude "coverage.info" --exclude-pattern "CMakeFiles/.*" --exclude-pattern "htd/test/.*" --exclude-pattern "htd/cmake/.*" --exclude-pattern "/usr/.*" --gcov-options '\-lp'
+      echo "/usr/bin/gcov -lp" > "${DEPENDENCIES_DIRECTORY}/gcov.sh"
+      chmod u+x "${DEPENDENCIES_DIRECTORY}/gcov.sh"
+      lcov --gcov-tool "${DEPENDENCIES_DIRECTORY}/gcov.sh" --directory "build" --base-directory . --capture --rc lcov_branch_coverage=1 --output-file coverage.info
+      lcov --gcov-tool "${DEPENDENCIES_DIRECTORY}/gcov.sh" --remove coverage.info 'htd/test/*' 'htd/cmake/*' '/usr/*' --rc lcov_branch_coverage=1 --output-file coverage.info
+      lcov --gcov-tool "${DEPENDENCIES_DIRECTORY}/gcov.sh" --rc lcov_branch_coverage=1 --list coverage.info
+      coveralls-lcov --repo-token ${COVERALLS_REPO_TOKEN} coverage.info
     fi
 
 env:

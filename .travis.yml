@@ -28,6 +28,7 @@ install:
     export PATH=${DEPENDENCIES_DIRECTORY}/lcov/bin:${PATH}
     gem install coveralls-lcov
     lcov --version
+    pip install --user cpp-coveralls
   fi
 - cd ${TRAVIS_BUILD_DIR}
 - echo ${PATH}
@@ -74,10 +75,11 @@ after_success:
   - |
     if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
       cd ${TRAVIS_BUILD_DIR}
-      lcov \-lp --directory "build" --base-directory . --capture --rc lcov_branch_coverage=1 --output-file coverage.info
-      lcov \-lp --remove coverage.info 'htd/test/*' 'htd/cmake/*' '/usr/*' --rc lcov_branch_coverage=1 --output-file coverage.info
-      lcov \-lp --rc lcov_branch_coverage=1 --list coverage.info
-      coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info
+      lcov --directory "build" --base-directory . --capture --rc lcov_branch_coverage=1 --output-file coverage.info
+      lcov --remove coverage.info 'htd/test/*' 'htd/cmake/*' '/usr/*' --rc lcov_branch_coverage=1 --output-file coverage.info
+      lcov --rc lcov_branch_coverage=1 --list coverage.info
+      #coveralls-lcov --repo-token ${COVERALLS_TOKEN} coverage.info
+      coveralls --root . --build-root "build" --exclude "coverage.info" --exclude "htd/test" --exclude "htd/cmake" --exclude "/usr" --gcov-options '\-lp'
     fi
 
 env:

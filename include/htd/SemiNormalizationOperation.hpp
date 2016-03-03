@@ -49,13 +49,6 @@ namespace htd
             void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
             SemiNormalizationOperation * clone(void) const HTD_OVERRIDE;
-
-        private:
-            bool emptyRoot_;
-
-            bool emptyLeaves_;
-
-            bool identicalJoinNodeParent_;
     };
 }
 

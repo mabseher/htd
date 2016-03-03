@@ -31,7 +31,7 @@
 #include <htd/AddEmptyRootOperation.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 
-htd::WeakNormalizationOperation::WeakNormalizationOperation(void)
+htd::WeakNormalizationOperation::WeakNormalizationOperation(void) : emptyRoot_(false), emptyLeaves_(false), identicalJoinNodeParent_(false)
 {
 
 }
@@ -92,6 +92,21 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(identicalJoinNodeParent_);
 
     joinNodeNormalizationOperation.apply(decomposition, labelingFunctions);
+}
+
+bool htd::WeakNormalizationOperation::emptyRootRequired(void) const
+{
+    return emptyRoot_;
+}
+
+bool htd::WeakNormalizationOperation::emptyLeavesRequired(void) const
+{
+    return emptyLeaves_;
+}
+
+bool htd::WeakNormalizationOperation::identicalJoinNodeParentRequired(void) const
+{
+    return identicalJoinNodeParent_;
 }
 
 htd::WeakNormalizationOperation * htd::WeakNormalizationOperation::clone(void) const

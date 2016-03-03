@@ -32,13 +32,13 @@
 #include <htd/LimitChildCountOperation.hpp>
 
 htd::SemiNormalizationOperation::SemiNormalizationOperation(void)
-    : htd::WeakNormalizationOperation(), emptyRoot_(false), emptyLeaves_(false), identicalJoinNodeParent_(false)
+    : htd::WeakNormalizationOperation()
 {
 
 }
 
 htd::SemiNormalizationOperation::SemiNormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent)
-    : htd::WeakNormalizationOperation(emptyRoot, emptyLeaves, identicalJoinNodeParent), emptyRoot_(emptyRoot), emptyLeaves_(emptyLeaves), identicalJoinNodeParent_(identicalJoinNodeParent)
+    : htd::WeakNormalizationOperation(emptyRoot, emptyLeaves, identicalJoinNodeParent)
 {
 
 }
@@ -74,7 +74,7 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
 htd::SemiNormalizationOperation * htd::SemiNormalizationOperation::clone(void) const
 {
-    return new htd::SemiNormalizationOperation(emptyRoot_, emptyLeaves_, identicalJoinNodeParent_);
+    return new htd::SemiNormalizationOperation(emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired());
 }
 
 #endif /* HTD_HTD_SEMINORMALIZATIONOPERATION_CPP */

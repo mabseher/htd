@@ -51,12 +51,6 @@ namespace htd
             NormalizationOperation * clone(void) const HTD_OVERRIDE;
 
         private:
-            bool emptyRoot_;
-
-            bool emptyLeaves_;
-
-            bool identicalJoinNodeParent_;
-
             bool treatLeafNodesAsIntroduceNodes_;
     };
 }

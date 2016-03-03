@@ -49,6 +49,12 @@ namespace htd
 
             virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
+            bool emptyRootRequired(void) const;
+
+            bool emptyLeavesRequired(void) const;
+
+            bool identicalJoinNodeParentRequired(void) const;
+
             WeakNormalizationOperation * clone(void) const HTD_OVERRIDE;
 
         private:

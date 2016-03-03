@@ -33,13 +33,13 @@
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 
 htd::NormalizationOperation::NormalizationOperation(void)
-    : htd::SemiNormalizationOperation(), emptyRoot_(false), emptyLeaves_(false), identicalJoinNodeParent_(false), treatLeafNodesAsIntroduceNodes_(false)
+    : htd::SemiNormalizationOperation(), treatLeafNodesAsIntroduceNodes_(false)
 {
 
 }
 
 htd::NormalizationOperation::NormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent, bool treatLeafNodesAsIntroduceNodes)
-    : htd::SemiNormalizationOperation(emptyRoot, emptyLeaves, identicalJoinNodeParent), emptyRoot_(emptyRoot), emptyLeaves_(emptyLeaves), identicalJoinNodeParent_(identicalJoinNodeParent), treatLeafNodesAsIntroduceNodes_(treatLeafNodesAsIntroduceNodes)
+    : htd::SemiNormalizationOperation(emptyRoot, emptyLeaves, identicalJoinNodeParent), treatLeafNodesAsIntroduceNodes_(treatLeafNodesAsIntroduceNodes)
 {
 
 }
@@ -95,7 +95,7 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
 htd::NormalizationOperation * htd::NormalizationOperation::clone(void) const
 {
-    return new htd::NormalizationOperation(emptyRoot_, emptyLeaves_, identicalJoinNodeParent_, treatLeafNodesAsIntroduceNodes_);
+    return new htd::NormalizationOperation(emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired(), treatLeafNodesAsIntroduceNodes_);
 }
 
 #endif /* HTD_HTD_NORMALIZATIONOPERATION_CPP */

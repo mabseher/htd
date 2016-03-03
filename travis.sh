@@ -8,7 +8,7 @@ mkdir build/${HTD_TARGET} || true
 cd build/${HTD_TARGET}
 
 if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
-    CXX_FLAGS="${CXX_FLAGS} --coverage"
+    CXX_FLAGS="${CXX_FLAGS} --coverage -fno-inline -fno-inline-small-functions -fno-default-inline -fno-elide-constructors -Wno-invalid-offsetof -g -O0"
 fi
 
 cmake -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \

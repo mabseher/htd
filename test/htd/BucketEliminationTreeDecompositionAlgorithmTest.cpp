@@ -136,6 +136,157 @@ TEST(BucketEliminationTreeDecompositionAlgorithmTest, CheckResultSimpleGraph)
     delete decomposition;
 }
 
+class BagSizeLabelingFunction : public htd::ILabelingFunction
+{
+    public:
+        BagSizeLabelingFunction(void)
+        {
+
+        }
+
+        ~BagSizeLabelingFunction()
+        {
+
+        }
+
+        std::string name() const HTD_OVERRIDE
+        {
+            return "BAG_SIZE";
+        }
+
+        htd::ILabel * computeLabel(const std::vector<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE
+        {
+            HTD_UNUSED(labels);
+
+            return new htd::Label<std::size_t>(vertices.size());
+        }
+
+        htd::ILabel * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE
+        {
+            HTD_UNUSED(labels);
+
+            return new htd::Label<std::size_t>(vertices.size());
+        }
+
+        ILabelingFunction * clone(void) const HTD_OVERRIDE
+        {
+            return new BagSizeLabelingFunction();
+        }
+};
+
+TEST(BucketEliminationTreeDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunction)
+{
+    htd::MultiHypergraph graph;
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    htd::BucketEliminationTreeDecompositionAlgorithm algorithm;
+
+    htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph, 1, new BagSizeLabelingFunction());
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+    }
+
+    delete decomposition;
+}
+
+class BagSizeLabelingFunction2 : public htd::ILabelingFunction
+{
+    public:
+        BagSizeLabelingFunction2(void)
+        {
+
+        }
+
+        ~BagSizeLabelingFunction2()
+        {
+
+        }
+
+        std::string name() const HTD_OVERRIDE
+        {
+            return "BAG_SIZE_TIMES_2";
+        }
+
+        htd::ILabel * computeLabel(const std::vector<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE
+        {
+            HTD_UNUSED(labels);
+
+            return new htd::Label<std::size_t>(vertices.size() + htd::accessLabel<std::size_t>(labels.label("BAG_SIZE")));
+        }
+
+        htd::ILabel * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE
+        {
+            HTD_UNUSED(labels);
+
+            return new htd::Label<std::size_t>(vertices.size() + htd::accessLabel<std::size_t>(labels.label("BAG_SIZE")));
+        }
+
+        ILabelingFunction * clone(void) const HTD_OVERRIDE
+        {
+            return new BagSizeLabelingFunction();
+        }
+};
+
+TEST(BucketEliminationTreeDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunctionVector)
+{
+    htd::MultiHypergraph graph;
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    htd::BucketEliminationTreeDecompositionAlgorithm algorithm;
+
+    htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph, { new BagSizeLabelingFunction(), new BagSizeLabelingFunction2() });
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+        ASSERT_EQ(decomposition->bagSize(vertex) * 2, htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE_TIMES_2", vertex)));
+    }
+
+    delete decomposition;
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

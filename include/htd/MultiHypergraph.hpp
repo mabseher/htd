@@ -146,6 +146,8 @@ namespace htd
 
             htd::vertex_container vertices_;
 
+            std::unordered_set<htd::vertex_t> selfLoops_;
+
             std::unordered_set<htd::vertex_t> deletions_;
 
             std::shared_ptr<htd::hyperedge_container> edges_;

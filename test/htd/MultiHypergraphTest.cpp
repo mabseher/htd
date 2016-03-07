@@ -253,13 +253,13 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     std::vector<htd::vertex_t> elements3 { 1, 2, 3 };
     std::vector<htd::vertex_t> elements4 { 3, 2, 1 };
 
-    htd::ConstCollection<htd::vertex_t> edgeIds3 = graph.associatedEdgeIds(elements3);
-    htd::ConstCollection<htd::vertex_t> edgeIds4 = graph.associatedEdgeIds(htd::Collection<htd::vertex_t>(elements4.begin(), elements4.end()));
+    htd::ConstCollection<htd::vertex_t> edgeIds5 = graph.associatedEdgeIds(elements3);
+    htd::ConstCollection<htd::vertex_t> edgeIds6 = graph.associatedEdgeIds(htd::Collection<htd::vertex_t>(elements4.begin(), elements4.end()));
 
-    ASSERT_EQ((std::size_t)1, edgeIds3.size());
-    ASSERT_EQ((std::size_t)0, edgeIds4.size());
+    ASSERT_EQ((std::size_t)1, edgeIds5.size());
+    ASSERT_EQ((std::size_t)0, edgeIds6.size());
 
-    ASSERT_EQ((htd::id_t)2, edgeIds3[0]);
+    ASSERT_EQ((htd::id_t)2, edgeIds5[0]);
 
     const htd::Hyperedge & hyperedge2 = graph.hyperedge((htd::id_t)2);
 
@@ -307,6 +307,69 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)3));
+}
+
+TEST(MultiHypergraphTest, CheckSelfLoop)
+{
+    htd::MultiHypergraph graph(2);
+
+    ASSERT_EQ((std::size_t)2, graph.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph.edgeCount());
+
+    htd::id_t edgeId1 = graph.addEdge((htd::vertex_t)1, (htd::vertex_t)1);
+
+    ASSERT_TRUE(graph.isEdge(edgeId1));
+
+    ASSERT_EQ((std::size_t)1, graph.neighborCount((htd::vertex_t)1));
+    ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    ASSERT_FALSE(graph.isConnected());
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)2));
+
+    ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)1, (htd::index_t)0));
+
+    htd::id_t edgeId2 = graph.addEdge((htd::vertex_t)1, (htd::vertex_t)1);
+
+    ASSERT_TRUE(graph.isEdge(edgeId2));
+
+    ASSERT_EQ((std::size_t)1, graph.neighborCount((htd::vertex_t)1));
+    ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)2));
+
+    ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)1, (htd::index_t)0));
+
+    graph.removeEdge(edgeId1);
+
+    htd::id_t edgeId3 = graph.addEdge((htd::vertex_t)1, (htd::vertex_t)2);
+
+    graph.removeEdge(edgeId2);
+
+    ASSERT_FALSE(graph.isEdge(edgeId1));
+    ASSERT_FALSE(graph.isEdge(edgeId2));
+    ASSERT_TRUE(graph.isEdge(edgeId3));
+
+    ASSERT_EQ((std::size_t)1, graph.neighborCount((htd::vertex_t)1));
+    ASSERT_EQ((std::size_t)1, graph.neighborCount((htd::vertex_t)2));
+
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    ASSERT_TRUE(graph.isConnected());
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)2));
+
+    ASSERT_EQ((htd::vertex_t)2, graph.neighborAtPosition((htd::vertex_t)1, (htd::index_t)0));
+    ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)2, (htd::index_t)0));
 }
 
 int main(int argc, char **argv)

@@ -170,17 +170,28 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     graph.addEdge(htd::Hyperedge((htd::id_t)1, (htd::vertex_t)2, (htd::vertex_t)1));
 
     ASSERT_TRUE(graph.isEdge((htd::id_t)1));
+    ASSERT_FALSE(graph.isEdge((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isEdge((htd::vertex_t)2, (htd::vertex_t)1));
+
+    ASSERT_EQ((std::size_t)1, graph.edgeCount((htd::vertex_t)1));
+    ASSERT_EQ((std::size_t)1, graph.edgeCount((htd::vertex_t)2));
+    ASSERT_EQ((std::size_t)0, graph.edgeCount((htd::vertex_t)3));
 
     std::vector<htd::vertex_t> elements1 { 1, 2 };
     std::vector<htd::vertex_t> elements2 { 2, 1 };
 
     htd::ConstCollection<htd::vertex_t> edgeIds1 = graph.associatedEdgeIds(elements1);
-    htd::ConstCollection<htd::vertex_t> edgeIds2 = graph.associatedEdgeIds(htd::Collection<htd::vertex_t>(elements2.begin(), elements2.end()));
+    htd::ConstCollection<htd::vertex_t> edgeIds2 = graph.associatedEdgeIds((htd::vertex_t)1, (htd::vertex_t)2);
+    htd::ConstCollection<htd::vertex_t> edgeIds3 = graph.associatedEdgeIds((htd::vertex_t)2, (htd::vertex_t)1);
+    htd::ConstCollection<htd::vertex_t> edgeIds4 = graph.associatedEdgeIds(htd::Collection<htd::vertex_t>(elements2.begin(), elements2.end()));
 
     ASSERT_EQ((std::size_t)0, edgeIds1.size());
-    ASSERT_EQ((std::size_t)1, edgeIds2.size());
+    ASSERT_EQ((std::size_t)0, edgeIds2.size());
+    ASSERT_EQ((std::size_t)1, edgeIds3.size());
+    ASSERT_EQ((std::size_t)1, edgeIds4.size());
 
-    ASSERT_EQ((htd::id_t)1, edgeIds2[0]);
+    ASSERT_EQ((htd::id_t)1, edgeIds3[0]);
+    ASSERT_EQ((htd::id_t)1, edgeIds4[0]);
 
     const htd::Hyperedge & hyperedge1 = graph.hyperedge((htd::id_t)1);
 
@@ -229,7 +240,15 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
 
     graph.addEdge(htd::Hyperedge((htd::id_t)5, std::vector<htd::vertex_t> { 1, 2, 3 }));
 
+    std::vector<htd::vertex_t> edgeElements2 { 1, 2, 3 };
+
     ASSERT_TRUE(graph.isEdge((htd::id_t)2));
+    ASSERT_TRUE(graph.isEdge(edgeElements2));
+    ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>(edgeElements2.begin(), edgeElements2.end())));
+
+    ASSERT_EQ((std::size_t)2, graph.edgeCount((htd::vertex_t)1));
+    ASSERT_EQ((std::size_t)2, graph.edgeCount((htd::vertex_t)2));
+    ASSERT_EQ((std::size_t)1, graph.edgeCount((htd::vertex_t)3));
 
     std::vector<htd::vertex_t> elements3 { 1, 2, 3 };
     std::vector<htd::vertex_t> elements4 { 3, 2, 1 };

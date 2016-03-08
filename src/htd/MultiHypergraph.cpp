@@ -597,34 +597,32 @@ const htd::Hyperedge & htd::MultiHypergraph::hyperedge(htd::id_t edgeId) const
 
 const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t index) const
 {
-    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();
-
-    if (index >= hyperedgeCollection.size())
+    if (index >= edges_->size())
     {
-        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedgeAtPosition(htd::index_t) const");
+        throw std::out_of_range("const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t) const");
     }
 
-    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
-
-    std::advance(it, index);
-
-    return *it;
+    return edges_->at(index);
 }
 
 const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges(vertex);
-
-    if (index >= hyperedgeCollection.size())
+    for (auto it = edges_->begin(); it != edges_->end(); ++it)
     {
-        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
+        const htd::Hyperedge & hyperedge = *it;
+
+        if (hyperedge.containsVertex(vertex))
+        {
+            if (index == 0)
+            {
+                return hyperedge;
+            }
+
+            --index;
+        }
     }
 
-    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
-
-    std::advance(it, index);
-
-    return *it;
+    throw std::out_of_range("const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
 }
 
 

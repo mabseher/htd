@@ -318,6 +318,13 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
 
     htd::id_t edgeId1 = graph.addEdge((htd::vertex_t)1, (htd::vertex_t)1);
 
+    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
+
+    ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0).id());
+    ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
+
     ASSERT_TRUE(graph.isEdge(edgeId1));
 
     ASSERT_EQ((std::size_t)1, graph.neighborCount((htd::vertex_t)1));
@@ -337,6 +344,15 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
 
     htd::id_t edgeId2 = graph.addEdge((htd::vertex_t)1, (htd::vertex_t)1);
 
+    ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
+
+    ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0).id());
+    ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
+    ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)1).id());
+    ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)1, (htd::vertex_t)1).id());
+
     ASSERT_TRUE(graph.isEdge(edgeId2));
 
     ASSERT_EQ((std::size_t)1, graph.neighborCount((htd::vertex_t)1));
@@ -344,11 +360,34 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
 
     ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)1, (htd::index_t)0));
 
+    ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
+
     graph.removeEdge(edgeId1);
+
+    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
+
+    ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0).id());
+    ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
 
     htd::id_t edgeId3 = graph.addEdge((htd::vertex_t)1, (htd::vertex_t)2);
 
+    ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)2).size());
+
+    ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0).id());
+    ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
+    ASSERT_EQ((htd::id_t)3, graph.hyperedgeAtPosition((htd::index_t)1).id());
+    ASSERT_EQ((htd::id_t)3, graph.hyperedgeAtPosition((htd::index_t)1, (htd::vertex_t)1).id());
+    ASSERT_EQ((htd::id_t)3, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)2).id());
+
     graph.removeEdge(edgeId2);
+
+    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)2).size());
 
     ASSERT_FALSE(graph.isEdge(edgeId1));
     ASSERT_FALSE(graph.isEdge(edgeId2));

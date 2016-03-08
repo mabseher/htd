@@ -216,21 +216,6 @@ htd::FilteredHyperedgeCollection htd::Hypergraph::hyperedgesAtPositions(const st
     return base_->hyperedgesAtPositions(indices);
 }
 
-void htd::Hypergraph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const
-{
-    return base_->copyHyperedgesTo(target);
-}
-
-void htd::Hypergraph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target, htd::vertex_t vertex) const
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::Hypergraph::copyHyperedgesTo(std::vector<htd::Hyperedge> &, htd::vertex_t) const");
-    }
-
-    return base_->copyHyperedgesTo(target, vertex);
-}
-
 const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::id_t edgeId) const
 {
     return base_->hyperedge(edgeId);

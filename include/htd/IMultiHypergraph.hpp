@@ -85,8 +85,6 @@ namespace htd
 
             virtual htd::ConstCollection<htd::Hyperedge> hyperedges(void) const = 0;
 
-            virtual void copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const = 0;
-
             virtual const htd::Hyperedge & hyperedge(htd::id_t edgeId) const = 0;
 
             virtual const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index) const = 0;
@@ -96,8 +94,6 @@ namespace htd
             virtual std::size_t edgeCount(htd::vertex_t vertex) const = 0;
 
             virtual htd::ConstCollection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const = 0;
-
-            virtual void copyHyperedgesTo(std::vector<htd::Hyperedge> & target, htd::vertex_t vertex) const = 0;
 
             virtual const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const = 0;
 

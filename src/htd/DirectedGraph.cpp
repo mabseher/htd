@@ -511,21 +511,6 @@ htd::ConstCollection<htd::Hyperedge> htd::DirectedGraph::hyperedges(htd::vertex_
     return base_->hyperedges(vertex);
 }
 
-void htd::DirectedGraph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const
-{
-    return base_->copyHyperedgesTo(target);
-}
-
-void htd::DirectedGraph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target, htd::vertex_t vertex) const
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::DirectedGraph::copyHyperedgesTo(std::vector<htd::Hyperedge> &, htd::vertex_t) const");
-    }
-
-    return base_->copyHyperedgesTo(target, vertex);
-}
-
 const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::id_t edgeId) const
 {
     return base_->hyperedge(edgeId);

@@ -550,27 +550,6 @@ htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(htd::verte
     return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
 }
 
-void htd::MultiHypergraph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const
-{
-    std::copy(edges_->begin(), edges_->end(), std::back_inserter(target));
-}
-
-void htd::MultiHypergraph::copyHyperedgesTo(std::vector<htd::Hyperedge> & target, htd::vertex_t vertex) const
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::MultiHypergraph::copyHyperedgesTo(std::vector<htd::Hyperedge> &, htd::vertex_t) const");
-    }
-
-    for (auto & edge : *edges_)
-    {
-        if (edge.containsVertex(vertex))
-        {
-            target.push_back(edge);
-        }
-    }
-}
-
 const htd::Hyperedge & htd::MultiHypergraph::hyperedge(htd::id_t edgeId) const
 {
     bool found = false;

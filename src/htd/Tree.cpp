@@ -513,27 +513,8 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(void) const
 {
     htd::VectorAdapter<htd::Hyperedge> ret;
 
-    copyHyperedgesTo(ret.container());
+    std::vector<htd::Hyperedge> & target = ret.container();
 
-    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
-}
-
-htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t vertex) const
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t) const");
-    }
-
-    htd::VectorAdapter<htd::Hyperedge> ret;
-
-    copyHyperedgesTo(ret.container(), vertex);
-
-    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
-}
-
-void htd::Tree::copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const
-{
     htd::id_t id = 0;
 
     for (const auto & currentNode : nodes_)
@@ -554,16 +535,22 @@ void htd::Tree::copyHyperedgesTo(std::vector<htd::Hyperedge> & target) const
             ++id;
         }
     }
+
+    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
 }
 
-void htd::Tree::copyHyperedgesTo(std::vector<htd::Hyperedge> & target, htd::vertex_t vertex) const
+htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))
     {
-        throw std::logic_error("void htd::Tree::copyHyperedgesTo(std::vector<htd::Hyperedge> &, htd::vertex_t) const");
+        throw std::logic_error("htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t) const");
     }
 
-    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = htd::Tree::hyperedges();
+    htd::VectorAdapter<htd::Hyperedge> ret;
+
+    std::vector<htd::Hyperedge> & target = ret.container();
+
+    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();
 
     for (auto it = hyperedgeCollection.begin(); it != hyperedgeCollection.end(); ++it)
     {
@@ -574,6 +561,8 @@ void htd::Tree::copyHyperedgesTo(std::vector<htd::Hyperedge> & target, htd::vert
             target.push_back(currentHyperedge);
         }
     }
+
+    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
 }
 
 const htd::Hyperedge & htd::Tree::hyperedge(htd::id_t edgeId) const
@@ -638,7 +627,26 @@ htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(const std::vec
 {
     std::shared_ptr<std::vector<htd::Hyperedge>> hyperedges = std::make_shared<std::vector<htd::Hyperedge>>();
 
-    copyHyperedgesTo(*hyperedges);
+    htd::id_t id = 0;
+
+    for (const auto & currentNode : nodes_)
+    {
+        const auto & children = currentNode.second->children;
+
+        for (auto child : children)
+        {
+            if (currentNode.first < child)
+            {
+                hyperedges->push_back(htd::Hyperedge(id, currentNode.first, child));
+            }
+            else
+            {
+                hyperedges->push_back(htd::Hyperedge(id, child, currentNode.first));
+            }
+
+            ++id;
+        }
+    }
 
     return htd::FilteredHyperedgeCollection(hyperedges, indices);
 }

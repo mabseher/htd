@@ -266,7 +266,7 @@ bool htd::Tree::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 
 bool htd::Tree::isConnected(void) const
 {
-    return edgeCount() > 0;
+    return true;
 }
 
 bool htd::Tree::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
@@ -367,11 +367,27 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::vertices(void) const
 
 std::size_t htd::Tree::isolatedVertexCount(void) const
 {
-    return 0;
+    std::size_t ret = 0;
+
+    if (size_ == 1)
+    {
+        ret = 1;
+    }
+
+    return ret;
 }
 
 htd::ConstCollection<htd::vertex_t> htd::Tree::isolatedVertices(void) const
 {
+    if (size_ == 1)
+    {
+        htd::VectorAdapter<htd::vertex_t> result;
+
+        result.container().push_back(root_);
+
+        return htd::ConstCollection<htd::vertex_t>(result.begin(), result.end());
+    }
+
     return htd::ConstCollection<htd::vertex_t>();
 }
 
@@ -379,14 +395,17 @@ htd::vertex_t htd::Tree::isolatedVertexAtPosition(htd::index_t index) const
 {
     HTD_UNUSED(index)
 
-    throw std::out_of_range("htd::vertex_t htd::Tree::isolatedVertexAtPosition(htd::index_t index) const");
+    if (size_ != 1 || index > 0)
+    {
+        throw std::out_of_range("htd::vertex_t htd::Tree::isolatedVertexAtPosition(htd::index_t index) const");
+    }
+
+    return root_;
 }
 
 bool htd::Tree::isIsolatedVertex(htd::vertex_t vertex) const
 {
-    HTD_UNUSED(vertex)
-
-    return false;
+    return size_ == 1 && vertex == root_;
 }
 
 htd::ConstCollection<htd::edge_t> htd::Tree::edges(void) const
@@ -653,6 +672,11 @@ htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(const std::vec
 
 htd::vertex_t htd::Tree::root(void) const
 {
+    if (root_ == htd::Vertex::UNKNOWN)
+    {
+        throw std::logic_error("htd::vertex_t htd::Tree::root(void) const");
+    }
+
     return root_;
 }
 

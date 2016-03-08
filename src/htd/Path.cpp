@@ -688,6 +688,11 @@ htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(const std::vec
 
 htd::vertex_t htd::Path::root(void) const
 {
+    if (root_ == htd::Vertex::UNKNOWN)
+    {
+        throw std::logic_error("htd::vertex_t htd::Path::root(void) const");
+    }
+
     return root_;
 }
 

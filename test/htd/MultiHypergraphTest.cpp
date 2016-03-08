@@ -371,7 +371,7 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
     ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0).id());
     ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
 
-    htd::id_t edgeId3 = graph.addEdge((htd::vertex_t)1, (htd::vertex_t)2);
+    htd::id_t edgeId3 = graph.addEdge(std::vector<htd::vertex_t> { 1, 2 });
 
     ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
     ASSERT_EQ((std::size_t)2, graph.hyperedges((htd::vertex_t)1).size());
@@ -409,6 +409,172 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
 
     ASSERT_EQ((htd::vertex_t)2, graph.neighborAtPosition((htd::vertex_t)1, (htd::index_t)0));
     ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)2, (htd::index_t)0));
+}
+
+TEST(MultiHypergraphTest, CheckGraphModifications)
+{
+    htd::MultiHypergraph graph(3);
+
+    std::vector<htd::vertex_t> edgeElements1 { };
+
+    try
+    {
+        graph.addEdge(edgeElements1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)3, graph.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph.edgeCount());
+
+    htd::id_t edgeId1 = graph.addEdge(std::vector<htd::vertex_t> { 1 });
+
+    ASSERT_EQ((std::size_t)1, graph.edgeCount());
+    ASSERT_TRUE(graph.isEdge(edgeId1));
+
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)3));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)3));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)3));
+
+    htd::id_t edgeId2 = graph.addEdge(std::vector<htd::vertex_t> { 2, 1 });
+
+    ASSERT_EQ((std::size_t)2, graph.edgeCount());
+    ASSERT_TRUE(graph.isEdge(edgeId2));
+
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)3));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)3));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)3));
+
+    htd::id_t edgeId3 = graph.addEdge(std::vector<htd::vertex_t> { 1, 2, 3 });
+
+    ASSERT_EQ((std::size_t)3, graph.edgeCount());
+    ASSERT_TRUE(graph.isEdge(edgeId3));
+
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)3));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)3));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)3));
+
+    htd::id_t edgeId4 = graph.addEdge(std::vector<htd::vertex_t> { 2, 1, 3, 3 });
+
+    ASSERT_EQ((std::size_t)4, graph.edgeCount());
+    ASSERT_TRUE(graph.isEdge(edgeId4));
+
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)3));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)3));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)3));
+
+
+    ASSERT_EQ((std::size_t)1, graph.hyperedge(edgeId1).size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedge(edgeId2).size());
+    ASSERT_EQ((std::size_t)3, graph.hyperedge(edgeId3).size());
+    ASSERT_EQ((std::size_t)4, graph.hyperedge(edgeId4).size());
+
+    graph.removeVertex(3);
+
+    ASSERT_EQ((std::size_t)2, graph.vertexCount());
+    ASSERT_EQ((std::size_t)4, graph.edgeCount());
+    ASSERT_TRUE(graph.isEdge(edgeId1));
+    ASSERT_TRUE(graph.isEdge(edgeId2));
+    ASSERT_TRUE(graph.isEdge(edgeId3));
+    ASSERT_TRUE(graph.isEdge(edgeId4));
+
+    ASSERT_EQ((std::size_t)1, graph.hyperedge(edgeId1).size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedge(edgeId2).size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedge(edgeId3).size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedge(edgeId4).size());
+
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    graph.removeEdge(edgeId1);
+
+    ASSERT_EQ((std::size_t)2, graph.vertexCount());
+    ASSERT_EQ((std::size_t)3, graph.edgeCount());
+
+    ASSERT_FALSE(graph.isEdge(edgeId1));
+    ASSERT_TRUE(graph.isEdge(edgeId2));
+    ASSERT_TRUE(graph.isEdge(edgeId3));
+    ASSERT_TRUE(graph.isEdge(edgeId4));
+
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    graph.removeEdge(edgeId3);
+
+    ASSERT_EQ((std::size_t)2, graph.vertexCount());
+    ASSERT_EQ((std::size_t)2, graph.edgeCount());
+
+    ASSERT_FALSE(graph.isEdge(edgeId1));
+    ASSERT_TRUE(graph.isEdge(edgeId2));
+    ASSERT_FALSE(graph.isEdge(edgeId3));
+    ASSERT_TRUE(graph.isEdge(edgeId4));
+
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    graph.removeEdge(edgeId2);
+
+    ASSERT_EQ((std::size_t)2, graph.vertexCount());
+    ASSERT_EQ((std::size_t)1, graph.edgeCount());
+
+    ASSERT_FALSE(graph.isEdge(edgeId1));
+    ASSERT_FALSE(graph.isEdge(edgeId2));
+    ASSERT_FALSE(graph.isEdge(edgeId3));
+    ASSERT_TRUE(graph.isEdge(edgeId4));
+
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    graph.removeEdge(edgeId4);
+
+    ASSERT_EQ((std::size_t)2, graph.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph.edgeCount());
+
+    ASSERT_FALSE(graph.isEdge(edgeId1));
+    ASSERT_FALSE(graph.isEdge(edgeId2));
+    ASSERT_FALSE(graph.isEdge(edgeId3));
+    ASSERT_FALSE(graph.isEdge(edgeId4));
+
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
 }
 
 int main(int argc, char **argv)

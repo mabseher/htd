@@ -1038,8 +1038,6 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
     {
         const htd::Hyperedge & hyperedge = *position;
 
-        edges_->erase(position);
-
         for (htd::vertex_t vertex : hyperedge)
         {
             std::unordered_set<htd::vertex_t> missing(hyperedge.begin(), hyperedge.end());
@@ -1050,7 +1048,7 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
             {
                 htd::Hyperedge & currentEdge = *it;
 
-                if (std::find(currentEdge.begin(), currentEdge.end(), vertex) != currentEdge.end())
+                if (it != position && currentEdge.containsVertex(vertex))
                 {
                     std::size_t occurrences = 0;
 
@@ -1076,7 +1074,10 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
                 {
                     auto position2 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), *it);
 
-                    currentNeighborhood.erase(position2);
+                    if (position2 != currentNeighborhood.end())
+                    {
+                        currentNeighborhood.erase(position2);
+                    }
                 }
             }
 
@@ -1091,6 +1092,8 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
                 selfLoops_.erase(vertex);
             }
         }
+
+        edges_->erase(position);
     }
 }
 

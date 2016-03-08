@@ -1066,7 +1066,10 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
 
                 auto position2 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
 
-                currentNeighborhood.erase(position2);
+                if (position2 != currentNeighborhood.end())
+                {
+                    currentNeighborhood.erase(position2);
+                }
 
                 selfLoops_.erase(vertex);
             }

@@ -687,6 +687,7 @@ void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)
             {
                 auto & currentNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
 
+                // coverity[Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'currentNeighborhood'.]
                 currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex));
             }
         }

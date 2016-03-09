@@ -192,7 +192,8 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 if (vertex != selectedVertex)
                 {
                     auto & currentNeighborhood = neighborhood.at(vertex);
-                    
+
+                    // coverity[Because 'vertex' is a neighbor of 'selectedVertex', std::lower_bound will always find 'selectedVertex' in 'currentNeighborhood'.]
                     currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
                 }
             }

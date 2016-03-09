@@ -663,6 +663,7 @@ TEST(HyperedgeTest, CheckSize3Hyperedge3)
 
 int main(int argc, char **argv)
 {
+    // coverity[GoogleTest may throw. This results in a non-zero exit code and is intended.]
     ::testing::InitGoogleTest(&argc, argv);
 
     return RUN_ALL_TESTS();

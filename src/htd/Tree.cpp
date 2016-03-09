@@ -534,7 +534,7 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(void) const
 
     std::vector<htd::Hyperedge> & target = ret.container();
 
-    htd::id_t id = 0;
+    htd::id_t id = htd::Id::FIRST;
 
     for (const auto & currentNode : nodes_)
     {

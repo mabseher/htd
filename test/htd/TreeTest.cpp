@@ -193,6 +193,52 @@ TEST(TreeTest, CheckSize3Tree)
 
     ASSERT_TRUE(tree.isChild(root, child));
     ASSERT_FALSE(tree.isChild(child, root));
+
+    htd::vertex_t newRoot = tree.addParent(root);
+
+    ASSERT_TRUE(tree.isVertex(root));
+    ASSERT_TRUE(tree.isVertex(child));
+    ASSERT_TRUE(tree.isVertex(newRoot));
+    ASSERT_TRUE(tree.isRoot(newRoot));
+    ASSERT_EQ(newRoot, tree.root());
+
+    ASSERT_EQ((std::size_t)3, tree.vertexCount());
+    ASSERT_EQ((std::size_t)2, tree.edgeCount());
+    ASSERT_EQ((std::size_t)2, tree.edgeCount(root));
+    ASSERT_EQ((std::size_t)1, tree.edgeCount(child));
+    ASSERT_EQ((std::size_t)1, tree.edgeCount(newRoot));
+
+    ASSERT_EQ((std::size_t)3, tree.vertices().size());
+    ASSERT_EQ((std::size_t)2, tree.hyperedges().size());
+
+    ASSERT_EQ((std::size_t)0, tree.isolatedVertexCount());
+    ASSERT_EQ((std::size_t)0, tree.isolatedVertices().size());
+
+    ASSERT_TRUE(tree.isConnected());
+
+    ASSERT_EQ((std::size_t)1, tree.leafNodeCount());
+
+    ASSERT_TRUE(tree.isChild(newRoot, root));
+    ASSERT_TRUE(tree.isChild(root, child));
+
+    ASSERT_EQ((std::size_t)1, tree.childCount(root));
+    ASSERT_EQ((std::size_t)0, tree.childCount(child));
+    ASSERT_EQ((std::size_t)1, tree.childCount(newRoot));
+
+    ASSERT_EQ(root, tree.children(newRoot)[0]);
+    ASSERT_EQ(child, tree.children(root)[0]);
+
+    ASSERT_FALSE(tree.isLeafNode(root));
+    ASSERT_TRUE(tree.isLeafNode(child));
+    ASSERT_FALSE(tree.isLeafNode(newRoot));
+
+    ASSERT_EQ((std::size_t)2, tree.neighborCount(root));
+    ASSERT_EQ((std::size_t)1, tree.neighborCount(child));
+    ASSERT_EQ((std::size_t)1, tree.neighborCount(newRoot));
+
+    ASSERT_EQ((std::size_t)0, tree.associatedEdgeIds(newRoot, root).size());
+    ASSERT_EQ((std::size_t)1, tree.associatedEdgeIds(root, newRoot).size());
+    ASSERT_EQ((htd::id_t)1, tree.associatedEdgeIds(root, newRoot)[0]);
 }
 
 int main(int argc, char **argv)

@@ -58,18 +58,14 @@ htd::HypertreeDecomposition::~HypertreeDecomposition()
 
 htd::ConstCollection<htd::Hyperedge> htd::HypertreeDecomposition::coveringEdges(htd::vertex_t vertex) const
 {
-    if (isVertex(vertex))
-    {
-        auto & edgeLabel = dynamic_cast<const htd::Label<htd::ConstCollection<htd::Hyperedge>> *>(&(vertexLabel(htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER, vertex)))->value();
-
-        return htd::ConstCollection<htd::Hyperedge>(edgeLabel);
-    }
-    else
+    if (!isVertex(vertex))
     {
         throw std::logic_error("htd::ConstCollection<htd::Hyperedge> htd::HypertreeDecomposition::coveringEdges(htd::vertex_t) const");
     }
 
-    return htd::ConstCollection<htd::Hyperedge>();
+    auto & edgeLabel = dynamic_cast<const htd::Label<htd::ConstCollection<htd::Hyperedge>> *>(&(vertexLabel(htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER, vertex)))->value();
+
+    return htd::ConstCollection<htd::Hyperedge>(edgeLabel);
 }
 
 void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const htd::hyperedge_container & content)

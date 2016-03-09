@@ -79,6 +79,8 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
         manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
     }
 
+    va_end(arguments);
+
     return computeDecomposition(graph, manipulationOperations);
 }
 
@@ -168,6 +170,16 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
             ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
         }
+    }
+
+    for (auto & labelingFunction : labelingFunctions)
+    {
+        delete labelingFunction;
+    }
+
+    for (auto & postProcessingOperation : postProcessingOperations)
+    {
+        delete postProcessingOperation;
     }
 
     return ret;

@@ -169,6 +169,8 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
         manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
     }
 
+    va_end(arguments);
+
     return computeDecomposition(graph, manipulationOperations);
 }
 

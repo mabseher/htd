@@ -33,14 +33,20 @@
 namespace htd
 {
     template <typename T>
-    class IteratorBase : public virtual htd::ConstIteratorBase<T>
+    class IteratorBase
     {
         public:
             virtual ~IteratorBase<T>() = 0;
 
+            virtual IteratorBase<T> & operator++(void) = 0;
+
             virtual T * operator->(void) = 0;
 
             virtual T & operator*(void) = 0;
+
+            virtual bool operator==(const IteratorBase<T> & rhs) const = 0;
+
+            virtual bool operator!=(const IteratorBase<T> & rhs) const = 0;
 
             virtual IteratorBase<T> * clone(void) const = 0;
     };

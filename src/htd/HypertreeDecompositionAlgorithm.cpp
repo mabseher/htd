@@ -80,6 +80,8 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
         manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
     }
 
+    va_end(arguments);
+
     return computeDecomposition(graph, manipulationOperations);
 }
 
@@ -168,6 +170,16 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
                 ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
+        }
+
+        for (auto & labelingFunction : labelingFunctions)
+        {
+            delete labelingFunction;
+        }
+
+        for (auto & postProcessingOperation : postProcessingOperations)
+        {
+            delete postProcessingOperation;
         }
 
         delete treeDecomposition;

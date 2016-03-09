@@ -140,6 +140,16 @@ htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::co
         }
     }
 
+    for (auto & labelingFunction : labelingFunctions)
+    {
+        delete labelingFunction;
+    }
+
+    for (auto & postProcessingOperation : postProcessingOperations)
+    {
+        delete postProcessingOperation;
+    }
+
     return ret;
 }
 
@@ -155,6 +165,8 @@ htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::co
     {
         manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
     }
+
+    va_end(arguments);
 
     return computeDecomposition(graph, manipulationOperations);
 }

@@ -143,6 +143,16 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
         }
     }
 
+    for (auto & labelingFunction : labelingFunctions)
+    {
+        delete labelingFunction;
+    }
+
+    for (auto & postProcessingOperation : postProcessingOperations)
+    {
+        delete postProcessingOperation;
+    }
+
     return ret;
 }
 
@@ -164,6 +174,16 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
 void htd::BucketEliminationTreeDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
+    for (auto & labelingFunction : labelingFunctions_)
+    {
+        delete labelingFunction;
+    }
+
+    for (auto & postProcessingOperation : postProcessingOperations_)
+    {
+        delete postProcessingOperation;
+    }
+
     labelingFunctions_.clear();
 
     postProcessingOperations_.clear();

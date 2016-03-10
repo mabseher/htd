@@ -341,6 +341,17 @@ TEST(TreeTest, CheckSize3Tree)
     const htd::ConstCollection<htd::vertex_t> & childNeighbors = tree.neighbors(child);
     const htd::ConstCollection<htd::vertex_t> & newRootNeighbors = tree.neighbors(newRoot);
 
+    try
+    {
+        tree.neighbors((htd::vertex_t)4);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
     std::vector<htd::vertex_t> rootNeighbors2;
     std::vector<htd::vertex_t> childNeighbors2;
     std::vector<htd::vertex_t> newRootNeighbors2;
@@ -408,6 +419,148 @@ TEST(TreeTest, CheckSize3Tree)
     {
         HTD_UNUSED(error);
     }
+
+    ASSERT_EQ((std::size_t)2, tree.hyperedges(root).size());
+    ASSERT_EQ((std::size_t)1, tree.hyperedges(child).size());
+    ASSERT_EQ((std::size_t)1, tree.hyperedges(newRoot).size());
+
+    try
+    {
+        tree.hyperedges((htd::vertex_t)4);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)2, tree.edges(root).size());
+    ASSERT_EQ((std::size_t)1, tree.edges(child).size());
+    ASSERT_EQ((std::size_t)1, tree.edges(newRoot).size());
+
+    try
+    {
+        tree.edges((htd::vertex_t)4);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+}
+
+TEST(TreeTest, CheckTreeManipulations)
+{
+    htd::Tree tree;
+
+    htd::vertex_t root = tree.insertRoot();
+
+    htd::vertex_t node11 = tree.addChild(root);
+    htd::vertex_t node12 = tree.addChild(root);
+    htd::vertex_t node13 = tree.addChild(root);
+
+    htd::vertex_t node111 = tree.addChild(node11);
+    htd::vertex_t node121 = tree.addChild(node12);
+    htd::vertex_t node122 = tree.addChild(node12);
+    htd::vertex_t node131 = tree.addChild(node13);
+    htd::vertex_t node132 = tree.addChild(node13);
+    htd::vertex_t node133 = tree.addChild(node13);
+    htd::vertex_t node134 = tree.addChild(node13);
+
+    htd::vertex_t node1331 = tree.addChild(node133);
+
+    ASSERT_EQ((std::size_t)12, tree.vertexCount());
+    ASSERT_EQ((std::size_t)11, tree.edgeCount());
+
+    ASSERT_EQ((std::size_t)3, tree.childCount(root));
+    ASSERT_EQ((std::size_t)1, tree.childCount(node11));
+    ASSERT_EQ((std::size_t)2, tree.childCount(node12));
+    ASSERT_EQ((std::size_t)4, tree.childCount(node13));
+
+    ASSERT_EQ((std::size_t)0, tree.childCount(node111));
+    ASSERT_EQ((std::size_t)0, tree.childCount(node121));
+    ASSERT_EQ((std::size_t)0, tree.childCount(node122));
+    ASSERT_EQ((std::size_t)0, tree.childCount(node131));
+    ASSERT_EQ((std::size_t)0, tree.childCount(node132));
+    ASSERT_EQ((std::size_t)1, tree.childCount(node133));
+    ASSERT_EQ((std::size_t)0, tree.childCount(node134));
+
+    ASSERT_EQ((std::size_t)0, tree.childCount(node1331));
+
+    ASSERT_EQ((std::size_t)7, tree.leafNodeCount());
+
+    ASSERT_EQ((std::size_t)12, tree.vertexCount(root));
+    ASSERT_EQ((std::size_t)2, tree.vertexCount(node11));
+    ASSERT_EQ((std::size_t)3, tree.vertexCount(node12));
+    ASSERT_EQ((std::size_t)6, tree.vertexCount(node13));
+
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node111));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node121));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node122));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node131));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node132));
+    ASSERT_EQ((std::size_t)2, tree.vertexCount(node133));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node134));
+
+    tree.setParent(node12, node111);
+
+    ASSERT_EQ((std::size_t)12, tree.vertexCount(root));
+    ASSERT_EQ((std::size_t)5, tree.vertexCount(node11));
+    ASSERT_EQ((std::size_t)3, tree.vertexCount(node12));
+    ASSERT_EQ((std::size_t)6, tree.vertexCount(node13));
+
+    ASSERT_EQ((std::size_t)4, tree.vertexCount(node111));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node121));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node122));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node131));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node132));
+    ASSERT_EQ((std::size_t)2, tree.vertexCount(node133));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node134));
+
+    tree.removeChild(node13, node132);
+
+    ASSERT_FALSE(tree.isVertex(node132));
+
+    ASSERT_EQ((std::size_t)11, tree.vertexCount(root));
+    ASSERT_EQ((std::size_t)5, tree.vertexCount(node11));
+    ASSERT_EQ((std::size_t)3, tree.vertexCount(node12));
+    ASSERT_EQ((std::size_t)5, tree.vertexCount(node13));
+
+    ASSERT_EQ((std::size_t)4, tree.vertexCount(node111));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node121));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node122));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node131));
+    ASSERT_EQ((std::size_t)2, tree.vertexCount(node133));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node134));
+
+    tree.removeVertex(node12);
+
+    ASSERT_EQ((std::size_t)10, tree.vertexCount(root));
+    ASSERT_EQ((std::size_t)4, tree.vertexCount(node11));
+    ASSERT_EQ((std::size_t)5, tree.vertexCount(node13));
+
+    ASSERT_EQ((std::size_t)3, tree.vertexCount(node111));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node121));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node122));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node131));
+    ASSERT_EQ((std::size_t)2, tree.vertexCount(node133));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node134));
+
+    tree.removeSubtree(node13);
+
+    ASSERT_EQ((std::size_t)5, tree.vertexCount(root));
+    ASSERT_EQ((std::size_t)4, tree.vertexCount(node11));
+
+    ASSERT_EQ((std::size_t)3, tree.vertexCount(node111));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node121));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node122));
+
+    tree.removeRoot();
+
+    ASSERT_EQ((std::size_t)0, tree.vertexCount());
+    ASSERT_EQ((std::size_t)0, tree.edgeCount());
 }
 
 int main(int argc, char **argv)

@@ -297,6 +297,10 @@ TEST(TreeTest, CheckSize3Tree)
     ASSERT_EQ((std::size_t)0, tree.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(edgeElements2.begin(), edgeElements2.end())).size());
     ASSERT_EQ((htd::id_t)2, tree.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(edgeElements1.begin(), edgeElements1.end()))[0]);
 
+    ASSERT_EQ((std::size_t)1, tree.associatedEdgeIds(htd::Collection<htd::vertex_t>(edgeElements1.begin(), edgeElements1.end())).size());
+    ASSERT_EQ((std::size_t)0, tree.associatedEdgeIds(htd::Collection<htd::vertex_t>(edgeElements2.begin(), edgeElements2.end())).size());
+    ASSERT_EQ((htd::id_t)2, tree.associatedEdgeIds(htd::Collection<htd::vertex_t>(edgeElements1.begin(), edgeElements1.end()))[0]);
+
     ASSERT_FALSE(tree.isNeighbor(root, root));
     ASSERT_TRUE(tree.isNeighbor(root, child));
     ASSERT_TRUE(tree.isNeighbor(root, newRoot));
@@ -317,6 +321,93 @@ TEST(TreeTest, CheckSize3Tree)
     ASSERT_TRUE(tree.isConnected(newRoot, root));
     ASSERT_TRUE(tree.isConnected(newRoot, child));
     ASSERT_TRUE(tree.isConnected(newRoot, newRoot));
+
+    ASSERT_EQ(root, tree.vertexAtPosition((htd::index_t)0));
+    ASSERT_EQ(child, tree.vertexAtPosition((htd::index_t)1));
+    ASSERT_EQ(newRoot, tree.vertexAtPosition((htd::index_t)2));
+
+    try
+    {
+        tree.vertexAtPosition((htd::index_t)3);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    const htd::ConstCollection<htd::vertex_t> & rootNeighbors = tree.neighbors(root);
+    const htd::ConstCollection<htd::vertex_t> & childNeighbors = tree.neighbors(child);
+    const htd::ConstCollection<htd::vertex_t> & newRootNeighbors = tree.neighbors(newRoot);
+
+    std::vector<htd::vertex_t> rootNeighbors2;
+    std::vector<htd::vertex_t> childNeighbors2;
+    std::vector<htd::vertex_t> newRootNeighbors2;
+
+    try
+    {
+        tree.copyNeighborsTo(rootNeighbors2, (htd::vertex_t)4);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)2, rootNeighbors.size());
+    ASSERT_EQ((std::size_t)1, childNeighbors.size());
+    ASSERT_EQ((std::size_t)1, newRootNeighbors.size());
+
+    ASSERT_EQ((std::size_t)0, rootNeighbors2.size());
+    ASSERT_EQ((std::size_t)0, childNeighbors2.size());
+    ASSERT_EQ((std::size_t)0, newRootNeighbors2.size());
+
+    tree.copyNeighborsTo(rootNeighbors2, root);
+    tree.copyNeighborsTo(childNeighbors2, child);
+    tree.copyNeighborsTo(newRootNeighbors2, newRoot);
+
+    ASSERT_EQ((std::size_t)2, rootNeighbors2.size());
+    ASSERT_EQ((std::size_t)1, childNeighbors2.size());
+    ASSERT_EQ((std::size_t)1, newRootNeighbors2.size());
+
+    ASSERT_EQ(child, rootNeighbors[0]);
+    ASSERT_EQ(newRoot, rootNeighbors[1]);
+    ASSERT_EQ(root, childNeighbors[0]);
+    ASSERT_EQ(root, newRootNeighbors[0]);
+
+    ASSERT_EQ(child, rootNeighbors2[0]);
+    ASSERT_EQ(newRoot, rootNeighbors2[1]);
+    ASSERT_EQ(root, childNeighbors2[0]);
+    ASSERT_EQ(root, newRootNeighbors2[0]);
+
+    ASSERT_EQ(child, tree.neighborAtPosition(root, (htd::index_t)0));
+    ASSERT_EQ(newRoot, tree.neighborAtPosition(root, (htd::index_t)1));
+    ASSERT_EQ(root, tree.neighborAtPosition(child, (htd::index_t)0));
+    ASSERT_EQ(root, tree.neighborAtPosition(newRoot, (htd::index_t)0));
+
+    try
+    {
+        tree.neighborAtPosition((htd::vertex_t)4, (htd::index_t)0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.neighborAtPosition(root, (htd::index_t)2);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
 }
 
 int main(int argc, char **argv)

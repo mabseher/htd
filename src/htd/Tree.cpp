@@ -692,6 +692,15 @@ htd::vertex_t htd::Tree::parent(htd::vertex_t vertex) const
     if (isVertex(vertex))
     {
         ret = nodes_.at(vertex)->parent;
+
+        if (ret == htd::Vertex::UNKNOWN)
+        {
+            throw std::logic_error("htd::vertex_t htd::Tree::parent(htd::vertex_t) const");
+        }
+    }
+    else
+    {
+        throw std::logic_error("htd::vertex_t htd::Tree::parent(htd::vertex_t) const");
     }
     
     return ret;
@@ -707,7 +716,7 @@ bool htd::Tree::isParent(htd::vertex_t vertex, htd::vertex_t parent) const
     }
     else
     {
-        throw std::out_of_range("bool htd::Tree::isParent(htd::vertex_t, htd::vertex_t) const");
+        throw std::logic_error("bool htd::Tree::isParent(htd::vertex_t, htd::vertex_t) const");
     }
 
     return ret;
@@ -723,7 +732,7 @@ std::size_t htd::Tree::childCount(htd::vertex_t vertex) const
     }
     else
     {
-        throw std::out_of_range("std::size_t htd::Tree::childCount(htd::vertex_t) const");
+        throw std::logic_error("std::size_t htd::Tree::childCount(htd::vertex_t) const");
     }
 
     return ret;
@@ -760,7 +769,7 @@ htd::vertex_t htd::Tree::child(htd::vertex_t vertex, htd::index_t index) const
     }
     else
     {
-        throw std::out_of_range("bool htd::Tree::child(htd::vertex_t, htd::index_t) const");
+        throw std::logic_error("bool htd::Tree::child(htd::vertex_t, htd::index_t) const");
     }
     
     return ret;

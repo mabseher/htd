@@ -348,7 +348,7 @@ namespace htd
 
     std::tuple<std::size_t, std::size_t, std::size_t> analyze_sets(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
 
-    std::pair<std::size_t, std::size_t> compute_symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
+    std::pair<std::size_t, std::size_t> symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
 
     template <typename T>
     void set_union(const std::vector<T> & set1,
@@ -461,8 +461,8 @@ namespace htd
     
     template <class InputIterator1, 
               class InputIterator2>
-    std::size_t compute_set_difference_size(InputIterator1 firstSet1, InputIterator1 lastSet1,
-                                            InputIterator2 firstSet2, InputIterator2 lastSet2)
+    std::size_t set_difference_size(InputIterator1 firstSet1, InputIterator1 lastSet1,
+                                    InputIterator2 firstSet2, InputIterator2 lastSet2)
     {
         std::size_t ret = 0;
         
@@ -505,8 +505,8 @@ namespace htd
 
     template <class InputIterator1,
               class InputIterator2>
-    std::pair<std::size_t, std::size_t> compute_symmetric_difference_sizes(InputIterator1 firstSet1, InputIterator1 lastSet1,
-                                                                           InputIterator2 firstSet2, InputIterator2 lastSet2)
+    std::pair<std::size_t, std::size_t> symmetric_difference_sizes(InputIterator1 firstSet1, InputIterator1 lastSet1,
+                                                                   InputIterator2 firstSet2, InputIterator2 lastSet2)
     {
         std::pair<std::size_t, std::size_t> ret = std::make_pair(0, 0);
 
@@ -555,8 +555,8 @@ namespace htd
     
     template <class InputIterator1, 
               class InputIterator2>
-    std::size_t compute_set_intersection_size(InputIterator1 firstSet1, InputIterator1 lastSet1,
-                                              InputIterator2 firstSet2, InputIterator2 lastSet2)
+    std::size_t set_intersection_size(InputIterator1 firstSet1, InputIterator1 lastSet1,
+                                      InputIterator2 firstSet2, InputIterator2 lastSet2)
     {
         size_t ret = 0;
         
@@ -682,95 +682,6 @@ namespace htd
             }
         }
         
-        return ret;
-    }
-    
-    template <class InputIterator1, 
-              class InputIterator2,
-              class InputIterator3>
-    std::size_t compute_filtered_set_union_size(InputIterator1 firstSet1, InputIterator1 lastSet1,
-                                                InputIterator2 firstSet2, InputIterator2 lastSet2,
-                                                InputIterator3 firstFilterSet, InputIterator3 lastFilterSet)
-    {
-        std::size_t ret = 0;
-        
-        if (firstFilterSet == lastFilterSet)
-        {
-            ret = htd::compute_set_union_size(firstSet1, lastSet1,
-                                              firstSet2, lastSet2);
-        }
-        else
-        {
-            InputIterator3 tmp1 = firstFilterSet;
-            InputIterator3 tmp2 = firstFilterSet;
-
-            while (firstSet1 != lastSet1 && *firstSet1 < *firstSet2)
-            {
-                if (*firstSet1 < *tmp1) 
-                {
-                    ret++;
-                            
-                    ++firstSet1;
-                }
-                else
-                {
-                    if (!(*tmp1 < *firstSet1)) 
-                    {
-                        ++firstSet1;
-                    }
-
-                    ++tmp1;
-                    ++tmp2;
-                }
-            }
-
-            while (firstSet1 != lastSet1 && firstSet2 != lastSet2) 
-            {
-                while (tmp1 != lastFilterSet && *tmp1 < *firstSet1) 
-                {
-                    ++tmp1;
-                }
-
-                while (tmp2 != lastFilterSet && *tmp2 < *firstSet2)
-                {
-                    ++tmp2;
-                }
-
-                if (*firstSet2 < *firstSet1)
-                {
-                    if (tmp2 == lastFilterSet || *firstSet2 < *tmp2) 
-                    {
-                        ret++;
-                    }
-
-                    ++firstSet2;
-                }
-                else 
-                {
-                    if (tmp1 == lastFilterSet || *firstSet1 < *tmp1) 
-                    {
-                        ret++;
-                    }
-
-                    if (!(*firstSet1 < *firstSet2))
-                    {
-                        ++firstSet2;
-                    }
-
-                    ++firstSet1;
-                }
-            }
-
-            if (firstSet1 != lastSet1) 
-            {
-                ret += htd::compute_set_difference_size(firstSet1, lastSet1, tmp1, lastFilterSet);
-            }
-            else if (firstSet2 != lastSet2) 
-            {
-                ret += htd::compute_set_difference_size(firstSet2, lastSet2, tmp2, lastFilterSet);
-            }
-        }
-
         return ret;
     }
 

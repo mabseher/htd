@@ -325,7 +325,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                                     it++;
 
-                                    tmp -= htd::compute_set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
+                                    tmp -= htd::set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
                                 }
 
                                 tmp -= unaffectedNeighborCount;
@@ -354,7 +354,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                                 {
                                     auto & affectedVertices = existingNeighbors.at(unaffectedVertex);
 
-                                    tmp += htd::compute_set_difference_size(first, last, affectedVertices.begin(), affectedVertices.end());
+                                    tmp += htd::set_difference_size(first, last, affectedVertices.begin(), affectedVertices.end());
 
                                     tmp--;
                                 }
@@ -475,7 +475,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                             it++;
                             index++;
 
-                            tmp -= htd::compute_set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
+                            tmp -= htd::set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
                         }
 
                         if (tmp <= minFill)
@@ -623,7 +623,7 @@ std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::unordered
 
         it++;
 
-        ret += htd::compute_set_intersection_size(it, last, std::upper_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), currentNeighborhood.end());
+        ret += htd::set_intersection_size(it, last, std::upper_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), currentNeighborhood.end());
     }
     
     return ret;

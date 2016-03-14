@@ -298,7 +298,7 @@ std::tuple<std::size_t, std::size_t, std::size_t> htd::analyze_sets(const std::v
     return std::tuple<std::size_t, std::size_t, std::size_t>(onlySet1, overlap, onlySet2);
 }
 
-std::pair<std::size_t, std::size_t> htd::compute_symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2)
+std::pair<std::size_t, std::size_t> htd::symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2)
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();

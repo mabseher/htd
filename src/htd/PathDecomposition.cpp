@@ -498,7 +498,7 @@ std::size_t htd::PathDecomposition::forgottenVertexCount(htd::vertex_t vertex) c
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
         const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
 
-        ret = htd::compute_set_difference_size(childBag.begin(), childBag.end(), bag.begin(), bag.end());
+        ret = htd::set_difference_size(childBag.begin(), childBag.end(), bag.begin(), bag.end());
     }
     else
     {
@@ -517,7 +517,7 @@ std::size_t htd::PathDecomposition::forgottenVertexCount(htd::vertex_t vertex, h
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
         const std::vector<htd::vertex_t> & childBag = bagContent(child);
 
-        ret = htd::compute_set_difference_size(childBag.begin(), childBag.end(), bag.begin(), bag.end());
+        ret = htd::set_difference_size(childBag.begin(), childBag.end(), bag.begin(), bag.end());
     }
     else
     {
@@ -654,7 +654,7 @@ std::size_t htd::PathDecomposition::introducedVertexCount(htd::vertex_t vertex) 
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
         const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
 
-        ret = htd::compute_set_difference_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
+        ret = htd::set_difference_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
     }
     else
     {
@@ -673,7 +673,7 @@ std::size_t htd::PathDecomposition::introducedVertexCount(htd::vertex_t vertex, 
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
         const std::vector<htd::vertex_t> & childBag = bagContent(child);
 
-        ret = htd::compute_set_difference_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
+        ret = htd::set_difference_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
     }
     else
     {
@@ -810,7 +810,7 @@ std::size_t htd::PathDecomposition::rememberedVertexCount(htd::vertex_t vertex) 
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
         const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
 
-        ret = htd::compute_set_intersection_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
+        ret = htd::set_intersection_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
     }
     else
     {
@@ -829,7 +829,7 @@ std::size_t htd::PathDecomposition::rememberedVertexCount(htd::vertex_t vertex, 
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
         const std::vector<htd::vertex_t> & childBag = bagContent(child);
 
-        ret = htd::compute_set_intersection_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
+        ret = htd::set_intersection_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
     }
     else
     {

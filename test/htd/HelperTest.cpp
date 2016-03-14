@@ -475,6 +475,38 @@ TEST(HelperTest, CheckSetUnion9)
     ASSERT_TRUE(actualResult == expectedResult);
 }
 
+TEST(HelperTest, CheckSetDifferenceSize1)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 1, 2, 4, 5, 6 };
+
+    ASSERT_EQ((std::size_t)1, htd::set_difference_size(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckSetDifferenceSize2)
+{
+    std::vector<htd::vertex_t> input1 { 1, 2, 4, 5, 6 };
+    std::vector<htd::vertex_t> input2 { 1, 3, 5 };
+
+    ASSERT_EQ((std::size_t)3, htd::set_difference_size(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckSetIntersectionSize1)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 1, 2, 4, 5, 6 };
+
+    ASSERT_EQ((std::size_t)2, htd::set_intersection_size(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckSetIntersectionSize2)
+{
+    std::vector<htd::vertex_t> input1 { 1, 2, 4, 5, 6 };
+    std::vector<htd::vertex_t> input2 { 1, 3, 5 };
+
+    ASSERT_EQ((std::size_t)2, htd::set_intersection_size(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
 int main(int argc, char **argv)
 {
     // coverity[GoogleTest may throw. This results in a non-zero exit code and is intended.]

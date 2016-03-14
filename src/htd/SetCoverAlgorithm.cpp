@@ -78,7 +78,7 @@ htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const
 
     for (htd::index_t index = 0; index < containers.size(); index++)
     {
-        std::size_t coverage = htd::compute_set_intersection_size(remainder.begin(), remainder.end(), containers[index].begin(), containers[index].end());
+        std::size_t coverage = htd::set_intersection_size(remainder.begin(), remainder.end(), containers[index].begin(), containers[index].end());
 
         if (coverage > 0)
         {
@@ -180,7 +180,7 @@ htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const
                     htd::print(containers[container], false);
                     std::cout << std::endl;)
 
-                    std::size_t coverage = htd::compute_set_intersection_size(remainder.begin(), remainder.end(), containers[container].begin(), containers[container].end());
+                    std::size_t coverage = htd::set_intersection_size(remainder.begin(), remainder.end(), containers[container].begin(), containers[container].end());
 
                     if (index > selected && coverage > 0)
                     {

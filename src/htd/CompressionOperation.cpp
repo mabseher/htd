@@ -65,7 +65,7 @@ void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposi
                 const std::vector<htd::vertex_t> & currentBag = decomposition.bagContent(vertex);
                 const std::vector<htd::vertex_t> & parentBag = decomposition.bagContent(parent);
 
-                std::pair<std::size_t, std::size_t> result = htd::compute_symmetric_difference_sizes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end());
+                std::pair<std::size_t, std::size_t> result = htd::symmetric_difference_sizes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end());
 
                 if (result.first > 0 && result.second == 0)
                 {

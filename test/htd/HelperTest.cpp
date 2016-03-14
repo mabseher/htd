@@ -404,7 +404,6 @@ TEST(HelperTest, CheckSetUnion4)
     ASSERT_TRUE(actualResult == expectedResult);
 }
 
-
 TEST(HelperTest, CheckSetUnion5)
 {
     std::vector<htd::vertex_t> input1 { 1, 3, 5 };
@@ -475,6 +474,90 @@ TEST(HelperTest, CheckSetUnion9)
     ASSERT_TRUE(actualResult == expectedResult);
 }
 
+TEST(HelperTest, CheckSetDifference1)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 0, 2, 4, 6 };
+
+    std::vector<htd::vertex_t> actualResult;
+
+    std::vector<htd::vertex_t> expectedResult { 1, 3, 5 };
+
+    htd::set_difference(input1, input2, actualResult);
+
+    ASSERT_TRUE(actualResult == expectedResult);
+}
+
+TEST(HelperTest, CheckSetDifference2)
+{
+    std::vector<htd::vertex_t> input1 { 0, 2, 4, 6 };
+    std::vector<htd::vertex_t> input2 { 1, 3, 5 };
+
+    std::vector<htd::vertex_t> actualResult;
+
+    std::vector<htd::vertex_t> expectedResult { 0, 2, 4, 6 };
+
+    htd::set_difference(input1, input2, actualResult);
+
+    ASSERT_TRUE(actualResult == expectedResult);
+}
+
+TEST(HelperTest, CheckSetDifference5)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 1, 2, 4, 6 };
+
+    std::vector<htd::vertex_t> actualResult;
+
+    std::vector<htd::vertex_t> expectedResult { 3, 5 };
+
+    htd::set_difference(input1, input2, actualResult);
+
+    ASSERT_TRUE(actualResult == expectedResult);
+}
+
+TEST(HelperTest, CheckSetIntersection1)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 0, 2, 4, 6 };
+
+    std::vector<htd::vertex_t> actualResult;
+
+    std::vector<htd::vertex_t> expectedResult { };
+
+    htd::set_intersection(input1, input2, actualResult);
+
+    ASSERT_TRUE(actualResult == expectedResult);
+}
+
+TEST(HelperTest, CheckSetIntersection2)
+{
+    std::vector<htd::vertex_t> input1 { 0, 2, 4, 6 };
+    std::vector<htd::vertex_t> input2 { 1, 3, 5 };
+
+    std::vector<htd::vertex_t> actualResult;
+
+    std::vector<htd::vertex_t> expectedResult { };
+
+    htd::set_intersection(input1, input2, actualResult);
+
+    ASSERT_TRUE(actualResult == expectedResult);
+}
+
+TEST(HelperTest, CheckSetIntersection3)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 1, 2, 4, 6 };
+
+    std::vector<htd::vertex_t> actualResult;
+
+    std::vector<htd::vertex_t> expectedResult { 1 };
+
+    htd::set_intersection(input1, input2, actualResult);
+
+    ASSERT_TRUE(actualResult == expectedResult);
+}
+
 TEST(HelperTest, CheckSetDifferenceSize1)
 {
     std::vector<htd::vertex_t> input1 { 1, 3, 5 };
@@ -505,6 +588,131 @@ TEST(HelperTest, CheckSetIntersectionSize2)
     std::vector<htd::vertex_t> input2 { 1, 3, 5 };
 
     ASSERT_EQ((std::size_t)2, htd::set_intersection_size(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckHasNonEmptySetDifferenceSize1)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 1, 2, 4, 5, 6 };
+
+    ASSERT_TRUE(htd::has_non_empty_set_difference(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckHasNonEmptySetDifferenceSize2)
+{
+    std::vector<htd::vertex_t> input1 { 1, 2, 4, 5, 6 };
+    std::vector<htd::vertex_t> input2 { 1, 3, 5 };
+
+    ASSERT_TRUE(htd::has_non_empty_set_difference(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckHasNonEmptySetDifferenceSize3)
+{
+    std::vector<htd::vertex_t> input1 { 1, 5 };
+    std::vector<htd::vertex_t> input2 { 1, 2, 4, 5, 6 };
+
+    ASSERT_FALSE(htd::has_non_empty_set_difference(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckHasNonEmptySetIntersectionSize1)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 1, 2, 4, 5, 6 };
+
+    ASSERT_TRUE(htd::has_non_empty_set_intersection(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckHasNonEmptySetIntersectionSize2)
+{
+    std::vector<htd::vertex_t> input1 { 1, 2, 4, 5, 6 };
+    std::vector<htd::vertex_t> input2 { 1, 3, 5 };
+
+    ASSERT_TRUE(htd::has_non_empty_set_intersection(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckHasNonEmptySetIntersectionSize3)
+{
+    std::vector<htd::vertex_t> input1 { 0, 3 };
+    std::vector<htd::vertex_t> input2 { 1, 2, 4, 5, 6 };
+
+    ASSERT_FALSE(htd::has_non_empty_set_intersection(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckHasNonEmptySetIntersectionSize4)
+{
+    std::vector<htd::vertex_t> input1 { 1, 2, 4, 5, 6 };
+    std::vector<htd::vertex_t> input2 { 0, 3 };
+
+    ASSERT_FALSE(htd::has_non_empty_set_intersection(input1.begin(), input1.end(), input2.begin(), input2.end()));
+}
+
+TEST(HelperTest, CheckAnalyzeSets1)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 0, 2, 4, 6 };
+
+    const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(input1, input2);
+
+    ASSERT_EQ((std::size_t)3, std::get<0>(result));
+    ASSERT_EQ((std::size_t)0, std::get<1>(result));
+    ASSERT_EQ((std::size_t)4, std::get<2>(result));
+}
+
+TEST(HelperTest, CheckAnalyzeSets2)
+{
+    std::vector<htd::vertex_t> input1 { 0, 2, 4, 6 };
+    std::vector<htd::vertex_t> input2 { 1, 3, 5 };
+
+    const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(input1, input2);
+
+    ASSERT_EQ((std::size_t)4, std::get<0>(result));
+    ASSERT_EQ((std::size_t)0, std::get<1>(result));
+    ASSERT_EQ((std::size_t)3, std::get<2>(result));
+}
+
+TEST(HelperTest, CheckAnalyzeSets3)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 1, 2, 4, 6 };
+
+    const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(input1, input2);
+
+    ASSERT_EQ((std::size_t)2, std::get<0>(result));
+    ASSERT_EQ((std::size_t)1, std::get<1>(result));
+    ASSERT_EQ((std::size_t)3, std::get<2>(result));
+}
+
+TEST(HelperTest, CheckSymmetricDifferenceSizes1)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 0, 2, 4, 6 };
+
+    const std::pair<std::size_t, std::size_t> & result = htd::symmetric_difference_sizes(input1, input2);
+
+    ASSERT_EQ((std::size_t)3, result.first);
+    ASSERT_EQ((std::size_t)4, result.second);
+}
+
+TEST(HelperTest, CheckSymmetricDifferenceSizes2)
+{
+    std::vector<htd::vertex_t> input1 { 0, 2, 4, 6 };
+    std::vector<htd::vertex_t> input2 { 1, 3, 5 };
+
+    const std::pair<std::size_t, std::size_t> & result = htd::symmetric_difference_sizes(input1, input2);
+
+    ASSERT_EQ((std::size_t)4, result.first);
+    ASSERT_EQ((std::size_t)3, result.second);
+}
+
+TEST(HelperTest, CheckSymmetricDifferenceSizes3)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 1, 2, 4, 6 };
+
+    const std::pair<std::size_t, std::size_t> & result = htd::symmetric_difference_sizes(input1, input2);
+
+    ASSERT_EQ((std::size_t)2, result.first);
+    ASSERT_EQ((std::size_t)3, result.second);
 }
 
 int main(int argc, char **argv)

@@ -370,34 +370,12 @@ const htd::Hyperedge & htd::Graph::hyperedge(htd::id_t edgeId) const
 
 const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t index) const
 {
-    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();
-
-    if (index >= hyperedgeCollection.size())
-    {
-        throw std::out_of_range("const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t) const");
-    }
-
-    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
-
-    std::advance(it, index);
-
-    return *it;
+    return base_->hyperedgeAtPosition(index);
 }
 
 const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges(vertex);
-
-    if (index >= hyperedgeCollection.size())
-    {
-        throw std::out_of_range("const htd::Hyperedge & htd::Graph::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
-    }
-
-    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
-
-    std::advance(it, index);
-
-    return *it;
+    return base_->hyperedgeAtPosition(index, vertex);
 }
 
 htd::FilteredHyperedgeCollection htd::Graph::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const

@@ -70,28 +70,22 @@
 namespace htd
 {
     template < typename T >
+    void print(const T & input, std::ostream & stream)
+    {
+        stream << input;
+    }
+
+    template < typename T >
     void print(const T & input)
     {
         print(input, std::cout);
     }
 
-    template < typename T >
-    void print(const T & input, std::ostream & stream)
-    {
-        stream << input;
-    }
-    
     template < >
     void print<std::string>(const std::string& input);
 
     template < >
     void print<std::string>(const std::string& input, std::ostream & stream);
-
-    template < typename T >
-    void print(const htd::ConstCollection<T> & input, bool sorted = false)
-    {
-        print(input, std::cout, sorted);
-    }
 
     template < typename T >
     void print(const htd::ConstCollection<T> & input, std::ostream & stream, bool sorted = false)
@@ -117,7 +111,7 @@ namespace htd
                 }
             }
 
-            stream << " ] (SIZE: " << input.size() << ")";
+            stream << " ]";
         }
         else
         {
@@ -126,18 +120,16 @@ namespace htd
     }
 
     template < typename T >
-    void print(const std::vector<T> & input, bool sorted = false)
+    void print(const htd::ConstCollection<T> & input, bool sorted = false)
     {
         print(input, std::cout, sorted);
     }
-    
+
     template < typename T >
     void print(const std::vector<T> & input, std::ostream & stream, bool sorted = false)
     {
         std::vector<T> tmp(input);
-        
-        stream << "std::vector ";
-        
+
         if (tmp.size() > 0)
         {
             if (sorted)
@@ -157,7 +149,7 @@ namespace htd
                 }
             }
             
-            stream << " ] (SIZE: " << input.size() << ")";
+            stream << " ]";
         }
         else
         {
@@ -166,16 +158,14 @@ namespace htd
     }
 
     template < typename T >
-    void print(const std::set<T> & input)
+    void print(const std::vector<T> & input, bool sorted = false)
     {
-        print(input, std::cout);
+        print(input, std::cout, sorted);
     }
     
     template < typename T >
     void print(const std::set<T> & input, std::ostream & stream)
     {
-        stream << "std::set ";
-        
         if (input.size() > 0)
         {
             stream << "[ ";
@@ -190,7 +180,7 @@ namespace htd
                 }
             }
             
-            stream << " ] (SIZE: " << input.size() << ")";
+            stream << " ]";
         }
         else
         {
@@ -199,18 +189,16 @@ namespace htd
     }
 
     template < typename T >
-    void print(const std::unordered_set<T> & input, bool sorted = true)
+    void print(const std::set<T> & input)
     {
-        print(input, std::cout, sorted);
+        print(input, std::cout);
     }
     
     template < typename T >
     void print(const std::unordered_set<T> & input, std::ostream & stream, bool sorted = true)
     {
         std::vector<T> tmp(input.begin(), input.end());
-        
-        stream << "std::unordered_set ";
-        
+
         if (input.size() > 0)
         {
             if (sorted)
@@ -230,7 +218,7 @@ namespace htd
                 }
             }
             
-            stream << " ] (SIZE: " << input.size() << ")";
+            stream << " ]";
         }
         else
         {
@@ -238,17 +226,15 @@ namespace htd
         }
     }
 
-    template < typename Key, typename T >
-    void print(const std::map<Key, T> & input)
+    template < typename T >
+    void print(const std::unordered_set<T> & input, bool sorted = true)
     {
-        print(input, std::cout);
+        print(input, std::cout, sorted);
     }
     
     template < typename Key, typename T >
     void print(const std::map<Key, T> & input, std::ostream & stream)
     {
-        stream << "std::map ";
-        
         if (input.size() > 0)
         {
             stream << "[ ";
@@ -267,12 +253,18 @@ namespace htd
                 }
             }
             
-            stream << " ] (SIZE: " << input.size() << ")";
+            stream << " ]";
         }
         else
         {
             stream << "<EMPTY>";
         }
+    }
+
+    template < typename Key, typename T >
+    void print(const std::map<Key, T> & input)
+    {
+        print(input, std::cout);
     }
 
     void print(bool input);

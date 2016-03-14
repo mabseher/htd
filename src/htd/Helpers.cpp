@@ -83,13 +83,6 @@ void htd::print(const htd::FilteredHyperedgeCollection & input, std::ostream & s
     }
 }
 
-std::ostream & std::operator<<(std::ostream & stream, const htd::FilteredHyperedgeCollection & input)
-{
-    htd::print(input, stream);
-
-    return stream;
-}
-
 void htd::set_union(const std::vector<htd::vertex_t> & set1,
                     const std::vector<htd::vertex_t> & set2,
                     htd::vertex_t ignoredVertex,

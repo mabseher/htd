@@ -812,7 +812,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
         }
         else
         {
-            htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(), sortedElements.begin(), sortedElements.end(), vertex, std::back_inserter(newNeighborhood));
+            htd::set_union(currentNeighborhood, sortedElements, vertex, newNeighborhood);
         }
 
         currentNeighborhood.swap(newNeighborhood);
@@ -904,7 +904,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
         }
         else
         {
-            htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(), sortedElements.begin(), sortedElements.end(), vertex, std::back_inserter(newNeighborhood));
+            htd::set_union(currentNeighborhood, sortedElements, vertex, newNeighborhood);
         }
 
         currentNeighborhood.swap(newNeighborhood);
@@ -987,7 +987,7 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
         }
         else
         {
-            htd::filtered_set_union(currentNeighborhood.begin(), currentNeighborhood.end(), sortedElements.begin(), sortedElements.end(), vertex, std::back_inserter(newNeighborhood));
+            htd::set_union(currentNeighborhood, sortedElements, vertex, newNeighborhood);
         }
 
         currentNeighborhood.swap(newNeighborhood);

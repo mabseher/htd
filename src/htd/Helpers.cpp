@@ -68,21 +68,6 @@ void htd::print(const htd::Hyperedge & input, std::ostream & stream)
     htd::print(input.elements(), std::cout, false);
 }
 
-void htd::print(const htd::FilteredHyperedgeCollection & input)
-{
-    print(input, std::cout);
-}
-
-void htd::print(const htd::FilteredHyperedgeCollection & input, std::ostream & stream)
-{
-    for (const htd::Hyperedge & hyperedge : input)
-    {
-        htd::print(hyperedge, stream);
-
-        stream << std::endl;
-    }
-}
-
 void htd::set_union(const std::vector<htd::vertex_t> & set1,
                     const std::vector<htd::vertex_t> & set2,
                     htd::vertex_t ignoredVertex,

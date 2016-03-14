@@ -85,6 +85,84 @@ TEST(HelperTest, CheckPrintStringToStdout)
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
+TEST(HelperTest, CheckPrintVectorToStdout1)
+{
+    testing::internal::CaptureStdout();
+    testing::internal::CaptureStderr();
+
+    std::vector<int> inputSet { 1, 5, 3 };
+
+    htd::print(inputSet);
+
+    ASSERT_EQ("[ 1, 5, 3 ]", testing::internal::GetCapturedStdout());
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+}
+
+TEST(HelperTest, CheckPrintVectorToStdout2)
+{
+    testing::internal::CaptureStdout();
+    testing::internal::CaptureStderr();
+
+    std::vector<int> inputSet { 1, 5, 3 };
+
+    htd::print(inputSet, false);
+
+    ASSERT_EQ("[ 1, 5, 3 ]", testing::internal::GetCapturedStdout());
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+}
+
+TEST(HelperTest, CheckPrintVectorToStdout3)
+{
+    testing::internal::CaptureStdout();
+    testing::internal::CaptureStderr();
+
+    std::vector<std::string> inputSet { "a", "e", "c" };
+
+    htd::print(inputSet);
+
+    ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", testing::internal::GetCapturedStdout());
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+}
+
+TEST(HelperTest, CheckPrintVectorToStdout4)
+{
+    testing::internal::CaptureStdout();
+    testing::internal::CaptureStderr();
+
+    std::vector<std::string> inputSet { "a", "e", "c" };
+
+    htd::print(inputSet, false);
+
+    ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", testing::internal::GetCapturedStdout());
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+}
+
+TEST(HelperTest, CheckPrintVectorToStdoutSorted1)
+{
+    testing::internal::CaptureStdout();
+    testing::internal::CaptureStderr();
+
+    std::vector<int> inputSet { 1, 5, 3 };
+
+    htd::print(inputSet, true);
+
+    ASSERT_EQ("[ 1, 3, 5 ]", testing::internal::GetCapturedStdout());
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+}
+
+TEST(HelperTest, CheckPrintVectorToStdoutSorted2)
+{
+    testing::internal::CaptureStdout();
+    testing::internal::CaptureStderr();
+
+    std::vector<std::string> inputSet { "a", "e", "c" };
+
+    htd::print(inputSet, true);
+
+    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", testing::internal::GetCapturedStdout());
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+}
+
 TEST(HelperTest, CheckPrintSetToStdout1)
 {
     testing::internal::CaptureStdout();
@@ -221,6 +299,20 @@ TEST(HelperTest, CheckSetUnion1)
 
 TEST(HelperTest, CheckSetUnion2)
 {
+    std::vector<int> input1 { 0, 2, 4, 6 };
+    std::vector<int> input2 { 1, 3, 5 };
+
+    std::vector<int> actualResult;
+
+    std::vector<int> expectedResult { 0, 1, 2, 3, 4, 5, 6 };
+
+    htd::set_union(input1, input2, actualResult);
+
+    ASSERT_TRUE(actualResult == expectedResult);
+}
+
+TEST(HelperTest, CheckSetUnion3)
+{
     std::vector<int> input1 { 1, 3, 5 };
     std::vector<int> input2 { 0, 2, 4, 6 };
 
@@ -234,7 +326,7 @@ TEST(HelperTest, CheckSetUnion2)
 }
 
 
-TEST(HelperTest, CheckSetUnion3)
+TEST(HelperTest, CheckSetUnion4)
 {
     std::vector<htd::vertex_t> input1 { 1, 3, 5 };
     std::vector<htd::vertex_t> input2 { 1, 2, 4, 6 };
@@ -248,7 +340,7 @@ TEST(HelperTest, CheckSetUnion3)
     ASSERT_TRUE(actualResult == expectedResult);
 }
 
-TEST(HelperTest, CheckSetUnion4)
+TEST(HelperTest, CheckSetUnion5)
 {
     std::vector<htd::vertex_t> input1 { 1, 3, 5 };
     std::vector<htd::vertex_t> input2 { 1, 2, 4, 6 };
@@ -262,7 +354,7 @@ TEST(HelperTest, CheckSetUnion4)
     ASSERT_TRUE(actualResult == expectedResult);
 }
 
-TEST(HelperTest, CheckSetUnion5)
+TEST(HelperTest, CheckSetUnion6)
 {
     std::vector<htd::vertex_t> input1 { 1, 3, 5 };
     std::vector<htd::vertex_t> input2 { 1, 2, 4, 5, 6 };
@@ -272,6 +364,34 @@ TEST(HelperTest, CheckSetUnion5)
     std::vector<htd::vertex_t> expectedResult { 1, 2, 3, 4, 5, 6 };
 
     htd::set_union(input1, input2, 7, actualResult);
+
+    ASSERT_TRUE(actualResult == expectedResult);
+}
+
+TEST(HelperTest, CheckSetUnion7)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { };
+
+    std::vector<htd::vertex_t> actualResult;
+
+    std::vector<htd::vertex_t> expectedResult { 1, 5 };
+
+    htd::set_union(input1, input2, 3, actualResult);
+
+    ASSERT_TRUE(actualResult == expectedResult);
+}
+
+TEST(HelperTest, CheckSetUnion8)
+{
+    std::vector<htd::vertex_t> input1 { 1, 3, 5 };
+    std::vector<htd::vertex_t> input2 { 3 };
+
+    std::vector<htd::vertex_t> actualResult;
+
+    std::vector<htd::vertex_t> expectedResult { 1, 3, 5 };
+
+    htd::set_union(input1, input2, 0, actualResult);
 
     ASSERT_TRUE(actualResult == expectedResult);
 }

@@ -62,6 +62,11 @@ TEST(HelperTest, CheckPrintBoolToStdout1)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("true", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -76,6 +81,11 @@ TEST(HelperTest, CheckPrintBoolToStdout2)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("false", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -89,6 +99,11 @@ TEST(HelperTest, CheckPrintStringToStdout)
 
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
 
     ASSERT_EQ("\"abc123!!!\"", stdoutResult);
     ASSERT_EQ("", stderrResult);
@@ -106,6 +121,11 @@ TEST(HelperTest, CheckPrintVectorToStdout1)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("[ 1, 5, 3 ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -121,6 +141,11 @@ TEST(HelperTest, CheckPrintVectorToStdout2)
 
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
 
     ASSERT_EQ("[ 1, 5, 3 ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
@@ -138,6 +163,11 @@ TEST(HelperTest, CheckPrintVectorToStdout3)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("<EMPTY>", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -153,6 +183,11 @@ TEST(HelperTest, CheckPrintVectorToStdout4)
 
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
 
     ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
@@ -170,6 +205,11 @@ TEST(HelperTest, CheckPrintVectorToStdout5)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -185,6 +225,11 @@ TEST(HelperTest, CheckPrintVectorToStdout6)
 
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
 
     ASSERT_EQ("<EMPTY>", stdoutResult);
     ASSERT_EQ("", stderrResult);
@@ -202,6 +247,11 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted1)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("[ 1, 3, 5 ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -217,6 +267,11 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted2)
 
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
 
     ASSERT_EQ("<EMPTY>", stdoutResult);
     ASSERT_EQ("", stderrResult);
@@ -234,6 +289,11 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted3)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -249,6 +309,11 @@ TEST(HelperTest, CheckPrintSetToStdout1)
 
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
 
     ASSERT_EQ("[ 1, 3, 5 ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
@@ -266,6 +331,11 @@ TEST(HelperTest, CheckPrintSetToStdout2)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("<EMPTY>", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -282,6 +352,11 @@ TEST(HelperTest, CheckPrintSetToStdout3)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -297,6 +372,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout1)
 
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
 
     if (stdoutResult != "[ 1, 3, 5 ]" && stdoutResult != "[ 1, 5, 3 ]" &&
         stdoutResult != "[ 3, 1, 5 ]" && stdoutResult != "[ 3, 5, 1 ]" &&
@@ -322,6 +402,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout2)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("<EMPTY>", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -337,6 +422,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout3)
 
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
 
     if (stdoutResult != "[ \"a\", \"c\", \"e\" ]" && stdoutResult != "[ \"a\", \"e\", \"c\" ]" &&
         stdoutResult != "[ \"c\", \"a\", \"e\" ]" && stdoutResult != "[ \"c\", \"e\", \"a\" ]" &&
@@ -362,6 +452,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted1)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("[ 1, 3, 5 ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -378,6 +473,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted2)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -392,6 +492,11 @@ TEST(HelperTest, CheckPrintHyperedgeToStdout1)
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
 
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
+
     ASSERT_EQ("Hyperedge 1: [ 1, 5, 3, 5, 3 ]", stdoutResult);
     ASSERT_EQ("", stderrResult);
 }
@@ -405,6 +510,11 @@ TEST(HelperTest, CheckPrintHyperedgeToStdout2)
 
     std::string stdoutResult = testing::internal::GetCapturedStdout();
     std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    if (stdoutResult.empty() || !stderrResult.empty())
+    {
+        FAIL();
+    }
 
     ASSERT_EQ("Hyperedge 3: [ 1, 5, 3, 5, 3 ]", stdoutResult);
     ASSERT_EQ("", stderrResult);

@@ -103,7 +103,7 @@ htd::ConstCollection<htd::index_t> htd::HeuristicSetCoverAlgorithm::computeSetCo
 
         if (position != relevantContainers.end())
         {
-            relevantContainers.erase(position);
+            position = relevantContainers.erase(position);
         }
     }
 

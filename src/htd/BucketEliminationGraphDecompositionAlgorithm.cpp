@@ -569,6 +569,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                             {
                                 auto & currentNeighborhood2 = neighbors[neighbor];
 
+                                /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'currentNeighborhood2'. */
+                                // coverity[deref_iterator]
                                 *(std::find(currentNeighborhood2.begin(), currentNeighborhood2.end(), vertex)) = replacement;
 
                                 if (superset[replacement] == replacement && superset[neighbor] == neighbor)

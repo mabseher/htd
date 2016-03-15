@@ -187,6 +187,8 @@ TEST(BucketEliminationTreeDecompositionAlgorithmTest, CheckResultSimpleGraphWith
 
     htd::BucketEliminationTreeDecompositionAlgorithm algorithm;
 
+    /* False positive of coverity caused by variadic function. */
+    // coverity[leaked_storage]
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph, 1, new BagSizeLabelingFunction());
 
     ASSERT_NE(decomposition, nullptr);
@@ -327,9 +329,11 @@ TEST(BucketEliminationTreeDecompositionAlgorithmTest, CheckResultSimpleGraphWith
 
 int main(int argc, char **argv)
 {
-    // coverity[GoogleTest may throw. This results in a non-zero exit code and is intended.]
+    /* GoogleTest may throw. This results in a non-zero exit code and is intended. */
+    // coverity[fun_call_w_exception]
     ::testing::InitGoogleTest(&argc, argv);
 
-    // coverity[GoogleTest may throw. This results in a non-zero exit code and is intended.]
+    /* GoogleTest may throw. This results in a non-zero exit code and is intended. */
+    // coverity[fun_call_w_exception]
     return RUN_ALL_TESTS();
 }

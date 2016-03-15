@@ -30,6 +30,7 @@
 #include <htd/ILabel.hpp>
 
 #include <memory>
+#include <stdexcept>
 
 namespace htd
 {
@@ -112,7 +113,14 @@ namespace htd
     template<typename OutputType>
     const OutputType & accessLabel(const htd::ILabel & input)
     {
-        return dynamic_cast<const htd::Label<OutputType> *>(&input)->value();
+        const htd::Label<OutputType> * label = dynamic_cast<const htd::Label<OutputType> *>(&input);
+
+        if (label == nullptr)
+        {
+            throw std::logic_error("const OutputType & accessLabel(const htd::ILabel &)");
+        }
+
+        return label->value();
     }
 }
 

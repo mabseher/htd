@@ -155,7 +155,7 @@ htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const
 
                 if (position != remainder.end())
                 {
-                    remainder.erase(position);
+                    position = remainder.erase(position);
                 }
             }
 

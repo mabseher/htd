@@ -171,11 +171,11 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
                                 }
                                 else
                                 {
-                                    htd::index_t position1 = std::distance(first, std::lower_bound(first, last, newVertex));
-                                    htd::index_t position2 = std::distance(first, std::lower_bound(first + position1, last, selectedVertex));
+                                    auto position = std::lower_bound(first, last, selectedVertex);
 
-                                    currentNeighborhood.erase(first + position2);
-                                    currentNeighborhood.insert(currentNeighborhood.begin() + position1, newVertex);
+                                    position = currentNeighborhood.erase(position);
+
+                                    currentNeighborhood.insert(std::lower_bound(first, position, newVertex), newVertex);
                                 }
                             }
                             else
@@ -186,11 +186,11 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
                                 }
                                 else
                                 {
-                                    htd::index_t position1 = std::distance(first, std::lower_bound(first, last, selectedVertex));
-                                    htd::index_t position2 = std::distance(first, std::lower_bound(first + position1, last, newVertex));
+                                    auto position = std::lower_bound(first, last, selectedVertex);
 
-                                    currentNeighborhood.erase(first + position1);
-                                    currentNeighborhood.insert(currentNeighborhood.begin() + position2 - 1, newVertex);
+                                    position = currentNeighborhood.erase(position);
+
+                                    currentNeighborhood.insert(std::lower_bound(position, currentNeighborhood.end(), newVertex), newVertex);
                                 }
                             }
                         }

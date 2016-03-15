@@ -54,7 +54,7 @@ class TreeDecompositionTest : public ::testing::Test
 
 TEST(TreeDecompositionTest, CheckEmptyTree)
 {
-    htd::Tree tree;
+    htd::TreeDecomposition tree;
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
     ASSERT_EQ((std::size_t)0, tree.edgeCount());
@@ -85,7 +85,7 @@ TEST(TreeDecompositionTest, CheckEmptyTree)
 
 TEST(TreeDecompositionTest, CheckSize1Tree)
 {
-    htd::Tree tree;
+    htd::TreeDecomposition tree;
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
     ASSERT_EQ((std::size_t)0, tree.edgeCount());
@@ -141,7 +141,7 @@ TEST(TreeDecompositionTest, CheckSize1Tree)
 
 TEST(TreeDecompositionTest, CheckSize3Tree)
 {
-    htd::Tree tree;
+    htd::TreeDecomposition tree;
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
     ASSERT_EQ((std::size_t)0, tree.edgeCount());
@@ -438,7 +438,7 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
 
 TEST(TreeDecompositionTest, CheckTreeManipulations)
 {
-    htd::Tree tree;
+    htd::TreeDecomposition tree;
 
     htd::vertex_t root = tree.insertRoot();
 

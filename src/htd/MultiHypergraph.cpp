@@ -631,13 +631,15 @@ htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::addVertices(std::size_
 
     if (count > 0)
     {
+        std::size_t previousSize = vertices_.size();
+
         std::vector<htd::vertex_t> & vertexContainer = ret.container();
 
-        vertices_.resize(vertices_.size() + count, 0);
+        vertices_.resize(previousSize + count, 0);
 
         for (htd::index_t index = 0; index < count; ++index)
         {
-            vertices_[size_ + index + 1 - htd::Vertex::FIRST] = next_vertex_;
+            vertices_[previousSize + index + 1 - htd::Vertex::FIRST] = next_vertex_;
 
             vertexContainer.push_back(next_vertex_);
 

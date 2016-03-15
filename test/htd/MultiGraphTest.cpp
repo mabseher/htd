@@ -353,6 +353,10 @@ TEST(MultiGraphTest, CheckGraphModifications)
 {
     htd::MultiGraph graph(3);
 
+    std::vector<htd::vertex_t> neighbors1;
+    std::vector<htd::vertex_t> neighbors2;
+    std::vector<htd::vertex_t> neighbors3;
+
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
 
@@ -389,6 +393,22 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)3));
+
+    ASSERT_EQ((std::size_t)1, graph.neighbors((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)1, graph.neighbors((htd::vertex_t)2).size());
+    ASSERT_EQ((std::size_t)0, graph.neighbors((htd::vertex_t)3).size());
+
+    graph.copyNeighborsTo(neighbors1, (htd::vertex_t)1);
+    graph.copyNeighborsTo(neighbors2, (htd::vertex_t)2);
+    graph.copyNeighborsTo(neighbors3, (htd::vertex_t)3);
+
+    ASSERT_EQ((std::size_t)1, neighbors1.size());
+    ASSERT_EQ((std::size_t)1, neighbors2.size());
+    ASSERT_EQ((std::size_t)0, neighbors3.size());
+
+    neighbors1.clear();
+    neighbors2.clear();
+    neighbors3.clear();
 
     graph.removeVertex(3);
 
@@ -439,6 +459,39 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
 
+    ASSERT_EQ((std::size_t)0, graph.neighbors((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)0, graph.neighbors((htd::vertex_t)2).size());
+
+    try
+    {
+        graph.neighbors((htd::vertex_t)3);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    graph.copyNeighborsTo(neighbors1, (htd::vertex_t)1);
+    graph.copyNeighborsTo(neighbors2, (htd::vertex_t)2);
+
+    ASSERT_EQ((std::size_t)0, neighbors1.size());
+    ASSERT_EQ((std::size_t)0, neighbors2.size());
+
+    try
+    {
+        graph.copyNeighborsTo(neighbors3, (htd::vertex_t)3);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, neighbors3.size());
+
     try
     {
         graph.addEdge(3, 3);
@@ -460,6 +513,37 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    ASSERT_EQ((std::size_t)0, graph.addVertices(0).size());
+
+    ASSERT_EQ((htd::vertex_t)4, graph.addVertex());
+
+    ASSERT_EQ((std::size_t)3, graph.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph.edgeCount());
+
+    ASSERT_TRUE(graph.isVertex(1));
+    ASSERT_TRUE(graph.isVertex(2));
+    ASSERT_FALSE(graph.isVertex(3));
+    ASSERT_TRUE(graph.isVertex(4));
+
+    const htd::ConstCollection<htd::vertex_t> & newVertices = graph.addVertices(3);
+
+    ASSERT_EQ((std::size_t)3, newVertices.size());
+
+    ASSERT_EQ((htd::vertex_t)5, newVertices[0]);
+    ASSERT_EQ((htd::vertex_t)6, newVertices[1]);
+    ASSERT_EQ((htd::vertex_t)7, newVertices[2]);
+
+    ASSERT_EQ((std::size_t)6, graph.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph.edgeCount());
+
+    ASSERT_TRUE(graph.isVertex(1));
+    ASSERT_TRUE(graph.isVertex(2));
+    ASSERT_FALSE(graph.isVertex(3));
+    ASSERT_TRUE(graph.isVertex(4));
+    ASSERT_TRUE(graph.isVertex(5));
+    ASSERT_TRUE(graph.isVertex(6));
+    ASSERT_TRUE(graph.isVertex(7));
 }
 
 TEST(MultiGraphTest, CheckCopyConstructors)
@@ -511,6 +595,14 @@ TEST(MultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph4.vertexCount());
     ASSERT_EQ((std::size_t)0, graph4.edgeCount());
     ASSERT_FALSE(graph4.isEdge(edgeId1));
+
+    htd::MultiGraph * clonedGraph = graph1.clone();
+
+    ASSERT_EQ((std::size_t)2, clonedGraph->vertexCount());
+    ASSERT_EQ((std::size_t)0, clonedGraph->edgeCount());
+    ASSERT_FALSE(clonedGraph->isEdge(edgeId1));
+
+    delete clonedGraph;
 }
 
 int main(int argc, char **argv)

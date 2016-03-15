@@ -59,8 +59,11 @@ TEST(HelperTest, CheckPrintBoolToStdout1)
 
     htd::print(true);
 
-    ASSERT_EQ("true", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("true", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintBoolToStdout2)
@@ -70,8 +73,11 @@ TEST(HelperTest, CheckPrintBoolToStdout2)
 
     htd::print(false);
 
-    ASSERT_EQ("false", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("false", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintStringToStdout)
@@ -81,8 +87,11 @@ TEST(HelperTest, CheckPrintStringToStdout)
 
     htd::print(std::string("abc123!!!"));
 
-    ASSERT_EQ("\"abc123!!!\"", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("\"abc123!!!\"", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout1)
@@ -94,8 +103,11 @@ TEST(HelperTest, CheckPrintVectorToStdout1)
 
     htd::print(inputSet);
 
-    ASSERT_EQ("[ 1, 5, 3 ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("[ 1, 5, 3 ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout2)
@@ -107,8 +119,11 @@ TEST(HelperTest, CheckPrintVectorToStdout2)
 
     htd::print(inputSet, false);
 
-    ASSERT_EQ("[ 1, 5, 3 ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("[ 1, 5, 3 ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout3)
@@ -120,8 +135,11 @@ TEST(HelperTest, CheckPrintVectorToStdout3)
 
     htd::print(inputSet, false);
 
-    ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("<EMPTY>", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout4)
@@ -133,8 +151,11 @@ TEST(HelperTest, CheckPrintVectorToStdout4)
 
     htd::print(inputSet);
 
-    ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout5)
@@ -146,8 +167,11 @@ TEST(HelperTest, CheckPrintVectorToStdout5)
 
     htd::print(inputSet, false);
 
-    ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout6)
@@ -159,8 +183,11 @@ TEST(HelperTest, CheckPrintVectorToStdout6)
 
     htd::print(inputSet, false);
 
-    ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("<EMPTY>", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintVectorToStdoutSorted1)
@@ -172,8 +199,11 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted1)
 
     htd::print(inputSet, true);
 
-    ASSERT_EQ("[ 1, 3, 5 ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("[ 1, 3, 5 ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintVectorToStdoutSorted2)
@@ -185,8 +215,11 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted2)
 
     htd::print(inputSet, true);
 
-    ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("<EMPTY>", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintVectorToStdoutSorted3)
@@ -198,8 +231,11 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted3)
 
     htd::print(inputSet, true);
 
-    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintSetToStdout1)
@@ -211,8 +247,11 @@ TEST(HelperTest, CheckPrintSetToStdout1)
 
     htd::print(inputSet);
 
-    ASSERT_EQ("[ 1, 3, 5 ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("[ 1, 3, 5 ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintSetToStdout2)
@@ -224,8 +263,11 @@ TEST(HelperTest, CheckPrintSetToStdout2)
 
     htd::print(inputSet);
 
-    ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("<EMPTY>", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintSetToStdout3)
@@ -237,8 +279,11 @@ TEST(HelperTest, CheckPrintSetToStdout3)
 
     htd::print(inputSet);
 
-    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintUnorderedSetToStdout1)
@@ -250,18 +295,19 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout1)
 
     htd::print(inputSet);
 
-    std::string output = testing::internal::GetCapturedStdout();
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
 
-    if (output != "[ 1, 3, 5 ]" && output != "[ 1, 5, 3 ]" &&
-        output != "[ 3, 1, 5 ]" && output != "[ 3, 5, 1 ]" &&
-        output != "[ 5, 1, 3 ]" && output != "[ 5, 3, 1 ]")
+    if (stdoutResult != "[ 1, 3, 5 ]" && stdoutResult != "[ 1, 5, 3 ]" &&
+        stdoutResult != "[ 3, 1, 5 ]" && stdoutResult != "[ 3, 5, 1 ]" &&
+        stdoutResult != "[ 5, 1, 3 ]" && stdoutResult != "[ 5, 3, 1 ]")
     {
-        std::cout << "UNEXPECTED RESULT: \"" << output << "\"" << std::endl;
+        std::cout << "UNEXPECTED RESULT: \"" << stdoutResult << "\"" << std::endl;
 
         FAIL();
     }
 
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintUnorderedSetToStdout2)
@@ -273,8 +319,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout2)
 
     htd::print(inputSet);
 
-    ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("<EMPTY>", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintUnorderedSetToStdout3)
@@ -286,18 +335,19 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout3)
 
     htd::print(inputSet);
 
-    std::string output = testing::internal::GetCapturedStdout();
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
 
-    if (output != "[ \"a\", \"c\", \"e\" ]" && output != "[ \"a\", \"e\", \"c\" ]" &&
-        output != "[ \"c\", \"a\", \"e\" ]" && output != "[ \"c\", \"e\", \"a\" ]" &&
-        output != "[ \"e\", \"a\", \"c\" ]" && output != "[ \"e\", \"c\", \"a\" ]")
+    if (stdoutResult != "[ \"a\", \"c\", \"e\" ]" && stdoutResult != "[ \"a\", \"e\", \"c\" ]" &&
+        stdoutResult != "[ \"c\", \"a\", \"e\" ]" && stdoutResult != "[ \"c\", \"e\", \"a\" ]" &&
+        stdoutResult != "[ \"e\", \"a\", \"c\" ]" && stdoutResult != "[ \"e\", \"c\", \"a\" ]")
     {
-        std::cout << "UNEXPECTED RESULT: \"" << output << "\"" << std::endl;
+        std::cout << "UNEXPECTED RESULT: \"" << stdoutResult << "\"" << std::endl;
 
         FAIL();
     }
 
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted1)
@@ -309,8 +359,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted1)
 
     htd::print(inputSet, true);
 
-    ASSERT_EQ("[ 1, 3, 5 ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("[ 1, 3, 5 ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted2)
@@ -322,8 +375,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted2)
 
     htd::print(inputSet, true);
 
-    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintHyperedgeToStdout1)
@@ -333,8 +389,11 @@ TEST(HelperTest, CheckPrintHyperedgeToStdout1)
 
     htd::print(htd::Hyperedge(1, { 1, 5, 3, 5, 3 }));
 
-    ASSERT_EQ("Hyperedge 1: [ 1, 5, 3, 5, 3 ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("Hyperedge 1: [ 1, 5, 3, 5, 3 ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckPrintHyperedgeToStdout2)
@@ -344,8 +403,11 @@ TEST(HelperTest, CheckPrintHyperedgeToStdout2)
 
     htd::print(htd::Hyperedge(3, { 1, 5, 3, 5, 3 }));
 
-    ASSERT_EQ("Hyperedge 3: [ 1, 5, 3, 5, 3 ]", testing::internal::GetCapturedStdout());
-    ASSERT_EQ("", testing::internal::GetCapturedStderr());
+    std::string stdoutResult = testing::internal::GetCapturedStdout();
+    std::string stderrResult = testing::internal::GetCapturedStderr();
+
+    ASSERT_EQ("Hyperedge 3: [ 1, 5, 3, 5, 3 ]", stdoutResult);
+    ASSERT_EQ("", stderrResult);
 }
 
 TEST(HelperTest, CheckSetUnion1)

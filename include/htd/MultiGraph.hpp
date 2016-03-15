@@ -95,14 +95,6 @@ namespace htd
 
             bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::edge_t> edges(void) const HTD_OVERRIDE;
-
-            htd::ConstCollection<htd::edge_t> edges(htd::vertex_t vertex) const HTD_OVERRIDE;
-
-            const htd::edge_t & edgeAtPosition(htd::index_t index) const HTD_OVERRIDE;
-
-            const htd::edge_t & edgeAtPosition(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
-
             htd::ConstCollection<htd::Hyperedge> hyperedges(void) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;

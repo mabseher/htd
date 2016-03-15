@@ -36,14 +36,6 @@ namespace htd
         public:
             virtual ~IMultiGraph() = 0;
 
-            virtual htd::ConstCollection<htd::edge_t> edges(void) const = 0;
-
-            virtual const htd::edge_t & edgeAtPosition(htd::index_t index) const = 0;
-
-            virtual htd::ConstCollection<htd::edge_t> edges(htd::vertex_t vertex) const = 0;
-
-            virtual const htd::edge_t & edgeAtPosition(htd::index_t index, htd::vertex_t vertex) const = 0;
-
             virtual IMultiGraph * clone(void) const = 0;
     };
 

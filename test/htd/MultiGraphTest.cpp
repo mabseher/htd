@@ -184,14 +184,17 @@ TEST(MultiGraphTest, CheckSizeInitializedGraph2)
     htd::ConstCollection<htd::vertex_t> edgeIds2 = graph.associatedEdgeIds((htd::vertex_t)1, (htd::vertex_t)2);
     htd::ConstCollection<htd::vertex_t> edgeIds3 = graph.associatedEdgeIds((htd::vertex_t)2, (htd::vertex_t)1);
     htd::ConstCollection<htd::vertex_t> edgeIds4 = graph.associatedEdgeIds(htd::Collection<htd::vertex_t>(elements2.begin(), elements2.end()));
+    htd::ConstCollection<htd::vertex_t> edgeIds5 = graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements2.begin(), elements2.end()));
 
     ASSERT_EQ((std::size_t)0, edgeIds1.size());
     ASSERT_EQ((std::size_t)0, edgeIds2.size());
     ASSERT_EQ((std::size_t)1, edgeIds3.size());
     ASSERT_EQ((std::size_t)1, edgeIds4.size());
+    ASSERT_EQ((std::size_t)1, edgeIds5.size());
 
     ASSERT_EQ((htd::id_t)1, edgeIds3[0]);
     ASSERT_EQ((htd::id_t)1, edgeIds4[0]);
+    ASSERT_EQ((htd::id_t)1, edgeIds5[0]);
 
     const htd::Hyperedge & hyperedge1 = graph.hyperedge((htd::id_t)1);
 
@@ -339,6 +342,11 @@ TEST(MultiGraphTest, CheckSelfLoop)
 
     ASSERT_EQ((htd::vertex_t)2, graph.neighborAtPosition((htd::vertex_t)1, (htd::index_t)0));
     ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)2, (htd::index_t)0));
+
+    ASSERT_EQ((htd::vertex_t)2, graph.neighbors((htd::vertex_t)1)[0]);
+    ASSERT_EQ((htd::vertex_t)1, graph.neighbors((htd::vertex_t)2)[0]);
+    ASSERT_EQ((htd::vertex_t)2, graph.neighborAtPosition((htd::vertex_t)1, 0));
+    ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)2, 0));
 }
 
 TEST(MultiGraphTest, CheckGraphModifications)
@@ -350,8 +358,27 @@ TEST(MultiGraphTest, CheckGraphModifications)
 
     htd::id_t edgeId1 = graph.addEdge(2, 1);
 
+    std::vector<htd::vertex_t> elements1 { 1, 2, 3 };
+    std::vector<htd::vertex_t> elements2 { 1, 2 };
+    std::vector<htd::vertex_t> elements3 { 2, 1 };
+
+    ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)1, graph.edgeCount());
+
     ASSERT_TRUE(graph.isEdge(edgeId1));
+    ASSERT_FALSE(graph.isEdge(elements1));
+    ASSERT_FALSE(graph.isEdge(elements2));
+    ASSERT_TRUE(graph.isEdge(elements3));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>(elements1.begin(), elements1.end())));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>(elements2.begin(), elements2.end())));
+    ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>(elements3.begin(), elements3.end())));
+
+    ASSERT_EQ((std::size_t)0, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements1.begin(), elements1.end())).size());
+    ASSERT_EQ((std::size_t)0, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements2.begin(), elements2.end())).size());
+    ASSERT_EQ((std::size_t)1, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements3.begin(), elements3.end())).size());
+
+    ASSERT_EQ((htd::id_t)1, graph.associatedEdgeIds(elements3)[0]);
+    ASSERT_EQ((htd::id_t)1, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements3.begin(), elements3.end()))[0]);
 
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
     ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
@@ -367,7 +394,21 @@ TEST(MultiGraphTest, CheckGraphModifications)
 
     ASSERT_EQ((std::size_t)2, graph.vertexCount());
     ASSERT_EQ((std::size_t)1, graph.edgeCount());
+
     ASSERT_TRUE(graph.isEdge(edgeId1));
+    ASSERT_FALSE(graph.isEdge(elements1));
+    ASSERT_FALSE(graph.isEdge(elements2));
+    ASSERT_TRUE(graph.isEdge(elements3));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>(elements1.begin(), elements1.end())));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>(elements2.begin(), elements2.end())));
+    ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>(elements3.begin(), elements3.end())));
+
+    ASSERT_EQ((std::size_t)0, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements1.begin(), elements1.end())).size());
+    ASSERT_EQ((std::size_t)0, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements2.begin(), elements2.end())).size());
+    ASSERT_EQ((std::size_t)1, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements3.begin(), elements3.end())).size());
+
+    ASSERT_EQ((htd::id_t)1, graph.associatedEdgeIds(elements3)[0]);
+    ASSERT_EQ((htd::id_t)1, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements3.begin(), elements3.end()))[0]);
 
     ASSERT_EQ((std::size_t)2, graph.hyperedge(edgeId1).size());
 
@@ -382,6 +423,16 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
 
     ASSERT_FALSE(graph.isEdge(edgeId1));
+    ASSERT_FALSE(graph.isEdge(elements1));
+    ASSERT_FALSE(graph.isEdge(elements2));
+    ASSERT_FALSE(graph.isEdge(elements3));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>(elements1.begin(), elements1.end())));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>(elements2.begin(), elements2.end())));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>(elements3.begin(), elements3.end())));
+
+    ASSERT_EQ((std::size_t)0, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements1.begin(), elements1.end())).size());
+    ASSERT_EQ((std::size_t)0, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements2.begin(), elements2.end())).size());
+    ASSERT_EQ((std::size_t)0, graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements3.begin(), elements3.end())).size());
 
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
@@ -403,6 +454,7 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
 
     ASSERT_FALSE(graph.isEdge(edgeId1));
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 3, 3 }));
 
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
@@ -427,31 +479,38 @@ TEST(MultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph2.vertexCount());
     ASSERT_EQ((std::size_t)1, graph2.edgeCount());
 
-    htd::MultiGraph graph3;
+    const htd::IMultiGraph & graphReference1 = graph2;
 
-    ASSERT_EQ((std::size_t)0, graph3.vertexCount());
-    ASSERT_EQ((std::size_t)0, graph3.edgeCount());
-    ASSERT_FALSE(graph3.isEdge(edgeId1));
-
-    graph3 = graph1;
-
-    ASSERT_EQ((std::size_t)2, graph3.vertexCount());
-    ASSERT_EQ((std::size_t)0, graph3.edgeCount());
-    ASSERT_FALSE(graph3.isEdge(edgeId1));
-
-    graph3 = graph2;
+    htd::MultiGraph graph3(graphReference1);
 
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)1, graph3.edgeCount());
-    ASSERT_TRUE(graph3.isEdge(edgeId1));
 
-    const htd::IMultiGraph & graphReference1 = graph1;
+    htd::MultiGraph graph4;
 
-    graph3 = graphReference1;
+    ASSERT_EQ((std::size_t)0, graph4.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph4.edgeCount());
+    ASSERT_FALSE(graph4.isEdge(edgeId1));
 
-    ASSERT_EQ((std::size_t)2, graph3.vertexCount());
-    ASSERT_EQ((std::size_t)0, graph3.edgeCount());
-    ASSERT_FALSE(graph3.isEdge(edgeId1));
+    graph4 = graph1;
+
+    ASSERT_EQ((std::size_t)2, graph4.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph4.edgeCount());
+    ASSERT_FALSE(graph4.isEdge(edgeId1));
+
+    graph4 = graph2;
+
+    ASSERT_EQ((std::size_t)2, graph4.vertexCount());
+    ASSERT_EQ((std::size_t)1, graph4.edgeCount());
+    ASSERT_TRUE(graph4.isEdge(edgeId1));
+
+    const htd::IMultiGraph & graphReference2 = graph1;
+
+    graph4 = graphReference2;
+
+    ASSERT_EQ((std::size_t)2, graph4.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph4.edgeCount());
+    ASSERT_FALSE(graph4.isEdge(edgeId1));
 }
 
 int main(int argc, char **argv)

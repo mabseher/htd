@@ -434,21 +434,6 @@ TEST(TreeTest, CheckSize3Tree)
     {
         HTD_UNUSED(error);
     }
-
-    ASSERT_EQ((std::size_t)2, tree.edges(root).size());
-    ASSERT_EQ((std::size_t)1, tree.edges(child).size());
-    ASSERT_EQ((std::size_t)1, tree.edges(newRoot).size());
-
-    try
-    {
-        tree.edges((htd::vertex_t)4);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 }
 
 TEST(TreeTest, CheckTreeManipulations)

@@ -286,8 +286,13 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                     const htd::ConstCollection<htd::vertex_t> & component1 = components[index];
                     const htd::ConstCollection<htd::vertex_t> & component2 = components[index + 1];
 
-                    htd::vertex_t vertex1 = component1[rand() % component1.size()];
-                    htd::vertex_t vertex2 = component2[rand() % component2.size()];
+                    /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+                    // coverity[dont_call]
+                    htd::vertex_t vertex1 = component1[std::rand() % component1.size()];
+
+                    /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+                    // coverity[dont_call]
+                    htd::vertex_t vertex2 = component2[std::rand() % component2.size()];
 
                     mutableGraphDecomposition.addEdge(vertex1, vertex2);
                 }
@@ -302,7 +307,9 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         const htd::ConstCollection<htd::vertex_t> & vertexCollection = graphDecomposition->vertices();
 
-        graphTraversal.traverse(*graphDecomposition, vertexCollection[rand() % vertexCollection.size()], [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
+        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+        // coverity[dont_call]
+        graphTraversal.traverse(*graphDecomposition, vertexCollection[std::rand() % vertexCollection.size()], [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
         {
             HTD_UNUSED(distanceFromStartingVertex)
 

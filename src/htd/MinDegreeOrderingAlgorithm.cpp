@@ -136,7 +136,9 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
 
         auto it = pool.begin();
 
-        std::advance(it, rand() % pool.size());
+        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+        // coverity[dont_call]
+        std::advance(it, std::rand() % pool.size());
 
         htd::vertex_t selectedVertex = *it;
 

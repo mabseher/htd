@@ -175,8 +175,11 @@ void htd::MinFillOrderingAlgorithm2::writeOrderingTo(const htd::IMultiHypergraph
                 minDegreePool.push_back(vertex);
             }
         }
-        
-        htd::vertex_t selectedVertex = minDegreePool[rand() % minDegreePool.size()];
+
+        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+        // coverity[dont_call]
+        htd::vertex_t selectedVertex = minDegreePool[std::rand() % minDegreePool.size()];
+
         auto & selectedNeighborhood = neighborhood.at(selectedVertex);
         
         pool.erase(pool.find(selectedVertex));

@@ -59,16 +59,11 @@ TEST(HelperTest, CheckPrintBoolToStdout1)
 
     htd::print(true);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("true", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("true", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintBoolToStdout2)
@@ -78,16 +73,11 @@ TEST(HelperTest, CheckPrintBoolToStdout2)
 
     htd::print(false);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("false", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("false", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintStringToStdout)
@@ -97,16 +87,11 @@ TEST(HelperTest, CheckPrintStringToStdout)
 
     htd::print(std::string("abc123!!!"));
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("\"abc123!!!\"", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("\"abc123!!!\"", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout1)
@@ -118,16 +103,11 @@ TEST(HelperTest, CheckPrintVectorToStdout1)
 
     htd::print(inputSet);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("[ 1, 5, 3 ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("[ 1, 5, 3 ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout2)
@@ -139,16 +119,11 @@ TEST(HelperTest, CheckPrintVectorToStdout2)
 
     htd::print(inputSet, false);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("[ 1, 5, 3 ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("[ 1, 5, 3 ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout3)
@@ -160,16 +135,11 @@ TEST(HelperTest, CheckPrintVectorToStdout3)
 
     htd::print(inputSet, false);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("<EMPTY>", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout4)
@@ -181,16 +151,11 @@ TEST(HelperTest, CheckPrintVectorToStdout4)
 
     htd::print(inputSet);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout5)
@@ -202,16 +167,11 @@ TEST(HelperTest, CheckPrintVectorToStdout5)
 
     htd::print(inputSet, false);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintVectorToStdout6)
@@ -223,16 +183,11 @@ TEST(HelperTest, CheckPrintVectorToStdout6)
 
     htd::print(inputSet, false);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("<EMPTY>", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintVectorToStdoutSorted1)
@@ -244,16 +199,11 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted1)
 
     htd::print(inputSet, true);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("[ 1, 3, 5 ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("[ 1, 3, 5 ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintVectorToStdoutSorted2)
@@ -265,16 +215,11 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted2)
 
     htd::print(inputSet, true);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("<EMPTY>", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintVectorToStdoutSorted3)
@@ -286,16 +231,11 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted3)
 
     htd::print(inputSet, true);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintSetToStdout1)
@@ -307,16 +247,11 @@ TEST(HelperTest, CheckPrintSetToStdout1)
 
     htd::print(inputSet);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("[ 1, 3, 5 ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("[ 1, 3, 5 ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintSetToStdout2)
@@ -328,16 +263,11 @@ TEST(HelperTest, CheckPrintSetToStdout2)
 
     htd::print(inputSet);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("<EMPTY>", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintSetToStdout3)
@@ -349,16 +279,11 @@ TEST(HelperTest, CheckPrintSetToStdout3)
 
     htd::print(inputSet);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintUnorderedSetToStdout1)
@@ -370,24 +295,20 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout1)
 
     htd::print(inputSet);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    std::string output = testing::internal::GetCapturedStdout();
 
-    if (stdoutResult.empty() || !stderrResult.empty())
+    if (output != "[ 1, 3, 5 ]" && output != "[ 1, 5, 3 ]" &&
+        output != "[ 3, 1, 5 ]" && output != "[ 3, 5, 1 ]" &&
+        output != "[ 5, 1, 3 ]" && output != "[ 5, 3, 1 ]")
     {
-        FAIL();
-    }
-
-    if (stdoutResult != "[ 1, 3, 5 ]" && stdoutResult != "[ 1, 5, 3 ]" &&
-        stdoutResult != "[ 3, 1, 5 ]" && stdoutResult != "[ 3, 5, 1 ]" &&
-        stdoutResult != "[ 5, 1, 3 ]" && stdoutResult != "[ 5, 3, 1 ]")
-    {
-        std::cout << "UNEXPECTED RESULT: \"" << stdoutResult << "\"" << std::endl;
+        std::cout << "UNEXPECTED RESULT: \"" << output << "\"" << std::endl;
 
         FAIL();
     }
 
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintUnorderedSetToStdout2)
@@ -399,16 +320,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout2)
 
     htd::print(inputSet);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("<EMPTY>", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintUnorderedSetToStdout3)
@@ -420,24 +336,20 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout3)
 
     htd::print(inputSet);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    std::string output = testing::internal::GetCapturedStdout();
 
-    if (stdoutResult.empty() || !stderrResult.empty())
+    if (output != "[ \"a\", \"c\", \"e\" ]" && output != "[ \"a\", \"e\", \"c\" ]" &&
+        output != "[ \"c\", \"a\", \"e\" ]" && output != "[ \"c\", \"e\", \"a\" ]" &&
+        output != "[ \"e\", \"a\", \"c\" ]" && output != "[ \"e\", \"c\", \"a\" ]")
     {
-        FAIL();
-    }
-
-    if (stdoutResult != "[ \"a\", \"c\", \"e\" ]" && stdoutResult != "[ \"a\", \"e\", \"c\" ]" &&
-        stdoutResult != "[ \"c\", \"a\", \"e\" ]" && stdoutResult != "[ \"c\", \"e\", \"a\" ]" &&
-        stdoutResult != "[ \"e\", \"a\", \"c\" ]" && stdoutResult != "[ \"e\", \"c\", \"a\" ]")
-    {
-        std::cout << "UNEXPECTED RESULT: \"" << stdoutResult << "\"" << std::endl;
+        std::cout << "UNEXPECTED RESULT: \"" << output << "\"" << std::endl;
 
         FAIL();
     }
 
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted1)
@@ -449,16 +361,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted1)
 
     htd::print(inputSet, true);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("[ 1, 3, 5 ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("[ 1, 3, 5 ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted2)
@@ -470,16 +377,11 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted2)
 
     htd::print(inputSet, true);
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintHyperedgeToStdout1)
@@ -489,16 +391,11 @@ TEST(HelperTest, CheckPrintHyperedgeToStdout1)
 
     htd::print(htd::Hyperedge(1, { 1, 5, 3, 5, 3 }));
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("Hyperedge 1: [ 1, 5, 3, 5, 3 ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("Hyperedge 1: [ 1, 5, 3, 5, 3 ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckPrintHyperedgeToStdout2)
@@ -508,16 +405,11 @@ TEST(HelperTest, CheckPrintHyperedgeToStdout2)
 
     htd::print(htd::Hyperedge(3, { 1, 5, 3, 5, 3 }));
 
-    std::string stdoutResult = testing::internal::GetCapturedStdout();
-    std::string stderrResult = testing::internal::GetCapturedStderr();
+    // coverity[tainted_data]
+    ASSERT_EQ("Hyperedge 3: [ 1, 5, 3, 5, 3 ]", testing::internal::GetCapturedStdout());
 
-    if (stdoutResult.empty() || !stderrResult.empty())
-    {
-        FAIL();
-    }
-
-    ASSERT_EQ("Hyperedge 3: [ 1, 5, 3, 5, 3 ]", stdoutResult);
-    ASSERT_EQ("", stderrResult);
+    // coverity[tainted_data]
+    ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
 TEST(HelperTest, CheckSetUnion1)

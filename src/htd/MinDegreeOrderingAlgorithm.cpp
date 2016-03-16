@@ -173,6 +173,7 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
                                 {
                                     auto position = std::lower_bound(first, last, selectedVertex);
 
+                                    // coverity[use_iterator]
                                     position = currentNeighborhood.erase(position);
 
                                     currentNeighborhood.insert(std::lower_bound(first, position, newVertex), newVertex);
@@ -188,6 +189,7 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
                                 {
                                     auto position = std::lower_bound(first, last, selectedVertex);
 
+                                    // coverity[use_iterator]
                                     position = currentNeighborhood.erase(position);
 
                                     currentNeighborhood.insert(std::lower_bound(position, currentNeighborhood.end(), newVertex), newVertex);

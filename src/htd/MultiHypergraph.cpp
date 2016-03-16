@@ -1072,6 +1072,7 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
 
                 if (position2 != currentNeighborhood.end())
                 {
+                    // coverity[use_iterator]
                     position2 = currentNeighborhood.erase(position2);
                 }
 

@@ -123,7 +123,7 @@ std::size_t htd::Tree::edgeCount(htd::vertex_t vertex) const
 
 bool htd::Tree::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && nodes_.find(vertex) != nodes_.end();
+    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && nodes_.count(vertex) > 0;
 }
 
 bool htd::Tree::isEdge(htd::id_t edgeId) const

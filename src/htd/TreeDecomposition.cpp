@@ -47,12 +47,22 @@ htd::TreeDecomposition::TreeDecomposition(const htd::TreeDecomposition & origina
 
 htd::TreeDecomposition::TreeDecomposition(const htd::ITree & original) : htd::LabeledTree::LabeledTree(original), bagContent_(), inducedEdges_()
 {
+    for (htd::vertex_t vertex : original.vertices())
+    {
+        bagContent_[vertex] = std::vector<htd::vertex_t>();
 
+        inducedEdges_[vertex] = htd::FilteredHyperedgeCollection();
+    }
 }
 
 htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original) : htd::LabeledTree::LabeledTree(original), bagContent_(), inducedEdges_()
 {
+    for (htd::vertex_t vertex : original.vertices())
+    {
+        bagContent_[vertex] = std::vector<htd::vertex_t>();
 
+        inducedEdges_[vertex] = htd::FilteredHyperedgeCollection();
+    }
 }
 
 htd::TreeDecomposition::TreeDecomposition(const htd::ITreeDecomposition & original) : htd::LabeledTree::LabeledTree(original), bagContent_(), inducedEdges_()
@@ -60,6 +70,7 @@ htd::TreeDecomposition::TreeDecomposition(const htd::ITreeDecomposition & origin
     for (htd::vertex_t vertex : original.vertices())
     {
         bagContent_[vertex] = original.bagContent(vertex);
+
         inducedEdges_[vertex] = original.inducedHyperedges(vertex);
     }
 }
@@ -1058,6 +1069,13 @@ htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::TreeDecomp
     if (this != &original)
     {
         htd::LabeledTree::operator=(original);
+
+        for (htd::vertex_t vertex : original.vertices())
+        {
+            bagContent_[vertex] = original.bagContent(vertex);
+
+            inducedEdges_[vertex] = original.inducedHyperedges(vertex);
+        }
     }
 
     return *this;
@@ -1068,6 +1086,13 @@ htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::ITree & or
     if (this != &original)
     {
         htd::LabeledTree::operator=(original);
+
+        for (htd::vertex_t vertex : original.vertices())
+        {
+            bagContent_[vertex] = std::vector<htd::vertex_t>();
+
+            inducedEdges_[vertex] = htd::FilteredHyperedgeCollection();
+        }
     }
 
     return *this;
@@ -1078,6 +1103,13 @@ htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::ILabeledTr
     if (this != &original)
     {
         htd::LabeledTree::operator=(original);
+
+        for (htd::vertex_t vertex : original.vertices())
+        {
+            bagContent_[vertex] = std::vector<htd::vertex_t>();
+
+            inducedEdges_[vertex] = htd::FilteredHyperedgeCollection();
+        }
     }
 
     return *this;
@@ -1088,6 +1120,13 @@ htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::ITreeDecom
     if (this != &original)
     {
         htd::LabeledTree::operator=(original);
+
+        for (htd::vertex_t vertex : original.vertices())
+        {
+            bagContent_[vertex] = original.bagContent(vertex);
+
+            inducedEdges_[vertex] = original.inducedHyperedges(vertex);
+        }
     }
 
     return *this;

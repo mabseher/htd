@@ -1032,6 +1032,8 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::leafNodes(void) const
         }
     }
 
+    std::sort(result.begin(), result.end());
+
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
@@ -1142,6 +1144,10 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
         this->root_ = original.root_;
 
         this->size_ = original.size_;
+
+        vertices_.clear();
+
+        std::copy(original.vertices_.begin(), original.vertices_.end(), std::back_inserter(vertices_));
 
         if (original.next_vertex_ >= htd::Vertex::FIRST)
         {

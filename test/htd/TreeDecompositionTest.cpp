@@ -692,6 +692,67 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((htd::vertex_t)1, td1.bagContent(treeDecompositionNode2)[0]);
     ASSERT_EQ((htd::vertex_t)2, td1.bagContent(treeDecompositionNode2)[1]);
     ASSERT_EQ((htd::vertex_t)3, td1.bagContent(treeDecompositionNode2)[2]);
+
+    ASSERT_EQ((std::size_t)1, td1.leafNodeCount());
+    ASSERT_EQ((std::size_t)2, td2.leafNodeCount());
+    ASSERT_EQ((std::size_t)1, td3.leafNodeCount());
+
+    ASSERT_EQ(treeDecompositionNode2, td1.leafNodes()[0]);
+    ASSERT_EQ(treeDecompositionNode2, td1.leafNodeAtPosition(0));
+
+    ASSERT_EQ(treeNode2, td2.leafNodes()[0]);
+    ASSERT_EQ(treeNode2, td2.leafNodeAtPosition(0));
+    ASSERT_EQ(treeNode5, td2.leafNodes()[1]);
+    ASSERT_EQ(treeNode5, td2.leafNodeAtPosition(1));
+
+    ASSERT_EQ(labeledTreeNode3, td3.leafNodes()[0]);
+    ASSERT_EQ(labeledTreeNode3, td3.leafNodeAtPosition(0));
+
+    ASSERT_EQ((std::size_t)0, td1.joinNodeCount());
+    ASSERT_EQ((std::size_t)1, td2.joinNodeCount());
+    ASSERT_EQ((std::size_t)0, td3.joinNodeCount());
+
+    ASSERT_EQ(root1, td2.joinNodes()[0]);
+    ASSERT_EQ(root1, td2.joinNodeAtPosition(0));
+
+    ASSERT_FALSE(td1.isJoinNode(treeDecompositionNode2));
+
+    ASSERT_TRUE(td2.isJoinNode(root1));
+    ASSERT_FALSE(td2.isJoinNode(treeNode2));
+    ASSERT_FALSE(td2.isJoinNode(treeNode3));
+    ASSERT_FALSE(td2.isJoinNode(treeNode5));
+
+    ASSERT_FALSE(td3.isJoinNode(root2));
+    ASSERT_FALSE(td3.isJoinNode(labeledTreeNode3));
+
+    ASSERT_EQ((std::size_t)0, td1.forgetNodeCount());
+    ASSERT_EQ((std::size_t)0, td2.forgetNodeCount());
+    ASSERT_EQ((std::size_t)0, td3.forgetNodeCount());
+
+    ASSERT_FALSE(td1.isForgetNode(treeDecompositionNode2));
+
+    ASSERT_FALSE(td2.isForgetNode(root1));
+    ASSERT_FALSE(td2.isForgetNode(treeNode2));
+    ASSERT_FALSE(td2.isForgetNode(treeNode3));
+    ASSERT_FALSE(td2.isForgetNode(treeNode5));
+
+    ASSERT_FALSE(td3.isForgetNode(root2));
+    ASSERT_FALSE(td3.isForgetNode(labeledTreeNode3));
+
+    ASSERT_EQ((std::size_t)1, td1.introduceNodeCount());
+
+    ASSERT_EQ((std::size_t)0, td2.introduceNodeCount());
+    ASSERT_EQ((std::size_t)0, td3.introduceNodeCount());
+
+    ASSERT_TRUE(td1.isIntroduceNode(treeDecompositionNode2));
+
+    ASSERT_FALSE(td2.isIntroduceNode(root1));
+    ASSERT_FALSE(td2.isIntroduceNode(treeNode2));
+    ASSERT_FALSE(td2.isIntroduceNode(treeNode3));
+    ASSERT_FALSE(td2.isIntroduceNode(treeNode5));
+
+    ASSERT_FALSE(td3.isIntroduceNode(root2));
+    ASSERT_FALSE(td3.isIntroduceNode(labeledTreeNode3));
 }
 
 int main(int argc, char **argv)

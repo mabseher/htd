@@ -70,9 +70,9 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual htd::vertex_t forgottenVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
+            virtual htd::vertex_t forgottenVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
-            virtual htd::vertex_t forgottenVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const = 0;
+            virtual htd::vertex_t forgottenVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const = 0;
 
             virtual bool isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex) const = 0;
 
@@ -86,9 +86,9 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual htd::vertex_t introducedVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
+            virtual htd::vertex_t introducedVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
-            virtual htd::vertex_t introducedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const = 0;
+            virtual htd::vertex_t introducedVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const = 0;
 
             virtual bool isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex) const = 0;
 
@@ -102,9 +102,9 @@ namespace htd
 
             virtual htd::ConstCollection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
-            virtual htd::vertex_t rememberedVertex(htd::vertex_t vertex, htd::index_t index) const = 0;
+            virtual htd::vertex_t rememberedVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
-            virtual htd::vertex_t rememberedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const = 0;
+            virtual htd::vertex_t rememberedVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const = 0;
 
             virtual bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex) const = 0;
 

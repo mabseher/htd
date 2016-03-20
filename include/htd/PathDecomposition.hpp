@@ -119,9 +119,9 @@ namespace htd
 
             void copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            htd::vertex_t forgottenVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t forgottenVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
-            htd::vertex_t forgottenVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const HTD_OVERRIDE;
+            htd::vertex_t forgottenVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const HTD_OVERRIDE;
 
             bool isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex) const HTD_OVERRIDE;
 
@@ -139,9 +139,9 @@ namespace htd
 
             void copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            htd::vertex_t introducedVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t introducedVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
-            htd::vertex_t introducedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const HTD_OVERRIDE;
+            htd::vertex_t introducedVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const HTD_OVERRIDE;
 
             bool isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex) const HTD_OVERRIDE;
 
@@ -159,9 +159,9 @@ namespace htd
 
             void copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
-            htd::vertex_t rememberedVertex(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t rememberedVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
-            htd::vertex_t rememberedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const HTD_OVERRIDE;
+            htd::vertex_t rememberedVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const HTD_OVERRIDE;
 
             bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex) const HTD_OVERRIDE;
 

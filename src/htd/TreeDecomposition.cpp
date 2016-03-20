@@ -642,13 +642,13 @@ void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> 
     }
 }
 
-htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::forgottenVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = forgottenVertices(vertex);
 
     if (index >= forgottenVertexCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgottenVertexAtPosition(htd::vertex_t, htd::index_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = forgottenVertexCollection.begin();
@@ -658,13 +658,13 @@ htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd:
     return *it;
 }
 
-htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
+htd::vertex_t htd::TreeDecomposition::forgottenVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
     const htd::ConstCollection<htd::vertex_t> & forgottenVertexCollection = forgottenVertices(vertex, child);
 
     if (index >= forgottenVertexCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgottenVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::forgottenVertexAtPosition(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = forgottenVertexCollection.begin();
@@ -807,13 +807,13 @@ void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
     }
 }
 
-htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::introducedVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex);
 
     if (index >= introducedVertexCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introducedVertexAtPosition(htd::vertex_t, htd::index_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = introducedVertexCollection.begin();
@@ -823,13 +823,13 @@ htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd
     return *it;
 }
 
-htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
+htd::vertex_t htd::TreeDecomposition::introducedVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
     const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex, child);
 
     if (index >= introducedVertexCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introducedVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::introducedVertexAtPosition(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = introducedVertexCollection.begin();
@@ -972,13 +972,13 @@ void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>
     }
 }
 
-htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::TreeDecomposition::rememberedVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex);
 
     if (index >= introducedVertexCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::rememberedVertexAtPosition(htd::vertex_t, htd::index_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = introducedVertexCollection.begin();
@@ -988,13 +988,13 @@ htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd
     return *it;
 }
 
-htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
+htd::vertex_t htd::TreeDecomposition::rememberedVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
     const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex, child);
 
     if (index >= introducedVertexCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::rememberedVertex(htd::vertex_t, htd::index_t, htd::vertex_t) const");
+        throw std::out_of_range("htd::vertex_t htd::TreeDecomposition::rememberedVertexAtPosition(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = introducedVertexCollection.begin();

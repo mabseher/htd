@@ -986,6 +986,101 @@ TEST(TreeDecompositionTest, CheckNodeTypeDetection)
 
     ASSERT_EQ((htd::vertex_t)2, td3.introducedVertices(root3, node31)[0]);
     ASSERT_EQ((htd::vertex_t)1, td3.introducedVertices(root3, node32)[0]);
+    ASSERT_EQ((htd::vertex_t)2, td3.introducedVertexAtPosition(root3, 0, node31));
+    ASSERT_EQ((htd::vertex_t)1, td3.introducedVertexAtPosition(root3, 0, node32));
+
+    try
+    {
+        td3.introducedVertexAtPosition(root3, 0);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td3.introducedVertexAtPosition(root3, 1, node31);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td3.introducedVertexAtPosition(root3, 1, node32);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, td1.rememberedVertexCount(root1));
+    ASSERT_EQ((std::size_t)0, td1.rememberedVertexCount(root1, node11));
+    ASSERT_EQ((std::size_t)0, td1.rememberedVertices(root1).size());
+    ASSERT_EQ((std::size_t)0, td1.rememberedVertices(root1, node11).size());
+
+    ASSERT_EQ((std::size_t)0, td2.rememberedVertexCount(root2));
+    ASSERT_EQ((std::size_t)0, td2.rememberedVertexCount(root2, node21));
+    ASSERT_EQ((std::size_t)0, td2.rememberedVertices(root2).size());
+    ASSERT_EQ((std::size_t)0, td2.rememberedVertices(root2, node21).size());
+
+    ASSERT_EQ((std::size_t)2, td3.rememberedVertexCount(root3));
+    ASSERT_EQ((std::size_t)1, td3.rememberedVertexCount(root3, node31));
+    ASSERT_EQ((std::size_t)1, td3.rememberedVertexCount(root3, node32));
+    ASSERT_EQ((std::size_t)2, td3.rememberedVertices(root3).size());
+    ASSERT_EQ((std::size_t)1, td3.rememberedVertices(root3, node31).size());
+    ASSERT_EQ((std::size_t)1, td3.rememberedVertices(root3, node32).size());
+
+    ASSERT_EQ((htd::vertex_t)1, td3.rememberedVertices(root3)[0]);
+    ASSERT_EQ((htd::vertex_t)2, td3.rememberedVertices(root3)[1]);
+    ASSERT_EQ((htd::vertex_t)1, td3.rememberedVertexAtPosition(root3, 0));
+    ASSERT_EQ((htd::vertex_t)2, td3.rememberedVertexAtPosition(root3, 1));
+
+    ASSERT_EQ((htd::vertex_t)1, td3.rememberedVertices(root3, node31)[0]);
+    ASSERT_EQ((htd::vertex_t)2, td3.rememberedVertices(root3, node32)[0]);
+    ASSERT_EQ((htd::vertex_t)1, td3.rememberedVertexAtPosition(root3, 0, node31));
+    ASSERT_EQ((htd::vertex_t)2, td3.rememberedVertexAtPosition(root3, 0, node32));
+
+    try
+    {
+        td3.rememberedVertexAtPosition(root3, 3);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td3.rememberedVertexAtPosition(root3, 1, node31);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td3.rememberedVertexAtPosition(root3, 1, node32);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
 }
 
 int main(int argc, char **argv)

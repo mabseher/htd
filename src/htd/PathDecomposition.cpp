@@ -913,14 +913,14 @@ void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>
 
 htd::vertex_t htd::PathDecomposition::rememberedVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex);
+    const htd::ConstCollection<htd::vertex_t> & rememberedVertexCollection = rememberedVertices(vertex);
 
-    if (index >= introducedVertexCollection.size())
+    if (index >= rememberedVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::PathDecomposition::rememberedVertexAtPosition(htd::vertex_t, htd::index_t) const");
     }
 
-    htd::ConstIterator<htd::vertex_t> it = introducedVertexCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = rememberedVertexCollection.begin();
 
     std::advance(it, index);
 
@@ -929,14 +929,14 @@ htd::vertex_t htd::PathDecomposition::rememberedVertexAtPosition(htd::vertex_t v
 
 htd::vertex_t htd::PathDecomposition::rememberedVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const
 {
-    const htd::ConstCollection<htd::vertex_t> & introducedVertexCollection = introducedVertices(vertex, child);
+    const htd::ConstCollection<htd::vertex_t> & rememberedVertexCollection = rememberedVertices(vertex, child);
 
-    if (index >= introducedVertexCollection.size())
+    if (index >= rememberedVertexCollection.size())
     {
         throw std::out_of_range("htd::vertex_t htd::PathDecomposition::rememberedVertexAtPosition(htd::vertex_t, htd::index_t, htd::vertex_t) const");
     }
 
-    htd::ConstIterator<htd::vertex_t> it = introducedVertexCollection.begin();
+    htd::ConstIterator<htd::vertex_t> it = rememberedVertexCollection.begin();
 
     std::advance(it, index);
 

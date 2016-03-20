@@ -577,9 +577,12 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
 
     treeDecomposition.setBagContent(treeDecompositionNode2, std::vector<htd::vertex_t> { 1, 2, 3 });
 
+    const htd::ITreeDecomposition & treeDecompositionReference = treeDecomposition;
+
     htd::TreeDecomposition td1(tree);
     htd::TreeDecomposition td2(labeledTree);
     htd::TreeDecomposition td3(treeDecomposition);
+    htd::TreeDecomposition td4(treeDecompositionReference);
 
     ASSERT_EQ((std::size_t)4, td1.vertexCount());
     ASSERT_TRUE(td1.isVertex(root1));
@@ -596,6 +599,10 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)1, td3.vertexCount());
     ASSERT_FALSE(td3.isVertex(root3));
     ASSERT_TRUE(td3.isVertex(treeDecompositionNode2));
+
+    ASSERT_EQ((std::size_t)1, td4.vertexCount());
+    ASSERT_FALSE(td4.isVertex(root3));
+    ASSERT_TRUE(td4.isVertex(treeDecompositionNode2));
 
     ASSERT_EQ((std::size_t)0, td1.bagSize(root1));
     ASSERT_EQ((std::size_t)0, td1.bagSize(treeNode2));
@@ -634,6 +641,12 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((htd::vertex_t)1, td3.bagContent(treeDecompositionNode2)[0]);
     ASSERT_EQ((htd::vertex_t)2, td3.bagContent(treeDecompositionNode2)[1]);
     ASSERT_EQ((htd::vertex_t)3, td3.bagContent(treeDecompositionNode2)[2]);
+
+    ASSERT_EQ((std::size_t)3, td4.bagSize(treeDecompositionNode2));
+
+    ASSERT_EQ((htd::vertex_t)1, td4.bagContent(treeDecompositionNode2)[0]);
+    ASSERT_EQ((htd::vertex_t)2, td4.bagContent(treeDecompositionNode2)[1]);
+    ASSERT_EQ((htd::vertex_t)3, td4.bagContent(treeDecompositionNode2)[2]);
 
     td1 = treeDecomposition;
     td2 = tree;
@@ -753,6 +766,226 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
 
     ASSERT_FALSE(td3.isIntroduceNode(root2));
     ASSERT_FALSE(td3.isIntroduceNode(labeledTreeNode3));
+}
+
+TEST(TreeDecompositionTest, CheckNodeTypeDetection)
+{
+    htd::TreeDecomposition td1;
+    htd::TreeDecomposition td2;
+    htd::TreeDecomposition td3;
+
+    htd::vertex_t root1 = td1.insertRoot();
+    htd::vertex_t root2 = td2.insertRoot();
+    htd::vertex_t root3 = td3.insertRoot();
+
+    htd::vertex_t node11 = td1.addChild(root1);
+    htd::vertex_t node21 = td2.addChild(root2);
+    htd::vertex_t node31 = td3.addChild(root3);
+    htd::vertex_t node32 = td3.addChild(root3);
+
+    td2.setBagContent(node21, std::vector<htd::vertex_t> { 1, 2 });
+
+    td3.setBagContent(root3, std::vector<htd::vertex_t> { 1, 2 });
+    td3.setBagContent(node31, std::vector<htd::vertex_t> { 1 });
+    td3.setBagContent(node32, std::vector<htd::vertex_t> { 2 });
+
+    ASSERT_EQ((std::size_t)1, td1.leafNodeCount());
+    ASSERT_EQ((std::size_t)1, td2.leafNodeCount());
+    ASSERT_EQ((std::size_t)2, td3.leafNodeCount());
+
+    ASSERT_EQ((std::size_t)1, td1.leafNodes().size());
+    ASSERT_EQ((std::size_t)1, td2.leafNodes().size());
+    ASSERT_EQ((std::size_t)2, td3.leafNodes().size());
+
+    ASSERT_EQ(node11, td1.leafNodes()[0]);
+    ASSERT_EQ(node11, td1.leafNodeAtPosition(0));
+
+    try
+    {
+        td1.leafNodeAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(node21, td2.leafNodes()[0]);
+    ASSERT_EQ(node21, td2.leafNodeAtPosition(0));
+
+    try
+    {
+        td2.leafNodeAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(node31, td3.leafNodes()[0]);
+    ASSERT_EQ(node31, td3.leafNodeAtPosition(0));
+    ASSERT_EQ(node32, td3.leafNodes()[1]);
+    ASSERT_EQ(node32, td3.leafNodeAtPosition(1));
+
+    try
+    {
+        td1.leafNodeAtPosition(2);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, td1.joinNodeCount());
+    ASSERT_EQ((std::size_t)0, td2.joinNodeCount());
+    ASSERT_EQ((std::size_t)1, td3.joinNodeCount());
+
+    ASSERT_EQ((std::size_t)0, td1.joinNodes().size());
+    ASSERT_EQ((std::size_t)0, td2.joinNodes().size());
+    ASSERT_EQ((std::size_t)1, td3.joinNodes().size());
+
+    try
+    {
+        td1.joinNodeAtPosition(0);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td2.joinNodeAtPosition(0);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(root3, td3.joinNodes()[0]);
+    ASSERT_EQ(root3, td3.joinNodeAtPosition(0));
+
+    try
+    {
+        td3.joinNodeAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, td1.forgetNodeCount());
+    ASSERT_EQ((std::size_t)1, td2.forgetNodeCount());
+    ASSERT_EQ((std::size_t)0, td3.forgetNodeCount());
+
+    ASSERT_EQ((std::size_t)0, td1.forgetNodes().size());
+    ASSERT_EQ((std::size_t)1, td2.forgetNodes().size());
+    ASSERT_EQ((std::size_t)0, td3.forgetNodes().size());
+
+    try
+    {
+        td1.forgetNodeAtPosition(0);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(root2, td2.forgetNodes()[0]);
+    ASSERT_EQ(root2, td2.forgetNodeAtPosition(0));
+
+    try
+    {
+        td2.forgetNodeAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td3.forgetNodeAtPosition(0);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, td1.introduceNodeCount());
+    ASSERT_EQ((std::size_t)1, td2.introduceNodeCount());
+    ASSERT_EQ((std::size_t)2, td3.introduceNodeCount());
+
+    ASSERT_EQ((std::size_t)0, td1.introduceNodes().size());
+    ASSERT_EQ((std::size_t)1, td2.introduceNodes().size());
+    ASSERT_EQ((std::size_t)2, td3.introduceNodes().size());
+
+    try
+    {
+        td1.forgetNodeAtPosition(0);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(node21, td2.introduceNodes()[0]);
+    ASSERT_EQ(node21, td2.introduceNodeAtPosition(0));
+
+    try
+    {
+        td2.introduceNodeAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(node31, td3.introduceNodes()[0]);
+    ASSERT_EQ(node31, td3.introduceNodeAtPosition(0));
+    ASSERT_EQ(node32, td3.introduceNodes()[1]);
+    ASSERT_EQ(node32, td3.introduceNodeAtPosition(1));
+
+    try
+    {
+        td3.introduceNodeAtPosition(2);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)1, td3.introducedVertexCount(root3, node31));
+    ASSERT_EQ((std::size_t)1, td3.introducedVertexCount(root3, node32));
+
+    ASSERT_EQ((std::size_t)1, td3.introducedVertices(root3, node31).size());
+    ASSERT_EQ((std::size_t)1, td3.introducedVertices(root3, node32).size());
+
+    ASSERT_EQ((htd::vertex_t)2, td3.introducedVertices(root3, node31)[0]);
+    ASSERT_EQ((htd::vertex_t)1, td3.introducedVertices(root3, node32)[0]);
 }
 
 int main(int argc, char **argv)

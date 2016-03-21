@@ -411,16 +411,6 @@ void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const htd::Cons
     bagContent_[vertex] = std::vector<htd::vertex_t>(content.begin(), content.end());
 }
 
-void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content)
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::PathDecomposition::setBagContent(htd::vertex_t, htd::IConstCollection<htd::vertex_t> &&)");
-    }
-
-    bagContent_[vertex] = std::vector<htd::vertex_t>(content.begin(), content.end());
-}
-
 const htd::FilteredHyperedgeCollection & htd::PathDecomposition::inducedHyperedges(htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))

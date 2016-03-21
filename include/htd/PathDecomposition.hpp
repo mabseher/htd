@@ -99,8 +99,6 @@ namespace htd
 
             void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) HTD_OVERRIDE;
 
-            void setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content) HTD_OVERRIDE;
-
             const htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             void setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;

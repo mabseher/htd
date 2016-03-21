@@ -155,16 +155,6 @@ void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const htd::Con
     bagContent_[vertex] = std::vector<htd::vertex_t>(content.begin(), content.end());
 }
 
-void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content)
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, htd::IConstCollection<htd::vertex_t> &&)");
-    }
-
-    bagContent_[vertex] = std::vector<htd::vertex_t>(content.begin(), content.end());
-}
-
 const htd::FilteredHyperedgeCollection & htd::GraphDecomposition::inducedHyperedges(htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))

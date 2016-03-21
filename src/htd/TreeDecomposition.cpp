@@ -457,20 +457,6 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::Cons
     std::sort(bag.begin(), bag.end());
 }
 
-void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content)
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, htd::IConstCollection<htd::vertex_t> &&)");
-    }
-
-    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
-
-    bag = std::vector<htd::vertex_t>(content.begin(), content.end());
-
-    std::sort(bag.begin(), bag.end());
-}
-
 const htd::FilteredHyperedgeCollection & htd::TreeDecomposition::inducedHyperedges(htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))

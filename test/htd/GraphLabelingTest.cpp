@@ -85,6 +85,128 @@ TEST(GraphLabelingTest, TestEmptyLabeling)
     }
 }
 
+TEST(GraphLabelingTest, TestVertexLabelModifications)
+{
+    htd::GraphLabeling labeling;
+
+    labeling.setVertexLabel(1, new htd::Label<int>(1));
+    labeling.setVertexLabel(2, new htd::Label<int>(2));
+    labeling.setVertexLabel(3, new htd::Label<int>(3));
+
+    ASSERT_EQ((std::size_t)3, labeling.vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labeling.edgeLabelCount());
+
+    ASSERT_FALSE(labeling.isLabeledVertex(0));
+    ASSERT_TRUE(labeling.isLabeledVertex(1));
+    ASSERT_TRUE(labeling.isLabeledVertex(2));
+    ASSERT_TRUE(labeling.isLabeledVertex(3));
+    ASSERT_FALSE(labeling.isLabeledEdge(0));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.vertexLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.vertexLabel(2)));
+    ASSERT_EQ(3, htd::accessLabel<int>(labeling.vertexLabel(3)));
+
+    htd::ILabel * newLabel = new htd::Label<int>(33);
+
+    labeling.setVertexLabel(3, newLabel);
+
+    ASSERT_FALSE(labeling.isLabeledVertex(0));
+    ASSERT_TRUE(labeling.isLabeledVertex(1));
+    ASSERT_TRUE(labeling.isLabeledVertex(2));
+    ASSERT_TRUE(labeling.isLabeledVertex(3));
+    ASSERT_FALSE(labeling.isLabeledEdge(0));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.vertexLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.vertexLabel(2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.vertexLabel(3)));
+
+    labeling.setVertexLabel(3, newLabel);
+
+    ASSERT_FALSE(labeling.isLabeledVertex(0));
+    ASSERT_TRUE(labeling.isLabeledVertex(1));
+    ASSERT_TRUE(labeling.isLabeledVertex(2));
+    ASSERT_TRUE(labeling.isLabeledVertex(3));
+    ASSERT_FALSE(labeling.isLabeledEdge(0));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.vertexLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.vertexLabel(2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.vertexLabel(3)));
+
+    try
+    {
+        labeling.swapVertexLabels(0, 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        labeling.swapVertexLabels(1, 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    labeling.swapVertexLabels(1, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.vertexLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.vertexLabel(2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.vertexLabel(3)));
+
+    labeling.swapVertexLabels(1, 3);
+
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.vertexLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.vertexLabel(2)));
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.vertexLabel(3)));
+
+    labeling.swapVertexLabels(3, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.vertexLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.vertexLabel(2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.vertexLabel(3)));
+
+    htd::ILabel * exportedLabel = labeling.transferVertexLabel(1);
+
+    ASSERT_FALSE(labeling.isLabeledVertex(0));
+    ASSERT_FALSE(labeling.isLabeledVertex(1));
+    ASSERT_TRUE(labeling.isLabeledVertex(2));
+    ASSERT_TRUE(labeling.isLabeledVertex(3));
+    ASSERT_FALSE(labeling.isLabeledEdge(0));
+
+    try
+    {
+        labeling.vertexLabel(1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.vertexLabel(2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.vertexLabel(3)));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(*exportedLabel));
+
+    delete exportedLabel;
+
+    ASSERT_EQ((std::size_t)2, labeling.vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labeling.edgeLabelCount());
+
+    labeling.clear();
+
+    ASSERT_EQ((std::size_t)0, labeling.vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labeling.edgeLabelCount());
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

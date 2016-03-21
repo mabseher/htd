@@ -91,6 +91,42 @@ TEST(MinFillOrderingAlgorithmTest, CheckSize2Graph)
     }
 }
 
+TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph1)
+{
+    htd::MultiHypergraph graph(7);
+
+    graph.addEdge(1, 2);
+    graph.addEdge(1, 3);
+    graph.addEdge(2, 3);
+    graph.addEdge(2, 4);
+    graph.addEdge(2, 5);
+    graph.addEdge(2, 6);
+    graph.addEdge(3, 4);
+    graph.addEdge(3, 7);
+
+    htd::MinFillOrderingAlgorithm algorithm;
+
+    const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
+
+    ASSERT_EQ((std::size_t)7, ordering.size());
+
+    htd::index_t position1 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 1));
+    htd::index_t position2 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 2));
+    htd::index_t position3 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 3));
+    htd::index_t position4 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 4));
+    htd::index_t position5 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 5));
+    htd::index_t position6 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 6));
+    htd::index_t position7 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 7));
+
+    ASSERT_LT(position1, (htd::index_t)5);
+    ASSERT_LT(position4, (htd::index_t)5);
+    ASSERT_LT(position5, (htd::index_t)5);
+    ASSERT_LT(position6, (htd::index_t)5);
+    ASSERT_LT(position7, (htd::index_t)5);
+    ASSERT_GE(position2, (htd::index_t)5);
+    ASSERT_GE(position3, (htd::index_t)5);
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

@@ -182,6 +182,17 @@ TEST(GraphLabelingTest, TestVertexLabelModifications)
 
     try
     {
+        labeling.transferVertexLabel(0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
         labeling.vertexLabel(1);
 
         FAIL();
@@ -200,6 +211,147 @@ TEST(GraphLabelingTest, TestVertexLabelModifications)
 
     ASSERT_EQ((std::size_t)2, labeling.vertexLabelCount());
     ASSERT_EQ((std::size_t)0, labeling.edgeLabelCount());
+
+    labeling.removeVertexLabel(2);
+    labeling.removeVertexLabel(2);
+
+    ASSERT_EQ((std::size_t)1, labeling.vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labeling.edgeLabelCount());
+
+    labeling.clear();
+
+    ASSERT_EQ((std::size_t)0, labeling.vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labeling.edgeLabelCount());
+}
+
+TEST(GraphLabelingTest, TestEdgeLabelModifications)
+{
+    htd::GraphLabeling labeling;
+
+    labeling.setEdgeLabel(1, new htd::Label<int>(1));
+    labeling.setEdgeLabel(2, new htd::Label<int>(2));
+    labeling.setEdgeLabel(3, new htd::Label<int>(3));
+
+    ASSERT_EQ((std::size_t)0, labeling.vertexLabelCount());
+    ASSERT_EQ((std::size_t)3, labeling.edgeLabelCount());
+
+    ASSERT_FALSE(labeling.isLabeledEdge(0));
+    ASSERT_TRUE(labeling.isLabeledEdge(1));
+    ASSERT_TRUE(labeling.isLabeledEdge(2));
+    ASSERT_TRUE(labeling.isLabeledEdge(3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.edgeLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.edgeLabel(2)));
+    ASSERT_EQ(3, htd::accessLabel<int>(labeling.edgeLabel(3)));
+
+    htd::ILabel * newLabel = new htd::Label<int>(33);
+
+    labeling.setEdgeLabel(3, newLabel);
+
+    ASSERT_FALSE(labeling.isLabeledEdge(0));
+    ASSERT_TRUE(labeling.isLabeledEdge(1));
+    ASSERT_TRUE(labeling.isLabeledEdge(2));
+    ASSERT_TRUE(labeling.isLabeledEdge(3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.edgeLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.edgeLabel(2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.edgeLabel(3)));
+
+    labeling.setEdgeLabel(3, newLabel);
+
+    ASSERT_TRUE(labeling.isLabeledEdge(1));
+    ASSERT_TRUE(labeling.isLabeledEdge(2));
+    ASSERT_TRUE(labeling.isLabeledEdge(3));
+    ASSERT_FALSE(labeling.isLabeledEdge(0));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.edgeLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.edgeLabel(2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.edgeLabel(3)));
+
+    try
+    {
+        labeling.swapEdgeLabels(0, 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        labeling.swapEdgeLabels(1, 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    labeling.swapEdgeLabels(1, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.edgeLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.edgeLabel(2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.edgeLabel(3)));
+
+    labeling.swapEdgeLabels(1, 3);
+
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.edgeLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.edgeLabel(2)));
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.edgeLabel(3)));
+
+    labeling.swapEdgeLabels(3, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(labeling.edgeLabel(1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.edgeLabel(2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.edgeLabel(3)));
+
+    htd::ILabel * exportedLabel = labeling.transferEdgeLabel(1);
+
+    ASSERT_FALSE(labeling.isLabeledEdge(1));
+    ASSERT_TRUE(labeling.isLabeledEdge(2));
+    ASSERT_TRUE(labeling.isLabeledEdge(3));
+    ASSERT_FALSE(labeling.isLabeledEdge(0));
+
+    try
+    {
+        labeling.transferEdgeLabel(0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        labeling.edgeLabel(1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(2, htd::accessLabel<int>(labeling.edgeLabel(2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(labeling.edgeLabel(3)));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(*exportedLabel));
+
+    delete exportedLabel;
+
+    ASSERT_EQ((std::size_t)0, labeling.vertexLabelCount());
+    ASSERT_EQ((std::size_t)2, labeling.edgeLabelCount());
+
+    labeling.removeEdgeLabel(2);
+    labeling.removeEdgeLabel(2);
+
+    ASSERT_EQ((std::size_t)0, labeling.vertexLabelCount());
+    ASSERT_EQ((std::size_t)1, labeling.edgeLabelCount());
 
     labeling.clear();
 

@@ -359,6 +359,22 @@ TEST(GraphLabelingTest, TestEdgeLabelModifications)
     ASSERT_EQ((std::size_t)0, labeling.edgeLabelCount());
 }
 
+TEST(GraphLabelingTest, TestCloneMethod)
+{
+    htd::GraphLabeling labeling;
+
+    labeling.setVertexLabel(123, new htd::Label<int>(123));
+    labeling.setEdgeLabel(456, new htd::Label<int>(456));
+
+    htd::GraphLabeling * labeling2 = labeling.clone();
+
+    ASSERT_EQ((std::size_t)1, labeling.vertexLabelCount());
+    ASSERT_EQ((std::size_t)1, labeling.edgeLabelCount());
+
+    ASSERT_EQ(123, htd::accessLabel<int>(labeling2->vertexLabel(123)));
+    ASSERT_EQ(456, htd::accessLabel<int>(labeling2->edgeLabel(456)));
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

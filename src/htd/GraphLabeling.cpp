@@ -63,12 +63,26 @@ bool htd::GraphLabeling::isLabeledEdge(htd::id_t edgeId) const
 
 const htd::ILabel & htd::GraphLabeling::vertexLabel(htd::vertex_t vertex) const
 {
-    return *(vertexLabels_.at(vertex));
+    auto label = vertexLabels_.find(vertex);
+
+    if (label == vertexLabels_.end())
+    {
+        throw std::logic_error("const htd::ILabel & htd::GraphLabeling::edgeLabel(htd::id_t) const");
+    }
+
+    return *(label->second);
 }
 
 const htd::ILabel & htd::GraphLabeling::edgeLabel(htd::id_t edgeId) const
 {
-    return *(edgeLabels_.at(edgeId));
+    auto label = edgeLabels_.find(edgeId);
+
+    if (label == edgeLabels_.end())
+    {
+        throw std::logic_error("const htd::ILabel & htd::GraphLabeling::edgeLabel(htd::id_t) const");
+    }
+
+    return *(label->second);
 }
 
 void htd::GraphLabeling::setVertexLabel(htd::vertex_t vertex, htd::ILabel * label)
@@ -77,7 +91,10 @@ void htd::GraphLabeling::setVertexLabel(htd::vertex_t vertex, htd::ILabel * labe
 
     if (position != vertexLabels_.end())
     {
-        delete position->second;
+        if (!(*(position->second) == *label))
+        {
+            delete position->second;
+        }
     }
 
     vertexLabels_[vertex] = label;

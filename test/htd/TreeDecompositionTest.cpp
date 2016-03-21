@@ -810,6 +810,21 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     {
         HTD_UNUSED(error);
     }
+
+    td2 = treeDecompositionReference;
+
+    ASSERT_EQ((std::size_t)1, td2.vertexCount());
+
+    ASSERT_EQ((std::size_t)3, td2.bagSize(treeDecompositionNode2));
+
+    ASSERT_EQ((htd::vertex_t)1, td2.bagContent(treeDecompositionNode2)[0]);
+    ASSERT_EQ((htd::vertex_t)2, td2.bagContent(treeDecompositionNode2)[1]);
+    ASSERT_EQ((htd::vertex_t)3, td2.bagContent(treeDecompositionNode2)[2]);
+
+    ASSERT_TRUE(td2.isIntroduceNode(treeDecompositionNode2));
+    ASSERT_FALSE(td2.isForgetNode(treeDecompositionNode2));
+    ASSERT_FALSE(td2.isJoinNode(treeDecompositionNode2));
+    ASSERT_TRUE(td2.isLeafNode(treeDecompositionNode2));
 }
 
 TEST(TreeDecompositionTest, CheckBagContentModifications)
@@ -1293,6 +1308,22 @@ TEST(TreeDecompositionTest, CheckForgetNodeDetection)
     ASSERT_EQ((std::size_t)2, td.forgottenVertexCount(node12));
     ASSERT_EQ((std::size_t)0, td.forgottenVertexCount(node121));
 
+    ASSERT_EQ((std::size_t)1, td.forgottenVertexCount(root, node1));
+    ASSERT_EQ((std::size_t)0, td.forgottenVertexCount(node1, node11));
+    ASSERT_EQ((std::size_t)0, td.forgottenVertexCount(node1, node12));
+    ASSERT_EQ((std::size_t)2, td.forgottenVertexCount(node12, node121));
+
+    try
+    {
+        td.forgottenVertexCount(node121, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
     ASSERT_EQ((htd::vertex_t)3, td.forgottenVertices(node12)[0]);
     ASSERT_EQ((htd::vertex_t)3, td.forgottenVertexAtPosition(node12, 0));
     ASSERT_EQ((htd::vertex_t)4, td.forgottenVertices(node12)[1]);
@@ -1312,6 +1343,16 @@ TEST(TreeDecompositionTest, CheckForgetNodeDetection)
     ASSERT_FALSE(td.isForgottenVertex(node12, 2, node121));
     ASSERT_TRUE(td.isForgottenVertex(node12, 3, node121));
     ASSERT_TRUE(td.isForgottenVertex(node12, 4, node121));
+
+    ASSERT_TRUE(td.isRememberedVertex(node12, 1));
+    ASSERT_TRUE(td.isRememberedVertex(node12, 2));
+    ASSERT_FALSE(td.isRememberedVertex(node12, 3));
+    ASSERT_FALSE(td.isRememberedVertex(node12, 4));
+
+    ASSERT_TRUE(td.isRememberedVertex(node12, 1, node121));
+    ASSERT_TRUE(td.isRememberedVertex(node12, 2, node121));
+    ASSERT_FALSE(td.isRememberedVertex(node12, 3, node121));
+    ASSERT_FALSE(td.isRememberedVertex(node12, 4, node121));
 }
 
 int main(int argc, char **argv)

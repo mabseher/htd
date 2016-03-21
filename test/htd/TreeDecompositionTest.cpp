@@ -542,6 +542,17 @@ TEST(TreeDecompositionTest, CheckTreeManipulations)
     ASSERT_EQ((std::size_t)1, decomposition.vertexCount(node121));
     ASSERT_EQ((std::size_t)1, decomposition.vertexCount(node122));
 
+    try
+    {
+        decomposition.removeSubtree(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
     decomposition.removeRoot();
 
     ASSERT_EQ((std::size_t)0, decomposition.vertexCount());
@@ -738,6 +749,17 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     ASSERT_FALSE(td3.isJoinNode(root2));
     ASSERT_FALSE(td3.isJoinNode(labeledTreeNode3));
 
+    try
+    {
+        td1.isJoinNode(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
     ASSERT_EQ((std::size_t)0, td1.forgetNodeCount());
     ASSERT_EQ((std::size_t)0, td2.forgetNodeCount());
     ASSERT_EQ((std::size_t)0, td3.forgetNodeCount());
@@ -751,6 +773,17 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
 
     ASSERT_FALSE(td3.isForgetNode(root2));
     ASSERT_FALSE(td3.isForgetNode(labeledTreeNode3));
+
+    try
+    {
+        td1.isForgetNode(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 
     ASSERT_EQ((std::size_t)1, td1.introduceNodeCount());
 
@@ -766,6 +799,112 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
 
     ASSERT_FALSE(td3.isIntroduceNode(root2));
     ASSERT_FALSE(td3.isIntroduceNode(labeledTreeNode3));
+
+    try
+    {
+        td1.isIntroduceNode(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+}
+
+TEST(TreeDecompositionTest, CheckBagContentModifications)
+{
+    htd::TreeDecomposition td1;
+
+    htd::vertex_t root = td1.insertRoot();
+
+    ASSERT_EQ((std::size_t)0, td1.bagSize(root));
+    ASSERT_EQ((std::size_t)0, td1.bagContent(root).size());
+
+    try
+    {
+        td1.bagSize(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td1.bagContent(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    std::vector<htd::vertex_t> bagContent { 3, 2, 1 };
+
+    td1.setBagContent(root, bagContent);
+
+    ASSERT_EQ((std::size_t)3, td1.bagSize(root));
+    ASSERT_EQ((std::size_t)3, td1.bagContent(root).size());
+
+    ASSERT_EQ((htd::vertex_t)1, td1.bagContent(root)[0]);
+    ASSERT_EQ((htd::vertex_t)2, td1.bagContent(root)[1]);
+    ASSERT_EQ((htd::vertex_t)3, td1.bagContent(root)[2]);
+
+    td1.setBagContent(root, std::vector<htd::vertex_t> { 4, 5 });
+
+    ASSERT_EQ((std::size_t)2, td1.bagSize(root));
+    ASSERT_EQ((std::size_t)2, td1.bagContent(root).size());
+
+    ASSERT_EQ((htd::vertex_t)4, td1.bagContent(root)[0]);
+    ASSERT_EQ((htd::vertex_t)5, td1.bagContent(root)[1]);
+
+    td1.setBagContent(root, htd::ConstCollection<htd::vertex_t>::getInstance(bagContent));
+
+    ASSERT_EQ((std::size_t)3, td1.bagSize(root));
+    ASSERT_EQ((std::size_t)3, td1.bagContent(root).size());
+
+    ASSERT_EQ((htd::vertex_t)1, td1.bagContent(root)[0]);
+    ASSERT_EQ((htd::vertex_t)2, td1.bagContent(root)[1]);
+    ASSERT_EQ((htd::vertex_t)3, td1.bagContent(root)[2]);
+
+    try
+    {
+        td1.setBagContent(htd::Vertex::UNKNOWN, bagContent);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td1.setBagContent(htd::Vertex::UNKNOWN, std::vector<htd::vertex_t> { });
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td1.setBagContent(htd::Vertex::UNKNOWN, htd::ConstCollection<htd::vertex_t>::getInstance(bagContent));
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)1, td1.vertexCount());
 }
 
 TEST(TreeDecompositionTest, CheckNodeTypeDetection)

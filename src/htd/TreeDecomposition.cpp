@@ -422,7 +422,11 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const std::vect
         throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const std::vector<htd::vertex_t> &)");
     }
 
-    bagContent_[vertex] = content;
+    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
+
+    bag = content;
+
+    std::sort(bag.begin(), bag.end());
 }
 
 void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd::vertex_t> && content)
@@ -432,7 +436,11 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd
         throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, std::vector<htd::vertex_t> &&)");
     }
 
-    bagContent_[vertex] = std::move(content);
+    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
+
+    bag = std::move(content);
+
+    std::sort(bag.begin(), bag.end());
 }
 
 void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
@@ -442,7 +450,11 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::Cons
         throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const htd::ConstCollection<htd::vertex_t> &)");
     }
 
-    bagContent_[vertex] = std::vector<htd::vertex_t>(content.begin(), content.end());
+    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
+
+    bag = std::vector<htd::vertex_t>(content.begin(), content.end());
+
+    std::sort(bag.begin(), bag.end());
 }
 
 void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, htd::ConstCollection<htd::vertex_t> && content)
@@ -452,7 +464,11 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, htd::ConstColle
         throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, htd::IConstCollection<htd::vertex_t> &&)");
     }
 
-    bagContent_[vertex] = std::vector<htd::vertex_t>(content.begin(), content.end());
+    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
+
+    bag = std::vector<htd::vertex_t>(content.begin(), content.end());
+
+    std::sort(bag.begin(), bag.end());
 }
 
 const htd::FilteredHyperedgeCollection & htd::TreeDecomposition::inducedHyperedges(htd::vertex_t vertex) const

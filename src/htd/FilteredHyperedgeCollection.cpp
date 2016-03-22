@@ -122,10 +122,16 @@ void htd::FilteredHyperedgeCollection::restrictTo(const std::vector<htd::vertex_
         written_ = true;
     }
 
+    std::vector<htd::vertex_t> sortedVertices(vertices);
+
+    std::sort(sortedVertices.begin(), sortedVertices.end());
+
+    sortedVertices.erase(std::unique(sortedVertices.begin(), sortedVertices.end()), sortedVertices.end());
+
     relevantIndices_->erase(std::remove_if(relevantIndices_->begin(), relevantIndices_->end(), [&](htd::index_t index) {
         const std::vector<htd::vertex_t> & sortedElements = baseCollection_->at(index).sortedElements();
 
-        return htd::has_non_empty_set_difference(sortedElements.begin(), sortedElements.end(), vertices.begin(), vertices.end());
+        return htd::has_non_empty_set_difference(sortedElements.begin(), sortedElements.end(), sortedVertices.begin(), sortedVertices.end());
     }), relevantIndices_->end());
 }
 

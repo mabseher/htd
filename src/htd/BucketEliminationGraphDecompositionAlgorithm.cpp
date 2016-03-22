@@ -690,6 +690,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             ret->setInducedHyperedges(vertex, graph.hyperedgesAtPositions(inducedEdges[vertexName]));
         }
     }
+    else
+    {
+        ret->addVertex();
+    }
 
     return ret;
 }

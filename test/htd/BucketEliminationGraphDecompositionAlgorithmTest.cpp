@@ -122,6 +122,61 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraph)
     delete decomposition;
 }
 
+TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergraph1)
+{
+    htd::MultiHypergraph graph;
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+
+    graph.addEdge(std::vector<htd::vertex_t> { vertex1 });
+
+    HTD_UNUSED(vertex2);
+    HTD_UNUSED(vertex3);
+
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+
+    htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)3);
+
+    EXPECT_EQ((std::size_t)0, decomposition->edgeCount());
+
+    ASSERT_EQ((std::size_t)1, decomposition->minimumBagSize());
+    ASSERT_EQ((std::size_t)1, decomposition->maximumBagSize());
+
+    delete decomposition;
+}
+
+TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergraph2)
+{
+    htd::MultiHypergraph graph;
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+
+    graph.addEdge(std::vector<htd::vertex_t> { vertex3, vertex3, vertex2, vertex1, vertex2, vertex3, vertex3 });
+
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+
+    htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ((std::size_t)0, decomposition->edgeCount());
+
+    ASSERT_EQ((std::size_t)3, decomposition->minimumBagSize());
+    ASSERT_EQ((std::size_t)3, decomposition->maximumBagSize());
+
+    delete decomposition;
+}
+
 class BagSizeLabelingFunction : public htd::ILabelingFunction
 {
     public:

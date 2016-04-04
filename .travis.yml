@@ -75,6 +75,12 @@ after_success:
       coveralls-lcov --repo-token ${COVERALLS_REPO_TOKEN} coverage.info
     fi
 
+after_failure:
+  - |
+    if [ -f "${TRAVIS_BUILD_DIR}/build/${HTD_TARGET}/Testing/Temporary/LastTest.log" ]; then
+      cat "${TRAVIS_BUILD_DIR}/build/${HTD_TARGET}/Testing/Temporary/LastTest.log"
+    fi
+
 env:
   - HTD_TARGET=htd CMAKE_BUILD_TYPE=Debug HTD_USE_EXTENDED_IDENTIFIERS=True
   - HTD_TARGET=htd CMAKE_BUILD_TYPE=Debug HTD_USE_EXTENDED_IDENTIFIERS=False

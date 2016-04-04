@@ -127,6 +127,57 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph1)
     ASSERT_GE(position3, (htd::index_t)5);
 }
 
+TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph2)
+{
+    htd::MultiHypergraph graph(10);
+
+    graph.addEdge(1,10);
+    graph.addEdge(2,8);
+    graph.addEdge(3,9);
+    graph.addEdge(4,3);
+    graph.addEdge(4,6);
+    graph.addEdge(4,5);
+    graph.addEdge(5,9);
+    graph.addEdge(6,7);
+    graph.addEdge(7,4);
+    graph.addEdge(7,3);
+    graph.addEdge(8,1);
+    graph.addEdge(8,2);
+    graph.addEdge(9,5);
+    graph.addEdge(10,1);
+
+    htd::MinFillOrderingAlgorithm algorithm;
+
+    const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
+
+    ASSERT_EQ((std::size_t)10, ordering.size());
+
+    htd::index_t position1 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 1));
+    htd::index_t position2 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 2));
+    htd::index_t position3 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 3));
+    htd::index_t position4 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 4));
+    htd::index_t position5 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 5));
+    htd::index_t position6 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 6));
+    htd::index_t position7 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 7));
+    htd::index_t position8 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 8));
+    htd::index_t position9 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 9));
+    htd::index_t position10 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 10));
+
+    ASSERT_LT(position2, (htd::index_t)3);
+    ASSERT_LT(position6, (htd::index_t)3);
+    ASSERT_LT(position10, (htd::index_t)3);
+    ASSERT_LT(position2, position8);
+    ASSERT_LT(position6, position7);
+    ASSERT_LT(position10, position1);
+    ASSERT_LT(position1, (htd::index_t)6);
+    ASSERT_LT(position7, (htd::index_t)6);
+    ASSERT_LT(position8, (htd::index_t)6);
+    ASSERT_GE(position3, (htd::index_t)6);
+    ASSERT_GE(position4, (htd::index_t)6);
+    ASSERT_GE(position5, (htd::index_t)6);
+    ASSERT_GE(position9, (htd::index_t)6);
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

@@ -543,6 +543,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
         target.push_back(selectedVertex);
 
         //TODO Remove
+        /*
         std::cout << "SELECTED: " << selectedVertex << std::endl;
         for (htd::vertex_t vertex : vertices)
         {
@@ -551,7 +552,8 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
             std::cout << std::endl;
         }
         std::cout << std::endl;
-        
+        */
+
 #ifdef TESTOUTPUT
         std::cout << "STATUS AFTER: ";
         std::vector<int> statusAfter;

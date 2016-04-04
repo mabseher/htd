@@ -180,9 +180,9 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph2)
     ASSERT_LT(position2, position8);
     ASSERT_LT(position6, position7);
     ASSERT_LT(position10, position1);
-    ASSERT_LT(position1, (htd::index_t)7);
-    ASSERT_LT(position7, (htd::index_t)7);
-    ASSERT_LT(position8, (htd::index_t)7);
+    ASSERT_LT(position1, (htd::index_t)6);
+    ASSERT_LT(position7, (htd::index_t)6);
+    ASSERT_LT(position8, (htd::index_t)6);
     ASSERT_GE(position3, (htd::index_t)6);
     ASSERT_GE(position4, (htd::index_t)6);
     ASSERT_GE(position5, (htd::index_t)6);

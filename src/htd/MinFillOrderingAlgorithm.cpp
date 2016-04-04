@@ -539,6 +539,16 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
         size--;
 
         target.push_back(selectedVertex);
+
+        //TODO Remove
+        std::cout << "SELECTED: " << selectedVertex << std::endl;
+        for (htd::vertex_t vertex : vertices)
+        {
+            std::cout << "Vertex " << vertex << ": FILL=" << requiredFillAmount.at(vertex) << std::endl << "   ";
+            htd::print(neighborhood.at(vertex), std::cout, false);
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
         
 #ifdef TESTOUTPUT
         std::cout << "STATUS AFTER: ";

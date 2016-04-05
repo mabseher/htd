@@ -163,17 +163,6 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph2)
     htd::index_t position9 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 9));
     htd::index_t position10 = std::distance(ordering.begin(), std::find(ordering.begin(), ordering.end(), 10));
 
-    std::cout << "1:  " << position1 << std::endl;
-    std::cout << "2:  " << position2 << std::endl;
-    std::cout << "3:  " << position3 << std::endl;
-    std::cout << "4:  " << position4 << std::endl;
-    std::cout << "5:  " << position5 << std::endl;
-    std::cout << "6:  " << position6 << std::endl;
-    std::cout << "7:  " << position7 << std::endl;
-    std::cout << "8:  " << position8 << std::endl;
-    std::cout << "9:  " << position9 << std::endl;
-    std::cout << "10:  " << position10 << std::endl;
-
     ASSERT_LT(position2, (htd::index_t)3);
     ASSERT_LT(position6, (htd::index_t)3);
     ASSERT_LT(position10, (htd::index_t)3);

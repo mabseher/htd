@@ -243,6 +243,11 @@ TEST(GraphTest, CheckSelfLoop)
 {
     htd::Graph graph(2);
 
+    std::vector<htd::vertex_t> edge11 { 1, 1 };
+    std::vector<htd::vertex_t> edge12 { 1, 2 };
+    std::vector<htd::vertex_t> edge21 { 2, 1 };
+    std::vector<htd::vertex_t> edge122 { 1, 2, 2 };
+
     ASSERT_EQ((std::size_t)2, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
 
@@ -292,6 +297,10 @@ TEST(GraphTest, CheckSelfLoop)
 
     ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
 
+    ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
+
+    ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge11)));
+
     graph.removeEdge(edgeId1);
 
     ASSERT_EQ((std::size_t)0, graph.hyperedges().size());
@@ -308,6 +317,14 @@ TEST(GraphTest, CheckSelfLoop)
     ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
     ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)2).id());
 
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
+    ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2 }));
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 2, 1 }));
+
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge11)));
+    ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge12)));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge21)));
+
     graph.removeEdge(edgeId3);
 
     ASSERT_EQ((std::size_t)0, graph.hyperedges().size());
@@ -317,6 +334,14 @@ TEST(GraphTest, CheckSelfLoop)
     ASSERT_FALSE(graph.isEdge(edgeId1));
     ASSERT_FALSE(graph.isEdge(edgeId2));
     ASSERT_FALSE(graph.isEdge(edgeId3));
+
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2 }));
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 2, 1 }));
+
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge11)));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge12)));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge21)));
 
     ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)1));
     ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)2));
@@ -331,6 +356,10 @@ TEST(GraphTest, CheckSelfLoop)
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)2));
+
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2, 2 }));
+
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge122)));
 }
 
 TEST(GraphTest, CheckGraphModifications)
@@ -402,6 +431,24 @@ TEST(GraphTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    graph.addVertices(2);
+
+    ASSERT_EQ((std::size_t)4, graph.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph.edgeCount());
+
+    ASSERT_EQ((htd::vertex_t)1, graph.vertexAtPosition(0));
+    ASSERT_EQ((htd::vertex_t)2, graph.vertexAtPosition(1));
+    ASSERT_EQ((htd::vertex_t)4, graph.vertexAtPosition(2));
+    ASSERT_EQ((htd::vertex_t)5, graph.vertexAtPosition(3));
+
+    graph.addEdge(4, 5);
+
+    ASSERT_EQ((std::size_t)1, graph.edgeCount());
+
+    graph.removeEdge(4, 5);
+
+    ASSERT_EQ((std::size_t)0, graph.edgeCount());
 }
 
 TEST(GraphTest, CheckCopyConstructors)
@@ -446,6 +493,12 @@ TEST(GraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
     ASSERT_FALSE(graph3.isEdge(edgeId1));
+
+    htd::Graph graph4(graphReference1);
+
+    ASSERT_EQ((std::size_t)2, graph4.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph4.edgeCount());
+    ASSERT_FALSE(graph4.isEdge(edgeId1));
 }
 
 int main(int argc, char **argv)

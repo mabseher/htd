@@ -81,6 +81,39 @@ TEST(TreeTest, CheckEmptyTree)
     {
         HTD_UNUSED(error);
     }
+
+    try
+    {
+        tree.vertexCount(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.edgeCount(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.isolatedVertexAtPosition(0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 }
 
 TEST(TreeTest, CheckSize1Tree)
@@ -118,6 +151,7 @@ TEST(TreeTest, CheckSize1Tree)
     ASSERT_EQ(root, tree.root());
 
     ASSERT_EQ((std::size_t)1, tree.vertexCount());
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(root));
     ASSERT_EQ((std::size_t)0, tree.edgeCount());
     ASSERT_EQ((std::size_t)0, tree.edgeCount(root));
 
@@ -137,6 +171,72 @@ TEST(TreeTest, CheckSize1Tree)
     ASSERT_EQ(root, tree.isolatedVertices()[0]);
     ASSERT_EQ(root, tree.isolatedVertexAtPosition(0));
     ASSERT_TRUE(tree.isIsolatedVertex(root));
+
+    try
+    {
+        tree.vertexCount(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.edgeCount(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.isolatedVertexAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.hyperedgeAtPosition(0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.hyperedgeAtPosition(0, root);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.hyperedgesAtPositions(std::vector<htd::index_t> { 0 });
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 }
 
 TEST(TreeTest, CheckSize3Tree)

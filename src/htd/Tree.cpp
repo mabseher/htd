@@ -102,7 +102,7 @@ std::size_t htd::Tree::vertexCount(htd::vertex_t subtreeRoot) const
 
 std::size_t htd::Tree::edgeCount(void) const
 {
-    return size_ > 0 ? size_ - 1 : 0;
+    return edges_->size();
 }
 
 std::size_t htd::Tree::edgeCount(htd::vertex_t vertex) const
@@ -491,6 +491,14 @@ const htd::Hyperedge & htd::Tree::hyperedgeAtPosition(htd::index_t index, htd::v
 
 htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
 {
+    for (htd::index_t index : indices)
+    {
+        if (index >= edges_->size())
+        {
+            throw std::logic_error("htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(const std::vector<htd::index_t> &) const");
+        }
+    }
+
     return htd::FilteredHyperedgeCollection(edges_, indices);
 }
 

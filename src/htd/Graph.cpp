@@ -313,23 +313,6 @@ htd::id_t htd::Graph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
     return base_->addEdge(vertex1, vertex2);
 }
 
-htd::id_t htd::Graph::addEdge(const htd::edge_t & edge)
-{
-    if (!isVertex(edge.first) || !isVertex(edge.second))
-    {
-        throw std::logic_error("htd::id_t htd::Graph::addEdge(const htd::edge_t &)");
-    }
-
-    const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(edge.first, edge.second);
-
-    if (associatedIds.size() > 0)
-    {
-        return associatedIds[0];
-    }
-
-    return base_->addEdge(edge.first, edge.second);
-}
-
 void htd::Graph::removeEdge(htd::id_t edgeId)
 {
     base_->removeEdge(edgeId);
@@ -338,16 +321,6 @@ void htd::Graph::removeEdge(htd::id_t edgeId)
 void htd::Graph::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(vertex1, vertex2);
-
-    if (associatedIds.size() > 0)
-    {
-        base_->removeEdge(associatedIds[0]);
-    }
-}
-
-void htd::Graph::removeEdge(const htd::edge_t & edge)
-{
-    const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(edge.first, edge.second);
 
     if (associatedIds.size() > 0)
     {

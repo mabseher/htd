@@ -41,16 +41,6 @@ namespace htd
     typedef std::size_t index_t;
 
     /**
-     *  Datatype for edges.
-     */
-    typedef std::pair<vertex_t, vertex_t> edge_t;
-
-    /**
-     *  Datatype for storing edges.
-     */
-    typedef std::vector<edge_t> edge_container;
-
-    /**
      *  Datatype for storing vertices.
      */
     typedef std::vector<vertex_t> vertex_container;

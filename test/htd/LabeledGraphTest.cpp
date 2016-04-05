@@ -167,7 +167,7 @@ TEST(LabeledGraphTest, CheckSizeInitializedGraph2)
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)3));
 
-    graph.addEdge(std::make_pair((htd::vertex_t)2, (htd::vertex_t)1));
+    graph.addEdge(2, 1);
 
     ASSERT_TRUE(graph.isEdge((htd::id_t)1));
     ASSERT_FALSE(graph.isEdge((htd::vertex_t)1, (htd::vertex_t)2));
@@ -272,7 +272,7 @@ TEST(LabeledGraphTest, CheckSelfLoop)
 
     ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)1, (htd::index_t)0));
 
-    htd::id_t edgeId2 = graph.addEdge(std::make_pair((htd::vertex_t)1, (htd::vertex_t)1));
+    htd::id_t edgeId2 = graph.addEdge(1, 1);
 
     ASSERT_EQ(edgeId1, edgeId2);
 

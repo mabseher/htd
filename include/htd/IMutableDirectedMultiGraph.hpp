@@ -42,8 +42,6 @@ namespace htd
 
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
-            virtual htd::id_t addEdge(const htd::edge_t & edge) = 0;
-
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
             virtual IMutableDirectedMultiGraph * clone(void) const = 0;

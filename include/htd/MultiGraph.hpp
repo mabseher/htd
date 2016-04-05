@@ -114,9 +114,7 @@ namespace htd
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 
             htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
-            
-            htd::id_t addEdge(const htd::edge_t & edge) HTD_OVERRIDE;
-            
+
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
             MultiGraph * clone(void) const HTD_OVERRIDE;

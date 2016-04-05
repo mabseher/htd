@@ -301,11 +301,6 @@ htd::id_t htd::MultiGraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
     return base_->addEdge(vertex1, vertex2);
 }
 
-htd::id_t htd::MultiGraph::addEdge(const htd::edge_t & edge)
-{
-    return base_->addEdge(edge.first, edge.second);
-}
-
 void htd::MultiGraph::removeEdge(htd::id_t edgeId)
 {
     base_->removeEdge(edgeId);

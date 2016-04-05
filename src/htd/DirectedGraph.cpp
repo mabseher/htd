@@ -541,26 +541,6 @@ htd::id_t htd::DirectedGraph::addEdge(htd::vertex_t vertex1, htd::vertex_t verte
     return base_->addEdge(vertex1, vertex2);
 }
 
-htd::id_t htd::DirectedGraph::addEdge(const htd::edge_t & edge)
-{
-    if (!isVertex(edge.first) || !isVertex(edge.second))
-    {
-        throw std::logic_error("htd::id_t htd::DirectedGraph::addEdge(const htd::edge_t &)");
-    }
-
-    const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(edge.first, edge.second);
-
-    if (associatedIds.size() > 0)
-    {
-        return associatedIds[0];
-    }
-
-    outgoingNeighborhood_[edge.first - htd::Vertex::FIRST].insert(edge.second);
-    incomingNeighborhood_[edge.second - htd::Vertex::FIRST].insert(edge.first);
-
-    return base_->addEdge(edge.first, edge.second);
-}
-
 void htd::DirectedGraph::removeEdge(htd::id_t edgeId)
 {
     const htd::Hyperedge & selectedEdge = base_->hyperedge(edgeId);
@@ -580,16 +560,6 @@ void htd::DirectedGraph::removeEdge(htd::id_t edgeId)
 void htd::DirectedGraph::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(vertex1, vertex2);
-
-    if (associatedIds.size() > 0)
-    {
-        removeEdge(associatedIds[0]);
-    }
-}
-
-void htd::DirectedGraph::removeEdge(const htd::edge_t & edge)
-{
-    const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(edge.first, edge.second);
 
     if (associatedIds.size() > 0)
     {

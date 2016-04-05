@@ -532,19 +532,6 @@ htd::id_t htd::DirectedMultiGraph::addEdge(htd::vertex_t vertex1, htd::vertex_t 
     return base_->addEdge(vertex1, vertex2);
 }
 
-htd::id_t htd::DirectedMultiGraph::addEdge(const htd::edge_t & edge)
-{
-    if (!isVertex(edge.first) || !isVertex(edge.second))
-    {
-        throw std::logic_error("htd::id_t htd::DirectedMultiGraph::addEdge(const htd::edge_t &)");
-    }
-
-    outgoingNeighborhood_[edge.first - htd::Vertex::FIRST].insert(edge.second);
-    incomingNeighborhood_[edge.second - htd::Vertex::FIRST].insert(edge.first);
-
-    return base_->addEdge(edge.first, edge.second);
-}
-
 void htd::DirectedMultiGraph::removeEdge(htd::id_t edgeId)
 {
     const htd::Hyperedge & selectedEdge = base_->hyperedge(edgeId);

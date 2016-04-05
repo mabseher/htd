@@ -318,7 +318,7 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWit
     delete decomposition;
 }
 
-TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunctionVectorAndManipulationOperation)
+TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunctionVectorAndManipulationOperation1)
 {
     htd::MultiHypergraph graph;
 
@@ -332,6 +332,42 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWit
     htd::BucketEliminationGraphDecompositionAlgorithm algorithm({ new BagSizeLabelingFunction(), new htd::JoinNodeReplacementOperation() });
 
     htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph, { new BagSizeLabelingFunction2() });
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+        ASSERT_EQ(decomposition->bagSize(vertex) * 2, htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE_TIMES_2", vertex)));
+    }
+
+    delete decomposition;
+}
+
+TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunctionVectorAndManipulationOperation2)
+{
+    htd::MultiHypergraph graph;
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+
+    algorithm.addManipulationOperation(new BagSizeLabelingFunction());
+    algorithm.addManipulationOperation(new htd::JoinNodeReplacementOperation());
+    algorithm.addManipulationOperation(new BagSizeLabelingFunction2());
+
+    htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
     ASSERT_NE(decomposition, nullptr);
 

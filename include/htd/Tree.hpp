@@ -29,6 +29,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/IMutableTree.hpp>
 
+#include <memory>
 #include <string>
 #include <unordered_map>
 
@@ -175,11 +176,15 @@ namespace htd
 
             htd::vertex_t root_;
 
+            htd::index_t next_edge_;
+
             htd::vertex_t next_vertex_;
 
             htd::vertex_container vertices_;
 
             std::unordered_map<htd::id_t, Node *> nodes_;
+
+            std::shared_ptr<htd::hyperedge_container> edges_;
 
             void deleteNode(htd::Tree::Node * node);
     };

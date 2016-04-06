@@ -298,6 +298,17 @@ TEST(TreeTest, CheckSize3Tree)
 
     htd::vertex_t newRoot = tree.addParent(root);
 
+    try
+    {
+        tree.addParent(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
     ASSERT_TRUE(tree.isVertex(root));
     ASSERT_TRUE(tree.isVertex(child));
     ASSERT_TRUE(tree.isVertex(newRoot));
@@ -326,6 +337,28 @@ TEST(TreeTest, CheckSize3Tree)
     ASSERT_TRUE(tree.isParent(child, root));
     ASSERT_TRUE(tree.isParent(root, newRoot));
     ASSERT_FALSE(tree.isParent(child, newRoot));
+
+    try
+    {
+        tree.isChild(htd::Vertex::UNKNOWN, root);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.isChild(root, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 
     try
     {
@@ -431,6 +464,17 @@ TEST(TreeTest, CheckSize3Tree)
     ASSERT_FALSE(tree.isLeafNode(root));
     ASSERT_TRUE(tree.isLeafNode(child));
     ASSERT_FALSE(tree.isLeafNode(newRoot));
+
+    try
+    {
+        tree.isLeafNode(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 
     ASSERT_EQ((std::size_t)2, tree.vertexCount(root));
     ASSERT_EQ((std::size_t)1, tree.vertexCount(child));
@@ -689,7 +733,7 @@ TEST(TreeTest, CheckSize3Tree)
     }
 }
 
-TEST(TreeTest, CheckTreeManipulations)
+TEST(TreeTest, CheckTreeManipulations1)
 {
     htd::Tree tree;
 
@@ -743,6 +787,39 @@ TEST(TreeTest, CheckTreeManipulations)
     ASSERT_EQ((std::size_t)1, tree.vertexCount(node134));
 
     tree.setParent(node12, node111);
+
+    try
+    {
+        tree.setParent(node12, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.setParent(htd::Vertex::UNKNOWN, node12);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        tree.setParent(node12, node12);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 
     ASSERT_EQ((std::size_t)12, tree.vertexCount(root));
     ASSERT_EQ((std::size_t)5, tree.vertexCount(node11));
@@ -799,6 +876,51 @@ TEST(TreeTest, CheckTreeManipulations)
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
     ASSERT_EQ((std::size_t)0, tree.edgeCount());
+}
+
+TEST(TreeTest, CheckTreeManipulations2)
+{
+    htd::Tree tree;
+
+    htd::vertex_t root = tree.insertRoot();
+
+    htd::vertex_t node1 = tree.addChild(root);
+    htd::vertex_t node11 = tree.addChild(node1);
+
+    tree.removeVertex(node1);
+
+    ASSERT_EQ((std::size_t)2, tree.vertexCount(root));
+
+    ASSERT_EQ(node11, tree.childAtPosition(root, 0));
+    ASSERT_EQ(root, tree.parent(node11));
+
+    ASSERT_EQ((std::size_t)1, tree.edgeCount());
+    ASSERT_EQ((htd::id_t)3, tree.hyperedgeAtPosition(0).id());
+    ASSERT_EQ(root, tree.hyperedgeAtPosition(0)[0]);
+    ASSERT_EQ(node11, tree.hyperedgeAtPosition(0)[1]);
+
+    htd::vertex_t newRoot = tree.addParent(root);
+
+    tree.removeVertex(root);
+
+    ASSERT_EQ((std::size_t)1, tree.edgeCount());
+    ASSERT_EQ((htd::id_t)5, tree.hyperedgeAtPosition(0).id());
+    ASSERT_EQ(node11, tree.hyperedgeAtPosition(0)[0]);
+    ASSERT_EQ(newRoot, tree.hyperedgeAtPosition(0)[1]);
+
+    htd::vertex_t node2 = tree.addChild(newRoot);
+
+    htd::vertex_t newRoot2 = tree.addParent(newRoot);
+
+    tree.removeVertex(newRoot);
+
+    ASSERT_EQ((std::size_t)2, tree.edgeCount());
+    ASSERT_EQ((htd::id_t)8, tree.hyperedgeAtPosition(0).id());
+    ASSERT_EQ(node11, tree.hyperedgeAtPosition(0)[0]);
+    ASSERT_EQ(newRoot2, tree.hyperedgeAtPosition(0)[1]);
+    ASSERT_EQ((htd::id_t)9, tree.hyperedgeAtPosition(1).id());
+    ASSERT_EQ(node2, tree.hyperedgeAtPosition(1)[0]);
+    ASSERT_EQ(newRoot2, tree.hyperedgeAtPosition(1)[1]);
 }
 
 int main(int argc, char **argv)

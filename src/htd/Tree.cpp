@@ -591,20 +591,14 @@ htd::vertex_t htd::Tree::childAtPosition(htd::vertex_t vertex, htd::index_t inde
 
 bool htd::Tree::isChild(htd::vertex_t vertex, htd::vertex_t child) const
 {
-    bool ret = false;
-
-    if (isVertex(vertex))
-    {
-        const auto & children = nodes_.at(vertex)->children;
-
-        ret = std::find(children.begin(), children.end(), child) != children.end();
-    }
-    else
+    if (!isVertex(vertex) || !isVertex(child))
     {
         throw std::logic_error("bool htd::Tree::isChild(htd::vertex_t, htd::vertex_t) const");
     }
 
-    return ret;
+    const auto & children = nodes_.at(vertex)->children;
+
+    return std::find(children.begin(), children.end(), child) != children.end();
 }
 
 void htd::Tree::removeVertex(htd::vertex_t vertex)
@@ -629,22 +623,24 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                 }
                 case 1:
                 {
-                    nodes_.at(children[0])->parent = node.parent;
+                    htd::vertex_t child = children[0];
 
-                    auto position = std::lower_bound(siblings.begin(), siblings.end(), children[0]);
+                    nodes_.at(child)->parent = node.parent;
 
-                    if (position == siblings.end() || *position != children[0])
+                    auto position = std::lower_bound(siblings.begin(), siblings.end(), child);
+
+                    if (position == siblings.end() || *position != child)
                     {
-                        siblings.insert(position, children[0]);
+                        siblings.insert(position, child);
                     }
 
-                    if (node.parent < vertex)
+                    if (node.parent < child)
                     {
-                        edges_->push_back(htd::Hyperedge(next_edge_, node.parent, vertex));
+                        edges_->push_back(htd::Hyperedge(next_edge_, node.parent, child));
                     }
                     else
                     {
-                        edges_->push_back(htd::Hyperedge(next_edge_, vertex, node.parent));
+                        edges_->push_back(htd::Hyperedge(next_edge_, child, node.parent));
                     }
 
                     ++next_edge_;
@@ -664,13 +660,13 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                             siblings.insert(position, child);
                         }
 
-                        if (node.parent < vertex)
+                        if (node.parent < child)
                         {
-                            edges_->push_back(htd::Hyperedge(next_edge_, node.parent, vertex));
+                            edges_->push_back(htd::Hyperedge(next_edge_, node.parent, child));
                         }
                         else
                         {
-                            edges_->push_back(htd::Hyperedge(next_edge_, vertex, node.parent));
+                            edges_->push_back(htd::Hyperedge(next_edge_, child, node.parent));
                         }
 
                         ++next_edge_;

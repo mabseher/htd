@@ -872,6 +872,24 @@ TEST(TreeTest, CheckTreeManipulations1)
     ASSERT_EQ((std::size_t)1, tree.vertexCount(node121));
     ASSERT_EQ((std::size_t)1, tree.vertexCount(node122));
 
+    try
+    {
+        tree.removeSubtree(node13);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)5, tree.vertexCount(root));
+    ASSERT_EQ((std::size_t)4, tree.vertexCount(node11));
+
+    ASSERT_EQ((std::size_t)3, tree.vertexCount(node111));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node121));
+    ASSERT_EQ((std::size_t)1, tree.vertexCount(node122));
+
     tree.removeRoot();
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
@@ -921,6 +939,22 @@ TEST(TreeTest, CheckTreeManipulations2)
     ASSERT_EQ((htd::id_t)9, tree.hyperedgeAtPosition(1).id());
     ASSERT_EQ(node2, tree.hyperedgeAtPosition(1)[0]);
     ASSERT_EQ(newRoot2, tree.hyperedgeAtPosition(1)[1]);
+
+    tree.removeVertex(newRoot2);
+
+    ASSERT_EQ((std::size_t)1, tree.edgeCount());
+    ASSERT_EQ((htd::id_t)10, tree.hyperedgeAtPosition(0).id());
+    ASSERT_EQ(node11, tree.hyperedgeAtPosition(0)[0]);
+    ASSERT_EQ(node2, tree.hyperedgeAtPosition(0)[1]);
+
+    tree.removeVertex(node11);
+
+    ASSERT_EQ((std::size_t)1, tree.vertexCount());
+    ASSERT_EQ((std::size_t)0, tree.edgeCount());
+
+    tree.removeVertex(node2);
+
+    ASSERT_EQ((std::size_t)0, tree.vertexCount());
 }
 
 int main(int argc, char **argv)

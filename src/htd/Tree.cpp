@@ -720,6 +720,15 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                         {
                             newRootChildren.insert(position, child);
                         }
+
+                        if (root_ < child)
+                        {
+                            edges_->push_back(htd::Hyperedge(next_edge_, root_, child));
+                        }
+                        else
+                        {
+                            edges_->push_back(htd::Hyperedge(next_edge_, child, root_));
+                        }
                     }
 
                     deleteNode(nodes_.at(vertex));

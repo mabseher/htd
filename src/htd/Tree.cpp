@@ -519,18 +519,14 @@ bool htd::Tree::isRoot(htd::vertex_t vertex) const
 
 htd::vertex_t htd::Tree::parent(htd::vertex_t vertex) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
-    
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        ret = nodes_.at(vertex)->parent;
-
-        if (ret == htd::Vertex::UNKNOWN)
-        {
-            throw std::logic_error("htd::vertex_t htd::Tree::parent(htd::vertex_t) const");
-        }
+        throw std::logic_error("htd::vertex_t htd::Tree::parent(htd::vertex_t) const");
     }
-    else
+
+    htd::vertex_t ret = nodes_.at(vertex)->parent;
+
+    if (ret == htd::Vertex::UNKNOWN)
     {
         throw std::logic_error("htd::vertex_t htd::Tree::parent(htd::vertex_t) const");
     }
@@ -540,34 +536,22 @@ htd::vertex_t htd::Tree::parent(htd::vertex_t vertex) const
 
 bool htd::Tree::isParent(htd::vertex_t vertex, htd::vertex_t parent) const
 {
-    bool ret = false;
-
-    if (isVertex(vertex))
-    {
-        ret = nodes_.at(vertex)->parent == parent;
-    }
-    else
+    if (!isVertex(vertex) || !isVertex(parent))
     {
         throw std::logic_error("bool htd::Tree::isParent(htd::vertex_t, htd::vertex_t) const");
     }
 
-    return ret;
+    return nodes_.at(vertex)->parent == parent;
 }
 
 std::size_t htd::Tree::childCount(htd::vertex_t vertex) const
 {
-    std::size_t ret = 0;
-    
-    if (isVertex(vertex))
-    {
-        ret = nodes_.at(vertex)->children.size();
-    }
-    else
+    if (!isVertex(vertex))
     {
         throw std::logic_error("std::size_t htd::Tree::childCount(htd::vertex_t) const");
     }
 
-    return ret;
+    return nodes_.at(vertex)->children.size();
 }
 
 htd::ConstCollection<htd::vertex_t> htd::Tree::children(htd::vertex_t vertex) const
@@ -580,28 +564,26 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::children(htd::vertex_t vertex) co
     return htd::ConstCollection<htd::vertex_t>::getInstance(nodes_.at(vertex)->children);
 }
 
-htd::vertex_t htd::Tree::child(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::Tree::childAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        const auto & node = *(nodes_.at(vertex));
+        throw std::logic_error("bool htd::Tree::childAtPosition(htd::vertex_t, htd::index_t) const");
+    }
 
-        const auto & children = node.children;
+    const auto & node = *(nodes_.at(vertex));
 
-        if (index < children.size())
-        {
-            ret = children[index];
-        }
-        else
-        {
-            throw std::out_of_range("bool htd::Tree::child(htd::vertex_t, htd::index_t) const");
-        }
+    const auto & children = node.children;
+
+    if (index < children.size())
+    {
+        ret = children[index];
     }
     else
     {
-        throw std::logic_error("bool htd::Tree::child(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("bool htd::Tree::childAtPosition(htd::vertex_t, htd::index_t) const");
     }
     
     return ret;

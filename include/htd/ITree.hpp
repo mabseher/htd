@@ -60,7 +60,7 @@ namespace htd
             
             virtual htd::ConstCollection<htd::vertex_t> children(htd::vertex_t vertex) const = 0;
             
-            virtual htd::vertex_t child(htd::vertex_t vertex, htd::index_t index) const = 0;
+            virtual htd::vertex_t childAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
             virtual bool isChild(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 

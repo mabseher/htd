@@ -634,28 +634,24 @@ htd::vertex_t htd::Path::child(htd::vertex_t vertex) const
     return node.child;
 }
 
-htd::vertex_t htd::Path::child(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::Path::childAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    HTD_UNUSED(index);
-
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
     
-    if (isVertex(vertex))
+    if (!isVertex(vertex))
     {
-        const auto & node = *(nodes_.at(vertex));
+        throw std::logic_error("bool htd::Path::childAtPosition(htd::vertex_t, htd::index_t) const");
+    }
 
-        if (node.child != htd::Vertex::UNKNOWN)
-        {
-            ret = node.child;
-        }
-        else
-        {
-            throw std::out_of_range("bool htd::Path::child(htd::vertex_t, htd::index_t) const");
-        }
+    const auto & node = *(nodes_.at(vertex));
+
+    if (index == 0 && node.child != htd::Vertex::UNKNOWN)
+    {
+        ret = node.child;
     }
     else
     {
-        throw std::logic_error("bool htd::Path::child(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("bool htd::Path::childAtPosition(htd::vertex_t, htd::index_t) const");
     }
     
     return ret;

@@ -1032,7 +1032,7 @@ void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex
             }
             case 1:
             {
-                const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex, 0));
+                const std::vector<htd::vertex_t> & childBag = bagContent(childAtPosition(vertex, 0));
 
                 std::copy(childBag.begin(), childBag.end(), std::back_inserter(output));
 

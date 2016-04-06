@@ -125,7 +125,7 @@ void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, const std::fu
             {
                 parentStack.push(std::make_pair(currentNode, currentIndex + 1));
 
-                currentNode = tree.child(currentNode, currentIndex);
+                currentNode = tree.childAtPosition(currentNode, currentIndex);
 
                 currentIndex = 0;
 

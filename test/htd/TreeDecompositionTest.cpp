@@ -227,12 +227,12 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
     ASSERT_TRUE(decomposition.isParent(root, newRoot));
     ASSERT_FALSE(decomposition.isParent(child, newRoot));
 
-    ASSERT_EQ(child, decomposition.child(root, (htd::index_t)0));
-    ASSERT_EQ(root, decomposition.child(newRoot, (htd::index_t)0));
+    ASSERT_EQ(child, decomposition.childAtPosition(root, (htd::index_t)0));
+    ASSERT_EQ(root, decomposition.childAtPosition(newRoot, (htd::index_t)0));
 
     try
     {
-        decomposition.child(child, (htd::index_t)0);
+        decomposition.childAtPosition(child, (htd::index_t)0);
 
         FAIL();
     }

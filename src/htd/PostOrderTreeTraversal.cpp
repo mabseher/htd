@@ -141,7 +141,7 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, const std::f
             {
                 parentStack.push(std::make_pair(currentNode, currentIndex));
 
-                currentNode = tree.child(currentNode, currentIndex);
+                currentNode = tree.childAtPosition(currentNode, currentIndex);
 
                 currentIndex = tree.childCount(currentNode) - 1;
 
@@ -172,7 +172,7 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, const std::f
 
             if (peekIndex < tree.childCount(peekNode) && !(lastNode == peekNode && lastIndex == peekIndex))
             {
-                currentNode = tree.child(peekNode, peekIndex);
+                currentNode = tree.childAtPosition(peekNode, peekIndex);
 
                 currentIndex = tree.childCount(currentNode) - 1;
 

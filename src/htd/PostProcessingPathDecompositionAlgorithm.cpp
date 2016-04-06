@@ -207,7 +207,7 @@ htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::
 
         while (decomposition.childCount(currentVertex) == 1)
         {
-            currentVertex = decomposition.child(currentVertex, 0);
+            currentVertex = decomposition.childAtPosition(currentVertex, 0);
 
             newVertex = ret->addChild(newVertex);
 

@@ -196,22 +196,49 @@ namespace htd
 
             bool operator!=(const htd::ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
             {
-                return !(*this == rhs);
+                bool ret = false;
+
+                const ConstIterator<T> * o = dynamic_cast<const ConstIterator<T> *>(&rhs);
+
+                if (o != nullptr)
+                {
+                    if (baseIterator_ == nullptr)
+                    {
+                        ret = o->baseIterator_ != nullptr;
+                    }
+                    else if (o->baseIterator_ != nullptr)
+                    {
+                        ret = *baseIterator_ != *(o->baseIterator_ );
+                    }
+                }
+
+                return ret;
             }
 
             bool operator!=(const ConstIterator<T> & rhs) const
             {
-                return !(*this == rhs);
+                bool ret = false;
+
+                if (baseIterator_ == nullptr)
+                {
+                    ret = rhs.baseIterator_ != nullptr;
+                }
+                else if (rhs.baseIterator_ != nullptr)
+                {
+                    ret = *baseIterator_ != *(rhs.baseIterator_ );
+                }
+
+                return ret;
             }
 
             const T * operator->(void) const HTD_OVERRIDE
             {
-                return &(*(*(baseIterator_)));
+                return baseIterator_->operator->();
             }
 
             const T & operator*(void) const HTD_OVERRIDE
             {
-                return *(*baseIterator_);
+                return baseIterator_->operator*();
             }
 
             ConstIterator<T> * clone(void) const HTD_OVERRIDE

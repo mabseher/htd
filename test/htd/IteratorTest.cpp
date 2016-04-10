@@ -120,8 +120,8 @@ TEST(IteratorTest, CheckCollectionWrapper1)
 
     auto begin = collection1.begin();
     auto end = collection1.end();
-    auto beginPtr = reinterpret_cast<htd::IteratorBase<int> *>(&begin);
-    auto endPtr = reinterpret_cast<htd::IteratorBase<int> *>(&end);
+    auto beginPtr = static_cast<htd::IteratorBase<int> *>(&begin);
+    auto endPtr = static_cast<htd::IteratorBase<int> *>(&end);
 
     ASSERT_TRUE(collection1.begin() == *beginPtr);
     ASSERT_TRUE(collection1.end() == *endPtr);
@@ -203,8 +203,8 @@ TEST(IteratorTest, CheckConstCollectionWrapper1)
 
     auto begin = collection1.begin();
     auto end = collection1.end();
-    auto beginPtr = reinterpret_cast<htd::ConstIteratorBase<int> *>(&begin);
-    auto endPtr = reinterpret_cast<htd::ConstIteratorBase<int> *>(&end);
+    auto beginPtr = static_cast<htd::ConstIteratorBase<int> *>(&begin);
+    auto endPtr = static_cast<htd::ConstIteratorBase<int> *>(&end);
 
     ASSERT_TRUE(collection1.begin() == *beginPtr);
     ASSERT_TRUE(collection1.end() == *endPtr);

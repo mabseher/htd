@@ -66,6 +66,9 @@ TEST(LabeledGraphTest, CheckEmptyGraph)
     ASSERT_EQ((std::size_t)0, graph.isolatedVertices().size());
 
     ASSERT_TRUE(graph.isConnected());
+
+    ASSERT_EQ((std::size_t)0, graph.labelCount());
+    ASSERT_EQ((std::size_t)0, graph.labelings().labelCount());
 }
 
 TEST(LabeledGraphTest, CheckSizeInitializedGraph1)
@@ -101,6 +104,46 @@ TEST(LabeledGraphTest, CheckSizeInitializedGraph1)
 
     ASSERT_TRUE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+
+    ASSERT_EQ((std::size_t)0, graph.labelCount());
+    ASSERT_EQ((std::size_t)0, graph.labelings().labelCount());
+    ASSERT_EQ((std::size_t)0, graph.labelNames().size());
+
+    try
+    {
+        graph.labelNameAtPosition(0);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    graph.setVertexLabel("Label", 1, new htd::Label<int>(1));
+
+    ASSERT_EQ((std::size_t)1, graph.labelCount());
+    ASSERT_EQ((std::size_t)1, graph.labelings().labelCount());
+    ASSERT_EQ((std::size_t)1, graph.labelNames().size());
+    ASSERT_EQ("Label", graph.labelNames()[0]);
+    ASSERT_EQ("Label", graph.labelNameAtPosition(0));
+
+    try
+    {
+        graph.labelNameAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label", 1)));
+
+    ASSERT_FALSE(graph.isLabeledVertex("XYZ", 1));
+    ASSERT_FALSE(graph.isLabeledVertex("Label", htd::Vertex::UNKNOWN));
 }
 
 TEST(LabeledGraphTest, CheckSizeInitializedGraph2)

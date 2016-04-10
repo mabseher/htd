@@ -72,7 +72,7 @@ namespace htd
 
                     FilteredHyperedgeCollectionConstIterator & operator-=(std::size_t positions);
 
-                    std::size_t operator-(const FilteredHyperedgeCollectionConstIterator & rhs);
+                    long operator-(const FilteredHyperedgeCollectionConstIterator & rhs);
 
                     FilteredHyperedgeCollectionConstIterator & operator=(const FilteredHyperedgeCollectionConstIterator & original);
 

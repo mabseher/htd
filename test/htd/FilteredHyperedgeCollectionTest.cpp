@@ -92,6 +92,13 @@ TEST(FilteredHyperedgeCollectionTest, TestConstructors)
 
     std::vector<htd::Hyperedge> inputEdges1 { h1, h2, h3, h4, h5 };
     std::vector<htd::Hyperedge> inputEdges2 { h1, h2, h3, h4, h5 };
+    std::shared_ptr<std::vector<htd::Hyperedge>> inputEdges3 = std::make_shared<std::vector<htd::Hyperedge>>();
+
+    inputEdges3->push_back(h1);
+    inputEdges3->push_back(h2);
+    inputEdges3->push_back(h3);
+    inputEdges3->push_back(h4);
+    inputEdges3->push_back(h5);
 
     htd::FilteredHyperedgeCollection hyperedges1(inputEdges1, std::vector<htd::index_t> { 1, 3, 3, 2 });
     htd::FilteredHyperedgeCollection hyperedges2(inputEdges2, std::vector<htd::index_t> { 1, 3, 2, 3 });
@@ -161,6 +168,20 @@ TEST(FilteredHyperedgeCollectionTest, TestConstructors)
     htd::FilteredHyperedgeCollection hyperedges6(std::move(hyperedges3));
 
     ASSERT_EQ(5, std::distance(hyperedges6.begin(), hyperedges6.end()));
+
+    htd::FilteredHyperedgeCollection hyperedges7(inputEdges3, std::vector<htd::index_t> { 1, 3, 2, 3 });
+
+    ASSERT_EQ((std::size_t)4, hyperedges7.size());
+
+    ASSERT_TRUE(hyperedges2 == hyperedges2);
+    ASSERT_TRUE(hyperedges2 == hyperedges7);
+    ASSERT_TRUE(hyperedges7 == hyperedges2);
+    ASSERT_TRUE(hyperedges7 == hyperedges7);
+
+    ASSERT_FALSE(hyperedges2 != hyperedges2);
+    ASSERT_FALSE(hyperedges2 != hyperedges7);
+    ASSERT_FALSE(hyperedges7 != hyperedges2);
+    ASSERT_FALSE(hyperedges7 != hyperedges7);
 }
 
 TEST(FilteredHyperedgeCollectionTest, TestIterators)
@@ -205,15 +226,48 @@ TEST(FilteredHyperedgeCollectionTest, TestIterators)
     ASSERT_TRUE(it == hyperedges1.end());
     ASSERT_TRUE(it3 == hyperedges1.end());
 
-    it -= 3;
+    ASSERT_EQ(6, it - hyperedges1.begin());
+    ASSERT_EQ(-6, hyperedges1.begin() - it);
+
+    it--;
+
+    ASSERT_EQ((htd::id_t)5, it->id());
+
+    ASSERT_EQ(5, it - hyperedges1.begin());
+    ASSERT_EQ(-5, hyperedges1.begin() - it);
+
+    it -= 2;
 
     ASSERT_EQ((htd::id_t)3, (*it).id());
 
-    it -= 3;
+    ASSERT_EQ(3, it - hyperedges1.begin());
+    ASSERT_EQ(-3, hyperedges1.begin() - it);
+
+    it -= 2;
+
+    ASSERT_EQ((htd::id_t)4, (*it).id());
+
+    ASSERT_EQ(1, it - hyperedges1.begin());
+    ASSERT_EQ(-1, hyperedges1.begin() - it);
+
+    ++it;
+
+    ASSERT_EQ((htd::id_t)4, (*it).id());
+    ASSERT_TRUE(it != hyperedges1.begin());
+
+    ASSERT_EQ(2, it - hyperedges1.begin());
+    ASSERT_EQ(-2, hyperedges1.begin() - it);
+
+    it--;
+    --it;
 
     ASSERT_EQ((htd::id_t)2, (*it).id());
 
     ASSERT_TRUE(it == hyperedges1.begin());
+    ASSERT_FALSE(it != hyperedges1.begin());
+
+    ASSERT_EQ(0, it - hyperedges1.begin());
+    ASSERT_EQ(0, hyperedges1.begin() - it);
 }
 
 int main(int argc, char **argv)

@@ -105,12 +105,12 @@ htd::FilteredHyperedgeCollection & htd::FilteredHyperedgeCollection::operator=(h
 
 bool htd::FilteredHyperedgeCollection::operator==(const htd::FilteredHyperedgeCollection & rhs) const
 {
-    return baseCollection_ == rhs.baseCollection_ && relevantIndices_ == rhs.relevantIndices_;
+    return *baseCollection_ == *(rhs.baseCollection_) && *relevantIndices_ == *(rhs.relevantIndices_);
 }
 
 bool htd::FilteredHyperedgeCollection::operator!=(const htd::FilteredHyperedgeCollection & rhs) const
 {
-    return baseCollection_ != rhs.baseCollection_ || relevantIndices_ != rhs.relevantIndices_;
+    return *baseCollection_ != *(rhs.baseCollection_) || *relevantIndices_ != *(rhs.relevantIndices_);
 }
 
 void htd::FilteredHyperedgeCollection::restrictTo(const std::vector<htd::vertex_t> & vertices)
@@ -211,7 +211,7 @@ htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & htd
     return *this;
 }
 
-std::size_t htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator-(const htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & rhs)
+long htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator-(const htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & rhs)
 {
     if (baseCollection_ != rhs.baseCollection_ || relevantIndices_ != rhs.relevantIndices_)
     {
@@ -233,12 +233,12 @@ const htd::Hyperedge & htd::FilteredHyperedgeCollection::FilteredHyperedgeCollec
 
 bool htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator==(const htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & rhs) const
 {
-    return baseCollection_ == rhs.baseCollection_ && relevantIndices_ == rhs.relevantIndices_ && position_ == rhs.position_;
+    return *baseCollection_ == *(rhs.baseCollection_) && *relevantIndices_ == *(rhs.relevantIndices_) && position_ == rhs.position_;
 }
 
 bool htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator!=(const htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & rhs) const
 {
-    return baseCollection_ != rhs.baseCollection_ || relevantIndices_ != rhs.relevantIndices_ || position_ != rhs.position_;
+    return *baseCollection_ != *(rhs.baseCollection_) || *relevantIndices_ != *(rhs.relevantIndices_) || position_ != rhs.position_;
 }
 
 htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator=(const htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & original)

@@ -264,72 +264,79 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         htd::IMutableGraphDecomposition & mutableGraphDecomposition = htd::GraphDecompositionFactory::instance().accessMutableGraphDecomposition(*graphDecomposition);
 
-        if (mutableGraphDecomposition.edgeCount() + 1 != mutableGraphDecomposition.vertexCount() || mutableGraphDecomposition.isolatedVertexCount() > 0)
+        if (!htd::Library::instance().isAborted())
         {
-            htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = htd::ConnectedComponentAlgorithmFactory::instance().getConnectedComponentAlgorithm();
-
-            if (connectedComponentAlgorithm == nullptr)
+            if (mutableGraphDecomposition.edgeCount() + 1 != mutableGraphDecomposition.vertexCount() || mutableGraphDecomposition.isolatedVertexCount() > 0)
             {
-                throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
-            }
+                htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = htd::ConnectedComponentAlgorithmFactory::instance().getConnectedComponentAlgorithm();
 
-            htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> components = connectedComponentAlgorithm->determineComponents(*graphDecomposition);
-
-            delete connectedComponentAlgorithm;
-
-            std::size_t componentCount = components.size();
-
-            if (componentCount > 1)
-            {
-                for (htd::index_t index = 0; index < componentCount - 1; ++index)
+                if (connectedComponentAlgorithm == nullptr)
                 {
-                    const htd::ConstCollection<htd::vertex_t> & component1 = components[index];
-                    const htd::ConstCollection<htd::vertex_t> & component2 = components[index + 1];
+                    throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
+                }
 
-                    /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
-                    // coverity[dont_call]
-                    htd::vertex_t vertex1 = component1[std::rand() % component1.size()];
+                htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> components = connectedComponentAlgorithm->determineComponents(*graphDecomposition);
 
-                    /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
-                    // coverity[dont_call]
-                    htd::vertex_t vertex2 = component2[std::rand() % component2.size()];
+                delete connectedComponentAlgorithm;
 
-                    mutableGraphDecomposition.addEdge(vertex1, vertex2);
+                std::size_t componentCount = components.size();
+
+                if (componentCount > 1)
+                {
+                    for (htd::index_t index = 0; index < componentCount - 1; ++index)
+                    {
+                        const htd::ConstCollection<htd::vertex_t> & component1 = components[index];
+                        const htd::ConstCollection<htd::vertex_t> & component2 = components[index + 1];
+
+                        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+                        // coverity[dont_call]
+                        htd::vertex_t vertex1 = component1[std::rand() % component1.size()];
+
+                        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+                        // coverity[dont_call]
+                        htd::vertex_t vertex2 = component2[std::rand() % component2.size()];
+
+                        mutableGraphDecomposition.addEdge(vertex1, vertex2);
+                    }
                 }
             }
+
+            htd::vertex_t node = htd::Vertex::UNKNOWN;
+
+            std::unordered_map<htd::vertex_t, htd::vertex_t> vertexMapping;
+
+            htd::BreadthFirstGraphTraversal graphTraversal;
+
+            const htd::ConstCollection<htd::vertex_t> & vertexCollection = graphDecomposition->vertices();
+
+            /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+            // coverity[dont_call]
+            graphTraversal.traverse(*graphDecomposition, vertexCollection[std::rand() % vertexCollection.size()], [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
+            {
+                HTD_UNUSED(distanceFromStartingVertex)
+
+                if (predecessor == htd::Vertex::UNKNOWN)
+                {
+                    node = ret->insertRoot();
+                }
+                else
+                {
+                    node = ret->addChild(vertexMapping.at(predecessor));
+                }
+
+                vertexMapping[vertex] = node;
+
+                ret->setBagContent(node, mutableGraphDecomposition.bagContent(vertex));
+
+                ret->setInducedHyperedges(node, mutableGraphDecomposition.inducedHyperedges(vertex));
+            });
+
+            delete graphDecomposition;
         }
-
-        htd::vertex_t node = htd::Vertex::UNKNOWN;
-
-        std::unordered_map<htd::vertex_t, htd::vertex_t> vertexMapping;
-
-        htd::BreadthFirstGraphTraversal graphTraversal;
-
-        const htd::ConstCollection<htd::vertex_t> & vertexCollection = graphDecomposition->vertices();
-
-        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
-        // coverity[dont_call]
-        graphTraversal.traverse(*graphDecomposition, vertexCollection[std::rand() % vertexCollection.size()], [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
+        else
         {
-            HTD_UNUSED(distanceFromStartingVertex)
-
-            if (predecessor == htd::Vertex::UNKNOWN)
-            {
-                node = ret->insertRoot();
-            }
-            else
-            {
-                node = ret->addChild(vertexMapping.at(predecessor));
-            }
-
-            vertexMapping[vertex] = node;
-
-            ret->setBagContent(node, mutableGraphDecomposition.bagContent(vertex));
-
-            ret->setInducedHyperedges(node, mutableGraphDecomposition.inducedHyperedges(vertex));
-        });
-
-        delete graphDecomposition;
+            ret->insertRoot();
+        }
     }
     else
     {

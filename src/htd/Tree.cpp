@@ -39,37 +39,29 @@
 #include <utility>
 #include <vector>
 
-htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<htd::hyperedge_container>())
+htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<htd::hyperedge_container>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
 
 }
 
-htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), edges_(std::make_shared<htd::hyperedge_container>(*(original.edges_)))
+htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), edges_(std::make_shared<htd::hyperedge_container>(*(original.edges_))), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
     nodes_.reserve(original.nodes_.size());
     
     for (const auto & node : original.nodes_)
     {
-        nodes_.insert(std::make_pair(node.first, new htd::Tree::Node(*(node.second))));
+        nodes_.insert(std::make_pair(node.first, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(*(node.second)))));
     }
 }
 
-htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Vertex::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<htd::hyperedge_container>())
+htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Vertex::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<htd::hyperedge_container>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
     *this = original;
 }
 
 htd::Tree::~Tree()
 {
-    if (root_ != htd::Vertex::UNKNOWN)
-    {
-        for (auto it = nodes_.begin(); it != nodes_.end(); it++)
-        {
-            delete it->second;
-        }
 
-        nodes_.clear();
-    }
 }
 
 std::size_t htd::Tree::vertexCount(void) const
@@ -770,13 +762,8 @@ htd::vertex_t htd::Tree::insertRoot(void)
 
         next_vertex_ = root_ + 1;
 
-        for (auto it = nodes_.begin(); it != nodes_.end(); it++)
-        {
-            delete it->second;
-        }
-
         nodes_.clear();
-        nodes_.insert(std::make_pair(root_, new htd::Tree::Node(root_, htd::Vertex::UNKNOWN)));
+        nodes_.insert(std::make_pair(root_, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(root_, htd::Vertex::UNKNOWN))));
 
         vertices_.push_back(root_);
 
@@ -788,16 +775,8 @@ htd::vertex_t htd::Tree::insertRoot(void)
 
 void htd::Tree::removeRoot(void)
 {
-    if (root_ != htd::Vertex::UNKNOWN)
-    {
-        root_ = htd::Vertex::UNKNOWN;
-    
-        for (auto it = nodes_.begin(); it != nodes_.end(); it++)
-        {
-            delete it->second;
-        }
-    }
-        
+    root_ = htd::Vertex::UNKNOWN;
+
     size_ = 0;
 
     nodes_.clear();
@@ -821,7 +800,7 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
             node->children.push_back(ret);
 
-            nodes_.insert(std::make_pair(ret, new htd::Tree::Node(ret, vertex)));
+            nodes_.insert(std::make_pair(ret, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(ret, vertex))));
 
             vertices_.push_back(ret);
 
@@ -883,13 +862,13 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
         {
             ret = next_vertex_;
 
-            auto * newRootNode = new htd::Tree::Node(ret, htd::Vertex::UNKNOWN);
-
             node->parent = ret;
+
+            std::unique_ptr<htd::Tree::Node> newRootNode(new htd::Tree::Node(ret, htd::Vertex::UNKNOWN));
 
             newRootNode->children.push_back(vertex);
 
-            nodes_.insert(std::make_pair(ret, newRootNode));
+            nodes_.insert(std::make_pair(ret, std::move(newRootNode)));
 
             vertices_.push_back(ret);
 
@@ -1058,7 +1037,7 @@ bool htd::Tree::isLeafNode(htd::vertex_t vertex) const
     return ret;
 }
 
-void htd::Tree::deleteNode(htd::Tree::Node * node)
+void htd::Tree::deleteNode(const std::unique_ptr<htd::Tree::Node> & node)
 {
     if (node != nullptr)
     {
@@ -1088,8 +1067,6 @@ void htd::Tree::deleteNode(htd::Tree::Node * node)
 
                     children.erase(position);
 
-                    delete nodes_.at(nodeIdentifier);
-                        
                     nodes_.erase(nodeIdentifier);
 
                     vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), nodeIdentifier));
@@ -1099,8 +1076,6 @@ void htd::Tree::deleteNode(htd::Tree::Node * node)
         else
         {
             size_--;
-
-            delete nodes_.at(nodeIdentifier);
 
             nodes_.erase(nodeIdentifier);
 
@@ -1127,7 +1102,7 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
 
         for (const auto & node : original.nodes_)
         {
-            nodes_.insert(std::make_pair(node.first, new htd::Tree::Node(*(node.second))));
+            nodes_.insert(std::make_pair(node.first, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(*(node.second)))));
         }
 
         this->root_ = original.root_;
@@ -1193,7 +1168,7 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
 
                 std::copy(childCollection.begin(), childCollection.end(), std::back_inserter(newNode->children));
 
-                nodes_.insert(std::make_pair(vertex, newNode));
+                nodes_.insert(std::make_pair(vertex, std::unique_ptr<htd::Tree::Node>(newNode)));
 
                 if (vertex > maximumVertex)
                 {
@@ -1222,6 +1197,15 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
     }
 
     return *this;
+}
+
+void htd::Tree::handleSignal(int signal)
+{
+    HTD_UNUSED(signal);
+
+    std::cout << "DELETE TREE: " << signal << "   (HANDLER: " << signalHandlerId_ << ")" << std::endl;
+
+    removeRoot();
 }
 
 #endif /* HTD_HTD_TREE_CPP */

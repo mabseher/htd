@@ -182,11 +182,15 @@ namespace htd
 
             htd::vertex_container vertices_;
 
-            std::unordered_map<htd::id_t, Node *> nodes_;
+            std::unordered_map<htd::id_t, std::unique_ptr<Node>> nodes_;
 
             std::shared_ptr<htd::hyperedge_container> edges_;
 
-            void deleteNode(htd::Tree::Node * node);
+            htd::id_t signalHandlerId_;
+
+            void deleteNode(const std::unique_ptr<Node> & node);
+
+            void handleSignal(int signal);
     };
 }
 

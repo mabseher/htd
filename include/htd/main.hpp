@@ -153,6 +153,7 @@
 #include <htd/LabeledTree.hpp>
 #include <htd/LabeledTreeFactory.hpp>
 #include <htd/LabelingCollection.hpp>
+#include <htd/Library.hpp>
 #include <htd/LimitChildCountOperation.hpp>
 #include <htd/LimitMaximumForgottenVertexCountOperation.hpp>
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>

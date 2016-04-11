@@ -61,7 +61,7 @@ htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKN
 
 htd::Tree::~Tree()
 {
-
+    htd::Library::instance().unregisterSignalHandler(signalHandlerId_);
 }
 
 std::size_t htd::Tree::vertexCount(void) const
@@ -1202,8 +1202,6 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
 void htd::Tree::handleSignal(int signal)
 {
     HTD_UNUSED(signal);
-
-    std::cout << "DELETE TREE: " << signal << "   (HANDLER: " << signalHandlerId_ << ")" << std::endl;
 
     removeRoot();
 }

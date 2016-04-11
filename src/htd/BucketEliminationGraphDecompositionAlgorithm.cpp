@@ -290,7 +290,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             auto it = hyperedges.begin();
 
-            for (htd::index_t index = 0; index < edgeCount; ++index)
+            for (htd::index_t index = 0; index < edgeCount && !htd::Library::instance().isAborted(); ++index)
             {
                 const htd::Hyperedge & edge = *it;
 
@@ -405,8 +405,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             std::cout << std::endl << "MAX SIZE: " << maxSize << std::endl << std::endl;
             */
 
-            for (htd::vertex_t selection : ordering)
+            for (auto it = ordering.begin(); it != ordering.end() && !htd::Library::instance().isAborted(); ++it)
             {
+                htd::vertex_t selection = *it;
+
                 DEBUGGING_CODE(std::cout << std::endl << "   Processing bucket " << selection << " ..." << std::endl;)
 
                 const htd::vertex_container & bucket = buckets[selection];
@@ -495,8 +497,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             std::function<htd::vertex_t(void)> vertexCreationFunction(std::bind(&htd::IMutableGraphDecomposition::addVertex, ret));
 
-            for (htd::vertex_t vertex : ordering)
+            for (auto it = ordering.begin(); it != ordering.end() && !htd::Library::instance().isAborted(); ++it)
             {
+                htd::vertex_t vertex = *it;
+
                 auto & currentNeighborhood = neighbors[vertex];
 
                 if (superset[vertex] != vertex)
@@ -648,7 +652,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             std::stack<htd::vertex_t, std::vector<htd::vertex_t>> originStack;
 
-            for (index = 0; index < edgeCount; ++index)
+            for (index = 0; index < edgeCount && !htd::Library::instance().isAborted(); ++index)
             {
                 distributeEdge(index, it->sortedElements(), superset[edgeTarget[index]], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
 
@@ -677,8 +681,11 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             std::cout << std::endl << std::endl << std::endl;
             */
 
-            for (htd::vertex_t vertex : ret->vertices())
+            const htd::ConstCollection<htd::vertex_t> & decompositionVertices = ret->vertices();
+
+            for (auto it = decompositionVertices.begin(); it != decompositionVertices.end() && !htd::Library::instance().isAborted(); ++it)
             {
+                htd::vertex_t vertex = *it;
                 /*
                 std::cout << "SET BAG CONTENT " << vertex << " (" << result.lookupVertex(vertex) << "): ";
                 htd::print(buckets[vertex], std::cout, false);

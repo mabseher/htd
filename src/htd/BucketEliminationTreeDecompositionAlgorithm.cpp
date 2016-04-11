@@ -25,7 +25,6 @@
 #ifndef HTD_HTD_BUCKETELIMINATIONTREEDECOMPOSITIONALGORITHM_CPP
 #define	HTD_HTD_BUCKETELIMINATIONTREEDECOMPOSITIONALGORITHM_CPP
 
-
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
@@ -330,13 +329,13 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 ret->setInducedHyperedges(node, mutableGraphDecomposition.inducedHyperedges(vertex));
             });
-
-            delete graphDecomposition;
         }
         else
         {
             ret->insertRoot();
         }
+
+        delete graphDecomposition;
     }
     else
     {

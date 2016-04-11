@@ -90,7 +90,7 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
         }
     }
 
-    while (size > 0)
+    while (size > 0 && !htd::Library::instance().isAborted())
     {
         if (pool.size() == 0)
         {

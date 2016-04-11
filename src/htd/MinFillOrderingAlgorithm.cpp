@@ -127,7 +127,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
         )
     }
     
-    while (size > 0)
+    while (size > 0 && !htd::Library::instance().isAborted())
     {
         if (pool.size() == 0)
         {

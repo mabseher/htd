@@ -30,6 +30,8 @@
 #include <htd/Vertex.hpp>
 #include <htd/CompilerDetection.hpp>
 
+#include <htd/Library.hpp>
+
 #include <cstdlib>
 #include <vector>
 

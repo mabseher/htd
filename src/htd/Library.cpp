@@ -27,7 +27,7 @@
 
 #include <htd/Library.hpp>
 
-htd::Library::Library(void) : aborted_(false)
+htd::Library::Library(void) : aborted_(false), nextHandlerId_(htd::Id::FIRST), signalHandlers_()
 {
 
 }
@@ -49,14 +49,31 @@ bool htd::Library::isAborted(void)
     return aborted_;
 }
 
-void htd::Library::abort(void)
+void htd::Library::abort(int signal)
 {
     aborted_ = true;
+
+    for (const auto & signalHandler : signalHandlers_)
+    {
+        signalHandler.second(signal);
+    }
 }
 
 void htd::Library::reset(void)
 {
     aborted_ = false;
+}
+
+htd::id_t htd::Library::registerSignalHandler(const std::function<void(int)> & handler)
+{
+    signalHandlers_[nextHandlerId_] = handler;
+
+    return nextHandlerId_++;
+}
+
+void htd::Library::unregisterSignalHandler(htd::id_t handlerId)
+{
+    signalHandlers_.erase(handlerId);
 }
 
 #endif /* HTD_HTD_LIBRARY_CPP */

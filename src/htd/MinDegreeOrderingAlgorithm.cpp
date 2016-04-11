@@ -104,7 +104,7 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
         )
     }
     
-    while (size > 0)
+    while (size > 0 && !htd::Library::instance().isAborted())
     {
         if (pool.size() == 0)
         {

@@ -240,7 +240,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
     std::size_t size = graph.vertexCount();
 
-    if (size > 0)
+    if (size > 0 && !htd::Library::instance().isAborted())
     {
         htd::IOrderingAlgorithm * algorithm = htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm();
 

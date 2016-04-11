@@ -27,6 +27,10 @@
 
 #include <htd/Globals.hpp>
 
+#include <functional>
+#include <map>
+#include <memory>
+
 namespace htd
 {
     class Library
@@ -38,12 +42,20 @@ namespace htd
 
             bool isAborted(void);
 
-            void abort(void);
+            void abort(int signal);
             
             void reset(void);
+
+            htd::id_t registerSignalHandler(const std::function<void(int)> & handler);
+
+            void unregisterSignalHandler(htd::id_t handlerId);
             
         private:
             bool aborted_;
+
+            htd::id_t nextHandlerId_;
+
+            std::map<htd::id_t, std::function<void(int)>> signalHandlers_;
 
             Library(void);
 

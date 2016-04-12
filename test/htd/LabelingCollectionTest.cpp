@@ -61,6 +61,54 @@ TEST(LabelingCollectionTest, TestEmptyLabelingCollection)
     ASSERT_EQ((std::size_t)0, labelings.labelNames().size());
 
     ASSERT_EQ(0, std::distance(labelings.begin(), labelings.end()));
+
+    try
+    {
+        labelings.labelNameAtPosition(0);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+}
+
+TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
+{
+    htd::LabelingCollection labelings;
+
+    ASSERT_FALSE(labelings.isLabelingName("Label1"));
+
+    labelings.setLabeling("Label1", new htd::GraphLabeling());
+
+    ASSERT_EQ((std::size_t)1, labelings.labelCount());
+
+    ASSERT_EQ((std::size_t)1, labelings.labelNames().size());
+
+    ASSERT_EQ(1, std::distance(labelings.begin(), labelings.end()));
+
+    ASSERT_EQ((std::size_t)0, labelings.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labelings.labeling("Label1").edgeLabelCount());
+
+    ASSERT_EQ("Label1", labelings.labelNames()[0]);
+    ASSERT_EQ("Label1", labelings.labelNameAtPosition(0));
+    ASSERT_EQ("Label1", labelings.begin()->first);
+    ASSERT_EQ((std::size_t)0, labelings.begin()->second->vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labelings.begin()->second->edgeLabelCount());
+
+    ASSERT_TRUE(labelings.isLabelingName("Label1"));
+
+    try
+    {
+        labelings.labelNameAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
 }
 
 int main(int argc, char **argv)

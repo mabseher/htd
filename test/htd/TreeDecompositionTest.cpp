@@ -1315,7 +1315,29 @@ TEST(TreeDecompositionTest, CheckForgetNodeDetection)
 
     try
     {
+        td.forgottenVertexCount(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
         td.forgottenVertexCount(node121, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.forgottenVertexCount(htd::Vertex::UNKNOWN, node121);
 
         FAIL();
     }
@@ -1353,6 +1375,184 @@ TEST(TreeDecompositionTest, CheckForgetNodeDetection)
     ASSERT_TRUE(td.isRememberedVertex(node12, 2, node121));
     ASSERT_FALSE(td.isRememberedVertex(node12, 3, node121));
     ASSERT_FALSE(td.isRememberedVertex(node12, 4, node121));
+
+    try
+    {
+        td.forgottenVertices(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.forgottenVertices(htd::Vertex::UNKNOWN, node121);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    std::vector<htd::vertex_t> forgottenVertices;
+
+    td.copyForgottenVerticesTo(forgottenVertices, node12);
+
+    ASSERT_EQ((std::size_t)2, forgottenVertices.size());
+    ASSERT_EQ((htd::vertex_t)3, forgottenVertices[0]);
+    ASSERT_EQ((htd::vertex_t)4, forgottenVertices[1]);
+
+    forgottenVertices.clear();
+
+    try
+    {
+        td.copyForgottenVerticesTo(forgottenVertices, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, forgottenVertices.size());
+
+    td.copyForgottenVerticesTo(forgottenVertices, node12, node121);
+
+    ASSERT_EQ((std::size_t)2, forgottenVertices.size());
+    ASSERT_EQ((htd::vertex_t)3, forgottenVertices[0]);
+    ASSERT_EQ((htd::vertex_t)4, forgottenVertices[1]);
+
+    forgottenVertices.clear();
+
+    try
+    {
+        td.copyForgottenVerticesTo(forgottenVertices, htd::Vertex::UNKNOWN, node121);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, forgottenVertices.size());
+
+    try
+    {
+        td.copyForgottenVerticesTo(forgottenVertices, node12, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, forgottenVertices.size());
+}
+
+TEST(TreeDecompositionTest, CheckInducedHyperedges1)
+{
+    htd::TreeDecomposition td;
+
+    htd::vertex_t node1 = td.insertRoot();
+
+    ASSERT_EQ((std::size_t)0, td.inducedHyperedges(node1).size());
+
+    try
+    {
+        td.inducedHyperedges(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    htd::Hyperedge h1(1, 1, 2);
+    htd::Hyperedge h2(2, 2, 3);
+    htd::Hyperedge h3(3, 3, 3);
+
+    std::vector<htd::Hyperedge> inputEdges1 { h1, h2, h3 };
+
+    htd::FilteredHyperedgeCollection hyperedges1(inputEdges1, std::vector<htd::index_t> { 0, 1, 2 });
+    htd::FilteredHyperedgeCollection hyperedges2(inputEdges1, std::vector<htd::index_t> { 2, 1, 0 });
+    htd::FilteredHyperedgeCollection hyperedges3(inputEdges1, std::vector<htd::index_t> { 0 });
+
+    td.setInducedHyperedges(node1, hyperedges1);
+
+    ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
+
+    auto it = td.inducedHyperedges(node1).begin();
+
+    ASSERT_EQ((htd::id_t)1, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)2, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)3, it->id());
+
+    try
+    {
+        td.setInducedHyperedges(htd::Vertex::UNKNOWN, hyperedges1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
+
+    try
+    {
+        td.setInducedHyperedges(htd::Vertex::UNKNOWN, std::move(hyperedges1));
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
+
+    it = td.inducedHyperedges(node1).begin();
+
+    ASSERT_EQ((htd::id_t)1, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)2, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)3, it->id());
+
+    td.setInducedHyperedges(node1, std::move(hyperedges2));
+
+    try
+    {
+        td.inducedHyperedges(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
+
+    it = td.inducedHyperedges(node1).begin();
+
+    ASSERT_EQ((htd::id_t)3, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)2, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)1, it->id());
 }
 
 int main(int argc, char **argv)

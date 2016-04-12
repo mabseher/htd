@@ -195,6 +195,7 @@ TEST(FilteredHyperedgeCollectionTest, TestIterators)
     std::vector<htd::Hyperedge> inputEdges1 { h1, h2, h3, h4, h5 };
 
     htd::FilteredHyperedgeCollection hyperedges1(inputEdges1, std::vector<htd::index_t> { 1, 3, 3, 2, 0, 4 });
+    htd::FilteredHyperedgeCollection hyperedges2(inputEdges1, std::vector<htd::index_t> { 1, 3, 3, 2, 0, 4 });
 
     ASSERT_EQ(6, std::distance(hyperedges1.begin(), hyperedges1.end()));
 
@@ -261,6 +262,8 @@ TEST(FilteredHyperedgeCollectionTest, TestIterators)
     it--;
     --it;
 
+    auto itCopy1 = it;
+
     ASSERT_EQ((htd::id_t)2, (*it).id());
 
     ASSERT_TRUE(it == hyperedges1.begin());
@@ -268,6 +271,31 @@ TEST(FilteredHyperedgeCollectionTest, TestIterators)
 
     ASSERT_EQ(0, it - hyperedges1.begin());
     ASSERT_EQ(0, hyperedges1.begin() - it);
+
+    auto itCopy2 = std::move(it);
+
+    ASSERT_TRUE(itCopy1 == hyperedges1.begin());
+    ASSERT_FALSE(itCopy1 != hyperedges1.begin());
+
+    ASSERT_EQ(0, itCopy1 - hyperedges1.begin());
+    ASSERT_EQ(0, hyperedges1.begin() - itCopy1);
+
+    ASSERT_TRUE(itCopy2 == hyperedges1.begin());
+    ASSERT_FALSE(itCopy2 != hyperedges1.begin());
+
+    ASSERT_EQ(0, itCopy2 - hyperedges1.begin());
+    ASSERT_EQ(0, hyperedges1.begin() - itCopy2);
+
+    try
+    {
+        hyperedges1.begin() - hyperedges2.begin();
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 }
 
 int main(int argc, char **argv)

@@ -96,7 +96,7 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultDisconnectedGr
     delete decomposition;
 }
 
-TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraph)
+TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraph1)
 {
     htd::MultiHypergraph graph;
 
@@ -173,6 +173,49 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergra
 
     ASSERT_EQ((std::size_t)3, decomposition->minimumBagSize());
     ASSERT_EQ((std::size_t)3, decomposition->maximumBagSize());
+
+    delete decomposition;
+}
+
+TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultClique)
+{
+    htd::MultiHypergraph graph;
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+    htd::vertex_t vertex4 = graph.addVertex();
+    htd::vertex_t vertex5 = graph.addVertex();
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex1, vertex3);
+    graph.addEdge(vertex1, vertex4);
+    graph.addEdge(vertex1, vertex5);
+    graph.addEdge(vertex2, vertex3);
+    graph.addEdge(vertex2, vertex4);
+    graph.addEdge(vertex2, vertex5);
+    graph.addEdge(vertex3, vertex4);
+    graph.addEdge(vertex3, vertex5);
+    graph.addEdge(vertex4, vertex5);
+
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+
+    htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_EQ(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ((std::size_t)5, decomposition->minimumBagSize());
+    ASSERT_EQ((std::size_t)5, decomposition->maximumBagSize());
+
+    ASSERT_EQ(vertex1, decomposition->bagContent(1)[0]);
+    ASSERT_EQ(vertex2, decomposition->bagContent(1)[1]);
+    ASSERT_EQ(vertex3, decomposition->bagContent(1)[2]);
+    ASSERT_EQ(vertex4, decomposition->bagContent(1)[3]);
+    ASSERT_EQ(vertex5, decomposition->bagContent(1)[4]);
 
     delete decomposition;
 }

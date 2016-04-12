@@ -109,6 +109,17 @@ TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
     {
         HTD_UNUSED(error);
     }
+
+    try
+    {
+        labelings.labeling("Label2");
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 }
 
 int main(int argc, char **argv)

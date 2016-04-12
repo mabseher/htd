@@ -127,8 +127,6 @@ namespace htd
             void restrictTo(const std::vector<htd::vertex_t> & vertices);
 
         private:
-            bool written_;
-
             std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection_;
 
             std::shared_ptr<std::vector<htd::index_t>> relevantIndices_;

@@ -262,7 +262,10 @@ TEST(FilteredHyperedgeCollectionTest, TestIterators)
     it--;
     --it;
 
-    auto itCopy1 = it;
+    auto itCopy1 = hyperedges1.end();
+    auto itCopy2 = hyperedges1.end();
+
+    itCopy1 = it;
 
     ASSERT_EQ((htd::id_t)2, (*it).id());
 
@@ -272,7 +275,7 @@ TEST(FilteredHyperedgeCollectionTest, TestIterators)
     ASSERT_EQ(0, it - hyperedges1.begin());
     ASSERT_EQ(0, hyperedges1.begin() - it);
 
-    auto itCopy2 = std::move(it);
+    itCopy2 = std::move(it);
 
     ASSERT_TRUE(itCopy1 == hyperedges1.begin());
     ASSERT_FALSE(itCopy1 != hyperedges1.begin());
@@ -296,6 +299,65 @@ TEST(FilteredHyperedgeCollectionTest, TestIterators)
     {
         HTD_UNUSED(error);
     }
+}
+
+TEST(FilteredHyperedgeCollectionTest, TestRestriction)
+{
+    htd::Hyperedge h1(1, 1, 2);
+    htd::Hyperedge h2(2, 2, 3);
+    htd::Hyperedge h3(3, 4, 3);
+    htd::Hyperedge h4(4, 5, 5);
+    htd::Hyperedge h5(5, 7, 6);
+
+    std::vector<htd::Hyperedge> inputEdges1 { h1, h2, h3, h4, h5 };
+
+    htd::FilteredHyperedgeCollection hyperedges1(inputEdges1, std::vector<htd::index_t> { 0, 1, 2, 3, 4 });
+
+    htd::FilteredHyperedgeCollection hyperedges2(hyperedges1);
+
+    ASSERT_EQ((std::size_t)5, hyperedges1.size());
+
+    hyperedges1.restrictTo(std::vector<htd::vertex_t> { 1, 2, 3, 5 });
+
+    ASSERT_EQ((std::size_t)3, hyperedges1.size());
+
+    auto it = hyperedges1.begin();
+
+    ASSERT_EQ((htd::id_t)1, it->id());
+
+    ++it;
+
+    ASSERT_EQ((htd::id_t)2, it->id());
+
+    ++it;
+
+    ASSERT_EQ((htd::id_t)4, it->id());
+
+    hyperedges1.restrictTo(std::vector<htd::vertex_t> { 5 });
+
+    ASSERT_EQ((std::size_t)1, hyperedges1.size());
+
+    it = hyperedges1.begin();
+
+    ASSERT_EQ((htd::id_t)4, it->id());
+
+    hyperedges1.restrictTo(std::vector<htd::vertex_t> { 5 });
+
+    ASSERT_EQ((std::size_t)1, hyperedges1.size());
+
+    it = hyperedges1.begin();
+
+    ASSERT_EQ((htd::id_t)4, it->id());
+
+    hyperedges1.restrictTo(std::vector<htd::vertex_t> { 1, 2 });
+
+    ASSERT_EQ((std::size_t)0, hyperedges1.size());
+
+    ASSERT_EQ((std::size_t)5, hyperedges2.size());
+
+    hyperedges2.restrictTo(std::vector<htd::vertex_t> { htd::Vertex::UNKNOWN });
+
+    ASSERT_EQ((std::size_t)0, hyperedges2.size());
 }
 
 int main(int argc, char **argv)

@@ -66,14 +66,13 @@ TEST(LabeledMultiGraphTest, CheckEmptyGraph)
     ASSERT_EQ((std::size_t)0, graph.isolatedVertices().size());
 
     ASSERT_TRUE(graph.isConnected());
-
-    ASSERT_EQ((std::size_t)0, graph.labelCount());
-    ASSERT_EQ((std::size_t)0, graph.labelings().labelCount());
 }
 
-TEST(LabeledMultiGraphTest, CheckSizeInitializedGraph1)
+TEST(LabeledMultiGraphTest, CheckSize1Graph)
 {
-    htd::LabeledMultiGraph graph(1);
+    htd::LabeledMultiGraph graph;
+
+    graph.addVertex();
 
     ASSERT_EQ((std::size_t)1, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -104,51 +103,13 @@ TEST(LabeledMultiGraphTest, CheckSizeInitializedGraph1)
 
     ASSERT_TRUE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
-
-    ASSERT_EQ((std::size_t)0, graph.labelCount());
-    ASSERT_EQ((std::size_t)0, graph.labelings().labelCount());
-    ASSERT_EQ((std::size_t)0, graph.labelNames().size());
-
-    try
-    {
-        graph.labelNameAtPosition(0);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    graph.setVertexLabel("Label", 1, new htd::Label<int>(1));
-
-    ASSERT_EQ((std::size_t)1, graph.labelCount());
-    ASSERT_EQ((std::size_t)1, graph.labelings().labelCount());
-    ASSERT_EQ((std::size_t)1, graph.labelNames().size());
-    ASSERT_EQ("Label", graph.labelNames()[0]);
-    ASSERT_EQ("Label", graph.labelNameAtPosition(0));
-
-    try
-    {
-        graph.labelNameAtPosition(1);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    ASSERT_TRUE(graph.isLabeledVertex("Label", 1));
-    ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label", 1)));
-
-    ASSERT_FALSE(graph.isLabeledVertex("XYZ", 1));
-    ASSERT_FALSE(graph.isLabeledVertex("Label", htd::Vertex::UNKNOWN));
 }
 
-TEST(LabeledMultiGraphTest, CheckSizeInitializedGraph2)
+TEST(LabeledMultiGraphTest, CheckSize3Graph)
 {
-    htd::LabeledMultiGraph graph(3);
+    htd::LabeledMultiGraph graph;
+
+    graph.addVertices(3);
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -284,7 +245,14 @@ TEST(LabeledMultiGraphTest, CheckSizeInitializedGraph2)
 
 TEST(LabeledMultiGraphTest, CheckSelfLoop)
 {
-    htd::LabeledMultiGraph graph(2);
+    htd::LabeledMultiGraph graph;
+
+    graph.addVertices(2);
+
+    std::vector<htd::vertex_t> edge11 { 1, 1 };
+    std::vector<htd::vertex_t> edge12 { 1, 2 };
+    std::vector<htd::vertex_t> edge21 { 2, 1 };
+    std::vector<htd::vertex_t> edge122 { 1, 2, 2 };
 
     ASSERT_EQ((std::size_t)2, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -335,6 +303,10 @@ TEST(LabeledMultiGraphTest, CheckSelfLoop)
 
     ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
 
+    ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
+
+    ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge11)));
+
     graph.removeEdge(edgeId1);
 
     ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
@@ -348,23 +320,42 @@ TEST(LabeledMultiGraphTest, CheckSelfLoop)
     ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)2).size());
 
     ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0).id());
+    ASSERT_EQ((htd::id_t)3, graph.hyperedgeAtPosition((htd::index_t)1).id());
     ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
     ASSERT_EQ((htd::id_t)3, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)2).id());
+    ASSERT_EQ((htd::id_t)3, graph.hyperedgeAtPosition((htd::index_t)1, (htd::vertex_t)1).id());
 
+    ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
+    ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2 }));
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 2, 1 }));
+
+    ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge11)));
+    ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge12)));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge21)));
+
+    graph.removeEdge(edgeId2);
     graph.removeEdge(edgeId3);
 
-    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
-    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)0, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
 
     ASSERT_FALSE(graph.isEdge(edgeId1));
-    ASSERT_TRUE(graph.isEdge(edgeId2));
+    ASSERT_FALSE(graph.isEdge(edgeId2));
     ASSERT_FALSE(graph.isEdge(edgeId3));
 
-    ASSERT_EQ((std::size_t)1, graph.neighborCount((htd::vertex_t)1));
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2 }));
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 2, 1 }));
+
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge11)));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge12)));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge21)));
+
+    ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)1));
     ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)2));
 
-    ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
+    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
@@ -374,11 +365,17 @@ TEST(LabeledMultiGraphTest, CheckSelfLoop)
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)2));
+
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2, 2 }));
+
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge122)));
 }
 
 TEST(LabeledMultiGraphTest, CheckGraphModifications)
 {
-    htd::LabeledMultiGraph graph(3);
+    htd::LabeledMultiGraph graph;
+
+    graph.addVertices(3);
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -445,11 +442,33 @@ TEST(LabeledMultiGraphTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    graph.addVertices(2);
+
+    ASSERT_EQ((std::size_t)4, graph.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph.edgeCount());
+
+    ASSERT_EQ((htd::vertex_t)1, graph.vertexAtPosition(0));
+    ASSERT_EQ((htd::vertex_t)2, graph.vertexAtPosition(1));
+    ASSERT_EQ((htd::vertex_t)4, graph.vertexAtPosition(2));
+    ASSERT_EQ((htd::vertex_t)5, graph.vertexAtPosition(3));
+
+    graph.addEdge(4, 5);
+
+    ASSERT_EQ((std::size_t)1, graph.edgeCount());
 }
 
 TEST(LabeledMultiGraphTest, CheckCopyConstructors)
 {
-    htd::LabeledMultiGraph graph1(2);
+    htd::Hyperedge h1(1, 1, 2);
+
+    htd::FilteredHyperedgeCollection hyperedges1(std::vector<htd::Hyperedge> { h1 }, std::vector<htd::index_t> { 0 });
+
+    htd::LabeledMultiGraph graph1;
+
+    graph1.addVertices(2);
+
+    graph1.setVertexLabel("Label", 1, new htd::Label<int>(1));
 
     ASSERT_EQ((std::size_t)2, graph1.vertexCount());
     ASSERT_EQ((std::size_t)0, graph1.edgeCount());
@@ -460,6 +479,8 @@ TEST(LabeledMultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)0, graph2.edgeCount());
 
     htd::id_t edgeId1 = graph2.addEdge((htd::vertex_t)1, (htd::vertex_t)2);
+
+    graph2.setEdgeLabel("Label", edgeId1, new htd::Label<int>(123));
 
     ASSERT_EQ((std::size_t)2, graph2.vertexCount());
     ASSERT_EQ((std::size_t)1, graph2.edgeCount());
@@ -476,19 +497,81 @@ TEST(LabeledMultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
     ASSERT_FALSE(graph3.isEdge(edgeId1));
 
+    ASSERT_TRUE(graph3.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph3.vertexLabel("Label", 1)));
+
     graph3 = graph2;
 
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)1, graph3.edgeCount());
     ASSERT_TRUE(graph3.isEdge(edgeId1));
 
+    ASSERT_TRUE(graph3.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph3.vertexLabel("Label", 1)));
+
+    ASSERT_TRUE(graph3.isLabeledEdge("Label", edgeId1));
+    ASSERT_EQ(123, htd::accessLabel<int>(graph3.edgeLabel("Label", 1)));
+
     const htd::IMultiGraph & graphReference1 = graph1;
+
+    const htd::ILabeledMultiGraph & labeledMultiGraphReference1 = graph1;
 
     graph3 = graphReference1;
 
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
     ASSERT_FALSE(graph3.isEdge(edgeId1));
+
+    ASSERT_FALSE(graph3.isLabeledVertex("Label", 1));
+    ASSERT_FALSE(graph3.isLabeledEdge("Label", edgeId1));
+
+    htd::LabeledMultiGraph graph4(graphReference1);
+
+    ASSERT_EQ((std::size_t)2, graph4.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph4.edgeCount());
+    ASSERT_FALSE(graph4.isEdge(edgeId1));
+
+    ASSERT_FALSE(graph4.isLabeledVertex("Label", 1));
+    ASSERT_FALSE(graph4.isLabeledEdge("Label", edgeId1));
+    graph3 = labeledMultiGraphReference1;
+
+    ASSERT_EQ((std::size_t)2, graph3.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph3.edgeCount());
+    ASSERT_FALSE(graph3.isEdge(edgeId1));
+
+    ASSERT_TRUE(graph3.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph3.vertexLabel("Label", 1)));
+    ASSERT_FALSE(graph3.isLabeledEdge("Label", edgeId1));
+
+    htd::LabeledMultiGraph graph5(labeledMultiGraphReference1);
+
+    ASSERT_EQ((std::size_t)2, graph5.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph5.edgeCount());
+    ASSERT_FALSE(graph5.isEdge(edgeId1));
+
+    ASSERT_TRUE(graph5.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph5.vertexLabel("Label", 1)));
+    ASSERT_FALSE(graph5.isLabeledEdge("Label", edgeId1));
+
+    graph3 = labeledMultiGraphReference1;
+
+    ASSERT_EQ((std::size_t)2, graph3.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph3.edgeCount());
+    ASSERT_FALSE(graph3.isEdge(edgeId1));
+
+    ASSERT_TRUE(graph3.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph3.vertexLabel("Label", 1)));
+    ASSERT_FALSE(graph3.isLabeledEdge("Label", edgeId1));
+
+    htd::LabeledMultiGraph graph6(labeledMultiGraphReference1);
+
+    ASSERT_EQ((std::size_t)2, graph6.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph6.edgeCount());
+    ASSERT_FALSE(graph6.isEdge(edgeId1));
+
+    ASSERT_TRUE(graph6.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph6.vertexLabel("Label", 1)));
+    ASSERT_FALSE(graph6.isLabeledEdge("Label", edgeId1));
 }
 
 int main(int argc, char **argv)

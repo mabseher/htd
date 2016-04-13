@@ -120,6 +120,89 @@ TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
     {
         HTD_UNUSED(error);
     }
+
+    const htd::ILabelingCollection & reference1 = labelings;
+
+    htd::LabelingCollection labelings2(labelings);
+    htd::LabelingCollection labelings3(reference1);
+
+    ASSERT_EQ((std::size_t)0, reference1.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, reference1.labeling("Label1").edgeLabelCount());
+
+    ASSERT_EQ((std::size_t)0, reference1["Label1"].vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, reference1["Label1"].edgeLabelCount());
+
+    try
+    {
+        reference1.labeling("Label2");
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, labelings2.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labelings2.labeling("Label1").edgeLabelCount());
+
+    ASSERT_EQ((std::size_t)0, labelings3.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labelings3.labeling("Label1").edgeLabelCount());
+
+    labelings2.labeling("Label1").setVertexLabel(1, new htd::Label<int>(123));
+    labelings2.labeling("Label1").setEdgeLabel(3, new htd::Label<int>(456));
+
+    ASSERT_EQ((std::size_t)1, labelings2.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)1, labelings2.labeling("Label1").edgeLabelCount());
+
+    ASSERT_EQ((std::size_t)0, labelings3.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labelings3.labeling("Label1").edgeLabelCount());
+
+    ASSERT_EQ(123, htd::accessLabel<int>(labelings2.labeling("Label1").vertexLabel(1)));
+    ASSERT_EQ(456, htd::accessLabel<int>(labelings2.labeling("Label1").edgeLabel(3)));
+
+    labelings2.setLabeling("Label1", new htd::GraphLabeling());
+
+    ASSERT_EQ((std::size_t)0, labelings2.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labelings2.labeling("Label1").edgeLabelCount());
+
+    ASSERT_EQ((std::size_t)0, labelings3.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labelings3.labeling("Label1").edgeLabelCount());
+
+    labelings3.removeLabeling("Label1");
+
+    ASSERT_EQ((std::size_t)0, labelings3.labelCount());
+
+    labelings2.labeling("Label1").setVertexLabel(1, new htd::Label<int>(123));
+    labelings2.labeling("Label1").setEdgeLabel(3, new htd::Label<int>(456));
+
+    labelings2.removeVertexLabels(htd::Vertex::UNKNOWN);
+    labelings2.removeEdgeLabels(htd::Id::UNKNOWN);
+
+    ASSERT_EQ((std::size_t)1, labelings2.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)1, labelings2.labeling("Label1").edgeLabelCount());
+
+    ASSERT_EQ((std::size_t)1, labelings2["Label1"].vertexLabelCount());
+    ASSERT_EQ((std::size_t)1, labelings2["Label1"].edgeLabelCount());
+
+    labelings2.removeVertexLabels(1);
+
+    ASSERT_EQ((std::size_t)0, labelings2.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)1, labelings2.labeling("Label1").edgeLabelCount());
+
+    ASSERT_EQ((std::size_t)0, labelings2["Label1"].vertexLabelCount());
+    ASSERT_EQ((std::size_t)1, labelings2["Label1"].edgeLabelCount());
+
+    labelings2.removeEdgeLabels(3);
+
+    ASSERT_EQ((std::size_t)0, labelings2.labeling("Label1").vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, labelings2.labeling("Label1").edgeLabelCount());
+
+    ASSERT_EQ("Label1", reference1.labelNames()[0]);
+    ASSERT_EQ("Label1", reference1.labelNameAtPosition(0));
+    ASSERT_EQ("Label1", reference1.begin()->first);
+    ASSERT_EQ((std::size_t)0, reference1.begin()->second->vertexLabelCount());
+    ASSERT_EQ((std::size_t)0, reference1.begin()->second->edgeLabelCount());
 }
 
 int main(int argc, char **argv)

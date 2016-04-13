@@ -103,6 +103,68 @@ TEST(GraphDecompositionTest, CheckSize1Graph)
 
     ASSERT_TRUE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+
+    graph.setBagContent(1, std::vector<htd::vertex_t> { 3, 3, 2, 2, 1, 1 });
+
+    std::vector<htd::vertex_t> bagContent1 { 4, 5, 6 };
+    std::vector<htd::vertex_t> bagContent2 { 7, 8, 9 };
+
+    try
+    {
+        graph.setBagContent(htd::Vertex::UNKNOWN, bagContent1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
+    ASSERT_EQ((htd::vertex_t)1, graph.bagContent(1)[0]);
+    ASSERT_EQ((htd::vertex_t)2, graph.bagContent(1)[1]);
+    ASSERT_EQ((htd::vertex_t)3, graph.bagContent(1)[2]);
+
+    try
+    {
+        graph.setBagContent(htd::Vertex::UNKNOWN, htd::ConstCollection<htd::vertex_t>::getInstance(bagContent2));
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
+    ASSERT_EQ((htd::vertex_t)1, graph.bagContent(1)[0]);
+    ASSERT_EQ((htd::vertex_t)2, graph.bagContent(1)[1]);
+    ASSERT_EQ((htd::vertex_t)3, graph.bagContent(1)[2]);
+
+    graph.setBagContent(1, htd::ConstCollection<htd::vertex_t>::getInstance(bagContent2));
+
+    ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
+    ASSERT_EQ((htd::vertex_t)7, graph.bagContent(1)[0]);
+    ASSERT_EQ((htd::vertex_t)8, graph.bagContent(1)[1]);
+    ASSERT_EQ((htd::vertex_t)9, graph.bagContent(1)[2]);
+
+    graph.setBagContent(1, std::move(bagContent1));
+
+    try
+    {
+        graph.setBagContent(htd::Vertex::UNKNOWN, std::move(bagContent2));
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
+    ASSERT_EQ((htd::vertex_t)4, graph.bagContent(1)[0]);
+    ASSERT_EQ((htd::vertex_t)5, graph.bagContent(1)[1]);
+    ASSERT_EQ((htd::vertex_t)6, graph.bagContent(1)[2]);
 }
 
 TEST(GraphDecompositionTest, CheckSize3Graph)
@@ -589,6 +651,8 @@ TEST(GraphDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)1, graph6.inducedHyperedges(1).size());
 }
 
+
+
 TEST(GraphDecompositionTest, CheckInducedHyperedges1)
 {
     htd::GraphDecomposition gd;
@@ -686,6 +750,34 @@ TEST(GraphDecompositionTest, CheckInducedHyperedges1)
     ASSERT_EQ((htd::id_t)2, it->id());
     ++it;
     ASSERT_EQ((htd::id_t)1, it->id());
+}
+
+TEST(GraphDecompositionTest, CheckConversionFunctions)
+{
+    htd::MultiGraph graph(2);
+
+    htd::LabeledMultiGraph labeledGraph(2);
+
+    graph.addEdge(1, 2);
+    graph.addEdge(1, 2);
+
+    labeledGraph.addEdge(1, 2);
+    labeledGraph.addEdge(1, 2);
+    labeledGraph.addEdge(2, 1);
+    labeledGraph.addEdge(2, 1);
+
+    htd::GraphDecomposition gd1;
+    htd::GraphDecomposition gd2;
+
+    gd1 = graph;
+    gd2 = labeledGraph;
+
+    ASSERT_EQ((std::size_t)1, gd1.edgeCount());
+    ASSERT_EQ((std::size_t)2, gd2.edgeCount());
+
+    ASSERT_EQ((htd::id_t)1, gd1.hyperedgeAtPosition(0).id());
+    ASSERT_EQ((htd::id_t)1, gd2.hyperedgeAtPosition(0).id());
+    ASSERT_EQ((htd::id_t)3, gd2.hyperedgeAtPosition(1).id());
 }
 
 int main(int argc, char **argv)

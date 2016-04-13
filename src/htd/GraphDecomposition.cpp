@@ -140,7 +140,13 @@ void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const std::vec
         throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, const std::vector<htd::vertex_t> &)");
     }
 
-    bagContent_[vertex] = content;
+    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
+
+    bag = content;
+
+    std::sort(bag.begin(), bag.end());
+
+    bag.erase(std::unique(bag.begin(), bag.end()), bag.end());
 }
 
 void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd::vertex_t> && content)
@@ -150,7 +156,13 @@ void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, std::vector<ht
         throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, std::vector<htd::vertex_t> &&)");
     }
 
-    bagContent_[vertex] = std::move(content);
+    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
+
+    bag = std::move(content);
+
+    std::sort(bag.begin(), bag.end());
+
+    bag.erase(std::unique(bag.begin(), bag.end()), bag.end());
 }
 
 void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
@@ -160,7 +172,13 @@ void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const htd::Con
         throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, const htd::ConstCollection<htd::vertex_t> &)");
     }
 
-    bagContent_[vertex] = std::vector<htd::vertex_t>(content.begin(), content.end());
+    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
+
+    bag = std::vector<htd::vertex_t>(content.begin(), content.end());
+
+    std::sort(bag.begin(), bag.end());
+
+    bag.erase(std::unique(bag.begin(), bag.end()), bag.end());
 }
 
 const htd::FilteredHyperedgeCollection & htd::GraphDecomposition::inducedHyperedges(htd::vertex_t vertex) const

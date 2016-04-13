@@ -399,6 +399,28 @@ htd::Hypergraph & htd::Hypergraph::operator=(const htd::IMultiHypergraph & origi
         delete base_;
 
         base_ = htd::MultiHypergraphFactory::instance().getMultiHypergraph(original);
+
+        htd::id_t lastId = htd::Id::UNKNOWN;
+
+        std::vector<htd::id_t> removableIds;
+
+        for (const htd::Hyperedge & hyperedge : base_->hyperedges())
+        {
+            lastId = hyperedge.id();
+
+            for (htd::id_t id : base_->associatedEdgeIds(hyperedge.elements()))
+            {
+                if (id > lastId)
+                {
+                    removableIds.push_back(id);
+                }
+            }
+        }
+
+        for (htd::id_t id : removableIds)
+        {
+            base_->removeEdge(id);
+        }
     }
 
     return *this;

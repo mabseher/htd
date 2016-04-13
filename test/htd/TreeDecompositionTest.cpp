@@ -1163,6 +1163,39 @@ TEST(TreeDecompositionTest, CheckNodeTypeDetection)
 
     try
     {
+        td3.introducedVertexCount(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td3.introducedVertexCount(htd::Vertex::UNKNOWN, root3);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td3.introducedVertexCount(root3, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
         td3.introducedVertices(htd::Vertex::UNKNOWN);
 
         FAIL();
@@ -1277,6 +1310,217 @@ TEST(TreeDecompositionTest, CheckNodeTypeDetection)
     }
 }
 
+TEST(TreeDecompositionTest, CheckIntroduceNodeDetection)
+{
+    htd::TreeDecomposition td;
+
+    htd::vertex_t node1 = td.insertRoot();
+
+    htd::vertex_t node11 = td.addChild(node1);
+    htd::vertex_t node12 = td.addChild(node1);
+
+    htd::vertex_t node121 = td.addChild(node12);
+
+    td.setBagContent(node1, std::vector<htd::vertex_t> { 1, 2 });
+    td.setBagContent(node11, std::vector<htd::vertex_t> { 1 });
+    td.setBagContent(node12, std::vector<htd::vertex_t> { 2 });
+    td.setBagContent(node121, std::vector<htd::vertex_t> { });
+
+    ASSERT_EQ((std::size_t)2, td.introduceNodeCount());
+    ASSERT_EQ(node11, td.introduceNodes()[0]);
+    ASSERT_EQ(node11, td.introduceNodeAtPosition(0));
+    ASSERT_EQ(node12, td.introduceNodes()[1]);
+    ASSERT_EQ(node12, td.introduceNodeAtPosition(1));
+
+    ASSERT_EQ((std::size_t)0, td.introducedVertexCount(node1));
+    ASSERT_EQ((std::size_t)1, td.introducedVertexCount(node11));
+    ASSERT_EQ((std::size_t)1, td.introducedVertexCount(node12));
+    ASSERT_EQ((std::size_t)0, td.introducedVertexCount(node121));
+
+    ASSERT_EQ((std::size_t)1, td.introducedVertexCount(node1, node11));
+    ASSERT_EQ((std::size_t)1, td.introducedVertexCount(node1, node12));
+    ASSERT_EQ((std::size_t)1, td.introducedVertexCount(node12, node121));
+
+    try
+    {
+        td.introducedVertexCount(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.introducedVertexCount(node121, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.introducedVertexCount(htd::Vertex::UNKNOWN, node121);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((htd::vertex_t)1, td.introducedVertices(node11)[0]);
+    ASSERT_EQ((htd::vertex_t)1, td.introducedVertexAtPosition(node11, 0));
+    ASSERT_EQ((htd::vertex_t)2, td.introducedVertices(node12)[0]);
+    ASSERT_EQ((htd::vertex_t)2, td.introducedVertexAtPosition(node12, 0));
+
+    ASSERT_EQ((htd::vertex_t)2, td.introducedVertices(node12, node121)[0]);
+    ASSERT_EQ((htd::vertex_t)2, td.introducedVertexAtPosition(node12, 0, node121));
+
+    try
+    {
+        td.introducedVertexAtPosition(node12, 2);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.introducedVertexAtPosition(node12, 2, node121);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.introducedVertexAtPosition(htd::Vertex::UNKNOWN, 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.introducedVertexAtPosition(htd::Vertex::UNKNOWN, 0, node12);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.introducedVertexAtPosition(node12, 0, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_TRUE(td.isIntroducedVertex(node12, 2));
+    ASSERT_TRUE(td.isIntroducedVertex(node12, 2, node121));
+
+    ASSERT_FALSE(td.isRememberedVertex(node12, 2));
+    ASSERT_FALSE(td.isRememberedVertex(node12, 2, node121));
+
+    try
+    {
+        td.introducedVertices(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.introducedVertices(htd::Vertex::UNKNOWN, node121);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    std::vector<htd::vertex_t> introducedVertices;
+
+    td.copyIntroducedVerticesTo(introducedVertices, node12);
+
+    ASSERT_EQ((std::size_t)1, introducedVertices.size());
+    ASSERT_EQ((htd::vertex_t)2, introducedVertices[0]);
+
+    introducedVertices.clear();
+
+    try
+    {
+        td.copyIntroducedVerticesTo(introducedVertices, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, introducedVertices.size());
+
+    td.copyIntroducedVerticesTo(introducedVertices, node12, node121);
+
+    ASSERT_EQ((std::size_t)1, introducedVertices.size());
+    ASSERT_EQ((htd::vertex_t)2, introducedVertices[0]);
+
+    introducedVertices.clear();
+
+    try
+    {
+        td.copyIntroducedVerticesTo(introducedVertices, htd::Vertex::UNKNOWN, node121);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, introducedVertices.size());
+
+    try
+    {
+        td.copyIntroducedVerticesTo(introducedVertices, node12, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ((std::size_t)0, introducedVertices.size());
+}
+
 TEST(TreeDecompositionTest, CheckForgetNodeDetection)
 {
     htd::TreeDecomposition td;
@@ -1355,6 +1599,61 @@ TEST(TreeDecompositionTest, CheckForgetNodeDetection)
     ASSERT_EQ((htd::vertex_t)3, td.forgottenVertexAtPosition(node12, 0, node121));
     ASSERT_EQ((htd::vertex_t)4, td.forgottenVertices(node12, node121)[1]);
     ASSERT_EQ((htd::vertex_t)4, td.forgottenVertexAtPosition(node12, 1, node121));
+
+    try
+    {
+        td.forgottenVertexAtPosition(node12, 2);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.forgottenVertexAtPosition(node12, 2, node121);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.forgottenVertexAtPosition(htd::Vertex::UNKNOWN, 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.forgottenVertexAtPosition(htd::Vertex::UNKNOWN, 0, node12);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.forgottenVertexAtPosition(node12, 0, htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 
     ASSERT_FALSE(td.isForgottenVertex(node12, 1));
     ASSERT_FALSE(td.isForgottenVertex(node12, 2));

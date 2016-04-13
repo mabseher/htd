@@ -244,10 +244,12 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
     {
         htd::IOrderingAlgorithm * algorithm = htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm();
 
+        /*
         if (algorithm == nullptr)
         {
             throw std::logic_error("htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
         }
+        */
 
         std::vector<htd::vertex_t> ordering;
 
@@ -715,50 +717,19 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
-    switch (vertices.size())
+    std::size_t minimum = (std::size_t)-1;
+
+    std::size_t currentIndex = (std::size_t)-1;
+
+    for (htd::vertex_t vertex : vertices)
     {
-        case 0:
+        currentIndex = vertexIndices.at(vertex);
+
+        if (currentIndex < minimum)
         {
-            throw std::out_of_range("htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::unordered_map<htd::vertex_t, htd::index_t> &) const");
-        }
-        case 1:
-        {
-            ret = vertices[0];
+            ret = vertex;
 
-            break;
-        }
-        case 2:
-        {
-            if (vertexIndices.at(vertices[0]) <= vertexIndices.at(vertices[1]))
-            {
-                ret = vertices[0];
-            }
-            else
-            {
-                ret = vertices[1];
-            }
-
-            break;
-        }
-        default:
-        {
-            std::size_t minimum = (std::size_t)-1;
-
-            std::size_t currentIndex = (std::size_t)-1;
-
-            for (htd::vertex_t vertex : vertices)
-            {
-                currentIndex = vertexIndices.at(vertex);
-
-                if (currentIndex < minimum)
-                {
-                    ret = vertex;
-
-                    minimum = currentIndex;
-                }
-            }
-
-            break;
+            minimum = currentIndex;
         }
     }
 
@@ -769,66 +740,44 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVerte
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
-    switch (vertices.size())
+    if (vertices.size() == 2)
     {
-        case 0:
+        if (vertices[0] == excludedVertex)
         {
-            throw std::out_of_range("htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::unordered_map<htd::vertex_t, htd::index_t> &, htd::vertex_t) const");
+            ret = vertices[1];
         }
-        case 1:
+        else if (vertices[1] == excludedVertex)
         {
-            if (vertices[0] == excludedVertex)
-            {
-                throw std::out_of_range("htd::BucketEliminationGraphDecompositionAlgorithm::getMinimumVertex(const htd::Collection<htd::vertex_t> &, const std::unordered_map<htd::vertex_t, htd::index_t> &, htd::vertex_t) const");
-            }
-
             ret = vertices[0];
-
-            break;
         }
-        case 2:
+        else if (vertexIndices.at(vertices[0]) <= vertexIndices.at(vertices[1]))
         {
-            if (vertices[0] == excludedVertex)
-            {
-                ret = vertices[1];
-            }
-            else if (vertices[1] == excludedVertex)
-            {
-                ret = vertices[0];
-            }
-            else if (vertexIndices.at(vertices[0]) <= vertexIndices.at(vertices[1]))
-            {
-                ret = vertices[0];
-            }
-            else
-            {
-                ret = vertices[1];
-            }
-
-            break;
+            ret = vertices[0];
         }
-        default:
+        else
         {
-            std::size_t minimum = (std::size_t)-1;
+            ret = vertices[1];
+        }
+    }
+    else
+    {
+        std::size_t minimum = (std::size_t)-1;
 
-            std::size_t currentIndex = (std::size_t)-1;
+        std::size_t currentIndex = (std::size_t)-1;
 
-            for (htd::vertex_t vertex : vertices)
+        for (htd::vertex_t vertex : vertices)
+        {
+            if (vertex != excludedVertex)
             {
-                if (vertex != excludedVertex)
+                currentIndex = vertexIndices.at(vertex);
+
+                if (currentIndex < minimum)
                 {
-                    currentIndex = vertexIndices.at(vertex);
+                    ret = vertex;
 
-                    if (currentIndex < minimum)
-                    {
-                        ret = vertex;
-
-                        minimum = currentIndex;
-                    }
+                    minimum = currentIndex;
                 }
             }
-
-            break;
         }
     }
 

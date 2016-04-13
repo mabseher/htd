@@ -89,9 +89,31 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph1)
     ASSERT_EQ((htd::vertex_t)1, graph.vertexAtPosition((htd::index_t)0));
     ASSERT_TRUE(graph.isVertex((htd::vertex_t)1));
 
+    try
+    {
+        graph.vertexAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
     ASSERT_EQ((htd::vertex_t)1, isolatedVertices[0]);
     ASSERT_EQ((htd::vertex_t)1, graph.isolatedVertexAtPosition((htd::index_t)0));
     ASSERT_TRUE(graph.isIsolatedVertex((htd::vertex_t)1));
+
+    try
+    {
+        graph.isolatedVertexAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
 
     ASSERT_EQ((std::size_t)0, graph.edgeCount((htd::vertex_t)1));
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)1).size());
@@ -143,6 +165,17 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_EQ((std::size_t)0, graph.edgeCount((htd::vertex_t)1));
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)1).size());
 
+    try
+    {
+        graph.edgeCount(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
     ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)1));
     ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)2));
     ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)3));
@@ -155,6 +188,23 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)3));
+
+    try
+    {
+        graph.neighbors(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    std::vector<htd::vertex_t> neighbors1;
+
+    graph.copyNeighborsTo(neighbors1, 1);
+
+    ASSERT_EQ((std::size_t)0, neighbors1.size());
 
     ASSERT_FALSE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
@@ -226,6 +276,11 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)3));
+
+    ASSERT_EQ((std::size_t)1, graph.isolatedVertices().size());
+    ASSERT_EQ((htd::vertex_t)3, graph.isolatedVertices()[0]);
+    ASSERT_EQ((htd::vertex_t)3, graph.isolatedVertexAtPosition(0));
+    ASSERT_TRUE(graph.isIsolatedVertex(3));
 
     ASSERT_FALSE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
@@ -322,8 +377,52 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
     ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
 
+    try
+    {
+        graph.hyperedges(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
     ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0).id());
     ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
+
+    try
+    {
+        graph.hyperedge(htd::Id::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        graph.hyperedgeAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        graph.hyperedgeAtPosition(1, 1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
 
     ASSERT_TRUE(graph.isEdge(edgeId1));
 
@@ -764,6 +863,25 @@ TEST(MultiHypergraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
     ASSERT_FALSE(graph3.isEdge(edgeId1));
+
+    htd::MultiHypergraph graph4(graphReference1);
+
+    ASSERT_EQ((std::size_t)2, graph4.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph4.edgeCount());
+    ASSERT_FALSE(graph4.isEdge(edgeId1));
+
+    graph4.removeVertex(1);
+
+    const htd::IMultiHypergraph & graphReference2 = graph4;
+
+    htd::MultiHypergraph graph5;
+
+    graph5 = graphReference2;
+
+    ASSERT_EQ((std::size_t)1, graph5.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph5.edgeCount());
+
+    ASSERT_EQ((htd::vertex_t)2, graph5.vertexAtPosition(0));
 }
 
 int main(int argc, char **argv)

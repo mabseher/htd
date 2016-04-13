@@ -83,7 +83,7 @@ htd::MultiHypergraph::MultiHypergraph(const htd::IMultiHypergraph & original)
       vertices_(),
       selfLoops_(),
       deletions_(),
-      edges_(),
+      edges_(std::make_shared<htd::hyperedge_container>()),
       neighborhood_()
 {
     *this = original;
@@ -96,7 +96,7 @@ htd::MultiHypergraph::~MultiHypergraph()
 
 std::size_t htd::MultiHypergraph::vertexCount(void) const
 {
-    return size_ - deletions_.size();
+    return size_;
 }
 
 std::size_t htd::MultiHypergraph::edgeCount(void) const
@@ -120,7 +120,7 @@ std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t vertex) const
     }
     else
     {
-        throw std::out_of_range("std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t) const");
+        throw std::logic_error("std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t) const");
     }
 
     return ret;
@@ -698,6 +698,8 @@ void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)
         neighborhood_[vertex - htd::Vertex::FIRST].clear();
 
         vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
+
+        --size_;
     }
 }
 

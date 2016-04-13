@@ -457,9 +457,18 @@ TEST(GraphDecompositionTest, CheckGraphModifications)
 
 TEST(GraphDecompositionTest, CheckCopyConstructors)
 {
+    htd::Hyperedge h1(1, 1, 2);
+
+    htd::FilteredHyperedgeCollection hyperedges1(std::vector<htd::Hyperedge> { h1 }, std::vector<htd::index_t> { 0 });
+
     htd::GraphDecomposition graph1;
 
     graph1.addVertices(2);
+
+    graph1.setVertexLabel("Label", 1, new htd::Label<int>(1));
+
+    graph1.setBagContent(1, std::vector<htd::vertex_t> { 5 });
+    graph1.setInducedHyperedges(1, hyperedges1);
 
     ASSERT_EQ((std::size_t)2, graph1.vertexCount());
     ASSERT_EQ((std::size_t)0, graph1.edgeCount());
@@ -470,6 +479,8 @@ TEST(GraphDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)0, graph2.edgeCount());
 
     htd::id_t edgeId1 = graph2.addEdge((htd::vertex_t)1, (htd::vertex_t)2);
+
+    graph2.setEdgeLabel("Label", edgeId1, new htd::Label<int>(123));
 
     ASSERT_EQ((std::size_t)2, graph2.vertexCount());
     ASSERT_EQ((std::size_t)1, graph2.edgeCount());
@@ -486,13 +497,26 @@ TEST(GraphDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
     ASSERT_FALSE(graph3.isEdge(edgeId1));
 
+    ASSERT_TRUE(graph3.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph3.vertexLabel("Label", 1)));
+
     graph3 = graph2;
 
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)1, graph3.edgeCount());
     ASSERT_TRUE(graph3.isEdge(edgeId1));
 
+    ASSERT_TRUE(graph3.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph3.vertexLabel("Label", 1)));
+
+    ASSERT_TRUE(graph3.isLabeledEdge("Label", edgeId1));
+    ASSERT_EQ(123, htd::accessLabel<int>(graph3.edgeLabel("Label", 1)));
+
     const htd::IGraph & graphReference1 = graph1;
+
+    const htd::ILabeledGraph & labeledGraphReference1 = graph1;
+
+    const htd::IGraphDecomposition & graphDecompositionReference1 = graph1;
 
     graph3 = graphReference1;
 
@@ -500,11 +524,69 @@ TEST(GraphDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
     ASSERT_FALSE(graph3.isEdge(edgeId1));
 
+    ASSERT_FALSE(graph3.isLabeledVertex("Label", 1));
+    ASSERT_FALSE(graph3.isLabeledEdge("Label", edgeId1));
+    ASSERT_EQ((std::size_t)0, graph3.bagContent(1).size());
+    ASSERT_EQ((std::size_t)0, graph3.inducedHyperedges(1).size());
+
     htd::GraphDecomposition graph4(graphReference1);
 
     ASSERT_EQ((std::size_t)2, graph4.vertexCount());
     ASSERT_EQ((std::size_t)0, graph4.edgeCount());
     ASSERT_FALSE(graph4.isEdge(edgeId1));
+
+    ASSERT_FALSE(graph4.isLabeledVertex("Label", 1));
+    ASSERT_FALSE(graph4.isLabeledEdge("Label", edgeId1));
+    ASSERT_EQ((std::size_t)0, graph4.bagContent(1).size());
+    graph3 = labeledGraphReference1;
+
+    ASSERT_EQ((std::size_t)2, graph3.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph3.edgeCount());
+    ASSERT_FALSE(graph3.isEdge(edgeId1));
+
+    ASSERT_TRUE(graph3.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph3.vertexLabel("Label", 1)));
+    ASSERT_FALSE(graph3.isLabeledEdge("Label", edgeId1));
+    ASSERT_EQ((std::size_t)0, graph3.bagContent(1).size());
+    ASSERT_EQ((std::size_t)0, graph3.inducedHyperedges(1).size());
+
+    htd::GraphDecomposition graph5(labeledGraphReference1);
+
+    ASSERT_EQ((std::size_t)2, graph5.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph5.edgeCount());
+    ASSERT_FALSE(graph5.isEdge(edgeId1));
+
+    ASSERT_TRUE(graph5.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph5.vertexLabel("Label", 1)));
+    ASSERT_FALSE(graph5.isLabeledEdge("Label", edgeId1));
+    ASSERT_EQ((std::size_t)0, graph5.bagContent(1).size());
+    ASSERT_EQ((std::size_t)0, graph5.inducedHyperedges(1).size());
+
+    graph3 = graphDecompositionReference1;
+
+    ASSERT_EQ((std::size_t)2, graph3.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph3.edgeCount());
+    ASSERT_FALSE(graph3.isEdge(edgeId1));
+
+    ASSERT_TRUE(graph3.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph3.vertexLabel("Label", 1)));
+    ASSERT_FALSE(graph3.isLabeledEdge("Label", edgeId1));
+    ASSERT_EQ((std::size_t)1, graph3.bagContent(1).size());
+    ASSERT_EQ((htd::vertex_t)5, graph3.bagContent(1)[0]);
+    ASSERT_EQ((std::size_t)1, graph3.inducedHyperedges(1).size());
+
+    htd::GraphDecomposition graph6(graphDecompositionReference1);
+
+    ASSERT_EQ((std::size_t)2, graph6.vertexCount());
+    ASSERT_EQ((std::size_t)0, graph6.edgeCount());
+    ASSERT_FALSE(graph6.isEdge(edgeId1));
+
+    ASSERT_TRUE(graph6.isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph6.vertexLabel("Label", 1)));
+    ASSERT_FALSE(graph6.isLabeledEdge("Label", edgeId1));
+    ASSERT_EQ((std::size_t)1, graph6.bagContent(1).size());
+    ASSERT_EQ((htd::vertex_t)5, graph6.bagContent(1)[0]);
+    ASSERT_EQ((std::size_t)1, graph6.inducedHyperedges(1).size());
 }
 
 TEST(GraphDecompositionTest, CheckInducedHyperedges1)

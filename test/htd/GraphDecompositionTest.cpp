@@ -77,6 +77,19 @@ TEST(GraphDecompositionTest, CheckSize1Graph)
     ASSERT_EQ((std::size_t)1, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
 
+    ASSERT_EQ((std::size_t)0, graph.bagSize(1));
+
+    try
+    {
+        graph.bagSize(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
     htd::ConstCollection<htd::vertex_t> vertices = graph.vertices();
 
     ASSERT_EQ((std::size_t)1, vertices.size());
@@ -165,6 +178,24 @@ TEST(GraphDecompositionTest, CheckSize1Graph)
     ASSERT_EQ((htd::vertex_t)4, graph.bagContent(1)[0]);
     ASSERT_EQ((htd::vertex_t)5, graph.bagContent(1)[1]);
     ASSERT_EQ((htd::vertex_t)6, graph.bagContent(1)[2]);
+
+    try
+    {
+        graph.bagContent(htd::Vertex::UNKNOWN);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    std::vector<htd::vertex_t> bagContent3 { 9 };
+
+    graph.setBagContent(1, bagContent3);
+
+    ASSERT_EQ((std::size_t)1, graph.bagContent(1).size());
+    ASSERT_EQ((htd::vertex_t)9, graph.bagContent(1)[0]);
 }
 
 TEST(GraphDecompositionTest, CheckSize3Graph)
@@ -650,8 +681,6 @@ TEST(GraphDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((htd::vertex_t)5, graph6.bagContent(1)[0]);
     ASSERT_EQ((std::size_t)1, graph6.inducedHyperedges(1).size());
 }
-
-
 
 TEST(GraphDecompositionTest, CheckInducedHyperedges1)
 {

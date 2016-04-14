@@ -2059,6 +2059,384 @@ TEST(TreeDecompositionTest, CheckInducedHyperedges1)
     ASSERT_EQ((htd::id_t)1, it->id());
 }
 
+TEST(TreeDecompositionTest, TestVertexLabelModifications)
+{
+    htd::TreeDecomposition td;
+
+    td.insertRoot();
+    td.addChild(1);
+    td.addChild(1);
+    td.addChild(2);
+
+    td.setVertexLabel("Label", 1, new htd::Label<int>(1));
+    td.setVertexLabel("Label", 2, new htd::Label<int>(2));
+    td.setVertexLabel("Label", 3, new htd::Label<int>(3));
+
+    ASSERT_EQ((std::size_t)1, td.labelCount());
+    ASSERT_EQ((std::size_t)1, td.labelNames().size());
+    ASSERT_EQ("Label", td.labelNames()[0]);
+    ASSERT_EQ("Label", td.labelNameAtPosition(0));
+
+    try
+    {
+        td.labelNameAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_FALSE(td.isLabeledVertex("Label", 0));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.vertexLabel("Label", 2)));
+    ASSERT_EQ(3, htd::accessLabel<int>(td.vertexLabel("Label", 3)));
+
+    htd::ILabel * newLabel = new htd::Label<int>(33);
+
+    td.setVertexLabel("Label", 3, newLabel);
+
+    ASSERT_FALSE(td.isLabeledVertex("Label", 0));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(td.vertexLabel("Label", 3)));
+
+    td.setVertexLabel("Label", 3, newLabel);
+
+    ASSERT_FALSE(td.isLabeledVertex("Label", 0));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(td.vertexLabel("Label", 3)));
+
+    try
+    {
+        td.swapVertexLabels(0, 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.swapVertexLabels(1, 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    td.swapVertexLabels(1, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(td.vertexLabel("Label", 3)));
+
+    td.swapVertexLabels(1, 3);
+
+    ASSERT_EQ(33, htd::accessLabel<int>(td.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.vertexLabel("Label", 2)));
+    ASSERT_EQ(1, htd::accessLabel<int>(td.vertexLabel("Label", 3)));
+
+    td.swapVertexLabels(3, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(td.vertexLabel("Label", 3)));
+
+    htd::ILabel * exportedLabel = td.transferVertexLabel("Label", 1);
+
+    ASSERT_FALSE(td.isLabeledVertex("Label", 0));
+    ASSERT_FALSE(td.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(td.isLabeledVertex("Label", 3));
+
+    try
+    {
+        td.transferVertexLabel("Label", 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.transferVertexLabel("Label3", 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.vertexLabel("Label", 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(2, htd::accessLabel<int>(td.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(td.vertexLabel("Label", 3)));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(*exportedLabel));
+
+    td.setVertexLabel("Label2", 2, new htd::Label<int>(1));
+    td.setVertexLabel("Label2", 3, new htd::Label<int>(2));
+
+    td.swapVertexLabel("Label", 2, 3);
+
+    try
+    {
+        td.swapVertexLabel("UnknownLabel", 2, 3);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(33, htd::accessLabel<int>(td.vertexLabel("Label", 2)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.vertexLabel("Label", 3)));
+    ASSERT_EQ(1, htd::accessLabel<int>(td.vertexLabel("Label2", 2)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.vertexLabel("Label2", 3)));
+
+    td.removeVertexLabel("Label", 2);
+    td.removeVertexLabel("Label", htd::Vertex::UNKNOWN);
+    td.removeVertexLabel("Label3", 2);
+    td.removeVertexLabel("Label3", htd::Vertex::UNKNOWN);
+
+    try
+    {
+        td.vertexLabel("Label", 2);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.vertexLabel("Label2", 2)));
+
+    delete exportedLabel;
+}
+
+TEST(TreeDecompositionTest, TestEdgeLabelModifications)
+{
+    htd::TreeDecomposition td;
+
+    td.insertRoot();
+    td.addChild(1);
+    td.addChild(1);
+    td.addChild(2);
+
+    td.setEdgeLabel("Label", 1, new htd::Label<int>(1));
+    td.setEdgeLabel("Label", 2, new htd::Label<int>(2));
+    td.setEdgeLabel("Label", 3, new htd::Label<int>(3));
+
+    ASSERT_EQ((std::size_t)1, td.labelCount());
+    ASSERT_EQ((std::size_t)1, td.labelNames().size());
+    ASSERT_EQ("Label", td.labelNames()[0]);
+    ASSERT_EQ("Label", td.labelNameAtPosition(0));
+
+    try
+    {
+        td.labelNameAtPosition(1);
+
+        FAIL();
+    }
+    catch (const std::out_of_range & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_FALSE(td.isLabeledEdge("Label", 0));
+    ASSERT_TRUE(td.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(td.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(td.isLabeledEdge("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.edgeLabel("Label", 2)));
+    ASSERT_EQ(3, htd::accessLabel<int>(td.edgeLabel("Label", 3)));
+
+    htd::ILabel * newLabel = new htd::Label<int>(33);
+
+    td.setEdgeLabel("Label", 3, newLabel);
+
+    ASSERT_FALSE(td.isLabeledEdge("Label", 0));
+    ASSERT_TRUE(td.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(td.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(td.isLabeledEdge("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(td.edgeLabel("Label", 3)));
+
+    td.setEdgeLabel("Label", 3, newLabel);
+
+    ASSERT_TRUE(td.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(td.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(td.isLabeledEdge("Label", 3));
+    ASSERT_FALSE(td.isLabeledEdge("Label", 0));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(td.edgeLabel("Label", 3)));
+
+    try
+    {
+        td.swapEdgeLabels(0, 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.swapEdgeLabels(1, 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    td.swapEdgeLabels(1, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(td.edgeLabel("Label", 3)));
+
+    td.swapEdgeLabels(1, 3);
+
+    ASSERT_EQ(33, htd::accessLabel<int>(td.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.edgeLabel("Label", 2)));
+    ASSERT_EQ(1, htd::accessLabel<int>(td.edgeLabel("Label", 3)));
+
+    td.swapEdgeLabels(3, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(td.edgeLabel("Label", 3)));
+
+    htd::ILabel * exportedLabel = td.transferEdgeLabel("Label", 1);
+
+    ASSERT_FALSE(td.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(td.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(td.isLabeledEdge("Label", 3));
+    ASSERT_FALSE(td.isLabeledEdge("Label", 0));
+
+    try
+    {
+        td.transferEdgeLabel("Label", 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.transferEdgeLabel("Label3", 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        td.edgeLabel("Label", 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(2, htd::accessLabel<int>(td.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(td.edgeLabel("Label", 3)));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(*exportedLabel));
+
+    td.setEdgeLabel("Label2", 2, new htd::Label<int>(1));
+    td.setEdgeLabel("Label2", 3, new htd::Label<int>(2));
+
+    td.swapEdgeLabel("Label", 2, 3);
+
+    try
+    {
+        td.swapEdgeLabel("UnknownLabel", 2, 3);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(33, htd::accessLabel<int>(td.edgeLabel("Label", 2)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.edgeLabel("Label", 3)));
+    ASSERT_EQ(1, htd::accessLabel<int>(td.edgeLabel("Label2", 2)));
+    ASSERT_EQ(2, htd::accessLabel<int>(td.edgeLabel("Label2", 3)));
+
+    td.removeEdgeLabel("Label", 2);
+    td.removeEdgeLabel("Label", htd::Vertex::UNKNOWN);
+    td.removeEdgeLabel("Label3", 2);
+    td.removeEdgeLabel("Label3", htd::Vertex::UNKNOWN);
+
+    try
+    {
+        td.edgeLabel("Label", 2);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(1, htd::accessLabel<int>(td.edgeLabel("Label2", 2)));
+
+    delete exportedLabel;
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

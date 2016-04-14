@@ -70,9 +70,7 @@ TEST(LabeledGraphTest, CheckEmptyGraph)
 
 TEST(LabeledGraphTest, CheckSize1Graph)
 {
-    htd::LabeledGraph graph;
-
-    graph.addVertex();
+    htd::LabeledGraph graph(1);
 
     ASSERT_EQ((std::size_t)1, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -569,6 +567,18 @@ TEST(LabeledGraphTest, CheckCopyConstructors)
     ASSERT_TRUE(graph6.isLabeledVertex("Label", 1));
     ASSERT_EQ(1, htd::accessLabel<int>(graph6.vertexLabel("Label", 1)));
     ASSERT_FALSE(graph6.isLabeledEdge("Label", edgeId1));
+
+    htd::LabeledGraph * clonedGraph = graph6.clone();
+
+    ASSERT_EQ((std::size_t)2, clonedGraph->vertexCount());
+    ASSERT_EQ((std::size_t)0, clonedGraph->edgeCount());
+    ASSERT_FALSE(clonedGraph->isEdge(edgeId1));
+
+    ASSERT_TRUE(clonedGraph->isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(clonedGraph->vertexLabel("Label", 1)));
+    ASSERT_FALSE(clonedGraph->isLabeledEdge("Label", edgeId1));
+
+    delete clonedGraph;
 }
 
 TEST(LabeledGraphTest, CheckConversionFunctions)
@@ -748,6 +758,17 @@ TEST(LabeledGraphTest, TestVertexLabelModifications)
 
     graph.swapVertexLabel("Label", 2, 3);
 
+    try
+    {
+        graph.swapVertexLabel("UnknownLabel", 2, 3);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
     ASSERT_EQ(33, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
     ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
     ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label2", 2)));
@@ -926,6 +947,17 @@ TEST(LabeledGraphTest, TestEdgeLabelModifications)
     graph.setEdgeLabel("Label2", 3, new htd::Label<int>(2));
 
     graph.swapEdgeLabel("Label", 2, 3);
+
+    try
+    {
+        graph.swapEdgeLabel("UnknownLabel", 2, 3);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 
     ASSERT_EQ(33, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
     ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));

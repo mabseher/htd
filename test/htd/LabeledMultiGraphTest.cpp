@@ -83,9 +83,7 @@ TEST(LabeledMultiGraphTest, CheckEmptyGraph)
 
 TEST(LabeledMultiGraphTest, CheckSize1Graph)
 {
-    htd::LabeledMultiGraph graph;
-
-    graph.addVertex();
+    htd::LabeledMultiGraph graph(1);
 
     ASSERT_EQ((std::size_t)1, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -585,6 +583,18 @@ TEST(LabeledMultiGraphTest, CheckCopyConstructors)
     ASSERT_TRUE(graph6.isLabeledVertex("Label", 1));
     ASSERT_EQ(1, htd::accessLabel<int>(graph6.vertexLabel("Label", 1)));
     ASSERT_FALSE(graph6.isLabeledEdge("Label", edgeId1));
+
+    htd::LabeledMultiGraph * clonedGraph = graph6.clone();
+
+    ASSERT_EQ((std::size_t)2, clonedGraph->vertexCount());
+    ASSERT_EQ((std::size_t)0, clonedGraph->edgeCount());
+    ASSERT_FALSE(clonedGraph->isEdge(edgeId1));
+
+    ASSERT_TRUE(clonedGraph->isLabeledVertex("Label", 1));
+    ASSERT_EQ(1, htd::accessLabel<int>(clonedGraph->vertexLabel("Label", 1)));
+    ASSERT_FALSE(clonedGraph->isLabeledEdge("Label", edgeId1));
+
+    delete clonedGraph;
 }
 
 TEST(LabeledMultiGraphTest, TestVertexLabelModifications)
@@ -735,6 +745,17 @@ TEST(LabeledMultiGraphTest, TestVertexLabelModifications)
     graph.setVertexLabel("Label2", 3, new htd::Label<int>(2));
 
     graph.swapVertexLabel("Label", 2, 3);
+
+    try
+    {
+        graph.swapVertexLabel("UnknownLabel", 2, 3);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 
     ASSERT_EQ(33, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
     ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
@@ -914,6 +935,17 @@ TEST(LabeledMultiGraphTest, TestEdgeLabelModifications)
     graph.setEdgeLabel("Label2", 3, new htd::Label<int>(2));
 
     graph.swapEdgeLabel("Label", 2, 3);
+
+    try
+    {
+        graph.swapEdgeLabel("UnknownLabel", 2, 3);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
 
     ASSERT_EQ(33, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
     ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));

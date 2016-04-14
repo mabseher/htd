@@ -574,6 +574,250 @@ TEST(LabeledMultiGraphTest, CheckCopyConstructors)
     ASSERT_FALSE(graph6.isLabeledEdge("Label", edgeId1));
 }
 
+TEST(LabeledMultiGraphTest, TestVertexLabelModifications)
+{
+    htd::LabeledMultiGraph graph;
+
+    graph.addVertices(3);
+
+    graph.setVertexLabel("Label", 1, new htd::Label<int>(1));
+    graph.setVertexLabel("Label", 2, new htd::Label<int>(2));
+    graph.setVertexLabel("Label", 3, new htd::Label<int>(3));
+
+    ASSERT_FALSE(graph.isLabeledVertex("Label", 0));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
+    ASSERT_EQ(3, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
+
+    htd::ILabel * newLabel = new htd::Label<int>(33);
+
+    graph.setVertexLabel("Label", 3, newLabel);
+
+    ASSERT_FALSE(graph.isLabeledVertex("Label", 0));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
+
+    graph.setVertexLabel("Label", 3, newLabel);
+
+    ASSERT_FALSE(graph.isLabeledVertex("Label", 0));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
+
+    try
+    {
+        graph.swapVertexLabels(0, 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        graph.swapVertexLabels(1, 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    graph.swapVertexLabels(1, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
+
+    graph.swapVertexLabels(1, 3);
+
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
+
+    graph.swapVertexLabels(3, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
+
+    htd::ILabel * exportedLabel = graph.transferVertexLabel("Label", 1);
+
+    ASSERT_FALSE(graph.isLabeledVertex("Label", 0));
+    ASSERT_FALSE(graph.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(graph.isLabeledVertex("Label", 3));
+
+    try
+    {
+        graph.transferVertexLabel("Label", 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        graph.vertexLabel("Label", 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(*exportedLabel));
+
+    delete exportedLabel;
+}
+
+TEST(LabeledMultiGraphTest, TestEdgeLabelModifications)
+{
+    htd::LabeledMultiGraph graph;
+
+    graph.addVertices(3);
+
+    graph.addEdge(1, 1);
+    graph.addEdge(2, 2);
+    graph.addEdge(3, 3);
+
+    graph.setEdgeLabel("Label", 1, new htd::Label<int>(1));
+    graph.setEdgeLabel("Label", 2, new htd::Label<int>(2));
+    graph.setEdgeLabel("Label", 3, new htd::Label<int>(3));
+
+    ASSERT_FALSE(graph.isLabeledEdge("Label", 0));
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
+    ASSERT_EQ(3, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));
+
+    htd::ILabel * newLabel = new htd::Label<int>(33);
+
+    graph.setEdgeLabel("Label", 3, newLabel);
+
+    ASSERT_FALSE(graph.isLabeledEdge("Label", 0));
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));
+
+    graph.setEdgeLabel("Label", 3, newLabel);
+
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 3));
+    ASSERT_FALSE(graph.isLabeledEdge("Label", 0));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));
+
+    try
+    {
+        graph.swapEdgeLabels(0, 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        graph.swapEdgeLabels(1, 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    graph.swapEdgeLabels(1, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));
+
+    graph.swapEdgeLabels(1, 3);
+
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));
+
+    graph.swapEdgeLabels(3, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(graph.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));
+
+    htd::ILabel * exportedLabel = graph.transferEdgeLabel("Label", 1);
+
+    ASSERT_FALSE(graph.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(graph.isLabeledEdge("Label", 3));
+    ASSERT_FALSE(graph.isLabeledEdge("Label", 0));
+
+    try
+    {
+        graph.transferEdgeLabel("Label", 0);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    try
+    {
+        graph.edgeLabel("Label", 1);
+
+        FAIL();
+    }
+    catch (const std::logic_error & error)
+    {
+        HTD_UNUSED(error);
+    }
+
+    ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(*exportedLabel));
+
+    delete exportedLabel;
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

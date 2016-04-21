@@ -91,88 +91,39 @@ bool htd::DirectedMultiGraph::isEdge(htd::id_t edgeId) const
     return base_->isEdge(edgeId);
 }
 
-bool htd::DirectedMultiGraph::isEdge(const std::vector<htd::vertex_t> & elements) const
-{
-    return isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
-}
-
 bool htd::DirectedMultiGraph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
     return base_->isEdge(vertex1, vertex2);
 }
 
+bool htd::DirectedMultiGraph::isEdge(const std::vector<htd::vertex_t> & elements) const
+{
+    return base_->isEdge(elements);
+}
+
 bool htd::DirectedMultiGraph::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
-    bool ret = false;
-
-    if (elements.size() == 2)
-    {
-        ret = base_->isEdge(elements);
-    }
-
-    return ret;
+    return base_->isEdge(elements);
 }
 
 htd::ConstCollection<htd::id_t> htd::DirectedMultiGraph::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    htd::VectorAdapter<htd::id_t> ret;
-
-    auto & result = ret.container();
-
-    for (const htd::Hyperedge & edge : hyperedges())
-    {
-        if (edge[0] == vertex1 && edge[1] == vertex2)
-        {
-            result.push_back(edge.id());
-        }
-    }
-
-    return htd::ConstCollection<htd::id_t>::getInstance(ret);
+    return base_->associatedEdgeIds(vertex1, vertex2);
 }
 
 htd::ConstCollection<htd::id_t> htd::DirectedMultiGraph::associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const
 {
-    return associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
+    return base_->associatedEdgeIds(elements);
 }
 
 htd::ConstCollection<htd::id_t> htd::DirectedMultiGraph::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
 {
-    htd::VectorAdapter<htd::id_t> ret;
-
-    if (elements.size() == 2)
-    {
-        auto & result = ret.container();
-
-        for (const htd::Hyperedge & edge : hyperedges())
-        {
-            if (std::equal(edge.begin(), edge.end(), elements.begin()))
-            {
-                result.push_back(edge.id());
-            }
-        }
-    }
-
-    return htd::ConstCollection<htd::id_t>::getInstance(ret);
+    return base_->associatedEdgeIds(elements);
 }
 
 htd::ConstCollection<htd::id_t> htd::DirectedMultiGraph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
-    htd::VectorAdapter<htd::id_t> ret;
-
-    if (elements.size() == 2)
-    {
-        auto & result = ret.container();
-
-        for (const htd::Hyperedge & edge : hyperedges())
-        {
-            if (std::equal(edge.begin(), edge.end(), elements.begin()))
-            {
-                result.push_back(edge.id());
-            }
-        }
-    }
-
-    return htd::ConstCollection<htd::id_t>::getInstance(ret);
+    return base_->associatedEdgeIds(elements);
 }
 
 htd::vertex_t htd::DirectedMultiGraph::vertexAtPosition(htd::index_t index) const

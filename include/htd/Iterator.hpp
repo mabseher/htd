@@ -141,18 +141,15 @@ namespace htd
             {
                 bool ret = false;
 
-                const Iterator<T> * o = dynamic_cast<const Iterator<T> *>(&rhs);
+                const Iterator<T> * o = reinterpret_cast<const Iterator<T> *>(&rhs);
 
-                if (o != nullptr)
+                if (baseIterator_ == nullptr)
                 {
-                    if (baseIterator_ == nullptr)
-                    {
-                        ret = o->baseIterator_ == nullptr;
-                    }
-                    else if (o->baseIterator_ != nullptr)
-                    {
-                        ret = *baseIterator_ == *(o->baseIterator_ );
-                    }
+                    ret = o->baseIterator_ == nullptr;
+                }
+                else if (o->baseIterator_ != nullptr)
+                {
+                    ret = *baseIterator_ == *(o->baseIterator_ );
                 }
 
                 return ret;
@@ -178,18 +175,15 @@ namespace htd
             {
                 bool ret = false;
 
-                const Iterator<T> * o = dynamic_cast<const Iterator<T> *>(&rhs);
+                const Iterator<T> * o = reinterpret_cast<const Iterator<T> *>(&rhs);
 
-                if (o != nullptr)
+                if (baseIterator_ == nullptr)
                 {
-                    if (baseIterator_ == nullptr)
-                    {
-                        ret = o->baseIterator_ != nullptr;
-                    }
-                    else if (o->baseIterator_ != nullptr)
-                    {
-                        ret = *baseIterator_ != *(o->baseIterator_ );
-                    }
+                    ret = o->baseIterator_ != nullptr;
+                }
+                else if (o->baseIterator_ != nullptr)
+                {
+                    ret = *baseIterator_ != *(o->baseIterator_ );
                 }
 
                 return ret;

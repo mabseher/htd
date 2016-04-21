@@ -145,7 +145,7 @@ bool htd::MultiHypergraph::isEdge(htd::id_t edgeId) const
 
 bool htd::MultiHypergraph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    return isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(htd::vertex_container { vertex1, vertex2 }));
+    return isNeighbor(vertex1, vertex2) && isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(htd::vertex_container { vertex1, vertex2 }));
 }
 
 bool htd::MultiHypergraph::isEdge(const std::vector<htd::vertex_t> & elements) const
@@ -169,13 +169,16 @@ htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(htd::ver
 {
     htd::VectorAdapter<htd::id_t> ret;
 
-    auto & result = ret.container();
-
-    for (const htd::Hyperedge & edge : hyperedges())
+    if (isNeighbor(vertex1, vertex2))
     {
-        if (edge.size() == 2 && edge[0] == vertex1 && edge[1] == vertex2)
+        auto & result = ret.container();
+
+        for (const htd::Hyperedge & edge : hyperedges())
         {
-            result.push_back(edge.id());
+            if (edge.size() == 2 && edge[0] == vertex1 && edge[1] == vertex2)
+            {
+                result.push_back(edge.id());
+            }
         }
     }
 
@@ -239,44 +242,19 @@ bool htd::MultiHypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighb
     {
         if (vertex != neighbor)
         {
-            for (auto it = edges_->begin(); it != edges_->end();)
-            {
-                const std::vector<htd::vertex_t> & elements = it->sortedElements();
+            const std::vector<htd::vertex_t> & currentNeighborhood = neighborhood_.at(vertex - htd::Vertex::FIRST);
 
-                if (std::binary_search(elements.begin(), elements.end(), vertex))
-                {
-                    if (std::binary_search(elements.begin(), elements.end(), neighbor))
-                    {
-                        ret = true;
-
-                        it = edges_->end();
-                    }
-                    else
-                    {
-                        it++;
-                    }
-                }
-                else
-                {
-                    it++;
-                }
-            }
+            ret = std::binary_search(currentNeighborhood.begin(), currentNeighborhood.end(), neighbor);
         }
         else
         {
-            for (auto it = edges_->begin(); it != edges_->end();)
+            for (auto it = edges_->begin(); !ret && it != edges_->end(); ++it)
             {
                 const htd::Hyperedge & edge = *it;
 
                 if (std::count_if(edge.begin(), edge.end(), [&](htd::vertex_t element) { return element == vertex; }) >= 2)
                 {
                     ret = true;
-
-                    it = edges_->end();
-                }
-                else
-                {
-                    it++;
                 }
             }
         }

@@ -612,7 +612,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     for (htd::vertex_t neighbor : currentNeighborhood)
                     {
-                        if (superset[neighbor] == neighbor)
+                        if (neighbor > vertex && superset[neighbor] == neighbor)
                         {
                             ret->addEdge(graphNaming.insertVertex(vertex, vertexCreationFunction).first,
                                          graphNaming.insertVertex(neighbor, vertexCreationFunction).first);

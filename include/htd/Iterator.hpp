@@ -36,7 +36,7 @@
 namespace htd
 {
     template <typename T>
-    class Iterator : public virtual htd::IteratorBase<T>
+    class Iterator : public htd::IteratorBase<T>
     {
         public:
             typedef std::ptrdiff_t difference_type;
@@ -141,7 +141,7 @@ namespace htd
             {
                 bool ret = false;
 
-                const Iterator<T> * o = reinterpret_cast<const Iterator<T> *>(&rhs);
+                const Iterator<T> * o = static_cast<const Iterator<T> *>(&rhs);
 
                 if (baseIterator_ == nullptr)
                 {
@@ -175,7 +175,7 @@ namespace htd
             {
                 bool ret = false;
 
-                const Iterator<T> * o = reinterpret_cast<const Iterator<T> *>(&rhs);
+                const Iterator<T> * o = static_cast<const Iterator<T> *>(&rhs);
 
                 if (baseIterator_ == nullptr)
                 {

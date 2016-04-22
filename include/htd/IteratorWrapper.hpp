@@ -35,7 +35,7 @@
 namespace htd
 {
     template <typename Iter, typename T = typename Iter::value_type>
-    class IteratorWrapper : public std::iterator<std::forward_iterator_tag, T>, public virtual htd::IteratorBase<T>
+    class IteratorWrapper : public std::iterator<std::forward_iterator_tag, T>, public htd::IteratorBase<T>
     {
         public:
             IteratorWrapper(Iter baseIterator) : baseIterator_(baseIterator)
@@ -83,7 +83,7 @@ namespace htd
 
             bool operator==(const htd::IteratorBase<T> & rhs) const HTD_OVERRIDE
             {
-                return baseIterator_ == reinterpret_cast<const IteratorWrapper<Iter, T> *>(&rhs)->baseIterator_;
+                return baseIterator_ == static_cast<const IteratorWrapper<Iter, T> *>(&rhs)->baseIterator_;
             }
 
             bool operator==(const IteratorWrapper<Iter, T> & rhs) const
@@ -93,7 +93,7 @@ namespace htd
 
             bool operator!=(const htd::IteratorBase<T> & rhs) const HTD_OVERRIDE
             {
-                return baseIterator_ != reinterpret_cast<const IteratorWrapper<Iter, T> *>(&rhs)->baseIterator_;
+                return baseIterator_ != static_cast<const IteratorWrapper<Iter, T> *>(&rhs)->baseIterator_;
             }
 
             bool operator!=(const IteratorWrapper<Iter, T> & rhs) const

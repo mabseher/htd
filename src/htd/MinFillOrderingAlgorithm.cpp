@@ -58,10 +58,9 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
     std::size_t size = graph.vertexCount();
 
     std::size_t minFill = (std::size_t)-1;
+    std::size_t minDegree = (std::size_t)-1;
 
-    std::unordered_set<htd::vertex_t> pool(size);
-
-    std::vector<htd::vertex_t> minDegreePool;
+    std::vector<htd::vertex_t> pool(size);
 
     std::unordered_set<htd::vertex_t> vertices(graph.vertices().begin(), graph.vertices().end());
 
@@ -100,21 +99,35 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
     {
         auto & currentNeighborhood = neighborhood.at(vertex);
         
-        std::size_t tmp = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
-        
-        if (tmp <= minFill)
+        std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
+
+        if (currentFillValue <= minFill)
         {
-            if (tmp < minFill)
+            std::size_t currentVertexDegree = neighborhood.at(vertex).size() - 1;
+
+            if (currentFillValue < minFill)
             {
-                minFill = tmp;
+                minFill = currentFillValue;
+
+                minDegree = currentVertexDegree;
 
                 pool.clear();
             }
-            
-            pool.insert(vertex);
+
+            if (currentVertexDegree <= minDegree)
+            {
+                if (currentVertexDegree < minDegree)
+                {
+                    minDegree = currentVertexDegree;
+
+                    pool.clear();
+                }
+
+                pool.push_back(vertex);
+            }
         }
-        
-        requiredFillAmount[vertex] = tmp;
+
+        requiredFillAmount[vertex] = currentFillValue;
 
         DEBUGGING_CODE_LEVEL2(
         std::cout << "Vertex " << vertex << ":" << std::endl;
@@ -132,57 +145,48 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
         if (pool.size() == 0)
         {
             minFill = (std::size_t)-1;
-    
+
+            minDegree = (std::size_t)-1;
+
             for (htd::vertex_t vertex : vertices)
             {
-                std::size_t tmp = requiredFillAmount.at(vertex);
+                std::size_t currentFillValue = requiredFillAmount.at(vertex);
 
-                if (tmp <= minFill)
+                if (currentFillValue <= minFill)
                 {
-                    if (tmp < minFill)
+                    std::size_t currentVertexDegree = neighborhood.at(vertex).size() - 1;
+
+                    if (currentFillValue < minFill)
                     {
-                        minFill = tmp;
+                        minFill = currentFillValue;
+
+                        minDegree = currentVertexDegree;
 
                         pool.clear();
                     }
 
-                    pool.insert(vertex);
+                    if (currentVertexDegree <= minDegree)
+                    {
+                        if (currentVertexDegree < minDegree)
+                        {
+                            minDegree = currentVertexDegree;
+
+                            pool.clear();
+                        }
+
+                        pool.push_back(vertex);
+                    }
                 } 
-            }
-        }
-        
-        DEBUGGING_CODE_LEVEL2(
-        std::cout << "POOL (FILL=" << min << "): ";
-        htd::print(pool, false);
-        std::cout << std::endl;
-        )
-
-        std::size_t minDegree = (std::size_t)-1;
-        
-        for (htd::vertex_t vertex : pool)
-        {
-            std::size_t currentDegree = neighborhood.at(vertex).size() - 1;
-            
-            if (currentDegree <= minDegree)
-            {
-                if (currentDegree < minDegree)
-                {
-                    minDegreePool.clear();
-
-                    minDegree = currentDegree;
-                }
-                
-                minDegreePool.push_back(vertex);
             }
         }
 
         /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
         // coverity[dont_call]
-        htd::vertex_t selectedVertex = minDegreePool[std::rand() % minDegreePool.size()];
+        htd::vertex_t selectedVertex = pool[std::rand() % pool.size()];
 
         auto & selectedNeighborhood = neighborhood.at(selectedVertex);
         
-        pool.erase(selectedVertex);
+        pool.erase(std::find(pool.begin(), pool.end(), selectedVertex), pool.end());
         
         updateStatus.at(selectedVertex) = 4;
         
@@ -341,14 +345,28 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                                 if (tmp <= minFill)
                                 {
+                                    std::size_t currentVertexDegree = currentNeighborhood.size() - 1;
+
                                     if (tmp < minFill)
                                     {
                                         minFill = tmp;
 
+                                        minDegree = currentVertexDegree;
+
                                         pool.clear();
                                     }
 
-                                    pool.insert(vertex);
+                                    if (currentVertexDegree <= minDegree)
+                                    {
+                                        if (currentVertexDegree < minDegree)
+                                        {
+                                            minDegree = currentVertexDegree;
+
+                                            pool.clear();
+                                        }
+
+                                        pool.push_back(vertex);
+                                    }
                                 }
                             }
                             else
@@ -369,16 +387,30 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                                 if (updateStatus.at(vertex) == 0)
                                 {
+                                    std::size_t currentVertexDegree = currentNeighborhood.size() - 1;
+
                                     if (tmp <= minFill)
                                     {
                                         if (tmp < minFill)
                                         {
                                             minFill = tmp;
 
+                                            minDegree = currentVertexDegree;
+
                                             pool.clear();
                                         }
 
-                                        pool.insert(vertex);
+                                        if (currentVertexDegree <= minDegree)
+                                        {
+                                            if (currentVertexDegree < minDegree)
+                                            {
+                                                minDegree = currentVertexDegree;
+
+                                                pool.clear();
+                                            }
+
+                                            pool.push_back(vertex);
+                                        }
                                     }
                                 }
                             }
@@ -388,16 +420,30 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                             tmp = 0;
 
                             //TODO
-                            updateStatus.at(vertex) = 0;
+                            updateStatus[vertex] = 0;
+
+                            std::size_t currentVertexDegree = currentNeighborhood.size() - 1;
 
                             if (tmp < minFill)
                             {
                                 minFill = tmp;
 
+                                minDegree = currentVertexDegree;
+
                                 pool.clear();
                             }
 
-                            pool.insert(vertex);
+                            if (currentVertexDegree <= minDegree)
+                            {
+                                if (currentVertexDegree < minDegree)
+                                {
+                                    minDegree = currentVertexDegree;
+
+                                    pool.clear();
+                                }
+
+                                pool.push_back(vertex);
+                            }
                         }
 
                         requiredFillAmount.at(vertex) = tmp;
@@ -486,28 +532,56 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                         if (tmp <= minFill)
                         {
+                            std::size_t currentVertexDegree = neighborhood.at(vertex).size() - 1;
+
                             if (tmp < minFill)
                             {
                                 minFill = tmp;
 
+                                minDegree = currentVertexDegree;
+
                                 pool.clear();
                             }
 
-                            pool.insert(vertex);
+                            if (currentVertexDegree <= minDegree)
+                            {
+                                if (currentVertexDegree < minDegree)
+                                {
+                                    minDegree = currentVertexDegree;
+
+                                    pool.clear();
+                                }
+
+                                pool.push_back(vertex);
+                            }
                         }
                     }
                     else
                     {    
                         tmp = 0;
 
+                        std::size_t currentVertexDegree = neighborhood.at(vertex).size() - 1;
+
                         if (tmp < minFill)
                         {
                             minFill = tmp;
 
+                            minDegree = currentVertexDegree;
+
                             pool.clear();
                         }
 
-                        pool.insert(vertex);
+                        if (currentVertexDegree <= minDegree)
+                        {
+                            if (currentVertexDegree < minDegree)
+                            {
+                                minDegree = currentVertexDegree;
+
+                                pool.clear();
+                            }
+
+                            pool.push_back(vertex);
+                        }
                     }
 
                     requiredFillAmount.at(vertex) = tmp;

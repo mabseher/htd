@@ -249,18 +249,6 @@ void htd::Graph::removeVertex(htd::vertex_t vertex)
 
 htd::id_t htd::Graph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (!isVertex(vertex1) || !isVertex(vertex2))
-    {
-        throw std::logic_error("htd::id_t htd::Graph::addEdge(htd::vertex_t, htd::vertex_t)");
-    }
-
-    const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(vertex1, vertex2);
-
-    if (associatedIds.size() > 0)
-    {
-        return associatedIds[0];
-    }
-
     return base_->addEdge(vertex1, vertex2);
 }
 

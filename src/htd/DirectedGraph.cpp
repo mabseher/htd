@@ -474,22 +474,17 @@ void htd::DirectedGraph::removeVertex(htd::vertex_t vertex)
 
 htd::id_t htd::DirectedGraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (!isVertex(vertex1) || !isVertex(vertex2))
+    std::size_t edgeCountBefore = edgeCount();
+
+    htd::id_t ret = base_->addEdge(vertex1, vertex2);
+
+    if (edgeCount() != edgeCountBefore)
     {
-        throw std::logic_error("htd::id_t htd::DirectedGraph::addEdge(htd::vertex_t, htd::vertex_t)");
+        outgoingNeighborhood_[vertex1 - htd::Vertex::FIRST].insert(vertex2);
+        incomingNeighborhood_[vertex2 - htd::Vertex::FIRST].insert(vertex1);
     }
 
-    const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(vertex1, vertex2);
-
-    if (associatedIds.size() > 0)
-    {
-        return associatedIds[0];
-    }
-
-    outgoingNeighborhood_[vertex1 - htd::Vertex::FIRST].insert(vertex2);
-    incomingNeighborhood_[vertex2 - htd::Vertex::FIRST].insert(vertex1);
-
-    return base_->addEdge(vertex1, vertex2);
+    return ret;
 }
 
 void htd::DirectedGraph::removeEdge(htd::id_t edgeId)

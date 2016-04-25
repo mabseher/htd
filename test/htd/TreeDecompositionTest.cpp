@@ -886,39 +886,6 @@ TEST(TreeDecompositionTest, CheckBagContentModifications)
     ASSERT_EQ((htd::vertex_t)2, td1.bagContent(root)[1]);
     ASSERT_EQ((htd::vertex_t)3, td1.bagContent(root)[2]);
 
-    try
-    {
-        td1.setBagContent(htd::Vertex::UNKNOWN, bagContent);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    try
-    {
-        td1.setBagContent(htd::Vertex::UNKNOWN, std::vector<htd::vertex_t> { });
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    try
-    {
-        td1.setBagContent(htd::Vertex::UNKNOWN, htd::ConstCollection<htd::vertex_t>::getInstance(bagContent));
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)1, td1.vertexCount());
 }
 
@@ -2001,30 +1968,6 @@ TEST(TreeDecompositionTest, CheckInducedHyperedges1)
     ++it;
     ASSERT_EQ((htd::id_t)3, it->id());
 
-    try
-    {
-        td.setInducedHyperedges(htd::Vertex::UNKNOWN, hyperedges1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
-
-    try
-    {
-        td.setInducedHyperedges(htd::Vertex::UNKNOWN, std::move(hyperedges1));
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
 
     it = td.inducedHyperedges(node1).begin();
@@ -2036,17 +1979,6 @@ TEST(TreeDecompositionTest, CheckInducedHyperedges1)
     ASSERT_EQ((htd::id_t)3, it->id());
 
     td.setInducedHyperedges(node1, std::move(hyperedges2));
-
-    try
-    {
-        td.inducedHyperedges(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
 

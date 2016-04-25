@@ -26,6 +26,7 @@
 #define	HTD_HTD_BREADTHFIRSTGRAPHTRAVERSAL_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>
 
 #include <deque>
@@ -45,10 +46,7 @@ htd::BreadthFirstGraphTraversal::~BreadthFirstGraphTraversal()
 
 void htd::BreadthFirstGraphTraversal::traverse(const htd::IHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const
 {
-    if (!graph.isVertex(startingVertex))
-    {
-        throw std::logic_error("void htd::BreadthFirstGraphTraversal::traverse(const htd::IHypergraph &, htd::vertex_t, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const");
-    }
+    HTD_ASSERT(graph.isVertex(startingVertex))
 
     std::deque<std::tuple<htd::vertex_t, htd::vertex_t, std::size_t>> originDeque;
 

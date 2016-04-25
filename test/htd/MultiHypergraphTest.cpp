@@ -165,17 +165,6 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_EQ((std::size_t)0, graph.edgeCount((htd::vertex_t)1));
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)1).size());
 
-    try
-    {
-        graph.edgeCount(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)1));
     ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)2));
     ASSERT_EQ((std::size_t)0, graph.neighborCount((htd::vertex_t)3));
@@ -188,17 +177,6 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)3, (htd::vertex_t)3));
-
-    try
-    {
-        graph.neighbors(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     std::vector<htd::vertex_t> neighbors1;
 
@@ -515,19 +493,6 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
 TEST(MultiHypergraphTest, CheckGraphModifications)
 {
     htd::MultiHypergraph graph(3);
-
-    std::vector<htd::vertex_t> edgeElements1 { };
-
-    try
-    {
-        graph.addEdge(edgeElements1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());

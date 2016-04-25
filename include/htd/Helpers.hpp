@@ -34,6 +34,7 @@
 #include <htd/FilteredHyperedgeCollection.hpp>
 
 #include <algorithm>
+#include <cassert>
 #include <functional>
 #include <chrono>
 #include <iomanip>
@@ -46,6 +47,12 @@
 #include <vector>
 
 #define HTD_UNUSED(x) (void)(x);
+
+#ifdef NDEBUG
+    #define HTD_ASSERT(x)
+#else
+    #define HTD_ASSERT(x) assert(x);
+#endif
 
 #ifdef NDEBUG
     #define DEBUGGING_CODE(x)

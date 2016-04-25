@@ -409,19 +409,6 @@ TEST(HypergraphTest, CheckGraphModifications)
 {
     htd::Hypergraph graph(3);
 
-    std::vector<htd::vertex_t> edgeElements1 { };
-
-    try
-    {
-        graph.addEdge(edgeElements1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
 

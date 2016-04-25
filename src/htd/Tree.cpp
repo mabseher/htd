@@ -788,31 +788,27 @@ void htd::Tree::removeRoot(void)
 
 htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 {
+    HTD_ASSERT(isVertex(vertex))
+
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
-    
-    if (isVertex(vertex))
-    {
-        auto & node = nodes_.at(vertex);
 
-        if (node != nullptr)
-        {
-            ret = next_vertex_;
+    auto & node = nodes_.at(vertex);
 
-            node->children.push_back(ret);
+    ret = next_vertex_;
 
-            nodes_.insert(std::make_pair(ret, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(ret, vertex))));
+    node->children.push_back(ret);
 
-            vertices_.push_back(ret);
+    nodes_.insert(std::make_pair(ret, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(ret, vertex))));
 
-            ++next_vertex_;
+    vertices_.push_back(ret);
 
-            size_++;
-        }
+    ++next_vertex_;
 
-        edges_->push_back(htd::Hyperedge(next_edge_, vertex, ret));
+    size_++;
 
-        ++next_edge_;
-    }
+    edges_->push_back(htd::Hyperedge(next_edge_, vertex, ret));
+
+    ++next_edge_;
     
     return ret;
 }

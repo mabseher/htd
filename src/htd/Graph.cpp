@@ -154,20 +154,14 @@ std::size_t htd::Graph::neighborCount(htd::vertex_t vertex) const
 
 htd::ConstCollection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return base_->neighbors(vertex);
 }
 
 void htd::Graph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::Graph::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     base_->copyNeighborsTo(target, vertex);
 }

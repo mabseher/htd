@@ -492,20 +492,6 @@ TEST(MultiGraphTest, CheckGraphModifications)
 
     ASSERT_EQ((std::size_t)0, neighbors3.size());
 
-    try
-    {
-        graph.addEdge(3, 3);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    ASSERT_EQ((std::size_t)2, graph.vertexCount());
-    ASSERT_EQ((std::size_t)0, graph.edgeCount());
-
     ASSERT_FALSE(graph.isEdge(edgeId1));
     ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 3, 3 }));
 

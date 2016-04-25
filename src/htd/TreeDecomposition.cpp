@@ -397,30 +397,21 @@ bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t vertex) const
 
 std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return bagContent_.at(vertex).size();
 }
 
 const std::vector<htd::vertex_t> & htd::TreeDecomposition::bagContent(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("const std::vector<htd::vertex_t> & htd::TreeDecomposition::bagContent(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return bagContent_.at(vertex);
 }
 
 void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const std::vector<htd::vertex_t> &)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     std::vector<htd::vertex_t> & bag = bagContent_[vertex];
 
@@ -433,10 +424,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const std::vect
 
 void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd::vertex_t> && content)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, std::vector<htd::vertex_t> &&)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     std::vector<htd::vertex_t> & bag = bagContent_[vertex];
 
@@ -449,10 +437,7 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd
 
 void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::TreeDecomposition::setBagContent(htd::vertex_t, const htd::ConstCollection<htd::vertex_t> &)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     std::vector<htd::vertex_t> & bag = bagContent_[vertex];
 
@@ -465,30 +450,21 @@ void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::Cons
 
 const htd::FilteredHyperedgeCollection & htd::TreeDecomposition::inducedHyperedges(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("const htd::FilteredHyperedgeCollection & htd::TreeDecomposition::inducedHyperedges(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return inducedEdges_.at(vertex);
 }
 
 void htd::TreeDecomposition::setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::TreeDecomposition::setInducedHyperedges(htd::vertex_t, const htd::FilteredHyperedgeCollection &)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     inducedEdges_[vertex] = inducedEdges;
 }
 
 void htd::TreeDecomposition::setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::TreeDecomposition::setInducedHyperedges(htd::vertex_t, htd::FilteredHyperedgeCollection &&)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     inducedEdges_[vertex] = std::move(inducedEdges);
 }

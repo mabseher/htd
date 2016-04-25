@@ -108,19 +108,14 @@ std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t vertex) const
 {
     std::size_t ret = 0;
 
-    if (isVertex(vertex))
+    HTD_ASSERT(isVertex(vertex))
+
+    for (auto & edge : *edges_)
     {
-        for (auto & edge : *edges_)
+        if (edge.containsVertex(vertex))
         {
-            if (edge.containsVertex(vertex))
-            {
-                ret++;
-            }
+            ret++;
         }
-    }
-    else
-    {
-        throw std::logic_error("std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t) const");
     }
 
     return ret;
@@ -236,26 +231,25 @@ htd::vertex_t htd::MultiHypergraph::vertexAtPosition(htd::index_t index) const
 
 bool htd::MultiHypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
+    HTD_ASSERT(isVertex(vertex) && isVertex(neighbor))
+
     bool ret = false;
 
-    if (isVertex(vertex) && isVertex(neighbor))
+    if (vertex != neighbor)
     {
-        if (vertex != neighbor)
-        {
-            const std::vector<htd::vertex_t> & currentNeighborhood = neighborhood_.at(vertex - htd::Vertex::FIRST);
+        const std::vector<htd::vertex_t> & currentNeighborhood = neighborhood_.at(vertex - htd::Vertex::FIRST);
 
-            ret = std::binary_search(currentNeighborhood.begin(), currentNeighborhood.end(), neighbor);
-        }
-        else
+        ret = std::binary_search(currentNeighborhood.begin(), currentNeighborhood.end(), neighbor);
+    }
+    else
+    {
+        for (auto it = edges_->begin(); !ret && it != edges_->end(); ++it)
         {
-            for (auto it = edges_->begin(); !ret && it != edges_->end(); ++it)
+            const htd::Hyperedge & edge = *it;
+
+            if (std::count_if(edge.begin(), edge.end(), [&](htd::vertex_t element) { return element == vertex; }) >= 2)
             {
-                const htd::Hyperedge & edge = *it;
-
-                if (std::count_if(edge.begin(), edge.end(), [&](htd::vertex_t element) { return element == vertex; }) >= 2)
-                {
-                    ret = true;
-                }
+                ret = true;
             }
         }
     }
@@ -382,20 +376,14 @@ bool htd::MultiHypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vert
 
 htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::neighbors(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::neighbors(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(neighborhood_[vertex - htd::Vertex::FIRST]);
 }
 
 void htd::MultiHypergraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::MultiHypergraph::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     std::copy(neighborhood_[vertex - htd::Vertex::FIRST].begin(), neighborhood_[vertex - htd::Vertex::FIRST].end(), std::back_inserter(target));
 }
@@ -683,10 +671,7 @@ void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)
 
 htd::id_t htd::MultiHypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (!isVertex(vertex1) || !isVertex(vertex2))
-    {
-        throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(htd::vertex_t, htd::vertex_t)");
-    }
+    HTD_ASSERT(isVertex(vertex1) && isVertex(vertex2))
 
     edges_->push_back(htd::Hyperedge(next_edge_, vertex1, vertex2));
 
@@ -733,18 +718,13 @@ htd::id_t htd::MultiHypergraph::addEdge(const std::vector<htd::vertex_t> & eleme
 
 htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 {
+    HTD_ASSERT(elements.size() > 0)
+
     switch (elements.size())
     {
-        case 0:
-        {
-            throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> &&)");
-        }
         case 1:
         {
-            if (!isVertex(elements[0]))
-            {
-                throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> &&)");
-            }
+            HTD_ASSERT(isVertex(elements[0]))
 
             edges_->push_back(htd::Hyperedge(next_edge_, std::move(elements)));
 
@@ -760,13 +740,12 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
         }
     }
 
+    #ifndef NDEBUG
     for (htd::vertex_t vertex : elements)
     {
-        if (!isVertex(vertex))
-        {
-            throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> &&)");
-        }
+        HTD_ASSERT(isVertex(vertex))
     }
+    #endif
 
     std::vector<htd::vertex_t> sortedElements(elements);
 

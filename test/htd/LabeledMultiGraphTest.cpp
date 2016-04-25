@@ -433,27 +433,6 @@ TEST(LabeledMultiGraphTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
 
-    try
-    {
-        graph.addEdge(3, 3);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    ASSERT_EQ((std::size_t)2, graph.vertexCount());
-    ASSERT_EQ((std::size_t)0, graph.edgeCount());
-
-    ASSERT_FALSE(graph.isEdge(edgeId1));
-
-    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
-    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
-    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
-    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
-
     graph.addVertices(2);
 
     ASSERT_EQ((std::size_t)4, graph.vertexCount());

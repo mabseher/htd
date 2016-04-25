@@ -125,20 +125,14 @@ std::size_t htd::GraphDecomposition::bagSize(htd::vertex_t vertex) const
 
 const std::vector<htd::vertex_t> & htd::GraphDecomposition::bagContent(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("const std::vector<htd::vertex_t> & htd::GraphDecomposition::bagContent(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return bagContent_.at(vertex);
 }
 
 void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, const std::vector<htd::vertex_t> &)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     std::vector<htd::vertex_t> & bag = bagContent_[vertex];
 
@@ -151,10 +145,7 @@ void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const std::vec
 
 void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd::vertex_t> && content)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, std::vector<htd::vertex_t> &&)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     std::vector<htd::vertex_t> & bag = bagContent_[vertex];
 
@@ -167,10 +158,7 @@ void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, std::vector<ht
 
 void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::GraphDecomposition::setBagContent(htd::vertex_t, const htd::ConstCollection<htd::vertex_t> &)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     std::vector<htd::vertex_t> & bag = bagContent_[vertex];
 
@@ -183,30 +171,21 @@ void htd::GraphDecomposition::setBagContent(htd::vertex_t vertex, const htd::Con
 
 const htd::FilteredHyperedgeCollection & htd::GraphDecomposition::inducedHyperedges(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("const htd::FilteredHyperedgeCollection & htd::GraphDecomposition::inducedHyperedges(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return inducedEdges_.at(vertex);
 }
 
 void htd::GraphDecomposition::setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::GraphDecomposition::setInducedHyperedges(htd::vertex_t, const htd::FilteredHyperedgeCollection &)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     inducedEdges_[vertex] = inducedEdges;
 }
 
 void htd::GraphDecomposition::setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::GraphDecomposition::setInducedHyperedges(htd::vertex_t, htd::FilteredHyperedgeCollection &&)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     inducedEdges_[vertex] = std::move(inducedEdges);
 }

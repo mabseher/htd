@@ -122,32 +122,10 @@ TEST(GraphDecompositionTest, CheckSize1Graph)
     std::vector<htd::vertex_t> bagContent1 { 4, 5, 6 };
     std::vector<htd::vertex_t> bagContent2 { 7, 8, 9 };
 
-    try
-    {
-        graph.setBagContent(htd::Vertex::UNKNOWN, bagContent1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
     ASSERT_EQ((htd::vertex_t)1, graph.bagContent(1)[0]);
     ASSERT_EQ((htd::vertex_t)2, graph.bagContent(1)[1]);
     ASSERT_EQ((htd::vertex_t)3, graph.bagContent(1)[2]);
-
-    try
-    {
-        graph.setBagContent(htd::Vertex::UNKNOWN, htd::ConstCollection<htd::vertex_t>::getInstance(bagContent2));
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
     ASSERT_EQ((htd::vertex_t)1, graph.bagContent(1)[0]);
@@ -163,32 +141,10 @@ TEST(GraphDecompositionTest, CheckSize1Graph)
 
     graph.setBagContent(1, std::move(bagContent1));
 
-    try
-    {
-        graph.setBagContent(htd::Vertex::UNKNOWN, std::move(bagContent2));
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
     ASSERT_EQ((htd::vertex_t)4, graph.bagContent(1)[0]);
     ASSERT_EQ((htd::vertex_t)5, graph.bagContent(1)[1]);
     ASSERT_EQ((htd::vertex_t)6, graph.bagContent(1)[2]);
-
-    try
-    {
-        graph.bagContent(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     std::vector<htd::vertex_t> bagContent3 { 9 };
 
@@ -512,27 +468,6 @@ TEST(GraphDecompositionTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
 
-    try
-    {
-        graph.addEdge(3, 3);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    ASSERT_EQ((std::size_t)2, graph.vertexCount());
-    ASSERT_EQ((std::size_t)0, graph.edgeCount());
-
-    ASSERT_FALSE(graph.isEdge(edgeId1));
-
-    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
-    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
-    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
-    ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
-
     graph.addVertices(2);
 
     ASSERT_EQ((std::size_t)4, graph.vertexCount());
@@ -723,30 +658,6 @@ TEST(GraphDecompositionTest, CheckInducedHyperedges1)
     ++it;
     ASSERT_EQ((htd::id_t)3, it->id());
 
-    try
-    {
-        gd.setInducedHyperedges(htd::Vertex::UNKNOWN, hyperedges1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    ASSERT_EQ((std::size_t)3, gd.inducedHyperedges(node1).size());
-
-    try
-    {
-        gd.setInducedHyperedges(htd::Vertex::UNKNOWN, std::move(hyperedges1));
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)3, gd.inducedHyperedges(node1).size());
 
     it = gd.inducedHyperedges(node1).begin();
@@ -758,17 +669,6 @@ TEST(GraphDecompositionTest, CheckInducedHyperedges1)
     ASSERT_EQ((htd::id_t)3, it->id());
 
     gd.setInducedHyperedges(node1, std::move(hyperedges2));
-
-    try
-    {
-        gd.inducedHyperedges(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ((std::size_t)3, gd.inducedHyperedges(node1).size());
 

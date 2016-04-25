@@ -153,10 +153,7 @@ bool htd::Hypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) 
 
 htd::ConstCollection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return base_->neighbors(vertex);
 }

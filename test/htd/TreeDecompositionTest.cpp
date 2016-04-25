@@ -792,17 +792,6 @@ TEST(TreeDecompositionTest, CheckBagContentModifications)
     ASSERT_EQ((std::size_t)0, td1.bagSize(root));
     ASSERT_EQ((std::size_t)0, td1.bagContent(root).size());
 
-    try
-    {
-        td1.bagContent(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     std::vector<htd::vertex_t> bagContent { 3, 2, 1 };
 
     td1.setBagContent(root, bagContent);

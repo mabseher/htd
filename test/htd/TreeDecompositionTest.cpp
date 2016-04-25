@@ -1935,17 +1935,6 @@ TEST(TreeDecompositionTest, CheckInducedHyperedges1)
 
     ASSERT_EQ((std::size_t)0, td.inducedHyperedges(node1).size());
 
-    try
-    {
-        td.inducedHyperedges(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     htd::Hyperedge h1(1, 1, 2);
     htd::Hyperedge h2(2, 2, 3);
     htd::Hyperedge h3(3, 3, 3);

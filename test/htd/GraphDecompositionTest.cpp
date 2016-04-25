@@ -625,17 +625,6 @@ TEST(GraphDecompositionTest, CheckInducedHyperedges1)
 
     ASSERT_EQ((std::size_t)0, gd.inducedHyperedges(node1).size());
 
-    try
-    {
-        gd.inducedHyperedges(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     htd::Hyperedge h1(1, 1, 2);
     htd::Hyperedge h2(2, 2, 3);
     htd::Hyperedge h3(3, 3, 3);
@@ -644,7 +633,6 @@ TEST(GraphDecompositionTest, CheckInducedHyperedges1)
 
     htd::FilteredHyperedgeCollection hyperedges1(inputEdges1, std::vector<htd::index_t> { 0, 1, 2 });
     htd::FilteredHyperedgeCollection hyperedges2(inputEdges1, std::vector<htd::index_t> { 2, 1, 0 });
-    htd::FilteredHyperedgeCollection hyperedges3(inputEdges1, std::vector<htd::index_t> { 0 });
 
     gd.setInducedHyperedges(node1, hyperedges1);
 

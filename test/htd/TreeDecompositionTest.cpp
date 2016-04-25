@@ -619,31 +619,9 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)0, td1.bagSize(treeNode2));
     ASSERT_EQ((std::size_t)0, td1.bagSize(treeNode3));
 
-    try
-    {
-        td1.bagSize(treeNode4);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)0, td1.bagSize(treeNode5));
 
     ASSERT_EQ((std::size_t)0, td2.bagSize(root2));
-
-    try
-    {
-        td2.bagSize(labeledTreeNode2);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ((std::size_t)0, td2.bagSize(labeledTreeNode3));
 
@@ -683,31 +661,9 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)0, td2.bagSize(treeNode2));
     ASSERT_EQ((std::size_t)0, td2.bagSize(treeNode3));
 
-    try
-    {
-        td2.bagSize(treeNode4);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)0, td2.bagSize(treeNode5));
 
     ASSERT_EQ((std::size_t)0, td3.bagSize(root2));
-
-    try
-    {
-        td3.bagSize(labeledTreeNode2);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ((std::size_t)0, td3.bagSize(labeledTreeNode3));
 
@@ -835,17 +791,6 @@ TEST(TreeDecompositionTest, CheckBagContentModifications)
 
     ASSERT_EQ((std::size_t)0, td1.bagSize(root));
     ASSERT_EQ((std::size_t)0, td1.bagContent(root).size());
-
-    try
-    {
-        td1.bagSize(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     try
     {

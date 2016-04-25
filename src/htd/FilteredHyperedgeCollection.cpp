@@ -202,10 +202,7 @@ htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & htd
 
 long htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator-(const htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & rhs)
 {
-    if (baseCollection_ != rhs.baseCollection_ || relevantIndices_ != rhs.relevantIndices_)
-    {
-        throw std::logic_error("std::size_t htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator-(const htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator &)");
-    }
+    HTD_ASSERT(&(*baseCollection_) == &(*rhs.baseCollection_) && &(*relevantIndices_) == &(*rhs.relevantIndices_))
 
     return position_ - rhs.position_;
 }
@@ -222,12 +219,12 @@ const htd::Hyperedge & htd::FilteredHyperedgeCollection::FilteredHyperedgeCollec
 
 bool htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator==(const htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & rhs) const
 {
-    return *baseCollection_ == *(rhs.baseCollection_) && *relevantIndices_ == *(rhs.relevantIndices_) && position_ == rhs.position_;
+    return &(*baseCollection_) == &(*rhs.baseCollection_) && relevantIndices_ == rhs.relevantIndices_ && position_ == rhs.position_;
 }
 
 bool htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator!=(const htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & rhs) const
 {
-    return *baseCollection_ != *(rhs.baseCollection_) || *relevantIndices_ != *(rhs.relevantIndices_) || position_ != rhs.position_;
+    return &(*baseCollection_) != &(*rhs.baseCollection_) || relevantIndices_ != rhs.relevantIndices_ || position_ != rhs.position_;
 }
 
 htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator=(const htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator & original)

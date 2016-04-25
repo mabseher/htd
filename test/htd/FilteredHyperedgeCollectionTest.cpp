@@ -288,17 +288,6 @@ TEST(FilteredHyperedgeCollectionTest, TestIterators)
 
     ASSERT_EQ(0, itCopy2 - hyperedges1.begin());
     ASSERT_EQ(0, hyperedges1.begin() - itCopy2);
-
-    try
-    {
-        hyperedges1.begin() - hyperedges2.begin();
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 }
 
 TEST(FilteredHyperedgeCollectionTest, TestRestriction)

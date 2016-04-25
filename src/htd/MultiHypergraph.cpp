@@ -688,7 +688,7 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t ver
         throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(htd::vertex_t, htd::vertex_t)");
     }
 
-    edges_->push_back(htd::Hyperedge(next_edge_, htd::vertex_container { vertex1, vertex2 }));
+    edges_->push_back(htd::Hyperedge(next_edge_, vertex1, vertex2));
 
     if (vertex1 == vertex2)
     {

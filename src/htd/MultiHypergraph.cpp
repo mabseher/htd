@@ -182,11 +182,6 @@ htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(htd::ver
 
 htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const
 {
-    return associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
-}
-
-htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
-{
     htd::VectorAdapter<htd::id_t> ret;
 
     auto & result = ret.container();

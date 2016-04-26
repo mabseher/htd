@@ -236,7 +236,7 @@ TEST(GraphDecompositionTest, CheckSize3Graph)
     htd::ConstCollection<htd::vertex_t> edgeIds1 = graph.associatedEdgeIds(elements1);
     htd::ConstCollection<htd::vertex_t> edgeIds2 = graph.associatedEdgeIds((htd::vertex_t)1, (htd::vertex_t)2);
     htd::ConstCollection<htd::vertex_t> edgeIds3 = graph.associatedEdgeIds((htd::vertex_t)2, (htd::vertex_t)1);
-    htd::ConstCollection<htd::vertex_t> edgeIds4 = graph.associatedEdgeIds(htd::Collection<htd::vertex_t>(elements2.begin(), elements2.end()));
+    htd::ConstCollection<htd::vertex_t> edgeIds4 = graph.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(elements2.begin(), elements2.end()));
 
     ASSERT_EQ((std::size_t)0, edgeIds1.size());
     ASSERT_EQ((std::size_t)0, edgeIds2.size());

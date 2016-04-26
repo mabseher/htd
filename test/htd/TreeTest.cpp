@@ -507,10 +507,6 @@ TEST(TreeTest, CheckSize3Tree)
     ASSERT_EQ((std::size_t)0, tree.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(edgeElements2.begin(), edgeElements2.end())).size());
     ASSERT_EQ((htd::id_t)1, tree.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(edgeElements1.begin(), edgeElements1.end()))[0]);
 
-    ASSERT_EQ((std::size_t)1, tree.associatedEdgeIds(htd::Collection<htd::vertex_t>(edgeElements1.begin(), edgeElements1.end())).size());
-    ASSERT_EQ((std::size_t)0, tree.associatedEdgeIds(htd::Collection<htd::vertex_t>(edgeElements2.begin(), edgeElements2.end())).size());
-    ASSERT_EQ((htd::id_t)1, tree.associatedEdgeIds(htd::Collection<htd::vertex_t>(edgeElements1.begin(), edgeElements1.end()))[0]);
-
     ASSERT_FALSE(tree.isNeighbor(root, root));
     ASSERT_TRUE(tree.isNeighbor(root, child));
     ASSERT_TRUE(tree.isNeighbor(root, newRoot));

@@ -169,11 +169,6 @@ htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(htd::vertex_t verte
 
 htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const
 {
-    return associatedEdgeIds(htd::ConstCollection<htd::vertex_t>::getInstance(elements));
-}
-
-htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
-{
     htd::VectorAdapter<htd::id_t> ret;
 
     if (elements.size() == 2)

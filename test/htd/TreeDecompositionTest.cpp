@@ -297,10 +297,6 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
     ASSERT_EQ((std::size_t)0, decomposition.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(edgeElements2.begin(), edgeElements2.end())).size());
     ASSERT_EQ((htd::id_t)1, decomposition.associatedEdgeIds(htd::ConstCollection<htd::vertex_t>(edgeElements1.begin(), edgeElements1.end()))[0]);
 
-    ASSERT_EQ((std::size_t)1, decomposition.associatedEdgeIds(htd::Collection<htd::vertex_t>(edgeElements1.begin(), edgeElements1.end())).size());
-    ASSERT_EQ((std::size_t)0, decomposition.associatedEdgeIds(htd::Collection<htd::vertex_t>(edgeElements2.begin(), edgeElements2.end())).size());
-    ASSERT_EQ((htd::id_t)1, decomposition.associatedEdgeIds(htd::Collection<htd::vertex_t>(edgeElements1.begin(), edgeElements1.end()))[0]);
-
     ASSERT_FALSE(decomposition.isNeighbor(root, root));
     ASSERT_TRUE(decomposition.isNeighbor(root, child));
     ASSERT_TRUE(decomposition.isNeighbor(root, newRoot));

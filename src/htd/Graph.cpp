@@ -117,11 +117,6 @@ htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(const std::vector<
     return base_->associatedEdgeIds(elements);
 }
 
-htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(const htd::Collection<htd::vertex_t> & elements) const
-{
-    return base_->associatedEdgeIds(elements);
-}
-
 htd::ConstCollection<htd::id_t> htd::Graph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
     return base_->associatedEdgeIds(elements);

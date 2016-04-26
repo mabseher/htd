@@ -102,7 +102,7 @@ namespace htd
                 return htd::VectorAdapterIteratorWrapper<typename std::vector<T, Allocator>::iterator, T, Allocator>(container_, container_->begin());
             }
 
-            const htd::ConstIterator<T> begin(void) const
+            htd::ConstIterator<T> begin(void) const
             {
                 return htd::VectorAdapterConstIteratorWrapper<typename std::vector<T, Allocator>::const_iterator, T, Allocator>(container_, container_->begin());
             }
@@ -112,7 +112,7 @@ namespace htd
                 return htd::VectorAdapterIteratorWrapper<typename std::vector<T, Allocator>::iterator, T, Allocator>(container_, container_->end());
             }
 
-            const htd::ConstIterator<T> end(void) const
+            htd::ConstIterator<T> end(void) const
             {
                 return htd::VectorAdapterConstIteratorWrapper<typename std::vector<T, Allocator>::const_iterator, T, Allocator>(container_, container_->end());
             }

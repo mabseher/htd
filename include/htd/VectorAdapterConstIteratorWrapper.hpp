@@ -38,7 +38,7 @@ namespace htd
     class VectorAdapterConstIteratorWrapper : public virtual htd::ConstIteratorWrapper<Iter, T>
     {
         public:
-            VectorAdapterConstIteratorWrapper(std::shared_ptr<std::vector<T, Allocator>> collection, Iter baseIterator) : htd::ConstIteratorWrapper<Iter, T>(baseIterator), collection_(collection)
+            VectorAdapterConstIteratorWrapper(const std::shared_ptr<std::vector<T, Allocator>> & collection, const Iter & baseIterator) : htd::ConstIteratorWrapper<Iter, T>(baseIterator), collection_(collection)
             {
 
             }

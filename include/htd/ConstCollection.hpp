@@ -136,6 +136,11 @@ namespace htd
             {
 
             }
+
+            ConstCollection(htd::ConstIterator<T> && begin, htd::ConstIterator<T> && end, std::size_t size) : begin_(std::move(begin)), end_(std::move(end)), size_(size)
+            {
+
+            }
     };
 }
 

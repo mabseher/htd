@@ -160,7 +160,6 @@
 #include <htd/MaximumCardinalitySearchOrderingAlgorithm.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
-#include <htd/MinFillOrderingAlgorithm2.hpp>
 #include <htd/MultiGraph.hpp>
 #include <htd/MultiGraphFactory.hpp>
 #include <htd/MultiHypergraph.hpp>

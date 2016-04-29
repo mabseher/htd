@@ -64,7 +64,7 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(htd::IMutableTreeDecomposit
         {
             htd::vertex_t newParent = decomposition.addParent(node);
 
-            decomposition.setBagContent(newParent, bag);
+            decomposition.bagContent(newParent) = bag;
 
             decomposition.setInducedHyperedges(newParent, inducedHyperedges);
 

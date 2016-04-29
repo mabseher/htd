@@ -371,6 +371,16 @@ std::size_t htd::PathDecomposition::bagSize(htd::vertex_t vertex) const
     return bagContent_.at(vertex).size();
 }
 
+std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::vertex_t vertex)
+{
+    if (!isVertex(vertex))
+    {
+        throw std::logic_error("std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::vertex_t)");
+    }
+
+    return bagContent_.at(vertex);
+}
+
 const std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::vertex_t vertex) const
 {
     if (!isVertex(vertex))
@@ -379,36 +389,6 @@ const std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::verte
     }
 
     return bagContent_.at(vertex);
-}
-
-void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content)
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::PathDecomposition::setBagContent(htd::vertex_t, const std::vector<htd::vertex_t> &)");
-    }
-
-    bagContent_[vertex] = content;
-}
-
-void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd::vertex_t> && content)
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::PathDecomposition::setBagContent(htd::vertex_t, std::vector<htd::vertex_t> &&)");
-    }
-
-    bagContent_[vertex] = std::move(content);
-}
-
-void htd::PathDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::PathDecomposition::setBagContent(htd::vertex_t, const htd::ConstCollection<htd::vertex_t> &)");
-    }
-
-    bagContent_[vertex] = std::vector<htd::vertex_t>(content.begin(), content.end());
 }
 
 const htd::FilteredHyperedgeCollection & htd::PathDecomposition::inducedHyperedges(htd::vertex_t vertex) const

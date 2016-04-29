@@ -40,7 +40,9 @@ namespace htd
             virtual void removeSubtree(htd::vertex_t subtreeRoot) = 0;
             
             virtual htd::vertex_t insertRoot(void) = 0;
-            
+
+            virtual void makeRoot(htd::vertex_t vertex) = 0;
+
             virtual void removeRoot(void) = 0;
             
             virtual htd::vertex_t addChild(htd::vertex_t vertex) = 0;

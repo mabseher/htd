@@ -117,29 +117,16 @@ TEST(GraphDecompositionTest, CheckSize1Graph)
     ASSERT_TRUE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
 
-    graph.setBagContent(1, std::vector<htd::vertex_t> { 3, 3, 2, 2, 1, 1 });
+    graph.bagContent(1) = std::vector<htd::vertex_t> { 1, 2, 3 };
 
     std::vector<htd::vertex_t> bagContent1 { 4, 5, 6 };
-    std::vector<htd::vertex_t> bagContent2 { 7, 8, 9 };
 
     ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
     ASSERT_EQ((htd::vertex_t)1, graph.bagContent(1)[0]);
     ASSERT_EQ((htd::vertex_t)2, graph.bagContent(1)[1]);
     ASSERT_EQ((htd::vertex_t)3, graph.bagContent(1)[2]);
 
-    ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
-    ASSERT_EQ((htd::vertex_t)1, graph.bagContent(1)[0]);
-    ASSERT_EQ((htd::vertex_t)2, graph.bagContent(1)[1]);
-    ASSERT_EQ((htd::vertex_t)3, graph.bagContent(1)[2]);
-
-    graph.setBagContent(1, htd::ConstCollection<htd::vertex_t>::getInstance(bagContent2));
-
-    ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
-    ASSERT_EQ((htd::vertex_t)7, graph.bagContent(1)[0]);
-    ASSERT_EQ((htd::vertex_t)8, graph.bagContent(1)[1]);
-    ASSERT_EQ((htd::vertex_t)9, graph.bagContent(1)[2]);
-
-    graph.setBagContent(1, std::move(bagContent1));
+    graph.bagContent(1) = std::move(bagContent1);
 
     ASSERT_EQ((std::size_t)3, graph.bagContent(1).size());
     ASSERT_EQ((htd::vertex_t)4, graph.bagContent(1)[0]);
@@ -148,7 +135,7 @@ TEST(GraphDecompositionTest, CheckSize1Graph)
 
     std::vector<htd::vertex_t> bagContent3 { 9 };
 
-    graph.setBagContent(1, bagContent3);
+    graph.bagContent(1) = bagContent3;
 
     ASSERT_EQ((std::size_t)1, graph.bagContent(1).size());
     ASSERT_EQ((htd::vertex_t)9, graph.bagContent(1)[0]);
@@ -495,7 +482,7 @@ TEST(GraphDecompositionTest, CheckCopyConstructors)
 
     graph1.setVertexLabel("Label", 1, new htd::Label<int>(1));
 
-    graph1.setBagContent(1, std::vector<htd::vertex_t> { 5 });
+    graph1.bagContent(1) = std::vector<htd::vertex_t> { 5 };
     graph1.setInducedHyperedges(1, hyperedges1);
 
     ASSERT_EQ((std::size_t)2, graph1.vertexCount());

@@ -137,7 +137,9 @@ namespace htd
             void removeSubtree(htd::vertex_t subtreeRoot) HTD_OVERRIDE;
 
             htd::vertex_t insertRoot(void) HTD_OVERRIDE;
-            
+
+            void makeRoot(htd::vertex_t vertex) HTD_OVERRIDE;
+
             void removeRoot(void) HTD_OVERRIDE;
             
             htd::vertex_t addChild(htd::vertex_t vertex) HTD_OVERRIDE;

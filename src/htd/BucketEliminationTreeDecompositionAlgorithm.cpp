@@ -325,8 +325,9 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 vertexMapping[vertex] = node;
 
-                ret->setBagContent(node, mutableGraphDecomposition.bagContent(vertex));
+                ret->bagContent(node).swap(mutableGraphDecomposition.bagContent(vertex));
 
+                //TODO Export induced hyperedges via swap!
                 ret->setInducedHyperedges(node, mutableGraphDecomposition.inducedHyperedges(vertex));
             });
         }

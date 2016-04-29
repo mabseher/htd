@@ -66,7 +66,7 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
             const htd::FilteredHyperedgeCollection & inducedHyperedges = decomposition.inducedHyperedges(node);
 
-            decomposition.setBagContent(newNode, decomposition.bagContent(node));
+            decomposition.bagContent(newNode) = decomposition.bagContent(node);
 
             decomposition.setInducedHyperedges(newNode, inducedHyperedges);
 
@@ -125,7 +125,7 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
                     newNode = decomposition.addParent(newNode);
 
-                    decomposition.setBagContent(newNode, decomposition.bagContent(node));
+                    decomposition.bagContent(newNode) = decomposition.bagContent(node);
 
                     decomposition.setInducedHyperedges(newNode, inducedHyperedges);
 

@@ -402,50 +402,18 @@ std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t vertex) const
     return bagContent_.at(vertex).size();
 }
 
-const std::vector<htd::vertex_t> & htd::TreeDecomposition::bagContent(htd::vertex_t vertex) const
+std::vector<htd::vertex_t> & htd::TreeDecomposition::bagContent(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 
     return bagContent_.at(vertex);
 }
 
-void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content)
+const std::vector<htd::vertex_t> & htd::TreeDecomposition::bagContent(htd::vertex_t vertex) const
 {
     HTD_ASSERT(isVertex(vertex))
 
-    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
-
-    bag = content;
-
-    std::sort(bag.begin(), bag.end());
-
-    bag.erase(std::unique(bag.begin(), bag.end()), bag.end());
-}
-
-void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, std::vector<htd::vertex_t> && content)
-{
-    HTD_ASSERT(isVertex(vertex))
-
-    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
-
-    bag = std::move(content);
-
-    std::sort(bag.begin(), bag.end());
-
-    bag.erase(std::unique(bag.begin(), bag.end()), bag.end());
-}
-
-void htd::TreeDecomposition::setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content)
-{
-    HTD_ASSERT(isVertex(vertex))
-
-    std::vector<htd::vertex_t> & bag = bagContent_[vertex];
-
-    bag = std::vector<htd::vertex_t>(content.begin(), content.end());
-
-    std::sort(bag.begin(), bag.end());
-
-    bag.erase(std::unique(bag.begin(), bag.end()), bag.end());
+    return bagContent_.at(vertex);
 }
 
 const htd::FilteredHyperedgeCollection & htd::TreeDecomposition::inducedHyperedges(htd::vertex_t vertex) const

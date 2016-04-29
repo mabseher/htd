@@ -768,6 +768,13 @@ htd::vertex_t htd::Tree::insertRoot(void)
     return root_;
 }
 
+void htd::Tree::makeRoot(htd::vertex_t vertex)
+{
+    HTD_ASSERT(isVertex(vertex))
+
+
+}
+
 void htd::Tree::removeRoot(void)
 {
     root_ = htd::Vertex::UNKNOWN;

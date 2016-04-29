@@ -37,11 +37,7 @@ namespace htd
         public:
             virtual ~IMutablePathDecomposition() = 0;
 
-            virtual void setBagContent(htd::vertex_t vertex, const htd::vertex_container & content) = 0;
-
-            virtual void setBagContent(htd::vertex_t vertex, htd::vertex_container && content) = 0;
-
-            virtual void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) = 0;
+            virtual std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) = 0;
 
             virtual void setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
 

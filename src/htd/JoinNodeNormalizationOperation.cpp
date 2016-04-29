@@ -76,7 +76,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
             {
                 htd::vertex_t newParent = decomposition.addParent(node);
 
-                decomposition.setBagContent(newParent, bag);
+                decomposition.bagContent(newParent) = bag;
 
                 decomposition.setInducedHyperedges(newParent, inducedHyperedges);
 
@@ -112,7 +112,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
                 htd::vertex_t intermediateVertex = decomposition.addParent(child);
 
-                decomposition.setBagContent(intermediateVertex, bag);
+                decomposition.bagContent(intermediateVertex) = bag;
 
                 decomposition.setInducedHyperedges(intermediateVertex, inducedHyperedges);
 

@@ -190,7 +190,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
                         std::cout << std::endl << std::endl;
                         )
 
-                        decomposition.setBagContent(currentNode, newBagContent);
+                        decomposition.bagContent(currentNode) = newBagContent;
 
                         for (auto & labelingFunction : labelingFunctions)
                         {

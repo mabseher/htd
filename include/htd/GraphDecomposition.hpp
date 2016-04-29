@@ -57,13 +57,9 @@ namespace htd
 
             std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) HTD_OVERRIDE;
+
             const std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
-
-            void setBagContent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & content) HTD_OVERRIDE;
-
-            void setBagContent(htd::vertex_t vertex, std::vector<htd::vertex_t> && content) HTD_OVERRIDE;
-
-            void setBagContent(htd::vertex_t vertex, const htd::ConstCollection<htd::vertex_t> & content) HTD_OVERRIDE;
 
             const htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 

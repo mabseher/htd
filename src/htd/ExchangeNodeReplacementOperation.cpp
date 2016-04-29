@@ -79,7 +79,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
-                decomposition.setBagContent(newVertex, rememberedVertices);
+                decomposition.bagContent(newVertex) = rememberedVertices;
 
                 htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
@@ -143,7 +143,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
-                decomposition.setBagContent(newVertex, rememberedVertices);
+                decomposition.bagContent(newVertex) = rememberedVertices;
 
                 htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 

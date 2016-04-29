@@ -108,7 +108,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
                     htd::vertex_t newNode = decomposition.addChild(node);
 
-                    decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
+                    decomposition.bagContent(newNode) = std::vector<htd::vertex_t>(start, finish);
 
                     htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
@@ -135,7 +135,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                         {
                             newNode = decomposition.addParent(newNode);
 
-                            decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
+                            decomposition.bagContent(newNode) = std::vector<htd::vertex_t>(start, finish);
 
                             htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
@@ -176,7 +176,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
                     std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                    decomposition.setBagContent(newNode, newContent);
+                    decomposition.bagContent(newNode) = newContent;
 
                     htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
@@ -209,7 +209,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                                 newContent.push_back(*it);
                             }
 
-                            decomposition.setBagContent(newNode, newContent);
+                            decomposition.bagContent(newNode) = newContent;
 
                             htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
@@ -305,7 +305,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                     htd::vertex_t newNode = decomposition.addChild(node);
 
-                    decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
+                    decomposition.bagContent(newNode) = std::vector<htd::vertex_t>(start, finish);
 
                     htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
@@ -332,7 +332,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                         {
                             newNode = decomposition.addParent(newNode);
 
-                            decomposition.setBagContent(newNode, std::vector<htd::vertex_t>(start, finish));
+                            decomposition.bagContent(newNode) = std::vector<htd::vertex_t>(start, finish);
 
                             htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
@@ -373,7 +373,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                     std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                    decomposition.setBagContent(newNode, newContent);
+                    decomposition.bagContent(newNode) = newContent;
 
                     htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
@@ -404,7 +404,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                             std::copy(start, finish, std::back_inserter(newContent));
                             std::inplace_merge(newContent.begin(), newContent.end() - std::distance(start, finish), newContent.end());
 
-                            decomposition.setBagContent(newNode, newContent);
+                            decomposition.bagContent(newNode) = newContent;
 
                             htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 

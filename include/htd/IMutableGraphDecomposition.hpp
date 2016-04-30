@@ -35,6 +35,8 @@ namespace htd
     class IMutableGraphDecomposition : public virtual htd::IMutableLabeledGraph, public virtual htd::IGraphDecomposition
     {
         public:
+            using htd::IGraphDecomposition::bagContent;
+
             virtual ~IMutableGraphDecomposition() = 0;
 
             virtual std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) = 0;

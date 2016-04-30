@@ -35,6 +35,8 @@ namespace htd
     class IMutableTreeDecomposition : public virtual htd::IMutableLabeledTree, public virtual htd::ITreeDecomposition
     {
         public:
+            using htd::ITreeDecomposition::bagContent;
+
             virtual ~IMutableTreeDecomposition() = 0;
 
             virtual std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) = 0;

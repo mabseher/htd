@@ -35,6 +35,8 @@ namespace htd
     class IMutablePathDecomposition : public virtual htd::IMutableLabeledPath, public virtual htd::IPathDecomposition
     {
         public:
+            using htd::IPathDecomposition::bagContent;
+
             virtual ~IMutablePathDecomposition() = 0;
 
             virtual std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) = 0;

@@ -35,7 +35,7 @@
 namespace htd
 {
     template <typename Iter, typename T = typename Iter::value_type, class Allocator = std::allocator<T>>
-    class VectorAdapterConstIteratorWrapper : public virtual htd::ConstIteratorWrapper<Iter, T>
+    class VectorAdapterConstIteratorWrapper : public htd::ConstIteratorWrapper<Iter, T>
     {
         public:
             VectorAdapterConstIteratorWrapper(const std::shared_ptr<std::vector<T, Allocator>> & collection, const Iter & baseIterator) : htd::ConstIteratorWrapper<Iter, T>(baseIterator), collection_(collection)

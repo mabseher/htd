@@ -26,7 +26,7 @@
 #define	HTD_HTD_IGRAPHTRAVERSAL_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IHypergraph.hpp>
+#include <htd/IMultiHypergraph.hpp>
 
 #include <functional>
 
@@ -37,7 +37,7 @@ namespace htd
         public:
             virtual ~IGraphTraversal() = 0;
 
-            virtual void traverse(const htd::IHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const = 0;
+            virtual void traverse(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const = 0;
     };
 
     inline htd::IGraphTraversal::~IGraphTraversal() { }

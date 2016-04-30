@@ -274,7 +274,9 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                     throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
                 }
 
-                htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> components = connectedComponentAlgorithm->determineComponents(*graphDecomposition);
+                std::vector<std::vector<htd::vertex_t>> components;
+
+                connectedComponentAlgorithm->determineComponents(*graphDecomposition, components);
 
                 delete connectedComponentAlgorithm;
 
@@ -284,8 +286,8 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                 {
                     for (htd::index_t index = 0; index < componentCount - 1; ++index)
                     {
-                        const htd::ConstCollection<htd::vertex_t> & component1 = components[index];
-                        const htd::ConstCollection<htd::vertex_t> & component2 = components[index + 1];
+                        const std::vector<htd::vertex_t> & component1 = components[index];
+                        const std::vector<htd::vertex_t> & component2 = components[index + 1];
 
                         /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
                         // coverity[dont_call]

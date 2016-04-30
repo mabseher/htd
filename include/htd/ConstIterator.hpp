@@ -29,6 +29,7 @@
 #include <htd/ConstIteratorBase.hpp>
 #include <htd/ConstIteratorWrapper.hpp>
 #include <htd/Iterator.hpp>
+#include <htd/VectorAdapterConstIteratorWrapper.hpp>
 
 #include <memory>
 
@@ -53,6 +54,11 @@ namespace htd
 
             template <class Iter>
             ConstIterator(Iter iterator) : baseIterator_(new htd::ConstIteratorWrapper<Iter, T>(iterator))
+            {
+
+            }
+
+            ConstIterator(htd::VectorAdapterConstIteratorWrapper<typename std::vector<T>::const_iterator> * iterator) : baseIterator_(iterator)
             {
 
             }

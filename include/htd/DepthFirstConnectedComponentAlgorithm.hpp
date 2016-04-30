@@ -36,10 +36,10 @@ namespace htd
             DepthFirstConnectedComponentAlgorithm(void);
 
             ~DepthFirstConnectedComponentAlgorithm();
-            
-            htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> determineComponents(const htd::IHypergraph & graph) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::vertex_t> determineComponent(const htd::IHypergraph & graph, htd::vertex_t startingVertex) const HTD_OVERRIDE;
+            void determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
+
+            void determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
             DepthFirstConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
     };

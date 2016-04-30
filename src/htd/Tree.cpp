@@ -772,7 +772,8 @@ void htd::Tree::makeRoot(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 
-
+    //TODO Implement!
+    HTD_UNUSED(vertex)
 }
 
 void htd::Tree::removeRoot(void)

@@ -27,21 +27,21 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
-#include <htd/IDirectedGraph.hpp>
+#include <htd/IDirectedMultiGraph.hpp>
 
 namespace htd
 {
     class IStronglyConnectedComponentAlgorithm : public virtual htd::IConnectedComponentAlgorithm
     {
         public:
-            virtual ~IStronglyConnectedComponentAlgorithm() = 0;
-            
             using htd::IConnectedComponentAlgorithm::determineComponents;
             using htd::IConnectedComponentAlgorithm::determineComponent;
 
-            virtual htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> determineComponents(const htd::IDirectedGraph & graph) const = 0;
+            virtual ~IStronglyConnectedComponentAlgorithm() = 0;
 
-            virtual htd::ConstCollection<htd::vertex_t> determineComponent(const htd::IDirectedGraph & graph, htd::vertex_t origin) const = 0;
+            virtual void determineComponents(const htd::IDirectedMultiGraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const = 0;
+
+            virtual void determineComponent(const htd::IDirectedMultiGraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const = 0;
 
             virtual IStronglyConnectedComponentAlgorithm * clone(void) const = 0;
     };

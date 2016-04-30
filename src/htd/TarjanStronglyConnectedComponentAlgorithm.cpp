@@ -28,7 +28,6 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/TarjanStronglyConnectedComponentAlgorithm.hpp>
-#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <stack>
@@ -57,52 +56,33 @@ htd::TarjanStronglyConnectedComponentAlgorithm::~TarjanStronglyConnectedComponen
 
 }
 
-htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IHypergraph & graph) const
+void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const
 {
-    htd::VectorAdapter<htd::ConstCollection<htd::vertex_t>> ret;
-
     //TODO Implement!
     HTD_UNUSED(graph)
-
-    return htd::ConstCollection<htd::ConstCollection<htd::vertex_t>>::getInstance(ret);
+    HTD_UNUSED(target)
 }
 
-htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IDirectedGraph & graph) const
+void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IDirectedMultiGraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const
 {
-    htd::VectorAdapter<htd::ConstCollection<htd::vertex_t>> ret;
-
     //TODO Implement!
     HTD_UNUSED(graph)
-
-    return htd::ConstCollection<htd::ConstCollection<htd::vertex_t>>::getInstance(ret);
+    HTD_UNUSED(target)
 }
 
-htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph & graph, htd::vertex_t startingVertex) const
+void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const
 {
-    if (!graph.isVertex(startingVertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph &, htd::vertex_t) const");
-    }
-
-    htd::VectorAdapter<htd::vertex_t> ret;
-
     //TODO Implement!
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+    HTD_UNUSED(graph)
+    HTD_UNUSED(target)
+    HTD_UNUSED(startingVertex)
 }
 
-htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IDirectedGraph & graph, htd::vertex_t startingVertex) const
+void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IDirectedMultiGraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const
 {
-    if (!graph.isVertex(startingVertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IDirectedGraph &, htd::vertex_t) const");
-    }
-
-    htd::VectorAdapter<htd::vertex_t> ret;
-
-    //TODO Implement!
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+    HTD_UNUSED(graph)
+    HTD_UNUSED(target)
+    HTD_UNUSED(startingVertex)
 }
 
 htd::TarjanStronglyConnectedComponentAlgorithm * htd::TarjanStronglyConnectedComponentAlgorithm::clone(void) const

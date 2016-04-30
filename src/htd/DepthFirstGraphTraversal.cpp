@@ -26,6 +26,7 @@
 #define	HTD_HTD_DEPTHFIRSTGRAPHTRAVERSAL_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/DepthFirstGraphTraversal.hpp>
 
 #include <stack>
@@ -43,12 +44,9 @@ htd::DepthFirstGraphTraversal::~DepthFirstGraphTraversal()
 
 }
 
-void htd::DepthFirstGraphTraversal::traverse(const htd::IHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const
+void htd::DepthFirstGraphTraversal::traverse(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const
 {
-    if (!graph.isVertex(startingVertex))
-    {
-        throw std::logic_error("void htd::DepthFirstGraphTraversal::traverse(const htd::IHypergraph &, htd::vertex_t, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const");
-    }
+    HTD_ASSERT(graph.isVertex(startingVertex))
 
     std::stack<std::tuple<htd::vertex_t, htd::vertex_t, std::size_t>> originStack;
 

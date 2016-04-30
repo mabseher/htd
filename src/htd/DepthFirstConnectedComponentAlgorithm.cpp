@@ -45,11 +45,9 @@ htd::DepthFirstConnectedComponentAlgorithm::~DepthFirstConnectedComponentAlgorit
 
 }
 
-htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::IHypergraph & graph) const
+void htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const
 {
     htd::VectorAdapter<htd::ConstCollection<htd::vertex_t>> ret;
-
-    std::vector<htd::ConstCollection<htd::vertex_t>> & components = ret.container();
 
     const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
 
@@ -59,30 +57,23 @@ htd::ConstCollection<htd::ConstCollection<htd::vertex_t>> htd::DepthFirstConnect
 
         while (unvisitedVertices.size() > 0)
         {
-            const htd::ConstCollection<htd::vertex_t> & component = determineComponent(graph, *(unvisitedVertices.begin()));
+            std::vector<htd::vertex_t> component;
+
+            determineComponent(graph, *(unvisitedVertices.begin()), component);
 
             for (htd::vertex_t visitedVertex : component)
             {
                 unvisitedVertices.erase(visitedVertex);
             }
 
-            components.push_back(component);
+            target.push_back(std::move(component));
         }
     }
-
-    return htd::ConstCollection<htd::ConstCollection<htd::vertex_t>>::getInstance(ret);
 }
 
-htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph & graph, htd::vertex_t startingVertex) const
+void htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const
 {
-    if (!graph.isVertex(startingVertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IHypergraph &, htd::vertex_t) const");
-    }
-
-    htd::VectorAdapter<htd::vertex_t> ret;
-
-    std::vector<htd::vertex_t> & component = ret.container();
+    HTD_ASSERT(graph.isVertex(startingVertex))
 
     htd::DepthFirstGraphTraversal traversal;
 
@@ -91,12 +82,10 @@ htd::ConstCollection<htd::vertex_t> htd::DepthFirstConnectedComponentAlgorithm::
         HTD_UNUSED(predecessor)
         HTD_UNUSED(distanceFromStartingVertex)
 
-        component.push_back(vertex);
+        target.push_back(vertex);
     });
 
-    std::sort(component.begin(), component.end());
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+    std::sort(target.begin(), target.end());
 }
 
 htd::DepthFirstConnectedComponentAlgorithm * htd::DepthFirstConnectedComponentAlgorithm::clone(void) const

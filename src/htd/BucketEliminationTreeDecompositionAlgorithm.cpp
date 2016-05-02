@@ -256,10 +256,12 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         htd::IGraphDecomposition * graphDecomposition = graphDecompositionAlgorithm.computeDecomposition(graph);
 
+        /*
         if (graphDecomposition == nullptr)
         {
             throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
         }
+        */
 
         htd::IMutableGraphDecomposition & mutableGraphDecomposition = htd::GraphDecompositionFactory::instance().accessMutableGraphDecomposition(*graphDecomposition);
 
@@ -308,11 +310,9 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
             htd::BreadthFirstGraphTraversal graphTraversal;
 
-            const htd::ConstCollection<htd::vertex_t> & vertexCollection = graphDecomposition->vertices();
-
             /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
             // coverity[dont_call]
-            graphTraversal.traverse(*graphDecomposition, vertexCollection[std::rand() % vertexCollection.size()], [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
+            graphTraversal.traverse(*graphDecomposition, graphDecomposition->vertexAtPosition(std::rand() % graphDecomposition->vertexCount()), [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
             {
                 HTD_UNUSED(distanceFromStartingVertex)
 

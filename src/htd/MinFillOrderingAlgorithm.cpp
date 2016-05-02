@@ -62,7 +62,9 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
     std::vector<htd::vertex_t> pool(size);
 
-    std::unordered_set<htd::vertex_t> vertices(graph.vertices().begin(), graph.vertices().end());
+    const htd::ConstCollection<htd::vertex_t> & inputVertices = graph.vertices();
+
+    std::unordered_set<htd::vertex_t> vertices(inputVertices.begin(), inputVertices.end());
 
     std::unordered_map<htd::vertex_t, htd::state_t> updateStatus(size);
 
@@ -79,7 +81,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
     htd::vertex_container affectedVertices;
     affectedVertices.reserve(size);
 
-    for (htd::vertex_t vertex : graph.vertices())
+    for (htd::vertex_t vertex : inputVertices)
     {
         auto & currentNeighborhood = neighborhood[vertex];
 
@@ -95,7 +97,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
         updateStatus[vertex] = htd::State::UNKNOWN;
     }
 
-    for (htd::vertex_t vertex : vertices)
+    for (htd::vertex_t vertex : inputVertices)
     {
         auto & currentNeighborhood = neighborhood.at(vertex);
         

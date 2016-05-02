@@ -79,17 +79,6 @@ TEST(GraphDecompositionTest, CheckSize1Graph)
 
     ASSERT_EQ((std::size_t)0, graph.bagSize(1));
 
-    try
-    {
-        graph.bagSize(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     htd::ConstCollection<htd::vertex_t> vertices = graph.vertices();
 
     ASSERT_EQ((std::size_t)1, vertices.size());

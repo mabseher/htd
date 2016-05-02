@@ -170,6 +170,16 @@ namespace htd
                 {
 
                 }
+
+                Node(const Node & original) : id(original.id), parent(original.parent), children(original.children)
+                {
+
+                }
+
+                Node(Node && original) : id(original.id), parent(original.parent), children(std::move(original.children))
+                {
+
+                }
             };
 
             std::size_t size_;

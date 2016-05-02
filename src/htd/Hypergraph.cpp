@@ -240,11 +240,14 @@ void htd::Hypergraph::removeVertex(htd::vertex_t vertex)
 
 htd::id_t htd::Hypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(vertex1, vertex2);
-
-    if (associatedIds.size() > 0)
+    if (isNeighbor(vertex1, vertex2))
     {
-        return associatedIds[0];
+        const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(vertex1, vertex2);
+
+        if (associatedIds.size() > 0)
+        {
+            return associatedIds[0];
+        }
     }
 
     return base_->addEdge(vertex1, vertex2);

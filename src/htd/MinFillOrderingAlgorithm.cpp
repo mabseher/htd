@@ -694,8 +694,6 @@ std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::unordered
 {
     std::size_t ret = 0;
 
-    htd::vertex_t vertex = htd::Vertex::UNKNOWN;
-
     DEBUGGING_CODE_LEVEL2(
     std::cout << "COMPUTE EDGE COUNT:" << std::endl << "   ";
     htd::print(vertices, false);
@@ -709,7 +707,7 @@ std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::unordered
 
     for (auto it = vertices.begin(); index < count; index++)
     {
-        vertex = *it;
+        htd::vertex_t vertex = *it;
 
         auto & currentNeighborhood = availableNeighborhoods.at(vertex);
 
@@ -717,7 +715,7 @@ std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::unordered
 
         ret += htd::set_intersection_size(it, last, std::upper_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), currentNeighborhood.end());
     }
-    
+
     return ret;
 }
             

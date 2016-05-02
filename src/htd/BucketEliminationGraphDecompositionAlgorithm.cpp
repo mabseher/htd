@@ -683,17 +683,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             std::cout << std::endl << std::endl << std::endl;
             */
 
-            const htd::ConstCollection<htd::vertex_t> & decompositionVertices = ret->vertices();
+            htd::index_t nodeCount = ret->vertexCount();
 
-            for (auto it = decompositionVertices.begin(); it != decompositionVertices.end() && !htd::Library::instance().isAborted(); ++it)
+            for (htd::vertex_t vertex = 1; vertex <= nodeCount; ++vertex)
             {
-                htd::vertex_t vertex = *it;
-                /*
-                std::cout << "SET BAG CONTENT " << vertex << " (" << result.lookupVertex(vertex) << "): ";
-                htd::print(buckets[vertex], std::cout, false);
-                std::cout << std::endl;
-                */
-
                 htd::vertex_t vertexName = graphNaming.vertexName(vertex);
 
                 ret->bagContent(vertex) = std::move(buckets[vertexName]);

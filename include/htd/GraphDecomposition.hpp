@@ -51,6 +51,10 @@ namespace htd
 
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
 
+            htd::vertex_t addVertex(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;
+
+            htd::vertex_t addVertex(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) HTD_OVERRIDE;
+
             htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) HTD_OVERRIDE;
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;

@@ -407,10 +407,7 @@ bool htd::PathDecomposition::isIntroduceNode(htd::vertex_t vertex) const
 
 std::size_t htd::PathDecomposition::bagSize(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("std::size_t htd::PathDecomposition::bagSize(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return bagContent_.at(vertex).size();
 }

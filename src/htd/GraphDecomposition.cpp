@@ -86,6 +86,28 @@ htd::vertex_t htd::GraphDecomposition::addVertex(void)
     return ret;
 }
 
+htd::vertex_t htd::GraphDecomposition::addVertex(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    htd::vertex_t ret = htd::Graph::addVertex();
+
+    bagContent_[ret] = bagContent;
+
+    inducedEdges_[ret] = inducedEdges;
+
+    return ret;
+}
+
+htd::vertex_t htd::GraphDecomposition::addVertex(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    htd::vertex_t ret = htd::Graph::addVertex();
+
+    bagContent_[ret] = std::move(bagContent);
+
+    inducedEdges_[ret] = std::move(inducedEdges);
+
+    return ret;
+}
+
 htd::ConstCollection<htd::vertex_t> htd::GraphDecomposition::addVertices(std::size_t count)
 {
     const htd::ConstCollection<htd::vertex_t> & ret = htd::Graph::addVertices(count);
@@ -115,10 +137,7 @@ void htd::GraphDecomposition::removeVertex(htd::vertex_t vertex)
 
 std::size_t htd::GraphDecomposition::bagSize(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("std::size_t htd::GraphDecomposition::bagSize(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return bagContent_.at(vertex).size();
 }

@@ -497,7 +497,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             htd::BidirectionalGraphNaming<htd::vertex_t, htd::id_t> graphNaming;
 
-            std::function<htd::vertex_t(void)> vertexCreationFunction(std::bind(&htd::IMutableGraphDecomposition::addVertex, ret));
+            std::function<htd::vertex_t(void)> vertexCreationFunction(std::bind(&htd::IMutableGraph::addVertex, ret));
 
             for (auto it = ordering.begin(); it != ordering.end() && !htd::Library::instance().isAborted(); ++it)
             {

@@ -208,6 +208,11 @@ htd::FilteredHyperedgeCollection htd::Hypergraph::hyperedgesAtPositions(const st
     return base_->hyperedgesAtPositions(indices);
 }
 
+htd::FilteredHyperedgeCollection htd::Hypergraph::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
+{
+    return base_->hyperedgesAtPositions(std::move(indices));
+}
+
 const htd::Hyperedge & htd::Hypergraph::hyperedge(htd::id_t edgeId) const
 {
     return base_->hyperedge(edgeId);

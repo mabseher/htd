@@ -431,6 +431,11 @@ htd::FilteredHyperedgeCollection htd::DirectedGraph::hyperedgesAtPositions(const
     return base_->hyperedgesAtPositions(indices);
 }
 
+htd::FilteredHyperedgeCollection htd::DirectedGraph::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
+{
+    return base_->hyperedgesAtPositions(std::move(indices));
+}
+
 htd::vertex_t htd::DirectedGraph::addVertex(void)
 {
     htd::vertex_t ret = base_->addVertex();

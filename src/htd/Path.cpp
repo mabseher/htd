@@ -537,6 +537,51 @@ htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(const std::vec
     return htd::FilteredHyperedgeCollection(hyperedges, indices);
 }
 
+htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
+{
+    std::shared_ptr<std::vector<htd::Hyperedge>> hyperedges = std::make_shared<std::vector<htd::Hyperedge>>();
+
+    htd::id_t id = 0;
+
+    for (const auto & currentNode : nodes_)
+    {
+        htd::vertex_t vertex = currentNode.first;
+
+        htd::vertex_t parent = currentNode.second->parent;
+        htd::vertex_t child = currentNode.second->child;
+
+        if (parent != htd::Vertex::UNKNOWN)
+        {
+            if (parent < vertex)
+            {
+                hyperedges->push_back(htd::Hyperedge(id, parent, vertex));
+            }
+            else
+            {
+                hyperedges->push_back(htd::Hyperedge(id, vertex, parent));
+            }
+
+            ++id;
+        }
+
+        if (child != htd::Vertex::UNKNOWN)
+        {
+            if (child < vertex)
+            {
+                hyperedges->push_back(htd::Hyperedge(id, child, vertex));
+            }
+            else
+            {
+                hyperedges->push_back(htd::Hyperedge(id, vertex, child));
+            }
+
+            ++id;
+        }
+    }
+
+    return htd::FilteredHyperedgeCollection(hyperedges, std::move(indices));
+}
+
 htd::vertex_t htd::Path::root(void) const
 {
     if (root_ == htd::Vertex::UNKNOWN)
@@ -1011,7 +1056,7 @@ void htd::Path::deleteNode(htd::Path::Node * node)
 
 htd::Path * htd::Path::clone(void) const
 {
-    return new Path(*this);
+    return new htd::Path(*this);
 }
 
 htd::Path & htd::Path::operator=(const htd::Path & original)

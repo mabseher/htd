@@ -108,6 +108,8 @@ namespace htd
 
             htd::FilteredHyperedgeCollection hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const HTD_OVERRIDE;
 
+            htd::FilteredHyperedgeCollection hyperedgesAtPositions(std::vector<htd::index_t> && indices) const HTD_OVERRIDE;
+
             htd::vertex_t root(void) const HTD_OVERRIDE;
 
             bool isRoot(htd::vertex_t vertex) const HTD_OVERRIDE;

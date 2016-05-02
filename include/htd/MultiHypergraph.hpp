@@ -105,6 +105,8 @@ namespace htd
 
             htd::FilteredHyperedgeCollection hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const HTD_OVERRIDE;
 
+            htd::FilteredHyperedgeCollection hyperedgesAtPositions(std::vector<htd::index_t> && indices) const HTD_OVERRIDE;
+
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) HTD_OVERRIDE;

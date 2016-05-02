@@ -89,6 +89,8 @@ namespace htd
 
             virtual htd::FilteredHyperedgeCollection hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const = 0;
 
+            virtual htd::FilteredHyperedgeCollection hyperedgesAtPositions(std::vector<htd::index_t> && indices) const = 0;
+
             virtual std::size_t edgeCount(htd::vertex_t vertex) const = 0;
 
             virtual htd::ConstCollection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const = 0;

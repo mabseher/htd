@@ -478,15 +478,26 @@ const htd::Hyperedge & htd::Tree::hyperedgeAtPosition(htd::index_t index, htd::v
 
 htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
 {
+    #ifndef NDEBUG
     for (htd::index_t index : indices)
     {
-        if (index >= edges_->size())
-        {
-            throw std::logic_error("htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(const std::vector<htd::index_t> &) const");
-        }
+        HTD_ASSERT(index < edges_->size())
     }
+    #endif
 
     return htd::FilteredHyperedgeCollection(edges_, indices);
+}
+
+htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
+{
+    #ifndef NDEBUG
+    for (htd::index_t index : indices)
+    {
+        HTD_ASSERT(index < edges_->size())
+    }
+    #endif
+
+    return htd::FilteredHyperedgeCollection(edges_, std::move(indices));
 }
 
 htd::vertex_t htd::Tree::root(void) const

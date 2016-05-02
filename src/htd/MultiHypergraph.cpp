@@ -565,10 +565,14 @@ const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t in
     throw std::out_of_range("const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
 }
 
-
 htd::FilteredHyperedgeCollection htd::MultiHypergraph::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
 {
     return htd::FilteredHyperedgeCollection(edges_, indices);
+}
+
+htd::FilteredHyperedgeCollection htd::MultiHypergraph::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
+{
+    return htd::FilteredHyperedgeCollection(edges_, std::move(indices));
 }
 
 htd::vertex_t htd::MultiHypergraph::addVertex(void)

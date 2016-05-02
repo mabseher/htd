@@ -226,17 +226,6 @@ TEST(TreeTest, CheckSize1Tree)
     {
         HTD_UNUSED(error);
     }
-
-    try
-    {
-        tree.hyperedgesAtPositions(std::vector<htd::index_t> { 0 });
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 }
 
 TEST(TreeTest, CheckSize3Tree)
@@ -716,17 +705,6 @@ TEST(TreeTest, CheckSize3Tree)
 
     ASSERT_EQ(root, (*position)[0]);
     ASSERT_EQ(newRoot, (*position)[1]);
-
-    try
-    {
-        tree.hyperedgesAtPositions(std::vector<htd::index_t> { 2 });
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 }
 
 TEST(TreeTest, CheckTreeManipulations1)

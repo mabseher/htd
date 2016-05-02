@@ -35,15 +35,25 @@ namespace htd
     class IMutablePathDecomposition : public virtual htd::IMutableLabeledPath, public virtual htd::IPathDecomposition
     {
         public:
+            using htd::IMutablePath::addChild;
+            using htd::IMutablePath::addParent;
+
             using htd::IPathDecomposition::bagContent;
+            using htd::IPathDecomposition::inducedHyperedges;
 
             virtual ~IMutablePathDecomposition() = 0;
 
+            virtual htd::vertex_t addChild(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
+
+            virtual htd::vertex_t addChild(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
+
+            virtual htd::vertex_t addParent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
+
+            virtual htd::vertex_t addParent(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
+
             virtual std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) = 0;
 
-            virtual void setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
-
-            virtual void setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
+            virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
 
             virtual IMutablePathDecomposition * clone(void) const = 0;
 

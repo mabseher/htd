@@ -136,6 +136,28 @@ htd::vertex_t htd::PathDecomposition::addChild(htd::vertex_t vertex)
     return ret;
 }
 
+htd::vertex_t htd::PathDecomposition::addChild(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    htd::vertex_t ret = htd::Path::addChild(vertex);
+
+    bagContent_[ret] = bagContent;
+
+    inducedEdges_[ret] = inducedEdges;
+
+    return ret;
+}
+
+htd::vertex_t htd::PathDecomposition::addChild(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    htd::vertex_t ret = htd::Path::addChild(vertex);
+
+    bagContent_[ret] = std::move(bagContent);
+
+    inducedEdges_[ret] = std::move(inducedEdges);
+
+    return ret;
+}
+
 htd::vertex_t htd::PathDecomposition::addParent(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::Path::addParent(vertex);
@@ -143,6 +165,28 @@ htd::vertex_t htd::PathDecomposition::addParent(htd::vertex_t vertex)
     bagContent_[ret] = std::vector<htd::vertex_t>();
 
     inducedEdges_[ret] = htd::FilteredHyperedgeCollection();
+
+    return ret;
+}
+
+htd::vertex_t htd::PathDecomposition::addParent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    htd::vertex_t ret = htd::Path::addParent(vertex);
+
+    bagContent_[ret] = bagContent;
+
+    inducedEdges_[ret] = inducedEdges;
+
+    return ret;
+}
+
+htd::vertex_t htd::PathDecomposition::addParent(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    htd::vertex_t ret = htd::Path::addParent(vertex);
+
+    bagContent_[ret] = std::move(bagContent);
+
+    inducedEdges_[ret] = std::move(inducedEdges);
 
     return ret;
 }
@@ -391,34 +435,18 @@ const std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::verte
     return bagContent_.at(vertex);
 }
 
-const htd::FilteredHyperedgeCollection & htd::PathDecomposition::inducedHyperedges(htd::vertex_t vertex) const
+htd::FilteredHyperedgeCollection & htd::PathDecomposition::inducedHyperedges(htd::vertex_t vertex)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("const htd::FilteredHyperedgeCollection & htd::PathDecomposition::inducedHyperedges(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return inducedEdges_.at(vertex);
 }
 
-void htd::PathDecomposition::setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges)
+const htd::FilteredHyperedgeCollection & htd::PathDecomposition::inducedHyperedges(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::PathDecomposition::setInducedHyperedges(htd::vertex_t, const htd::FilteredHyperedgeCollection &)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
-    inducedEdges_[vertex] = inducedEdges;
-}
-
-void htd::PathDecomposition::setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges)
-{
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::PathDecomposition::setInducedHyperedges(htd::vertex_t, htd::FilteredHyperedgeCollection &&)");
-    }
-
-    inducedEdges_[vertex] = std::move(inducedEdges);
+    return inducedEdges_.at(vertex);
 }
 
 std::size_t htd::PathDecomposition::minimumBagSize(void) const

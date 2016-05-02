@@ -137,25 +137,18 @@ const std::vector<htd::vertex_t> & htd::GraphDecomposition::bagContent(htd::vert
     return bagContent_.at(vertex);
 }
 
-const htd::FilteredHyperedgeCollection & htd::GraphDecomposition::inducedHyperedges(htd::vertex_t vertex) const
+htd::FilteredHyperedgeCollection & htd::GraphDecomposition::inducedHyperedges(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 
     return inducedEdges_.at(vertex);
 }
 
-void htd::GraphDecomposition::setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges)
+const htd::FilteredHyperedgeCollection & htd::GraphDecomposition::inducedHyperedges(htd::vertex_t vertex) const
 {
     HTD_ASSERT(isVertex(vertex))
 
-    inducedEdges_[vertex] = inducedEdges;
-}
-
-void htd::GraphDecomposition::setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges)
-{
-    HTD_ASSERT(isVertex(vertex))
-
-    inducedEdges_[vertex] = std::move(inducedEdges);
+    return inducedEdges_.at(vertex);
 }
 
 std::size_t htd::GraphDecomposition::minimumBagSize(void) const

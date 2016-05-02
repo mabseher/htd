@@ -64,11 +64,13 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
         {
             htd::vertex_t newNode = decomposition.addChild(node);
 
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
+
             const htd::FilteredHyperedgeCollection & inducedHyperedges = decomposition.inducedHyperedges(node);
 
-            decomposition.bagContent(newNode) = decomposition.bagContent(node);
+            decomposition.bagContent(newNode) = bag;
 
-            decomposition.setInducedHyperedges(newNode, inducedHyperedges);
+            decomposition.inducedHyperedges(newNode) = inducedHyperedges;
 
             for (auto & labelingFunction : labelingFunctions)
             {
@@ -125,9 +127,9 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
                     newNode = decomposition.addParent(newNode);
 
-                    decomposition.bagContent(newNode) = decomposition.bagContent(node);
+                    decomposition.bagContent(newNode) = bag;
 
-                    decomposition.setInducedHyperedges(newNode, inducedHyperedges);
+                    decomposition.inducedHyperedges(newNode) = inducedHyperedges;
 
                     for (auto it = start; it != finish; ++it)
                     {

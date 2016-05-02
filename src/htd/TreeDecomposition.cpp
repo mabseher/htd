@@ -147,6 +147,28 @@ htd::vertex_t htd::TreeDecomposition::addChild(htd::vertex_t vertex)
     return ret;
 }
 
+htd::vertex_t htd::TreeDecomposition::addChild(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    htd::vertex_t ret = htd::Tree::addChild(vertex);
+
+    bagContent_[ret] = bagContent;
+
+    inducedEdges_[ret] = inducedEdges;
+
+    return ret;
+}
+
+htd::vertex_t htd::TreeDecomposition::addChild(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    htd::vertex_t ret = htd::Tree::addChild(vertex);
+
+    bagContent_[ret] = std::move(bagContent);
+
+    inducedEdges_[ret] = std::move(inducedEdges);
+
+    return ret;
+}
+
 htd::vertex_t htd::TreeDecomposition::addParent(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::Tree::addParent(vertex);
@@ -154,6 +176,28 @@ htd::vertex_t htd::TreeDecomposition::addParent(htd::vertex_t vertex)
     bagContent_[ret] = std::vector<htd::vertex_t>();
 
     inducedEdges_[ret] = htd::FilteredHyperedgeCollection();
+
+    return ret;
+}
+
+htd::vertex_t htd::TreeDecomposition::addParent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    htd::vertex_t ret = htd::Tree::addParent(vertex);
+
+    bagContent_[ret] = bagContent;
+
+    inducedEdges_[ret] = inducedEdges;
+
+    return ret;
+}
+
+htd::vertex_t htd::TreeDecomposition::addParent(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    htd::vertex_t ret = htd::Tree::addParent(vertex);
+
+    bagContent_[ret] = std::move(bagContent);
+
+    inducedEdges_[ret] = std::move(inducedEdges);
 
     return ret;
 }
@@ -416,25 +460,18 @@ const std::vector<htd::vertex_t> & htd::TreeDecomposition::bagContent(htd::verte
     return bagContent_.at(vertex);
 }
 
-const htd::FilteredHyperedgeCollection & htd::TreeDecomposition::inducedHyperedges(htd::vertex_t vertex) const
+htd::FilteredHyperedgeCollection & htd::TreeDecomposition::inducedHyperedges(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 
     return inducedEdges_.at(vertex);
 }
 
-void htd::TreeDecomposition::setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges)
+const htd::FilteredHyperedgeCollection & htd::TreeDecomposition::inducedHyperedges(htd::vertex_t vertex) const
 {
     HTD_ASSERT(isVertex(vertex))
 
-    inducedEdges_[vertex] = inducedEdges;
-}
-
-void htd::TreeDecomposition::setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges)
-{
-    HTD_ASSERT(isVertex(vertex))
-
-    inducedEdges_[vertex] = std::move(inducedEdges);
+    return inducedEdges_.at(vertex);
 }
 
 std::size_t htd::TreeDecomposition::minimumBagSize(void) const

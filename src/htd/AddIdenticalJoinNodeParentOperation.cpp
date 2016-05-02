@@ -58,15 +58,13 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(htd::IMutableTreeDecomposit
         std::cout << std::endl << std::endl;
         )
 
-        const htd::FilteredHyperedgeCollection & inducedHyperedges = decomposition.inducedHyperedges(node);
-
         if (decomposition.bagContent(decomposition.parent(node)) != bag)
         {
             htd::vertex_t newParent = decomposition.addParent(node);
 
             decomposition.bagContent(newParent) = bag;
 
-            decomposition.setInducedHyperedges(newParent, inducedHyperedges);
+            decomposition.inducedHyperedges(newParent) = decomposition.inducedHyperedges(node);
 
             for (auto & labelingFunction : labelingFunctions)
             {

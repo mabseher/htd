@@ -41,9 +41,7 @@ namespace htd
 
             virtual std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) = 0;
 
-            virtual void setInducedHyperedges(htd::vertex_t vertex, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
-
-            virtual void setInducedHyperedges(htd::vertex_t vertex, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
+            virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
 
             virtual IMutableGraphDecomposition * clone(void) const = 0;
 

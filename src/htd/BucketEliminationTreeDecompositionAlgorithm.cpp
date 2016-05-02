@@ -319,18 +319,19 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                 if (predecessor == htd::Vertex::UNKNOWN)
                 {
                     node = ret->insertRoot();
+
+                    ret->bagContent(node) = std::move(mutableGraphDecomposition.bagContent(vertex));
+
+                    ret->inducedHyperedges(node) = std::move(mutableGraphDecomposition.inducedHyperedges(vertex));
                 }
                 else
                 {
-                    node = ret->addChild(vertexMapping.at(predecessor));
+                    node = ret->addChild(vertexMapping.at(predecessor),
+                                         std::move(mutableGraphDecomposition.bagContent(vertex)),
+                                         std::move(mutableGraphDecomposition.inducedHyperedges(vertex)));
                 }
 
-                vertexMapping[vertex] = node;
-
-                ret->bagContent(node).swap(mutableGraphDecomposition.bagContent(vertex));
-
-                //TODO Export induced hyperedges via swap!
-                ret->setInducedHyperedges(node, mutableGraphDecomposition.inducedHyperedges(vertex));
+                vertexMapping[vertex] = node;;
             });
         }
         else

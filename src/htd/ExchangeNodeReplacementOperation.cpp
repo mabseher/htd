@@ -85,7 +85,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
 
                 newInducedHyperedges.restrictTo(rememberedVertices);
 
-                decomposition.setInducedHyperedges(newVertex, newInducedHyperedges);
+                decomposition.inducedHyperedges(newVertex) = std::move(newInducedHyperedges);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -149,7 +149,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
                 newInducedHyperedges.restrictTo(rememberedVertices);
 
-                decomposition.setInducedHyperedges(newVertex, newInducedHyperedges);
+                decomposition.inducedHyperedges(newVertex) = std::move(newInducedHyperedges);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {

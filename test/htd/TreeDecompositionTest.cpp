@@ -1862,9 +1862,8 @@ TEST(TreeDecompositionTest, CheckInducedHyperedges1)
 
     htd::FilteredHyperedgeCollection hyperedges1(inputEdges1, std::vector<htd::index_t> { 0, 1, 2 });
     htd::FilteredHyperedgeCollection hyperedges2(inputEdges1, std::vector<htd::index_t> { 2, 1, 0 });
-    htd::FilteredHyperedgeCollection hyperedges3(inputEdges1, std::vector<htd::index_t> { 0 });
 
-    td.setInducedHyperedges(node1, hyperedges1);
+    td.inducedHyperedges(node1) = hyperedges1;
 
     ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
 
@@ -1886,7 +1885,7 @@ TEST(TreeDecompositionTest, CheckInducedHyperedges1)
     ++it;
     ASSERT_EQ((htd::id_t)3, it->id());
 
-    td.setInducedHyperedges(node1, std::move(hyperedges2));
+    td.inducedHyperedges(node1) = std::move(hyperedges2);
 
     ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
 

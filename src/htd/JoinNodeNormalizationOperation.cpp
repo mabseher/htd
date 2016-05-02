@@ -61,14 +61,14 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
     {
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
+        const htd::FilteredHyperedgeCollection & inducedHyperedges = decomposition.inducedHyperedges(node);
+
         DEBUGGING_CODE(
         std::cout << "JOIN NODE: " << node << std::endl;
         std::cout << "   ";
         htd::print(bag, false);
         std::cout << std::endl << std::endl;
         )
-
-        const htd::FilteredHyperedgeCollection & inducedHyperedges = decomposition.inducedHyperedges(node);
 
         if (identicalParent_)
         {
@@ -78,7 +78,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
                 decomposition.bagContent(newParent) = bag;
 
-                decomposition.setInducedHyperedges(newParent, inducedHyperedges);
+                decomposition.inducedHyperedges(newParent) = inducedHyperedges;
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -114,7 +114,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
                 decomposition.bagContent(intermediateVertex) = bag;
 
-                decomposition.setInducedHyperedges(intermediateVertex, inducedHyperedges);
+                decomposition.inducedHyperedges(intermediateVertex) = inducedHyperedges;
 
                 for (auto & labelingFunction : labelingFunctions)
                 {

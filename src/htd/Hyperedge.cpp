@@ -27,9 +27,27 @@
 
 #include <htd/Hyperedge.hpp>
 
-htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2) : Hyperedge(id, std::vector<htd::vertex_t> { vertex1, vertex2 })
+//htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2) : Hyperedge(id, std::vector<htd::vertex_t> { vertex1, vertex2 })
+htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT : id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>(std::initializer_list<htd::vertex_t> { vertex1, vertex2 })), sortedElements_(std::make_shared<std::vector<htd::vertex_t>>())
 {
+    if (vertex1 < vertex2)
+    {
+        sortedElements_->reserve(2);
 
+        sortedElements_->push_back(vertex1);
+        sortedElements_->push_back(vertex2);
+    }
+    else if (vertex1 > vertex2)
+    {
+        sortedElements_->reserve(2);
+
+        sortedElements_->push_back(vertex2);
+        sortedElements_->push_back(vertex1);
+    }
+    else
+    {
+        sortedElements_->push_back(vertex1);
+    }
 }
 
 htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements) : id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>(elements.begin(), elements.end())), sortedElements_(std::make_shared<std::vector<htd::vertex_t>>())

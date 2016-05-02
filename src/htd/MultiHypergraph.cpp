@@ -110,7 +110,7 @@ std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t vertex) const
 
     HTD_ASSERT(isVertex(vertex))
 
-    for (auto & edge : *edges_)
+    for (const htd::Hyperedge & edge : *edges_)
     {
         if (edge.containsVertex(vertex))
         {

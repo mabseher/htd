@@ -41,7 +41,7 @@ namespace htd
         public:
             typedef htd::vertex_t value_type;
 
-            Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2);
+            Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT;
 
             Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements);
 

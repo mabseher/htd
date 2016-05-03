@@ -37,7 +37,6 @@
 #include <stack>
 #include <stdexcept>
 #include <utility>
-#include <vector>
 
 htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<htd::hyperedge_container>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
@@ -859,35 +858,29 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
-    if (!isVertex(vertex))
-    {
-        throw std::out_of_range("htd::vertex_t htd::Tree::addParent(htd::vertex_t)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     if (isRoot(vertex))
     {
         auto & node = nodes_.at(vertex);
 
-        if (node != nullptr)
-        {
-            ret = next_vertex_;
+        ret = next_vertex_;
 
-            node->parent = ret;
+        node->parent = ret;
 
-            std::unique_ptr<htd::Tree::Node> newRootNode(new htd::Tree::Node(ret, htd::Vertex::UNKNOWN));
+        std::unique_ptr<htd::Tree::Node> newRootNode(new htd::Tree::Node(ret, htd::Vertex::UNKNOWN));
 
-            newRootNode->children.push_back(vertex);
+        newRootNode->children.push_back(vertex);
 
-            nodes_.insert(std::make_pair(ret, std::move(newRootNode)));
+        nodes_.insert(std::make_pair(ret, std::move(newRootNode)));
 
-            vertices_.push_back(ret);
+        vertices_.push_back(ret);
 
-            ++next_vertex_;
+        ++next_vertex_;
 
-            size_++;
+        size_++;
 
-            root_ = ret;
-        }
+        root_ = ret;
     }
     else
     {
@@ -899,21 +892,18 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
         auto & selectedNode = nodes_.at(vertex);
         auto & intermediateNode = nodes_.at(ret);
 
-        if (parentNode != nullptr && selectedNode != nullptr && intermediateNode != nullptr)
+        intermediateNode->parent = parentVertex;
+
+        intermediateNode->children.push_back(vertex);
+
+        auto position = std::find(parentNode->children.begin(), parentNode->children.end(), vertex);
+
+        if (position != parentNode->children.end())
         {
-            intermediateNode->parent = parentVertex;
-
-            intermediateNode->children.push_back(vertex);
-
-            auto position = std::find(parentNode->children.begin(), parentNode->children.end(), vertex);
-
-            if (position != parentNode->children.end())
-            {
-                parentNode->children.erase(position);
-            }
-
-            selectedNode->parent = ret;
+            parentNode->children.erase(position);
         }
+
+        selectedNode->parent = ret;
     }
 
     edges_->push_back(htd::Hyperedge(next_edge_, vertex, ret));

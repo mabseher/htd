@@ -110,11 +110,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
                 std::cout << std::endl << std::endl;
                 )
 
-                htd::vertex_t intermediateVertex = decomposition.addParent(child);
-
-                decomposition.bagContent(intermediateVertex) = bag;
-
-                decomposition.inducedHyperedges(intermediateVertex) = inducedHyperedges;
+                htd::vertex_t intermediateVertex = decomposition.addParent(child, bag, inducedHyperedges);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {

@@ -931,6 +931,66 @@ TEST(TreeTest, CheckTreeManipulations2)
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
 }
 
+TEST(TreeTest, CheckMakeRootFunctionality1)
+{
+    htd::Tree tree;
+
+    htd::vertex_t node1 = tree.insertRoot();
+    htd::vertex_t node2 = tree.addChild(node1);
+    htd::vertex_t node3 = tree.addChild(node1);
+    htd::vertex_t node4 = tree.addChild(node2);
+    htd::vertex_t node5 = tree.addChild(node2);
+    htd::vertex_t node6 = tree.addChild(node3);
+
+    tree.makeRoot(node1);
+
+    ASSERT_EQ((std::size_t)6, tree.vertexCount());
+
+    ASSERT_TRUE(tree.isParent(node2, node1));
+    ASSERT_TRUE(tree.isParent(node3, node1));
+    ASSERT_TRUE(tree.isParent(node4, node2));
+    ASSERT_TRUE(tree.isParent(node5, node2));
+    ASSERT_TRUE(tree.isParent(node6, node3));
+
+    ASSERT_TRUE(tree.isChild(node1, node2));
+    ASSERT_TRUE(tree.isChild(node1, node3));
+    ASSERT_TRUE(tree.isChild(node2, node4));
+    ASSERT_TRUE(tree.isChild(node2, node5));
+    ASSERT_TRUE(tree.isChild(node3, node6));
+
+    tree.makeRoot(node2);
+
+    ASSERT_EQ((std::size_t)6, tree.vertexCount());
+
+    ASSERT_TRUE(tree.isParent(node1, node2));
+    ASSERT_TRUE(tree.isParent(node3, node1));
+    ASSERT_TRUE(tree.isParent(node4, node2));
+    ASSERT_TRUE(tree.isParent(node5, node2));
+    ASSERT_TRUE(tree.isParent(node6, node3));
+
+    ASSERT_TRUE(tree.isChild(node2, node1));
+    ASSERT_TRUE(tree.isChild(node1, node3));
+    ASSERT_TRUE(tree.isChild(node2, node4));
+    ASSERT_TRUE(tree.isChild(node2, node5));
+    ASSERT_TRUE(tree.isChild(node3, node6));
+
+    tree.makeRoot(node1);
+
+    ASSERT_EQ((std::size_t)6, tree.vertexCount());
+
+    ASSERT_TRUE(tree.isParent(node2, node1));
+    ASSERT_TRUE(tree.isParent(node3, node1));
+    ASSERT_TRUE(tree.isParent(node4, node2));
+    ASSERT_TRUE(tree.isParent(node5, node2));
+    ASSERT_TRUE(tree.isParent(node6, node3));
+
+    ASSERT_TRUE(tree.isChild(node1, node2));
+    ASSERT_TRUE(tree.isChild(node1, node3));
+    ASSERT_TRUE(tree.isChild(node2, node4));
+    ASSERT_TRUE(tree.isChild(node2, node5));
+    ASSERT_TRUE(tree.isChild(node3, node6));
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

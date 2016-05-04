@@ -287,17 +287,6 @@ TEST(TreeTest, CheckSize3Tree)
 
     htd::vertex_t newRoot = tree.addParent(root);
 
-    try
-    {
-        tree.addParent(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_TRUE(tree.isVertex(root));
     ASSERT_TRUE(tree.isVertex(child));
     ASSERT_TRUE(tree.isVertex(newRoot));

@@ -493,7 +493,7 @@ htd::vertex_t htd::Tree::parent(htd::vertex_t vertex) const
 
     htd::vertex_t ret = nodes_.at(vertex)->parent;
 
-    HTD_ASSERT(isVertex(parent))
+    HTD_ASSERT(ret != htd::Vertex::UNKNOWN)
     
     return ret;
 }

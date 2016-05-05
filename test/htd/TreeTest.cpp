@@ -70,50 +70,6 @@ TEST(TreeTest, CheckEmptyTree)
     ASSERT_EQ((std::size_t)0, tree.leafNodeCount());
 
     ASSERT_EQ((std::size_t)0, tree.isolatedVertexCount());
-
-    try
-    {
-        tree.root();
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    try
-    {
-        tree.vertexCount(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    try
-    {
-        tree.edgeCount(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    try
-    {
-        tree.isolatedVertexAtPosition(0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 }
 
 TEST(TreeTest, CheckSize1Tree)
@@ -132,17 +88,6 @@ TEST(TreeTest, CheckSize1Tree)
     ASSERT_TRUE(tree.isConnected());
 
     ASSERT_EQ((std::size_t)0, tree.leafNodeCount());
-
-    try
-    {
-        tree.root();
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     htd::vertex_t root = tree.insertRoot();
 
@@ -171,61 +116,6 @@ TEST(TreeTest, CheckSize1Tree)
     ASSERT_EQ(root, tree.isolatedVertices()[0]);
     ASSERT_EQ(root, tree.isolatedVertexAtPosition(0));
     ASSERT_TRUE(tree.isIsolatedVertex(root));
-
-    try
-    {
-        tree.vertexCount(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    try
-    {
-        tree.edgeCount(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    try
-    {
-        tree.isolatedVertexAtPosition(1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    try
-    {
-        tree.hyperedgeAtPosition(0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    try
-    {
-        tree.hyperedgeAtPosition(0, root);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 }
 
 TEST(TreeTest, CheckSize3Tree)
@@ -244,17 +134,6 @@ TEST(TreeTest, CheckSize3Tree)
     ASSERT_TRUE(tree.isConnected());
 
     ASSERT_EQ((std::size_t)0, tree.leafNodeCount());
-
-    try
-    {
-        tree.root();
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     htd::vertex_t root = tree.insertRoot();
 
@@ -389,46 +268,13 @@ TEST(TreeTest, CheckSize3Tree)
     ASSERT_EQ(child, tree.vertexAtPosition((htd::index_t)1));
     ASSERT_EQ(newRoot, tree.vertexAtPosition((htd::index_t)2));
 
-    try
-    {
-        tree.vertexAtPosition((htd::index_t)3);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     const htd::ConstCollection<htd::vertex_t> & rootNeighbors = tree.neighbors(root);
     const htd::ConstCollection<htd::vertex_t> & childNeighbors = tree.neighbors(child);
     const htd::ConstCollection<htd::vertex_t> & newRootNeighbors = tree.neighbors(newRoot);
 
-    try
-    {
-        tree.neighbors((htd::vertex_t)4);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     std::vector<htd::vertex_t> rootNeighbors2;
     std::vector<htd::vertex_t> childNeighbors2;
     std::vector<htd::vertex_t> newRootNeighbors2;
-
-    try
-    {
-        tree.copyNeighborsTo(rootNeighbors2, (htd::vertex_t)4);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ((std::size_t)2, rootNeighbors.size());
     ASSERT_EQ((std::size_t)1, childNeighbors.size());

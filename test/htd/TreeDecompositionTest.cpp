@@ -156,17 +156,6 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
 
     ASSERT_EQ((std::size_t)0, decomposition.leafNodeCount());
 
-    try
-    {
-        decomposition.root();
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     htd::vertex_t root = decomposition.insertRoot();
 
     htd::vertex_t child = decomposition.addChild(root);
@@ -230,30 +219,8 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
     ASSERT_EQ(child, decomposition.childAtPosition(root, (htd::index_t)0));
     ASSERT_EQ(root, decomposition.childAtPosition(newRoot, (htd::index_t)0));
 
-    try
-    {
-        decomposition.childAtPosition(child, (htd::index_t)0);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ(newRoot, decomposition.parent(root));
     ASSERT_EQ(root, decomposition.parent(child));
-
-    try
-    {
-        decomposition.parent(newRoot);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ((std::size_t)1, decomposition.childCount(root));
     ASSERT_EQ((std::size_t)0, decomposition.childCount(child));
@@ -322,46 +289,13 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
     ASSERT_EQ(child, decomposition.vertexAtPosition((htd::index_t)1));
     ASSERT_EQ(newRoot, decomposition.vertexAtPosition((htd::index_t)2));
 
-    try
-    {
-        decomposition.vertexAtPosition((htd::index_t)3);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     const htd::ConstCollection<htd::vertex_t> & rootNeighbors = decomposition.neighbors(root);
     const htd::ConstCollection<htd::vertex_t> & childNeighbors = decomposition.neighbors(child);
     const htd::ConstCollection<htd::vertex_t> & newRootNeighbors = decomposition.neighbors(newRoot);
 
-    try
-    {
-        decomposition.neighbors((htd::vertex_t)4);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     std::vector<htd::vertex_t> rootNeighbors2;
     std::vector<htd::vertex_t> childNeighbors2;
     std::vector<htd::vertex_t> newRootNeighbors2;
-
-    try
-    {
-        decomposition.copyNeighborsTo(rootNeighbors2, (htd::vertex_t)4);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ((std::size_t)2, rootNeighbors.size());
     ASSERT_EQ((std::size_t)1, childNeighbors.size());
@@ -394,42 +328,9 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
     ASSERT_EQ(root, decomposition.neighborAtPosition(child, (htd::index_t)0));
     ASSERT_EQ(root, decomposition.neighborAtPosition(newRoot, (htd::index_t)0));
 
-    try
-    {
-        decomposition.neighborAtPosition((htd::vertex_t)4, (htd::index_t)0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
-    try
-    {
-        decomposition.neighborAtPosition(root, (htd::index_t)2);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)2, decomposition.hyperedges(root).size());
     ASSERT_EQ((std::size_t)1, decomposition.hyperedges(child).size());
     ASSERT_EQ((std::size_t)1, decomposition.hyperedges(newRoot).size());
-
-    try
-    {
-        decomposition.hyperedges((htd::vertex_t)4);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 }
 
 TEST(TreeDecompositionTest, CheckTreeManipulations)
@@ -537,17 +438,6 @@ TEST(TreeDecompositionTest, CheckTreeManipulations)
     ASSERT_EQ((std::size_t)3, decomposition.vertexCount(node111));
     ASSERT_EQ((std::size_t)1, decomposition.vertexCount(node121));
     ASSERT_EQ((std::size_t)1, decomposition.vertexCount(node122));
-
-    try
-    {
-        decomposition.removeSubtree(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     decomposition.removeRoot();
 
@@ -701,17 +591,6 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     ASSERT_FALSE(td3.isJoinNode(root2));
     ASSERT_FALSE(td3.isJoinNode(labeledTreeNode3));
 
-    try
-    {
-        td1.isJoinNode(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
-
     ASSERT_EQ((std::size_t)0, td1.forgetNodeCount());
     ASSERT_EQ((std::size_t)0, td2.forgetNodeCount());
     ASSERT_EQ((std::size_t)0, td3.forgetNodeCount());
@@ -725,17 +604,6 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
 
     ASSERT_FALSE(td3.isForgetNode(root2));
     ASSERT_FALSE(td3.isForgetNode(labeledTreeNode3));
-
-    try
-    {
-        td1.isForgetNode(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ((std::size_t)1, td1.introduceNodeCount());
 
@@ -751,17 +619,6 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
 
     ASSERT_FALSE(td3.isIntroduceNode(root2));
     ASSERT_FALSE(td3.isIntroduceNode(labeledTreeNode3));
-
-    try
-    {
-        td1.isIntroduceNode(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     td2 = treeDecompositionReference;
 
@@ -839,17 +696,6 @@ TEST(TreeDecompositionTest, CheckNodeTypeDetection)
 
     ASSERT_EQ(node11, td1.leafNodes()[0]);
     ASSERT_EQ(node11, td1.leafNodeAtPosition(0));
-
-    try
-    {
-        td1.leafNodeAtPosition(1);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error);
-    }
 
     ASSERT_EQ(node21, td2.leafNodes()[0]);
     ASSERT_EQ(node21, td2.leafNodeAtPosition(0));

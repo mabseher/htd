@@ -56,6 +56,11 @@ namespace htd
 
             virtual const htd::ILabel & edgeLabel(const std::string & labelName, htd::id_t edgeId) const = 0;
 
+            /**
+             *  Create a deep copy the current labeled hypergraph.
+             *
+             *  @return A new ILabeledHypergraph object identical to the current labeled hypergraph.
+             */
             virtual ILabeledHypergraph * clone(void) const = 0;
     };
 

@@ -49,6 +49,11 @@ namespace htd
 
             virtual std::size_t maximumBagSize(void) const = 0;
 
+            /**
+             *  Create a deep copy the current graph decomposition.
+             *
+             *  @return A new IGraphDecomposition object identical to the current graph decomposition.
+             */
             virtual IGraphDecomposition * clone(void) const = 0;
     };
 

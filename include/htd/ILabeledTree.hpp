@@ -36,6 +36,11 @@ namespace htd
         public:
             virtual ~ILabeledTree() = 0;
 
+            /**
+             *  Create a deep copy the current labeled tree.
+             *
+             *  @return A new ILabeledTree object identical to the current labeled tree.
+             */
             virtual ILabeledTree * clone(void) const = 0;
     };
 

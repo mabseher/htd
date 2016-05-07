@@ -56,6 +56,11 @@ namespace htd
 
             virtual htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId) = 0;
 
+            /**
+             *  Create a deep copy the current mutable labeled path.
+             *
+             *  @return A new IMutableLabeledPath object identical to the current mutable labeled path.
+             */
             virtual IMutableLabeledPath * clone(void) const = 0;
 
             virtual IMutableLabeledPath & operator=(const htd::ILabeledPath & original) = 0;

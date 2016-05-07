@@ -66,6 +66,11 @@ namespace htd
 
             virtual htd::ILabelCollection * exportEdgeLabelCollection(htd::id_t edgeId) const = 0;
 
+            /**
+             *  Create a deep copy the current labeling collection.
+             *
+             *  @return A new ILabelingCollection object identical to the current labeling collection.
+             */
             virtual ILabelingCollection * clone(void) const = 0;
 
             virtual htd::IGraphLabeling & operator[](const std::string & labelName) = 0;

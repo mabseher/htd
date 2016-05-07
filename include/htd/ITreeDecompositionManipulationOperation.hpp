@@ -41,6 +41,11 @@ namespace htd
 
             virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
+            /**
+             *  Create a deep copy the current tree decomposition manipulation operation.
+             *
+             *  @return A new ITreeDecompositionManipulationOperation object identical to the current tree decomposition manipulation operation.
+             */
             virtual ITreeDecompositionManipulationOperation * clone(void) const HTD_OVERRIDE = 0;
     };
     

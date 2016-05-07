@@ -36,6 +36,11 @@ namespace htd
 
             virtual std::size_t hash(void) const = 0;
 
+            /**
+             *  Create a deep copy the current label.
+             *
+             *  @return A new ILabel object identical to the current label.
+             */
             virtual ILabel * clone(void) const = 0;
 
             virtual bool operator==(const ILabel & rhs) const = 0;

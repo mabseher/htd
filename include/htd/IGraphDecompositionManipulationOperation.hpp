@@ -41,6 +41,11 @@ namespace htd
 
             virtual void apply(htd::IMutableLabeledGraph & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
+            /**
+             *  Create a deep copy the current graph decomposition manipulation operation.
+             *
+             *  @return A new IGraphDecompositionManipulationOperation object identical to the current graph decomposition manipulation operation.
+             */
             virtual IGraphDecompositionManipulationOperation * clone(void) const HTD_OVERRIDE = 0;
     };
     

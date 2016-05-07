@@ -39,9 +39,15 @@ namespace htd
     struct Vertex
     {
         public:
-            static const htd::vertex_t FIRST = 1;
+            /**
+             *  The ID of the first vertex.
+             */
+            static const htd::vertex_t FIRST = htd::Id::FIRST;
 
-            static const htd::vertex_t UNKNOWN = 0;
+            /**
+             *  The ID of unknown or undefined vertices.
+             */
+            static const htd::vertex_t UNKNOWN = htd::Id::UNKNOWN;
 
         private:
             Vertex(void);

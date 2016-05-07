@@ -49,6 +49,11 @@ namespace htd
 
             virtual void addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) = 0;
 
+            /**
+             *  Create a deep copy the current graph decomposition algorithm.
+             *
+             *  @return A new IGraphDecompositionAlgorithm object identical to the current graph decomposition algorithm.
+             */
             virtual IGraphDecompositionAlgorithm * clone(void) const = 0;
     };
 

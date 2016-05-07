@@ -44,6 +44,11 @@ namespace htd
 
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
+            /**
+             *  Create a deep copy the current mutable directed multi-graph.
+             *
+             *  @return A new IMutableDirectedMultiGraph object identical to the current mutable directed multi-graph.
+             */
             virtual IMutableDirectedMultiGraph * clone(void) const = 0;
 
             virtual IMutableDirectedMultiGraph & operator=(const htd::IDirectedMultiGraph & original) = 0;

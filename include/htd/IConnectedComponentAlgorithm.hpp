@@ -26,6 +26,7 @@
 #define	HTD_HTD_ICONNECTEDCOMPONENTALGORITHM_HPP
 
 #include <htd/Globals.hpp>
+
 #include <htd/IHypergraph.hpp>
 #include <htd/ConstCollection.hpp>
 
@@ -40,6 +41,11 @@ namespace htd
 
             virtual void determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const = 0;
 
+            /**
+             *  Create a deep copy the current connected component algorithm.
+             *
+             *  @return A new IConnectedComponentAlgorithm object identical to the current connected component algorithm.
+             */
             virtual IConnectedComponentAlgorithm * clone(void) const = 0;
     };
 

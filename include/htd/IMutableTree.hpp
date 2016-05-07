@@ -53,6 +53,11 @@ namespace htd
 
             virtual void setParent(htd::vertex_t vertex, htd::vertex_t newParent) = 0;
 
+            /**
+             *  Create a deep copy the current mutable tree.
+             *
+             *  @return A new IMutableTree object identical to the current mutable tree.
+             */
             virtual IMutableTree * clone(void) const = 0;
 
             virtual IMutableTree & operator=(const htd::ITree & original) = 0;

@@ -38,6 +38,11 @@ namespace htd
         public:
             virtual ~ILabeledGraph() = 0;
 
+            /**
+             *  Create a deep copy the current labeled graph.
+             *
+             *  @return A new ILabeledGraph object identical to the current labeled graph.
+             */
             virtual ILabeledGraph * clone(void) const = 0;
     };
 

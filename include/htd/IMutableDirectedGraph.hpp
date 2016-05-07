@@ -47,6 +47,11 @@ namespace htd
 
             virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
+            /**
+             *  Create a deep copy the current mutable directed graph.
+             *
+             *  @return A new IMutableDirectedGraph object identical to the current mutable directed graph.
+             */
             virtual IMutableDirectedGraph * clone(void) const = 0;
 
             virtual IMutableDirectedGraph & operator=(const htd::IDirectedGraph & original) = 0;

@@ -50,6 +50,11 @@ namespace htd
 
             virtual void removeLabel(const std::string & labelName) = 0;
 
+            /**
+             *  Create a deep copy the current label collection.
+             *
+             *  @return A new ILabelCollection object identical to the current label collection.
+             */
             virtual ILabelCollection * clone(void) const = 0;
     };
 

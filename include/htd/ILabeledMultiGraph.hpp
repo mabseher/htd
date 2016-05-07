@@ -38,6 +38,11 @@ namespace htd
         public:
             virtual ~ILabeledMultiGraph() = 0;
 
+            /**
+             *  Create a deep copy the current labeled multi-graph.
+             *
+             *  @return A new ILabeledMultiGraph object identical to the current labeled multi-graph.
+             */
             virtual ILabeledMultiGraph * clone(void) const = 0;
     };
 

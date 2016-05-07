@@ -42,6 +42,11 @@ namespace htd
 
             virtual htd::ConstCollection<htd::Hyperedge> coveringEdges(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Create a deep copy the current hypertree decomposition.
+             *
+             *  @return A new IHypertreeDecomposition object identical to the current hypertree decomposition.
+             */
             virtual IHypertreeDecomposition * clone(void) const = 0;
     };
 

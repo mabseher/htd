@@ -51,6 +51,11 @@ namespace htd
 
             virtual htd::vertex_t addParent(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Create a deep copy the current mutable path.
+             *
+             *  @return A new IMutablePath object identical to the current mutable path.
+             */
             virtual IMutablePath * clone(void) const = 0;
 
             virtual IMutablePath & operator=(const htd::IPath & original) = 0;

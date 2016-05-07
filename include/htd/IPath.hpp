@@ -39,6 +39,11 @@ namespace htd
 
             virtual htd::vertex_t child(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Create a deep copy the current path.
+             *
+             *  @return A new IPath object identical to the current path.
+             */
             virtual IPath * clone(void) const = 0;
     };
 

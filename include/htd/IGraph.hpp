@@ -37,6 +37,11 @@ namespace htd
         public:
             virtual ~IGraph() = 0;
 
+            /**
+             *  Create a deep copy the current graph.
+             *
+             *  @return A new IGraph object identical to the current graph.
+             */
             virtual IGraph * clone(void) const = 0;
     };
 

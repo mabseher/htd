@@ -48,6 +48,11 @@ namespace htd
 
             virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
+            /**
+             *  Create a deep copy the current mutable graph.
+             *
+             *  @return A new IMutableGraph object identical to the current mutable graph.
+             */
             virtual IMutableGraph * clone(void) const = 0;
 
             virtual IMutableGraph & operator=(const htd::IGraph & original) = 0;

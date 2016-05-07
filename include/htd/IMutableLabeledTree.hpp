@@ -56,6 +56,11 @@ namespace htd
 
             virtual htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId) = 0;
 
+            /**
+             *  Create a deep copy the current mutable labeled tree.
+             *
+             *  @return A new IMutableLabeledTree object identical to the current mutable labeled tree.
+             */
             virtual IMutableLabeledTree * clone(void) const = 0;
 
             virtual IMutableLabeledTree & operator=(const htd::ILabeledTree & original) = 0;

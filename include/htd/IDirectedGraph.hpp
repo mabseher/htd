@@ -53,6 +53,11 @@ namespace htd
 
             virtual bool isReachable(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
 
+            /**
+             *  Create a deep copy the current directed graph.
+             *
+             *  @return A new IDirectedGraph object identical to the current directed graph.
+             */
             virtual IDirectedGraph * clone(void) const = 0;
     };
 

@@ -56,6 +56,11 @@ namespace htd
 
             virtual htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId) = 0;
 
+            /**
+             *  Create a deep copy the current mutable labeled multi-graph.
+             *
+             *  @return A new IMutableLabeledMultiGraph object identical to the current mutable labeled multi-graph.
+             */
             virtual IMutableLabeledMultiGraph * clone(void) const = 0;
 
             virtual IMutableLabeledMultiGraph & operator=(const htd::ILabeledMultiGraph & original) = 0;

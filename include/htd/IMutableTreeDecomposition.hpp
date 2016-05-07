@@ -55,6 +55,11 @@ namespace htd
 
             virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Create a deep copy the current mutable tree decomposition.
+             *
+             *  @return A new IMutableTreeDecomposition object identical to the current mutable tree decomposition.
+             */
             virtual IMutableTreeDecomposition * clone(void) const = 0;
 
             virtual IMutableTreeDecomposition & operator=(const htd::ITree & original) = 0;

@@ -38,8 +38,14 @@ namespace htd
     struct Id
     {
         public:
+            /**
+             *  The first allowed ID.
+             */
             static const htd::id_t FIRST = 1;
 
+            /**
+             *  The ID of unknown or undefined artifacts.
+             */
             static const htd::id_t UNKNOWN = 0;
 
         private:

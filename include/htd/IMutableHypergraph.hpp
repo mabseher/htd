@@ -63,6 +63,11 @@ namespace htd
 
             virtual void removeEdge(const htd::Hyperedge & hyperedge) = 0;
 
+            /**
+             *  Create a deep copy the current mutable hypergraph.
+             *
+             *  @return A new IMutableHypergraph object identical to the current mutable hypergraph.
+             */
             virtual IMutableHypergraph * clone(void) const = 0;
 
             virtual IMutableHypergraph & operator=(const htd::IHypergraph & original) = 0;

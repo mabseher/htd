@@ -43,6 +43,11 @@ namespace htd
 
             virtual htd::IPathDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE = 0;
 
+            /**
+             *  Create a deep copy the current path decomposition algorithm.
+             *
+             *  @return A new IPathDecompositionAlgorithm object identical to the current path decomposition algorithm.
+             */
             virtual IPathDecompositionAlgorithm * clone(void) const HTD_OVERRIDE = 0;
     };
 

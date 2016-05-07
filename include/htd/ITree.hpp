@@ -64,6 +64,11 @@ namespace htd
 
             virtual bool isChild(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Create a deep copy the current tree.
+             *
+             *  @return A new ITree object identical to the current tree.
+             */
             virtual ITree * clone(void) const = 0;
     };
 

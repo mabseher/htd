@@ -40,6 +40,11 @@ namespace htd
 
             virtual void setCoveringEdges(htd::vertex_t vertex, const htd::ConstCollection<htd::Hyperedge> & content) = 0;
 
+            /**
+             *  Create a deep copy the current mutable hypertree decomposition.
+             *
+             *  @return A new IMutableHypertreeDecomposition object identical to the current mutable hypertree decomposition.
+             */
             virtual IMutableHypertreeDecomposition * clone(void) const HTD_OVERRIDE = 0;
 
             virtual IMutableHypertreeDecomposition & operator=(const htd::ITreeDecomposition & original) HTD_OVERRIDE = 0;

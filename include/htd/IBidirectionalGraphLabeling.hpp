@@ -33,7 +33,7 @@
 
 namespace htd
 {
-    class IBidirectionalGraphLabeling : public virtual htd::IGraphLabeling
+    class IBidirectionalGraphLabeling : public htd::IGraphLabeling
     {
         public:
             virtual ~IBidirectionalGraphLabeling() = 0;
@@ -48,6 +48,11 @@ namespace htd
 
             virtual htd::id_t lookupEdge(const htd::ILabel & label) const = 0;
 
+            /**
+             *  Create a deep copy the current bi-directional graph labeling.
+             *
+             *  @return A new IBidirectionalGraphLabeling object identical to the current bi-directional graph labeling.
+             */
             virtual IBidirectionalGraphLabeling * clone(void) const = 0;
     };
     

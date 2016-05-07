@@ -36,6 +36,11 @@ namespace htd
         public:
             virtual ~ILabeledPath() = 0;
 
+            /**
+             *  Create a deep copy the current labeled path.
+             *
+             *  @return A new ILabeledPath object identical to the current labeled path.
+             */
             virtual ILabeledPath * clone(void) const = 0;
     };
 

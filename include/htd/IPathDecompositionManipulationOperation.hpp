@@ -41,6 +41,11 @@ namespace htd
 
             virtual void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
+            /**
+             *  Create a deep copy the current path decomposition manipulation operation.
+             *
+             *  @return A new IPathDecompositionManipulationOperation object identical to the current path decomposition manipulation operation.
+             */
             virtual IPathDecompositionManipulationOperation * clone(void) const HTD_OVERRIDE = 0;
     };
     

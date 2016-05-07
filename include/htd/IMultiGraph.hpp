@@ -36,6 +36,11 @@ namespace htd
         public:
             virtual ~IMultiGraph() = 0;
 
+            /**
+             *  Create a deep copy the current multi-graph.
+             *
+             *  @return A new IMultiGraph object identical to the current multi-graph.
+             */
             virtual IMultiGraph * clone(void) const = 0;
     };
 

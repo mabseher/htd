@@ -38,6 +38,11 @@ namespace htd
         public:
             virtual ~ILabeledDirectedGraph() = 0;
 
+            /**
+             *  Create a deep copy the current labeled directed graph.
+             *
+             *  @return A new ILabeledDirectedGraph object identical to the current labeled directed graph.
+             */
             virtual ILabeledDirectedGraph * clone(void) const = 0;
     };
 

@@ -34,6 +34,11 @@ namespace htd
         public:
             virtual ~IDecompositionManipulationOperation() = 0;
 
+            /**
+             *  Create a deep copy the current decomposition manipulation operation.
+             *
+             *  @return A new IDecompositionManipulationOperation object identical to the current decomposition manipulation operation.
+             */
             virtual IDecompositionManipulationOperation * clone(void) const = 0;
     };
     

@@ -104,6 +104,11 @@ namespace htd
 
             virtual std::size_t maximumBagSize(void) const = 0;
 
+            /**
+             *  Create a deep copy the current path decomposition.
+             *
+             *  @return A new IPathDecomposition object identical to the current path decomposition.
+             */
             virtual IPathDecomposition * clone(void) const = 0;
     };
 

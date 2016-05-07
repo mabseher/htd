@@ -38,6 +38,11 @@ namespace htd
         public:
             virtual ~IHypergraph() = 0;
 
+            /**
+             *  Create a deep copy the current hypergraph.
+             *
+             *  @return A new IHypergraph object identical to the current hypergraph.
+             */
             virtual IHypergraph * clone(void) const = 0;
     };
 

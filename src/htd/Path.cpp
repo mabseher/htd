@@ -217,15 +217,15 @@ htd::vertex_t htd::Path::vertexAtPosition(htd::index_t index) const
     return vertices_[index];
 }
 
-bool htd::Path::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::Path::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
     bool ret = false;
     
-    if (isVertex(vertex1) && isVertex(vertex2))
+    if (isVertex(vertex) && isVertex(neighbor))
     {
-        const auto & node = nodes_.at(vertex1);
+        const auto & node = nodes_.at(vertex);
 
-        ret = node->parent == vertex2 || node->child == vertex2;
+        ret = node->parent == neighbor || node->child == neighbor;
     }
     
     return ret;

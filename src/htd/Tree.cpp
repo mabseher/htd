@@ -199,20 +199,20 @@ htd::vertex_t htd::Tree::vertexAtPosition(htd::index_t index) const
     return vertices_[index];
 }
 
-bool htd::Tree::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
+bool htd::Tree::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
     bool ret = false;
     
-    HTD_ASSERT(isVertex(vertex1))
-    HTD_ASSERT(isVertex(vertex2))
+    HTD_ASSERT(isVertex(vertex))
+    HTD_ASSERT(isVertex(neighbor))
 
-    const auto & node = *(nodes_.at(vertex1));
+    const auto & node = *(nodes_.at(vertex));
 
     const auto & children = node.children;
 
     if (node.parent != htd::Vertex::UNKNOWN)
     {
-        if (node.parent == vertex2)
+        if (node.parent == neighbor)
         {
             ret = true;
         }
@@ -222,7 +222,7 @@ bool htd::Tree::isNeighbor(htd::vertex_t vertex1, htd::vertex_t vertex2) const
     {
         for (auto it = children.begin(); it != children.end();)
         {
-            if (*it == vertex2)
+            if (*it == neighbor)
             {
                 ret = true;
 

@@ -266,11 +266,12 @@ namespace htd
             virtual htd::ConstCollection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const = 0;
 
             /**
-             *  Access the hyperedge at the specific position.
+             *  Access the hyperedge at the specific position. Edges not containing the given vertex are ignored.
              *
-             *  @param[in] index     The position of the hyperedge.
+             *  @param[in] index    The position of the hyperedge.
+             *  @param[in] vertex   The vertex which should be contained in the edge.
              *
-             *  @return The hyperedge at the specific position.
+             *  @return The hyperedge at the specific position. Edges not containing the given vertex are ignored.
              */
             virtual const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const = 0;
 
@@ -294,8 +295,8 @@ namespace htd
             /**
              *  Check whether two vertices are neighbors.
              *
-             *  @param[in] vertex1  The first vertex.
-             *  @param[in] vertex2  The second vertex.
+             *  @param[in] vertex   The vertex.
+             *  @param[in] neighbor The potential neighbor.
              *
              *  @return True if the two vertices are neighbors, false otherwise.
              */

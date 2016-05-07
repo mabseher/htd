@@ -198,9 +198,9 @@ TEST(HypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_EQ((htd::id_t)1, hyperedge1.id());
     ASSERT_FALSE(hyperedge1.empty());
     ASSERT_EQ((std::size_t)2, hyperedge1.size());
-    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)1));
-    ASSERT_TRUE(hyperedge1.containsVertex((htd::vertex_t)2));
-    ASSERT_FALSE(hyperedge1.containsVertex((htd::vertex_t)3));
+    ASSERT_TRUE(hyperedge1.contains((htd::vertex_t)1));
+    ASSERT_TRUE(hyperedge1.contains((htd::vertex_t)2));
+    ASSERT_FALSE(hyperedge1.contains((htd::vertex_t)3));
 
     const std::vector<htd::vertex_t> & hyperedgeElements1 = hyperedge1.elements();
 
@@ -266,9 +266,9 @@ TEST(HypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_EQ((htd::id_t)2, hyperedge2.id());
     ASSERT_FALSE(hyperedge2.empty());
     ASSERT_EQ((std::size_t)3, hyperedge2.size());
-    ASSERT_TRUE(hyperedge2.containsVertex((htd::vertex_t)1));
-    ASSERT_TRUE(hyperedge2.containsVertex((htd::vertex_t)2));
-    ASSERT_TRUE(hyperedge2.containsVertex((htd::vertex_t)3));
+    ASSERT_TRUE(hyperedge2.contains((htd::vertex_t)1));
+    ASSERT_TRUE(hyperedge2.contains((htd::vertex_t)2));
+    ASSERT_TRUE(hyperedge2.contains((htd::vertex_t)3));
 
     const std::vector<htd::vertex_t> & hyperedgeElements2 = hyperedge2.elements();
 

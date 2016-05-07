@@ -385,7 +385,7 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t vertex)
 
     for (auto & edge : *edges_)
     {
-        if (edge.containsVertex(vertex))
+        if (edge.contains(vertex))
         {
             result.push_back(edge);
         }
@@ -434,7 +434,7 @@ const htd::Hyperedge & htd::Tree::hyperedgeAtPosition(htd::index_t index, htd::v
     {
         const htd::Hyperedge & hyperedge = *it;
 
-        if (hyperedge.containsVertex(vertex))
+        if (hyperedge.contains(vertex))
         {
             if (index == 0)
             {
@@ -678,7 +678,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
         }
     }
 
-    edges_->erase(std::remove_if(edges_->begin(), edges_->end(), [&](const htd::Hyperedge & edge) { return edge.containsVertex(vertex); }), edges_->end());
+    edges_->erase(std::remove_if(edges_->begin(), edges_->end(), [&](const htd::Hyperedge & edge) { return edge.contains(vertex); }), edges_->end());
 }
 
 void htd::Tree::removeSubtree(htd::vertex_t subtreeRoot)
@@ -931,7 +931,7 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
         node->parent = newParent;
 
         //TODO Optimize!
-        edges_->erase(std::remove_if(edges_->begin(), edges_->end(), [&](const htd::Hyperedge & edge) { return edge.containsVertex(oldParent) && edge.containsVertex(vertex); }), edges_->end());
+        edges_->erase(std::remove_if(edges_->begin(), edges_->end(), [&](const htd::Hyperedge & edge) { return edge.contains(oldParent) && edge.contains(vertex); }), edges_->end());
 
         if (vertex < newParent)
         {

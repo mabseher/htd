@@ -112,7 +112,7 @@ std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t vertex) const
 
     for (const htd::Hyperedge & edge : *edges_)
     {
-        if (edge.containsVertex(vertex))
+        if (edge.contains(vertex))
         {
             ret++;
         }
@@ -502,7 +502,7 @@ htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(htd::verte
 
     for (auto & edge : *edges_)
     {
-        if (edge.containsVertex(vertex))
+        if (edge.contains(vertex))
         {
             result.push_back(edge);
         }
@@ -551,7 +551,7 @@ const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t in
     {
         const htd::Hyperedge & hyperedge = *it;
 
-        if (hyperedge.containsVertex(vertex))
+        if (hyperedge.contains(vertex))
         {
             if (index == 0)
             {
@@ -804,11 +804,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
                 throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &)");
             }
 
-            htd::Hyperedge newHyperedge(hyperedge);
-
-            newHyperedge.setId(next_edge_);
-
-            edges_->push_back(newHyperedge);
+            edges_->push_back(htd::Hyperedge(next_edge_, hyperedge.elements()));
 
             return next_edge_++;
         }
@@ -834,13 +830,9 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
         throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &)");
     }
 
-    htd::Hyperedge newHyperedge(hyperedge);
+    edges_->push_back(htd::Hyperedge(next_edge_, hyperedge.elements()));
 
-    newHyperedge.setId(next_edge_);
-
-    edges_->push_back(newHyperedge);
-
-    std::vector<htd::vertex_t> sortedElements(newHyperedge.begin(), newHyperedge.end());
+    std::vector<htd::vertex_t> sortedElements(hyperedge.begin(), hyperedge.end());
 
     std::sort(sortedElements.begin(), sortedElements.end());
 
@@ -989,7 +981,7 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
             {
                 htd::Hyperedge & currentEdge = *it;
 
-                if (it != position && currentEdge.containsVertex(vertex))
+                if (it != position && currentEdge.contains(vertex))
                 {
                     std::size_t occurrences = 0;
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Hyperedge.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
@@ -36,57 +36,202 @@
 
 namespace htd
 {
+    /**
+     *  Class for the efficient storage of hyperedges.
+     */
     class Hyperedge
     {
         public:
+            /**
+             *  The data type of the elements of a hyperedge.
+             */
             typedef htd::vertex_t value_type;
 
+            /**
+             *  Constructor for a hyperedge.
+             *
+             *  @param[in] id       The ID of the constructed hyperedge.
+             *  @param[in] vertex1  The first endpoint of the constructed hyperedge.
+             *  @param[in] vertex2  The second endpoint of the constructed hyperedge.
+             */
             Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT;
 
+            /**
+             *  Constructor for a hyperedge.
+             *
+             *  @param[in] id       The ID of the constructed hyperedge.
+             *  @param[in] elements The endpoints of the constructed hyperedge.
+             */
             Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements);
 
+            /**
+             *  Constructor for a hyperedge.
+             *
+             *  @param[in] id       The ID of the constructed hyperedge.
+             *  @param[in] elements The endpoints of the constructed hyperedge.
+             */
             Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT;
 
+            /**
+             *  Constructor for a hyperedge.
+             *
+             *  @param[in] id       The ID of the constructed hyperedge.
+             *  @param[in] elements The endpoints of the constructed hyperedge.
+             */
             Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements);
 
+            /**
+             *  Copy constructor for a hyperedge.
+             *
+             *  @param[in] original  The original hyperedge.
+             */
             Hyperedge(const Hyperedge & original);
 
+            /**
+             *  Move constructor for a hyperedge.
+             *
+             *  @param[in] original  The original hyperedge.
+             */
             Hyperedge(Hyperedge && original) HTD_NOEXCEPT;
 
+            /**
+             *  Destructor for a hyperedge.
+             */
             ~Hyperedge();
 
+            /**
+             *  Getter for the ID of the hyperedge.
+             *
+             *  @return The ID of the hyperedge.
+             */
             htd::id_t id() const;
 
+            /**
+             *  Setter for the ID of the hyperedge.
+             *
+             *  @param[in] newId    The new ID of the hyperedge.
+             */
             void setId(htd::id_t newId);
 
-            const std::vector<htd::vertex_t> & elements() const;
+            /**
+             *  Getter for the elements of the hyperedge.
+             *
+             *  @return The elements of the hyperedge.
+             */
+            const std::vector<htd::vertex_t> & elements(void) const;
 
-            const std::vector<htd::vertex_t> & sortedElements() const;
+            /**
+             *  Getter for the elements of the hyperedge in ascending order without duplicates.
+             *
+             *  @return The elements of the hyperedge in ascending order without duplicates.
+             */
+            const std::vector<htd::vertex_t> & sortedElements(void) const;
 
-            bool empty() const;
+            /**
+             *  Boolean getter to check whether the hyperedge contains no elements.
+             *
+             *  @return True if the hyperedge contains no elements, false otherwise.
+             */
+            bool empty(void) const;
 
-            std::size_t size() const;
+            /**
+             *  Getter for the number of elements of the hyperedge.
+             *
+             *  @return The number of elements of the hyperedge.
+             */
+            std::size_t size(void) const;
 
-            bool containsVertex(htd::vertex_t vertex) const;
+            /**
+             *  Boolean getter to check whether the hyperedge a specific vertex.
+             *
+             *  @param[in] vertex   The specific vertex to test for existence.
+             *
+             *  @return True if the hyperedge contains the specific vertex, false otherwise.
+             */
+            bool contains(htd::vertex_t vertex) const;
 
+            /**
+             *  Erase a specific vertex from the hyperedge in case the vertex is contained in the hyperedge.
+             *
+             *  @param[in] vertex   The specific vertex which should be removed.
+             */
             void erase(htd::vertex_t vertex);
 
+            /**
+             *  Getter for a const_iterator pointing to the first element in the hyperedge.
+             *
+             *  @return A const_iterator pointing to the first element in the hyperedge.
+             */
             std::vector<htd::vertex_t>::const_iterator begin(void) const;
 
+            /**
+             *  Getter for a const_iterator pointing to the end of the elements in the hyperedge.
+             *
+             *  @return A const_iterator pointing to the end of the elements in the hyperedge.
+             */
             std::vector<htd::vertex_t>::const_iterator end(void) const;
 
+            /**
+             *  Access the element at the specific position within the hyperedge.
+             *
+             *  @param[in] index    The position of the element.
+             *
+             *  @return The element at the specific position.
+             */
             const htd::vertex_t & operator[](htd::index_t index) const;
 
+            /**
+             *  Copy assignment operator for a hyperedge.
+             *
+             *  @param[in] original  The original hyperedge.
+             */
             Hyperedge & operator=(const Hyperedge & original);
 
+            /**
+             *  Move assignment operator for a hyperedge.
+             *
+             *  @param[in] original  The original hyperedge.
+             */
             Hyperedge & operator=(Hyperedge && original) HTD_NOEXCEPT;
 
+            /**
+             *  Less-than operator for a hyperedge.
+             *
+             *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
+             *
+             *  @return True if the vector returned by the elements() is lexicographically smaller than
+             *          rhs.elements() or if the elements are equal and id() is smaller than rhs.id(),
+             *          false otherwise.
+             */
             bool operator<(const Hyperedge & rhs) const;
 
+            /**
+             *  Greater-than operator for a hyperedge.
+             *
+             *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
+             *
+             *  @return True if the vector returned by the elements() is lexicographically greater than
+             *          rhs.elements() or if the elements are equal and id() is greater than rhs.id(),
+             *          false otherwise.
+             */
             bool operator>(const Hyperedge & rhs) const;
 
+            /**
+             *  Equality operator for a hyperedge.
+             *
+             *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
+             *
+             *  @return True if the vector returned by the elements() is equal to rhs.elements().
+             */
             bool operator==(const Hyperedge & rhs) const;
 
+            /**
+             *  Inequality operator for a hyperedge.
+             *
+             *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
+             *
+             *  @return True if the vector returned by the elements() is unequal to rhs.elements().
+             */
             bool operator!=(const Hyperedge & rhs) const;
 
         private:

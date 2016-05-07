@@ -255,7 +255,7 @@ std::size_t htd::Hyperedge::size() const
     return elements_->size();
 }
 
-bool htd::Hyperedge::containsVertex(htd::vertex_t vertex) const
+bool htd::Hyperedge::contains(htd::vertex_t vertex) const
 {
     return std::binary_search(sortedElements_->begin(), sortedElements_->end(), vertex);
 }

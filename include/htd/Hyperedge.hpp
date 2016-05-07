@@ -128,7 +128,7 @@ namespace htd
             const std::vector<htd::vertex_t> & sortedElements(void) const;
 
             /**
-             *  Boolean getter to check whether the hyperedge contains no elements.
+             *  Check whether the hyperedge contains no elements.
              *
              *  @return True if the hyperedge contains no elements, false otherwise.
              */
@@ -142,7 +142,7 @@ namespace htd
             std::size_t size(void) const;
 
             /**
-             *  Boolean getter to check whether the hyperedge a specific vertex.
+             *  Check whether the hyperedge a specific vertex.
              *
              *  @param[in] vertex   The specific vertex to test for existence.
              *

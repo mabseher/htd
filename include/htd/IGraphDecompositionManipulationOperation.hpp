@@ -27,7 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ILabelingFunction.hpp>
-#include <htd/IMutableLabeledGraph.hpp>
+#include <htd/IMutableGraphDecomposition.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
 
 namespace htd
@@ -37,9 +37,20 @@ namespace htd
         public:
             virtual ~IGraphDecompositionManipulationOperation() = 0;
 
-            virtual void apply(htd::IMutableLabeledGraph & decomposition) const = 0;
+            /**
+             *  Apply the manipulation operation to the given graph decomposition.
+             *
+             *  @param[in] decomposition    The graph decomposition which should be modified.
+             */
+            virtual void apply(htd::IMutableGraphDecomposition & decomposition) const = 0;
 
-            virtual void apply(htd::IMutableLabeledGraph & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+            /**
+             *  Apply the manipulation operation to the given graph decomposition.
+             *
+             *  @param[in] decomposition        The graph decomposition which should be modified.
+             *  @param[in] labelingFunctions    A vector of labeling functions which should be applied after the modifications.
+             */
+            virtual void apply(htd::IMutableGraphDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
             /**
              *  Create a deep copy the current graph decomposition manipulation operation.

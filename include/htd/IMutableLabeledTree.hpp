@@ -34,6 +34,9 @@ namespace htd
     class IMutableLabeledTree : public virtual htd::ILabeledTree, public virtual htd::IMutableTree
     {
         public:
+            /**
+             *  Destructor for an IMutableLabeledTree object.
+             */
             virtual ~IMutableLabeledTree() = 0;
 
             virtual void setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;

@@ -39,6 +39,9 @@ namespace htd
             using htd::IGraphDecomposition::bagContent;
             using htd::IGraphDecomposition::inducedHyperedges;
 
+            /**
+             *  Destructor for an IMutableGraphDecomposition object.
+             */
             virtual ~IMutableGraphDecomposition() = 0;
 
             virtual htd::vertex_t addVertex(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;

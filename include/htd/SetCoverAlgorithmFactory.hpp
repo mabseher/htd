@@ -33,8 +33,16 @@ namespace htd
     class SetCoverAlgorithmFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~SetCoverAlgorithmFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static SetCoverAlgorithmFactory & instance(void);
 
             htd::ISetCoverAlgorithm * getSetCoverAlgorithm(void);

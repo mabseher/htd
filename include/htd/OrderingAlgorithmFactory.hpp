@@ -33,8 +33,16 @@ namespace htd
     class OrderingAlgorithmFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~OrderingAlgorithmFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static OrderingAlgorithmFactory & instance(void);
 
             htd::IOrderingAlgorithm * getOrderingAlgorithm(void);

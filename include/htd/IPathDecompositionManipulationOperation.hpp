@@ -37,8 +37,19 @@ namespace htd
         public:
             virtual ~IPathDecompositionManipulationOperation() = 0;
 
+            /**
+             *  Apply the manipulation operation to the given path decomposition.
+             *
+             *  @param[in] decomposition    The path decomposition which should be modified.
+             */
             virtual void apply(htd::IMutablePathDecomposition & decomposition) const = 0;
 
+            /**
+             *  Apply the manipulation operation to the given path decomposition.
+             *
+             *  @param[in] decomposition        The path decomposition which should be modified.
+             *  @param[in] labelingFunctions    A vector of labeling functions which should be applied after the modifications.
+             */
             virtual void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
             /**

@@ -34,8 +34,16 @@ namespace htd
     class TreeDecompositionFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~TreeDecompositionFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static TreeDecompositionFactory & instance(void);
 
             htd::IMutableTreeDecomposition * getTreeDecomposition(void);

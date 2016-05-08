@@ -33,8 +33,16 @@ namespace htd
     class GraphFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~GraphFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static GraphFactory & instance(void);
 
             htd::IMutableGraph * getGraph(void);

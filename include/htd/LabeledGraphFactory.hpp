@@ -33,8 +33,16 @@ namespace htd
     class LabeledGraphFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~LabeledGraphFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static LabeledGraphFactory & instance(void);
 
             htd::IMutableLabeledGraph * getLabeledGraph(void);

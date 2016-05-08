@@ -95,7 +95,7 @@ namespace htd
             Hyperedge(Hyperedge && original) HTD_NOEXCEPT;
 
             /**
-             *  Destructor for a hyperedge.
+             *  Destructor for a Hyperedge object.
              */
             ~Hyperedge();
 

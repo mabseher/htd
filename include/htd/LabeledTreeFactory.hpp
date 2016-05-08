@@ -33,8 +33,16 @@ namespace htd
     class LabeledTreeFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~LabeledTreeFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static LabeledTreeFactory & instance(void);
 
             htd::IMutableLabeledTree * getLabeledTree(void);

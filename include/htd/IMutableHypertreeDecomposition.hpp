@@ -34,6 +34,9 @@ namespace htd
     class IMutableHypertreeDecomposition : public virtual htd::IMutableTreeDecomposition, public virtual htd::IHypertreeDecomposition
     {
         public:
+            /**
+             *  Destructor for an IMutableHypertreeDecomposition object.
+             */
             virtual ~IMutableHypertreeDecomposition() = 0;
 
             virtual void setCoveringEdges(htd::vertex_t vertex, const htd::hyperedge_container & content) = 0;

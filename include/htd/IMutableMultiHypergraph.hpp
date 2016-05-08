@@ -33,12 +33,25 @@ namespace htd
     class IMutableMultiHypergraph : public virtual htd::IMultiHypergraph
     {
         public:
+            /**
+             *  Destructor for an IMutableMultiHypergraph object.
+             */
             virtual ~IMutableMultiHypergraph() = 0;
 
+            /**
+             *  Add a new vertex to the multi-hypergraph.
+             *
+             *  @return The ID of the new vertex.
+             */
             virtual htd::vertex_t addVertex(void) = 0;
 
             virtual htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) = 0;
 
+            /**
+             *  Remove a vertex from the multi-hypergraph.
+             *
+             *  @param[in] vertex   The ID of the vertex which should be removed.
+             */
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;

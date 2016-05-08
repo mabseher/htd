@@ -33,12 +33,20 @@ namespace htd
     class IMutablePath : public virtual htd::IPath
     {
         public:
+            /**
+             *  Destructor for an IMutablePath object.
+             */
             virtual ~IMutablePath() = 0;
 
             virtual htd::vertex_t insertRoot(void) = 0;
 
             virtual void removeRoot(void) = 0;
 
+            /**
+             *  Remove a vertex from the path.
+             *
+             *  @param[in] vertex   The ID of the vertex which should be removed.
+             */
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 
             virtual void removeSubpath(htd::vertex_t subpathRoot) = 0;

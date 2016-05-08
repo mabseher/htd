@@ -32,12 +32,25 @@ namespace htd
     class IMutableDirectedMultiGraph : public virtual htd::IDirectedMultiGraph
     {
         public:
+            /**
+             *  Destructor for an IMutableDirectedMultiGraph object.
+             */
             virtual ~IMutableDirectedMultiGraph() = 0;
 
+            /**
+             *  Add a new vertex to the directed multi-graph.
+             *
+             *  @return The ID of the new vertex.
+             */
             virtual htd::vertex_t addVertex(void) = 0;
 
             virtual htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) = 0;
 
+            /**
+             *  Remove a vertex from the directed multi-graph.
+             *
+             *  @param[in] vertex   The ID of the vertex which should be removed.
+             */
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;

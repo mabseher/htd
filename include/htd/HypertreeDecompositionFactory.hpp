@@ -33,8 +33,16 @@ namespace htd
     class HypertreeDecompositionFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~HypertreeDecompositionFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static HypertreeDecompositionFactory & instance(void);
 
             htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(void);

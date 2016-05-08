@@ -33,8 +33,16 @@ namespace htd
     class ConnectedComponentAlgorithmFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~ConnectedComponentAlgorithmFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static ConnectedComponentAlgorithmFactory & instance(void);
 
             htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(void);

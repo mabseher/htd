@@ -34,6 +34,9 @@ namespace htd
     class IMutableLabeledMultiHypergraph : public virtual htd::ILabeledMultiHypergraph, public virtual htd::IMutableMultiHypergraph
     {
         public:
+            /**
+             *  Destructor for an IMutableLabeledMultiHypergraph object.
+             */
             virtual ~IMutableLabeledMultiHypergraph() = 0;
 
             virtual void setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;

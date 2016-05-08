@@ -34,8 +34,16 @@ namespace htd
     class GraphDecompositionFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~GraphDecompositionFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static GraphDecompositionFactory & instance(void);
 
             htd::IMutableGraphDecomposition * getGraphDecomposition(void);

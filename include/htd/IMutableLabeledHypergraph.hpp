@@ -35,6 +35,9 @@ namespace htd
     class IMutableLabeledHypergraph : public virtual htd::ILabeledHypergraph, public virtual htd::IMutableHypergraph
     {
         public:
+            /**
+             *  Destructor for an IMutableLabeledHypergraph object.
+             */
             virtual ~IMutableLabeledHypergraph() = 0;
 
             virtual void setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;

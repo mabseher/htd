@@ -34,6 +34,9 @@ namespace htd
     class IMutableLabeledPath : public virtual htd::ILabeledPath, public virtual htd::IMutablePath
     {
         public:
+            /**
+             *  Destructor for an IMutableLabeledPath object.
+             */
             virtual ~IMutableLabeledPath() = 0;
 
             virtual void setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;

@@ -41,6 +41,9 @@ namespace htd
             using htd::IPathDecomposition::bagContent;
             using htd::IPathDecomposition::inducedHyperedges;
 
+            /**
+             *  Destructor for an IMutablePathDecomposition object.
+             */
             virtual ~IMutablePathDecomposition() = 0;
 
             virtual htd::vertex_t addChild(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;

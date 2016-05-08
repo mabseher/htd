@@ -32,29 +32,37 @@ namespace htd
 {
     class LabeledPathFactory
     {
-    public:
-        ~LabeledPathFactory();
+        public:
+            /**
+             *  Destructor of the factory class.
+             */
+            ~LabeledPathFactory();
 
-        static LabeledPathFactory & instance(void);
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
+            static LabeledPathFactory & instance(void);
 
-        htd::IMutableLabeledPath * getLabeledPath(void);
+            htd::IMutableLabeledPath * getLabeledPath(void);
 
-        htd::IMutableLabeledPath * getLabeledPath(const htd::ILabeledPath & original);
+            htd::IMutableLabeledPath * getLabeledPath(const htd::ILabeledPath & original);
 
-        void setConstructionTemplate(htd::IMutableLabeledPath * original);
+            void setConstructionTemplate(htd::IMutableLabeledPath * original);
 
-        htd::IMutableLabeledPath & accessMutableLabeledPath(htd::ILabeledPath & original);
+            htd::IMutableLabeledPath & accessMutableLabeledPath(htd::ILabeledPath & original);
 
-        const htd::IMutableLabeledPath & accessMutableLabeledPath(const htd::ILabeledPath & original);
+            const htd::IMutableLabeledPath & accessMutableLabeledPath(const htd::ILabeledPath & original);
 
-    private:
-        htd::IMutableLabeledPath * constructionTemplate_;
+        private:
+            htd::IMutableLabeledPath * constructionTemplate_;
 
-        LabeledPathFactory(void);
+            LabeledPathFactory(void);
 
-        LabeledPathFactory(const LabeledPathFactory & original);
+            LabeledPathFactory(const LabeledPathFactory & original);
 
-        LabeledPathFactory & operator=(const LabeledPathFactory & original);
+            LabeledPathFactory & operator=(const LabeledPathFactory & original);
     };
 }
 

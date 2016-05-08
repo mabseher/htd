@@ -33,8 +33,16 @@ namespace htd
     class StronglyConnectedComponentAlgorithmFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~StronglyConnectedComponentAlgorithmFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static StronglyConnectedComponentAlgorithmFactory & instance(void);
 
             htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(void);

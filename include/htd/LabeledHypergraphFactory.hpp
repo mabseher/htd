@@ -33,8 +33,16 @@ namespace htd
     class LabeledHypergraphFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~LabeledHypergraphFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static LabeledHypergraphFactory & instance(void);
 
             htd::IMutableLabeledHypergraph * getLabeledHypergraph(void);

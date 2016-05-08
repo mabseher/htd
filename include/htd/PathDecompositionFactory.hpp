@@ -34,8 +34,16 @@ namespace htd
     class PathDecompositionFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~PathDecompositionFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static PathDecompositionFactory & instance(void);
 
             htd::IMutablePathDecomposition * getPathDecomposition(void);

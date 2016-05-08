@@ -33,8 +33,16 @@ namespace htd
     class DirectedMultiGraphFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~DirectedMultiGraphFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static DirectedMultiGraphFactory & instance(void);
 
             htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(void);

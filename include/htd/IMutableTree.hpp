@@ -33,8 +33,16 @@ namespace htd
     class IMutableTree : public virtual htd::ITree
     {
         public:
+            /**
+             *  Destructor for an IMutableTree object.
+             */
             virtual ~IMutableTree() = 0;
-            
+
+            /**
+             *  Remove a vertex from the tree.
+             *
+             *  @param[in] vertex   The ID of the vertex which should be removed.
+             */
             virtual void removeVertex(htd::vertex_t vertex) = 0;
             
             virtual void removeSubtree(htd::vertex_t subtreeRoot) = 0;

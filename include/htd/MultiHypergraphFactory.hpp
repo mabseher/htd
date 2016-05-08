@@ -33,8 +33,16 @@ namespace htd
     class MultiHypergraphFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~MultiHypergraphFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static MultiHypergraphFactory & instance(void);
 
             htd::IMutableMultiHypergraph * getMultiHypergraph(void);

@@ -34,6 +34,9 @@ namespace htd
     class IMutableLabeledDirectedMultiGraph : public virtual htd::ILabeledDirectedMultiGraph, public virtual htd::IMutableDirectedMultiGraph
     {
         public:
+            /**
+             *  Destructor for an IMutableLabeledDirectedMultiGraph object.
+             */
             virtual ~IMutableLabeledDirectedMultiGraph() = 0;
 
             virtual void setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;

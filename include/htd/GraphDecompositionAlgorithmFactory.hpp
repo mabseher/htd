@@ -36,8 +36,16 @@ namespace htd
     class GraphDecompositionAlgorithmFactory
     {
         public:
+            /**
+             *  Destructor of the factory class.
+             */
             ~GraphDecompositionAlgorithmFactory();
 
+            /**
+             *  Access the singleton instance of the factory class.
+             *
+             *  @return The singleton instance of the factory class.
+             */
             static GraphDecompositionAlgorithmFactory & instance(void);
 
             htd::IGraphDecompositionAlgorithm * getGraphDecompositionAlgorithm(void);

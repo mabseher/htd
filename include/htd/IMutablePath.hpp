@@ -58,6 +58,11 @@ namespace htd
              */
             virtual IMutablePath * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable path.
+             *
+             *  @param[in] original  The original path.
+             */
             virtual IMutablePath & operator=(const htd::IPath & original) = 0;
     };
 

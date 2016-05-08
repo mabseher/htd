@@ -54,8 +54,18 @@ namespace htd
              */
             virtual IMutableDirectedGraph * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable directed graph.
+             *
+             *  @param[in] original  The original directed graph.
+             */
             virtual IMutableDirectedGraph & operator=(const htd::IDirectedGraph & original) = 0;
 
+            /**
+             *  Copy assignment operator for a mutable directed graph.
+             *
+             *  @param[in] original  The original directed multi-graph.
+             */
             virtual IMutableDirectedGraph & operator=(const htd::IDirectedMultiGraph & original) = 0;
     };
 

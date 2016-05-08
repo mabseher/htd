@@ -64,8 +64,18 @@ namespace htd
              */
             virtual IMutableLabeledHypergraph * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable labeled hypergraph.
+             *
+             *  @param[in] original  The original labeled hypergraph.
+             */
             virtual IMutableLabeledHypergraph & operator=(const htd::ILabeledHypergraph & original) = 0;
 
+            /**
+             *  Copy assignment operator for a mutable labeled hypergraph.
+             *
+             *  @param[in] original  The original labeled multi-hypergraph.
+             */
             virtual IMutableLabeledHypergraph & operator=(const htd::ILabeledMultiHypergraph & original) = 0;
     };
 

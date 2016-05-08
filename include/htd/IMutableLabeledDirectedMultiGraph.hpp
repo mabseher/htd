@@ -63,6 +63,11 @@ namespace htd
              */
             virtual IMutableLabeledDirectedMultiGraph * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable labeled directed multi-graph.
+             *
+             *  @param[in] original  The original labeled directed multi-graph.
+             */
             virtual IMutableLabeledDirectedMultiGraph & operator=(const htd::ILabeledDirectedMultiGraph & original) = 0;
     };
 

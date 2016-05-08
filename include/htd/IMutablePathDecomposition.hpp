@@ -62,10 +62,25 @@ namespace htd
              */
             virtual IMutablePathDecomposition * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable path decomposition.
+             *
+             *  @param[in] original  The original path.
+             */
             virtual IMutablePathDecomposition & operator=(const htd::IPath & original) = 0;
 
+            /**
+             *  Copy assignment operator for a mutable path decomposition.
+             *
+             *  @param[in] original  The original labeled path.
+             */
             virtual IMutablePathDecomposition & operator=(const htd::ILabeledPath & original) = 0;
 
+            /**
+             *  Copy assignment operator for a mutable path decomposition.
+             *
+             *  @param[in] original  The original path decomposition.
+             */
             virtual IMutablePathDecomposition & operator=(const htd::IPathDecomposition & original) = 0;
     };
 

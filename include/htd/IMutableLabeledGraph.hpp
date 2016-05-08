@@ -64,8 +64,18 @@ namespace htd
              */
             virtual IMutableLabeledGraph * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable labeled graph.
+             *
+             *  @param[in] original  The original labeled graph.
+             */
             virtual IMutableLabeledGraph & operator=(const htd::ILabeledGraph & original) = 0;
 
+            /**
+             *  Copy assignment operator for a mutable labeled graph.
+             *
+             *  @param[in] original  The original labeled multi-graph.
+             */
             virtual IMutableLabeledGraph & operator=(const htd::ILabeledMultiGraph & original) = 0;
     };
 

@@ -62,10 +62,25 @@ namespace htd
              */
             virtual IMutableTreeDecomposition * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable tree decomposition.
+             *
+             *  @param[in] original  The original tree.
+             */
             virtual IMutableTreeDecomposition & operator=(const htd::ITree & original) = 0;
 
+            /**
+             *  Copy assignment operator for a mutable tree decomposition.
+             *
+             *  @param[in] original  The original labeled tree.
+             */
             virtual IMutableTreeDecomposition & operator=(const htd::ILabeledTree & original) = 0;
 
+            /**
+             *  Copy assignment operator for a mutable tree decomposition.
+             *
+             *  @param[in] original  The original tree decomposition.
+             */
             virtual IMutableTreeDecomposition & operator=(const htd::ITreeDecomposition & original) = 0;
     };
 

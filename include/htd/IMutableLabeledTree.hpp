@@ -63,6 +63,11 @@ namespace htd
              */
             virtual IMutableLabeledTree * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable labeled tree.
+             *
+             *  @param[in] original  The original labeled tree.
+             */
             virtual IMutableLabeledTree & operator=(const htd::ILabeledTree & original) = 0;
     };
 

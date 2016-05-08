@@ -47,8 +47,18 @@ namespace htd
              */
             virtual IMutableHypertreeDecomposition * clone(void) const HTD_OVERRIDE = 0;
 
+            /**
+             *  Copy assignment operator for a mutable hypertree decomposition.
+             *
+             *  @param[in] original  The original tree decomposition.
+             */
             virtual IMutableHypertreeDecomposition & operator=(const htd::ITreeDecomposition & original) HTD_OVERRIDE = 0;
 
+            /**
+             *  Copy assignment operator for a mutable hypertree decomposition.
+             *
+             *  @param[in] original  The original hypertree decomposition.
+             */
             virtual IMutableHypertreeDecomposition & operator=(const htd::IHypertreeDecomposition & original) = 0;
     };
 

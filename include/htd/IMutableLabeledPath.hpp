@@ -63,6 +63,11 @@ namespace htd
              */
             virtual IMutableLabeledPath * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable labeled path.
+             *
+             *  @param[in] original  The original labeled path.
+             */
             virtual IMutableLabeledPath & operator=(const htd::ILabeledPath & original) = 0;
     };
 

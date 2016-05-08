@@ -28,7 +28,6 @@
 #include <htd/Globals.hpp>
 #include <htd/IMutableLabeledGraph.hpp>
 #include <htd/IGraphDecomposition.hpp>
-#include <htd/Label.hpp>
 
 namespace htd
 {
@@ -57,12 +56,39 @@ namespace htd
              */
             virtual IMutableGraphDecomposition * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable graph decomposition.
+             *
+             *  @param[in] original  The original graph.
+             */
             virtual IMutableGraphDecomposition & operator=(const htd::IGraph & original) = 0;
 
+            /**
+             *  Copy assignment operator for a mutable graph decomposition.
+             *
+             *  @param[in] original  The original multi-graph.
+             */
+            virtual IMutableGraphDecomposition & operator=(const htd::IMultiGraph & original) = 0;
+
+            /**
+             *  Copy assignment operator for a mutable graph decomposition.
+             *
+             *  @param[in] original  The original labeled graph.
+             */
             virtual IMutableGraphDecomposition & operator=(const htd::ILabeledGraph & original) = 0;
 
+            /**
+             *  Copy assignment operator for a mutable graph decomposition.
+             *
+             *  @param[in] original  The original labeled multi-graph.
+             */
             virtual IMutableGraphDecomposition & operator=(const htd::ILabeledMultiGraph & original) = 0;
 
+            /**
+             *  Copy assignment operator for a mutable graph decomposition.
+             *
+             *  @param[in] original  The original graph decomposition.
+             */
             virtual IMutableGraphDecomposition & operator=(const htd::IGraphDecomposition & original) = 0;
     };
 

@@ -62,6 +62,11 @@ namespace htd
              */
             virtual IMutableMultiHypergraph * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable multi-hypergraph.
+             *
+             *  @param[in] original  The original multi-hypergraph.
+             */
             virtual IMutableMultiHypergraph & operator=(const htd::IMultiHypergraph & original) = 0;
     };
 

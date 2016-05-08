@@ -39,14 +39,45 @@ namespace htd
         public:
             virtual ~IGraphDecomposition() = 0;
 
+            /**
+             *  Getter for the bag size of a specific vertex.
+             *
+             *  @param[in] vertex   The vertex for which the bag size should be returned.
+             *
+             *  @return The bag size of the specific vertex.
+             */
             virtual std::size_t bagSize(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Access the bag content of a specific vertex.
+             *
+             *  @param[in] vertex   The vertex for which the bag content should be returned.
+             *
+             *  @return The bag content of the specific vertex.
+             */
             virtual const std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Access the hyperedges induced by the bag content of a specific vertex.
+             *
+             *  @param[in] vertex   The vertex for which the induced hyperedges should be returned.
+             *
+             *  @return The collection of hyperedges induced by the bag content of the specific vertex.
+             */
             virtual const htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Getter for the minimum bag size of the decomposition.
+             *
+             *  @return The minimum bag size of the decomposition.
+             */
             virtual std::size_t minimumBagSize(void) const = 0;
 
+            /**
+             *  Getter for the maximum bag size of the decomposition.
+             *
+             *  @return The minimum bag size of the decomposition.
+             */
             virtual std::size_t maximumBagSize(void) const = 0;
 
             /**

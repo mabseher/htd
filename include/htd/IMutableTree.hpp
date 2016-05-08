@@ -60,6 +60,11 @@ namespace htd
              */
             virtual IMutableTree * clone(void) const = 0;
 
+            /**
+             *  Copy assignment operator for a mutable tree.
+             *
+             *  @param[in] original  The original tree.
+             */
             virtual IMutableTree & operator=(const htd::ITree & original) = 0;
     };
 

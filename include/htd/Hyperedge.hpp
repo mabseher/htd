@@ -221,7 +221,7 @@ namespace htd
              *
              *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
              *
-             *  @return True if the vector returned by the elements() is equal to rhs.elements().
+             *  @return True if the vector returned by the elements() is equal to rhs.elements(), false otherwise.
              */
             bool operator==(const Hyperedge & rhs) const;
 
@@ -230,7 +230,7 @@ namespace htd
              *
              *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
              *
-             *  @return True if the vector returned by the elements() is unequal to rhs.elements().
+             *  @return True if the vector returned by the elements() is unequal to rhs.elements(), false otherwise.
              */
             bool operator!=(const Hyperedge & rhs) const;
 

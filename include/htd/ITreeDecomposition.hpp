@@ -38,6 +38,11 @@ namespace htd
         public:
             virtual ~ITreeDecomposition() = 0;
 
+            /**
+             *  Getter for the number of join nodes of the decomposition.
+             *
+             *  @return The number of join nodes of the decomposition.
+             */
             virtual std::size_t joinNodeCount(void) const = 0;
 
             virtual htd::ConstCollection<htd::vertex_t> joinNodes(void) const = 0;
@@ -46,6 +51,11 @@ namespace htd
 
             virtual bool isJoinNode(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Getter for the number of forget nodes of the decomposition.
+             *
+             *  @return The number of forget nodes of the decomposition.
+             */
             virtual std::size_t forgetNodeCount(void) const = 0;
 
             virtual htd::ConstCollection<htd::vertex_t> forgetNodes(void) const = 0;
@@ -54,6 +64,11 @@ namespace htd
 
             virtual bool isForgetNode(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Getter for the number of introduce nodes of the decomposition.
+             *
+             *  @return The number of introduce nodes of the decomposition.
+             */
             virtual std::size_t introduceNodeCount(void) const = 0;
 
             virtual htd::ConstCollection<htd::vertex_t> introduceNodes(void) const = 0;

@@ -35,6 +35,9 @@ namespace htd
     struct State
     {
         public:
+            /**
+             *  The ID of unknown or undefined states.
+             */
             static const htd::state_t UNKNOWN = 0;
 
         private:

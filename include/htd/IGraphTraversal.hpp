@@ -37,6 +37,16 @@ namespace htd
         public:
             virtual ~IGraphTraversal() = 0;
 
+            /**
+             *  Traverse the given graph and call the provided function for each vertex.
+             *
+             *  @param[in] graph            The graph which should be traversed.
+             *  @param[in] startingVertex   The vertex from which the traversal will be started.
+             *  @param[in] targetFunction   The function which will be called for each vertex found during the traversal. The parameters passed to the function are the following:
+             *                                  -# The current vertex.
+             *                                  -# The immediate predecessor of the current vertex in the traversal process.
+             *                                  -# The distance between the current vertex and the starting vertex of the traversal.
+             */
             virtual void traverse(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const = 0;
     };
 

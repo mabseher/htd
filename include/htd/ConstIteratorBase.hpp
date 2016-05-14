@@ -48,6 +48,11 @@ namespace htd
 
             virtual bool operator!=(const ConstIteratorBase<T> & rhs) const = 0;
 
+            /**
+             *  Create a deep copy the current iterator.
+             *
+             *  @return A new ConstIteratorBase<T> object identical to the current iterator.
+             */
             virtual ConstIteratorBase<T> * clone(void) const = 0;
     };
 

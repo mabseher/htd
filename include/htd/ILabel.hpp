@@ -34,6 +34,11 @@ namespace htd
         public:
             virtual ~ILabel() = 0;
 
+            /**
+             *  Getter for the hash code of the label.
+             *
+             *  @return The hash code of the label.
+             */
             virtual std::size_t hash(void) const = 0;
 
             /**
@@ -43,8 +48,20 @@ namespace htd
              */
             virtual ILabel * clone(void) const = 0;
 
+            /**
+             *  Equality operator for a label.
+             *
+             *  @param[in] rhs  The label at the right-hand side of the operator.
+             *
+             *  @return True if the label value is equal to the value of the label at the right-hand side of the operator, false otherwise.
+             */
             virtual bool operator==(const ILabel & rhs) const = 0;
 
+            /**
+             *  Print the label to the given output stream.
+             *
+             *  @param[in] stream   The output stream to which the label should be written.
+             */
             virtual void print(std::ostream & stream) const = 0;
     };
 

@@ -38,12 +38,50 @@ namespace htd
         public:
             virtual ~ITreeTraversal() = 0;
 
+            /**
+             *  Traverse the given path, starting from it's root, and call the provided function for each vertex.
+             *
+             *  @param[in] path             The path which should be traversed.
+             *  @param[in] targetFunction   The function which will be called for each vertex found during the traversal. The parameters passed to the function are the following:
+             *                                  -# The current vertex.
+             *                                  -# The immediate predecessor of the current vertex in the traversal process.
+             *                                  -# The distance between the current vertex and the starting vertex of the traversal.
+             */
             virtual void traverse(const htd::IPath & path, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const = 0;
 
+            /**
+             *  Traverse the given path and call the provided function for each vertex.
+             *
+             *  @param[in] path             The path which should be traversed.
+             *  @param[in] targetFunction   The function which will be called for each vertex found during the traversal. The parameters passed to the function are the following:
+             *                                  -# The current vertex.
+             *                                  -# The immediate predecessor of the current vertex in the traversal process.
+             *                                  -# The distance between the current vertex and the starting vertex of the traversal.
+             *  @param[in] startingVertex   The vertex from which the traversal will be started.
+             */
             virtual void traverse(const htd::IPath & path, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction, htd::vertex_t startingVertex) const = 0;
 
+            /**
+             *  Traverse the given tree, starting from it's root, and call the provided function for each vertex.
+             *
+             *  @param[in] tree             The tree which should be traversed.
+             *  @param[in] targetFunction   The function which will be called for each vertex found during the traversal. The parameters passed to the function are the following:
+             *                                  -# The current vertex.
+             *                                  -# The immediate predecessor of the current vertex in the traversal process.
+             *                                  -# The distance between the current vertex and the starting vertex of the traversal.
+             */
             virtual void traverse(const htd::ITree & tree, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const = 0;
 
+            /**
+             *  Traverse the given tree, starting from it's root, and call the provided function for each vertex.
+             *
+             *  @param[in] tree             The tree which should be traversed.
+             *  @param[in] targetFunction   The function which will be called for each vertex found during the traversal. The parameters passed to the function are the following:
+             *                                  -# The current vertex.
+             *                                  -# The immediate predecessor of the current vertex in the traversal process.
+             *                                  -# The distance between the current vertex and the starting vertex of the traversal.
+             *  @param[in] startingVertex   The vertex from which the traversal will be started.
+             */
             virtual void traverse(const htd::ITree & tree, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction, htd::vertex_t startingVertex) const = 0;
     };
 

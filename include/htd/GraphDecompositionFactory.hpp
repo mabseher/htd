@@ -27,10 +27,12 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableGraphDecomposition.hpp>
-#include <htd/IGraphDecomposition.hpp>
 
 namespace htd
 {
+    /**
+     *  Factory class for the default implementation of the IMutableGraphDecomposition interface.
+     */
     class GraphDecompositionFactory
     {
         public:

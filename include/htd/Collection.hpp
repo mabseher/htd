@@ -34,6 +34,9 @@
 
 namespace htd
 {
+    /**
+     *  Wrapper for collections.
+     */
     template <typename T>
     class Collection
     {

@@ -38,30 +38,118 @@ namespace htd
 
             using htd::IGraph::vertexCount;
 
+            /**
+             *  Getter for the number of vertices in the subtree.
+             *
+             *  @param[in] subtreeRoot  The root of the subtree.
+             *
+             *  @return The number of vertices in the subtree.
+             */
             virtual std::size_t vertexCount(htd::vertex_t subtreeRoot) const = 0;
 
+            /**
+             *  Getter for the root of the tree.
+             *
+             *  @return The ID of the root vertex of the tree.
+             */
             virtual htd::vertex_t root(void) const = 0;
 
+            /**
+             *  Check whether a vertex is the root node of the tree.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return True if the the vertex is the root node of the tree, false otherwise.
+             */
             virtual bool isRoot(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Getter for the number of leaf nodes of the tree.
+             *
+             *  @return The number of leaf nodes of the tree.
+             */
             virtual std::size_t leafNodeCount(void) const = 0;
 
+            /**
+             *  Access the collection of all leaf nodes of the tree.
+             *
+             *  @return The collection of all leaf nodes of the tree in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> leafNodes(void) const = 0;
 
+            /**
+             *  Access the leaf node at the specific position.
+             *
+             *  @param[in] index    The position of the leaf node.
+             *
+             *  @return The leaf node at the specific position.
+             */
             virtual htd::vertex_t leafNodeAtPosition(htd::index_t index) const = 0;
 
+            /**
+             *  Check whether a vertex is a leaf node of the tree.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return True if the the vertex is a leaf node of the tree, false otherwise.
+             */
             virtual bool isLeafNode(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Getter for the parent of a vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The ID of the parent of the vertex.
+             */
             virtual htd::vertex_t parent(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Check whether a vertex is the parent of another.
+             *
+             *  @param[in] vertex   The vertex.
+             *  @param[in] parent   The potential parent.
+             *
+             *  @return True if the the potential parent is indeed the parent of the given vertex, false otherwise.
+             */
             virtual bool isParent(htd::vertex_t vertex, htd::vertex_t parent) const = 0;
-            
+
+            /**
+             *  Getter for the number of children of a vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The number of children of the vertex.
+             */
             virtual std::size_t childCount(htd::vertex_t vertex) const = 0;
-            
+
+            /**
+             *  Access the collection of all children of a given vertex in the graph.
+             *
+             *  @param[in] vertex   The vertex for which the collection of children should be returned.
+             *
+             *  @return The collection of all children of the given vertex in the graph in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> children(htd::vertex_t vertex) const = 0;
-            
+
+            /**
+             *  Access the child at the specific position.
+             *
+             *  @param[in] vertex   The vertex for which the child should be returned.
+             *  @param[in] index    The position of the child.
+             *
+             *  @return The child at the specific position.
+             */
             virtual htd::vertex_t childAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
+            /**
+             *  Check whether a vertex is a child of another.
+             *
+             *  @param[in] vertex   The vertex.
+             *  @param[in] parent   The potential child.
+             *
+             *  @return True if the the potential child is indeed a child of the given vertex, false otherwise.
+             */
             virtual bool isChild(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             /**

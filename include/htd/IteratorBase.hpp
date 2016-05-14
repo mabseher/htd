@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     *  Wrapper for iterators of mutable collections.
+     */
     template <typename T>
     class IteratorBase
     {

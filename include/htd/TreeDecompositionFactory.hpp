@@ -27,10 +27,12 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
-#include <htd/ITreeDecomposition.hpp>
 
 namespace htd
 {
+    /**
+     *  Factory class for the default implementation of the IMutableTreeDecomposition interface.
+     */
     class TreeDecompositionFactory
     {
         public:

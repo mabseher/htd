@@ -29,6 +29,9 @@
 
 namespace htd
 {
+    /**
+     *  Wrapper for iterators of immutable collections.
+     */
     template <typename T>
     class ConstIteratorBase
     {

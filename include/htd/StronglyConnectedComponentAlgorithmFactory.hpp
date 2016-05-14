@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     *  Factory class for the default implementation of the IStronglyConnectedComponentAlgorithm interface.
+     */
     class StronglyConnectedComponentAlgorithmFactory
     {
         public:

@@ -35,8 +35,20 @@ namespace htd
         public:
             virtual ~IPath() = 0;
 
+            /**
+             *  Access the leaf node of the path.
+             *
+             *  @return The leaf node of the path.
+             */
             virtual htd::vertex_t leafNode(void) const = 0;
 
+            /**
+             *  Access the child of a vertex.
+             *
+             *  @param[in] vertex   The vertex for which the child should be returned.
+             *
+             *  @return The child of the vertex.
+             */
             virtual htd::vertex_t child(htd::vertex_t vertex) const = 0;
 
             /**

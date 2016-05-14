@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     *  Factory class for the default implementation of the IMutableLabeledMultiHypergraph interface.
+     */
     class LabeledMultiHypergraphFactory
     {
         public:

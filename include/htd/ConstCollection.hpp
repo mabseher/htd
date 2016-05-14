@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     *  Wrapper for immutable collections.
+     */
     template <typename T>
     class ConstCollection
     {

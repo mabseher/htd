@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     *  Factory class for the default implementation of the IMutableLabeledTree interface.
+     */
     class LabeledTreeFactory
     {
         public:

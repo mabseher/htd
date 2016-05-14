@@ -67,7 +67,7 @@ TEST(TreeDecompositionTest, CheckEmptyTree)
 
     ASSERT_TRUE(decomposition.isConnected());
 
-    ASSERT_EQ((std::size_t)0, decomposition.leafNodeCount());
+    ASSERT_EQ((std::size_t)0, decomposition.leafCount());
 
     ASSERT_EQ((std::size_t)0, decomposition.isolatedVertexCount());
 }
@@ -87,7 +87,7 @@ TEST(TreeDecompositionTest, CheckSize1Tree)
 
     ASSERT_TRUE(decomposition.isConnected());
 
-    ASSERT_EQ((std::size_t)0, decomposition.leafNodeCount());
+    ASSERT_EQ((std::size_t)0, decomposition.leafCount());
 
     htd::vertex_t root = decomposition.insertRoot();
 
@@ -107,9 +107,9 @@ TEST(TreeDecompositionTest, CheckSize1Tree)
 
     ASSERT_TRUE(decomposition.isConnected());
 
-    ASSERT_EQ((std::size_t)1, decomposition.leafNodeCount());
-    ASSERT_EQ((std::size_t)1, decomposition.leafNodes().size());
-    ASSERT_EQ((htd::vertex_t)1, decomposition.leafNodes()[0]);
+    ASSERT_EQ((std::size_t)1, decomposition.leafCount());
+    ASSERT_EQ((std::size_t)1, decomposition.leaves().size());
+    ASSERT_EQ((htd::vertex_t)1, decomposition.leaves()[0]);
 
     ASSERT_EQ((std::size_t)1, decomposition.isolatedVertexCount());
     ASSERT_EQ(root, decomposition.isolatedVertices()[0]);
@@ -132,7 +132,7 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
 
     ASSERT_TRUE(decomposition.isConnected());
 
-    ASSERT_EQ((std::size_t)0, decomposition.leafNodeCount());
+    ASSERT_EQ((std::size_t)0, decomposition.leafCount());
 
     htd::vertex_t root = decomposition.insertRoot();
 
@@ -158,7 +158,7 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
 
     ASSERT_TRUE(decomposition.isConnected());
 
-    ASSERT_EQ((std::size_t)1, decomposition.leafNodeCount());
+    ASSERT_EQ((std::size_t)1, decomposition.leafCount());
 
     ASSERT_TRUE(decomposition.isChild(root, child));
     ASSERT_FALSE(decomposition.isChild(child, root));
@@ -185,7 +185,7 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
 
     ASSERT_TRUE(decomposition.isConnected());
 
-    ASSERT_EQ((std::size_t)1, decomposition.leafNodeCount());
+    ASSERT_EQ((std::size_t)1, decomposition.leafCount());
 
     ASSERT_TRUE(decomposition.isChild(newRoot, root));
     ASSERT_TRUE(decomposition.isChild(root, child));
@@ -207,9 +207,9 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
     ASSERT_EQ(root, decomposition.children(newRoot)[0]);
     ASSERT_EQ(child, decomposition.children(root)[0]);
 
-    ASSERT_FALSE(decomposition.isLeafNode(root));
-    ASSERT_TRUE(decomposition.isLeafNode(child));
-    ASSERT_FALSE(decomposition.isLeafNode(newRoot));
+    ASSERT_FALSE(decomposition.isLeaf(root));
+    ASSERT_TRUE(decomposition.isLeaf(child));
+    ASSERT_FALSE(decomposition.isLeaf(newRoot));
 
     ASSERT_EQ((std::size_t)2, decomposition.vertexCount(root));
     ASSERT_EQ((std::size_t)1, decomposition.vertexCount(child));
@@ -349,7 +349,7 @@ TEST(TreeDecompositionTest, CheckTreeManipulations)
 
     ASSERT_EQ((std::size_t)0, decomposition.childCount(node1331));
 
-    ASSERT_EQ((std::size_t)7, decomposition.leafNodeCount());
+    ASSERT_EQ((std::size_t)7, decomposition.leafCount());
 
     ASSERT_EQ((std::size_t)12, decomposition.vertexCount(root));
     ASSERT_EQ((std::size_t)2, decomposition.vertexCount(node11));
@@ -537,20 +537,20 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((htd::vertex_t)2, td1.bagContent(treeDecompositionNode2)[1]);
     ASSERT_EQ((htd::vertex_t)3, td1.bagContent(treeDecompositionNode2)[2]);
 
-    ASSERT_EQ((std::size_t)1, td1.leafNodeCount());
-    ASSERT_EQ((std::size_t)2, td2.leafNodeCount());
-    ASSERT_EQ((std::size_t)1, td3.leafNodeCount());
+    ASSERT_EQ((std::size_t)1, td1.leafCount());
+    ASSERT_EQ((std::size_t)2, td2.leafCount());
+    ASSERT_EQ((std::size_t)1, td3.leafCount());
 
-    ASSERT_EQ(treeDecompositionNode2, td1.leafNodes()[0]);
-    ASSERT_EQ(treeDecompositionNode2, td1.leafNodeAtPosition(0));
+    ASSERT_EQ(treeDecompositionNode2, td1.leaves()[0]);
+    ASSERT_EQ(treeDecompositionNode2, td1.leafAtPosition(0));
 
-    ASSERT_EQ(treeNode2, td2.leafNodes()[0]);
-    ASSERT_EQ(treeNode2, td2.leafNodeAtPosition(0));
-    ASSERT_EQ(treeNode5, td2.leafNodes()[1]);
-    ASSERT_EQ(treeNode5, td2.leafNodeAtPosition(1));
+    ASSERT_EQ(treeNode2, td2.leaves()[0]);
+    ASSERT_EQ(treeNode2, td2.leafAtPosition(0));
+    ASSERT_EQ(treeNode5, td2.leaves()[1]);
+    ASSERT_EQ(treeNode5, td2.leafAtPosition(1));
 
-    ASSERT_EQ(labeledTreeNode3, td3.leafNodes()[0]);
-    ASSERT_EQ(labeledTreeNode3, td3.leafNodeAtPosition(0));
+    ASSERT_EQ(labeledTreeNode3, td3.leaves()[0]);
+    ASSERT_EQ(labeledTreeNode3, td3.leafAtPosition(0));
 
     ASSERT_EQ((std::size_t)0, td1.joinNodeCount());
     ASSERT_EQ((std::size_t)1, td2.joinNodeCount());
@@ -611,7 +611,7 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     ASSERT_TRUE(td2.isIntroduceNode(treeDecompositionNode2));
     ASSERT_FALSE(td2.isForgetNode(treeDecompositionNode2));
     ASSERT_FALSE(td2.isJoinNode(treeDecompositionNode2));
-    ASSERT_TRUE(td2.isLeafNode(treeDecompositionNode2));
+    ASSERT_TRUE(td2.isLeaf(treeDecompositionNode2));
 }
 
 TEST(TreeDecompositionTest, CheckBagContentModifications)
@@ -664,24 +664,24 @@ TEST(TreeDecompositionTest, CheckNodeTypeDetection)
     td3.bagContent(node31) = std::vector<htd::vertex_t> { 1 };
     td3.bagContent(node32) = std::vector<htd::vertex_t> { 2 };
 
-    ASSERT_EQ((std::size_t)1, td1.leafNodeCount());
-    ASSERT_EQ((std::size_t)1, td2.leafNodeCount());
-    ASSERT_EQ((std::size_t)2, td3.leafNodeCount());
+    ASSERT_EQ((std::size_t)1, td1.leafCount());
+    ASSERT_EQ((std::size_t)1, td2.leafCount());
+    ASSERT_EQ((std::size_t)2, td3.leafCount());
 
-    ASSERT_EQ((std::size_t)1, td1.leafNodes().size());
-    ASSERT_EQ((std::size_t)1, td2.leafNodes().size());
-    ASSERT_EQ((std::size_t)2, td3.leafNodes().size());
+    ASSERT_EQ((std::size_t)1, td1.leaves().size());
+    ASSERT_EQ((std::size_t)1, td2.leaves().size());
+    ASSERT_EQ((std::size_t)2, td3.leaves().size());
 
-    ASSERT_EQ(node11, td1.leafNodes()[0]);
-    ASSERT_EQ(node11, td1.leafNodeAtPosition(0));
+    ASSERT_EQ(node11, td1.leaves()[0]);
+    ASSERT_EQ(node11, td1.leafAtPosition(0));
 
-    ASSERT_EQ(node21, td2.leafNodes()[0]);
-    ASSERT_EQ(node21, td2.leafNodeAtPosition(0));
+    ASSERT_EQ(node21, td2.leaves()[0]);
+    ASSERT_EQ(node21, td2.leafAtPosition(0));
 
-    ASSERT_EQ(node31, td3.leafNodes()[0]);
-    ASSERT_EQ(node31, td3.leafNodeAtPosition(0));
-    ASSERT_EQ(node32, td3.leafNodes()[1]);
-    ASSERT_EQ(node32, td3.leafNodeAtPosition(1));
+    ASSERT_EQ(node31, td3.leaves()[0]);
+    ASSERT_EQ(node31, td3.leafAtPosition(0));
+    ASSERT_EQ(node32, td3.leaves()[1]);
+    ASSERT_EQ(node32, td3.leafAtPosition(1));
 
     ASSERT_EQ((std::size_t)0, td1.joinNodeCount());
     ASSERT_EQ((std::size_t)0, td2.joinNodeCount());

@@ -47,10 +47,10 @@ else()
     set(HTD_ID_TYPE "std::uint_least32_t" )
 endif()
 
-if (NOT DEFINED HTD_BUILD_TESTS)
+if (NOT DEFINED BUILD_TESTING)
     message("Tests are disabled!")
 
-    set(HTD_BUILD_TESTS OFF)
+    set(BUILD_TESTING OFF)
 endif()
 
 subdirs(src/htd)

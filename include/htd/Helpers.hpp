@@ -744,18 +744,36 @@ namespace std
 
     std::ostream & operator<<(std::ostream & stream, const htd::FilteredHyperedgeCollection & input);
 
+    /**
+     *  Combine the given seed with the hash code of the given input.
+     *
+     *  @param[in] seed     The seed hash value.
+     *  @param[in] input    The input which's hash code shall be combined with the seed hash value.
+     *
+     *  @return The combined hash code.
+     */
     template<typename T>
-    void hash_combine(std::size_t & seed, const T & v)
+    void hash_combine(std::size_t & seed, const T & input)
     {
         std::hash<T> hashFunction;
 
-        seed ^= hashFunction(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        seed ^= hashFunction(input) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
     }
 
+    /**
+     *  Implementation of std::hash for htd::Hyperedge.
+     */
     template<>
     struct hash<htd::Hyperedge>
     {
         public:
+            /**
+             *  Compute the hash code of a given htd::Hyperedge.
+             *
+             *  @param[in] data The htd::Hyperedge which's hash code should be returned.
+             *
+             *  @return The hash code of the given htd::Hyperedge.
+             */
             std::size_t operator()(const htd::Hyperedge & data) const
             {
                 std::size_t ret = 31 * data.id();
@@ -769,10 +787,20 @@ namespace std
             }
     };
 
+    /**
+     *  Implementation of std::hash for htd::FilteredHyperedgeCollection.
+     */
     template<>
     struct hash<htd::FilteredHyperedgeCollection>
     {
         public:
+            /**
+             *  Compute the hash code of a given htd::FilteredHyperedgeCollection.
+             *
+             *  @param[in] data The htd::FilteredHyperedgeCollection which's hash code should be returned.
+             *
+             *  @return The hash code of the given htd::FilteredHyperedgeCollection.
+             */
             std::size_t operator()(const htd::FilteredHyperedgeCollection & data) const
             {
                 std::size_t ret = 31;
@@ -786,10 +814,20 @@ namespace std
             }
     };
 
+    /**
+     *  Implementation of std::hash for htd::Collection<htd::vertex_t>.
+     */
     template<>
     struct hash<htd::Collection<htd::vertex_t>>
     {
         public:
+            /**
+             *  Compute the hash code of a given htd::Collection<htd::vertex_t>.
+             *
+             *  @param[in] data The htd::Collection<htd::vertex_t> which's hash code should be returned.
+             *
+             *  @return The hash code of the given htd::Collection<htd::vertex_t>.
+             */
             std::size_t operator()(const htd::ConstCollection<htd::vertex_t> & data) const
             {
                 std::size_t ret = 31;
@@ -803,10 +841,20 @@ namespace std
             }
     };
 
+    /**
+     *  Implementation of std::hash for htd::ConstCollection<htd::vertex_t>.
+     */
     template<>
     struct hash<htd::ConstCollection<htd::vertex_t>>
     {
         public:
+            /**
+             *  Compute the hash code of a given htd::ConstCollection<htd::vertex_t>.
+             *
+             *  @param[in] data The htd::ConstCollection<htd::vertex_t> which's hash code should be returned.
+             *
+             *  @return The hash code of the given htd::ConstCollection<htd::vertex_t>.
+             */
             std::size_t operator()(const htd::ConstCollection<htd::vertex_t> & data) const
             {
                 std::size_t ret = 31;
@@ -820,10 +868,20 @@ namespace std
             }
     };
 
+    /**
+     *  Implementation of std::hash for htd::Collection<htd::Hyperedge>.
+     */
     template<>
     struct hash<htd::Collection<htd::Hyperedge>>
     {
         public:
+            /**
+             *  Compute the hash code of a given htd::Collection<htd::Hyperedge>.
+             *
+             *  @param[in] data The htd::Collection<htd::Hyperedge> which's hash code should be returned.
+             *
+             *  @return The hash code of the given htd::Collection<htd::Hyperedge>.
+             */
             std::size_t operator()(const htd::ConstCollection<htd::Hyperedge> & data) const
             {
                 std::size_t ret = 31;
@@ -839,10 +897,20 @@ namespace std
             }
     };
 
+    /**
+     *  Implementation of std::hash for htd::ConstCollection<htd::Hyperedge>.
+     */
     template<>
     struct hash<htd::ConstCollection<htd::Hyperedge>>
     {
         public:
+            /**
+             *  Compute the hash code of a given htd::ConstCollection<htd::Hyperedge>.
+             *
+             *  @param[in] data The htd::ConstCollection<htd::Hyperedge> which's hash code should be returned.
+             *
+             *  @return The hash code of the given htd::ConstCollection<htd::Hyperedge>.
+             */
             std::size_t operator()(const htd::ConstCollection<htd::Hyperedge> & data) const
             {
                 std::size_t ret = 31;
@@ -858,10 +926,20 @@ namespace std
             }
     };
 
+    /**
+     *  Implementation of std::hash for htd::vertex_container.
+     */
     template<>
     struct hash<htd::vertex_container>
     {
         public:
+            /**
+             *  Compute the hash code of a given htd::vertex_container.
+             *
+             *  @param[in] data The htd::vertex_container which's hash code should be returned.
+             *
+             *  @return The hash code of the given htd::vertex_container.
+             */
             std::size_t operator()(const htd::vertex_container & data) const
             {
                 std::size_t ret = 31;

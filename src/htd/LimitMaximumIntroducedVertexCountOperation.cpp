@@ -63,7 +63,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
     for (htd::vertex_t node : introduceNodes)
     {
-        if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeafNode(node))
+        if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
         {
             htd::vertex_container bagContent;
 
@@ -260,7 +260,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
     for (htd::vertex_t node : introduceNodes)
     {
-        if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeafNode(node))
+        if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
         {
             htd::vertex_container bagContent;
 

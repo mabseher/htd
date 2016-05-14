@@ -946,7 +946,7 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
     }
 }
 
-std::size_t htd::Tree::leafNodeCount(void) const
+std::size_t htd::Tree::leafCount(void) const
 {
     std::size_t ret = 0;
 
@@ -961,7 +961,7 @@ std::size_t htd::Tree::leafNodeCount(void) const
     return ret;
 }
 
-htd::ConstCollection<htd::vertex_t> htd::Tree::leafNodes(void) const
+htd::ConstCollection<htd::vertex_t> htd::Tree::leaves(void) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -980,13 +980,13 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::leafNodes(void) const
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::Tree::leafNodeAtPosition(htd::index_t index) const
+htd::vertex_t htd::Tree::leafAtPosition(htd::index_t index) const
 {
-    const htd::ConstCollection<htd::vertex_t> & leafNodeCollection = leafNodes();
+    const htd::ConstCollection<htd::vertex_t> & leafNodeCollection = leaves();
 
     if (index >= leafNodeCollection.size())
     {
-        throw std::out_of_range("htd::vertex_t htd::Tree::leafNodeAtPosition(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::Tree::leafAtPosition(htd::index_t) const");
     }
 
     htd::ConstIterator<htd::vertex_t> it = leafNodeCollection.begin();
@@ -996,7 +996,7 @@ htd::vertex_t htd::Tree::leafNodeAtPosition(htd::index_t index) const
     return *it;
 }
 
-bool htd::Tree::isLeafNode(htd::vertex_t vertex) const
+bool htd::Tree::isLeaf(htd::vertex_t vertex) const
 {
     HTD_ASSERT(isVertex(vertex))
 

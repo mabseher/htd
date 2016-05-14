@@ -40,7 +40,7 @@ namespace htd
              *
              *  @return The leaf node of the path.
              */
-            virtual htd::vertex_t leafNode(void) const = 0;
+            virtual htd::vertex_t leaf(void) const = 0;
 
             /**
              *  Access the child of a vertex.

@@ -938,7 +938,7 @@ htd::vertex_t htd::Path::addParent(htd::vertex_t vertex)
     return ret;
 }
 
-std::size_t htd::Path::leafNodeCount(void) const
+std::size_t htd::Path::leafCount(void) const
 {
     std::size_t ret = 0;
 
@@ -950,7 +950,7 @@ std::size_t htd::Path::leafNodeCount(void) const
     return ret;
 }
 
-htd::ConstCollection<htd::vertex_t> htd::Path::leafNodes(void) const
+htd::ConstCollection<htd::vertex_t> htd::Path::leaves(void) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -967,11 +967,11 @@ htd::ConstCollection<htd::vertex_t> htd::Path::leafNodes(void) const
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::Path::leafNode(void) const
+htd::vertex_t htd::Path::leaf(void) const
 {
     if (size_ == 0)
     {
-        throw std::out_of_range("htd::vertex_t htd::Path::leafNode(void) const");
+        throw std::out_of_range("htd::vertex_t htd::Path::leaf(void) const");
     }
 
     for (const auto & node : nodes_)
@@ -985,17 +985,17 @@ htd::vertex_t htd::Path::leafNode(void) const
     return htd::Vertex::UNKNOWN;
 }
 
-htd::vertex_t htd::Path::leafNodeAtPosition(htd::index_t index) const
+htd::vertex_t htd::Path::leafAtPosition(htd::index_t index) const
 {
     if (size_ == 0 || index >= 1)
     {
-        throw std::out_of_range("htd::vertex_t htd::Path::leafNodeAtPosition(htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::Path::leafAtPosition(htd::index_t) const");
     }
 
-    return leafNode();
+    return leaf();
 }
 
-bool htd::Path::isLeafNode(htd::vertex_t vertex) const
+bool htd::Path::isLeaf(htd::vertex_t vertex) const
 {
     bool ret = false;
 
@@ -1005,7 +1005,7 @@ bool htd::Path::isLeafNode(htd::vertex_t vertex) const
     }
     else
     {
-        throw std::out_of_range("bool htd::Path::isLeafNode(htd::vertex_t) const");
+        throw std::out_of_range("bool htd::Path::isLeaf(htd::vertex_t) const");
     }
 
     return ret;
@@ -1126,7 +1126,7 @@ htd::Path & htd::Path::operator=(const htd::IPath & original)
                     newNode = new htd::Path::Node(vertex, original.parent(vertex));
                 }
 
-                if (!original.isLeafNode(vertex))
+                if (!original.isLeaf(vertex))
                 {
                     newNode->child = original.child(vertex);
                 }

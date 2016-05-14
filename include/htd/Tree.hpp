@@ -114,13 +114,13 @@ namespace htd
 
             bool isRoot(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            std::size_t leafNodeCount(void) const HTD_OVERRIDE;
+            std::size_t leafCount(void) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::vertex_t> leafNodes(void) const HTD_OVERRIDE;
+            htd::ConstCollection<htd::vertex_t> leaves(void) const HTD_OVERRIDE;
 
-            htd::vertex_t leafNodeAtPosition(htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t leafAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
-            bool isLeafNode(htd::vertex_t vertex) const HTD_OVERRIDE;
+            bool isLeaf(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::vertex_t parent(htd::vertex_t vertex) const HTD_OVERRIDE;
 

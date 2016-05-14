@@ -68,14 +68,14 @@ namespace htd
              *
              *  @return The number of leaf nodes of the tree.
              */
-            virtual std::size_t leafNodeCount(void) const = 0;
+            virtual std::size_t leafCount(void) const = 0;
 
             /**
              *  Access the collection of all leaf nodes of the tree.
              *
              *  @return The collection of all leaf nodes of the tree in ascending order.
              */
-            virtual htd::ConstCollection<htd::vertex_t> leafNodes(void) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> leaves(void) const = 0;
 
             /**
              *  Access the leaf node at the specific position.
@@ -84,7 +84,7 @@ namespace htd
              *
              *  @return The leaf node at the specific position.
              */
-            virtual htd::vertex_t leafNodeAtPosition(htd::index_t index) const = 0;
+            virtual htd::vertex_t leafAtPosition(htd::index_t index) const = 0;
 
             /**
              *  Check whether a vertex is a leaf node of the tree.
@@ -93,7 +93,7 @@ namespace htd
              *
              *  @return True if the the vertex is a leaf node of the tree, false otherwise.
              */
-            virtual bool isLeafNode(htd::vertex_t vertex) const = 0;
+            virtual bool isLeaf(htd::vertex_t vertex) const = 0;
 
             /**
              *  Getter for the parent of a vertex.

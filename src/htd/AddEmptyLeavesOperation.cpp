@@ -50,7 +50,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomp
 {
     std::vector<htd::vertex_t> leafNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & leafNodeContainer = decomposition.leafNodes();
+    const htd::ConstCollection<htd::vertex_t> & leafNodeContainer = decomposition.leaves();
 
     std::copy(leafNodeContainer.begin(), leafNodeContainer.end(), std::back_inserter(leafNodes));
 
@@ -83,7 +83,7 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
 {
     std::vector<htd::vertex_t> leafNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & leafNodeContainer = decomposition.leafNodes();
+    const htd::ConstCollection<htd::vertex_t> & leafNodeContainer = decomposition.leaves();
 
     std::copy(leafNodeContainer.begin(), leafNodeContainer.end(), std::back_inserter(leafNodes));
 

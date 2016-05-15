@@ -300,7 +300,7 @@ namespace htd
 
             const VertexNameType & incomingNeighborAtPosition(const VertexNameType & vertexName, htd::index_t index) const
             {
-                return vertexName(base_->incomingNeighbor(lookupVertex(vertexName), index));
+                return vertexName(base_->incomingNeighborAtPosition(lookupVertex(vertexName), index));
             }
 
             htd::ConstCollection<VertexNameType> outgoingNeighbors(const VertexNameType & vertexName) const
@@ -319,7 +319,7 @@ namespace htd
 
             const VertexNameType & outgoingNeighborAtPosition(const VertexNameType & vertexName, htd::index_t index) const
             {
-                return vertexName(base_->outgoingNeighbor(lookupVertex(vertexName), index));
+                return vertexName(base_->outgoingNeighborAtPosition(lookupVertex(vertexName), index));
             }
 
             std::size_t isolatedVertexCount(void) const

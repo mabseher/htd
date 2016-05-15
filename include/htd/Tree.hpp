@@ -184,24 +184,58 @@ namespace htd
                 }
             };
 
+            /**
+             *  The size of the tree.
+             */
             std::size_t size_;
 
+            /**
+             *  The root vertex of the tree.
+             */
             htd::vertex_t root_;
 
-            htd::index_t next_edge_;
+            /**
+             *  The ID the next edge added to the tree will get.
+             */
+            htd::id_t next_edge_;
 
+            /**
+             *  The ID the next vertex added to the tree will get.
+             */
             htd::vertex_t next_vertex_;
 
+            /**
+             *  The collection of all vertices of the tree in ascending order.
+             */
             htd::vertex_container vertices_;
 
+            /**
+             *  The map of pointers to all tree nodes. It maps vertex IDs to the corresponding node information.
+             */
             std::unordered_map<htd::id_t, std::unique_ptr<Node>> nodes_;
 
+            /**
+             *  The collection of all hyperedges which exist in the tree.
+             */
             std::shared_ptr<htd::hyperedge_container> edges_;
 
+            /**
+             *  The ID of the signal handler associated to the tree.
+             */
             htd::id_t signalHandlerId_;
 
+            /**
+             *  Delete a node of the tree and perform an update of the internal state.
+             *
+             *  @param[in] node The node of the tree which shall be removed.
+             */
             void deleteNode(const std::unique_ptr<Node> & node);
 
+            /**
+             *  Handle an incoming signal.
+             *
+             *  @param[in] signal   The signal which was received.
+             */
             void handleSignal(int signal);
     };
 }

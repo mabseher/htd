@@ -41,11 +41,21 @@ namespace htd
 
             }
 
+            /**
+             *  Copy constructor for an iterator.
+             *
+             *  @param[in] original  The original iterator.
+             */
             ConstIteratorWrapper<Iter, T>(const ConstIteratorWrapper<Iter, T> & original) : baseIterator_(original.baseIterator_)
             {
 
             }
 
+            /**
+             *  Move constructor for an iterator.
+             *
+             *  @param[in] original  The original iterator.
+             */
             ConstIteratorWrapper<Iter, T>(ConstIteratorWrapper<Iter, T> && original) : baseIterator_(std::move(original.baseIterator_))
             {
 
@@ -70,6 +80,11 @@ namespace htd
                 return *this;
             }
 
+            /**
+             *  Increment the iterator.
+             *
+             *  @return A copy of the iterator reflecting the state before the increment operation took place.
+             */
             ConstIteratorWrapper<Iter, T> operator++(int)
             {
                 ConstIteratorWrapper<Iter, T> ret(*this);
@@ -84,6 +99,13 @@ namespace htd
                 return baseIterator_ == static_cast<const ConstIteratorWrapper<Iter, T> *>(&rhs)->baseIterator_;
             }
 
+            /**
+             *  Equality operator for an iterator.
+             *
+             *  @param[in] rhs  The iterator at the right-hand side of the operator.
+             *
+             *  @return True if the iterator points to the same element as the iterator at the right-hand side of the operator, false otherwise.
+             */
             bool operator==(const ConstIteratorWrapper<Iter, T> & rhs) const
             {
                 return baseIterator_ == rhs.baseIterator_;
@@ -94,6 +116,13 @@ namespace htd
                 return baseIterator_ != static_cast<const ConstIteratorWrapper<Iter, T> *>(&rhs)->baseIterator_;
             }
 
+            /**
+             *  Inequality operator for an iterator.
+             *
+             *  @param[in] rhs  The iterator at the right-hand side of the operator.
+             *
+             *  @return True if the iterator does not point to the same element as the iterator at the right-hand side of the operator, false otherwise.
+             */
             bool operator!=(const ConstIteratorWrapper<Iter, T> & rhs) const
             {
                 return baseIterator_ != rhs.baseIterator_;

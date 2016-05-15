@@ -49,7 +49,6 @@ namespace htd
         protected:
             HeuristicSetCoverAlgorithm & operator=(const HeuristicSetCoverAlgorithm &) { return *this; }
 
-
         private:
 
             const std::size_t maximumAttempts = 25;

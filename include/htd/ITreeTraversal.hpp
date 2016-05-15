@@ -41,7 +41,7 @@ namespace htd
             /**
              *  Traverse the given path, starting from it's root, and call the provided function for each vertex.
              *
-             *  @param[in] path             The path which should be traversed.
+             *  @param[in] path             The path which shall be traversed.
              *  @param[in] targetFunction   The function which will be called for each vertex found during the traversal. The parameters passed to the function are the following:
              *                                  -# The current vertex.
              *                                  -# The immediate predecessor of the current vertex in the traversal process.
@@ -52,7 +52,7 @@ namespace htd
             /**
              *  Traverse the given path and call the provided function for each vertex.
              *
-             *  @param[in] path             The path which should be traversed.
+             *  @param[in] path             The path which shall be traversed.
              *  @param[in] targetFunction   The function which will be called for each vertex found during the traversal. The parameters passed to the function are the following:
              *                                  -# The current vertex.
              *                                  -# The immediate predecessor of the current vertex in the traversal process.
@@ -64,7 +64,7 @@ namespace htd
             /**
              *  Traverse the given tree, starting from it's root, and call the provided function for each vertex.
              *
-             *  @param[in] tree             The tree which should be traversed.
+             *  @param[in] tree             The tree which shall be traversed.
              *  @param[in] targetFunction   The function which will be called for each vertex found during the traversal. The parameters passed to the function are the following:
              *                                  -# The current vertex.
              *                                  -# The immediate predecessor of the current vertex in the traversal process.
@@ -75,7 +75,7 @@ namespace htd
             /**
              *  Traverse the given tree, starting from it's root, and call the provided function for each vertex.
              *
-             *  @param[in] tree             The tree which should be traversed.
+             *  @param[in] tree             The tree which shall be traversed.
              *  @param[in] targetFunction   The function which will be called for each vertex found during the traversal. The parameters passed to the function are the following:
              *                                  -# The current vertex.
              *                                  -# The immediate predecessor of the current vertex in the traversal process.

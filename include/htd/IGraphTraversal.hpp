@@ -40,7 +40,7 @@ namespace htd
             /**
              *  Traverse the given graph and call the provided function for each vertex.
              *
-             *  @param[in] graph            The graph which should be traversed.
+             *  @param[in] graph            The graph which shall be traversed.
              *  @param[in] startingVertex   The vertex from which the traversal will be started.
              *  @param[in] targetFunction   The function which will be called for each vertex found during the traversal. The parameters passed to the function are the following:
              *                                  -# The current vertex.

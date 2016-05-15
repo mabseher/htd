@@ -40,15 +40,15 @@ namespace htd
             /**
              *  Apply the manipulation operation to the given graph decomposition.
              *
-             *  @param[in] decomposition    The graph decomposition which should be modified.
+             *  @param[in] decomposition    The graph decomposition which shall be modified.
              */
             virtual void apply(htd::IMutableGraphDecomposition & decomposition) const = 0;
 
             /**
              *  Apply the manipulation operation to the given graph decomposition.
              *
-             *  @param[in] decomposition        The graph decomposition which should be modified.
-             *  @param[in] labelingFunctions    A vector of labeling functions which should be applied after the modifications.
+             *  @param[in] decomposition        The graph decomposition which shall be modified.
+             *  @param[in] labelingFunctions    A vector of labeling functions which shall be applied after the modifications.
              */
             virtual void apply(htd::IMutableGraphDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 

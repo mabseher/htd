@@ -38,7 +38,7 @@ namespace htd
             /**
              *  Getter for the number of neighbors having an outgoing edge to the given vertex.
              *
-             *  @param[in] vertex   The vertex for which the number of incoming neighbors should be computed.
+             *  @param[in] vertex   The vertex for which the number of incoming neighbors shall be computed.
              *
              *  @return The number of neighbors having an outgoing edge to the given vertex.
              */
@@ -47,7 +47,7 @@ namespace htd
             /**
              *  Access the collection of all neighbors having an outgoing edge to the given vertex.
              *
-             *  @param[in] vertex   The vertex for which the collection of incoming neighbors should be returned.
+             *  @param[in] vertex   The vertex for which the collection of incoming neighbors shall be returned.
              *
              *  @return The collection of all neighbors having an outgoing edge to the given vertex in ascending order.
              */
@@ -56,7 +56,7 @@ namespace htd
             /**
              *  Access the incoming neighbor at the specific position.
              *
-             *  @param[in] vertex    The vertex for which the incoming neighbor should be returned.
+             *  @param[in] vertex    The vertex for which the incoming neighbor shall be returned.
              *  @param[in] index     The position of the incoming neighbor.
              *
              *  @return The incoming neighbor of the given vertex at the specific position.
@@ -76,7 +76,7 @@ namespace htd
             /**
              *  Getter for the number of neighbors having an incoming edge from the given vertex.
              *
-             *  @param[in] vertex   The vertex for which the number of outgoing neighbors should be computed.
+             *  @param[in] vertex   The vertex for which the number of outgoing neighbors shall be computed.
              *
              *  @return The number of neighbors having an incoming edge from the given vertex.
              */
@@ -85,7 +85,7 @@ namespace htd
             /**
              *  Access the collection of all neighbors having an incoming edge from the given vertex.
              *
-             *  @param[in] vertex   The vertex for which the collection of outgoing neighbors should be returned.
+             *  @param[in] vertex   The vertex for which the collection of outgoing neighbors shall be returned.
              *
              *  @return The collection of all neighbors having an incoming edge from the given vertex in ascending order.
              */
@@ -94,7 +94,7 @@ namespace htd
             /**
              *  Access the outgoing neighbor at the specific position.
              *
-             *  @param[in] vertex    The vertex for which the outgoing neighbor should be returned.
+             *  @param[in] vertex    The vertex for which the outgoing neighbor shall be returned.
              *  @param[in] index     The position of the outgoing neighbor.
              *
              *  @return The outgoing neighbor of the given vertex at the specific position.

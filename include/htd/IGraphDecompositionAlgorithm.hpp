@@ -39,8 +39,23 @@ namespace htd
         public:
             virtual ~IGraphDecompositionAlgorithm() = 0;
             
+            /**
+             *  Compute a decomposition of the given graph.
+             *
+             *  @param[in] graph    The input graph to decompose.
+             *
+             *  @return A new IGraphDecomposition object representing the decomposition of the given graph.
+             */
             virtual htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const = 0;
 
+            /**
+             *  Compute a decomposition of the given graph and apply the given manipulation operations to it.
+             *
+             *  @param[in] graph                    The input graph to decompose.
+             *  @param[in] manipulationOperations   The manipulation operations which should be applied.
+             *
+             *  @return A new IGraphDecomposition object representing the decomposition of the given graph.
+             */
             virtual htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const = 0;
 
             virtual void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) = 0;

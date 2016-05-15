@@ -58,6 +58,11 @@ namespace htd
 
             }
 
+            /**
+             *  Copy constructor for an iterator.
+             *
+             *  @param[in] original  The original iterator.
+             */
             Iterator<T>(const Iterator<T> & original) : baseIterator_(nullptr)
             {
                 if (original.baseIterator_ != nullptr)
@@ -66,6 +71,11 @@ namespace htd
                 }
             }
 
+            /**
+             *  Move constructor for an iterator.
+             *
+             *  @param[in] original  The original iterator.
+             */
             Iterator<T>(Iterator<T> && original) : baseIterator_(nullptr)
             {
                 if (original.baseIterator_ != nullptr)
@@ -155,6 +165,13 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Equality operator for an iterator.
+             *
+             *  @param[in] rhs  The iterator at the right-hand side of the operator.
+             *
+             *  @return True if the iterator points to the same element as the iterator at the right-hand side of the operator, false otherwise.
+             */
             bool operator==(const Iterator<T> & rhs) const
             {
                 bool ret = false;
@@ -189,6 +206,13 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Inequality operator for an iterator.
+             *
+             *  @param[in] rhs  The iterator at the right-hand side of the operator.
+             *
+             *  @return True if the iterator does not point to the same element as the iterator at the right-hand side of the operator, false otherwise.
+             */
             bool operator!=(const Iterator<T> & rhs) const
             {
                 bool ret = false;

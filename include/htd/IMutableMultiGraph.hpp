@@ -50,7 +50,7 @@ namespace htd
             /**
              *  Remove a vertex from the multi-graph.
              *
-             *  @param[in] vertex   The ID of the vertex which should be removed.
+             *  @param[in] vertex   The ID of the vertex which shall be removed.
              */
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 

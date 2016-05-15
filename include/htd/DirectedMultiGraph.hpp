@@ -90,7 +90,7 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> incomingNeighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::vertex_t incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t incomingNeighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
             bool isIncomingNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
@@ -98,7 +98,7 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> outgoingNeighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::vertex_t outgoingNeighbor(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
+            htd::vertex_t outgoingNeighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
             bool isOutgoingNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
 

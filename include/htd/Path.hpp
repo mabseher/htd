@@ -176,16 +176,36 @@ namespace htd
                 }
             };
 
+            /**
+             *  The size of the path.
+             */
             std::size_t size_;
 
+            /**
+             *  The root vertex of the path.
+             */
             htd::vertex_t root_;
 
+            /**
+             *  The ID the next vertex added to the path will get.
+             */
             htd::vertex_t next_vertex_;
 
+            /**
+             *  The collection of all vertices of the path in ascending order.
+             */
             htd::vertex_container vertices_;
 
+            /**
+             *  The map of pointers to all path nodes. It maps vertex IDs to the corresponding node information.
+             */
             std::unordered_map<htd::id_t, Node *> nodes_;
 
+            /**
+             *  Delete a node of the path and perform an update of the internal state.
+             *
+             *  @param[in] node The node of the path which shall be removed.
+             */
             void deleteNode(htd::Path::Node * node);
     };
 }

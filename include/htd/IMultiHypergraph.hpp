@@ -172,7 +172,7 @@ namespace htd
             /**
              *  Getter for the number of neighbors of a given vertex in the graph.
              *
-             *  @param[in] vertex   The vertex for which the number of neighbors should be computed.
+             *  @param[in] vertex   The vertex for which the number of neighbors shall be computed.
              *
              *  @return The number of neighbors of the given vertex in the graph.
              */
@@ -181,7 +181,7 @@ namespace htd
             /**
              *  Access the collection of all neighbors of a given vertex in the graph.
              *
-             *  @param[in] vertex   The vertex for which the collection of neighbors should be returned.
+             *  @param[in] vertex   The vertex for which the collection of neighbors shall be returned.
              *
              *  @return The collection of all neighbors of the given vertex in the graph in ascending order.
              */
@@ -192,7 +192,7 @@ namespace htd
             /**
              *  Access the neighbor at the specific position.
              *
-             *  @param[in] vertex    The vertex for which the neighbor should be returned.
+             *  @param[in] vertex    The vertex for which the neighbor shall be returned.
              *  @param[in] index     The position of the neighbor.
              *
              *  @return The neighbor of the given vertex at the specific position.
@@ -250,7 +250,7 @@ namespace htd
             /**
              *  Getter for the number of edges in the graph containing a specific vertex.
              *
-             *  @param[in] vertex   The vertex which should be contained in the edges.
+             *  @param[in] vertex   The vertex which shall be contained in the edges.
              *
              *  @return The number of edges in the graph containing the specific vertex.
              */
@@ -259,7 +259,7 @@ namespace htd
             /**
              *  Access the collection of all hyperedges containing a specific vertex.
              *
-             *  @param[in] vertex   The vertex which should be contained in the edges.
+             *  @param[in] vertex   The vertex which shall be contained in the edges.
              *
              *  @return The collection of all hyperedges containing the specific vertex sorted by ID in ascending order.
              */
@@ -269,7 +269,7 @@ namespace htd
              *  Access the hyperedge at the specific position. Edges not containing the given vertex are ignored.
              *
              *  @param[in] index    The position of the hyperedge.
-             *  @param[in] vertex   The vertex which should be contained in the edge.
+             *  @param[in] vertex   The vertex which shall be contained in the edge.
              *
              *  @return The hyperedge at the specific position. Edges not containing the given vertex are ignored.
              */

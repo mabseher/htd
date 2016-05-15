@@ -295,7 +295,7 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedMultiGraph::outgoingNeighbors(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::DirectedMultiGraph::incomingNeighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::DirectedMultiGraph::incomingNeighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
@@ -313,18 +313,18 @@ htd::vertex_t htd::DirectedMultiGraph::incomingNeighbor(htd::vertex_t vertex, ht
         }
         else
         {
-            throw std::out_of_range("htd::vertex_t htd::DirectedMultiGraph::incomingNeighbor(htd::vertex_t, htd::index_t) const");
+            throw std::out_of_range("htd::vertex_t htd::DirectedMultiGraph::incomingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
         }
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::DirectedMultiGraph::incomingNeighbor(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::DirectedMultiGraph::incomingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
     }
 
     return ret;
 }
 
-htd::vertex_t htd::DirectedMultiGraph::outgoingNeighbor(htd::vertex_t vertex, htd::index_t index) const
+htd::vertex_t htd::DirectedMultiGraph::outgoingNeighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
 
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
@@ -343,12 +343,12 @@ htd::vertex_t htd::DirectedMultiGraph::outgoingNeighbor(htd::vertex_t vertex, ht
         }
         else
         {
-            throw std::out_of_range("htd::vertex_t htd::DirectedMultiGraph::outgoingNeighbor(htd::vertex_t, htd::index_t) const");
+            throw std::out_of_range("htd::vertex_t htd::DirectedMultiGraph::outgoingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
         }
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::DirectedMultiGraph::outgoingNeighbor(htd::vertex_t, htd::index_t) const");
+        throw std::out_of_range("htd::vertex_t htd::DirectedMultiGraph::outgoingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
     }
 
     return ret;

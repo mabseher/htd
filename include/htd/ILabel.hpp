@@ -60,7 +60,7 @@ namespace htd
             /**
              *  Print the label to the given output stream.
              *
-             *  @param[in] stream   The output stream to which the label should be written.
+             *  @param[in] stream   The output stream to which the label shall be written.
              */
             virtual void print(std::ostream & stream) const = 0;
     };

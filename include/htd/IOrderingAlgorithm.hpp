@@ -26,7 +26,7 @@
 #define	HTD_HTD_IORDERINGALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IHypergraph.hpp>
+#include <htd/IMultiHypergraph.hpp>
 #include <htd/ConstCollection.hpp>
 
 namespace htd
@@ -36,8 +36,21 @@ namespace htd
         public:
             virtual ~IOrderingAlgorithm() = 0;
             
+            /**
+             *  Compute the vertex ordering of a given graph.
+             *
+             *  @param[in] graph    The input graph for which the vertex ordering shall be computed.
+             *
+             *  @return The vertex ordering of the given graph.
+             */
             virtual htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const = 0;
 
+            /**
+             *  Compute the vertex ordering of a given graph and write it to the end of a given vector.
+             *
+             *  @param[in] graph    The input graph for which the vertex ordering shall be computed.
+             *  @param[out] target  The target vector to which the ordering shall be appended.
+             */
             virtual void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const = 0;
 
             /**

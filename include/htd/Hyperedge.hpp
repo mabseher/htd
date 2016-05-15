@@ -153,7 +153,7 @@ namespace htd
             /**
              *  Erase a specific vertex from the hyperedge in case the vertex is contained in the hyperedge.
              *
-             *  @param[in] vertex   The specific vertex which should be removed.
+             *  @param[in] vertex   The specific vertex which shall be removed.
              */
             void erase(htd::vertex_t vertex);
 

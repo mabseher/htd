@@ -770,7 +770,7 @@ namespace std
             /**
              *  Compute the hash code of a given htd::Hyperedge.
              *
-             *  @param[in] data The htd::Hyperedge which's hash code should be returned.
+             *  @param[in] data The htd::Hyperedge which's hash code shall be returned.
              *
              *  @return The hash code of the given htd::Hyperedge.
              */
@@ -797,7 +797,7 @@ namespace std
             /**
              *  Compute the hash code of a given htd::FilteredHyperedgeCollection.
              *
-             *  @param[in] data The htd::FilteredHyperedgeCollection which's hash code should be returned.
+             *  @param[in] data The htd::FilteredHyperedgeCollection which's hash code shall be returned.
              *
              *  @return The hash code of the given htd::FilteredHyperedgeCollection.
              */
@@ -824,7 +824,7 @@ namespace std
             /**
              *  Compute the hash code of a given htd::Collection<htd::vertex_t>.
              *
-             *  @param[in] data The htd::Collection<htd::vertex_t> which's hash code should be returned.
+             *  @param[in] data The htd::Collection<htd::vertex_t> which's hash code shall be returned.
              *
              *  @return The hash code of the given htd::Collection<htd::vertex_t>.
              */
@@ -851,7 +851,7 @@ namespace std
             /**
              *  Compute the hash code of a given htd::ConstCollection<htd::vertex_t>.
              *
-             *  @param[in] data The htd::ConstCollection<htd::vertex_t> which's hash code should be returned.
+             *  @param[in] data The htd::ConstCollection<htd::vertex_t> which's hash code shall be returned.
              *
              *  @return The hash code of the given htd::ConstCollection<htd::vertex_t>.
              */
@@ -878,7 +878,7 @@ namespace std
             /**
              *  Compute the hash code of a given htd::Collection<htd::Hyperedge>.
              *
-             *  @param[in] data The htd::Collection<htd::Hyperedge> which's hash code should be returned.
+             *  @param[in] data The htd::Collection<htd::Hyperedge> which's hash code shall be returned.
              *
              *  @return The hash code of the given htd::Collection<htd::Hyperedge>.
              */
@@ -907,7 +907,7 @@ namespace std
             /**
              *  Compute the hash code of a given htd::ConstCollection<htd::Hyperedge>.
              *
-             *  @param[in] data The htd::ConstCollection<htd::Hyperedge> which's hash code should be returned.
+             *  @param[in] data The htd::ConstCollection<htd::Hyperedge> which's hash code shall be returned.
              *
              *  @return The hash code of the given htd::ConstCollection<htd::Hyperedge>.
              */
@@ -936,7 +936,7 @@ namespace std
             /**
              *  Compute the hash code of a given htd::vertex_container.
              *
-             *  @param[in] data The htd::vertex_container which's hash code should be returned.
+             *  @param[in] data The htd::vertex_container which's hash code shall be returned.
              *
              *  @return The hash code of the given htd::vertex_container.
              */

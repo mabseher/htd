@@ -43,6 +43,11 @@ namespace htd
 
             }
 
+            /**
+             *  Copy constructor for an iterator.
+             *
+             *  @param[in] original  The original iterator.
+             */
             VectorAdapterConstIteratorWrapper(const VectorAdapterConstIteratorWrapper<Iter, T, Allocator> & original) : htd::ConstIteratorWrapper<Iter, T>(original), collection_(original.collection_)
             {
 

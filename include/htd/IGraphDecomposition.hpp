@@ -42,7 +42,7 @@ namespace htd
             /**
              *  Getter for the bag size of a specific vertex.
              *
-             *  @param[in] vertex   The vertex for which the bag size should be returned.
+             *  @param[in] vertex   The vertex for which the bag size shall be returned.
              *
              *  @return The bag size of the specific vertex.
              */
@@ -51,7 +51,7 @@ namespace htd
             /**
              *  Access the bag content of a specific vertex.
              *
-             *  @param[in] vertex   The vertex for which the bag content should be returned.
+             *  @param[in] vertex   The vertex for which the bag content shall be returned.
              *
              *  @return The bag content of the specific vertex.
              */
@@ -60,7 +60,7 @@ namespace htd
             /**
              *  Access the hyperedges induced by the bag content of a specific vertex.
              *
-             *  @param[in] vertex   The vertex for which the induced hyperedges should be returned.
+             *  @param[in] vertex   The vertex for which the induced hyperedges shall be returned.
              *
              *  @return The collection of hyperedges induced by the bag content of the specific vertex.
              */

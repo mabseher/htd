@@ -126,7 +126,7 @@ namespace htd
             /**
              *  Access the collection of all children of a given vertex in the graph.
              *
-             *  @param[in] vertex   The vertex for which the collection of children should be returned.
+             *  @param[in] vertex   The vertex for which the collection of children shall be returned.
              *
              *  @return The collection of all children of the given vertex in the graph in ascending order.
              */
@@ -135,7 +135,7 @@ namespace htd
             /**
              *  Access the child at the specific position.
              *
-             *  @param[in] vertex   The vertex for which the child should be returned.
+             *  @param[in] vertex   The vertex for which the child shall be returned.
              *  @param[in] index    The position of the child.
              *
              *  @return The child at the specific position.
@@ -146,7 +146,7 @@ namespace htd
              *  Check whether a vertex is a child of another.
              *
              *  @param[in] vertex   The vertex.
-             *  @param[in] parent   The potential child.
+             *  @param[in] child    The potential child.
              *
              *  @return True if the the potential child is indeed a child of the given vertex, false otherwise.
              */

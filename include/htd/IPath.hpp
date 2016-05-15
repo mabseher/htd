@@ -45,7 +45,7 @@ namespace htd
             /**
              *  Access the child of a vertex.
              *
-             *  @param[in] vertex   The vertex for which the child should be returned.
+             *  @param[in] vertex   The vertex for which the child shall be returned.
              *
              *  @return The child of the vertex.
              */

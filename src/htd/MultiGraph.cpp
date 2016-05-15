@@ -237,7 +237,7 @@ htd::vertex_t htd::MultiGraph::addVertex(void)
     return base_->addVertex();
 }
 
-htd::ConstCollection<htd::vertex_t> htd::MultiGraph::addVertices(std::size_t count)
+htd::vertex_t htd::MultiGraph::addVertices(std::size_t count)
 {
     return base_->addVertices(count);
 }

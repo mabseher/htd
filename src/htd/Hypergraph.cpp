@@ -233,7 +233,7 @@ htd::vertex_t htd::Hypergraph::addVertex(void)
     return base_->addVertex();
 }
 
-htd::ConstCollection<htd::vertex_t> htd::Hypergraph::addVertices(std::size_t count)
+htd::vertex_t htd::Hypergraph::addVertices(std::size_t count)
 {
     return base_->addVertices(count);
 }

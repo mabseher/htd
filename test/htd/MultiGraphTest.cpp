@@ -497,7 +497,7 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
 
-    ASSERT_EQ((std::size_t)0, graph.addVertices(0).size());
+    ASSERT_EQ((htd::vertex_t)3, graph.addVertices(0));
 
     ASSERT_EQ((htd::vertex_t)4, graph.addVertex());
 
@@ -509,13 +509,7 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isVertex(3));
     ASSERT_TRUE(graph.isVertex(4));
 
-    const htd::ConstCollection<htd::vertex_t> & newVertices = graph.addVertices(3);
-
-    ASSERT_EQ((std::size_t)3, newVertices.size());
-
-    ASSERT_EQ((htd::vertex_t)5, newVertices[0]);
-    ASSERT_EQ((htd::vertex_t)6, newVertices[1]);
-    ASSERT_EQ((htd::vertex_t)7, newVertices[2]);
+    ASSERT_EQ((htd::vertex_t)5, graph.addVertices(3));
 
     ASSERT_EQ((std::size_t)6, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());

@@ -45,7 +45,16 @@ namespace htd
              */
             virtual htd::vertex_t addVertex(void) = 0;
 
-            virtual htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) = 0;
+            /**
+             *  Add new vertices to the directed graph.
+             *
+             *  @param[in] count    The number of vertices which shall be added.
+             *
+             *  @return The ID of the first vertex which was added to the graph. If the number of vertices to add is greater than 1,
+             *          the additional vertices are numbered in ascending order and without gaps starting from the returned ID + 1.
+             *          If the number of new vertices is 0, the returned value is the ID of the last vertex added to the graph.
+             */
+            virtual htd::vertex_t addVertices(std::size_t count) = 0;
 
             /**
              *  Remove a vertex from the directed graph.

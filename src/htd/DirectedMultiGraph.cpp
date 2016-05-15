@@ -447,7 +447,7 @@ htd::vertex_t htd::DirectedMultiGraph::addVertex(void)
     return ret;
 }
 
-htd::ConstCollection<htd::vertex_t> htd::DirectedMultiGraph::addVertices(std::size_t count)
+htd::vertex_t htd::DirectedMultiGraph::addVertices(std::size_t count)
 {
     return base_->addVertices(count);
 }

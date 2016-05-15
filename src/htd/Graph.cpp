@@ -231,7 +231,7 @@ htd::vertex_t htd::Graph::addVertex(void)
     return base_->addVertex();
 }
 
-htd::ConstCollection<htd::vertex_t> htd::Graph::addVertices(std::size_t count)
+htd::vertex_t htd::Graph::addVertices(std::size_t count)
 {
     return base_->addVertices(count);
 }

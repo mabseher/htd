@@ -127,7 +127,7 @@ namespace htd
 
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::vertex_t> addVertices(std::size_t count) HTD_OVERRIDE;
+            htd::vertex_t addVertices(std::size_t count) HTD_OVERRIDE;
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 

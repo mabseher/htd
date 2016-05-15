@@ -590,23 +590,19 @@ htd::vertex_t htd::MultiHypergraph::addVertex(void)
     return ret;
 }
 
-htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::addVertices(std::size_t count)
+htd::vertex_t htd::MultiHypergraph::addVertices(std::size_t count)
 {
-    htd::VectorAdapter<htd::vertex_t> ret;
+    htd::vertex_t ret = next_vertex_;
 
     if (count > 0)
     {
         std::size_t previousSize = vertices_.size();
-
-        std::vector<htd::vertex_t> & vertexContainer = ret.container();
 
         vertices_.resize(previousSize + count, 0);
 
         for (htd::index_t index = 0; index < count; ++index)
         {
             vertices_[previousSize + index + 1 - htd::Vertex::FIRST] = next_vertex_;
-
-            vertexContainer.push_back(next_vertex_);
 
             ++next_vertex_;
         }
@@ -615,8 +611,12 @@ htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::addVertices(std::size_
 
         size_ += count;
     }
+    else
+    {
+        --ret;
+    }
 
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+    return ret;
 }
 
 void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)

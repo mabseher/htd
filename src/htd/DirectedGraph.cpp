@@ -446,7 +446,7 @@ htd::vertex_t htd::DirectedGraph::addVertex(void)
     return ret;
 }
 
-htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::addVertices(std::size_t count)
+htd::vertex_t htd::DirectedGraph::addVertices(std::size_t count)
 {
     incomingNeighborhood_.resize(incomingNeighborhood_.size() + count, std::unordered_set<htd::vertex_t>());
     outgoingNeighborhood_.resize(outgoingNeighborhood_.size() + count, std::unordered_set<htd::vertex_t>());

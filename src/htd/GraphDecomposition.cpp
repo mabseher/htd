@@ -108,19 +108,15 @@ htd::vertex_t htd::GraphDecomposition::addVertex(std::vector<htd::vertex_t> && b
     return ret;
 }
 
-htd::ConstCollection<htd::vertex_t> htd::GraphDecomposition::addVertices(std::size_t count)
+htd::vertex_t htd::GraphDecomposition::addVertices(std::size_t count)
 {
-    const htd::ConstCollection<htd::vertex_t> & ret = htd::Graph::addVertices(count);
-
-    auto it = ret.begin();
+    htd::vertex_t ret = htd::Graph::addVertices(count);
 
     for (htd::index_t index = 0; index < count; ++index)
     {
-        bagContent_[*it] = std::vector<htd::vertex_t>();
+        bagContent_[ret + index] = std::vector<htd::vertex_t>();
 
-        inducedEdges_[*it] = htd::FilteredHyperedgeCollection();
-
-        ++it;
+        inducedEdges_[ret + index] = htd::FilteredHyperedgeCollection();
     }
 
     return ret;

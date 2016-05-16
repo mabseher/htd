@@ -40,53 +40,105 @@ namespace htd
     class ConstCollection
     {
         public:
+            /**
+             *  The value type of the collection.
+             */
             typedef T value_type;
 
+            /**
+             *  Constructor for a ConstCollection object representing an empty collection.
+             */
             ConstCollection(void) : begin_(), end_(), size_(0)
             {
 
             }
 
+            /**
+             *  Constructor for a ConstCollection object wrapping the given region of a collection.
+             *
+             *  @param[in] begin    The begin of the collection to be wrapped.
+             *  @param[in] end      The end of the collection to be wrapped.
+             */
             ConstCollection(const htd::ConstIterator<T> & begin, const htd::ConstIterator<T> & end) : begin_(begin), end_(end), size_(std::distance(begin, end))
             {
 
             }
 
+            /**
+             *  Copy constructor for a ConstCollection object.
+             *
+             *  @param[in] original  The original ConstCollection object.
+             */
             ConstCollection(const htd::ConstCollection<T> & original) : begin_(original.begin_), end_(original.end_), size_(original.size_)
             {
 
             }
 
+            /**
+             *  Move constructor for a ConstCollection object.
+             *
+             *  @param[in] original  The original ConstCollection object.
+             */
             ConstCollection(htd::ConstCollection<T> && original) : begin_(std::move(original.begin_)), end_(std::move(original.end_)), size_(original.size_)
             {
 
             }
 
+            /**
+             *  Destructor for a ConstCollection object.
+             */
             ~ConstCollection()
             {
 
             }
 
+            /**
+             *  Check whether the collection is emtpy.
+             *
+             *  @return True if the collection is empty, false otherwise.
+             */
             bool empty() const
             {
                 return begin_ == end_;
             }
 
+            /**
+             *  Getter for the size of the collection.
+             *
+             *  @return The size of the collection.
+             */
             std::size_t size() const
             {
                 return size_;
             }
 
+            /**
+             *  Getter for the iterator to the first element in the collection.
+             *
+             *  @return An iterator to the first element in the collection.
+             */
             htd::ConstIterator<T> begin(void) const
             {
                 return begin_;
             }
 
+            /**
+             *  Getter for the iterator to the end of the collection.
+             *
+             *  @return An iterator to the end of the collection.
+             */
             htd::ConstIterator<T> end(void) const
             {
                 return end_;
             }
 
+            /**
+             *  Access the element at the specific position within the collection.
+             *
+             *  @param[in] index    The position of the element.
+             *
+             *  @return The element at the specific position.
+             */
             const T & operator[](htd::index_t index) const
             {
                 htd::ConstIterator<T> position = begin_;
@@ -113,11 +165,25 @@ namespace htd
                 return *this;
             }
 
+            /**
+             *  Equality operator for a collection.
+             *
+             *  @param[in] rhs  The collection at the right-hand side of the operator.
+             *
+             *  @return True if the collection is equal to the collection at the right-hand side of the operator, false otherwise.
+             */
             inline bool operator==(const htd::ConstCollection<T> & rhs) const
             {
                 return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
             }
 
+            /**
+             *  Inequality operator for a collection.
+             *
+             *  @param[in] rhs  The collection at the right-hand side of the operator.
+             *
+             *  @return True if the collection is not equal to the collection at the right-hand side of the operator, false otherwise.
+             */
             inline bool operator!=(const htd::ConstCollection<T> & rhs) const
             {
                 return !(*this == rhs);
@@ -130,7 +196,14 @@ namespace htd
             }
 
         private:
+            /**
+             *  An iterator to the first element of the collection.
+             */
             htd::ConstIterator<T> begin_;
+
+            /**
+             *  An iterator to the end of the collection.
+             */
             htd::ConstIterator<T> end_;
 
             std::size_t size_;

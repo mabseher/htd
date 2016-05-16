@@ -63,16 +63,59 @@ namespace htd
              */
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Add a new edge to the multi-hypergraph.
+             *
+             *  @param[in] vertex1  The first endpoint of the edge.
+             *  @param[in] vertex2  The second endpoint of the edge.
+             *
+             *  @return The ID of the new edge.
+             */
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
+            /**
+             *  Add a new edge to the multi-hypergraph.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             *
+             *  @return The ID of the new edge.
+             */
             virtual htd::id_t addEdge(const std::vector<htd::vertex_t> & elements) = 0;
 
+            /**
+             *  Add a new edge to the multi-hypergraph.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             *
+             *  @return The ID of the new edge.
+             */
             virtual htd::id_t addEdge(std::vector<htd::vertex_t> && elements) = 0;
 
+            /**
+             *  Add a new edge to the multi-hypergraph.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             *
+             *  @return The ID of the new edge.
+             */
             virtual htd::id_t addEdge(const htd::ConstCollection<htd::vertex_t> & elements) = 0;
 
+            /**
+             *  Add a new edge to the multi-hypergraph.
+             *
+             *  @param[in] hyperedge    The template hyperedge.
+             *
+             *  @return The ID of the new edge.
+             */
             virtual htd::id_t addEdge(const htd::Hyperedge & hyperedge) = 0;
 
+            /**
+             *  Add a new edge to the multi-hypergraph.
+             *
+             *  @param[in] hyperedge    The template hyperedge.
+             *
+             *  @return The ID of the new edge.
+             */
             virtual htd::id_t addEdge(htd::Hyperedge && hyperedge) = 0;
 
             virtual void removeEdge(htd::id_t edgeId) = 0;

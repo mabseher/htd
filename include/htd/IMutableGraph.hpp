@@ -64,6 +64,14 @@ namespace htd
              */
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Add a new edge to the graph if it does not already exist.
+             *
+             *  @param[in] vertex1  The first endpoint of the edge.
+             *  @param[in] vertex2  The second endpoint of the edge.
+             *
+             *  @return The ID of the new edge if the edge did not exist before. Otherwise, the ID of the existing edge is returned.
+             */
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
             virtual void removeEdge(htd::id_t edgeId) = 0;

@@ -41,63 +41,125 @@ namespace htd
     class Collection
     {
         public:
+            /**
+             *  The value type of the collection.
+             */
             typedef T value_type;
 
+            /**
+             *  Constructor for a Collection object representing an empty collection.
+             */
             Collection(void) : begin_(), end_()
             {
 
             }
 
+            /**
+             *  Constructor for a Collection object wrapping the given region of a collection.
+             *
+             *  @param[in] begin    The begin of the collection to be wrapped.
+             *  @param[in] end      The end of the collection to be wrapped.
+             */
             Collection(const Iterator<T> & begin, const Iterator<T> & end) : begin_(begin), end_(end)
             {
 
             }
 
+            /**
+             *  Copy constructor for a Collection object.
+             *
+             *  @param[in] original  The original Collection object.
+             */
             Collection(const htd::Collection<T> & original) : begin_(original.begin_), end_(original.end_)
             {
 
             }
 
+            /**
+             *  Move constructor for a Collection object.
+             *
+             *  @param[in] original  The original Collection object.
+             */
             Collection(htd::Collection<T> && original) : begin_(std::move(original.begin_)), end_(std::move(original.end_))
             {
 
             }
 
+            /**
+             *  Destructor for a Collection object.
+             */
             ~Collection()
             {
 
             }
 
+            /**
+             *  Check whether the collection is emtpy.
+             *
+             *  @return True if the collection is empty, false otherwise.
+             */
             bool empty() const
             {
                 return begin_ == end_;
             }
 
+            /**
+             *  Getter for the size of the collection.
+             *
+             *  @return The size of the collection.
+             */
             std::size_t size() const
             {
                 return std::distance(begin_, end_);
             }
 
+            /**
+             *  Getter for the iterator to the first element in the collection.
+             *
+             *  @return An iterator to the first element in the collection.
+             */
             htd::Iterator<T> begin(void)
             {
                 return begin_;
             }
 
+            /**
+             *  Getter for the iterator to the first element in the collection.
+             *
+             *  @return An iterator to the first element in the collection.
+             */
             htd::ConstIterator<T> begin(void) const
             {
                 return begin_;
             }
 
+            /**
+             *  Getter for the iterator to the end of the collection.
+             *
+             *  @return An iterator to the end of the collection.
+             */
             htd::Iterator<T> end(void)
             {
                 return end_;
             }
 
+            /**
+             *  Getter for the iterator to the end of the collection.
+             *
+             *  @return An iterator to the end of the collection.
+             */
             htd::ConstIterator<T> end(void) const
             {
                 return end_;
             }
 
+            /**
+             *  Access the element at the specific position within the collection.
+             *
+             *  @param[in] index    The position of the element.
+             *
+             *  @return The element at the specific position.
+             */
             T & operator[](htd::index_t index)
             {
                 htd::Iterator<htd::vertex_t> position = begin_;
@@ -107,6 +169,13 @@ namespace htd
                 return *position;
             }
 
+            /**
+             *  Access the element at the specific position within the collection.
+             *
+             *  @param[in] index    The position of the element.
+             *
+             *  @return The element at the specific position.
+             */
             const T & operator[](htd::index_t index) const
             {
                 htd::Iterator<htd::vertex_t> position = begin_;
@@ -133,11 +202,25 @@ namespace htd
                 return *this;
             }
 
+            /**
+             *  Equality operator for a collection.
+             *
+             *  @param[in] rhs  The collection at the right-hand side of the operator.
+             *
+             *  @return True if the collection is equal to the collection at the right-hand side of the operator, false otherwise.
+             */
             inline bool operator==(const Collection<T> & rhs) const
             {
                 return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
             }
 
+            /**
+             *  Inequality operator for a collection.
+             *
+             *  @param[in] rhs  The collection at the right-hand side of the operator.
+             *
+             *  @return True if the collection is not equal to the collection at the right-hand side of the operator, false otherwise.
+             */
             inline bool operator!=(const Collection<T> & rhs) const
             {
                 return !(*this == rhs);
@@ -150,7 +233,14 @@ namespace htd
             }
 
         private:
+            /**
+             *  An iterator to the first element of the collection.
+             */
             htd::Iterator<T> begin_;
+
+            /**
+             *  An iterator to the end of the collection.
+             */
             htd::Iterator<T> end_;
     };
 }

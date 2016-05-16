@@ -94,7 +94,7 @@ namespace htd
             /**
              *  Check whether a given edge is part of the graph.
              *
-             *  @param[in] elements  The endpoints of the hyperedge.
+             *  @param[in] elements The endpoints of the hyperedge.
              *
              *  @return True if the edge is part of the graph, false otherwise.
              */
@@ -103,7 +103,7 @@ namespace htd
             /**
              *  Check whether a given edge is part of the graph.
              *
-             *  @param[in] elements  The endpoints of the hyperedge.
+             *  @param[in] elements The endpoints of the hyperedge.
              *
              *  @return True if the edge is part of the graph, false otherwise.
              */
@@ -131,7 +131,7 @@ namespace htd
             /**
              *  Get all associated edge IDs.
              *
-             *  @param[in] elements  The endpoints of the hyperedge.
+             *  @param[in] elements The endpoints of the hyperedge.
              *
              *  @return The collection of all edges containing exactly the provided endpoints in the given order.
              */
@@ -154,7 +154,7 @@ namespace htd
             /**
              *  Access the isolated vertex at the specific position.
              *
-             *  @param[in] index     The position of the isolated vertex.
+             *  @param[in] index    The position of the isolated vertex.
              *
              *  @return The isolated vertex at the specific position.
              */

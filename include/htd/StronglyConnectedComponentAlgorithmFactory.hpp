@@ -50,9 +50,17 @@ namespace htd
 
             htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(void);
 
+            /**
+             *  Set the default implementation of the IStronglyConnectedComponentAlgorithm interface.
+             *
+             *  @param[in] original The new default implementation of the IStronglyConnectedComponentAlgorithm interface.
+             */
             void setConstructionTemplate(htd::IStronglyConnectedComponentAlgorithm * original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IStronglyConnectedComponentAlgorithm * constructionTemplate_;
 
             StronglyConnectedComponentAlgorithmFactory(void);

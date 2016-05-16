@@ -52,6 +52,11 @@ namespace htd
 
             htd::IMutableTreeDecomposition * getTreeDecomposition(const htd::ITreeDecomposition & original);
 
+            /**
+             *  Set the default implementation of the IMutableTreeDecomposition interface.
+             *
+             *  @param[in] original The new default implementation of the IMutableTreeDecomposition interface.
+             */
             void setConstructionTemplate(htd::IMutableTreeDecomposition * original);
 
             htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(htd::ITreeDecomposition & original);
@@ -59,6 +64,9 @@ namespace htd
             const htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(const htd::ITreeDecomposition & original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IMutableTreeDecomposition * constructionTemplate_;
 
             TreeDecompositionFactory(void);

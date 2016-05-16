@@ -52,6 +52,11 @@ namespace htd
 
             htd::ITreeDecompositionAlgorithm * getTreeDecompositionAlgorithm(void);
 
+            /**
+             *  Set the default implementation of the ITreeDecompositionAlgorithm interface.
+             *
+             *  @param[in] original The new default implementation of the ITreeDecompositionAlgorithm interface.
+             */
             void setConstructionTemplate(htd::ITreeDecompositionAlgorithm * original);
 
             void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
@@ -61,6 +66,9 @@ namespace htd
             void addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::ITreeDecompositionAlgorithm * constructionTemplate_;
 
             std::vector<htd::ILabelingFunction *> labelingFunctions_;

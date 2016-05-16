@@ -50,9 +50,17 @@ namespace htd
 
             htd::ISetCoverAlgorithm * getSetCoverAlgorithm(void);
 
+            /**
+             *  Set the default implementation of the ISetCoverAlgorithm interface.
+             *
+             *  @param[in] original The new default implementation of the ISetCoverAlgorithm interface.
+             */
             void setConstructionTemplate(htd::ISetCoverAlgorithm * original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::ISetCoverAlgorithm * constructionTemplate_;
 
             SetCoverAlgorithmFactory(void);

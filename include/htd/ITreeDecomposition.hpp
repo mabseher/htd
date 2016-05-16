@@ -45,10 +45,29 @@ namespace htd
              */
             virtual std::size_t joinNodeCount(void) const = 0;
 
+            /**
+             *  Access the collection of all join nodes in the decomposition.
+             *
+             *  @return The collection of all join nodes in the decomposition sorted by ID in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> joinNodes(void) const = 0;
 
+            /**
+             *  Access the join node at the specific position.
+             *
+             *  @param[in] index     The position of the join node.
+             *
+             *  @return The ID of the join node at the specific position.
+             */
             virtual htd::vertex_t joinNodeAtPosition(htd::index_t index) const = 0;
 
+            /**
+             *  Check whether a vertex is a join node in the decomposition.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return True if the given vertex is a join node in the decomposition, false otherwise.
+             */
             virtual bool isJoinNode(htd::vertex_t vertex) const = 0;
 
             /**
@@ -58,10 +77,29 @@ namespace htd
              */
             virtual std::size_t forgetNodeCount(void) const = 0;
 
+            /**
+             *  Access the collection of all forget nodes in the decomposition.
+             *
+             *  @return The collection of all forget nodes in the decomposition sorted by ID in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> forgetNodes(void) const = 0;
 
+            /**
+             *  Access the forget node at the specific position.
+             *
+             *  @param[in] index     The position of the forget node.
+             *
+             *  @return The ID of the forget node at the specific position.
+             */
             virtual htd::vertex_t forgetNodeAtPosition(htd::index_t index) const = 0;
 
+            /**
+             *  Check whether a vertex is a forget node in the decomposition.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return True if the given vertex is a forget node in the decomposition, false otherwise.
+             */
             virtual bool isForgetNode(htd::vertex_t vertex) const = 0;
 
             /**
@@ -71,70 +109,320 @@ namespace htd
              */
             virtual std::size_t introduceNodeCount(void) const = 0;
 
+            /**
+             *  Access the collection of all introduce nodes in the decomposition.
+             *
+             *  @return The collection of all introduce nodes in the decomposition sorted by ID in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> introduceNodes(void) const = 0;
 
+            /**
+             *  Access the introduce node at the specific position.
+             *
+             *  @param[in] index     The position of the introduce node.
+             *
+             *  @return The ID of the introduce node at the specific position.
+             */
             virtual htd::vertex_t introduceNodeAtPosition(htd::index_t index) const = 0;
 
+            /**
+             *  Check whether a vertex is an introduce node in the decomposition.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return True if the given vertex is an introduce node in the decomposition, false otherwise.
+             */
             virtual bool isIntroduceNode(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Getter for the number of vertices which are present in at least one child bag but not in the bag of the given vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The number of vertices which are present in at least one child bag but not in the bag of the given vertex.
+             */
             virtual std::size_t forgottenVertexCount(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Getter for the number of vertices which are present in the given child's bag but not in the bag of the given vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             *  @param[in] child    The child.
+             *
+             *  @return The number of vertices which are present in the given child's bag but not in the bag of the given vertex.
+             */
             virtual std::size_t forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Access the collection of all vertices which are present in at least one child bag but not in the bag of the given vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The collection of all vertices which are present in at least one child bag but not in the bag of the given vertex. The result is sorted in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Access the collection of all vertices which are present in the given child's bag but not in the bag of the given vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             *  @param[in] child    The child.
+             *
+             *  @return The collection of all vertices which are present in the given child's bag but not in the bag of the given vertex. The result is sorted in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> forgottenVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Compute the collection of all vertices which are present in at least one child bag but not in the bag of the given vertex and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the forgotten vertices shall be appended.
+             *  @param[in] vertex   The vertex.
+             */
             virtual void copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Compute the collection of all vertices which are present in the given child's bag but not in the bag of the given vertex and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the forgotten vertices shall be appended.
+             *  @param[in] vertex   The vertex.
+             *  @param[in] child    The child.
+             */
             virtual void copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Access the forgotten vertex at the specific position. A forgotten vertex is a vertex which is present in at least one child bag but not in the bag of the given vertex.
+             *
+             *  @param[in] vertex   The vertex for which the forgotten vertex shall be returned.
+             *  @param[in] index    The position of the forgotten vertex.
+             *
+             *  @return The forgotten vertex at the specific position.
+             */
             virtual htd::vertex_t forgottenVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
+            /**
+             *  Access the forgotten vertex at the specific position. A forgotten vertex is a vertex which is present in the given child's bag but not in the bag of the given vertex.
+             *
+             *  @param[in] vertex   The vertex for which the forgotten vertex shall be returned.
+             *  @param[in] index    The position of the forgotten vertex.
+             *  @param[in] child    The child.
+             *
+             *  @return The forgotten vertex at the specific position.
+             */
             virtual htd::vertex_t forgottenVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const = 0;
 
+            /**
+             *  Check whether a vertex is present in at least one child bag but not in the bag of the given vertex.
+             *
+             *  @param[in] vertex           The vertex which's bag shall be investigated.
+             *  @param[in] forgottenVertex  The potential forgotten vertex.
+             *
+             *  @return True if the given vertex is present in at least one child bag but not in the bag of the given vertex, false otherwise.
+             */
             virtual bool isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex) const = 0;
 
+            /**
+             *  Check whether a vertex is present in the given child's bag but not in the bag of the given vertex.
+             *
+             *  @param[in] vertex           The vertex which's bag shall be investigated.
+             *  @param[in] forgottenVertex  The potential forgotten vertex.
+             *  @param[in] child            The child.
+             *
+             *  @return True if the given vertex is present in the given child's bag but not in the bag of the given vertex, false otherwise.
+             */
             virtual bool isForgottenVertex(htd::vertex_t vertex, htd::vertex_t forgottenVertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Getter for the number of vertices which are present in the bag of the given vertex but not in any child bag.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The number of vertices which are present in the bag of the given vertex but not in any child bag.
+             */
             virtual std::size_t introducedVertexCount(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Getter for the number of vertices which are present in the bag of the given vertex but not in the given child's bag.
+             *
+             *  @param[in] vertex   The vertex.
+             *  @param[in] child    The child.
+             *
+             *  @return The number of vertices which are present in the bag of the given vertex but not in the given child's bag.
+             */
             virtual std::size_t introducedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Access the collection of all vertices which are present in the bag of the given vertex but not in any child bag.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The collection of all vertices which are present in the bag of the given vertex but not in any child bag. The result is sorted in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> introducedVertices(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Access the collection of all vertices which are present in the bag of the given vertex but not in the given child's bag.
+             *
+             *  @param[in] vertex   The vertex.
+             *  @param[in] child    The child.
+             *
+             *  @return The collection of all vertices which are present in the bag of the given vertex but not in the given child's bag. The result is sorted in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> introducedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Compute the collection of all vertices which are present in the bag of the given vertex but not in any child bag and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the introduced vertices shall be appended.
+             *  @param[in] vertex   The vertex.
+             */
             virtual void copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Compute the collection of all vertices which are present in the bag of the given vertex but not in the given child's bag and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the introduced vertices shall be appended.
+             *  @param[in] vertex   The vertex.
+             *  @param[in] child    The child.
+             */
             virtual void copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Access the introduced vertex at the specific position. An introduced vertex is a vertex which is present in the bag of the given vertex but not in any child bag.
+             *
+             *  @param[in] vertex   The vertex for which the introduced vertex shall be returned.
+             *  @param[in] index    The position of the introduced vertex.
+             *
+             *  @return The introduced vertex at the specific position.
+             */
             virtual htd::vertex_t introducedVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
+            /**
+             *  Access the introduced vertex at the specific position. An introduced vertex is a vertex which is present in the bag of the given vertex but not in the given child's bag.
+             *
+             *  @param[in] vertex   The vertex for which the introduced vertex shall be returned.
+             *  @param[in] index    The position of the introduced vertex.
+             *  @param[in] child    The child.
+             *
+             *  @return The introduced vertex at the specific position.
+             */
             virtual htd::vertex_t introducedVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const = 0;
 
+            /**
+             *  Check whether a vertex is present in the bag of the given vertex but not in any child bag.
+             *
+             *  @param[in] vertex           The vertex which's bag shall be investigated.
+             *  @param[in] introducedVertex The potential introduced vertex.
+             *
+             *  @return True if the given vertex is present in the bag of the given vertex but not in any child bag, false otherwise.
+             */
             virtual bool isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex) const = 0;
 
+            /**
+             *  Check whether a vertex is present in the bag of the given vertex but not in the given child's bag.
+             *
+             *  @param[in] vertex           The vertex which's bag shall be investigated.
+             *  @param[in] introducedVertex The potential introduced vertex.
+             *  @param[in] child            The child.
+             *
+             *  @return True if the given vertex is present in the bag of the given vertex but not in the given child's bag, false otherwise.
+             */
             virtual bool isIntroducedVertex(htd::vertex_t vertex, htd::vertex_t introducedVertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Getter for the number of vertices which are present in the bag of the given vertex and in at least one child bag.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The number of vertices which are present in the bag of the given vertex and in at least one child bag.
+             */
             virtual std::size_t rememberedVertexCount(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Getter for the number of vertices which are present in the bag of the given vertex and in the given child's bag.
+             *
+             *  @param[in] vertex   The vertex.
+             *  @param[in] child    The child.
+             *
+             *  @return The number of vertices which are present in the bag of the given vertex and in the given child's bag.
+             */
             virtual std::size_t rememberedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Access the collection of all vertices which are present in the bag of the given vertex and in at least one child bag.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The collection of all vertices which are present in the bag of the given vertex and in at least one child bag. The result is sorted in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Access the collection of all vertices which are present in the bag of the given vertex and in the given child's bag.
+             *
+             *  @param[in] vertex   The vertex.
+             *  @param[in] child    The child.
+             *
+             *  @return The collection of all vertices which are present in the bag of the given vertex and in the given child's bag. The result is sorted in ascending order.
+             */
             virtual htd::ConstCollection<htd::vertex_t> rememberedVertices(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Compute the collection of all vertices which are present in the bag of the given vertex and in at least one child bag and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the remembered vertices shall be appended.
+             *  @param[in] vertex   The vertex.
+             */
             virtual void copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Compute the collection of all vertices which are present in the bag of the given vertex and in the given child's bag and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the remembered vertices shall be appended.
+             *  @param[in] vertex   The vertex.
+             *  @param[in] child    The child.
+             */
             virtual void copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Access the remembered vertex at the specific position. A remembered vertex is a vertex which is present in the bag of the given vertex and in at least one child bag.
+             *
+             *  @param[in] vertex   The vertex for which the remembered vertex shall be returned.
+             *  @param[in] index    The position of the remembered vertex.
+             *
+             *  @return The remembered vertex at the specific position.
+             */
             virtual htd::vertex_t rememberedVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
 
+            /**
+             *  Access the remembered vertex at the specific position. A remembered vertex is a vertex which is present in the bag of the given vertex and in the given child's bag.
+             *
+             *  @param[in] vertex   The vertex for which the remembered vertex shall be returned.
+             *  @param[in] index    The position of the remembered vertex.
+             *  @param[in] child    The child.
+             *
+             *  @return The remembered vertex at the specific position.
+             */
             virtual htd::vertex_t rememberedVertexAtPosition(htd::vertex_t vertex, htd::index_t index, htd::vertex_t child) const = 0;
 
+            /**
+             *  Check whether a vertex is present in the bag of the given vertex and in at least one child bag.
+             *
+             *  @param[in] vertex           The vertex which's bag shall be investigated.
+             *  @param[in] rememberedVertex The potential remembered vertex.
+             *
+             *  @return True if the given vertex is present in the bag of the given vertex and in at least one child bag, false otherwise.
+             */
             virtual bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex) const = 0;
 
+            /**
+             *  Check whether a vertex is present in the bag of the given vertex and in the given child's bag.
+             *
+             *  @param[in] vertex           The vertex which's bag shall be investigated.
+             *  @param[in] rememberedVertex The potential remembered vertex.
+             *  @param[in] child            The child.
+             *
+             *  @return True if the given vertex is present in the bag of the given vertex and in the given child's bag, false otherwise.
+             */
             virtual bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const = 0;
 
             /**

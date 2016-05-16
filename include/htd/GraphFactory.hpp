@@ -56,6 +56,11 @@ namespace htd
 
             htd::IMutableGraph * getGraph(const htd::IMultiGraph & original);
 
+            /**
+             *  Set the default implementation of the IMutableGraph interface.
+             *
+             *  @param[in] original The new default implementation of the IMutableGraph interface.
+             */
             void setConstructionTemplate(htd::IMutableGraph * original);
 
             htd::IMutableGraph & accessMutableGraph(htd::IGraph & original);
@@ -63,6 +68,9 @@ namespace htd
             const htd::IMutableGraph & accessMutableGraph(const htd::IGraph & original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IMutableGraph * constructionTemplate_;
 
             GraphFactory(void);

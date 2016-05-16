@@ -50,9 +50,17 @@ namespace htd
 
             htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(void);
 
+            /**
+             *  Set the default implementation of the IConnectedComponentAlgorithm interface.
+             *
+             *  @param[in] original The new default implementation of the IConnectedComponentAlgorithm interface.
+             */
             void setConstructionTemplate(htd::IConnectedComponentAlgorithm * original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IConnectedComponentAlgorithm * constructionTemplate_;
 
             ConnectedComponentAlgorithmFactory(void);

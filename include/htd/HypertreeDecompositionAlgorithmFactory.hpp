@@ -52,6 +52,11 @@ namespace htd
 
             htd::IHypertreeDecompositionAlgorithm * getHypertreeDecompositionAlgorithm(void);
 
+            /**
+             *  Set the default implementation of the IHypertreeDecompositionAlgorithm interface.
+             *
+             *  @param[in] original The new default implementation of the IHypertreeDecompositionAlgorithm interface.
+             */
             void setConstructionTemplate(htd::IHypertreeDecompositionAlgorithm * original);
 
             void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
@@ -61,6 +66,9 @@ namespace htd
             void addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IHypertreeDecompositionAlgorithm * constructionTemplate_;
 
             std::vector<htd::ILabelingFunction *> labelingFunctions_;

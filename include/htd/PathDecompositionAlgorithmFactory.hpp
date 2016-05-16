@@ -52,6 +52,11 @@ namespace htd
 
             htd::IPathDecompositionAlgorithm * getPathDecompositionAlgorithm(void);
 
+            /**
+             *  Set the default implementation of the IPathDecompositionAlgorithm interface.
+             *
+             *  @param[in] original The new default implementation of the IPathDecompositionAlgorithm interface.
+             */
             void setConstructionTemplate(htd::IPathDecompositionAlgorithm * original);
 
             void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
@@ -61,6 +66,9 @@ namespace htd
             void addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IPathDecompositionAlgorithm * constructionTemplate_;
 
             std::vector<htd::ILabelingFunction *> labelingFunctions_;

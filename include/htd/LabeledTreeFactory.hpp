@@ -52,6 +52,11 @@ namespace htd
 
             htd::IMutableLabeledTree * getLabeledTree(const htd::ILabeledTree & original);
 
+            /**
+             *  Set the default implementation of the IMutableLabeledTree interface.
+             *
+             *  @param[in] original The new default implementation of the IMutableLabeledTree interface.
+             */
             void setConstructionTemplate(htd::IMutableLabeledTree * original);
 
             htd::IMutableLabeledTree & accessMutableLabeledTree(htd::ILabeledTree & original);
@@ -59,6 +64,9 @@ namespace htd
             const htd::IMutableLabeledTree & accessMutableLabeledTree(const htd::ILabeledTree & original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IMutableLabeledTree * constructionTemplate_;
 
             LabeledTreeFactory(void);

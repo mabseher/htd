@@ -52,6 +52,11 @@ namespace htd
 
             htd::IMutableGraphDecomposition * getGraphDecomposition(const htd::IGraphDecomposition & original);
 
+            /**
+             *  Set the default implementation of the IMutableGraphDecomposition interface.
+             *
+             *  @param[in] original The new default implementation of the IMutableGraphDecomposition interface.
+             */
             void setConstructionTemplate(htd::IMutableGraphDecomposition * original);
 
             htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(htd::IGraphDecomposition & original);
@@ -59,6 +64,9 @@ namespace htd
             const htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(const htd::IGraphDecomposition & original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IMutableGraphDecomposition * constructionTemplate_;
 
             GraphDecompositionFactory(void);

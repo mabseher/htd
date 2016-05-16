@@ -53,6 +53,11 @@ namespace htd
 
             htd::IMutablePathDecomposition * getPathDecomposition(const htd::IPathDecomposition & original);
 
+            /**
+             *  Set the default implementation of the IMutablePathDecomposition interface.
+             *
+             *  @param[in] original The new default implementation of the IMutablePathDecomposition interface.
+             */
             void setConstructionTemplate(htd::IMutablePathDecomposition * original);
 
             htd::IMutablePathDecomposition & accessMutablePathDecomposition(htd::IPathDecomposition & original);
@@ -60,6 +65,9 @@ namespace htd
             const htd::IMutablePathDecomposition & accessMutablePathDecomposition(const htd::IPathDecomposition & original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IMutablePathDecomposition * constructionTemplate_;
 
             PathDecompositionFactory(void);

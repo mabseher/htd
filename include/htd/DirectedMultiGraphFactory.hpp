@@ -54,6 +54,11 @@ namespace htd
 
             htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(const htd::IDirectedMultiGraph & original);
 
+            /**
+             *  Set the default implementation of the IMutableDirectedMultiGraph interface.
+             *
+             *  @param[in] original The new default implementation of the IMutableDirectedMultiGraph interface.
+             */
             void setConstructionTemplate(htd::IMutableDirectedMultiGraph * original);
 
             htd::IMutableDirectedMultiGraph & accessMutableDirectedMultiGraph(htd::IDirectedMultiGraph & original);
@@ -61,6 +66,9 @@ namespace htd
             const htd::IMutableDirectedMultiGraph & accessMutableDirectedMultiGraph(const htd::IDirectedMultiGraph & original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IMutableDirectedMultiGraph * constructionTemplate_;
 
             DirectedMultiGraphFactory(void);

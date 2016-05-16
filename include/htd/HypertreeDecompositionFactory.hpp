@@ -52,6 +52,11 @@ namespace htd
 
             htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(const htd::ITreeDecomposition & original);
 
+            /**
+             *  Set the default implementation of the IMutableHypertreeDecomposition interface.
+             *
+             *  @param[in] original The new default implementation of the IMutableHypertreeDecomposition interface.
+             */
             void setConstructionTemplate(htd::IMutableHypertreeDecomposition * original);
 
             htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(htd::IHypertreeDecomposition & original);
@@ -59,6 +64,9 @@ namespace htd
             const htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(const htd::IHypertreeDecomposition & original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IMutableHypertreeDecomposition * constructionTemplate_;
 
             HypertreeDecompositionFactory(void);

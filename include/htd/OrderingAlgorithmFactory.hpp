@@ -50,9 +50,17 @@ namespace htd
 
             htd::IOrderingAlgorithm * getOrderingAlgorithm(void);
 
+            /**
+             *  Set the default implementation of the IOrderingAlgorithm interface.
+             *
+             *  @param[in] original The new default implementation of the IOrderingAlgorithm interface.
+             */
             void setConstructionTemplate(htd::IOrderingAlgorithm * original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IOrderingAlgorithm * constructionTemplate_;
 
             OrderingAlgorithmFactory(void);

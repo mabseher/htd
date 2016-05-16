@@ -35,16 +35,46 @@
 
 namespace htd
 {
+    /**
+     *  Wrapper for iterators of immutable collections.
+     */
     template <typename T>
     class Iterator : public htd::IteratorBase<T>
     {
         public:
+            /**
+             *  The difference type between two iterators.
+             */
             typedef std::ptrdiff_t difference_type;
+
+            /**
+             *  The value type of the iterator.
+             */
             typedef T value_type;
+
+            /**
+             *  The reference type of the iterator.
+             */
             typedef T & reference;
+
+            /**
+             *  The pointer type of the iterator.
+             */
             typedef T * pointer;
+
+            /**
+             *  The const_reference type of the iterator.
+             */
             typedef const T & const_reference;
+
+            /**
+             *  The const_pointer type of the iterator.
+             */
             typedef const T * const_pointer;
+
+            /**
+             *  The category of the iterator.
+             */
             typedef std::forward_iterator_tag iterator_category;
 
             Iterator(void) : baseIterator_(nullptr)

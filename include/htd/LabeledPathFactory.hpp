@@ -52,6 +52,11 @@ namespace htd
 
             htd::IMutableLabeledPath * getLabeledPath(const htd::ILabeledPath & original);
 
+            /**
+             *  Set the default implementation of the IMutableLabeledPath interface.
+             *
+             *  @param[in] original The new default implementation of the IMutableLabeledPath interface.
+             */
             void setConstructionTemplate(htd::IMutableLabeledPath * original);
 
             htd::IMutableLabeledPath & accessMutableLabeledPath(htd::ILabeledPath & original);
@@ -59,6 +64,9 @@ namespace htd
             const htd::IMutableLabeledPath & accessMutableLabeledPath(const htd::ILabeledPath & original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IMutableLabeledPath * constructionTemplate_;
 
             LabeledPathFactory(void);

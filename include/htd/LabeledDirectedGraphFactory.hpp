@@ -56,6 +56,11 @@ namespace htd
 
             htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original);
 
+            /**
+             *  Set the default implementation of the IMutableLabeledDirectedGraph interface.
+             *
+             *  @param[in] original The new default implementation of the IMutableLabeledDirectedGraph interface.
+             */
             void setConstructionTemplate(htd::IMutableLabeledDirectedGraph * original);
 
             htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(htd::ILabeledDirectedGraph & original);
@@ -63,6 +68,9 @@ namespace htd
             const htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IMutableLabeledDirectedGraph * constructionTemplate_;
 
             LabeledDirectedGraphFactory(void);

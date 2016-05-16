@@ -53,6 +53,11 @@ namespace htd
 
             htd::IGraphDecompositionAlgorithm * getGraphDecompositionAlgorithm(void);
 
+            /**
+             *  Set the default implementation of the IGraphDecompositionAlgorithm interface.
+             *
+             *  @param[in] original The new default implementation of the IGraphDecompositionAlgorithm interface.
+             */
             void setConstructionTemplate(htd::IGraphDecompositionAlgorithm * original);
 
             void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
@@ -62,6 +67,9 @@ namespace htd
             void addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IGraphDecompositionAlgorithm * constructionTemplate_;
 
             std::vector<htd::ILabelingFunction *> labelingFunctions_;

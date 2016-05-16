@@ -56,6 +56,11 @@ namespace htd
 
             htd::IMutableHypergraph * getHypergraph(const htd::IMultiHypergraph & original);
 
+            /**
+             *  Set the default implementation of the IMutableHypergraph interface.
+             *
+             *  @param[in] original The new default implementation of the IMutableHypergraph interface.
+             */
             void setConstructionTemplate(htd::IMutableHypergraph * original);
 
             htd::IMutableHypergraph & accessMutableHypergraph(htd::IHypergraph & original);
@@ -63,6 +68,9 @@ namespace htd
             const htd::IMutableHypergraph & accessMutableHypergraph(const htd::IHypergraph & original);
 
         private:
+            /**
+             *  A pointer to a clean instance of the default implementation.
+             */
             htd::IMutableHypergraph * constructionTemplate_;
 
             HypergraphFactory(void);

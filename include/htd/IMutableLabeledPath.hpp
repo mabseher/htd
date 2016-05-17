@@ -39,20 +39,86 @@ namespace htd
              */
             virtual ~IMutableLabeledPath() = 0;
 
+            /**
+             *  Set the label associated with the given vertex.
+             *
+             *  If the vertex is already labeled, the existing label will
+             *  be replaced and the memory of the previous label is freed.
+             *
+             *  @note When calling this method the control over the memory region of the new label is transferred to the
+             *  path. Deleting the label outside the path or assigning the same label object to multiple vertices or
+             *  edges will lead to undefined behavior.
+             *
+             *  @param[in] labelName    The name of the new label.
+             *  @param[in] vertex       The vertex to be labeled.
+             *  @param[in] label        The new label.
+             */
             virtual void setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label) = 0;
 
+            /**
+             *  Set the label associated with the given edge.
+             *
+             *  If the edge is already labeled, the existing label will
+             *  be replaced and the memory of the previous label is freed.
+             *
+             *  @note When calling this method the control over the memory region of the new label is transferred to the
+             *  path. Deleting the label outside the path or assigning the same label object to multiple vertices or
+             *  edges will lead to undefined behavior.
+             *
+             *  @param[in] labelName    The name of the new label.
+             *  @param[in] edgeId       The ID of the edge to be labeled.
+             *  @param[in] label        The new label.
+             */
             virtual void setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label) = 0;
 
+            /**
+             *  Remove the label associated with the given vertex.
+             *
+             *  @param[in] labelName    The name of the label which shall be removed.
+             *  @param[in] vertex       The vertex.
+             */
             virtual void removeVertexLabel(const std::string & labelName, htd::vertex_t vertex) = 0;
 
+            /**
+             *  Remove the label associated with the given edge.
+             *
+             *  @param[in] labelName    The name of the label which shall be removed.
+             *  @param[in] edgeId       The ID of the edge.
+             */
             virtual void removeEdgeLabel(const std::string & labelName, htd::id_t edgeId) = 0;
 
+            /**
+             *  Swap the labels of two vertices.
+             *
+             *  @param[in] vertex1  The first vertex.
+             *  @param[in] vertex2  The second vertex.
+             */
             virtual void swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
+            /**
+             *  Swap the labels of two edges.
+             *
+             *  @param[in] edgeId1  The ID of the first edge.
+             *  @param[in] edgeId2  The ID of the second edge.
+             */
             virtual void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
+            /**
+             *  Swap the labels of two vertices.
+             *
+             *  @param[in] labelName    The name of the label which shall be swapped.
+             *  @param[in] vertex1      The first vertex.
+             *  @param[in] vertex2      The second vertex.
+             */
             virtual void swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
+            /**
+             *  Swap the labels of two edges.
+             *
+             *  @param[in] labelName    The name of the label which shall be swapped.
+             *  @param[in] edgeId1      The ID of the first edge.
+             *  @param[in] edgeId2      The ID of the second edge.
+             */
             virtual void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
             virtual htd::ILabel * transferVertexLabel(const std::string & labelName, htd::vertex_t vertex) = 0;

@@ -519,61 +519,160 @@ namespace htd
                 return base_->edgeLabel(labelName, names_.lookupEdge(edgeName));
             }
 
+            /**
+             *  Set the label associated with the given vertex.
+             *
+             *  If the vertex is already labeled, the existing label will
+             *  be replaced and the memory of the previous label is freed.
+             *
+             *  @note When calling this method the control over the memory region of the new label is transferred to the
+             *  graph. Deleting the label outside the graph or assigning the same label object to multiple vertices or
+             *  edges will lead to undefined behavior.
+             *
+             *  @param[in] labelName    The name of the new label.
+             *  @param[in] vertexName   The name of the vertex to be labeled.
+             *  @param[in] label        The new label.
+             */
             void setVertexLabel(const std::string & labelName, const VertexNameType & vertexName, htd::ILabel * label)
             {
                 base_->setVertexLabel(labelName, lookupVertex(vertexName), label);
             }
 
+            /**
+             *  Set the label associated with the given edge.
+             *
+             *  If the edge is already labeled, the existing label will
+             *  be replaced and the memory of the previous label is freed.
+             *
+             *  @note When calling this method the control over the memory region of the new label is transferred to the
+             *  graph. Deleting the label outside the graph or assigning the same label object to multiple vertices or
+             *  edges will lead to undefined behavior.
+             *
+             *  @param[in] labelName    The name of the new label.
+             *  @param[in] edgeId       The ID of the edge to be labeled.
+             *  @param[in] label        The new label.
+             */
             void setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label)
             {
                 base_->setEdgeLabel(labelName, edgeId, label);
             }
 
+            /**
+             *  Set the label associated with the given edge.
+             *
+             *  If the edge is already labeled, the existing label will
+             *  be replaced and the memory of the previous label is freed.
+             *
+             *  @note When calling this method the control over the memory region of the new label is transferred to the
+             *  graph. Deleting the label outside the graph or assigning the same label object to multiple vertices or
+             *  edges will lead to undefined behavior.
+             *
+             *  @param[in] labelName    The name of the new label.
+             *  @param[in] edgeName     The name of the edge to be labeled.
+             *  @param[in] label        The new label.
+             */
             void setEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName, htd::ILabel * label)
             {
                 base_->setEdgeLabel(labelName, names_.lookupEdge(edgeName), label);
             }
 
+            /**
+             *  Remove the label associated with the given vertex.
+             *
+             *  @param[in] labelName    The name of the label which shall be removed.
+             *  @param[in] vertexName   The name of the vertex.
+             */
             void removeVertexLabel(const std::string & labelName, const VertexNameType & vertexName)
             {
                 base_->removeVertexLabel(labelName, lookupVertex(vertexName));
             }
 
+            /**
+             *  Remove the label associated with the given edge.
+             *
+             *  @param[in] labelName    The name of the label which shall be removed.
+             *  @param[in] edgeId       The ID of the edge.
+             */
             void removeEdgeLabel(const std::string & labelName, htd::id_t edgeId)
             {
                 base_->removeEdgeLabel(labelName, edgeId);
             }
 
+            /**
+             *  Remove the label associated with the given edge.
+             *
+             *  @param[in] labelName    The name of the label which shall be removed.
+             *  @param[in] edgeName     The name of the edge.
+             */
             void removeEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName)
             {
                 base_->removeEdgeLabel(labelName, names_.lookupEdge(edgeName));
             }
 
+            /**
+             *  Swap the labels of two vertices.
+             *
+             *  @param[in] vertexName1  The name of the first vertex.
+             *  @param[in] vertexName2  The name of the second vertex.
+             */
             void swapVertexLabels(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
                 base_->swapVertexLabels(lookupVertex(vertexName1), lookupVertex(vertexName2));
             }
 
+            /**
+             *  Swap the labels of two edges.
+             *
+             *  @param[in] edgeId1  The ID of the first edge.
+             *  @param[in] edgeId2  The ID of the second edge.
+             */
             void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
             {
                 base_->swapEdgeLabels(edgeId1, edgeId2);
             }
 
+            /**
+             *  Swap the labels of two edges.
+             *
+             *  @param[in] edgeName1    The name of the first edge.
+             *  @param[in] edgeName2    The name of the second edge.
+             */
             void swapEdgeLabels(const EdgeNameType & edgeName1, const EdgeNameType & edgeName2)
             {
                 base_->swapEdgeLabels(names_.lookupEdge(edgeName1), names_.lookupEdge(edgeName2));
             }
 
+            /**
+             *  Swap the labels of two vertices.
+             *
+             *  @param[in] labelName    The name of the label which shall be swapped.
+             *  @param[in] vertexName1  The name of the first vertex.
+             *  @param[in] vertexName2  The name of the second vertex.
+             */
             void swapVertexLabel(const std::string & labelName, const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
                 base_->swapVertexLabel(labelName, lookupVertex(vertexName1), lookupVertex(vertexName2));
             }
 
+            /**
+             *  Swap the labels of two edges.
+             *
+             *  @param[in] labelName    The name of the label which shall be swapped.
+             *  @param[in] edgeId1      The ID of the first edge.
+             *  @param[in] edgeId2      The ID of the second edge.
+             */
             void swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
             {
                 base_->swapEdgeLabel(labelName, edgeId1, edgeId2);
             }
 
+            /**
+             *  Swap the labels of two edges.
+             *
+             *  @param[in] labelName    The name of the label which shall be swapped.
+             *  @param[in] edgeName1    The name of the first edge.
+             *  @param[in] edgeName2    The name of the second edge.
+             */
             void swapEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName1, const EdgeNameType & edgeName2)
             {
                 base_->swapEdgeLabel(labelName, names_.lookupEdge(edgeName1), names_.lookupEdge(edgeName2));

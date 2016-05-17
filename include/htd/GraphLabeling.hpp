@@ -51,15 +51,15 @@ namespace htd
 
             const htd::ILabel & vertexLabel(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::ILabel & edgeLabel(htd::id_t id) const HTD_OVERRIDE;
+            const htd::ILabel & edgeLabel(htd::id_t edgeId) const HTD_OVERRIDE;
 
             void setVertexLabel(htd::vertex_t vertex, htd::ILabel * label) HTD_OVERRIDE;
 
-            void setEdgeLabel(htd::id_t id, htd::ILabel * label) HTD_OVERRIDE;
+            void setEdgeLabel(htd::id_t edgeId, htd::ILabel * label) HTD_OVERRIDE;
 
             void swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
-            void swapEdgeLabels(htd::id_t id1, htd::id_t id2) HTD_OVERRIDE;
+            void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) HTD_OVERRIDE;
 
             htd::ILabel * transferVertexLabel(htd::vertex_t vertex) HTD_OVERRIDE;
 
@@ -67,7 +67,7 @@ namespace htd
 
             void removeVertexLabel(htd::vertex_t vertex) HTD_OVERRIDE;
 
-            void removeEdgeLabel(htd::id_t id) HTD_OVERRIDE;
+            void removeEdgeLabel(htd::id_t edgeId) HTD_OVERRIDE;
 
             GraphLabeling * clone(void) const HTD_OVERRIDE;
 

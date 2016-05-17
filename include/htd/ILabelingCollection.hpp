@@ -58,8 +58,20 @@ namespace htd
 
             virtual void removeEdgeLabels(htd::id_t edgeId) = 0;
 
+            /**
+             *  Swap the labels of two vertices.
+             *
+             *  @param[in] vertex1  The first vertex.
+             *  @param[in] vertex2  The second vertex.
+             */
             virtual void swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
+            /**
+             *  Swap the labels of two edges.
+             *
+             *  @param[in] edgeId1  The ID of the first edge.
+             *  @param[in] edgeId2  The ID of the second edge.
+             */
             virtual void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
             virtual htd::ILabelCollection * exportVertexLabelCollection(htd::vertex_t vertex) const = 0;

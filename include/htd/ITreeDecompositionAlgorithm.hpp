@@ -38,9 +38,24 @@ namespace htd
     {
         public:
             virtual ~ITreeDecompositionAlgorithm() = 0;
-            
+
+            /**
+             *  Compute a decomposition of the given graph.
+             *
+             *  @param[in] graph    The input graph to decompose.
+             *
+             *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
+             */
             virtual htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE = 0;
 
+            /**
+             *  Compute a decomposition of the given graph and apply the given manipulation operations to it.
+             *
+             *  @param[in] graph                    The input graph to decompose.
+             *  @param[in] manipulationOperations   The manipulation operations which should be applied.
+             *
+             *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
+             */
             virtual htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE = 0;
 
             /**

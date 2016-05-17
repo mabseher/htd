@@ -26,7 +26,7 @@
 #define	HTD_HTD_ILABELINGFUNCTION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Collection.hpp>
+#include <htd/ConstCollection.hpp>
 #include <htd/ILabel.hpp>
 #include <htd/ILabelCollection.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
@@ -47,8 +47,24 @@ namespace htd
              */
             virtual std::string name() const = 0;
 
+            /**
+             *  Compute a new label based on a set of vertices (e.g., the bag of a graph decomposition) and labels previously computed on the same set of vertices.
+             *
+             *  @param vertices The set of input vertices sorted in ascending order.
+             *  @param labels   The collection of previously computed labels.
+             *
+             *  @return A new label based on the given set of vertices.
+             */
             virtual htd::ILabel * computeLabel(const std::vector<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const = 0;
 
+            /**
+             *  Compute a new label based on a set of vertices (e.g., the bag of a graph decomposition) and labels previously computed on the same set of vertices.
+             *
+             *  @param vertices The set of input vertices sorted in ascending order.
+             *  @param labels   The collection of previously computed labels.
+             *
+             *  @return A new label based on the given set of vertices.
+             */
             virtual htd::ILabel * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const = 0;
 
             /**

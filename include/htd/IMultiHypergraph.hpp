@@ -187,6 +187,12 @@ namespace htd
              */
             virtual htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Write the collection of all neighbors of a given vertex to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the neighbors shall be appended.
+             *  @param[in] vertex   The vertex.
+             */
             virtual void copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
 
             /**
@@ -215,6 +221,8 @@ namespace htd
 
             /**
              *  Access the hyperedge with a specific ID.
+             *
+             *  @param[in] edgeId   The ID of the hyperedge.
              *
              *  @return The hyperedge with the specific ID.
              */

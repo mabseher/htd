@@ -457,31 +457,72 @@ namespace htd
                 base_->setParent(lookupVertex(vertexName), lookupVertex(newParentName));
             }
 
+            /**
+             *  Getter for the number of different label names in the graph.
+             *
+             *  @return The number of different label names in the graph.
+             */
             std::size_t labelCount(void) const
             {
                 return base_->labelCount();
             }
 
+            /**
+             *  Access the collection of all label names used in the tree.
+             *
+             *  @return The collection of all label names used in the tree sorted in ascending order.
+             */
             htd::ConstCollection<std::string> labelNames(void) const
             {
                 return base_->labelNames();
             }
 
+            /**
+             *  Access the label name at the specific position.
+             *
+             *  @param[in] index    The position of the label name.
+             *
+             *  @return The label name at the specific position.
+             */
             const std::string & labelNameAtPosition(htd::index_t index) const
             {
                 return base_->labelNameAtPosition(index);
             }
 
+            /**
+             *  Access the label associated with the given vertex.
+             *
+             *  @param[in] labelName    The name of the label.
+             *  @param[in] vertexName   The name of the vertex.
+             *
+             *  @return The label associated with the given vertex.
+             */
             const htd::ILabel & vertexLabel(const std::string & labelName, const VertexNameType & vertexName) const
             {
                 return base_->vertexLabel(labelName, lookupVertex(vertexName));
             }
 
+            /**
+             *  Access the label associated with the given edge.
+             *
+             *  @param[in] labelName    The name of the label.
+             *  @param[in] edgeId       The ID of the edge.
+             *
+             *  @return The label associated with the given edge.
+             */
             const htd::ILabel & edgeLabel(const std::string & labelName, htd::id_t edgeId) const
             {
                 return base_->edgeLabel(labelName, edgeId);
             }
 
+            /**
+             *  Access the label associated with the given edge.
+             *
+             *  @param[in] labelName    The name of the label.
+             *  @param[in] edgeName     The name of the edge.
+             *
+             *  @return The label associated with the given edge.
+             */
             const htd::ILabel & edgeLabel(const std::string & labelName, const EdgeNameType & edgeName) const
             {
                 return base_->edgeLabel(labelName, names_.lookupEdge(edgeName));
@@ -646,6 +687,11 @@ namespace htd
                 base_->swapEdgeLabel(labelName, names_.lookupEdge(edgeName1), names_.lookupEdge(edgeName2));
             }
 
+            /**
+             *  Create a deep copy the current tree.
+             *
+             *  @return A new NamedTree object identical to the current path.
+             */
             NamedTree<VertexNameType, EdgeNameType> * clone(void) const
             {
                 return new NamedTree<VertexNameType, EdgeNameType>(*this);

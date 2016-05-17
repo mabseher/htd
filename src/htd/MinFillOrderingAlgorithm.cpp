@@ -70,15 +70,15 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
     std::unordered_map<htd::vertex_t, std::size_t> requiredFillAmount(size);
     
-    std::unordered_map<htd::vertex_t, htd::vertex_container> neighborhood(size);
+    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> neighborhood(size);
 
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> existingNeighbors(size);
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> additionalNeighbors(size);
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> unaffectedNeighbors(size);
     
-    htd::vertex_container newNeighborhood;
+    std::vector<htd::vertex_t> newNeighborhood;
     
-    htd::vertex_container affectedVertices;
+    std::vector<htd::vertex_t> affectedVertices;
     affectedVertices.reserve(size);
 
     for (htd::vertex_t vertex : inputVertices)
@@ -692,7 +692,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
     DEBUGGING_CODE_LEVEL2(std::cout << std::endl;)
 }
 
-std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::unordered_map<htd::vertex_t, htd::vertex_container> & availableNeighborhoods, const htd::vertex_container & vertices) const
+std::size_t htd::MinFillOrderingAlgorithm::computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const
 {
     std::size_t ret = 0;
 

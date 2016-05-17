@@ -93,7 +93,7 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
             }
         }
 
-        htd::vertex_container children;
+        std::vector<htd::vertex_t> children;
 
         const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 

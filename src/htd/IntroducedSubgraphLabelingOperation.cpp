@@ -62,7 +62,7 @@ void htd::IntroducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposit
 
     for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
     {
-        htd::vertex_container elements(hyperedge.begin(), hyperedge.end());
+        std::vector<htd::vertex_t> elements(hyperedge.begin(), hyperedge.end());
 
         std::sort(elements.begin(), elements.end());
 
@@ -99,7 +99,7 @@ void htd::IntroducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposit
         {
             for (htd::vertex_t child : decomposition.children(vertex))
             {
-                htd::vertex_container forgottenVertices;
+                std::vector<htd::vertex_t> forgottenVertices;
 
                 decomposition.copyForgottenVerticesTo(forgottenVertices, vertex, child);
 
@@ -194,7 +194,7 @@ void htd::IntroducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposit
 
     for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
     {
-        htd::vertex_container elements(hyperedge.begin(), hyperedge.end());
+        std::vector<htd::vertex_t> elements(hyperedge.begin(), hyperedge.end());
 
         std::sort(elements.begin(), elements.end());
 
@@ -231,7 +231,7 @@ void htd::IntroducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposit
         {
             for (htd::vertex_t child : decomposition.children(vertex))
             {
-                htd::vertex_container forgottenVertices;
+                std::vector<htd::vertex_t> forgottenVertices;
 
                 decomposition.copyForgottenVerticesTo(forgottenVertices, vertex, child);
 

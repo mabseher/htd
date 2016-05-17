@@ -63,7 +63,7 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
 
     std::unordered_set<htd::vertex_t> vertices(graph.vertices().begin(), graph.vertices().end());
 
-    std::unordered_map<htd::vertex_t, htd::vertex_container> neighborhood(size);
+    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> neighborhood(size);
 
     std::unordered_map<htd::vertex_t, std::size_t> weights(size);
 

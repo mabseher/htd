@@ -140,7 +140,7 @@ bool htd::MultiHypergraph::isEdge(htd::id_t edgeId) const
 
 bool htd::MultiHypergraph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    return isNeighbor(vertex1, vertex2) && isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(htd::vertex_container { vertex1, vertex2 }));
+    return isNeighbor(vertex1, vertex2) && isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(std::vector<htd::vertex_t> { vertex1, vertex2 }));
 }
 
 bool htd::MultiHypergraph::isEdge(const std::vector<htd::vertex_t> & elements) const
@@ -324,8 +324,8 @@ bool htd::MultiHypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vert
         }
         else
         {
-            htd::vertex_container newVertices;
-            htd::vertex_container tmpVertices;
+            std::vector<htd::vertex_t> newVertices;
+            std::vector<htd::vertex_t> tmpVertices;
 
             std::vector<bool> reachableVertices(size_);
 
@@ -583,7 +583,7 @@ htd::vertex_t htd::MultiHypergraph::addVertex(void)
 
     next_vertex_++;
 
-    neighborhood_.push_back(htd::vertex_container());
+    neighborhood_.push_back(std::vector<htd::vertex_t>());
 
     vertices_.push_back(ret);
 
@@ -607,7 +607,7 @@ htd::vertex_t htd::MultiHypergraph::addVertices(std::size_t count)
             ++next_vertex_;
         }
 
-        neighborhood_.resize(neighborhood_.size() + count, htd::vertex_container());
+        neighborhood_.resize(neighborhood_.size() + count, std::vector<htd::vertex_t>());
 
         size_ += count;
     }
@@ -761,7 +761,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
     edges_->push_back(htd::Hyperedge(next_edge_, std::move(elements)));
 
-    htd::vertex_container newNeighborhood;
+    std::vector<htd::vertex_t> newNeighborhood;
 
     for (htd::vertex_t vertex : sortedElements)
     {
@@ -845,7 +845,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 
     sortedElements.erase(position, sortedElements.end());
 
-    htd::vertex_container newNeighborhood;
+    std::vector<htd::vertex_t> newNeighborhood;
 
     for (htd::vertex_t vertex : sortedElements)
     {
@@ -928,7 +928,7 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
 
     sortedElements.erase(position, sortedElements.end());
 
-    htd::vertex_container newNeighborhood;
+    std::vector<htd::vertex_t> newNeighborhood;
 
     for (htd::vertex_t vertex : sortedElements)
     {
@@ -1001,7 +1001,7 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
 
             if (!missing.empty())
             {
-                htd::vertex_container & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+                std::vector<htd::vertex_t> & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
 
                 for (auto it = missing.begin(); it != missing.end(); it++)
                 {
@@ -1016,7 +1016,7 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
 
             if (selfLoops_.count(vertex) > 0 && !selfLoopExists)
             {
-                htd::vertex_container & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+                std::vector<htd::vertex_t> & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
 
                 auto position2 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
 
@@ -1089,7 +1089,7 @@ htd::MultiHypergraph & htd::MultiHypergraph::operator=(const htd::IMultiHypergra
             {
                 deletions_.insert(next_vertex_);
 
-                neighborhood_.push_back(htd::vertex_container());
+                neighborhood_.push_back(std::vector<htd::vertex_t>());
 
                 ++next_vertex_;
             }
@@ -1098,7 +1098,7 @@ htd::MultiHypergraph & htd::MultiHypergraph::operator=(const htd::IMultiHypergra
 
             next_vertex_++;
 
-            neighborhood_.push_back(htd::vertex_container());
+            neighborhood_.push_back(std::vector<htd::vertex_t>());
 
             vertices_.push_back(vertex);
         }

@@ -93,7 +93,7 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
         {
             for (htd::vertex_t child : decomposition.children(vertex))
             {
-                htd::vertex_container forgottenVertices;
+                std::vector<htd::vertex_t> forgottenVertices;
 
                 decomposition.copyForgottenVerticesTo(forgottenVertices, vertex, child);
 
@@ -227,7 +227,7 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
         {
             for (htd::vertex_t child : decomposition.children(vertex))
             {
-                htd::vertex_container forgottenVertices;
+                std::vector<htd::vertex_t> forgottenVertices;
 
                 decomposition.copyForgottenVerticesTo(forgottenVertices, vertex, child);
 

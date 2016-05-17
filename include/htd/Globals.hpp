@@ -33,7 +33,6 @@
 #include <htd/Library.hpp>
 
 #include <cstdlib>
-#include <vector>
 
 namespace htd
 {
@@ -41,11 +40,6 @@ namespace htd
      *  Datatype for indices.
      */
     typedef std::size_t index_t;
-
-    /**
-     *  Datatype for storing vertices.
-     */
-    typedef std::vector<vertex_t> vertex_container;
 }
 
 #endif /* HTD_HTD_GLOBALS_HPP */

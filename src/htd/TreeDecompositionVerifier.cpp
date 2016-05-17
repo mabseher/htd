@@ -112,7 +112,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
     std::vector<htd::id_t> identifiers(edgeCount);
 
-    std::vector<htd::vertex_container> sortedEdges(edgeCount);
+    std::vector<std::vector<htd::vertex_t>> sortedEdges(edgeCount);
 
     htd::index_t index = 0;
 
@@ -120,7 +120,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
     for (const htd::Hyperedge & hyperedge : hyperedges)
     {
-        htd::vertex_container & elements = sortedEdges[index];
+        std::vector<htd::vertex_t> & elements = sortedEdges[index];
 
         std::copy(hyperedge.sortedElements().begin(), hyperedge.sortedElements().end(), std::back_inserter(elements));
 
@@ -148,7 +148,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
             {
                 htd::id_t id = identifiers[index];
 
-                const htd::vertex_container & edge = sortedEdges[index];
+                const std::vector<htd::vertex_t> & edge = sortedEdges[index];
 
                 if (missingEdges.count(id) > 0 && std::includes(bag.begin(), bag.end(), edge.begin(), edge.end()))
                 {

@@ -76,7 +76,7 @@ namespace htd
 
             htd::vertex_t getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::unordered_map<htd::vertex_t, htd::index_t> & vertexIndices, htd::vertex_t excludedVertex) const;
 
-            void distributeEdge(htd::index_t edgeIndex, const std::vector<htd::vertex_t> & edge, htd::vertex_t startBucket, const std::unordered_map<htd::vertex_t, htd::vertex_container> & buckets, const std::unordered_map<htd::vertex_t, htd::vertex_container> & neighbors, std::unordered_map<htd::vertex_t, std::vector<htd::index_t>> & inducedEdges, std::vector<htd::id_t> & lastAssignedEdge, std::stack<htd::vertex_t, std::vector<htd::vertex_t>> & originStack) const;
+            void distributeEdge(htd::index_t edgeIndex, const std::vector<htd::vertex_t> & edge, htd::vertex_t startBucket, const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & buckets, const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & neighbors, std::unordered_map<htd::vertex_t, std::vector<htd::index_t>> & inducedEdges, std::vector<htd::id_t> & lastAssignedEdge, std::stack<htd::vertex_t, std::vector<htd::vertex_t>> & originStack) const;
     };
 }
 

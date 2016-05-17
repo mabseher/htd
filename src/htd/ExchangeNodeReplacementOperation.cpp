@@ -47,9 +47,9 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
 
 void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::vertex_container forgetNodes;
-    htd::vertex_container exchangeNodes;
-    htd::vertex_container introduceNodes;
+    std::vector<htd::vertex_t> forgetNodes;
+    std::vector<htd::vertex_t> exchangeNodes;
+    std::vector<htd::vertex_t> introduceNodes;
 
     const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
     const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = decomposition.introduceNodes();
@@ -63,7 +63,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
     {
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
-        htd::vertex_container children;
+        std::vector<htd::vertex_t> children;
 
         const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 
@@ -111,9 +111,9 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
     
 void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::vertex_container forgetNodes;
-    htd::vertex_container exchangeNodes;
-    htd::vertex_container introduceNodes;
+    std::vector<htd::vertex_t> forgetNodes;
+    std::vector<htd::vertex_t> exchangeNodes;
+    std::vector<htd::vertex_t> introduceNodes;
 
     const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
     const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = decomposition.introduceNodes();
@@ -127,7 +127,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
     {
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
-        htd::vertex_container children;
+        std::vector<htd::vertex_t> children;
 
         const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 

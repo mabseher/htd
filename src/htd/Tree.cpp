@@ -644,7 +644,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                 auto & newRootNode = *(nodes_.at(root_));
 
-                htd::vertex_container & newRootChildren = newRootNode.children;
+                std::vector<htd::vertex_t> & newRootChildren = newRootNode.children;
 
                 newRootNode.parent = htd::Vertex::UNKNOWN;
 

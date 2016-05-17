@@ -58,7 +58,7 @@ void htd::InOrderTreeTraversal::traverse(const htd::IPath & path, const std::fun
         throw std::logic_error("void htd::InOrderTreeTraversal::traverse(const htd::IPath &, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> &, htd::vertex_t) const");
     }
 
-    htd::vertex_container vertices;
+    std::vector<htd::vertex_t> vertices;
 
     htd::PreOrderTreeTraversal traversal;
 
@@ -96,7 +96,7 @@ void htd::InOrderTreeTraversal::traverse(const htd::ITree & tree, const std::fun
         throw std::logic_error("void htd::InOrderTreeTraversal::traverse(const htd::ITree &, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> &, htd::vertex_t) const");
     }
 
-    htd::vertex_container vertices;
+    std::vector<htd::vertex_t> vertices;
 
     htd::PreOrderTreeTraversal traversal;
 

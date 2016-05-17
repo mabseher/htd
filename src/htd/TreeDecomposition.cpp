@@ -283,7 +283,7 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(node, childBagContent);
 
@@ -306,7 +306,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) co
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(node, childBagContent);
 
@@ -343,7 +343,7 @@ bool htd::TreeDecomposition::isForgetNode(htd::vertex_t vertex) const
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -365,7 +365,7 @@ std::size_t htd::TreeDecomposition::introduceNodeCount(void) const
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(node, childBagContent);
 
@@ -388,7 +388,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void)
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(node, childBagContent);
 
@@ -425,7 +425,7 @@ bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t vertex) const
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -520,7 +520,7 @@ std::size_t htd::TreeDecomposition::forgottenVertexCount(htd::vertex_t vertex) c
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -563,7 +563,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(ht
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -604,7 +604,7 @@ void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> 
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -685,7 +685,7 @@ std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t vertex) 
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -728,7 +728,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(h
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -769,7 +769,7 @@ void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -850,7 +850,7 @@ std::size_t htd::TreeDecomposition::rememberedVertexCount(htd::vertex_t vertex) 
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -893,7 +893,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(h
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -934,7 +934,7 @@ void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
 
-        htd::vertex_container childBagContent;
+        std::vector<htd::vertex_t> childBagContent;
 
         getChildrenVertexLabelSetUnion(vertex, childBagContent);
 
@@ -1007,7 +1007,7 @@ bool htd::TreeDecomposition::isRememberedVertex(htd::vertex_t vertex, htd::verte
     return std::binary_search(rememberedVertexCollection.begin(), rememberedVertexCollection.end(), rememberedVertex);
 }
 
-void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const
 {
     if (isVertex(vertex))
     {
@@ -1044,7 +1044,7 @@ void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex
     }
     else
     {
-        throw std::logic_error("void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t, htd::vertex_container &) const");
+        throw std::logic_error("void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t, std::vector<htd::vertex_t> &) const");
     }
 }
 

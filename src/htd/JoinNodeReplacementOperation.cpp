@@ -147,7 +147,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
                             htd::print(introducedVertexCollection, false);
                             std::cout << std::endl;
 
-                            htd::vertex_container newRequiredVertices2;
+                            std::vector<htd::vertex_t> newRequiredVertices2;
 
                             std::set_difference(requiredVertices.begin(), requiredVertices.end(), introducedVertexCollection.begin(), introducedVertexCollection.end(), std::back_inserter(newRequiredVertices));
 
@@ -174,7 +174,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
                     {
                         const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(currentNode);
 
-                        htd::vertex_container newBagContent;
+                        std::vector<htd::vertex_t> newBagContent;
 
                         DEBUGGING_CODE(
                         std::cout << "OLD BAG CONTENT " << currentNode << ": ";
@@ -299,7 +299,7 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
     }
 }
 
-void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, htd::vertex_container & output) const
+void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const
 {
     std::unordered_set<htd::vertex_t> result;
 

@@ -228,7 +228,7 @@ namespace htd
 
             htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<VertexNameType> & elements) const
             {
-                htd::vertex_container hyperedge;
+                std::vector<htd::vertex_t> hyperedge;
 
                 bool ok = true;
 
@@ -496,7 +496,7 @@ namespace htd
 
             void removeEdge(const std::vector<VertexNameType> & elements)
             {
-                htd::vertex_container hyperedge;
+                std::vector<htd::vertex_t> hyperedge;
 
                 for (auto & vertex : elements)
                 {
@@ -513,7 +513,7 @@ namespace htd
 
             void removeEdge(const htd::ConstCollection<VertexNameType> & elements)
             {
-                htd::vertex_container hyperedge;
+                std::vector<htd::vertex_t> hyperedge;
 
                 for (auto & vertex : elements)
                 {

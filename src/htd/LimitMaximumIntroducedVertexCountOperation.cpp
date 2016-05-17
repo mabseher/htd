@@ -55,7 +55,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
 void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::vertex_container introduceNodes;
+    std::vector<htd::vertex_t> introduceNodes;
 
     const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = decomposition.introduceNodes();
 
@@ -65,7 +65,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
     {
         if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
         {
-            htd::vertex_container bagContent;
+            std::vector<htd::vertex_t> bagContent;
 
             const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
@@ -75,7 +75,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
             if (introducedVertexCount > limit_)
             {
-                htd::vertex_container introducedVertices;
+                std::vector<htd::vertex_t> introducedVertices;
 
                 decomposition.copyIntroducedVerticesTo(introducedVertices, node);
 
@@ -95,7 +95,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                     intermediatedVertexCount--;
                 }
 
-                htd::vertex_container children;
+                std::vector<htd::vertex_t> children;
 
                 const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 
@@ -252,7 +252,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
     
 void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::vertex_container introduceNodes;
+    std::vector<htd::vertex_t> introduceNodes;
 
     const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = decomposition.introduceNodes();
 
@@ -262,7 +262,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
     {
         if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
         {
-            htd::vertex_container bagContent;
+            std::vector<htd::vertex_t> bagContent;
 
             const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
@@ -272,7 +272,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
             if (introducedVertexCount > limit_)
             {
-                htd::vertex_container introducedVertices;
+                std::vector<htd::vertex_t> introducedVertices;
 
                 decomposition.copyIntroducedVerticesTo(introducedVertices, node);
 
@@ -292,7 +292,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
                     intermediatedVertexCount--;
                 }
 
-                htd::vertex_container children;
+                std::vector<htd::vertex_t> children;
 
                 const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 

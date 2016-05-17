@@ -48,7 +48,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
 void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::vertex_container forgetNodes;
+    std::vector<htd::vertex_t> forgetNodes;
 
     const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
 
@@ -56,7 +56,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
     for (htd::vertex_t node : forgetNodes)
     {
-        htd::vertex_container bagContent;
+        std::vector<htd::vertex_t> bagContent;
 
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
@@ -66,7 +66,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
         if (forgottenVertexCount > limit_)
         {
-            htd::vertex_container forgottenVertices;
+            std::vector<htd::vertex_t> forgottenVertices;
 
             decomposition.copyForgottenVerticesTo(forgottenVertices, node);
 
@@ -86,7 +86,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
                 intermediatedVertexCount--;
             }
 
-            htd::vertex_container children;
+            std::vector<htd::vertex_t> children;
 
             const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 
@@ -181,7 +181,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
 void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::vertex_container forgetNodes;
+    std::vector<htd::vertex_t> forgetNodes;
 
     const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
 
@@ -189,7 +189,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
     for (htd::vertex_t node : forgetNodes)
     {
-        htd::vertex_container bagContent;
+        std::vector<htd::vertex_t> bagContent;
 
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
@@ -199,7 +199,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
         if (forgottenVertexCount > limit_)
         {
-            htd::vertex_container forgottenVertices;
+            std::vector<htd::vertex_t> forgottenVertices;
 
             decomposition.copyForgottenVerticesTo(forgottenVertices, node);
 
@@ -219,7 +219,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
                 intermediatedVertexCount--;
             }
 
-            htd::vertex_container children;
+            std::vector<htd::vertex_t> children;
 
             const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 

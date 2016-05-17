@@ -194,7 +194,7 @@ namespace htd
             /**
              *  The collection of all vertices of the path in ascending order.
              */
-            htd::vertex_container vertices_;
+            std::vector<htd::vertex_t> vertices_;
 
             /**
              *  The map of pointers to all path nodes. It maps vertex IDs to the corresponding node information.

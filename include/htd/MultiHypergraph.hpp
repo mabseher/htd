@@ -140,7 +140,7 @@ namespace htd
 
             htd::vertex_t next_vertex_;
 
-            htd::vertex_container vertices_;
+            std::vector<htd::vertex_t> vertices_;
 
             std::unordered_set<htd::vertex_t> selfLoops_;
 
@@ -148,7 +148,7 @@ namespace htd
 
             std::shared_ptr<htd::hyperedge_container> edges_;
 
-            std::vector<htd::vertex_container> neighborhood_;
+            std::vector<std::vector<htd::vertex_t>> neighborhood_;
     };
 }
 

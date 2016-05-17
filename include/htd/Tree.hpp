@@ -166,7 +166,7 @@ namespace htd
 
                 htd::vertex_t parent;
 
-                htd::vertex_container children;
+                std::vector<htd::vertex_t> children;
 
                 Node(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), children()
                 {
@@ -207,7 +207,7 @@ namespace htd
             /**
              *  The collection of all vertices of the tree in ascending order.
              */
-            htd::vertex_container vertices_;
+            std::vector<htd::vertex_t> vertices_;
 
             /**
              *  The map of pointers to all tree nodes. It maps vertex IDs to the corresponding node information.

@@ -927,20 +927,20 @@ namespace std
     };
 
     /**
-     *  Implementation of std::hash for htd::vertex_container.
+     *  Implementation of std::hash for std::vector<htd::vertex_t>.
      */
     template<>
-    struct hash<htd::vertex_container>
+    struct hash<std::vector<htd::vertex_t>>
     {
         public:
             /**
-             *  Compute the hash code of a given htd::vertex_container.
+             *  Compute the hash code of a given std::vector<htd::vertex_t>.
              *
-             *  @param[in] data The htd::vertex_container which's hash code shall be returned.
+             *  @param[in] data The std::vector<htd::vertex_t> which's hash code shall be returned.
              *
-             *  @return The hash code of the given htd::vertex_container.
+             *  @return The hash code of the given std::vector<htd::vertex_t>.
              */
-            std::size_t operator()(const htd::vertex_container & data) const
+            std::size_t operator()(const std::vector<htd::vertex_t> & data) const
             {
                 std::size_t ret = 31;
 

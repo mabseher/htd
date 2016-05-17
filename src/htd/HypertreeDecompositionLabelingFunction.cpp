@@ -50,7 +50,7 @@ htd::HypertreeDecompositionLabelingFunction::HypertreeDecompositionLabelingFunct
     {
         const std::vector<htd::vertex_t> & elementCollection = originalHyperedge.elements();
 
-        htd::vertex_container elements(elementCollection.begin(), elementCollection.end());
+        std::vector<htd::vertex_t> elements(elementCollection.begin(), elementCollection.end());
 
         std::sort(elements.begin(), elements.end());
 

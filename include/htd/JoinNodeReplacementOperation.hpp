@@ -44,7 +44,7 @@ namespace htd
             JoinNodeReplacementOperation * clone(void) const HTD_OVERRIDE;
 
         private:
-            void getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, htd::vertex_container & output) const;
+            void getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const;
     };
 }
 

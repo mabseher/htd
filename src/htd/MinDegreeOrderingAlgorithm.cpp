@@ -63,11 +63,11 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
 
     std::unordered_set<htd::vertex_t> vertices(graph.vertices().begin(), graph.vertices().end());
 
-    std::unordered_map<htd::vertex_t, htd::vertex_container> neighborhood(size);
+    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> neighborhood(size);
 
-    htd::vertex_container newNeighborhood;
+    std::vector<htd::vertex_t> newNeighborhood;
 
-    htd::vertex_container difference;
+    std::vector<htd::vertex_t> difference;
 
     for (htd::vertex_t vertex : vertices)
     {

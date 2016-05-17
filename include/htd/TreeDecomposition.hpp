@@ -180,8 +180,7 @@ namespace htd
             TreeDecomposition & operator=(const htd::ITreeDecomposition & original) HTD_OVERRIDE;
 
         protected:
-
-            void getChildrenVertexLabelSetUnion(htd::vertex_t vertex, htd::vertex_container & output) const;
+            void getChildrenVertexLabelSetUnion(htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const;
 
         private:
             std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> bagContent_;

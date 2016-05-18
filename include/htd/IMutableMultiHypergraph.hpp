@@ -118,6 +118,11 @@ namespace htd
              */
             virtual htd::id_t addEdge(htd::Hyperedge && hyperedge) = 0;
 
+            /**
+             *  Remove an edge from the multi-hypergraph.
+             *
+             *  @param[in] edgeId   The ID of the edge which shall be removed.
+             */
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
             /**

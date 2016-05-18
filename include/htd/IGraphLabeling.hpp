@@ -35,8 +35,18 @@ namespace htd
         public:
             virtual ~IGraphLabeling() = 0;
 
+            /**
+             *  Getter for the number of different vertex labels stored in the graph labeling.
+             *
+             *  @return The number of different vertex labels stored in the graph labeling.
+             */
             virtual std::size_t vertexLabelCount() const = 0;
 
+            /**
+             *  Getter for the number of different edge labels stored in the graph labeling.
+             *
+             *  @return The number of different edge labels stored in the graph labeling.
+             */
             virtual std::size_t edgeLabelCount() const = 0;
 
             /**
@@ -121,8 +131,30 @@ namespace htd
              */
             virtual void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
+            /**
+             *  Transfer the control over a vertex label to a new owner.
+             *
+             *  @param[in] vertex   The vertex whichs label shall be transferred.
+             *
+             *  @note After calling this function the labeling is no longer aware of the label, hence - in the context of the
+             *        labeling - the vertex is in the same state as it was never labeled. Furthermore, the new owner has to
+             *        take care that the memory allocated by the label gets freed.
+             *
+             *  @return A pointer to the vertex label.
+             */
             virtual htd::ILabel * transferVertexLabel(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Transfer the control over an edge label to a new owner.
+             *
+             *  @param[in] edgeId   The ID of the edge whichs label shall be transferred.
+             *
+             *  @note After calling this function the labeling is no longer aware of the label, hence - in the context of the
+             *        labeling - the edge is in the same state as it was never labeled. Furthermore, the new owner has to
+             *        take care that the memory allocated by the label gets freed.
+             *
+             *  @return A pointer to the edge label.
+             */
             virtual htd::ILabel * transferEdgeLabel(htd::id_t edgeId) = 0;
 
             /**

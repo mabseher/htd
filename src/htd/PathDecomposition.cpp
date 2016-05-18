@@ -116,15 +116,6 @@ htd::vertex_t htd::PathDecomposition::insertRoot(void)
     return ret;
 }
 
-void htd::PathDecomposition::removeRoot(void)
-{
-    htd::Path::removeRoot();
-
-    bagContent_.clear();
-
-    inducedEdges_.clear();
-}
-
 htd::vertex_t htd::PathDecomposition::addChild(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::Path::addChild(vertex);

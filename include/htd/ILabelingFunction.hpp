@@ -50,8 +50,8 @@ namespace htd
             /**
              *  Compute a new label based on a set of vertices (e.g., the bag of a graph decomposition) and labels previously computed on the same set of vertices.
              *
-             *  @param vertices The set of input vertices sorted in ascending order.
-             *  @param labels   The collection of previously computed labels.
+             *  @param[in] vertices The set of input vertices sorted in ascending order.
+             *  @param[in] labels   The collection of previously computed labels.
              *
              *  @return A new label based on the given set of vertices.
              */
@@ -60,8 +60,8 @@ namespace htd
             /**
              *  Compute a new label based on a set of vertices (e.g., the bag of a graph decomposition) and labels previously computed on the same set of vertices.
              *
-             *  @param vertices The set of input vertices sorted in ascending order.
-             *  @param labels   The collection of previously computed labels.
+             *  @param[in] vertices The set of input vertices sorted in ascending order.
+             *  @param[in] labels   The collection of previously computed labels.
              *
              *  @return A new label based on the given set of vertices.
              */

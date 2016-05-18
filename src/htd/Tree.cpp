@@ -624,7 +624,14 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
         {
             case 0:
             {
-                removeRoot();
+                root_ = htd::Vertex::UNKNOWN;
+
+                size_ = 0;
+
+                nodes_.clear();
+                edges_->clear();
+
+                vertices_.clear();
 
                 break;
             }
@@ -765,19 +772,6 @@ void htd::Tree::makeRoot(htd::vertex_t vertex)
             originDeque.pop_front();
         }
     }
-}
-
-void htd::Tree::removeRoot(void)
-{
-    root_ = htd::Vertex::UNKNOWN;
-
-    size_ = 0;
-
-    nodes_.clear();
-
-    edges_->clear();
-
-    vertices_.clear();
 }
 
 htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
@@ -1045,7 +1039,7 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
     {
         if (this->root_ != htd::Vertex::UNKNOWN)
         {
-            removeRoot();
+            removeSubtree(root_);
         }
 
         nodes_.reserve(original.nodes_.size());
@@ -1086,7 +1080,7 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
     {
         if (this->root_ != htd::Vertex::UNKNOWN)
         {
-            removeRoot();
+            removeSubtree(root_);
         }
 
         size_ = original.vertexCount();
@@ -1153,7 +1147,7 @@ void htd::Tree::handleSignal(int signal)
 {
     HTD_UNUSED(signal);
 
-    removeRoot();
+    removeSubtree(root_);
 }
 
 #endif /* HTD_HTD_TREE_CPP */

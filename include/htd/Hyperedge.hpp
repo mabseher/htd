@@ -142,7 +142,7 @@ namespace htd
             std::size_t size(void) const;
 
             /**
-             *  Check whether the hyperedge a specific vertex.
+             *  Check whether the hyperedge contains a specific vertex.
              *
              *  @param[in] vertex   The specific vertex to test for existence.
              *

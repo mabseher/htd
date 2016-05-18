@@ -104,80 +104,123 @@ namespace htd
 
             }
 
+            /**
+             *  Destructor for a NamedVertexHyperedge object.
+             */
             ~NamedVertexHyperedge()
             {
 
             }
 
-            htd::id_t id() const
+            /**
+             *  Getter for the ID of the hyperedge.
+             *
+             *  @return The ID of the hyperedge.
+             */
+            htd::id_t id(void) const
             {
                 return id_;
             }
 
-            htd::Collection<VertexNameType> elements()
+            /**
+             *  Getter for the elements of the hyperedge.
+             *
+             *  @return The elements of the hyperedge.
+             */
+            std::vector<VertexNameType> & elements(void)
             {
-                return htd::Collection<VertexNameType>::getInstance(elements_);
+                return elements_;
             }
 
-            htd::ConstCollection<VertexNameType> elements() const
+            /**
+             *  Getter for the elements of the hyperedge.
+             *
+             *  @return The elements of the hyperedge.
+             */
+            const std::vector<VertexNameType> & elements(void) const
             {
-                return htd::ConstCollection<VertexNameType>::getInstance(elements_);
+                return elements_;
             }
 
-            bool empty() const
+            /**
+             *  Check whether the hyperedge contains no elements.
+             *
+             *  @return True if the hyperedge contains no elements, false otherwise.
+             */
+            bool empty(void) const
             {
                 return elements_.empty();
             }
 
-            std::size_t size() const
+            /**
+             *  Getter for the number of elements of the hyperedge.
+             *
+             *  @return The number of elements of the hyperedge.
+             */
+            std::size_t size(void) const
             {
                 return elements_.size();
             }
 
+            /**
+             *  Check whether the hyperedge contains a specific vertex.
+             *
+             *  @param[in] vertex   The specific vertex to test for existence.
+             *
+             *  @return True if the hyperedge contains the specific vertex, false otherwise.
+             */
             bool containsVertex(const VertexNameType & vertex) const
             {
                 return std::find(elements_.begin(), elements_.end(), vertex) != elements_.end();
             }
 
-            void push_back(const VertexNameType & vertex)
-            {
-                elements_.push_back(vertex);
-            }
-
+            /**
+             *  Erase a specific vertex from the hyperedge in case the vertex is contained in the hyperedge.
+             *
+             *  @param[in] vertex   The specific vertex which shall be removed.
+             */
             void erase(const VertexNameType & vertex)
             {
                 elements_.erase(std::remove(elements_.begin(), elements_.end(), vertex), elements_.end());
             }
 
-            htd::Iterator<VertexNameType> begin(void)
+            /**
+             *  Getter for a const_iterator pointing to the first element in the hyperedge.
+             *
+             *  @return A const_iterator pointing to the first element in the hyperedge.
+             */
+            typename std::vector<VertexNameType>::const_iterator begin(void) const
             {
-                return htd::Iterator<VertexNameType>(elements_.begin());
+                return elements_.begin();
             }
 
-            const htd::ConstIterator<VertexNameType> begin(void) const
+            /**
+             *  Getter for a const_iterator pointing to the end of the elements in the hyperedge.
+             *
+             *  @return A const_iterator pointing to the end of the elements in the hyperedge.
+             */
+            typename std::vector<VertexNameType>::const_iterator end(void) const
             {
-                return htd::ConstIterator<VertexNameType>(elements_.begin());
+                return elements_.end();
             }
 
-            htd::Iterator<VertexNameType> end(void)
-            {
-                return htd::Iterator<VertexNameType>(elements_.end());
-            }
-
-            const htd::ConstIterator<VertexNameType> end(void) const
-            {
-                return htd::ConstIterator<VertexNameType>(elements_.end());
-            }
-
+            /**
+             *  Access the element at the specific position within the hyperedge.
+             *
+             *  @param[in] index    The position of the element.
+             *
+             *  @return The element at the specific position.
+             */
             const VertexNameType & operator[](htd::index_t index) const
             {
-                htd::ConstIterator<VertexNameType> position = begin();
-
-                std::advance(position, index);
-
-                return *position;
+                return elements_.at(index);
             }
 
+            /**
+             *  Copy assignment operator for a hyperedge.
+             *
+             *  @param[in] original  The original hyperedge.
+             */
             NamedVertexHyperedge & operator=(const NamedVertexHyperedge & original)
             {
                 id_ = original.id_;
@@ -187,21 +230,53 @@ namespace htd
                 return *this;
             }
 
+            /**
+             *  Less-than operator for a hyperedge.
+             *
+             *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
+             *
+             *  @return True if the vector returned by the elements() is lexicographically smaller than
+             *          rhs.elements() or if the elements are equal and id() is smaller than rhs.id(),
+             *          false otherwise.
+             */
             bool operator<(const NamedVertexHyperedge & rhs) const
             {
                 return std::tie(elements_, id_) < std::tie(rhs.elements_, rhs.id_);
             }
 
+            /**
+             *  Greater-than operator for a hyperedge.
+             *
+             *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
+             *
+             *  @return True if the vector returned by the elements() is lexicographically greater than
+             *          rhs.elements() or if the elements are equal and id() is greater than rhs.id(),
+             *          false otherwise.
+             */
             bool operator>(const NamedVertexHyperedge & rhs) const
             {
                 return std::tie(elements_, id_) > std::tie(rhs.elements_, rhs.id_);
             }
 
+            /**
+             *  Equality operator for a hyperedge.
+             *
+             *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
+             *
+             *  @return True if the vector returned by the elements() is equal to rhs.elements(), false otherwise.
+             */
             bool operator==(const NamedVertexHyperedge & rhs) const
             {
                 return rhs.id_ == id_ && rhs.elements_ == elements_;
             }
 
+            /**
+             *  Inequality operator for a hyperedge.
+             *
+             *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
+             *
+             *  @return True if the vector returned by the elements() is unequal to rhs.elements(), false otherwise.
+             */
             bool operator!=(const NamedVertexHyperedge & rhs) const
             {
                 return rhs.id_ != id_ || rhs.elements_ != elements_;

@@ -143,9 +143,7 @@ namespace htd
             void removeSubpath(htd::vertex_t subpathRoot) HTD_OVERRIDE;
 
             htd::vertex_t insertRoot(void) HTD_OVERRIDE;
-            
-            void removeRoot(void) HTD_OVERRIDE;
-            
+
             htd::vertex_t addChild(htd::vertex_t vertex) HTD_OVERRIDE;
 
             htd::vertex_t addParent(htd::vertex_t vertex) HTD_OVERRIDE;

@@ -43,16 +43,27 @@ namespace htd
     class NamedHypergraph
     {
         public:
+            /**
+             *  Constructor for a hypergraph.
+             */
             NamedHypergraph(void) : base_(htd::LabeledHypergraphFactory::instance().getLabeledHypergraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledHypergraph::addVertex, base_))
             {
 
             }
 
+            /**
+             *  Copy constructor for a hypergraph.
+             *
+             *  @param[in] original  The original hypergraph.
+             */
             NamedHypergraph(const NamedHypergraph<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), names_(original.names_), vertexCreationFunction_(std::bind(&htd::IMutableLabeledHypergraph::addVertex, base_))
             {
 
             }
 
+            /**
+             *  Destructor for a NamedHypergraph object.
+             */
             ~NamedHypergraph()
             {
                 if (base_ != nullptr)
@@ -95,14 +106,22 @@ namespace htd
                 return names_.isVertexName(vertexName);
             }
 
-            void setVertexName(htd::vertex_t vertex, const VertexNameType & vertexName)
+            /**
+             *  Set the name associated with the given vertex.
+             *
+             *  If the vertex is already named, the existing name will be replaced.
+             *
+             *  @param[in] vertex   The vertex to be named.
+             *  @param[in] name     The new name.
+             */
+            void setVertexName(htd::vertex_t vertex, const VertexNameType & name)
             {
                 if (!base_->isVertex(vertex))
                 {
                     throw std::logic_error("void htd::NamedHypergraph<VertexNameType, EdgeNameType>::setVertexName(htd::vertex_t, const VertexNameType &)");
                 }
 
-                names_.setVertexName(vertex, vertexName);
+                names_.setVertexName(vertex, name);
             }
 
             /**
@@ -117,16 +136,31 @@ namespace htd
                 return names_.isEdgeName(edgeName);
             }
 
-            void setEdgeName(htd::id_t edgeId, const EdgeNameType & edgeName)
+            /**
+             *  Set the name associated with the given edge.
+             *
+             *  If the edge is already named, the existing name will be replaced.
+             *
+             *  @param[in] edgeId   The ID of the edge to be named.
+             *  @param[in] name     The new name.
+             */
+            void setEdgeName(htd::id_t edgeId, const EdgeNameType & name)
             {
                 if (!base_->isEdge(edgeId))
                 {
                     throw std::logic_error("void htd::NamedHypergraph<VertexNameType, EdgeNameType>::setEdgeName(htd::id_t, const EdgeNameType &)");
                 }
 
-                names_.setEdgeName(edgeId, edgeName);
+                names_.setEdgeName(edgeId, name);
             }
 
+            /**
+             *  Access the name associated with the given vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The name associated with the given vertex.
+             */
             const VertexNameType & vertexName(htd::vertex_t vertex) const
             {
                 if (!names_.isNamedVertex(vertex))
@@ -137,6 +171,13 @@ namespace htd
                 return names_.vertexName(vertex);
             }
 
+            /**
+             *  Access the name associated with the given edge.
+             *
+             *  @param[in] edgeId   The ID of the edge.
+             *
+             *  @return The name associated with the given edge.
+             */
             const EdgeNameType & edgeName(htd::id_t edgeId) const
             {
                 if (!names_.isNamedEdge(edgeId))
@@ -147,6 +188,13 @@ namespace htd
                 return names_.edgeName(edgeId);
             }
 
+            /**
+             *  Access the vertex with the given name.
+             *
+             *  @param[in] vertexName   The name of the vertex which shall be returned.
+             *
+             *  @return The vertex with the given name.
+             */
             htd::vertex_t lookupVertex(const VertexNameType & vertexName) const
             {
                 if (!names_.isVertexName(vertexName))
@@ -157,6 +205,13 @@ namespace htd
                 return names_.lookupVertex(vertexName);
             }
 
+            /**
+             *  Access the hyperedge with the given name.
+             *
+             *  @param[in] edgeName The name of the hyperedge which shall be returned.
+             *
+             *  @return The hyperedge with the given name.
+             */
             htd::NamedVertexHyperedge<VertexNameType> lookupHyperedge(const EdgeNameType & edgeName) const
             {
                 if (!names_.isEdgeName(edgeName))
@@ -619,11 +674,28 @@ namespace htd
                 }
             }
 
+            /**
+             *  Add a new edge to the hypergraph if it does not already exist.
+             *
+             *  @param[in] vertexName1  The first endpoint of the edge.
+             *  @param[in] vertexName2  The second endpoint of the edge.
+             *
+             *  @return The ID of the new edge if the edge did not exist before. Otherwise, the ID of the existing edge is returned.
+             */
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
                 return base_->addEdge(addVertices(std::vector<VertexNameType> { vertexName1, vertexName2 }));
             }
 
+            /**
+             *  Add a new edge to the hypergraph if it does not already exist.
+             *
+             *  @param[in] vertexName1  The first endpoint of the edge.
+             *  @param[in] vertexName2  The second endpoint of the edge.
+             *  @param[in] name         The name assigned to the edge in the case it is added.
+             *
+             *  @return The ID of the new edge if the edge did not exist before. Otherwise, the ID of the existing edge is returned.
+             */
             htd::id_t addEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2, const EdgeNameType & name)
             {
                 htd::id_t edgeId = base_->addEdge(addVertices(std::vector<VertexNameType> { vertexName1, vertexName2 }));
@@ -633,16 +705,38 @@ namespace htd
                 return edgeId;
             }
 
+            /**
+             *  Add a new edge to the hypergraph if it does not already exist.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             *
+             *  @return The ID of the new edge if the edge did not exist before. Otherwise, the ID of the existing edge is returned.
+             */
             htd::id_t addEdge(const std::vector<VertexNameType> & elements)
             {
                 return base_->addEdge(addVertices(elements));
             }
 
+            /**
+             *  Add a new edge to the hypergraph if it does not already exist.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             *
+             *  @return The ID of the new edge if the edge did not exist before. Otherwise, the ID of the existing edge is returned.
+             */
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements)
             {
                 return base_->addEdge(addVertices(elements));
             }
 
+            /**
+             *  Add a new edge to the hypergraph if it does not already exist.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             *  @param[in] name     The name assigned to the edge in the case it is added.
+             *
+             *  @return The ID of the new edge if the edge did not exist before. Otherwise, the ID of the existing edge is returned.
+             */
             htd::id_t addEdge(const std::vector<VertexNameType> & elements, const EdgeNameType & name)
             {
                 htd::id_t edgeId = base_->addEdge(addVertices(elements));
@@ -652,6 +746,14 @@ namespace htd
                 return edgeId;
             }
 
+            /**
+             *  Add a new edge to the hypergraph if it does not already exist.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             *  @param[in] name     The name assigned to the edge in the case it is added.
+             *
+             *  @return The ID of the new edge if the edge did not exist before. Otherwise, the ID of the existing edge is returned.
+             */
             htd::id_t addEdge(const htd::ConstCollection<VertexNameType> & elements, const EdgeNameType & name)
             {
                 htd::id_t edgeId = base_->addEdge(addVertices(elements));
@@ -661,16 +763,11 @@ namespace htd
                 return edgeId;
             }
 
-            htd::id_t addEdge(const std::pair<VertexNameType, VertexNameType> & edge)
-            {
-                return addEdge(edge.first, edge.second);
-            }
-
-            htd::id_t addEdge(const std::pair<VertexNameType, VertexNameType> & edge, const EdgeNameType & name)
-            {
-                return addEdge(edge.first, edge.second, name);
-            }
-
+            /**
+             *  Remove an edge from the hypergraph.
+             *
+             *  @param[in] edgeId   The ID of the edge which shall be removed.
+             */
             void removeEdge(htd::id_t edgeId)
             {
                 base_->removeEdge(edgeId);
@@ -678,6 +775,11 @@ namespace htd
                 names_.removeEdgeName(edgeId);
             }
 
+            /**
+             *  Remove an edge from the hypergraph.
+             *
+             *  @param[in] edgeName The name of the edge which shall be removed.
+             */
             void removeEdge(const EdgeNameType & edgeName)
             {
                 if (isEdgeName(edgeName))
@@ -690,6 +792,12 @@ namespace htd
                 }
             }
 
+            /**
+             *  Remove an edge from the hypergraph.
+             *
+             *  @param[in] vertexName1  The first endpoint of the edge.
+             *  @param[in] vertexName2  The second endpoint of the edge.
+             */
             void removeEdge(const VertexNameType & vertexName1, const VertexNameType & vertexName2)
             {
                 if (!isVertexName(vertexName1) || !isVertexName(vertexName2))
@@ -700,11 +808,11 @@ namespace htd
                 base_->removeEdge(lookupVertex(vertexName1), lookupVertex(vertexName2));
             }
 
-            void removeEdge(const std::pair<VertexNameType, VertexNameType> & edge)
-            {
-                removeEdge(edge.first, edge.second);
-            }
-
+            /**
+             *  Remove an edge from the hypergraph.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             */
             void removeEdge(const std::vector<VertexNameType> & elements)
             {
                 std::vector<htd::vertex_t> hyperedge;
@@ -722,6 +830,11 @@ namespace htd
                 base_->removeEdge(htd::ConstCollection<htd::vertex_t>::getInstance(hyperedge));
             }
 
+            /**
+             *  Remove an edge from the hypergraph.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             */
             void removeEdge(const htd::ConstCollection<VertexNameType> & elements)
             {
                 std::vector<htd::vertex_t> hyperedge;
@@ -970,6 +1083,57 @@ namespace htd
             }
 
             /**
+             *  Transfer the control over a vertex label to a new owner.
+             *
+             *  @param[in] labelName    The name of the labeling which will be affected by the operation.
+             *  @param[in] vertexName   The name of the vertex whichs label shall be transferred.
+             *
+             *  @note After calling this function the labeling is no longer aware of the label, hence - in the context of the
+             *        labeling - the vertex is in the same state as it was never labeled. Furthermore, the new owner has to
+             *        take care that the memory allocated by the label gets freed.
+             *
+             *  @return A pointer to the vertex label.
+             */
+            htd::ILabel * transferVertexLabel(const std::string & labelName, htd::vertex_t vertexName)
+            {
+                return base_->transferVertexLabel(labelName, lookupVertex(vertexName));
+            }
+
+            /**
+             *  Transfer the control over an edge label to a new owner.
+             *
+             *  @param[in] labelName    The name of the labeling which will be affected by the operation.
+             *  @param[in] edgeId       The ID of the edge whichs label shall be transferred.
+             *
+             *  @note After calling this function the labeling is no longer aware of the label, hence - in the context of the
+             *        labeling - the edge is in the same state as it was never labeled. Furthermore, the new owner has to
+             *        take care that the memory allocated by the label gets freed.
+             *
+             *  @return A pointer to the edge label.
+             */
+            htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
+            {
+                return base_->transferEdgeLabel(labelName, edgeId);
+            }
+
+            /**
+             *  Transfer the control over an edge label to a new owner.
+             *
+             *  @param[in] labelName    The name of the labeling which will be affected by the operation.
+             *  @param[in] edgeName     The name of the edge whichs label shall be transferred.
+             *
+             *  @note After calling this function the labeling is no longer aware of the label, hence - in the context of the
+             *        labeling - the edge is in the same state as it was never labeled. Furthermore, the new owner has to
+             *        take care that the memory allocated by the label gets freed.
+             *
+             *  @return A pointer to the edge label.
+             */
+            htd::ILabel * transferEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName)
+            {
+                return base_->transferEdgeLabel(labelName, names_.lookupEdge(edgeName));
+            }
+
+            /**
              *  Create a deep copy the current hypergraph.
              *
              *  @return A new NamedHypergraph object identical to the current hypergraph.
@@ -979,6 +1143,11 @@ namespace htd
                 return new NamedHypergraph<VertexNameType, EdgeNameType>(*this);
             }
 
+            /**
+             *  Access the underlying ILabeledHypergraph object.
+             *
+             *  @return The underlying ILabeledHypergraph object.
+             */
             const htd::ILabeledHypergraph & internalGraph(void) const
             {
                 return *base_;

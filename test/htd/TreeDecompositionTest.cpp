@@ -416,11 +416,6 @@ TEST(TreeDecompositionTest, CheckTreeManipulations)
     ASSERT_EQ((std::size_t)3, decomposition.vertexCount(node111));
     ASSERT_EQ((std::size_t)1, decomposition.vertexCount(node121));
     ASSERT_EQ((std::size_t)1, decomposition.vertexCount(node122));
-
-    decomposition.removeRoot();
-
-    ASSERT_EQ((std::size_t)0, decomposition.vertexCount());
-    ASSERT_EQ((std::size_t)0, decomposition.edgeCount());
 }
 
 TEST(TreeDecompositionTest, CheckCopyConstructors)

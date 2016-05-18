@@ -44,15 +44,23 @@ namespace htd
              *  @param[in] vertex   The ID of the vertex which shall be removed.
              */
             virtual void removeVertex(htd::vertex_t vertex) = 0;
-            
+
+            /**
+             *  Remove a subtree from the tree.
+             *
+             *  @param[in] subtreeRoot  The root of the subtree.
+             */
             virtual void removeSubtree(htd::vertex_t subtreeRoot) = 0;
-            
+
+            /**
+             *  Insert the root of the tree if it does not already exist.
+             *
+             *  @return The ID of the root of the tree.
+             */
             virtual htd::vertex_t insertRoot(void) = 0;
 
             virtual void makeRoot(htd::vertex_t vertex) = 0;
 
-            virtual void removeRoot(void) = 0;
-            
             virtual htd::vertex_t addChild(htd::vertex_t vertex) = 0;
             
             virtual void removeChild(htd::vertex_t vertex, htd::vertex_t child) = 0;

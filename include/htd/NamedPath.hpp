@@ -43,16 +43,27 @@ namespace htd
     class NamedPath
     {
         public:
+            /**
+             *  Constructor for a path.
+             */
             NamedPath(void) : base_(htd::LabeledPathFactory::instance().getLabeledPath()), names_()
             {
 
             }
 
+            /**
+             *  Copy constructor for a path.
+             *
+             *  @param[in] original  The original path.
+             */
             NamedPath(const NamedPath<VertexNameType, EdgeNameType> & original) : base_(original.base_->clone()), names_(original.names_)
             {
 
             }
 
+            /**
+             *  Destructor for a NamedPath object.
+             */
             ~NamedPath()
             {
                 if (base_ != nullptr)
@@ -95,14 +106,22 @@ namespace htd
                 return names_.isVertexName(vertexName);
             }
 
-            void setVertexName(htd::vertex_t vertex, const VertexNameType & vertexName)
+            /**
+             *  Set the name associated with the given vertex.
+             *
+             *  If the vertex is already named, the existing name will be replaced.
+             *
+             *  @param[in] vertex   The vertex to be named.
+             *  @param[in] name     The new name.
+             */
+            void setVertexName(htd::vertex_t vertex, const VertexNameType & name)
             {
                 if (!base_->isVertex(vertex))
                 {
                     throw std::logic_error("void htd::NamedPath<VertexNameType, EdgeNameType>::setVertexName(htd::vertex_t, const VertexNameType &)");
                 }
 
-                names_.setVertexName(vertex, vertexName);
+                names_.setVertexName(vertex, name);
             }
 
             /**
@@ -117,16 +136,31 @@ namespace htd
                 return names_.isEdgeName(edgeName);
             }
 
-            void setEdgeName(htd::id_t edgeId, const EdgeNameType & edgeName)
+            /**
+             *  Set the name associated with the given edge.
+             *
+             *  If the edge is already named, the existing name will be replaced.
+             *
+             *  @param[in] edgeId   The ID of the edge to be named.
+             *  @param[in] name     The new name.
+             */
+            void setEdgeName(htd::id_t edgeId, const EdgeNameType & name)
             {
                 if (!base_->isEdge(edgeId))
                 {
                     throw std::logic_error("void htd::NamedPath<VertexNameType, EdgeNameType>::setEdgeName(htd::id_t, const EdgeNameType &)");
                 }
 
-                names_.setEdgeName(edgeId, edgeName);
+                names_.setEdgeName(edgeId, name);
             }
 
+            /**
+             *  Access the name associated with the given vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The name associated with the given vertex.
+             */
             const VertexNameType & vertexName(htd::vertex_t vertex) const
             {
                 if (!names_.isNamedVertex(vertex))
@@ -137,6 +171,13 @@ namespace htd
                 return names_.vertexName(vertex);
             }
 
+            /**
+             *  Access the name associated with the given edge.
+             *
+             *  @param[in] edgeId   The ID of the edge.
+             *
+             *  @return The name associated with the given edge.
+             */
             const EdgeNameType & edgeName(htd::id_t edgeId) const
             {
                 if (!names_.isNamedEdge(edgeId))
@@ -147,6 +188,13 @@ namespace htd
                 return names_.edgeName(edgeId);
             }
 
+            /**
+             *  Access the vertex with the given name.
+             *
+             *  @param[in] vertexName   The name of the vertex which shall be returned.
+             *
+             *  @return The vertex with the given name.
+             */
             htd::vertex_t lookupVertex(const VertexNameType & vertexName) const
             {
                 if (!names_.isVertexName(vertexName))
@@ -157,6 +205,13 @@ namespace htd
                 return names_.lookupVertex(vertexName);
             }
 
+            /**
+             *  Access the hyperedge with the given name.
+             *
+             *  @param[in] edgeName The name of the hyperedge which shall be returned.
+             *
+             *  @return The hyperedge with the given name.
+             */
             htd::NamedVertexHyperedge<VertexNameType> lookupHyperedge(const EdgeNameType & edgeName) const
             {
                 if (!names_.isEdgeName(edgeName))
@@ -528,9 +583,9 @@ namespace htd
             /**
              *  Remove a vertex from the path.
              *
-             *  @note This operation retains the path structure by connecting the neighbors of the removed vertex in a valid way.
-             *
              *  @param[in] vertexName   The name of the vertex which shall be removed.
+             *
+             *  @note This operation retains the path structure by connecting the neighbors of the removed vertex in a valid way.
              */
             void removeVertex(const VertexNameType & vertexName)
             {
@@ -544,11 +599,16 @@ namespace htd
                 }
             }
 
-            void removeSubpath(const VertexNameType & vertexName)
+            /**
+             *  Remove a subpath from the path.
+             *
+             *  @param[in] subpathRoot  The root of the subpath.
+             */
+            void removeSubpath(const VertexNameType & subpathRoot)
             {
-                if (isVertexName(vertexName))
+                if (isVertexName(subpathRoot))
                 {
-                    htd::vertex_t locatedVertex = lookupVertex(vertexName);
+                    htd::vertex_t locatedVertex = lookupVertex(subpathRoot);
 
                     htd::PostOrderTreeTraversal treeTraversal;
 
@@ -564,6 +624,13 @@ namespace htd
                 }
             }
 
+            /**
+             *  Insert the root of the path if it does not already exist.
+             *
+             *  @param[in] vertexName   The name of the vertex which shall be added.
+             *
+             *  @return The ID of the root of the path.
+             */
             htd::vertex_t insertRoot(const VertexNameType & vertexName)
             {
                 if (base_->vertexCount() > 0)
@@ -578,16 +645,6 @@ namespace htd
                 names_.setVertexName(ret, vertexName);
 
                 return ret;
-            }
-
-            void removeRoot(void)
-            {
-                if (base_->vertexCount() > 0)
-                {
-                    names_.clear();
-
-                    base_->removeRoot();
-                }
             }
 
             htd::vertex_t addChild(const VertexNameType & vertexName, const VertexNameType & childName)
@@ -882,6 +939,57 @@ namespace htd
             }
 
             /**
+             *  Transfer the control over a vertex label to a new owner.
+             *
+             *  @param[in] labelName    The name of the labeling which will be affected by the operation.
+             *  @param[in] vertexName   The name of the vertex whichs label shall be transferred.
+             *
+             *  @note After calling this function the labeling is no longer aware of the label, hence - in the context of the
+             *        labeling - the vertex is in the same state as it was never labeled. Furthermore, the new owner has to
+             *        take care that the memory allocated by the label gets freed.
+             *
+             *  @return A pointer to the vertex label.
+             */
+            htd::ILabel * transferVertexLabel(const std::string & labelName, htd::vertex_t vertexName)
+            {
+                return base_->transferVertexLabel(labelName, lookupVertex(vertexName));
+            }
+
+            /**
+             *  Transfer the control over an edge label to a new owner.
+             *
+             *  @param[in] labelName    The name of the labeling which will be affected by the operation.
+             *  @param[in] edgeId       The ID of the edge whichs label shall be transferred.
+             *
+             *  @note After calling this function the labeling is no longer aware of the label, hence - in the context of the
+             *        labeling - the edge is in the same state as it was never labeled. Furthermore, the new owner has to
+             *        take care that the memory allocated by the label gets freed.
+             *
+             *  @return A pointer to the edge label.
+             */
+            htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
+            {
+                return base_->transferEdgeLabel(labelName, edgeId);
+            }
+
+            /**
+             *  Transfer the control over an edge label to a new owner.
+             *
+             *  @param[in] labelName    The name of the labeling which will be affected by the operation.
+             *  @param[in] edgeName     The name of the edge whichs label shall be transferred.
+             *
+             *  @note After calling this function the labeling is no longer aware of the label, hence - in the context of the
+             *        labeling - the edge is in the same state as it was never labeled. Furthermore, the new owner has to
+             *        take care that the memory allocated by the label gets freed.
+             *
+             *  @return A pointer to the edge label.
+             */
+            htd::ILabel * transferEdgeLabel(const std::string & labelName, const EdgeNameType & edgeName)
+            {
+                return base_->transferEdgeLabel(labelName, names_.lookupEdge(edgeName));
+            }
+
+            /**
              *  Create a deep copy the current path.
              *
              *  @return A new NamedPath object identical to the current path.
@@ -891,7 +999,12 @@ namespace htd
                 return new NamedPath<VertexNameType, EdgeNameType>(*this);
             }
 
-            const htd::ILabeledTree & internalGraph(void) const
+            /**
+             *  Access the underlying ILabeledPath object.
+             *
+             *  @return The underlying ILabeledPath object.
+             */
+            const htd::ILabeledPath & internalGraph(void) const
             {
                 return *base_;
             }

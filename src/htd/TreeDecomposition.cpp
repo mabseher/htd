@@ -127,15 +127,6 @@ htd::vertex_t htd::TreeDecomposition::insertRoot(void)
     return ret;
 }
 
-void htd::TreeDecomposition::removeRoot(void)
-{
-    htd::Tree::removeRoot();
-
-    bagContent_.clear();
-
-    inducedEdges_.clear();
-}
-
 htd::vertex_t htd::TreeDecomposition::addChild(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::Tree::addChild(vertex);

@@ -748,7 +748,7 @@ void htd::Path::removeVertex(htd::vertex_t vertex)
             }
             else
             {
-                removeRoot();
+                removeSubpath(root_);
             }
         }
     }
@@ -794,25 +794,6 @@ htd::vertex_t htd::Path::insertRoot(void)
     }
 
     return root_;
-}
-
-void htd::Path::removeRoot(void)
-{
-    if (root_ != htd::Vertex::UNKNOWN)
-    {
-        root_ = htd::Vertex::UNKNOWN;
-
-        for (auto it = nodes_.begin(); it != nodes_.end(); it++)
-        {
-            delete it->second;
-        }
-    }
-
-    size_ = 0;
-
-    nodes_.clear();
-
-    vertices_.clear();
 }
 
 htd::vertex_t htd::Path::addChild(htd::vertex_t vertex)
@@ -1065,7 +1046,7 @@ htd::Path & htd::Path::operator=(const htd::Path & original)
     {
         if (this->root_ != htd::Vertex::UNKNOWN)
         {
-            removeRoot();
+            removeSubpath(root_);
         }
 
         nodes_.reserve(original.nodes_.size());
@@ -1098,7 +1079,7 @@ htd::Path & htd::Path::operator=(const htd::IPath & original)
     {
         if (this->root_ != htd::Vertex::UNKNOWN)
         {
-            removeRoot();
+            removeSubpath(root_);
         }
 
         size_ = original.vertexCount();

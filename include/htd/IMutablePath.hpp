@@ -38,9 +38,12 @@ namespace htd
              */
             virtual ~IMutablePath() = 0;
 
+            /**
+             *  Insert the root of the path if it does not already exist.
+             *
+             *  @return The ID of the root of the path.
+             */
             virtual htd::vertex_t insertRoot(void) = 0;
-
-            virtual void removeRoot(void) = 0;
 
             /**
              *  Remove a vertex from the path.
@@ -49,6 +52,11 @@ namespace htd
              */
             virtual void removeVertex(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Remove a subpath from the path.
+             *
+             *  @param[in] subpathRoot  The root of the subpath.
+             */
             virtual void removeSubpath(htd::vertex_t subpathRoot) = 0;
 
             virtual void removeChild(htd::vertex_t vertex) = 0;

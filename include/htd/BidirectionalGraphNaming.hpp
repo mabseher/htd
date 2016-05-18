@@ -49,36 +49,82 @@ namespace htd
 
             }
 
+            /**
+             *  Getter for the number of different vertex names stored in the graph naming.
+             *
+             *  @return The number of different vertex names stored in the graph naming.
+             */
             std::size_t vertexNameCount(void) const
             {
                 return vertexNames_.size();
             }
 
+            /**
+             *  Getter for the number of different edge names stored in the graph naming.
+             *
+             *  @return The number of different edge names stored in the graph naming.
+             */
             std::size_t edgeNameCount(void) const
             {
                 return edgeNames_.size();
             }
 
+            /**
+             *  Check whether a given vertex has a name.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return True if the given vertex has a name, false otherwise.
+             */
             bool isNamedVertex(htd::vertex_t vertex) const
             {
                 return vertexNames_.find(vertex) != vertexNames_.end();
             }
 
+            /**
+             *  Check whether a given edge has a name.
+             *
+             *  @param[in] edgeId   The ID of the edge.
+             *
+             *  @return True if the given edge has a name, false otherwise.
+             */
             bool isNamedEdge(htd::id_t edgeId) const
             {
                 return edgeNames_.find(edgeId) != edgeNames_.end();
             }
 
+            /**
+             *  Access the name associated with the given vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The name associated with the given vertex.
+             */
             const VertexNameType & vertexName(htd::vertex_t vertex) const
             {
                 return vertexNames_.at(vertex);
             }
 
+            /**
+             *  Access the name associated with the given edge.
+             *
+             *  @param[in] edgeId   The ID of the edge.
+             *
+             *  @return The name associated with the given edge.
+             */
             const EdgeNameType & edgeName(htd::id_t edgeId) const
             {
                 return edgeNames_.at(edgeId);
             }
 
+            /**
+             *  Set the name associated with the given vertex.
+             *
+             *  If the vertex is already named, the existing name will be replaced.
+             *
+             *  @param[in] vertex   The vertex to be named.
+             *  @param[in] name     The new name.
+             */
             void setVertexName(htd::vertex_t vertex, const VertexNameType & name)
             {
                 if (vertexNamesReverseMap_.find(name) == vertexNamesReverseMap_.end())
@@ -107,6 +153,14 @@ namespace htd
                 }
             }
 
+            /**
+             *  Set the name associated with the given edge.
+             *
+             *  If the edge is already named, the existing name will be replaced.
+             *
+             *  @param[in] edgeId   The ID of the edge to be named.
+             *  @param[in] name     The new name.
+             */
             void setEdgeName(htd::id_t edgeId, const EdgeNameType & name)
             {
                 if (edgeNamesReverseMap_.find(name) == edgeNamesReverseMap_.end())
@@ -219,6 +273,11 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Remove the name associated with the given vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             */
             void removeVertexName(htd::vertex_t vertex)
             {
                 auto position = vertexNames_.find(vertex);
@@ -240,6 +299,11 @@ namespace htd
                 }
             }
 
+            /**
+             *  Remove the name associated with the given edge.
+             *
+             *  @param[in] edgeId   The ID of the edge.
+             */
             void removeEdgeName(htd::id_t edgeId)
             {
                 auto position = edgeNames_.find(edgeId);
@@ -281,6 +345,11 @@ namespace htd
                 return edgeNamesReverseMap_.at(name);
             }
 
+            /**
+             *  Create a deep copy the current graph naming.
+             *
+             *  @return A new BidirectionalGraphNaming object identical to the current graph naming.
+             */
             htd::BidirectionalGraphNaming<VertexNameType, EdgeNameType, VertexNameHashFunction, EdgeNameHashFunction, VertexNameEqualityFunction, EdgeNameEqualityFunction> * clone(void) const
             {
                 auto * ret = new BidirectionalGraphNaming<VertexNameType, EdgeNameType, VertexNameHashFunction, EdgeNameHashFunction, VertexNameEqualityFunction, EdgeNameEqualityFunction>();

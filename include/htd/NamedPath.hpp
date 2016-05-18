@@ -63,16 +63,33 @@ namespace htd
                 }
             }
 
+            /**
+             *  Getter for the number of vertices in the path.
+             *
+             *  @return The number of vertices in the path.
+             */
             std::size_t vertexCount(void) const
             {
                 return base_->vertexCount();
             }
 
+            /**
+             *  Getter for the number of edges in the path.
+             *
+             *  @return The number of edges in the path.
+             */
             std::size_t edgeCount(void) const
             {
                 return base_->edgeCount();
             }
 
+            /**
+             *  Check whether a given vertex name is indeed the name of a vertex of the path.
+             *
+             *  @param[in] vertexName   The vertex name to test.
+             *
+             *  @return True if the given vertex name is indeed the name of a vertex of the path, false otherwise.
+             */
             bool isVertexName(const VertexNameType & vertexName) const
             {
                 return names_.isVertexName(vertexName);
@@ -88,6 +105,13 @@ namespace htd
                 names_.setVertexName(vertex, vertexName);
             }
 
+            /**
+             *  Check whether a given edge name is indeed the name of an edge of the path.
+             *
+             *  @param[in] edgeName The edge name to test.
+             *
+             *  @return True if the given edge name is indeed the name of an edge of the path, false otherwise.
+             */
             bool isEdgeName(const EdgeNameType & edgeName) const
             {
                 return names_.isEdgeName(edgeName);
@@ -152,16 +176,37 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Getter for the number of edges in the path containing a specific vertex.
+             *
+             *  @param[in] vertexName   The name of the vertex which shall be contained in the edges.
+             *
+             *  @return The number of edges in the path containing the specific vertex.
+             */
             std::size_t edgeCount(const VertexNameType & vertexName) const
             {
                 return base_->edgeCount(lookupVertex(vertexName));
             }
 
+            /**
+             *  Check whether a given edge is part of the path.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             *
+             *  @return True if the edge is part of the path, false otherwise.
+             */
             bool isEdge(const std::vector<VertexNameType> & elements)
             {
                 return isEdge(htd::ConstCollection<VertexNameType>::getInstance(elements));
             }
 
+            /**
+             *  Check whether a given edge is part of the path.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             *
+             *  @return True if the edge is part of the path, false otherwise.
+             */
             bool isEdge(const htd::ConstCollection<VertexNameType> & elements)
             {
                 bool ok = true;
@@ -182,6 +227,13 @@ namespace htd
                 return ok;
             }
 
+            /**
+             *  Get the associated edge ID.
+             *
+             *  @param[in] edgeName The name of the edge.
+             *
+             *  @return The ID of the edge with the given name.
+             */
             htd::id_t associatedEdgeId(const EdgeNameType & edgeName) const
             {
                 if (!names_.isEdgeName(edgeName))
@@ -192,6 +244,14 @@ namespace htd
                 return names_.lookupEdge(edgeName);
             }
 
+            /**
+             *  Get all associated edge IDs.
+             *
+             *  @param[in] vertexName1  The first endpoint of the edge.
+             *  @param[in] vertexName2  The second endpoint of the edge.
+             *
+             *  @return The collection of all edges containing exactly the provided endpoints in the given order.
+             */
             htd::ConstCollection<htd::id_t> associatedEdgeIds(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
             {
                 if (isVertexName(vertexName1) && isVertexName(vertexName2))
@@ -202,11 +262,11 @@ namespace htd
                 return htd::ConstCollection<htd::id_t>::getInstance(htd::VectorAdapter<htd::id_t>());
             }
 
-            htd::ConstCollection<htd::id_t> associatedEdgeIds(std::pair<VertexNameType, VertexNameType> vertexNames) const
-            {
-                return associatedEdgeIds(vertexNames.first, vertexNames.second);
-            }
-
+            /**
+             *  Access the collection of all vertices in the path.
+             *
+             *  @return The collection of all vertices in the path sorted in ascending order.
+             */
             htd::ConstCollection<VertexNameType> vertices(void) const
             {
                 htd::VectorAdapter<VertexNameType> ret;
@@ -221,21 +281,75 @@ namespace htd
                 return htd::ConstCollection<VertexNameType>::getInstance(ret);
             }
 
+            /**
+             *  Access the vertex at the specific position.
+             *
+             *  @param[in] index     The position of the vertex.
+             *
+             *  @return The vertex at the specific position.
+             */
+            const VertexNameType & vertexAtPosition(htd::index_t index) const
+            {
+                return vertexName(base_->vertexAtPosition(index));
+            }
+
+            /**
+             *  Check whether the path is connected.
+             *
+             *  @note This function always returns true as a path is connected by definition.
+             *
+             *  @return True if the path is connected, false otherwise.
+             */
+            bool isConnected(void) const
+            {
+                return base_->isConnected();
+            }
+
+            /**
+             *  Check whether two vertices are contained in the same connected component.
+             *
+             *  @param[in] vertexName1  The first vertex.
+             *  @param[in] vertexName2  The second vertex.
+             *
+             *  @return True if the two vertices are contained in the same connected component, false otherwise.
+             */
             bool isConnected(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
             {
                 return base_->isConnected(lookupVertex(vertexName1), lookupVertex(vertexName2));
             }
 
+            /**
+             *  Check whether two vertices are neighbors.
+             *
+             *  @param[in] vertexName1  The first vertex.
+             *  @param[in] vertexName2  The second vertex.
+             *
+             *  @return True if the two vertices are neighbors, false otherwise.
+             */
             bool isNeighbor(const VertexNameType & vertexName1, const VertexNameType & vertexName2) const
             {
                 return base_->isNeighbor(lookupVertex(vertexName1), lookupVertex(vertexName2));
             }
-            
+
+            /**
+             *  Getter for the number of neighbors of a given vertex in the path.
+             *
+             *  @param[in] vertexName   The name of the vertex for which the number of neighbors shall be computed.
+             *
+             *  @return The number of neighbors of the given vertex in the path.
+             */
             std::size_t neighborCount(const VertexNameType & vertexName) const
             {
                 return base_->neighborCount(lookupVertex(vertexName));
             }
 
+            /**
+             *  Access the collection of all neighbors of a given vertex in the path.
+             *
+             *  @param[in] vertexName   The name of the vertex for which the collection of neighbors shall be returned.
+             *
+             *  @return The collection of all neighbors of the given vertex in the path in ascending order.
+             */
             htd::ConstCollection<VertexNameType> neighbors(const VertexNameType & vertexName) const
             {
                 htd::VectorAdapter<VertexNameType> ret;
@@ -250,16 +364,34 @@ namespace htd
                 return htd::ConstCollection<VertexNameType>::getInstance(ret);
             }
 
+            /**
+             *  Access the neighbor at the specific position.
+             *
+             *  @param[in] vertexName   The name of the vertex for which the neighbor shall be returned.
+             *  @param[in] index        The position of the neighbor.
+             *
+             *  @return The neighbor of the given vertex at the specific position.
+             */
             const VertexNameType & neighborAtPosition(const VertexNameType & vertexName, htd::index_t index) const
             {
                 return vertexName(base_->neighborAtPosition(lookupVertex(vertexName), index));
             }
 
+            /**
+             *  Getter for the number of isolated vertices in the path.
+             *
+             *  @return The number of isolated vertices in the path.
+             */
             std::size_t isolatedVertexCount(void) const
             {
                 return base_->isolatedVertexCount();
             }
 
+            /**
+             *  Access the collection of all isolated vertices in the path.
+             *
+             *  @return The collection of all isolated vertices in the path sorted in ascending order.
+             */
             htd::ConstCollection<VertexNameType> isolatedVertices(void) const
             {
                 htd::VectorAdapter<VertexNameType> ret;
@@ -274,16 +406,35 @@ namespace htd
                 return htd::ConstCollection<VertexNameType>::getInstance(ret);
             }
 
+            /**
+             *  Access the isolated vertex at the specific position.
+             *
+             *  @param[in] index    The position of the isolated vertex.
+             *
+             *  @return The isolated vertex at the specific position.
+             */
             const VertexNameType & isolatedVertexAtPosition(htd::index_t index) const
             {
                 return vertexName(base_->isolatedVertexAtPosition(index));
             }
 
+            /**
+             *  Check whether a given vertex is isolated.
+             *
+             *  @param[in] vertexName   The name of the vertex to test for isolation.
+             *
+             *  @return True if the vertex has no neighbors in the path, false otherwise.
+             */
             bool isIsolatedVertex(const VertexNameType & vertexName) const
             {
                 return base_->isIsolatedVertex(lookupVertex(vertexName));
             }
 
+            /**
+             *  Access the collection of all hyperedges in the path.
+             *
+             *  @return The collection of all hyperedges in the path sorted by ID in ascending order.
+             */
             htd::ConstCollection<NamedVertexHyperedge<VertexNameType>> hyperedges(void) const
             {
                 htd::VectorAdapter<NamedVertexHyperedge<VertexNameType>> ret;
@@ -305,6 +456,13 @@ namespace htd
                 return htd::ConstCollection<NamedVertexHyperedge<VertexNameType>>::getInstance(ret);
             }
 
+            /**
+             *  Access the collection of all hyperedges containing a specific vertex.
+             *
+             *  @param[in] vertexName   The name of the vertex which shall be contained in the edges.
+             *
+             *  @return The collection of all hyperedges containing the specific vertex sorted by ID in ascending order.
+             */
             htd::ConstCollection<NamedVertexHyperedge<VertexNameType>> hyperedges(const VertexNameType & vertexName) const
             {
                 htd::VectorAdapter<NamedVertexHyperedge<VertexNameType>> ret;
@@ -326,6 +484,13 @@ namespace htd
                 return htd::ConstCollection<NamedVertexHyperedge<VertexNameType>>::getInstance(ret);
             }
 
+            /**
+             *  Access the hyperedge with a specific ID.
+             *
+             *  @param[in] edgeId   The ID of the hyperedge.
+             *
+             *  @return The hyperedge with the specific ID.
+             */
             NamedVertexHyperedge<VertexNameType> hyperedge(htd::id_t edgeId) const
             {
                 NamedVertexHyperedge<VertexNameType> ret(edgeId);
@@ -338,6 +503,14 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Access the hyperedge at the specific position. Edges not containing the given vertex are ignored.
+             *
+             *  @param[in] index        The position of the hyperedge.
+             *  @param[in] vertexName   The name of the vertex which shall be contained in the edge.
+             *
+             *  @return The hyperedge at the specific position. Edges not containing the given vertex are ignored.
+             */
             NamedVertexHyperedge<VertexNameType> hyperedgeAtPosition(htd::index_t index, const VertexNameType & vertexName) const
             {
                 const htd::Hyperedge & hyperedge = base_->hyperedgeAtPosition(index, lookupVertex(vertexName));
@@ -352,6 +525,13 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Remove a vertex from the path.
+             *
+             *  @note This operation retains the path structure by connecting the neighbors of the removed vertex in a valid way.
+             *
+             *  @param[in] vertexName   The name of the vertex which shall be removed.
+             */
             void removeVertex(const VertexNameType & vertexName)
             {
                 if (isVertexName(vertexName))

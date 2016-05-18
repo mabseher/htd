@@ -35,29 +35,70 @@
 #include <vector>
 
 namespace htd
-{
+    {
+    /**
+     *  Class for the efficient storage of hyperedges of named graph types.
+     */
     template<typename VertexNameType>
     class NamedVertexHyperedge
     {
-        public:
+            public:
+            /**
+             *  The data type of the elements of a hyperedge of a named graph.
+             */
             typedef VertexNameType value_type;
 
+            /**
+             *  Constructor for a hyperedge without endpoints.
+             *
+             *  @param[in] id   The ID of the constructed hyperedge.
+             */
             NamedVertexHyperedge(htd::id_t id) : id_(id), elements_()
             {
 
             }
 
+            /**
+             *  Constructor for a hyperedge.
+             *
+             *  @param[in] id       The ID of the constructed hyperedge.
+             *  @param[in] vertex1  The first endpoint of the constructed hyperedge.
+             *  @param[in] vertex2  The second endpoint of the constructed hyperedge.
+             */
             NamedVertexHyperedge(htd::id_t id, const VertexNameType & vertex1, const VertexNameType & vertex2) : id_(id), elements_()
             {
                 elements_.push_back(vertex1);
                 elements_.push_back(vertex2);
             }
 
+            /**
+             *  Constructor for a hyperedge.
+             *
+             *  @param[in] id       The ID of the constructed hyperedge.
+             *  @param[in] elements The endpoints of the constructed hyperedge.
+             */
             NamedVertexHyperedge(htd::id_t id, const std::vector<VertexNameType> & elements) : id_(id), elements_(elements.begin(), elements.end())
             {
 
             }
 
+            /**
+             *  Constructor for a hyperedge.
+             *
+             *  @param[in] id       The ID of the constructed hyperedge.
+             *  @param[in] elements The endpoints of the constructed hyperedge.
+             */
+            NamedVertexHyperedge(htd::id_t id, std::vector<VertexNameType> && elements) : id_(id), elements_(std::move(elements))
+            {
+
+            }
+
+            /**
+             *  Constructor for a hyperedge.
+             *
+             *  @param[in] id       The ID of the constructed hyperedge.
+             *  @param[in] elements The endpoints of the constructed hyperedge.
+             */
             NamedVertexHyperedge(htd::id_t id, const htd::ConstCollection<VertexNameType> & elements) : id_(id), elements_(elements.begin(), elements.end())
             {
 

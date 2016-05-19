@@ -77,11 +77,19 @@ namespace htd
              */
             typedef std::forward_iterator_tag iterator_category;
 
+            /**
+             *  Constructor for an iterator pointing nowhere.
+             */
             Iterator(void) : baseIterator_(nullptr)
             {
 
             }
 
+            /**
+             *  Constructor for an iterator.
+             *
+             *  @param[in] iterator The underlying iterator.
+             */
             template <class Iter>
             Iterator(Iter iterator) : baseIterator_(new IteratorWrapper<Iter, T>(iterator))
             {
@@ -116,6 +124,9 @@ namespace htd
                 }
             }
 
+            /**
+             *  Destructor for an Iterator object.
+             */
             virtual ~Iterator()
             {
                 if (baseIterator_ != nullptr)
@@ -136,6 +147,11 @@ namespace htd
                 return *this;
             }
 
+            /**
+             *  Increment the iterator.
+             *
+             *  @return A copy of the iterator reflecting the state before the increment operation took place.
+             */
             Iterator<T> operator++(int)
             {
                 Iterator<T> ret(*baseIterator_);
@@ -145,6 +161,11 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Copy assignment operator for an iterator.
+             *
+             *  @param[in] original  The original iterator.
+             */
             Iterator<T> & operator=(const Iterator<T> & original)
             {
                 if (baseIterator_!= nullptr)
@@ -160,6 +181,11 @@ namespace htd
                 return *this;
             }
 
+            /**
+             *  Move assignment operator for an iterator.
+             *
+             *  @param[in] original  The original iterator.
+             */
             Iterator<T> & operator=(Iterator<T> && original)
             {
                 if (baseIterator_!= nullptr)
@@ -264,6 +290,11 @@ namespace htd
                 return baseIterator_->operator->();
             }
 
+            /**
+             *  Dereference the iterator.
+             *
+             *  @return A pointer to the element at the current iterator position.
+             */
             const T * operator->(void) const
             {
                 return baseIterator_->operator->();
@@ -274,6 +305,11 @@ namespace htd
                 return baseIterator_->operator*();
             }
 
+            /**
+             *  Dereference the iterator.
+             *
+             *  @return A reference to the element at the current iterator position.
+             */
             const T & operator*(void) const
             {
                 return baseIterator_->operator*();

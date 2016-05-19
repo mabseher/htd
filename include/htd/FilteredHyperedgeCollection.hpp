@@ -41,15 +41,45 @@ namespace htd
         public:
             typedef htd::Hyperedge value_type;
 
+            /**
+             *  Custom read-only iterator for hyperedge collections.
+             */
             class FilteredHyperedgeCollectionConstIterator
             {
                 public:
+                    /**
+                     *  The difference type between two iterators.
+                     */
                     typedef std::ptrdiff_t difference_type;
+
+                    /**
+                     *  The value type of the iterator.
+                     */
                     typedef htd::Hyperedge value_type;
+
+                    /**
+                     *  The reference type of the iterator.
+                     */
                     typedef const htd::Hyperedge & reference;
+
+                    /**
+                     *  The pointer type of the iterator.
+                     */
                     typedef const htd::Hyperedge * pointer;
+
+                    /**
+                     *  The const_reference type of the iterator.
+                     */
                     typedef const htd::Hyperedge & const_reference;
+
+                    /**
+                     *  The const_pointer type of the iterator.
+                     */
                     typedef const htd::Hyperedge * const_pointer;
+
+                    /**
+                     *  The category of the iterator.
+                     */
                     typedef std::random_access_iterator_tag iterator_category;
 
                     FilteredHyperedgeCollectionConstIterator(const FilteredHyperedgeCollection & collection, htd::index_t position);

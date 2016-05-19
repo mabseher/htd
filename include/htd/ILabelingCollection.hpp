@@ -38,24 +38,91 @@ namespace htd
         public:
             virtual ~ILabelingCollection() = 0;
 
+            /**
+             *  Getter for the number of different label names.
+             *
+             *  @return The number of different label names.
+             */
             virtual std::size_t labelCount(void) const = 0;
 
+            /**
+             *  Access the collection of all label names.
+             *
+             *  @return The collection of all label names sorted in ascending order.
+             */
             virtual htd::ConstCollection<std::string> labelNames(void) const = 0;
 
+            /**
+             *  Access the label name at the specific position.
+             *
+             *  @param[in] index    The position of the label name.
+             *
+             *  @return The label name at the specific position.
+             */
             virtual const std::string & labelNameAtPosition(htd::index_t index) const = 0;
 
-            virtual bool isLabelingName(const std::string & labelName) const = 0;
+            /**
+             *  Check whether a given string is the name of a labeling.
+             *
+             *  @param[in] labelName    The name of the labeling.
+             *
+             *  @return True if the given string is the name of a labeling, false otherwise.
+             */
+            virtual bool isLabelName(const std::string & labelName) const = 0;
 
+            /**
+             *  Access the labeling with the given name.
+             *
+             *  @param[in] labelName    The name of the labeling.
+             *
+             *  @return The labeling with the given name.
+             */
             virtual htd::IGraphLabeling & labeling(const std::string & labelName) = 0;
 
+            /**
+             *  Access the labeling with the given name.
+             *
+             *  @param[in] labelName    The name of the labeling.
+             *
+             *  @return The labeling with the given name.
+             */
             virtual const htd::IGraphLabeling & labeling(const std::string & labelName) const = 0;
 
+            /**
+             *  Set the labeling with the given name.
+             *
+             *  If a graph labeling with the same name already exists in the labeling collection,
+             *  the existing labeling will be replaced and the memory of the previous labeling
+             *  is freed.
+             *
+             *  @note When calling this method the control over the memory region of the new labeling is transferred to the
+             *  labeling collection. Deleting the labeling outside the labeling collection or inserting the same labeling
+             *  object to multiple names will lead to undefined behavior.
+             *
+             *  @param[in] labelName    The name of the new labeling.
+             *  @param[in] labeling     The new labeling.
+             */
             virtual void setLabeling(const std::string & labelName, htd::IGraphLabeling * labeling) = 0;
 
+            /**
+             *  Remove the labeling with the given name.
+             *
+             *  @param[in] labelName    The name of the labeling which shall be removed.
+             */
             virtual void removeLabeling(const std::string & labelName) = 0;
 
+            /**
+             *  Remove all labels associated with a given vertex.
+             *
+             *  @param[in] vertex   The vertex which's labels shall be removed.
+             */
             virtual void removeVertexLabels(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Remove all labels associated with a given edge.
+             *
+             *  @param[in] edgeId   The ID of the edge which's labels shall be removed.
+             */
             virtual void removeEdgeLabels(htd::id_t edgeId) = 0;
 
             /**

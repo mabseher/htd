@@ -78,7 +78,7 @@ TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
 {
     htd::LabelingCollection labelings;
 
-    ASSERT_FALSE(labelings.isLabelingName("Label1"));
+    ASSERT_FALSE(labelings.isLabelName("Label1"));
 
     labelings.setLabeling("Label1", new htd::GraphLabeling());
 
@@ -97,7 +97,7 @@ TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
     ASSERT_EQ((std::size_t)0, labelings.begin()->second->vertexLabelCount());
     ASSERT_EQ((std::size_t)0, labelings.begin()->second->edgeLabelCount());
 
-    ASSERT_TRUE(labelings.isLabelingName("Label1"));
+    ASSERT_TRUE(labelings.isLabelName("Label1"));
 
     try
     {

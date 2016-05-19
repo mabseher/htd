@@ -91,12 +91,12 @@ const std::string & htd::LabeledPath::labelNameAtPosition(htd::index_t index) co
 
 bool htd::LabeledPath::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->isLabelingName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
+    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
 }
 
 bool htd::LabeledPath::isLabeledEdge(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->isLabelingName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
+    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
 }
 
 const htd::ILabel & htd::LabeledPath::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
@@ -111,7 +111,7 @@ const htd::ILabel & htd::LabeledPath::edgeLabel(const std::string & labelName, h
 
 void htd::LabeledPath::setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         labelings_->setLabeling(labelName, new htd::GraphLabeling());
     }
@@ -121,7 +121,7 @@ void htd::LabeledPath::setVertexLabel(const std::string & labelName, htd::vertex
 
 void htd::LabeledPath::setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         labelings_->setLabeling(labelName, new htd::GraphLabeling());
     }
@@ -131,7 +131,7 @@ void htd::LabeledPath::setEdgeLabel(const std::string & labelName, htd::id_t edg
 
 void htd::LabeledPath::removeVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (labelings_->isLabelingName(labelName))
+    if (labelings_->isLabelName(labelName))
     {
         labelings_->labeling(labelName).removeVertexLabel(vertex);
     }
@@ -139,7 +139,7 @@ void htd::LabeledPath::removeVertexLabel(const std::string & labelName, htd::ver
 
 void htd::LabeledPath::removeEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (labelings_->isLabelingName(labelName))
+    if (labelings_->isLabelName(labelName))
     {
         labelings_->labeling(labelName).removeEdgeLabel(edgeId);
     }
@@ -157,7 +157,7 @@ void htd::LabeledPath::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
 
 void htd::LabeledPath::swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("void htd::LabeledPath::swapVertexLabel(const std::string &, htd::vertex_t, htd::vertex_t)");
     }
@@ -167,7 +167,7 @@ void htd::LabeledPath::swapVertexLabel(const std::string & labelName, htd::verte
 
 void htd::LabeledPath::swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("void htd::LabeledPath::swapEdgeLabel(const std::string &, htd::id_t, htd::id_t)");
     }
@@ -177,7 +177,7 @@ void htd::LabeledPath::swapEdgeLabel(const std::string & labelName, htd::id_t ed
 
 htd::ILabel * htd::LabeledPath::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("htd::ILabel * htd::LabeledPath::transferVertexLabel(const std::string &, htd::vertex_t)");
     }
@@ -187,7 +187,7 @@ htd::ILabel * htd::LabeledPath::transferVertexLabel(const std::string & labelNam
 
 htd::ILabel * htd::LabeledPath::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("htd::ILabel * htd::LabeledPath::transferEdgeLabel(const std::string &, htd::id_t)");
     }

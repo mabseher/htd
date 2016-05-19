@@ -353,16 +353,6 @@ void htd::Hypergraph::removeEdge(const htd::ConstCollection<htd::vertex_t> & ele
     }
 }
 
-void htd::Hypergraph::removeEdge(const htd::Hyperedge & hyperedge)
-{
-    const htd::ConstCollection<htd::id_t> & associatedIds = associatedEdgeIds(hyperedge.elements());
-
-    if (associatedIds.size() > 0)
-    {
-        base_->removeEdge(associatedIds[0]);
-    }
-}
-
 htd::Hypergraph * htd::Hypergraph::clone(void) const
 {
     return new htd::Hypergraph(*this);

@@ -118,15 +118,34 @@ namespace htd
              */
             virtual htd::id_t addEdge(htd::Hyperedge && hyperedge) = 0;
 
+            /**
+             *  Remove an edge from the hypergraph.
+             *
+             *  @param[in] edgeId   The ID of the edge which shall be removed.
+             */
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
+            /**
+             *  Remove an edge from the hypergraph.
+             *
+             *  @param[in] vertex1  The first endpoint of the edge.
+             *  @param[in] vertex2  The second endpoint of the edge.
+             */
             virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
+            /**
+             *  Remove an edge from the hypergraph.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             */
             virtual void removeEdge(const std::vector<htd::vertex_t> & elements) = 0;
 
+            /**
+             *  Remove an edge from the hypergraph.
+             *
+             *  @param[in] elements The endpoints of the hyperedge.
+             */
             virtual void removeEdge(const htd::ConstCollection<htd::vertex_t> & elements) = 0;
-
-            virtual void removeEdge(const htd::Hyperedge & hyperedge) = 0;
 
             /**
              *  Create a deep copy the current mutable hypergraph.

@@ -74,8 +74,19 @@ namespace htd
              */
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
+            /**
+             *  Remove an edge from the graph.
+             *
+             *  @param[in] edgeId   The ID of the edge which shall be removed.
+             */
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
+            /**
+             *  Remove an edge from the graph.
+             *
+             *  @param[in] vertex1  The first endpoint of the edge.
+             *  @param[in] vertex2  The second endpoint of the edge.
+             */
             virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
             /**

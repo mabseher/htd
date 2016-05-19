@@ -37,16 +37,21 @@ namespace htd
     template <typename Iter, typename T = typename Iter::value_type>
     class IteratorWrapper : public std::iterator<std::forward_iterator_tag, T>, public htd::IteratorBase<T>
     {
-        public:
+            public:
+            /**
+             *  Constructor for an iterator wrapper.
+             *
+             *  @param[in] baseIterator The underlying iterator which shall be wrapped.
+             */
             IteratorWrapper(Iter baseIterator) : baseIterator_(baseIterator)
             {
 
             }
 
             /**
-             *  Copy constructor for an iterator.
+             *  Copy constructor for an iterator wrapper.
              *
-             *  @param[in] original  The original iterator.
+             *  @param[in] original  The original iterator wrapper.
              */
             IteratorWrapper<Iter, T>(const IteratorWrapper<Iter, T> & original) : baseIterator_(original.baseIterator_)
             {
@@ -54,9 +59,9 @@ namespace htd
             }
 
             /**
-             *  Move constructor for an iterator.
+             *  Move constructor for an iterator wrapper.
              *
-             *  @param[in] original  The original iterator.
+             *  @param[in] original  The original iterator wrapper.
              */
             IteratorWrapper<Iter, T>(IteratorWrapper<Iter, T> && original) : baseIterator_(std::move(original.baseIterator_))
             {
@@ -68,6 +73,11 @@ namespace htd
 
             }
 
+            /**
+             *  Copy assignment operator for an iterator wrapper.
+             *
+             *  @param[in] original  The original iterator wrapper.
+             */
             IteratorWrapper & operator=(const IteratorWrapper & original)
             {
                 baseIterator_ = original.baseIterator_;

@@ -103,12 +103,12 @@ const std::string & htd::LabeledDirectedGraph::labelNameAtPosition(htd::index_t 
 
 bool htd::LabeledDirectedGraph::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->isLabelingName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
+    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
 }
 
 bool htd::LabeledDirectedGraph::isLabeledEdge(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->isLabelingName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
+    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
 }
 
 const htd::ILabel & htd::LabeledDirectedGraph::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
@@ -123,7 +123,7 @@ const htd::ILabel & htd::LabeledDirectedGraph::edgeLabel(const std::string & lab
 
 void htd::LabeledDirectedGraph::setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         labelings_->setLabeling(labelName, new htd::GraphLabeling());
     }
@@ -133,7 +133,7 @@ void htd::LabeledDirectedGraph::setVertexLabel(const std::string & labelName, ht
 
 void htd::LabeledDirectedGraph::setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         labelings_->setLabeling(labelName, new htd::GraphLabeling());
     }
@@ -143,7 +143,7 @@ void htd::LabeledDirectedGraph::setEdgeLabel(const std::string & labelName, htd:
 
 void htd::LabeledDirectedGraph::removeVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (labelings_->isLabelingName(labelName))
+    if (labelings_->isLabelName(labelName))
     {
         labelings_->labeling(labelName).removeVertexLabel(vertex);
     }
@@ -151,7 +151,7 @@ void htd::LabeledDirectedGraph::removeVertexLabel(const std::string & labelName,
 
 void htd::LabeledDirectedGraph::removeEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (labelings_->isLabelingName(labelName))
+    if (labelings_->isLabelName(labelName))
     {
         labelings_->labeling(labelName).removeEdgeLabel(edgeId);
     }
@@ -169,7 +169,7 @@ void htd::LabeledDirectedGraph::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edge
 
 void htd::LabeledDirectedGraph::swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("void htd::LabeledDirectedGraph::swapVertexLabel(const std::string &, htd::vertex_t, htd::vertex_t)");
     }
@@ -179,7 +179,7 @@ void htd::LabeledDirectedGraph::swapVertexLabel(const std::string & labelName, h
 
 void htd::LabeledDirectedGraph::swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("void htd::LabeledDirectedGraph::swapEdgeLabel(const std::string &, htd::id_t, htd::id_t)");
     }
@@ -189,7 +189,7 @@ void htd::LabeledDirectedGraph::swapEdgeLabel(const std::string & labelName, htd
 
 htd::ILabel * htd::LabeledDirectedGraph::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("htd::ILabel * htd::LabeledDirectedGraph::transferVertexLabel(const std::string &, htd::vertex_t)");
     }
@@ -199,7 +199,7 @@ htd::ILabel * htd::LabeledDirectedGraph::transferVertexLabel(const std::string &
 
 htd::ILabel * htd::LabeledDirectedGraph::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("htd::ILabel * htd::LabeledDirectedGraph::transferEdgeLabel(const std::string &, htd::id_t)");
     }

@@ -77,17 +77,30 @@ namespace htd
              */
             typedef std::forward_iterator_tag iterator_category;
 
+            /**
+             *  Constructor for an iterator pointing nowhere.
+             */
             ConstIterator(void) : baseIterator_(nullptr)
             {
 
             }
 
+            /**
+             *  Constructor for an iterator.
+             *
+             *  @param[in] iterator The underlying iterator.
+             */
             template <class Iter>
             ConstIterator(Iter iterator) : baseIterator_(new htd::ConstIteratorWrapper<Iter, T>(iterator))
             {
 
             }
 
+            /**
+             *  Constructor for an iterator.
+             *
+             *  @param[in] iterator The underlying iterator.
+             */
             ConstIterator(htd::VectorAdapterConstIteratorWrapper<typename std::vector<T>::const_iterator> * iterator) : baseIterator_(iterator)
             {
 
@@ -121,6 +134,9 @@ namespace htd
                 }
             }
 
+            /**
+             *  Destructor for a ConstIterator object.
+             */
             virtual ~ConstIterator()
             {
                 if (baseIterator_ != nullptr)
@@ -141,6 +157,11 @@ namespace htd
                 return *this;
             }
 
+            /**
+             *  Increment the iterator.
+             *
+             *  @return A copy of the iterator reflecting the state before the increment operation took place.
+             */
             ConstIterator<T> operator++(int)
             {
                 ConstIterator<T> ret(*baseIterator_);
@@ -167,6 +188,11 @@ namespace htd
                 return *this;
             }
 
+            /**
+             *  Copy assignment operator for an iterator.
+             *
+             *  @param[in] original  The original iterator.
+             */
             ConstIterator<T> & operator=(const ConstIterator<T> & original)
             {
                 if (baseIterator_!= nullptr)
@@ -184,6 +210,11 @@ namespace htd
                 return *this;
             }
 
+            /**
+             *  Move assignment operator for an iterator.
+             *
+             *  @param[in] original  The original iterator.
+             */
             ConstIterator<T> & operator=(ConstIterator<T> && original)
             {
                 if (baseIterator_!= nullptr)

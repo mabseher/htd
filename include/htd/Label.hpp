@@ -37,27 +37,50 @@ namespace htd
     template<typename T>
     class Label : public virtual htd::ILabel
     {
-        public:
+            public:
+            /**
+             *  Constructor for a label.
+             *
+             *  @param[in] value    The value of the label.
+             */
             Label(T value) : value_(std::make_shared<T>(value))
             {
 
             }
 
+            /**
+             *  Copy constructor for a label.
+             *
+             *  @param[in] original  The original label.
+             */
             Label(const Label<T> & original) : value_(std::make_shared<T>(*(original.value_)))
             {
 
             }
 
+            /**
+             *  Move constructor for a label.
+             *
+             *  @param[in] original  The original label.
+             */
             Label(Label<T> && original) : value_(std::move(original.value_))
             {
 
             }
 
+            /**
+             *  Destructor for a Label object.
+             */
             ~Label()
             {
 
             }
 
+            /**
+             *  Getter for the value of the label.
+             *
+             *  @return The value of the label.
+             */
             const T & value() const
             {
                 return *value_;
@@ -75,20 +98,37 @@ namespace htd
                 return new Label<T>(*value_);
             }
 
-            Label<T> & operator=(const Label<T> & rhs) const
+            /**
+             *  Copy assignment operator for a label.
+             *
+             *  @param[in] original  The original label.
+             */
+            Label<T> & operator=(const Label<T> & original) const
             {
-                value_ = rhs.value_;
+                value_ = original.value_;
 
                 return *this;
             }
 
-            Label<T> & operator=(Label<T> && rhs) const
+            /**
+             *  Move assignment operator for a label.
+             *
+             *  @param[in] original  The original label.
+             */
+            Label<T> & operator=(Label<T> && original) const
             {
-                value_ = std::move(rhs.value_);
+                value_ = std::move(original.value_);
 
                 return *this;
             }
 
+            /**
+             *  Equality operator for a label.
+             *
+             *  @param[in] rhs  The label at the right-hand side of the operator.
+             *
+             *  @return True if the label value is equal to the value of the label at the right-hand side of the operator, false otherwise.
+             */
             bool operator==(const Label<T> & rhs) const
             {
                 return *value_ == rhs.value();

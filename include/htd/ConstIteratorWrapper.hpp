@@ -36,15 +36,20 @@ namespace htd
     class ConstIteratorWrapper : public std::iterator<std::forward_iterator_tag, T>, public htd::ConstIteratorBase<T>
     {
         public:
+            /**
+             *  Constructor for an iterator wrapper.
+             *
+             *  @param[in] baseIterator The underlying iterator which shall be wrapped.
+             */
             ConstIteratorWrapper(Iter baseIterator) : baseIterator_(baseIterator)
             {
 
             }
 
             /**
-             *  Copy constructor for an iterator.
+             *  Copy constructor for an iterator wrapper.
              *
-             *  @param[in] original  The original iterator.
+             *  @param[in] original  The original iterator wrapper.
              */
             ConstIteratorWrapper<Iter, T>(const ConstIteratorWrapper<Iter, T> & original) : baseIterator_(original.baseIterator_)
             {
@@ -52,9 +57,9 @@ namespace htd
             }
 
             /**
-             *  Move constructor for an iterator.
+             *  Move constructor for an iterator wrapper.
              *
-             *  @param[in] original  The original iterator.
+             *  @param[in] original  The original iterator wrapper.
              */
             ConstIteratorWrapper<Iter, T>(ConstIteratorWrapper<Iter, T> && original) : baseIterator_(std::move(original.baseIterator_))
             {
@@ -66,6 +71,11 @@ namespace htd
 
             }
 
+            /**
+             *  Copy assignment operator for an iterator wrapper.
+             *
+             *  @param[in] original  The original iterator wrapper.
+             */
             ConstIteratorWrapper & operator=(ConstIteratorWrapper & original)
             {
                 baseIterator_ = original.baseIterator_;

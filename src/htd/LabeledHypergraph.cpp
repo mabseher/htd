@@ -103,12 +103,12 @@ const std::string & htd::LabeledHypergraph::labelNameAtPosition(htd::index_t ind
 
 bool htd::LabeledHypergraph::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->isLabelingName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
+    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
 }
 
 bool htd::LabeledHypergraph::isLabeledEdge(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->isLabelingName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
+    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
 }
 
 const htd::ILabel & htd::LabeledHypergraph::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
@@ -123,7 +123,7 @@ const htd::ILabel & htd::LabeledHypergraph::edgeLabel(const std::string & labelN
 
 void htd::LabeledHypergraph::setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         labelings_->setLabeling(labelName, new htd::GraphLabeling());
     }
@@ -133,7 +133,7 @@ void htd::LabeledHypergraph::setVertexLabel(const std::string & labelName, htd::
 
 void htd::LabeledHypergraph::setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         labelings_->setLabeling(labelName, new htd::GraphLabeling());
     }
@@ -143,7 +143,7 @@ void htd::LabeledHypergraph::setEdgeLabel(const std::string & labelName, htd::id
 
 void htd::LabeledHypergraph::removeVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (labelings_->isLabelingName(labelName))
+    if (labelings_->isLabelName(labelName))
     {
         labelings_->labeling(labelName).removeVertexLabel(vertex);
     }
@@ -151,7 +151,7 @@ void htd::LabeledHypergraph::removeVertexLabel(const std::string & labelName, ht
 
 void htd::LabeledHypergraph::removeEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (labelings_->isLabelingName(labelName))
+    if (labelings_->isLabelName(labelName))
     {
         labelings_->labeling(labelName).removeEdgeLabel(edgeId);
     }
@@ -169,7 +169,7 @@ void htd::LabeledHypergraph::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2
 
 void htd::LabeledHypergraph::swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("void htd::LabeledHypergraph::swapVertexLabel(const std::string &, htd::vertex_t, htd::vertex_t)");
     }
@@ -179,7 +179,7 @@ void htd::LabeledHypergraph::swapVertexLabel(const std::string & labelName, htd:
 
 void htd::LabeledHypergraph::swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("void htd::LabeledHypergraph::swapEdgeLabel(const std::string &, htd::id_t, htd::id_t)");
     }
@@ -189,7 +189,7 @@ void htd::LabeledHypergraph::swapEdgeLabel(const std::string & labelName, htd::i
 
 htd::ILabel * htd::LabeledHypergraph::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("htd::ILabel * htd::LabeledHypergraph::transferVertexLabel(const std::string &, htd::vertex_t)");
     }
@@ -199,7 +199,7 @@ htd::ILabel * htd::LabeledHypergraph::transferVertexLabel(const std::string & la
 
 htd::ILabel * htd::LabeledHypergraph::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (!labelings_->isLabelingName(labelName))
+    if (!labelings_->isLabelName(labelName))
     {
         throw std::logic_error("htd::ILabel * htd::LabeledHypergraph::transferEdgeLabel(const std::string &, htd::id_t)");
     }

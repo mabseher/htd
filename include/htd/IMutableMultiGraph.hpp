@@ -73,6 +73,11 @@ namespace htd
              */
             virtual htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
+            /**
+             *  Remove an edge from the multi-graph.
+             *
+             *  @param[in] edgeId   The ID of the edge which shall be removed.
+             */
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
             /**

@@ -134,8 +134,6 @@ namespace htd
 
             void removeEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
 
-            void removeEdge(const htd::Hyperedge & hyperedge) HTD_OVERRIDE;
-
             Hypergraph * clone(void) const HTD_OVERRIDE;
 
             Hypergraph & operator=(const Hypergraph & original);

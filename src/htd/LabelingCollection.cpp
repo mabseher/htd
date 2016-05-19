@@ -112,7 +112,7 @@ const htd::IGraphLabeling & htd::LabelingCollection::labeling(const std::string 
     return *(content_.at(labelName));
 }
 
-bool htd::LabelingCollection::isLabelingName(const std::string & labelName) const
+bool htd::LabelingCollection::isLabelName(const std::string & labelName) const
 {
     return content_.find(labelName) != content_.end();
 }

@@ -126,7 +126,7 @@ namespace htd
              *  Transfer the control over a vertex label to a new owner.
              *
              *  @param[in] labelName    The name of the labeling which will be affected by the operation.
-             *  @param[in] vertex       The vertex whichs label shall be transferred.
+             *  @param[in] vertex       The vertex which's label shall be transferred.
              *
              *  @note After calling this function the labeling is no longer aware of the label, hence - in the context of the
              *        labeling - the vertex is in the same state as it was never labeled. Furthermore, the new owner has to
@@ -140,7 +140,7 @@ namespace htd
              *  Transfer the control over an edge label to a new owner.
              *
              *  @param[in] labelName    The name of the labeling which will be affected by the operation.
-             *  @param[in] edgeId       The ID of the edge whichs label shall be transferred.
+             *  @param[in] edgeId       The ID of the edge which's label shall be transferred.
              *
              *  @note After calling this function the labeling is no longer aware of the label, hence - in the context of the
              *        labeling - the edge is in the same state as it was never labeled. Furthermore, the new owner has to

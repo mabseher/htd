@@ -54,7 +54,7 @@ namespace htd
 
             const std::string & labelNameAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
-            bool isLabelingName(const std::string & labelName) const HTD_OVERRIDE;
+            bool isLabelName(const std::string & labelName) const HTD_OVERRIDE;
 
             htd::IGraphLabeling & labeling(const std::string & labelName) HTD_OVERRIDE;
 

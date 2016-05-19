@@ -59,12 +59,45 @@ namespace htd
              */
             virtual void removeSubpath(htd::vertex_t subpathRoot) = 0;
 
+            /**
+             *  Remove the child of a vertex from the path.
+             *
+             *  @param[in] vertex   The ID of the vertex which's child shall be removed.
+             *
+             *  @note This operation retains the path structure by connecting the neighbors of the removed vertex in a valid way.
+             */
             virtual void removeChild(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Add a new child to the given vertex.
+             *
+             *  @param[in] vertex   The vertex which shall get a new child.
+             *
+             *  @return The ID of the new child.
+             *
+             *  @note If the given vertex already has a child, the old child will be attached to the new vertex in order to keep the path structure valid.
+             */
             virtual htd::vertex_t addChild(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Remove the child of a vertex from the path.
+             *
+             *  @param[in] vertex   The ID of the vertex which's child shall be removed.
+             *  @param[in] child    The ID of the vertex which shall be removed.
+             *
+             *  @note This operation retains the path structure by connecting the neighbors of the removed vertex in a valid way.
+             */
             virtual void removeChild(htd::vertex_t vertex, htd::vertex_t child) = 0;
 
+            /**
+             *  Add a new parent to the given vertex.
+             *
+             *  @param[in] vertex   The vertex which shall get a new parent.
+             *
+             *  @return The ID of the new parent.
+             *
+             *  @note If the given vertex already has a parent, the old parent will be attached to the new vertex in order to keep the path structure valid.
+             */
             virtual htd::vertex_t addParent(htd::vertex_t vertex) = 0;
 
             /**

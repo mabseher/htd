@@ -39,6 +39,9 @@ namespace htd
     class FilteredHyperedgeCollection
     {
         public:
+            /**
+             *  The value type of the collection.
+             */
             typedef htd::Hyperedge value_type;
 
             /**
@@ -82,38 +85,136 @@ namespace htd
                      */
                     typedef std::random_access_iterator_tag iterator_category;
 
+                    /**
+                     *  Constructor for an iterator.
+                     *
+                     *  @param[in] collection   The underlying collection.
+                     *  @param[in] position     The position of the new iterator within the collection.
+                     */
                     FilteredHyperedgeCollectionConstIterator(const FilteredHyperedgeCollection & collection, htd::index_t position);
 
+                    /**
+                     *  Copy constructor for a FilteredHyperedgeCollectionConstIterator object.
+                     *
+                     *  @param[in] original  The original FilteredHyperedgeCollectionConstIterator object.
+                     */
                     FilteredHyperedgeCollectionConstIterator(const FilteredHyperedgeCollectionConstIterator & original);
 
+                    /**
+                     *  Move constructor for a FilteredHyperedgeCollectionConstIterator object.
+                     *
+                     *  @param[in] original  The original FilteredHyperedgeCollectionConstIterator object.
+                     */
                     FilteredHyperedgeCollectionConstIterator(FilteredHyperedgeCollectionConstIterator && original);
 
+                    /**
+                     *  Destructor for a FilteredHyperedgeCollectionConstIterator object.
+                     */
                     ~FilteredHyperedgeCollectionConstIterator();
 
+                    /**
+                     *  Increment the iterator.
+                     *
+                     *  @return A reference to the incremented iterator.
+                     */
                     FilteredHyperedgeCollectionConstIterator & operator++(void);
 
+                    /**
+                     *  Increment the iterator.
+                     *
+                     *  @return A copy of the iterator reflecting the state before the increment operation took place.
+                     */
                     FilteredHyperedgeCollectionConstIterator operator++(int);
 
+                    /**
+                     *  Increment the iterator.
+                     *
+                     *  @param[in] positions    The number of positions the iterator shall be incremented.
+                     *
+                     *  @return A reference to the incremented iterator.
+                     */
                     FilteredHyperedgeCollectionConstIterator & operator+=(std::size_t positions);
 
+                    /**
+                     *  Decrement the iterator.
+                     *
+                     *  @return A reference to the decremented iterator.
+                     */
                     FilteredHyperedgeCollectionConstIterator & operator--(void);
 
+                    /**
+                     *  Decrement the iterator.
+                     *
+                     *  @return A copy of the iterator reflecting the state before the decrement operation took place.
+                     */
                     FilteredHyperedgeCollectionConstIterator operator--(int);
 
+                    /**
+                     *  Decrement the iterator.
+                     *
+                     *  @param[in] positions    The number of positions the iterator shall be decremented.
+                     *
+                     *  @return A reference to the decremented iterator.
+                     */
                     FilteredHyperedgeCollectionConstIterator & operator-=(std::size_t positions);
 
+                    /**
+                     *  Compute the distance between two iterators.
+                     *
+                     *  The distance is given by the difference between the position of the iterator at the
+                     *  right-hand side of the operator and the position of the iterator at the left-hand
+                     *  side of the operator.
+                     *
+                     *  @param[in] rhs  The iterator at the right-hand side of the operator.
+                     *
+                     *  @return The distance between two iterators.
+                     */
                     long operator-(const FilteredHyperedgeCollectionConstIterator & rhs);
 
+                    /**
+                     *  Copy assignment operator for an iterator.
+                     *
+                     *  @param[in] original  The original iterator.
+                     */
                     FilteredHyperedgeCollectionConstIterator & operator=(const FilteredHyperedgeCollectionConstIterator & original);
 
+                    /**
+                     *  Move assignment operator for an iterator.
+                     *
+                     *  @param[in] original  The original iterator.
+                     */
                     FilteredHyperedgeCollectionConstIterator & operator=(FilteredHyperedgeCollectionConstIterator && original);
 
+                    /**
+                     *  Equality operator for an iterator.
+                     *
+                     *  @param[in] rhs  The iterator at the right-hand side of the operator.
+                     *
+                     *  @return True if the iterator points to the same element as the iterator at the right-hand side of the operator, false otherwise.
+                     */
                     bool operator==(const FilteredHyperedgeCollectionConstIterator & rhs) const;
 
+                    /**
+                     *  Inequality operator for an iterator.
+                     *
+                     *  @param[in] rhs  The iterator at the right-hand side of the operator.
+                     *
+                     *  @return True if the iterator does not point to the same element as the iterator at the right-hand side of the operator, false otherwise.
+                     */
                     bool operator!=(const FilteredHyperedgeCollectionConstIterator & rhs) const;
 
+                    /**
+                     *  Dereference the iterator.
+                     *
+                     *  @return A pointer to the element at the current iterator position.
+                     */
                     const htd::Hyperedge * operator->(void) const;
 
+                    /**
+                     *  Dereference the iterator.
+                     *
+                     *  @return A reference to the element at the current iterator position.
+                     */
                     const htd::Hyperedge & operator*(void) const;
 
                 private:
@@ -124,36 +225,120 @@ namespace htd
                     htd::index_t position_;
             };
 
+            /**
+             *  Constructor for a FilteredHyperedgeCollection object representing an empty collection.
+             */
             FilteredHyperedgeCollection(void);
 
+            /**
+             *  Constructor for a FilteredHyperedgeCollection.
+             *
+             *  @param[in] baseCollection   The underlying hyperedge collection.
+             *  @param[in] relevantIndices  The relevant indices within the hyperedge collection.
+             */
             FilteredHyperedgeCollection(const std::vector<htd::Hyperedge> & baseCollection, const std::vector<htd::index_t> & relevantIndices);
 
+            /**
+             *  Constructor for a FilteredHyperedgeCollection.
+             *
+             *  @param[in] baseCollection   The underlying hyperedge collection.
+             *  @param[in] relevantIndices  The relevant indices within the hyperedge collection.
+             */
             FilteredHyperedgeCollection(std::vector<htd::Hyperedge> && baseCollection, std::vector<htd::index_t> && relevantIndices);
 
+            /**
+             *  Constructor for a FilteredHyperedgeCollection.
+             *
+             *  @param[in] baseCollection   The underlying hyperedge collection.
+             *  @param[in] relevantIndices  The relevant indices within the hyperedge collection.
+             */
             FilteredHyperedgeCollection(std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection, const std::vector<htd::index_t> & relevantIndices);
 
+            /**
+             *  Constructor for a FilteredHyperedgeCollection.
+             *
+             *  @param[in] baseCollection   The underlying hyperedge collection.
+             *  @param[in] relevantIndices  The relevant indices within the hyperedge collection.
+             */
             FilteredHyperedgeCollection(std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection, std::vector<htd::index_t> && relevantIndices);
 
-            FilteredHyperedgeCollection(const FilteredHyperedgeCollection & hyperedges);
+            /**
+             *  Copy constructor for a FilteredHyperedgeCollection object.
+             *
+             *  @param[in] original  The original FilteredHyperedgeCollection object.
+             */
+            FilteredHyperedgeCollection(const FilteredHyperedgeCollection & original);
 
-            FilteredHyperedgeCollection(FilteredHyperedgeCollection && hyperedges);
+            /**
+             *  Move constructor for a FilteredHyperedgeCollection object.
+             *
+             *  @param[in] original  The original FilteredHyperedgeCollection object.
+             */
+            FilteredHyperedgeCollection(FilteredHyperedgeCollection && original);
 
+            /**
+             *  Destructor for a FilteredHyperedgeCollection object.
+             */
             virtual ~FilteredHyperedgeCollection();
 
+            /**
+             *  Getter for the size of the collection.
+             *
+             *  @return The size of the collection.
+             */
             std::size_t size(void) const;
 
+            /**
+             *  Getter for the iterator to the first element in the collection.
+             *
+             *  @return An iterator to the first element in the collection.
+             */
             FilteredHyperedgeCollectionConstIterator begin(void) const;
 
+            /**
+             *  Getter for the iterator to the end of the collection.
+             *
+             *  @return An iterator to the end of the collection.
+             */
             FilteredHyperedgeCollectionConstIterator end(void) const;
 
-            FilteredHyperedgeCollection & operator=(const FilteredHyperedgeCollection & rhs);
+            /**
+             *  Copy assignment operator for a FilteredHyperedgeCollection object.
+             *
+             *  @param[in] original  The original FilteredHyperedgeCollection object.
+             */
+            FilteredHyperedgeCollection & operator=(const FilteredHyperedgeCollection & original);
 
-            FilteredHyperedgeCollection & operator=(FilteredHyperedgeCollection && rhs);
+            /**
+             *  Move assignment operator for a FilteredHyperedgeCollection object.
+             *
+             *  @param[in] original  The original FilteredHyperedgeCollection object.
+             */
+            FilteredHyperedgeCollection & operator=(FilteredHyperedgeCollection && original);
 
+            /**
+             *  Equality operator for a hyperedge collection.
+             *
+             *  @param[in] rhs  The hyperedge collection at the right-hand side of the operator.
+             *
+             *  @return True if the hyperedge collection is equal to the hyperedge collection at the right-hand side of the operator, false otherwise.
+             */
             bool operator==(const FilteredHyperedgeCollection & rhs) const;
 
+            /**
+             *  Inequality operator for a hyperedge collection.
+             *
+             *  @param[in] rhs  The hyperedge collection at the right-hand side of the operator.
+             *
+             *  @return True if the hyperedge collection is not equal to the hyperedge collection at the right-hand side of the operator, false otherwise.
+             */
             bool operator!=(const FilteredHyperedgeCollection & rhs) const;
 
+            /**
+             *  Remove all hyperedges from the collection which contain also other vertices than those provided to this method.
+             *
+             *  @param[in] vertices The vertices which act as a filter for the hyperedges in the collection.
+             */
             void restrictTo(const std::vector<htd::vertex_t> & vertices);
 
         private:

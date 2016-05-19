@@ -647,6 +647,14 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Add a new child to the given vertex.
+             *
+             *  @param[in] vertexName   The name of the vertex which shall get a new child.
+             *  @param[in] childName    The name of the vertex which shall be added.
+             *
+             *  @return The ID of the new child.
+             */
             htd::vertex_t addChild(const VertexNameType & vertexName, const VertexNameType & childName)
             {
                 if (!isVertexName(vertexName) || isVertexName(childName))
@@ -661,6 +669,14 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Remove the child of a vertex from the tree.
+             *
+             *  @param[in] vertexName   The name of the vertex which's child shall be removed.
+             *  @param[in] childName    The name of the vertex which shall be removed.
+             *
+             *  @note This operation retains the tree structure by connecting the neighbors of the removed vertex in a valid way.
+             */
             void removeChild(const VertexNameType & vertexName, const VertexNameType & childName)
             {
                 if (!isVertexName(vertexName) || !isVertexName(childName))
@@ -675,6 +691,16 @@ namespace htd
                 names_.removeVertexName(child);
             }
 
+            /**
+             *  Add a new parent to the given vertex.
+             *
+             *  @param[in] vertexName   The name of the vertex which shall get a new parent.
+             *  @param[in] parentName   The name of the vertex which shall be added as the new parent of the given vertex.
+             *
+             *  @return The ID of the new parent.
+             *
+             *  @note If the given vertex already has a parent, the old parent will be attached to the new vertex in order to keep the tree structure valid.
+             */
             htd::vertex_t addParent(const VertexNameType & vertexName, const VertexNameType & parentName)
             {
                 if (!isVertexName(vertexName) || isVertexName(parentName))
@@ -689,6 +715,12 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Attach the given vertex (together with its subtree) to a new parent.
+             *
+             *  @param[in] vertexName       The name of the vertex which shall get a new parent.
+             *  @param[in] newParentName    The name of the desired parent.
+             */
             void setParent(const VertexNameType & vertexName, const VertexNameType & newParentName)
             {
                 base_->setParent(lookupVertex(vertexName), lookupVertex(newParentName));

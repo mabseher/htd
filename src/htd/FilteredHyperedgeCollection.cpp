@@ -58,12 +58,12 @@ htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(std::shared_ptr<st
 
 }
 
-htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(const htd::FilteredHyperedgeCollection & hyperedges) : baseCollection_(hyperedges.baseCollection_), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(*(hyperedges.relevantIndices_)))
+htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(const htd::FilteredHyperedgeCollection & original) : baseCollection_(original.baseCollection_), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(*(original.relevantIndices_)))
 {
 
 }
 
-htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(htd::FilteredHyperedgeCollection && hyperedges) : baseCollection_(std::move(hyperedges.baseCollection_)), relevantIndices_(std::move(hyperedges.relevantIndices_))
+htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(htd::FilteredHyperedgeCollection && original) : baseCollection_(std::move(original.baseCollection_)), relevantIndices_(std::move(original.relevantIndices_))
 {
 
 }

@@ -185,19 +185,42 @@ namespace htd
                 return *position;
             }
 
-            Collection<T> & operator=(Collection<T> & rhs)
+            /**
+             *  Copy assignment operator for a Collection object.
+             *
+             *  @param[in] original  The original Collection object.
+             */
+            Collection<T> & operator=(const Collection<T> & original)
             {
-                begin_ = rhs.begin_;
-                end_ = rhs.end_;
+                begin_ = original.begin_;
+                end_ = original.end_;
 
                 return *this;
             }
 
-            template <typename CollectionType>
-            Collection<T> & operator=(CollectionType & rhs)
+            /**
+             *  Move assignment operator for a Collection object.
+             *
+             *  @param[in] original  The original Collection object.
+             */
+            Collection<T> & operator=(Collection<T> && original)
             {
-                begin_ = rhs.begin();
-                end_ = rhs.end();
+                begin_ = std::move(original.begin_);
+                end_ = std::move(original.end_);
+
+                return *this;
+            }
+
+            /**
+             *  Copy assignment operator for a ConstCollection object.
+             *
+             *  @param[in] original  The original collection.
+             */
+            template <typename CollectionType>
+            Collection<T> & operator=(CollectionType & original)
+            {
+                begin_ = original.begin();
+                end_ = original.end();
 
                 return *this;
             }

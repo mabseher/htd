@@ -59,14 +59,49 @@ namespace htd
              */
             virtual htd::vertex_t insertRoot(void) = 0;
 
+            /**
+             *  Change the root of the tree to the given vertex.
+             *
+             *  @param[in] vertex   The vertex which shall be the new root.
+             */
             virtual void makeRoot(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Add a new child to the given vertex.
+             *
+             *  @param[in] vertex   The vertex which shall get a new child.
+             *
+             *  @return The ID of the new child.
+             */
             virtual htd::vertex_t addChild(htd::vertex_t vertex) = 0;
-            
+
+            /**
+             *  Remove the child of a vertex from the tree.
+             *
+             *  @param[in] vertex   The ID of the vertex which's child shall be removed.
+             *  @param[in] child    The ID of the vertex which shall be removed.
+             *
+             *  @note This operation retains the tree structure by connecting the neighbors of the removed vertex in a valid way.
+             */
             virtual void removeChild(htd::vertex_t vertex, htd::vertex_t child) = 0;
 
+            /**
+             *  Add a new parent to the given vertex.
+             *
+             *  @param[in] vertex   The vertex which shall get a new parent.
+             *
+             *  @return The ID of the new parent.
+             *
+             *  @note If the given vertex already has a parent, the old parent will be attached to the new vertex in order to keep the tree structure valid.
+             */
             virtual htd::vertex_t addParent(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Attach the given vertex (together with its subtree) to a new parent.
+             *
+             *  @param[in] vertex       The vertex which shall get a new parent.
+             *  @param[in] newParent    The desired parent.
+             */
             virtual void setParent(htd::vertex_t vertex, htd::vertex_t newParent) = 0;
 
             /**

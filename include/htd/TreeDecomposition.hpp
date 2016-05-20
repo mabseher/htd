@@ -169,6 +169,11 @@ namespace htd
 
             TreeDecomposition * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable tree decomposition.
+             *
+             *  @param[in] original  The original tree decomposition.
+             */
             TreeDecomposition & operator=(const TreeDecomposition & original);
 
             TreeDecomposition & operator=(const htd::ITree & original) HTD_OVERRIDE;

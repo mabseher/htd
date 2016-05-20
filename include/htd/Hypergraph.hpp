@@ -136,6 +136,11 @@ namespace htd
 
             Hypergraph * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable hypergraph.
+             *
+             *  @param[in] original  The original hypergraph.
+             */
             Hypergraph & operator=(const Hypergraph & original);
 
             Hypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;

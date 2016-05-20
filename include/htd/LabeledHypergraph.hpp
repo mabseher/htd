@@ -88,6 +88,11 @@ namespace htd
 
             LabeledHypergraph * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable labeled hypergraph.
+             *
+             *  @param[in] original  The original labeled hypergraph.
+             */
             LabeledHypergraph & operator=(const LabeledHypergraph & original);
 
             LabeledHypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;

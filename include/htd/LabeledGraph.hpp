@@ -88,6 +88,11 @@ namespace htd
 
             LabeledGraph * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable labeled graph.
+             *
+             *  @param[in] original  The original labeled graph.
+             */
             LabeledGraph & operator=(const LabeledGraph & original);
 
             LabeledGraph & operator=(const htd::IGraph & original) HTD_OVERRIDE;

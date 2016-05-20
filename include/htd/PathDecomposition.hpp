@@ -171,6 +171,11 @@ namespace htd
 
             PathDecomposition * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable path decomposition.
+             *
+             *  @param[in] original  The original path decomposition.
+             */
             PathDecomposition & operator=(const PathDecomposition & original);
 
             PathDecomposition & operator=(const htd::IPath & original) HTD_OVERRIDE;

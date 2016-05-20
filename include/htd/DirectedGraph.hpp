@@ -139,6 +139,11 @@ namespace htd
 
             DirectedGraph * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable directed graph.
+             *
+             *  @param[in] original  The original directed graph.
+             */
             DirectedGraph & operator=(const DirectedGraph & original);
 
             DirectedGraph & operator=(const htd::IDirectedGraph & original) HTD_OVERRIDE;

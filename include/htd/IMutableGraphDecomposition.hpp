@@ -48,8 +48,22 @@ namespace htd
 
             virtual htd::vertex_t addVertex(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
 
+            /**
+             *  Access the bag content of a specific vertex.
+             *
+             *  @param[in] vertex   The vertex for which the bag content shall be returned.
+             *
+             *  @return The bag content of the specific vertex.
+             */
             virtual std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Access the hyperedges induced by the bag content of a specific vertex.
+             *
+             *  @param[in] vertex   The vertex for which the induced hyperedges shall be returned.
+             *
+             *  @return The collection of hyperedges induced by the bag content of the specific vertex.
+             */
             virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
 
             /**

@@ -119,6 +119,11 @@ namespace htd
 
             Graph * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable graph.
+             *
+             *  @param[in] original  The original graph.
+             */
             Graph & operator=(const Graph & original);
 
             Graph & operator=(const htd::IGraph & original) HTD_OVERRIDE;

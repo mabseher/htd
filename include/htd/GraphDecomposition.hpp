@@ -75,6 +75,11 @@ namespace htd
 
             GraphDecomposition * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable graph decomposition.
+             *
+             *  @param[in] original  The original graph decomposition.
+             */
             GraphDecomposition & operator=(const GraphDecomposition & original);
 
             GraphDecomposition & operator=(const htd::IGraph & original) HTD_OVERRIDE;

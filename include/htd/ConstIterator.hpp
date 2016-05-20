@@ -171,6 +171,11 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Copy assignment operator for an iterator.
+             *
+             *  @param[in] original  The original iterator.
+             */
             ConstIterator & operator=(htd::Iterator<T> & original)
             {
                 if (baseIterator_ != nullptr)

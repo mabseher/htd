@@ -46,16 +46,70 @@ namespace htd
              */
             virtual ~IMutableTreeDecomposition() = 0;
 
+            /**
+             *  Add a new child to the given vertex.
+             *
+             *  @param[in] vertex       The vertex which shall get a new child.
+             *  @param[in] bagContent   The bag content associated with the new vertex.
+             *  @param[in] inducedEdges The collection of induced edges associated with the new vertex.
+             *
+             *  @return The ID of the new child.
+             */
             virtual htd::vertex_t addChild(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
 
+            /**
+             *  Add a new child to the given vertex.
+             *
+             *  @param[in] vertex       The vertex which shall get a new child.
+             *  @param[in] bagContent   The bag content associated with the new vertex.
+             *  @param[in] inducedEdges The collection of induced edges associated with the new vertex.
+             *
+             *  @return The ID of the new child.
+             */
             virtual htd::vertex_t addChild(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
 
+            /**
+             *  Add a new parent to the given vertex.
+             *
+             *  @param[in] vertex       The vertex which shall get a new parent.
+             *  @param[in] bagContent   The bag content associated with the new vertex.
+             *  @param[in] inducedEdges The collection of induced edges associated with the new vertex.
+             *
+             *  @return The ID of the new parent.
+             *
+             *  @note If the given vertex already has a parent, the old parent will be attached to the new vertex in order to keep the tree structure valid.
+             */
             virtual htd::vertex_t addParent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
 
+            /**
+             *  Add a new parent to the given vertex.
+             *
+             *  @param[in] vertex       The vertex which shall get a new parent.
+             *  @param[in] bagContent   The bag content associated with the new vertex.
+             *  @param[in] inducedEdges The collection of induced edges associated with the new vertex.
+             *
+             *  @return The ID of the new parent.
+             *
+             *  @note If the given vertex already has a parent, the old parent will be attached to the new vertex in order to keep the tree structure valid.
+             */
             virtual htd::vertex_t addParent(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
 
+            /**
+             *  Access the bag content of a specific vertex.
+             *
+             *  @param[in] vertex   The vertex for which the bag content shall be returned.
+             *
+             *  @return The bag content of the specific vertex.
+             */
             virtual std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) = 0;
 
+            /**
+             *  Access the hyperedges induced by the bag content of a specific vertex.
+             *
+             *  @param[in] vertex   The vertex for which the induced hyperedges shall be returned.
+             *
+             *  @return The collection of hyperedges induced by the bag content of the specific vertex.
+             */
             virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
 
             /**

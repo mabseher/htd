@@ -88,6 +88,11 @@ namespace htd
 
             LabeledDirectedMultiGraph * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable labeled directed multi-graph.
+             *
+             *  @param[in] original  The original labeled directed multi-graph.
+             */
             LabeledDirectedMultiGraph & operator=(const LabeledDirectedMultiGraph & original);
 
             LabeledDirectedMultiGraph & operator=(const htd::IDirectedMultiGraph & original) HTD_OVERRIDE;

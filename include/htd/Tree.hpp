@@ -152,30 +152,62 @@ namespace htd
 
             Tree * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable tree.
+             *
+             *  @param[in] original  The original tree.
+             */
             Tree & operator=(const Tree & original);
 
             Tree & operator=(const htd::ITree & original) HTD_OVERRIDE;
 
         protected:
-
+            /**
+             *  Structure representing a node of a tree.
+             */
             struct Node
             {
+                /**
+                 *  The ID of the tree node.
+                 */
                 htd::id_t id;
 
+                /**
+                 *  The parent of the tree node.
+                 */
                 htd::vertex_t parent;
 
+                /**
+                 *  The collection of all children of the tree node.
+                 */
                 std::vector<htd::vertex_t> children;
 
+                /**
+                 *  Constructor for a tree node.
+                 *
+                 *  @param[in] id       The ID of the constructed tree node.
+                 *  @param[in] parent   The parent of the constructed tree node.
+                 */
                 Node(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), children()
                 {
 
                 }
 
+                /**
+                 *  Copy constructor for a tree node.
+                 *
+                 *  @param[in] original  The original tree node.
+                 */
                 Node(const Node & original) : id(original.id), parent(original.parent), children(original.children)
                 {
 
                 }
 
+                /**
+                 *  Move constructor for a tree node.
+                 *
+                 *  @param[in] original  The original tree node.
+                 */
                 Node(Node && original) : id(original.id), parent(original.parent), children(std::move(original.children))
                 {
 

@@ -84,6 +84,11 @@ namespace htd
 
             LabeledTree * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable labeled tree.
+             *
+             *  @param[in] original  The original labeled tree.
+             */
             LabeledTree & operator=(const LabeledTree & original);
 
             LabeledTree & operator=(const htd::ITree & original) HTD_OVERRIDE;

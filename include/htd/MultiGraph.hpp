@@ -119,6 +119,11 @@ namespace htd
 
             MultiGraph * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable multi-graph.
+             *
+             *  @param[in] original  The original multi-graph.
+             */
             MultiGraph & operator=(const MultiGraph & original);
 
             MultiGraph & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;

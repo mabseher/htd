@@ -84,6 +84,11 @@ namespace htd
 
             LabeledPath * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable labeled path.
+             *
+             *  @param[in] original  The original labeled path.
+             */
             LabeledPath & operator=(const LabeledPath & original);
 
             LabeledPath & operator=(const htd::IPath & original) HTD_OVERRIDE;

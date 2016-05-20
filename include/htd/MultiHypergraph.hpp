@@ -129,6 +129,11 @@ namespace htd
 
             MultiHypergraph * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable multi-hypergraph.
+             *
+             *  @param[in] original  The original multi-hypergraph.
+             */
             MultiHypergraph & operator=(const MultiHypergraph & original);
 
             MultiHypergraph & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;

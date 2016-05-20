@@ -50,7 +50,6 @@ namespace htd
             HeuristicSetCoverAlgorithm & operator=(const HeuristicSetCoverAlgorithm &) { return *this; }
 
         private:
-
             const std::size_t maximumAttempts = 25;
             const std::size_t maximumNeighborhoodSize = 25;
             const std::size_t maximumTotalNeighborhoodSize = 100;

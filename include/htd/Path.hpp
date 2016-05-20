@@ -154,20 +154,42 @@ namespace htd
 
             Path * clone(void) const HTD_OVERRIDE;
 
+            /**
+             *  Copy assignment operator for a mutable path.
+             *
+             *  @param[in] original  The original path.
+             */
             Path & operator=(const Path & original);
 
             Path & operator=(const htd::IPath & original) HTD_OVERRIDE;
 
         protected:
-
+            /**
+             *  Structure representing a node of a path.
+             */
             struct Node
             {
+                /**
+                 *  The ID of the path node.
+                 */
                 htd::id_t id;
 
+                /**
+                 *  The parent of the path node.
+                 */
                 htd::vertex_t parent;
 
+                /**
+                 *  The child of the path node.
+                 */
                 htd::vertex_t child;
 
+                /**
+                 *  Constructor for a path node.
+                 *
+                 *  @param[in] id       The ID of the constructed path node.
+                 *  @param[in] parent   The parent of the constructed path node.
+                 */
                 Node(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), child(htd::Vertex::UNKNOWN)
                 {
 

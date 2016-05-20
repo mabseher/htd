@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 
+#include <htd/Collection.hpp>
 #include <htd/ConstCollection.hpp>
 #include <htd/Iterator.hpp>
 #include <htd/ConstIterator.hpp>
@@ -42,155 +43,331 @@ namespace htd
     class VectorAdapter
     {
         public:
+            /**
+             *  Constructor for an adapter of an empty vector.
+             */
             VectorAdapter(void) : container_(std::make_shared<std::vector<T, Allocator>>())
             {
 
             }
 
+            /**
+             *  Constructor for an adapter of a vector.
+             *
+             *  @param[in] collection   The vector which shall be copied to the new adapter.
+             */
             VectorAdapter(const std::vector<T> & collection) : container_(std::make_shared<std::vector<T, Allocator>>(collection))
             {
 
             }
 
+            /**
+             *  Constructor for an adapter of a vector.
+             *
+             *  @param[in] collection   The vector which shall be transferred to the new adapter.
+             */
             VectorAdapter(std::vector<T> && collection) : container_(std::make_shared<std::vector<T, Allocator>>())
             {
                 std::swap(collection, *container_);
             }
 
+            /**
+             *  Constructor for an adapter of a vector.
+             *
+             *  @param[in] collection   The vector which shall be copied to the new adapter.
+             */
             VectorAdapter(const htd::ConstCollection<T> & collection) : container_(std::make_shared<std::vector<T, Allocator>>(collection.begin(), collection.end()))
             {
 
             }
 
-            VectorAdapter(const VectorAdapter<T> & collection) : container_(collection.container_)
+            /**
+             *  Copy constructor for an adapter of a vector.
+             *
+             *  @param[in] original  The original vector adapter.
+             */
+            VectorAdapter(const VectorAdapter<T> & original) : container_(original.container_)
             {
 
             }
 
-            VectorAdapter(VectorAdapter<T> && collection) : container_(std::move(collection.container_))
+            /**
+             *  Move constructor for an adapter of a vector.
+             *
+             *  @param[in] original  The original vector adapter.
+             */
+            VectorAdapter(VectorAdapter<T> && original) : container_(std::move(original.container_))
             {
 
             }
 
+            /**
+             *  Destructor for a VectorAdapter object.
+             */
             virtual ~VectorAdapter()
             {
 
             }
 
-            bool empty() const
+            /**
+             *  Check whether the vector contains no elements.
+             *
+             *  @return True if the vector contains no elements, false otherwise.
+             */
+            bool empty(void) const
             {
                 return container_->empty();
             }
 
-            std::size_t size() const
+            /**
+             *  Getter for the number of elements of the vector.
+             *
+             *  @return The number of elements of the vector.
+             */
+            std::size_t size(void) const
             {
                 return container_->size();
             }
 
-            std::vector<T, Allocator> & container()
+            /**
+             *  Access the underlying vector wrapped by the adapter.
+             *
+             *  @return The underlying vector wrapped by the adapter.
+             */
+            std::vector<T, Allocator> & container(void)
             {
                 return *container_;
             }
 
-            const std::vector<T, Allocator> & container() const
+            /**
+             *  Access the underlying vector wrapped by the adapter.
+             *
+             *  @return The underlying vector wrapped by the adapter.
+             */
+            const std::vector<T, Allocator> & container(void) const
             {
                 return *container_;
             }
 
+            /**
+             *  Getter for an iterator pointing to the first element in the vector.
+             *
+             *  @return An iterator pointing to the first element in the vector.
+             */
             htd::Iterator<T> begin(void)
             {
                 return htd::VectorAdapterIteratorWrapper<typename std::vector<T, Allocator>::iterator, T, Allocator>(container_, container_->begin());
             }
 
+            /**
+             *  Getter for a const_iterator pointing to the first element in the vector.
+             *
+             *  @return A const_iterator pointing to the first element in the vector.
+             */
             htd::ConstIterator<T> begin(void) const
             {
                 return htd::ConstIterator<T>(new htd::VectorAdapterConstIteratorWrapper<typename std::vector<T, Allocator>::const_iterator, T, Allocator>(container_, container_->begin()));
             }
 
+            /**
+             *  Getter for an iterator pointing to the end of the elements in the vector.
+             *
+             *  @return An iterator pointing to the end of the elements in the vector.
+             */
             htd::Iterator<T> end(void)
             {
                 return htd::VectorAdapterIteratorWrapper<typename std::vector<T, Allocator>::iterator, T, Allocator>(container_, container_->end());
             }
 
+            /**
+             *  Getter for a const_iterator pointing to the end of the elements in the vector.
+             *
+             *  @return A const_iterator pointing to the end of the elements in the vector.
+             */
             htd::ConstIterator<T> end(void) const
             {
                 return htd::ConstIterator<T>(new htd::VectorAdapterConstIteratorWrapper<typename std::vector<T, Allocator>::const_iterator, T, Allocator>(container_, container_->end()));
             }
 
+            /**
+             *  Access the element at the specific position within the vector.
+             *
+             *  @param[in] index    The position of the element.
+             *
+             *  @return The element at the specific position.
+             */
             T & operator[](htd::index_t index)
             {
                 return container_->at(index);
             }
 
+            /**
+             *  Access the element at the specific position within the vector.
+             *
+             *  @param[in] index    The position of the element.
+             *
+             *  @return The element at the specific position.
+             */
             const T & operator[](htd::index_t index) const
             {
                 return container_->at(index);
             }
 
-            VectorAdapter<T, Allocator> & operator=(std::vector<T, Allocator> && rhs)
+            /**
+             *  Move assignment operator for an adapter of a vector.
+             *
+             *  @param[in] original  The original vector.
+             */
+            VectorAdapter<T, Allocator> & operator=(std::vector<T, Allocator> && original)
             {
-                std::swap(rhs, *container_);
+                std::swap(original, *container_);
 
                 return *this;
             }
 
-            VectorAdapter<T, Allocator> & operator=(const VectorAdapter<T, Allocator> & rhs)
+            /**
+             *  Copy assignment operator for an adapter of a vector.
+             *
+             *  @param[in] original  The original vector.
+             */
+            VectorAdapter<T, Allocator> & operator=(const VectorAdapter<T, Allocator> & original)
             {
-                std::swap(rhs, *container_);
+                std::swap(original, *container_);
 
                 return *this;
             }
 
-            VectorAdapter<T, Allocator> & operator=(VectorAdapter<T, Allocator> && rhs)
+            /**
+             *  Move assignment operator for an adapter of a vector.
+             *
+             *  @param[in] original  The original vector.
+             */
+            VectorAdapter<T, Allocator> & operator=(VectorAdapter<T, Allocator> && original)
             {
-                container_ = std::move(rhs.container_);
+                container_ = std::move(original.container_);
 
                 return *this;
             }
 
-            VectorAdapter<T, Allocator> & operator=(htd::Collection<T> & rhs)
+            /**
+             *  Copy assignment operator for an adapter of a vector.
+             *
+             *  @param[in] original  The original collection.
+             */
+            VectorAdapter<T, Allocator> & operator=(const htd::Collection<T> & original)
             {
                 container_->clear();
 
-                std::copy(rhs.begin(), rhs.end(), std::back_inserter(*container_));
+                std::copy(original.begin(), original.end(), std::back_inserter(*container_));
 
                 return *this;
             }
 
-            VectorAdapter<T, Allocator> & operator=(const htd::ConstCollection<T> & rhs)
+            /**
+             *  Copy assignment operator for an adapter of a vector.
+             *
+             *  @param[in] original  The original collection.
+             */
+            VectorAdapter<T, Allocator> & operator=(const htd::ConstCollection<T> & original)
             {
                 container_->clear();
 
-                std::copy(rhs.begin(), rhs.end(), std::back_inserter(*container_));
+                std::copy(original.begin(), original.end(), std::back_inserter(*container_));
 
                 return *this;
             }
 
+            /**
+             *  Copy assignment operator for an adapter of a vector.
+             *
+             *  @param[in] original  The original collection.
+             */
             template <typename CollectionType>
-            VectorAdapter<T, Allocator> & operator=(const CollectionType & rhs)
+            VectorAdapter<T, Allocator> & operator=(const CollectionType & original)
             {
                 container_->clear();
 
-                std::copy(rhs.begin(), rhs.end(), std::back_inserter(*container_));
+                std::copy(original.begin(), original.end(), std::back_inserter(*container_));
 
                 return *this;
             }
 
+            /**
+             *  Equality operator for an adapter of a vector.
+             *
+             *  @param[in] rhs  The collection at the right-hand side of the operator.
+             *
+             *  @return True if the collection of elements in the wrapped vector is equal to
+             *          the collection at the right-hand side of the operator, false otherwise.
+             */
+            inline bool operator==(const VectorAdapter<T, Allocator> & rhs) const
+            {
+                return *container_ == *(rhs.container_);
+            }
+
+            /**
+             *  Equality operator for an adapter of a vector.
+             *
+             *  @param[in] rhs  The collection at the right-hand side of the operator.
+             *
+             *  @return True if the collection of elements in the wrapped vector is equal to
+             *          the collection at the right-hand side of the operator, false otherwise.
+             */
             inline bool operator==(const htd::Collection<T> & rhs) const
             {
                 return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
             }
 
-            inline bool operator!=(const htd::Collection<T> & rhs) const
-            {
-                return !(*this == rhs);
-            }
-
+            /**
+             *  Equality operator for an adapter of a vector.
+             *
+             *  @param[in] rhs  The collection at the right-hand side of the operator.
+             *
+             *  @return True if the collection of elements in the wrapped vector is equal to
+             *          the collection at the right-hand side of the operator, false otherwise.
+             */
             inline bool operator==(const htd::ConstCollection<T> & rhs) const
             {
                 return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
             }
 
+            /**
+             *  Inequality operator for an adapter of a vector.
+             *
+             *  @param[in] rhs  The collection at the right-hand side of the operator.
+             *
+             *  @return True if the collection of elements in the wrapped vector is not equal
+             *          to the collection at the right-hand side of the operator, false
+             *          otherwise.
+             */
+            inline bool operator!=(const VectorAdapter<T, Allocator> & rhs) const
+            {
+                return *container_ != *(rhs.container_);
+            }
+
+            /**
+             *  Inequality operator for an adapter of a vector.
+             *
+             *  @param[in] rhs  The collection at the right-hand side of the operator.
+             *
+             *  @return True if the collection of elements in the wrapped vector is not equal
+             *          to the collection at the right-hand side of the operator, false
+             *          otherwise.
+             */
+            inline bool operator!=(const htd::Collection<T> & rhs) const
+            {
+                return !(*this == rhs);
+            }
+
+            /**
+             *  Inequality operator for an adapter of a vector.
+             *
+             *  @param[in] rhs  The collection at the right-hand side of the operator.
+             *
+             *  @return True if the collection of elements in the wrapped vector is not equal
+             *          to the collection at the right-hand side of the operator, false
+             *          otherwise.
+             */
             inline bool operator!=(const htd::ConstCollection<T> & rhs) const
             {
                 return !(*this == rhs);

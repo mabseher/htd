@@ -325,21 +325,49 @@ namespace htd
                 }
             }
 
+            /**
+             *  Check whether a given vertex name is indeed the name of a known vertex.
+             *
+             *  @param[in] name The vertex name to test.
+             *
+             *  @return True if the given vertex name is indeed the name of a known vertex, false otherwise.
+             */
             bool isVertexName(const VertexNameType & name) const
             {
                 return vertexNamesReverseMap_.count(name) > 0;
             }
 
+            /**
+             *  Check whether a given edge name is indeed the name of a known edge.
+             *
+             *  @param[in] name The edge name to test.
+             *
+             *  @return True if the given edge name is indeed the name of a known edge, false otherwise.
+             */
             bool isEdgeName(const EdgeNameType & name) const
             {
                 return edgeNamesReverseMap_.count(name) > 0;
             }
 
+            /**
+             *  Access the vertex with the given name.
+             *
+             *  @param[in] name The name of the vertex which shall be returned.
+             *
+             *  @return The vertex with the given name.
+             */
             htd::vertex_t lookupVertex(const VertexNameType & name) const
             {
                 return vertexNamesReverseMap_.at(name);
             }
 
+            /**
+             *  Access the ID of the edge with the given name.
+             *
+             *  @param[in] name The name of the edge which shall be returned.
+             *
+             *  @return The ID of the edge with the given name.
+             */
             htd::id_t lookupEdge(const EdgeNameType & name) const
             {
                 return edgeNamesReverseMap_.at(name);

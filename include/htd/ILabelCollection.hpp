@@ -36,18 +36,68 @@ namespace htd
         public:
             virtual ~ILabelCollection() = 0;
 
+            /**
+             *  Getter for the number of different label names.
+             *
+             *  @return The number of different label names.
+             */
             virtual std::size_t labelCount(void) const = 0;
 
+            /**
+             *  Access the collection of all label names.
+             *
+             *  @return The collection of all label names sorted in ascending order.
+             */
             virtual htd::ConstCollection<std::string> labelNames(void) const = 0;
 
+            /**
+             *  Access the label name at the specific position.
+             *
+             *  @param[in] index    The position of the label name.
+             *
+             *  @return The label name at the specific position.
+             */
             virtual const std::string & labelNameAtPosition(htd::index_t index) const = 0;
 
+            /**
+             *  Access the label with the given name.
+             *
+             *  @param[in] labelName    The name of the label.
+             *
+             *  @return The label with the given name.
+             */
             virtual htd::ILabel & label(const std::string & labelName) = 0;
 
+            /**
+             *  Access the label with the given name.
+             *
+             *  @param[in] labelName    The name of the label.
+             *
+             *  @return The label with the given name.
+             */
             virtual const htd::ILabel & label(const std::string & labelName) const = 0;
 
+            /**
+             *  Set the label with the given name.
+             *
+             *  If a label with the same name already exists in the label collection, the
+             *  existing label will be replaced and the memory of the previous label is
+             *  freed.
+             *
+             *  @note When calling this method the control over the memory region of the new label is transferred to the label
+             *  collection. Deleting the label outside the label collection or inserting the same label object with multiple
+             *  names will lead to undefined behavior.
+             *
+             *  @param[in] labelName    The name of the new labeling.
+             *  @param[in] label        The new label.
+             */
             virtual void setLabel(const std::string & labelName, htd::ILabel * label) = 0;
 
+            /**
+             *  Remove the label with the given name.
+             *
+             *  @param[in] labelName    The name of the label which shall be removed.
+             */
             virtual void removeLabel(const std::string & labelName) = 0;
 
             /**

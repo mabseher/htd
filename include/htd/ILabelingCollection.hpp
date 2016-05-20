@@ -97,7 +97,7 @@ namespace htd
              *
              *  @note When calling this method the control over the memory region of the new labeling is transferred to the
              *  labeling collection. Deleting the labeling outside the labeling collection or inserting the same labeling
-             *  object to multiple names will lead to undefined behavior.
+             *  object with multiple names will lead to undefined behavior.
              *
              *  @param[in] labelName    The name of the new labeling.
              *  @param[in] labeling     The new labeling.

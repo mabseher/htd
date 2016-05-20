@@ -39,15 +39,21 @@ namespace htd
     class VectorAdapterConstIteratorWrapper : public htd::ConstIteratorWrapper<Iter, T>
     {
         public:
+            /**
+             *  Constructor for an iterator wrapper.
+             *
+             *  @param[in] collection   The underlying vector at which the iterator points.
+             *  @param[in] baseIterator The underlying iterator which shall be wrapped.
+             */
             VectorAdapterConstIteratorWrapper(const std::shared_ptr<std::vector<T, Allocator>> & collection, const Iter & baseIterator) : htd::ConstIteratorWrapper<Iter, T>(baseIterator), collection_(collection)
             {
 
             }
 
             /**
-             *  Copy constructor for an iterator.
+             *  Copy constructor for an iterator wrapper.
              *
-             *  @param[in] original  The original iterator.
+             *  @param[in] original  The original iterator wrapper.
              */
             VectorAdapterConstIteratorWrapper(const VectorAdapterConstIteratorWrapper<Iter, T, Allocator> & original) : htd::ConstIteratorWrapper<Iter, T>(original), collection_(original.collection_)
             {

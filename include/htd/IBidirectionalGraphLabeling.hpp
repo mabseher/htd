@@ -40,12 +40,40 @@ namespace htd
 
             virtual std::pair<htd::id_t, bool> insertVertex(htd::ILabel * label, const std::function<htd::vertex_t(void)> & vertexCreationFunction) = 0;
 
+            /**
+             *  Check whether a given label is indeed the label of a known vertex.
+             *
+             *  @param[in] label    The label to test.
+             *
+             *  @return True if the given label is indeed the label of a known vertex, false otherwise.
+             */
             virtual bool isVertexLabel(const htd::ILabel & label) const = 0;
 
+            /**
+             *  Check whether a given label is indeed the label of a known edge.
+             *
+             *  @param[in] label    The label to test.
+             *
+             *  @return True if the given label is indeed the label of a known edge, false otherwise.
+             */
             virtual bool isEdgeLabel(const htd::ILabel & label) const = 0;
 
+            /**
+             *  Access the vertex with the given label.
+             *
+             *  @param[in] label    The label of the vertex which shall be returned.
+             *
+             *  @return The vertex with the given label.
+             */
             virtual htd::vertex_t lookupVertex(const htd::ILabel & label) const = 0;
 
+            /**
+             *  Access the ID of the edge with the given label.
+             *
+             *  @param[in] label    The label of the edge which shall be returned.
+             *
+             *  @return The ID of the edge with the given label.
+             */
             virtual htd::id_t lookupEdge(const htd::ILabel & label) const = 0;
 
             /**

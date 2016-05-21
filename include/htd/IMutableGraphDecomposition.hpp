@@ -44,8 +44,24 @@ namespace htd
              */
             virtual ~IMutableGraphDecomposition() = 0;
 
+            /**
+             *  Add a new vertex to the graph decomposition.
+             *
+             *  @param[in] bagContent   The bag content associated with the new vertex.
+             *  @param[in] inducedEdges The collection of induced edges associated with the new vertex.
+             *
+             *  @return The ID of the new vertex.
+             */
             virtual htd::vertex_t addVertex(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
 
+            /**
+             *  Add a new vertex to the graph decomposition.
+             *
+             *  @param[in] bagContent   The bag content associated with the new vertex.
+             *  @param[in] inducedEdges The collection of induced edges associated with the new vertex.
+             *
+             *  @return The ID of the new vertex.
+             */
             virtual htd::vertex_t addVertex(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
 
             /**

@@ -37,14 +37,37 @@ namespace htd
     class PathDecomposition : public htd::LabeledPath, public virtual htd::IMutablePathDecomposition
     {
         public:
+            /**
+             *  Constructor for a path decomposition.
+             */
             PathDecomposition(void);
 
+            /**
+             *  Copy constructor for a path decomposition.
+             *
+             *  @param[in] original  The original path decomposition.
+             */
             PathDecomposition(const PathDecomposition & original);
 
+            /**
+             *  Copy constructor for a path decomposition.
+             *
+             *  @param[in] original  The original path.
+             */
             PathDecomposition(const htd::IPath & original);
 
+            /**
+             *  Copy constructor for a path decomposition.
+             *
+             *  @param[in] original  The original labeled path.
+             */
             PathDecomposition(const htd::ILabeledPath & original);
 
+            /**
+             *  Copy constructor for a path decomposition.
+             *
+             *  @param[in] original  The original path decomposition.
+             */
             PathDecomposition(const htd::IPathDecomposition & original);
             
             ~PathDecomposition();

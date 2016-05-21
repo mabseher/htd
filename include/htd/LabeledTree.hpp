@@ -34,12 +34,30 @@ namespace htd
     class LabeledTree : public htd::Tree, public virtual htd::IMutableLabeledTree
     {
         public:
+            /**
+             *  Constructor for a labeled tree.
+             */
             LabeledTree(void);
 
+            /**
+             *  Copy constructor for a labeled tree.
+             *
+             *  @param[in] original  The original labeled tree.
+             */
             LabeledTree(const LabeledTree & original);
 
+            /**
+             *  Copy constructor for a labeled tree.
+             *
+             *  @param[in] original  The original tree.
+             */
             LabeledTree(const htd::ITree & original);
 
+            /**
+             *  Copy constructor for a labeled tree.
+             *
+             *  @param[in] original  The original labeled tree.
+             */
             LabeledTree(const htd::ILabeledTree & original);
             
             virtual ~LabeledTree();

@@ -108,10 +108,25 @@ namespace htd
 
             std::vector<htd::IGraphDecompositionManipulationOperation *> postProcessingOperations_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             GraphDecompositionAlgorithmFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             GraphDecompositionAlgorithmFactory(const GraphDecompositionAlgorithmFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             GraphDecompositionAlgorithmFactory & operator=(const GraphDecompositionAlgorithmFactory & original);
     };
 }

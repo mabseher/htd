@@ -91,10 +91,25 @@ namespace htd
              */
             htd::IMutableGraphDecomposition * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             GraphDecompositionFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             GraphDecompositionFactory(const GraphDecompositionFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             GraphDecompositionFactory & operator=(const GraphDecompositionFactory & original);
     };
 }

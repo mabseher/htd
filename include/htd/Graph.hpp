@@ -33,12 +33,30 @@ namespace htd
     class Graph : public virtual htd::IMutableGraph
     {
         public:
+            /**
+             *  Constructor for a graph.
+             */
             Graph(void);
 
+            /**
+             *  Constructor for a graph.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             */
             Graph(std::size_t initialSize);
 
+            /**
+             *  Copy constructor for a graph.
+             *
+             *  @param[in] original  The original graph.
+             */
             Graph(const Graph & original);
 
+            /**
+             *  Copy constructor for a graph.
+             *
+             *  @param[in] original  The original graph.
+             */
             Graph(const htd::IGraph & original);
 
             ~Graph();

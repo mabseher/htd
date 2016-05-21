@@ -34,14 +34,37 @@ namespace htd
     class LabeledMultiGraph : public htd::MultiGraph, public virtual htd::IMutableLabeledMultiGraph
     {
         public:
+            /**
+             *  Constructor for a labeled multi-graph.
+             */
             LabeledMultiGraph(void);
 
+            /**
+             *  Constructor for a labeled multi-graph.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             */
             LabeledMultiGraph(std::size_t initialSize);
 
+            /**
+             *  Copy constructor for a labeled multi-graph.
+             *
+             *  @param[in] original  The original labeled multi-graph.
+             */
             LabeledMultiGraph(const LabeledMultiGraph & original);
 
+            /**
+             *  Copy constructor for a labeled multi-graph.
+             *
+             *  @param[in] original  The original multi-graph.
+             */
             LabeledMultiGraph(const htd::IMultiGraph & original);
 
+            /**
+             *  Copy constructor for a labeled multi-graph.
+             *
+             *  @param[in] original  The original labeled multi-graph.
+             */
             LabeledMultiGraph(const htd::ILabeledMultiGraph & original);
             
             virtual ~LabeledMultiGraph();

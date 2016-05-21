@@ -68,10 +68,25 @@ namespace htd
              */
             htd::IConnectedComponentAlgorithm * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             ConnectedComponentAlgorithmFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             ConnectedComponentAlgorithmFactory(const ConnectedComponentAlgorithmFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             ConnectedComponentAlgorithmFactory & operator=(const ConnectedComponentAlgorithmFactory & original);
     };
 }

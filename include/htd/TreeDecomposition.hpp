@@ -37,14 +37,37 @@ namespace htd
     class TreeDecomposition : public htd::LabeledTree, public virtual htd::IMutableTreeDecomposition
     {
         public:
+            /**
+             *  Constructor for a tree decomposition.
+             */
             TreeDecomposition(void);
 
+            /**
+             *  Copy constructor for a tree decomposition.
+             *
+             *  @param[in] original  The original tree decomposition.
+             */
             TreeDecomposition(const TreeDecomposition & original);
 
+            /**
+             *  Copy constructor for a tree decomposition.
+             *
+             *  @param[in] original  The original tree.
+             */
             TreeDecomposition(const htd::ITree & original);
 
+            /**
+             *  Copy constructor for a tree decomposition.
+             *
+             *  @param[in] original  The original labeled tree.
+             */
             TreeDecomposition(const htd::ILabeledTree & original);
 
+            /**
+             *  Copy constructor for a tree decomposition.
+             *
+             *  @param[in] original  The original tree decomposition.
+             */
             TreeDecomposition(const htd::ITreeDecomposition & original);
             
             ~TreeDecomposition();

@@ -249,6 +249,11 @@ namespace htd
                 return !(*this == rhs);
             }
 
+            /**
+             *  Create a new Collection object wrapping the provided collection.
+             *
+             *  @param[in] collection   The collection which shall be wrapped.
+             */
             template <typename CollectionType>
             static Collection<T> getInstance(CollectionType & collection)
             {

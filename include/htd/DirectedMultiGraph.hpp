@@ -36,12 +36,30 @@ namespace htd
     class DirectedMultiGraph : public virtual htd::IMutableDirectedMultiGraph
     {
         public:
+            /**
+             *  Constructor for a directed multi-graph.
+             */
             DirectedMultiGraph(void);
 
+            /**
+             *  Constructor for a directed multi-graph.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             */
             DirectedMultiGraph(std::size_t initialSize);
 
+            /**
+             *  Copy constructor for a directed multi-graph.
+             *
+             *  @param[in] original  The original directed multi-graph.
+             */
             DirectedMultiGraph(const DirectedMultiGraph & original);
 
+            /**
+             *  Copy constructor for a directed multi-graph.
+             *
+             *  @param[in] original  The original directed multi-graph.
+             */
             DirectedMultiGraph(const htd::IDirectedMultiGraph & original);
 
             ~DirectedMultiGraph();

@@ -212,6 +212,11 @@ namespace htd
                 return !(*this == rhs);
             }
 
+            /**
+             *  Create a new ConstCollection object wrapping the provided collection.
+             *
+             *  @param[in] collection   The collection which shall be wrapped.
+             */
             template <typename CollectionType>
             static ConstCollection<T> getInstance(const CollectionType & collection)
             {

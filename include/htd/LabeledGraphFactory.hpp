@@ -109,10 +109,25 @@ namespace htd
              */
             htd::IMutableLabeledGraph * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             LabeledGraphFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             LabeledGraphFactory(const LabeledGraphFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             LabeledGraphFactory & operator=(const LabeledGraphFactory & original);
     };
 }

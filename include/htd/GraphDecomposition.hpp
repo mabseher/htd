@@ -37,14 +37,37 @@ namespace htd
     class GraphDecomposition : public htd::LabeledGraph, public virtual htd::IMutableGraphDecomposition
     {
         public:
+            /**
+             *  Constructor for a graph decomposition.
+             */
             GraphDecomposition(void);
 
+            /**
+             *  Copy constructor for a graph decomposition.
+             *
+             *  @param[in] original  The original graph decomposition.
+             */
             GraphDecomposition(const GraphDecomposition & original);
 
+            /**
+             *  Copy constructor for a graph decomposition.
+             *
+             *  @param[in] original  The original graph.
+             */
             GraphDecomposition(const htd::IGraph & original);
 
+            /**
+             *  Copy constructor for a graph decomposition.
+             *
+             *  @param[in] original  The original labeled graph.
+             */
             GraphDecomposition(const htd::ILabeledGraph & original);
 
+            /**
+             *  Copy constructor for a graph decomposition.
+             *
+             *  @param[in] original  The original graph decomposition.
+             */
             GraphDecomposition(const htd::IGraphDecomposition & original);
             
             ~GraphDecomposition();

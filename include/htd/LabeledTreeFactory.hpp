@@ -91,10 +91,25 @@ namespace htd
              */
             htd::IMutableLabeledTree * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             LabeledTreeFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             LabeledTreeFactory(const LabeledTreeFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             LabeledTreeFactory & operator=(const LabeledTreeFactory & original);
     };
 }

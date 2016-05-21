@@ -38,10 +38,23 @@ namespace htd
     class Path : public virtual htd::IMutablePath
     {
         public:
+            /**
+             *  Constructor for a path.
+             */
             Path(void);
 
+            /**
+             *  Copy constructor for a path.
+             *
+             *  @param[in] original  The original path.
+             */
             Path(const Path & original);
 
+            /**
+             *  Copy constructor for a path.
+             *
+             *  @param[in] original  The original path.
+             */
             Path(const htd::IPath & original);
             
             ~Path();

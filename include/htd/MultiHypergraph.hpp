@@ -35,12 +35,30 @@ namespace htd
     class MultiHypergraph : public virtual htd::IMutableMultiHypergraph
     {
         public:
+            /**
+             *  Constructor for a multi-hypergraph.
+             */
             MultiHypergraph(void);
 
+            /**
+             *  Constructor for a multi-hypergraph.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             */
             MultiHypergraph(std::size_t initialSize);
 
+            /**
+             *  Copy constructor for a multi-hypergraph.
+             *
+             *  @param[in] original  The original multi-hypergraph.
+             */
             MultiHypergraph(const MultiHypergraph & original);
 
+            /**
+             *  Copy constructor for a multi-hypergraph.
+             *
+             *  @param[in] original  The original multi-hypergraph.
+             */
             MultiHypergraph(const htd::IMultiHypergraph & original);
 
             virtual ~MultiHypergraph();

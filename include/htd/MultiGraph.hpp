@@ -35,12 +35,30 @@ namespace htd
     class MultiGraph : public virtual htd::IMutableMultiGraph
     {
         public:
+            /**
+             *  Constructor for a multi-graph.
+             */
             MultiGraph(void);
 
+            /**
+             *  Constructor for a multi-graph.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             */
             MultiGraph(std::size_t initialSize);
 
+            /**
+             *  Copy constructor for a multi-graph.
+             *
+             *  @param[in] original  The original multi-graph.
+             */
             MultiGraph(const MultiGraph & original);
 
+            /**
+             *  Copy constructor for a multi-graph.
+             *
+             *  @param[in] original  The original multi-graph.
+             */
             MultiGraph(const htd::IMultiGraph & original);
 
             ~MultiGraph();

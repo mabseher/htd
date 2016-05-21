@@ -39,8 +39,21 @@ namespace htd
 
             virtual ~IStronglyConnectedComponentAlgorithm() = 0;
 
+            /**
+             *  Determine the strongly connected components of the given graph.
+             *
+             *  @param[in] graph     The graph which's components shall be determinded.
+             *  @param[out] target   The target vector to which the determined components shall be appended.
+             */
             virtual void determineComponents(const htd::IDirectedMultiGraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const = 0;
 
+            /**
+             *  Determine the strongly connected component of the given graph where a given vertex resides.
+             *
+             *  @param[in] graph            The graph which's components shall be determinded.
+             *  @param[in] startingVertex   The specific vertex from which the algorithm shall start.
+             *  @param[out] target          The target vector to which the determined component shall be appended.
+             */
             virtual void determineComponent(const htd::IDirectedMultiGraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const = 0;
 
             /**

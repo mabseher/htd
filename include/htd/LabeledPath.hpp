@@ -34,12 +34,30 @@ namespace htd
     class LabeledPath : public htd::Path, public virtual htd::IMutableLabeledPath
     {
         public:
+            /**
+             *  Constructor for a labeled path.
+             */
             LabeledPath(void);
 
+            /**
+             *  Copy constructor for a labeled path.
+             *
+             *  @param[in] original  The original labeled path.
+             */
             LabeledPath(const LabeledPath & original);
 
+            /**
+             *  Copy constructor for a labeled path.
+             *
+             *  @param[in] original  The original path.
+             */
             LabeledPath(const htd::IPath & original);
 
+            /**
+             *  Copy constructor for a labeled path.
+             *
+             *  @param[in] original  The original labeled path.
+             */
             LabeledPath(const htd::ILabeledPath & original);
             
             virtual ~LabeledPath();

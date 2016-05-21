@@ -34,14 +34,37 @@ namespace htd
     class LabeledDirectedGraph : public htd::DirectedGraph, public virtual htd::IMutableLabeledDirectedGraph
     {
         public:
+            /**
+             *  Constructor for a labeled directed graph.
+             */
             LabeledDirectedGraph(void);
 
+            /**
+             *  Constructor for a labeled directed graph.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             */
             LabeledDirectedGraph(std::size_t initialSize);
 
+            /**
+             *  Copy constructor for a labeled directed graph.
+             *
+             *  @param[in] original  The original labeled directed graph.
+             */
             LabeledDirectedGraph(const LabeledDirectedGraph & original);
 
+            /**
+             *  Copy constructor for a directed graph.
+             *
+             *  @param[in] original  The original directed graph.
+             */
             LabeledDirectedGraph(const htd::IDirectedGraph & original);
 
+            /**
+             *  Copy constructor for a labeled directed graph.
+             *
+             *  @param[in] original  The original labeled directed graph.
+             */
             LabeledDirectedGraph(const htd::ILabeledDirectedGraph & original);
             
             virtual ~LabeledDirectedGraph();

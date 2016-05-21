@@ -35,12 +35,30 @@ namespace htd
     class DirectedGraph : public virtual htd::IMutableDirectedGraph
     {
         public:
+            /**
+             *  Constructor for a directed graph.
+             */
             DirectedGraph(void);
 
+            /**
+             *  Constructor for a directed graph.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             */
             DirectedGraph(std::size_t initialSize);
 
+            /**
+             *  Copy constructor for a directed graph.
+             *
+             *  @param[in] original  The original directed graph.
+             */
             DirectedGraph(const DirectedGraph & original);
 
+            /**
+             *  Copy constructor for a directed graph.
+             *
+             *  @param[in] original  The original directed graph.
+             */
             DirectedGraph(const htd::IDirectedGraph & original);
 
             ~DirectedGraph();

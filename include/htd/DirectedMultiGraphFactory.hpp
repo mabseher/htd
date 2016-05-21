@@ -100,10 +100,25 @@ namespace htd
              */
             htd::IMutableDirectedMultiGraph * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             DirectedMultiGraphFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             DirectedMultiGraphFactory(const DirectedMultiGraphFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             DirectedMultiGraphFactory & operator=(const DirectedMultiGraphFactory & original);
     };
 }

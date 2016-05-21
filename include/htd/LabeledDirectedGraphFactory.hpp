@@ -109,10 +109,25 @@ namespace htd
              */
             htd::IMutableLabeledDirectedGraph * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             LabeledDirectedGraphFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             LabeledDirectedGraphFactory(const LabeledDirectedGraphFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             LabeledDirectedGraphFactory & operator=(const LabeledDirectedGraphFactory & original);
     };
 }

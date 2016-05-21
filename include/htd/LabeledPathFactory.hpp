@@ -91,10 +91,25 @@ namespace htd
              */
             htd::IMutableLabeledPath * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             LabeledPathFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             LabeledPathFactory(const LabeledPathFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             LabeledPathFactory & operator=(const LabeledPathFactory & original);
     };
 }

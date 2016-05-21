@@ -91,10 +91,25 @@ namespace htd
              */
             htd::IMutableHypertreeDecomposition * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             HypertreeDecompositionFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             HypertreeDecompositionFactory(const HypertreeDecompositionFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             HypertreeDecompositionFactory & operator=(const HypertreeDecompositionFactory & original);
     };
 }

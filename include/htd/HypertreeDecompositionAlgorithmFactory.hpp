@@ -107,10 +107,25 @@ namespace htd
 
             std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             HypertreeDecompositionAlgorithmFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             HypertreeDecompositionAlgorithmFactory(const HypertreeDecompositionAlgorithmFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             HypertreeDecompositionAlgorithmFactory & operator=(const HypertreeDecompositionAlgorithmFactory & original);
     };
 }

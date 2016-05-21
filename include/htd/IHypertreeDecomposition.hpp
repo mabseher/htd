@@ -40,6 +40,13 @@ namespace htd
 
             virtual ~IHypertreeDecomposition() = 0;
 
+            /**
+             *  Access the hyperedges covering the bag content of a specific vertex.
+             *
+             *  @param[in] vertex   The vertex for which the covering edges shall be returned.
+             *
+             *  @return The collection of hyperedges covering the bag content of the specific vertex.
+             */
             virtual htd::ConstCollection<htd::Hyperedge> coveringEdges(htd::vertex_t vertex) const = 0;
 
             /**

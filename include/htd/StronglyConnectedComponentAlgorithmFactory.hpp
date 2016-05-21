@@ -68,10 +68,25 @@ namespace htd
              */
             htd::IStronglyConnectedComponentAlgorithm * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             StronglyConnectedComponentAlgorithmFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             StronglyConnectedComponentAlgorithmFactory(const StronglyConnectedComponentAlgorithmFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             StronglyConnectedComponentAlgorithmFactory & operator=(const StronglyConnectedComponentAlgorithmFactory & original);
     };
 }

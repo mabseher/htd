@@ -34,14 +34,37 @@ namespace htd
     class LabeledGraph : public htd::Graph, public virtual htd::IMutableLabeledGraph
     {
         public:
+            /**
+             *  Constructor for a labeled graph.
+             */
             LabeledGraph(void);
 
+            /**
+             *  Constructor for a labeled graph.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             */
             LabeledGraph(std::size_t initialSize);
 
+            /**
+             *  Copy constructor for a labeled graph.
+             *
+             *  @param[in] original  The original labeled graph.
+             */
             LabeledGraph(const LabeledGraph & original);
 
+            /**
+             *  Copy constructor for a labeled graph.
+             *
+             *  @param[in] original  The original graph.
+             */
             LabeledGraph(const htd::IGraph & original);
 
+            /**
+             *  Copy constructor for a labeled graph.
+             *
+             *  @param[in] original  The original labeled graph.
+             */
             LabeledGraph(const htd::ILabeledGraph & original);
             
             virtual ~LabeledGraph();

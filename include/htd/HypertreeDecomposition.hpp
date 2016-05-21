@@ -35,10 +35,23 @@ namespace htd
     class HypertreeDecomposition : public htd::TreeDecomposition, public virtual htd::IMutableHypertreeDecomposition
     {
         public:
+            /**
+             *  Constructor for a hypertree decomposition.
+             */
             HypertreeDecomposition(void);
-            
+
+            /**
+             *  Copy constructor for a hypertree decomposition.
+             *
+             *  @param[in] original  The original tree decomposition.
+             */
             HypertreeDecomposition(const htd::ITreeDecomposition & original);
 
+            /**
+             *  Copy constructor for a hypertree decomposition.
+             *
+             *  @param[in] original  The original hypertree decomposition.
+             */
             HypertreeDecomposition(const htd::IHypertreeDecomposition & original);
 
             ~HypertreeDecomposition();

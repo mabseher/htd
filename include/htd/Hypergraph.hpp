@@ -36,12 +36,30 @@ namespace htd
     class Hypergraph : public virtual htd::IMutableHypergraph
     {
         public:
+            /**
+             *  Constructor for a hypergraph.
+             */
             Hypergraph(void);
 
+            /**
+             *  Constructor for a hypergraph.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             */
             Hypergraph(std::size_t initialSize);
 
+            /**
+             *  Copy constructor for a hypergraph.
+             *
+             *  @param[in] original  The original hypergraph.
+             */
             Hypergraph(const Hypergraph & original);
 
+            /**
+             *  Copy constructor for a hypergraph.
+             *
+             *  @param[in] original  The original hypergraph.
+             */
             Hypergraph(const htd::IHypergraph & original);
 
             virtual ~Hypergraph();

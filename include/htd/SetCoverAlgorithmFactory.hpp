@@ -68,10 +68,25 @@ namespace htd
              */
             htd::ISetCoverAlgorithm * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             SetCoverAlgorithmFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             SetCoverAlgorithmFactory(const SetCoverAlgorithmFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             SetCoverAlgorithmFactory & operator=(const SetCoverAlgorithmFactory & original);
     };
 }

@@ -92,10 +92,25 @@ namespace htd
              */
             htd::IMutablePathDecomposition * constructionTemplate_;
 
+            /**
+             *  Constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             PathDecompositionFactory(void);
 
+            /**
+             *  Copy constructor for the factory class.
+             *
+             *  @note This constructor is private to prevent creating multiple instances of the factory.
+             */
             PathDecompositionFactory(const PathDecompositionFactory & original);
 
+            /**
+             *  Copy assignment operator for the factory class.
+             *
+             *  @note This operator is private to prevent assignments to the factory class.
+             */
             PathDecompositionFactory & operator=(const PathDecompositionFactory & original);
     };
 }

@@ -38,10 +38,23 @@ namespace htd
     class Tree : public virtual htd::IMutableTree
     {
         public:
+            /**
+             *  Constructor for a tree.
+             */
             Tree(void);
 
+            /**
+             *  Copy constructor for a tree.
+             *
+             *  @param[in] original  The original tree.
+             */
             Tree(const Tree & original);
 
+            /**
+             *  Copy constructor for a tree.
+             *
+             *  @param[in] original  The original tree.
+             */
             Tree(const htd::ITree & original);
             
             ~Tree();

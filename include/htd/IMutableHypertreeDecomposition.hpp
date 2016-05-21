@@ -39,8 +39,20 @@ namespace htd
              */
             virtual ~IMutableHypertreeDecomposition() = 0;
 
+            /**
+             *  Set the hyperedges covering the bag content of a specific vertex.
+             *
+             *  @param[in] vertex   The vertex for which the covering edges shall be set.
+             *  @param[in] content  The collection of hyperedges covering the bag content of the specific vertex.
+             */
             virtual void setCoveringEdges(htd::vertex_t vertex, const htd::hyperedge_container & content) = 0;
 
+            /**
+             *  Set the hyperedges covering the bag content of a specific vertex.
+             *
+             *  @param[in] vertex   The vertex for which the covering edges shall be set.
+             *  @param[in] content  The collection of hyperedges covering the bag content of the specific vertex.
+             */
             virtual void setCoveringEdges(htd::vertex_t vertex, const htd::ConstCollection<htd::Hyperedge> & content) = 0;
 
             /**

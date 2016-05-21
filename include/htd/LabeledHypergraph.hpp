@@ -34,14 +34,37 @@ namespace htd
     class LabeledHypergraph : public htd::Hypergraph, public virtual htd::IMutableLabeledHypergraph
     {
         public:
+            /**
+             *  Constructor for a labeled hypergraph.
+             */
             LabeledHypergraph(void);
 
+            /**
+             *  Constructor for a labeled hypergraph.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             */
             LabeledHypergraph(std::size_t initialSize);
 
+            /**
+             *  Copy constructor for a labeled hypergraph.
+             *
+             *  @param[in] original  The original labeled hypergraph.
+             */
             LabeledHypergraph(const LabeledHypergraph & original);
 
+            /**
+             *  Copy constructor for a labeled hypergraph.
+             *
+             *  @param[in] original  The original hypergraph.
+             */
             LabeledHypergraph(const htd::IHypergraph & original);
 
+            /**
+             *  Copy constructor for a labeled hypergraph.
+             *
+             *  @param[in] original  The original labeled hypergraph.
+             */
             LabeledHypergraph(const htd::ILabeledHypergraph & original);
             
             virtual ~LabeledHypergraph();

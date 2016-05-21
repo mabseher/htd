@@ -48,8 +48,20 @@ namespace htd
              */
             static GraphDecompositionFactory & instance(void);
 
+            /**
+             *  Create a new IMutableGraphDecomposition object.
+             *
+             *  @return A new IMutableGraphDecomposition object.
+             */
             htd::IMutableGraphDecomposition * getGraphDecomposition(void);
 
+            /**
+             *  Create a new IMutableGraphDecomposition object.
+             *
+             *  @param[in] original The original graph decomposition acting as template for the created graph.
+             *
+             *  @return A new IMutableGraphDecomposition object identical to the given original graph.
+             */
             htd::IMutableGraphDecomposition * getGraphDecomposition(const htd::IGraphDecomposition & original);
 
             /**
@@ -59,8 +71,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableGraphDecomposition * original);
 
+            /**
+             *  Access the mutable interface of a given graph decomposition.
+             *
+             *  @return The mutable interface of the given graph decomposition.
+             */
             htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(htd::IGraphDecomposition & original);
 
+            /**
+             *  Access the mutable interface of a given graph decomposition.
+             *
+             *  @return The mutable interface of the given graph decomposition.
+             */
             const htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(const htd::IGraphDecomposition & original);
 
         private:

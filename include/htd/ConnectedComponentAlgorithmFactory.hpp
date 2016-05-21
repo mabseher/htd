@@ -48,6 +48,11 @@ namespace htd
              */
             static ConnectedComponentAlgorithmFactory & instance(void);
 
+            /**
+             *  Create a new IConnectedComponentAlgorithm object.
+             *
+             *  @return A new IConnectedComponentAlgorithm object.
+             */
             htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(void);
 
             /**

@@ -48,8 +48,20 @@ namespace htd
              */
             static LabeledPathFactory & instance(void);
 
+            /**
+             *  Create a new IMutableLabeledPath object.
+             *
+             *  @return A new IMutableLabeledPath object.
+             */
             htd::IMutableLabeledPath * getLabeledPath(void);
 
+            /**
+             *  Create a new IMutableLabeledPath object.
+             *
+             *  @param[in] original The original labeled path acting as template for the created graph.
+             *
+             *  @return A new IMutableLabeledPath object identical to the given original graph.
+             */
             htd::IMutableLabeledPath * getLabeledPath(const htd::ILabeledPath & original);
 
             /**
@@ -59,8 +71,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableLabeledPath * original);
 
+            /**
+             *  Access the mutable interface of a given labeled path.
+             *
+             *  @return The mutable interface of the given labeled path.
+             */
             htd::IMutableLabeledPath & accessMutableLabeledPath(htd::ILabeledPath & original);
 
+            /**
+             *  Access the mutable interface of a given labeled path.
+             *
+             *  @return The mutable interface of the given labeled path.
+             */
             const htd::IMutableLabeledPath & accessMutableLabeledPath(const htd::ILabeledPath & original);
 
         private:

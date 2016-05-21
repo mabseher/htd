@@ -48,8 +48,20 @@ namespace htd
              */
             static LabeledTreeFactory & instance(void);
 
+            /**
+             *  Create a new IMutableLabeledTree object.
+             *
+             *  @return A new IMutableLabeledTree object.
+             */
             htd::IMutableLabeledTree * getLabeledTree(void);
 
+            /**
+             *  Create a new IMutableLabeledTree object.
+             *
+             *  @param[in] original The original labeled tree acting as template for the created graph.
+             *
+             *  @return A new IMutableLabeledTree object identical to the given original graph.
+             */
             htd::IMutableLabeledTree * getLabeledTree(const htd::ILabeledTree & original);
 
             /**
@@ -59,8 +71,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableLabeledTree * original);
 
+            /**
+             *  Access the mutable interface of a given labeled tree.
+             *
+             *  @return The mutable interface of the given labeled tree.
+             */
             htd::IMutableLabeledTree & accessMutableLabeledTree(htd::ILabeledTree & original);
 
+            /**
+             *  Access the mutable interface of a given labeled tree.
+             *
+             *  @return The mutable interface of the given labeled tree.
+             */
             const htd::IMutableLabeledTree & accessMutableLabeledTree(const htd::ILabeledTree & original);
 
         private:

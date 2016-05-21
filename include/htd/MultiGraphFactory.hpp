@@ -48,10 +48,29 @@ namespace htd
              */
             static MultiGraphFactory & instance(void);
 
+            /**
+             *  Create a new IMutableMultiGraph object.
+             *
+             *  @return A new IMutableMultiGraph object.
+             */
             htd::IMutableMultiGraph * getMultiGraph(void);
 
+            /**
+             *  Create a new IMutableMultiGraph object.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             *
+             *  @return A new IMutableMultiGraph object of the given size.
+             */
             htd::IMutableMultiGraph * getMultiGraph(std::size_t initialSize);
 
+            /**
+             *  Create a new IMutableMultiGraph object.
+             *
+             *  @param[in] original The original multi-graph acting as template for the created graph.
+             *
+             *  @return A new IMutableMultiGraph object identical to the given original graph.
+             */
             htd::IMutableMultiGraph * getMultiGraph(const htd::IMultiGraph & original);
 
             /**
@@ -61,8 +80,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableMultiGraph * original);
 
+            /**
+             *  Access the mutable interface of a given multi-graph.
+             *
+             *  @return The mutable interface of the given multi-graph.
+             */
             htd::IMutableMultiGraph & accessMutableMultiGraph(htd::IMultiGraph & original);
 
+            /**
+             *  Access the mutable interface of a given multi-graph.
+             *
+             *  @return The mutable interface of the given multi-graph.
+             */
             const htd::IMutableMultiGraph & accessMutableMultiGraph(const htd::IMultiGraph & original);
 
         private:

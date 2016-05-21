@@ -48,12 +48,38 @@ namespace htd
              */
             static DirectedGraphFactory & instance(void);
 
+            /**
+             *  Create a new IMutableDirectedGraph object.
+             *
+             *  @return A new IMutableDirectedGraph object.
+             */
             htd::IMutableDirectedGraph * getDirectedGraph(void);
 
+            /**
+             *  Create a new IMutableDirectedGraph object.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             *
+             *  @return A new IMutableDirectedGraph object of the given size.
+             */
             htd::IMutableDirectedGraph * getDirectedGraph(std::size_t initialSize);
 
+            /**
+             *  Create a new IMutableDirectedGraph object.
+             *
+             *  @param[in] original The original directed graph acting as template for the created graph.
+             *
+             *  @return A new IMutableDirectedGraph object identical to the given original graph.
+             */
             htd::IMutableDirectedGraph * getDirectedGraph(const htd::IDirectedGraph & original);
 
+            /**
+             *  Create a new IMutableDirectedGraph object.
+             *
+             *  @param[in] original The original directed multi-graph acting as template for the created graph.
+             *
+             *  @return A new IMutableDirectedGraph object identical to the given original graph.
+             */
             htd::IMutableDirectedGraph * getDirectedGraph(const htd::IDirectedMultiGraph & original);
 
             /**
@@ -63,8 +89,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableDirectedGraph * original);
 
+            /**
+             *  Access the mutable interface of a given directed graph.
+             *
+             *  @return The mutable interface of the given directed graph.
+             */
             htd::IMutableDirectedGraph & accessMutableDirectedGraph(htd::IDirectedGraph & original);
 
+            /**
+             *  Access the mutable interface of a given directed graph.
+             *
+             *  @return The mutable interface of the given directed graph.
+             */
             const htd::IMutableDirectedGraph & accessMutableDirectedGraph(const htd::IDirectedGraph & original);
 
         private:

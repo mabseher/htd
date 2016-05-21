@@ -48,6 +48,11 @@ namespace htd
              */
             static OrderingAlgorithmFactory & instance(void);
 
+            /**
+             *  Create a new IOrderingAlgorithm object.
+             *
+             *  @return A new IOrderingAlgorithm object.
+             */
             htd::IOrderingAlgorithm * getOrderingAlgorithm(void);
 
             /**

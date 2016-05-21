@@ -48,12 +48,38 @@ namespace htd
              */
             static HypergraphFactory & instance(void);
 
+            /**
+             *  Create a new IMutableHypergraph object.
+             *
+             *  @return A new IMutableHypergraph object.
+             */
             htd::IMutableHypergraph * getHypergraph(void);
 
+            /**
+             *  Create a new IMutableHypergraph object.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             *
+             *  @return A new IMutableHypergraph object of the given size.
+             */
             htd::IMutableHypergraph * getHypergraph(std::size_t initialSize);
 
+            /**
+             *  Create a new IMutableHypergraph object.
+             *
+             *  @param[in] original The original hypergraph acting as template for the created graph.
+             *
+             *  @return A new IMutableHypergraph object identical to the given original graph.
+             */
             htd::IMutableHypergraph * getHypergraph(const htd::IHypergraph & original);
 
+            /**
+             *  Create a new IMutableHypergraph object.
+             *
+             *  @param[in] original The original multi-hypergraph acting as template for the created graph.
+             *
+             *  @return A new IMutableHypergraph object identical to the given original graph.
+             */
             htd::IMutableHypergraph * getHypergraph(const htd::IMultiHypergraph & original);
 
             /**
@@ -63,8 +89,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableHypergraph * original);
 
+            /**
+             *  Access the mutable interface of a given hypergraph.
+             *
+             *  @return The mutable interface of the given hypergraph.
+             */
             htd::IMutableHypergraph & accessMutableHypergraph(htd::IHypergraph & original);
 
+            /**
+             *  Access the mutable interface of a given hypergraph.
+             *
+             *  @return The mutable interface of the given hypergraph.
+             */
             const htd::IMutableHypergraph & accessMutableHypergraph(const htd::IHypergraph & original);
 
         private:

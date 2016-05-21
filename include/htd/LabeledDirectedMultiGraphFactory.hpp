@@ -48,10 +48,29 @@ namespace htd
              */
             static LabeledDirectedMultiGraphFactory & instance(void);
 
+            /**
+             *  Create a new IMutableLabeledDirectedMultiGraph object.
+             *
+             *  @return A new IMutableLabeledDirectedMultiGraph object.
+             */
             htd::IMutableLabeledDirectedMultiGraph * getLabeledDirectedMultiGraph(void);
 
+            /**
+             *  Create a new IMutableLabeledDirectedMultiGraph object.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             *
+             *  @return A new IMutableLabeledDirectedMultiGraph object of the given size.
+             */
             htd::IMutableLabeledDirectedMultiGraph * getLabeledDirectedMultiGraph(std::size_t initialSize);
 
+            /**
+             *  Create a new IMutableLabeledDirectedMultiGraph object.
+             *
+             *  @param[in] original The original labeled directed multi-graph acting as template for the created graph.
+             *
+             *  @return A new IMutableLabeledDirectedMultiGraph object identical to the given original graph.
+             */
             htd::IMutableLabeledDirectedMultiGraph * getLabeledDirectedMultiGraph(const htd::ILabeledDirectedMultiGraph & original);
 
             /**
@@ -61,8 +80,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableLabeledDirectedMultiGraph * original);
 
+            /**
+             *  Access the mutable interface of a given labeled directed multi-graph.
+             *
+             *  @return The mutable interface of the given labeled directed multi-graph.
+             */
             htd::IMutableLabeledDirectedMultiGraph & accessMutableLabeledDirectedMultiGraph(htd::ILabeledDirectedMultiGraph & original);
 
+            /**
+             *  Access the mutable interface of a given labeled directed multi-graph.
+             *
+             *  @return The mutable interface of the given labeled directed multi-graph.
+             */
             const htd::IMutableLabeledDirectedMultiGraph & accessMutableLabeledDirectedMultiGraph(const htd::ILabeledDirectedMultiGraph & original);
 
         private:

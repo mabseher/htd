@@ -48,10 +48,29 @@ namespace htd
              */
             static DirectedMultiGraphFactory & instance(void);
 
+            /**
+             *  Create a new IMutableDirectedMultiGraph object.
+             *
+             *  @return A new IMutableDirectedMultiGraph object.
+             */
             htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(void);
 
+            /**
+             *  Create a new IMutableDirectedMultiGraph object.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             *
+             *  @return A new IMutableDirectedMultiGraph object of the given size.
+             */
             htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(std::size_t initialSize);
 
+            /**
+             *  Create a new IMutableDirectedMultiGraph object.
+             *
+             *  @param[in] original The original directed multi-graph acting as template for the created graph.
+             *
+             *  @return A new IMutableDirectedMultiGraph object identical to the given original graph.
+             */
             htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(const htd::IDirectedMultiGraph & original);
 
             /**
@@ -61,8 +80,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableDirectedMultiGraph * original);
 
+            /**
+             *  Access the mutable interface of a given directed multi-graph.
+             *
+             *  @return The mutable interface of the given directed multi-graph.
+             */
             htd::IMutableDirectedMultiGraph & accessMutableDirectedMultiGraph(htd::IDirectedMultiGraph & original);
 
+            /**
+             *  Access the mutable interface of a given directed multi-graph.
+             *
+             *  @return The mutable interface of the given directed multi-graph.
+             */
             const htd::IMutableDirectedMultiGraph & accessMutableDirectedMultiGraph(const htd::IDirectedMultiGraph & original);
 
         private:

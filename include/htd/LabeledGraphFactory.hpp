@@ -48,12 +48,38 @@ namespace htd
              */
             static LabeledGraphFactory & instance(void);
 
+            /**
+             *  Create a new IMutableLabeledGraph object.
+             *
+             *  @return A new IMutableLabeledGraph object.
+             */
             htd::IMutableLabeledGraph * getLabeledGraph(void);
 
+            /**
+             *  Create a new IMutableLabeledGraph object.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             *
+             *  @return A new IMutableLabeledGraph object of the given size.
+             */
             htd::IMutableLabeledGraph * getLabeledGraph(std::size_t initialSize);
 
+            /**
+             *  Create a new IMutableLabeledGraph object.
+             *
+             *  @param[in] original The original labeled graph acting as template for the created graph.
+             *
+             *  @return A new IMutableLabeledGraph object identical to the given original graph.
+             */
             htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledGraph & original);
 
+            /**
+             *  Create a new IMutableLabeledGraph object.
+             *
+             *  @param[in] original The original labeled multi-graph acting as template for the created graph.
+             *
+             *  @return A new IMutableLabeledGraph object identical to the given original graph.
+             */
             htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledMultiGraph & original);
 
             /**
@@ -63,8 +89,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableLabeledGraph * original);
 
+            /**
+             *  Access the mutable interface of a given labeled graph.
+             *
+             *  @return The mutable interface of the given labeled graph.
+             */
             htd::IMutableLabeledGraph & accessMutableLabeledGraph(htd::ILabeledGraph & original);
 
+            /**
+             *  Access the mutable interface of a given labeled graph.
+             *
+             *  @return The mutable interface of the given labeled graph.
+             */
             const htd::IMutableLabeledGraph & accessMutableLabeledGraph(const htd::ILabeledGraph & original);
 
         private:

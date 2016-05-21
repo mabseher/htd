@@ -48,6 +48,11 @@ namespace htd
              */
             static StronglyConnectedComponentAlgorithmFactory & instance(void);
 
+            /**
+             *  Create a new IStronglyConnectedComponentAlgorithm object.
+             *
+             *  @return A new IStronglyConnectedComponentAlgorithm object.
+             */
             htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(void);
 
             /**

@@ -48,6 +48,11 @@ namespace htd
              */
             static SetCoverAlgorithmFactory & instance(void);
 
+            /**
+             *  Create a new ISetCoverAlgorithm object.
+             *
+             *  @return A new ISetCoverAlgorithm object.
+             */
             htd::ISetCoverAlgorithm * getSetCoverAlgorithm(void);
 
             /**

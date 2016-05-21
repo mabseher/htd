@@ -49,8 +49,20 @@ namespace htd
              */
             static PathDecompositionFactory & instance(void);
 
+            /**
+             *  Create a new IMutablePathDecomposition object.
+             *
+             *  @return A new IMutablePathDecomposition object.
+             */
             htd::IMutablePathDecomposition * getPathDecomposition(void);
 
+            /**
+             *  Create a new IMutablePathDecomposition object.
+             *
+             *  @param[in] original The original path decomposition acting as template for the created graph.
+             *
+             *  @return A new IMutablePathDecomposition object identical to the given original graph.
+             */
             htd::IMutablePathDecomposition * getPathDecomposition(const htd::IPathDecomposition & original);
 
             /**
@@ -60,8 +72,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutablePathDecomposition * original);
 
+            /**
+             *  Access the mutable interface of a given path decomposition.
+             *
+             *  @return The mutable interface of the given path decomposition.
+             */
             htd::IMutablePathDecomposition & accessMutablePathDecomposition(htd::IPathDecomposition & original);
 
+            /**
+             *  Access the mutable interface of a given path decomposition.
+             *
+             *  @return The mutable interface of the given path decomposition.
+             */
             const htd::IMutablePathDecomposition & accessMutablePathDecomposition(const htd::IPathDecomposition & original);
 
         private:

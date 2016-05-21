@@ -48,10 +48,29 @@ namespace htd
              */
             static LabeledMultiGraphFactory & instance(void);
 
+            /**
+             *  Create a new IMutableLabeledMultiGraph object.
+             *
+             *  @return A new IMutableLabeledMultiGraph object.
+             */
             htd::IMutableLabeledMultiGraph * getLabeledMultiGraph(void);
 
+            /**
+             *  Create a new IMutableLabeledMultiGraph object.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             *
+             *  @return A new IMutableLabeledMultiGraph object of the given size.
+             */
             htd::IMutableLabeledMultiGraph * getLabeledMultiGraph(std::size_t initialSize);
 
+            /**
+             *  Create a new IMutableLabeledMultiGraph object.
+             *
+             *  @param[in] original The original labeled multi-graph acting as template for the created graph.
+             *
+             *  @return A new IMutableLabeledMultiGraph object identical to the given original graph.
+             */
             htd::IMutableLabeledMultiGraph * getLabeledMultiGraph(const htd::ILabeledMultiGraph & original);
 
             /**
@@ -61,8 +80,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableLabeledMultiGraph * original);
 
+            /**
+             *  Access the mutable interface of a given labeled multi-graph.
+             *
+             *  @return The mutable interface of the given labeled multi-graph.
+             */
             htd::IMutableLabeledMultiGraph & accessMutableLabeledMultiGraph(htd::ILabeledMultiGraph & original);
 
+            /**
+             *  Access the mutable interface of a given labeled multi-graph.
+             *
+             *  @return The mutable interface of the given labeled multi-graph.
+             */
             const htd::IMutableLabeledMultiGraph & accessMutableLabeledMultiGraph(const htd::ILabeledMultiGraph & original);
 
         private:

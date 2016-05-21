@@ -48,10 +48,29 @@ namespace htd
              */
             static MultiHypergraphFactory & instance(void);
 
+            /**
+             *  Create a new IMutableMultiHypergraph object.
+             *
+             *  @return A new IMutableMultiHypergraph object.
+             */
             htd::IMutableMultiHypergraph * getMultiHypergraph(void);
 
+            /**
+             *  Create a new IMutableMultiHypergraph object.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             *
+             *  @return A new IMutableMultiHypergraph object of the given size.
+             */
             htd::IMutableMultiHypergraph * getMultiHypergraph(std::size_t initialSize);
 
+            /**
+             *  Create a new IMutableMultiHypergraph object.
+             *
+             *  @param[in] original The original multi-hypergraph acting as template for the created graph.
+             *
+             *  @return A new IMutableMultiHypergraph object identical to the given original graph.
+             */
             htd::IMutableMultiHypergraph * getMultiHypergraph(const htd::IMultiHypergraph & original);
 
             /**
@@ -61,8 +80,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableMultiHypergraph * original);
 
+            /**
+             *  Access the mutable interface of a given multi-hypergraph.
+             *
+             *  @return The mutable interface of the given multi-hypergraph.
+             */
             htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(htd::IMultiHypergraph & original);
 
+            /**
+             *  Access the mutable interface of a given multi-hypergraph.
+             *
+             *  @return The mutable interface of the given multi-hypergraph.
+             */
             const htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(const htd::IMultiHypergraph & original);
 
         private:

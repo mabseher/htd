@@ -48,12 +48,38 @@ namespace htd
              */
             static GraphFactory & instance(void);
 
+            /**
+             *  Create a new IMutableGraph object.
+             *
+             *  @return A new IMutableGraph object.
+             */
             htd::IMutableGraph * getGraph(void);
 
+            /**
+             *  Create a new IMutableGraph object.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             *
+             *  @return A new IMutableGraph object of the given size.
+             */
             htd::IMutableGraph * getGraph(std::size_t initialSize);
 
+            /**
+             *  Create a new IMutableGraph object.
+             *
+             *  @param[in] original The original graph acting as template for the created graph.
+             *
+             *  @return A new IMutableGraph object identical to the given original graph.
+             */
             htd::IMutableGraph * getGraph(const htd::IGraph & original);
 
+            /**
+             *  Create a new IMutableGraph object.
+             *
+             *  @param[in] original The original multi-graph acting as template for the created graph.
+             *
+             *  @return A new IMutableGraph object identical to the given original graph.
+             */
             htd::IMutableGraph * getGraph(const htd::IMultiGraph & original);
 
             /**
@@ -63,8 +89,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableGraph * original);
 
+            /**
+             *  Access the mutable interface of a given graph.
+             *
+             *  @return The mutable interface of the given graph.
+             */
             htd::IMutableGraph & accessMutableGraph(htd::IGraph & original);
 
+            /**
+             *  Access the mutable interface of a given graph.
+             *
+             *  @return The mutable interface of the given graph.
+             */
             const htd::IMutableGraph & accessMutableGraph(const htd::IGraph & original);
 
         private:

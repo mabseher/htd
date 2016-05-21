@@ -48,8 +48,20 @@ namespace htd
              */
             static TreeDecompositionFactory & instance(void);
 
+            /**
+             *  Create a new IMutableTreeDecomposition object.
+             *
+             *  @return A new IMutableTreeDecomposition object.
+             */
             htd::IMutableTreeDecomposition * getTreeDecomposition(void);
 
+            /**
+             *  Create a new IMutableTreeDecomposition object.
+             *
+             *  @param[in] original The original tree decomposition acting as template for the created graph.
+             *
+             *  @return A new IMutableTreeDecomposition object identical to the given original graph.
+             */
             htd::IMutableTreeDecomposition * getTreeDecomposition(const htd::ITreeDecomposition & original);
 
             /**
@@ -59,8 +71,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableTreeDecomposition * original);
 
+            /**
+             *  Access the mutable interface of a given tree decomposition.
+             *
+             *  @return The mutable interface of the given tree decomposition.
+             */
             htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(htd::ITreeDecomposition & original);
 
+            /**
+             *  Access the mutable interface of a given tree decomposition.
+             *
+             *  @return The mutable interface of the given tree decomposition.
+             */
             const htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(const htd::ITreeDecomposition & original);
 
         private:

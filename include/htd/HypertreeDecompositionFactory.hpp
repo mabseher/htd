@@ -48,8 +48,20 @@ namespace htd
              */
             static HypertreeDecompositionFactory & instance(void);
 
+            /**
+             *  Create a new IMutableHypertreeDecomposition object.
+             *
+             *  @return A new IMutableHypertreeDecomposition object.
+             */
             htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(void);
 
+            /**
+             *  Create a new IMutableHypertreeDecomposition object.
+             *
+             *  @param[in] original The original hypertree decomposition acting as template for the created graph.
+             *
+             *  @return A new IMutableHypertreeDecomposition object identical to the given original graph.
+             */
             htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(const htd::ITreeDecomposition & original);
 
             /**
@@ -59,8 +71,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableHypertreeDecomposition * original);
 
+            /**
+             *  Access the mutable interface of a given hypertree decomposition.
+             *
+             *  @return The mutable interface of the given hypertree decomposition.
+             */
             htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(htd::IHypertreeDecomposition & original);
 
+            /**
+             *  Access the mutable interface of a given hypertree decomposition.
+             *
+             *  @return The mutable interface of the given hypertree decomposition.
+             */
             const htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(const htd::IHypertreeDecomposition & original);
 
         private:

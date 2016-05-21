@@ -48,12 +48,38 @@ namespace htd
              */
             static LabeledDirectedGraphFactory & instance(void);
 
+            /**
+             *  Create a new IMutableLabeledDirectedGraph object.
+             *
+             *  @return A new IMutableLabeledDirectedGraph object.
+             */
             htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(void);
 
+            /**
+             *  Create a new IMutableLabeledDirectedGraph object.
+             *
+             *  @param[in] initialSize  The initial size of the created graph.
+             *
+             *  @return A new IMutableLabeledDirectedGraph object of the given size.
+             */
             htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(std::size_t initialSize);
 
+            /**
+             *  Create a new IMutableLabeledDirectedGraph object.
+             *
+             *  @param[in] original The original labeled directed graph acting as template for the created graph.
+             *
+             *  @return A new IMutableLabeledDirectedGraph object identical to the given original graph.
+             */
             htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original);
 
+            /**
+             *  Create a new IMutableLabeledDirectedGraph object.
+             *
+             *  @param[in] original The original labeled directed multi-graph acting as template for the created graph.
+             *
+             *  @return A new IMutableLabeledDirectedGraph object identical to the given original graph.
+             */
             htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original);
 
             /**
@@ -63,8 +89,18 @@ namespace htd
              */
             void setConstructionTemplate(htd::IMutableLabeledDirectedGraph * original);
 
+            /**
+             *  Access the mutable interface of a given labeled directed graph.
+             *
+             *  @return The mutable interface of the given labeled directed graph.
+             */
             htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(htd::ILabeledDirectedGraph & original);
 
+            /**
+             *  Access the mutable interface of a given labeled directed graph.
+             *
+             *  @return The mutable interface of the given labeled directed graph.
+             */
             const htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original);
 
         private:

@@ -141,8 +141,22 @@ namespace htd
              */
             virtual void swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2) = 0;
 
+            /**
+             *  Create a new ILabelCollection object containing all labels for a given vertex.
+             *
+             *  @param[in] vertex   The vertex which's labels shall be returned.
+             *
+             *  @return A new ILabelCollection object containing all labels for the given vertex.
+             */
             virtual htd::ILabelCollection * exportVertexLabelCollection(htd::vertex_t vertex) const = 0;
 
+            /**
+             *  Create a new ILabelCollection object containing all labels for a given edge.
+             *
+             *  @param[in] edgeId   The ID of the edge which's labels shall be returned.
+             *
+             *  @return A new ILabelCollection object containing all labels for the given edge.
+             */
             virtual htd::ILabelCollection * exportEdgeLabelCollection(htd::id_t edgeId) const = 0;
 
             /**
@@ -152,16 +166,50 @@ namespace htd
              */
             virtual ILabelingCollection * clone(void) const = 0;
 
+            /**
+             *  Access the labeling with the given name.
+             *
+             *  @param[in] labelName    The name of the labeling.
+             *
+             *  @return The labeling with the given name.
+             */
             virtual htd::IGraphLabeling & operator[](const std::string & labelName) = 0;
 
+            /**
+             *  Access the labeling with the given name.
+             *
+             *  @param[in] labelName    The name of the labeling.
+             *
+             *  @return The labeling with the given name.
+             */
             virtual const htd::IGraphLabeling & operator[](const std::string & labelName) const = 0;
 
+            /**
+             *  Getter for the iterator to the first element in the collection.
+             *
+             *  @return An iterator to the first element in the collection.
+             */
             virtual htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) = 0;
 
+            /**
+             *  Getter for the iterator to the first element in the collection.
+             *
+             *  @return An iterator to the first element in the collection.
+             */
             virtual const htd::ConstIterator<std::pair<const std::string, htd::IGraphLabeling *>> begin(void) const = 0;
 
+            /**
+             *  Getter for the iterator to the end of the collection.
+             *
+             *  @return An iterator to the end of the collection.
+             */
             virtual htd::Iterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) = 0;
 
+            /**
+             *  Getter for the iterator to the end of the collection.
+             *
+             *  @return An iterator to the end of the collection.
+             */
             virtual const htd::ConstIterator<std::pair<const std::string, htd::IGraphLabeling *>> end(void) const = 0;
     };
 

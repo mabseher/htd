@@ -37,9 +37,23 @@ namespace htd
         public:
             virtual ~ISetCoverAlgorithm() = 0;
 
-            virtual htd::ConstCollection<htd::index_t> computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers) const = 0;
+            /**
+             *  Determine the connected components of the given graph.
+             *
+             *  @param[in] elements     The set of elements which must be covered.
+             *  @param[in] containers   The collection of containers which are available for covering the given elements.
+             *  @param[out] target      The target vector to which the indices of the covering containers shall be appended.
+             */
+            virtual void computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const = 0;
 
-            virtual htd::ConstCollection<htd::index_t> computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers) const = 0;
+            /**
+             *  Determine the connected components of the given graph.
+             *
+             *  @param[in] elements     The set of elements which must be covered.
+             *  @param[in] containers   The collection of containers which are available for covering the given elements.
+             *  @param[out] target      The target vector to which the indices of the covering containers shall be appended.
+             */
+            virtual void computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const = 0;
 
             /**
              *  Create a deep copy the current set-cover algorithm.

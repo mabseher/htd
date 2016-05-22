@@ -39,13 +39,18 @@ namespace htd
             
             ~SetCoverAlgorithm();
             
-            htd::ConstCollection<htd::index_t> computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers) const HTD_OVERRIDE;
+            void computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::index_t> computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers) const HTD_OVERRIDE;
+            void computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const HTD_OVERRIDE;
 
             SetCoverAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:
+            /**
+             *  Copy assignment operator for a set cover algorithm.
+             *
+             *  @note This operator is protected to prevent assignments to an already initialized algorithm.
+             */
             SetCoverAlgorithm & operator=(const SetCoverAlgorithm &) { return *this; }
 
         private:

@@ -189,6 +189,18 @@ namespace htd
                 }
             }
 
+            /**
+             *  Insert a vertex with the given name if a vertex with the same name not already exists.
+             *
+             *  @param[in] name                     The name of the vertex which shall be inserted.
+             *  @param[in] vertexCreationFunction   A function which is used to generate a new vertex ID in case that no vertex with the given name already exists.
+             *
+             *  @note Examples for the vertex creation function are the addVertex() functions of the mutable graph classes, i.e. htd::IMutableMultiHypergraph::addVertex().
+             *
+             *  @return A pair which's first value is the ID associated with the given vertex name. The second value of the pair is a boolean set to true in
+             *  case the vertex was inserted. If the second value of the pair is set to false, this means that a vertex with the same name was already part
+             *  of the graph naming and that the vertex creation function was not called.
+             */
             std::pair<htd::id_t, bool> insertVertex(const VertexNameType & name, const std::function<htd::vertex_t(void)> & vertexCreationFunction)
             {
                 std::pair<htd::id_t, bool> ret(0, false);
@@ -215,6 +227,16 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Insert a set of vertices with the given names. A vertex is only inserted if a vertex with the same name not already exists.
+             *
+             *  @param[in] names                    The names of the vertices which shall be inserted.
+             *  @param[in] vertexCreationFunction   A function which is used to generate a new vertex ID in case that no vertex with the given name already exists.
+             *
+             *  @note Examples for the vertex creation function are the addVertex() functions of the mutable graph classes, i.e. htd::IMutableMultiHypergraph::addVertex().
+             *
+             *  @return A vector of the vertex IDs corresponding to the given names.
+             */
             std::vector<htd::id_t> insertVertices(const std::vector<VertexNameType> & names, const std::function<htd::vertex_t(void)> & vertexCreationFunction)
             {
                 std::vector<htd::id_t> ret;
@@ -244,6 +266,16 @@ namespace htd
                 return ret;
             }
 
+            /**
+             *  Insert a set of vertices with the given names. A vertex is only inserted if a vertex with the same name not already exists.
+             *
+             *  @param[in] names                    The names of the vertices which shall be inserted.
+             *  @param[in] vertexCreationFunction   A function which is used to generate a new vertex ID in case that no vertex with the given name already exists.
+             *
+             *  @note Examples for the vertex creation function are the addVertex() functions of the mutable graph classes, i.e. htd::IMutableMultiHypergraph::addVertex().
+             *
+             *  @return A vector of the vertex IDs corresponding to the given names.
+             */
             std::vector<htd::id_t> insertVertices(const htd::ConstCollection<VertexNameType> & names, const std::function<htd::vertex_t(void)> & vertexCreationFunction)
             {
                 std::vector<htd::id_t> ret;

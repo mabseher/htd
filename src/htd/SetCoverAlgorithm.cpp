@@ -46,19 +46,12 @@ htd::SetCoverAlgorithm::~SetCoverAlgorithm()
     
 }
 
-htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers) const
+void htd::SetCoverAlgorithm::computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const
 {
-    std::vector<htd::ConstCollection<htd::id_t>> wrappedContainers;
-
-    for (const std::vector<htd::id_t> & container : containers)
-    {
-        wrappedContainers.push_back(htd::ConstCollection<htd::id_t>::getInstance(container));
-    }
-
-    return computeSetCover(htd::ConstCollection<htd::id_t>::getInstance(elements), htd::ConstCollection<htd::ConstCollection<htd::id_t>>::getInstance(wrappedContainers));
+    computeSetCover(htd::ConstCollection<htd::id_t>::getInstance(elements), htd::ConstCollection<std::vector<htd::id_t>>::getInstance(containers), target);
 }
 
-htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<htd::ConstCollection<htd::id_t>> & containers) const
+void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const
 {
     htd::id_t next = 0;
     
@@ -341,10 +334,8 @@ htd::ConstCollection<htd::index_t> htd::SetCoverAlgorithm::computeSetCover(const
         std::cout << "Total solutions: " << count << std::endl << std::endl;
         )
 
-        return htd::ConstCollection<htd::index_t>::getInstance(htd::VectorAdapter<htd::index_t>(solutions[0]));
+        std::copy(solutions[0].begin(), solutions[0].end(), std::back_inserter(target));
     }
-
-    return htd::ConstCollection<htd::index_t>::getInstance(htd::VectorAdapter<htd::index_t>());
 }
 
 htd::SetCoverAlgorithm * htd::SetCoverAlgorithm::clone(void) const

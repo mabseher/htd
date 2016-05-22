@@ -33,6 +33,7 @@
 #include <stack>
 #include <stdexcept>
 
+/*
 struct Node
 {
     int id;
@@ -45,6 +46,7 @@ struct Node
 
     unsigned int vindex;
 };
+*/
 
 htd::TarjanStronglyConnectedComponentAlgorithm::TarjanStronglyConnectedComponentAlgorithm(void)
 {

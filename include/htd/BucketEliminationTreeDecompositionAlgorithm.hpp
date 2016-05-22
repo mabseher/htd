@@ -90,7 +90,7 @@ namespace htd
             /**
              *  Copy assignment operator for a tree decomposition algorithm based on bucket elimination.
              *
-             *  @note This constructor is protected to prevent assignments to an already initialized algorithm.
+             *  @note This operator is protected to prevent assignments to an already initialized algorithm.
              */
             BucketEliminationTreeDecompositionAlgorithm & operator=(const BucketEliminationTreeDecompositionAlgorithm &) { return *this; }
 

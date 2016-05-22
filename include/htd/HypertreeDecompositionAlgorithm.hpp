@@ -88,7 +88,7 @@ namespace htd
             /**
              *  Copy assignment operator for a hypertree decomposition algorithm.
              *
-             *  @note This constructor is protected to prevent assignments to an already initialized algorithm.
+             *  @note This operator is protected to prevent assignments to an already initialized algorithm.
              */
             HypertreeDecompositionAlgorithm & operator=(const HypertreeDecompositionAlgorithm &) { return *this; }
 

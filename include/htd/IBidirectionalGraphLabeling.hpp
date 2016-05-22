@@ -38,6 +38,18 @@ namespace htd
         public:
             virtual ~IBidirectionalGraphLabeling() = 0;
 
+            /**
+             *  Insert a vertex with the given label if a vertex with an identical label not already exists.
+             *
+             *  @param[in] label                    The label of the vertex which shall be inserted.
+             *  @param[in] vertexCreationFunction   A function which is used to generate a new vertex ID in case that no vertex with the given label already exists.
+             *
+             *  @note Examples for the vertex creation function are the addVertex() functions of the mutable graph classes, i.e. htd::IMutableMultiHypergraph::addVertex().
+             *
+             *  @return A pair which's first value is the ID associated with the given vertex label. The second value of the pair is a boolean set to true in
+             *  case the vertex was inserted. If the second value of the pair is set to false, this means that a vertex with the same label was already part
+             *  of the graph labeling and that the vertex creation function was not called.
+             */
             virtual std::pair<htd::id_t, bool> insertVertex(htd::ILabel * label, const std::function<htd::vertex_t(void)> & vertexCreationFunction) = 0;
 
             /**

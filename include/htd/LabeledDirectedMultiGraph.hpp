@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IMutableLabeledDirectedMultiGraph interface.
+     */
     class LabeledDirectedMultiGraph : public htd::DirectedMultiGraph, public virtual htd::IMutableLabeledDirectedMultiGraph
     {
         public:

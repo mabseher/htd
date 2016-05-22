@@ -36,6 +36,9 @@ namespace htd
      */
     typedef htd::id_t vertex_t;
 
+    /**
+     *  Structure containing default values for special vertices.
+     */
     struct Vertex
     {
         public:

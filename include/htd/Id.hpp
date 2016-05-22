@@ -35,6 +35,9 @@ namespace htd
      */
     typedef std::uint_least32_t id_t;
 
+    /**
+     *  Structure containing default values for special identifiers.
+     */
     struct Id
     {
         public:

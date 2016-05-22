@@ -35,6 +35,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IMutablePath interface.
+     */
     class Path : public virtual htd::IMutablePath
     {
         public:

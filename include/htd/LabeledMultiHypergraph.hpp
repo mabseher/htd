@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IMutableLabeledMultiHypergraph interface.
+     */
     class LabeledMultiHypergraph : public htd::MultiHypergraph, public virtual htd::IMutableLabeledMultiHypergraph
     {
         public:

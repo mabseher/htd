@@ -30,9 +30,15 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of a manipulation operation which ensures that the parents of join nodes of a decomposition have the same bag content as the join nodes.
+     */
     class AddIdenticalJoinNodeParentOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
+            /**
+             *  Constructor for a new manipulation operation of type AddIdenticalJoinNodeParentOperation.
+             */
             AddIdenticalJoinNodeParentOperation(void);
 
             ~AddIdenticalJoinNodeParentOperation();

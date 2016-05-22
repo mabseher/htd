@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IMutableDirectedGraph interface.
+     */
     class DirectedGraph : public virtual htd::IMutableDirectedGraph
     {
         public:

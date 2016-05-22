@@ -35,6 +35,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IMutableTree interface.
+     */
     class Tree : public virtual htd::IMutableTree
     {
         public:

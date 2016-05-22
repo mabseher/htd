@@ -32,6 +32,9 @@ namespace htd
      */
     typedef unsigned char state_t;
 
+    /**
+     *  Structure containing default values for special states.
+     */
     struct State
     {
         public:

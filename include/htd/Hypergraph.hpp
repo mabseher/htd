@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IMutableHypergraph interface.
+     */
     class Hypergraph : public virtual htd::IMutableHypergraph
     {
         public:

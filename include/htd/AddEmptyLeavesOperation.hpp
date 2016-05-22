@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of a manipulation operation which ensures that the leaf nodes of a decomposition have empty bags.
+     */
     class AddEmptyLeavesOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:

@@ -33,9 +33,15 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of a manipulation operation which ensures that the nodes of a decomposition have only subset-maximal bags.
+     */
     class CompressionOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
+            /**
+             *  Constructor for a new manipulation operation of type CompressionOperation.
+             */
             CompressionOperation(void);
 
             virtual ~CompressionOperation();

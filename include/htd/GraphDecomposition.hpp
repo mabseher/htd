@@ -34,6 +34,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IMutableGraphDecomposition interface.
+     */
     class GraphDecomposition : public htd::LabeledGraph, public virtual htd::IMutableGraphDecomposition
     {
         public:

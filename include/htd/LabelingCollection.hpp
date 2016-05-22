@@ -40,10 +40,23 @@ namespace htd
     class LabelingCollection : public virtual htd::ILabelingCollection
     {
         public:
+            /**
+             *  Constructor for a labeling collection.
+             */
             LabelingCollection(void);
 
+            /**
+             *  Copy constructor for a labeling collection.
+             *
+             *  @param[in] original The original labeling collection.
+             */
             LabelingCollection(const LabelingCollection & original);
 
+            /**
+             *  Copy constructor for a labeling collection.
+             *
+             *  @param[in] original The original labeling collection.
+             */
             LabelingCollection(const htd::ILabelingCollection & original);
             
             ~LabelingCollection();

@@ -35,8 +35,18 @@ namespace htd
     class WeakNormalizationOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
+            /**
+             *  Constructor for a new manipulation operation of type WeakNormalizationOperation.
+             */
             WeakNormalizationOperation(void);
 
+            /**
+             *  Constructor for a new manipulation operation of type WeakNormalizationOperation.
+             *
+             *  @param[in] emptyRoot                A boolean flag whether the decomposition shall have a root node with empty bag.
+             *  @param[in] emptyLeaves              A boolean flag whether the decomposition's leave nodes shall have an empty bag.
+             *  @param[in] identicalJoinNodeParent  A boolean flag whether each join node shall have a parent with equal bag content.
+             */
             WeakNormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent);
 
             virtual ~WeakNormalizationOperation();
@@ -49,10 +59,25 @@ namespace htd
 
             virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
+            /**
+             *  Check whether the flag is set that the decomposition shall have a root node with empty bag.
+             *
+             *  @return True if the decomposition shall have a root node with empty bag, false otherwise.
+             */
             bool emptyRootRequired(void) const;
 
+            /**
+             *  Check whether the flag is set that the decomposition's leave nodes shall have an empty bag.
+             *
+             *  @return True if the decomposition's leave nodes shall have an empty bag, false otherwise.
+             */
             bool emptyLeavesRequired(void) const;
 
+            /**
+             *  Check whether the flag is set that each join node shall have a parent with equal bag content.
+             *
+             *  @return True if each join node shall have a parent with equal bag content, false otherwise.
+             */
             bool identicalJoinNodeParentRequired(void) const;
 
             WeakNormalizationOperation * clone(void) const HTD_OVERRIDE;

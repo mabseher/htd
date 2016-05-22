@@ -33,8 +33,16 @@ namespace htd
     class JoinNodeNormalizationOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
+            /**
+             *  Constructor for a new manipulation operation of type JoinNodeNormalizationOperation.
+             */
             JoinNodeNormalizationOperation(void);
 
+            /**
+             *  Constructor for a new manipulation operation of type JoinNodeNormalizationOperation.
+             *
+             *  @param[in] identicalParent  A boolean flag whether each join node shall have a parent with equal bag content.
+             */
             JoinNodeNormalizationOperation(bool identicalParent);
 
             ~JoinNodeNormalizationOperation();

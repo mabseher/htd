@@ -47,6 +47,11 @@ namespace htd
             NaturalOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:
+            /**
+             *  Copy assignment operator for an ordering algorithm.
+             *
+             *  @note This operator is protected to prevent assignments to an already initialized algorithm.
+             */
             NaturalOrderingAlgorithm & operator=(const NaturalOrderingAlgorithm &) { return *this; }
     };
 }

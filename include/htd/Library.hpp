@@ -33,21 +33,54 @@
 
 namespace htd
 {
+    /**
+     *  Central management class of the library.
+     */
     class Library
     {
         public:
             ~Library();
 
+            /**
+             *  Access the singleton instance of the management class.
+             *
+             *  @return The singleton instance of the management class.
+             */
             static Library & instance(void);
 
+            /**
+             *  Check whether the abort() function was called.
+             *
+             *  @return True if the abort() function was called, false otherwise.
+             */
             bool isAborted(void);
 
+            /**
+             *  Send a termination signal to running algorithms of the library to allow them freeing allocated resources before termination.
+             *
+             *  @param[in] signal   The signal which shall be sent to each signal handler.
+             */
             void abort(int signal);
             
+            /**
+             *  Reset the library, i.e. to re-initialize it after the abort() method was called.
+             */
             void reset(void);
 
+            /**
+             *  Register a new signal handler.
+             *
+             *  @param[in] handler  A callback function which shall be called on arrival of a new signal.
+             *
+             *  @return The ID of the new signal handler.
+             */
             htd::id_t registerSignalHandler(const std::function<void(int)> & handler);
 
+            /**
+             *  Unregister an existing signal handler.
+             *
+             *  @param[in] handlerId    The ID of the signal handler which shall be removed.
+             */
             void unregisterSignalHandler(htd::id_t handlerId);
             
         private:

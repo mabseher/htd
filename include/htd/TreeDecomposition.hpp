@@ -206,7 +206,13 @@ namespace htd
             TreeDecomposition & operator=(const htd::ITreeDecomposition & original) HTD_OVERRIDE;
 
         protected:
-            void getChildrenVertexLabelSetUnion(htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const;
+            /**
+             *  Compute the set union of all child bags of a given vertex.
+             *
+             *  @param[in] vertex   The vertex for which the set union of its children shall be computed.
+             *  @param[out] target  The target vector to which the resulting set union shall be appended.
+             */
+            void getChildBagSetUnion(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const;
 
         private:
             std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> bagContent_;

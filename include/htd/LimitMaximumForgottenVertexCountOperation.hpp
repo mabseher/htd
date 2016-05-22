@@ -35,6 +35,11 @@ namespace htd
     class LimitMaximumForgottenVertexCountOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
+            /**
+             *  Constructor for a new manipulation operation of type LimitMaximumForgottenVertexCountOperation.
+             *
+             *  @param[in] limit    The maximum number of forgotten vertices for a decomposition node.
+             */
             LimitMaximumForgottenVertexCountOperation(std::size_t limit);
 
             ~LimitMaximumForgottenVertexCountOperation();

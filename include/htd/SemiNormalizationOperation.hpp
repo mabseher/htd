@@ -34,8 +34,18 @@ namespace htd
     class SemiNormalizationOperation : public htd::WeakNormalizationOperation
     {
         public:
+            /**
+             *  Constructor for a new manipulation operation of type SemiNormalizationOperation.
+             */
             SemiNormalizationOperation(void);
 
+            /**
+             *  Constructor for a new manipulation operation of type SemiNormalizationOperation.
+             *
+             *  @param[in] emptyRoot                A boolean flag whether the decomposition shall have a root node with empty bag.
+             *  @param[in] emptyLeaves              A boolean flag whether the decomposition's leave nodes shall have an empty bag.
+             *  @param[in] identicalJoinNodeParent  A boolean flag whether each join node shall have a parent with equal bag content.
+             */
             SemiNormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent);
 
             virtual ~SemiNormalizationOperation();

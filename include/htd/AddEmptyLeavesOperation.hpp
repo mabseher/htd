@@ -34,6 +34,9 @@ namespace htd
     class AddEmptyLeavesOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
+            /**
+             *  Constructor for a new manipulation operation of type AddEmptyLeavesOperation.
+             */
             AddEmptyLeavesOperation(void);
 
             ~AddEmptyLeavesOperation();

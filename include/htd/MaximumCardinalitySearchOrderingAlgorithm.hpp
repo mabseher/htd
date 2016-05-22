@@ -47,6 +47,11 @@ namespace htd
             MaximumCardinalitySearchOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:
+            /**
+             *  Copy assignment operator for an ordering algorithm.
+             *
+             *  @note This operator is protected to prevent assignments to an already initialized algorithm.
+             */
             MaximumCardinalitySearchOrderingAlgorithm & operator=(const MaximumCardinalitySearchOrderingAlgorithm &) { return *this; }
     };
 }

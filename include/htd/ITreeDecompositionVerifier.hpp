@@ -36,18 +36,74 @@ namespace htd
         public:
             virtual ~ITreeDecompositionVerifier() = 0;
             
+            /**
+             *  Verify if the given tree decomposition is indeed a valid tree decomposition of the given graph.
+             *
+             *  @param[in] graph            The input graph.
+             *  @param[in] decomposition    The tree decomposition which shall be verified.
+             *
+             *  @return True if the given tree decomposition is indeed a valid tree decomposition of the given graph, false otherwise.
+             */
             virtual bool verify(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
-            
+
+            /**
+             *  Verify whether for each vertex of the input graph there is at least one bag of the given tree decomposition which contains the vertex.
+             *
+             *  @param[in] graph            The input graph.
+             *  @param[in] decomposition    The tree decomposition which shall be verified.
+             *
+             *  @return True if for each vertex of the input graph there is at least one bag of the given tree decomposition which contains the vertex, false otherwise.
+             */
             virtual bool verifyVertexExistence(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
-            
+
+            /**
+             *  Verify whether for each edge of the input graph there is at least one bag of the given tree decomposition which contains the edge.
+             *
+             *  @param[in] graph            The input graph.
+             *  @param[in] decomposition    The tree decomposition which shall be verified.
+             *
+             *  @return True if for each edge of the input graph there is at least one bag of the given tree decomposition which contains the edge, false otherwise.
+             */
             virtual bool verifyHyperedgeCoverage(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
-            
+
+            /**
+             *  Verify whether for each vertex of the input graph the decomposition nodes containing the vertex in their bags form a connected subgraph.
+             *
+             *  @param[in] graph            The input graph.
+             *  @param[in] decomposition    The tree decomposition which shall be verified.
+             *
+             *  @return True if for each vertex of the input graph the decomposition nodes containing the vertex in their bags form a connected subgraph, false otherwise.
+             */
             virtual bool verifyConnectednessCriterion(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
             
+            /**
+             *  Get the collection of all vertices of the input graph which do not occur in any bag of the decomposition.
+             *
+             *  @param[in] graph            The input graph.
+             *  @param[in] decomposition    The tree decomposition which shall be verified.
+             *
+             *  @return The collection of all vertices of the input graph which do not occur in any bag of the decomposition.
+             */
             virtual htd::ConstCollection<htd::vertex_t> violationsVertexExistence(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
-            
+
+            /**
+             *  Get the collection of all edges of the input graph which are not contained in any bag of the decomposition.
+             *
+             *  @param[in] graph            The input graph.
+             *  @param[in] decomposition    The tree decomposition which shall be verified.
+             *
+             *  @return The collection of all edges of the input graph which are not contained in any bag of the decomposition.
+             */
             virtual htd::ConstCollection<htd::Hyperedge> violationsHyperedgeCoverage(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
-            
+
+            /**
+             *  Get the collection of all vertices of the input graph for which the decomposition nodes containing the vertex in their bags do not form a connected subgraph.
+             *
+             *  @param[in] graph            The input graph.
+             *  @param[in] decomposition    The tree decomposition which shall be verified.
+             *
+             *  @return The collection of all vertices of the input graph for which the decomposition nodes containing the vertex in their bags do not form a connected subgraph.
+             */
             virtual htd::ConstCollection<htd::vertex_t> violationsConnectednessCriterion(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
     };
 

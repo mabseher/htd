@@ -36,14 +36,33 @@
 
 struct HistoryEntry
 {
-    std::size_t visits;
+    /**
+     *  The decomposition node under focus.
+     */
     htd::vertex_t vertex;
 
+    /**
+     *  The number of times how often the node was visited.
+     */
+    std::size_t visits;
+
+    /**
+     *  The collection of vertices which are still required by another child of a join node.
+     */
     std::vector<htd::vertex_t> requiredVertices;
 
+    /**
+     *  The collection of children which are available to be assigned as new child of the resulting path node.
+     */
     std::unordered_set<htd::vertex_t> availableChildren;
 
-    HistoryEntry(htd::vertex_t currentVertex, std::size_t visits) : visits(visits), vertex(currentVertex), requiredVertices(), availableChildren()
+    /**
+     *  Constructor of a history entry for the tree traversal.
+     *
+     *  @param[in] currentVertex    The decomposition node under focus.
+     *  @param[in] visits           The number of times how often the node was visited.
+     */
+    HistoryEntry(htd::vertex_t currentVertex, std::size_t visits) : vertex(currentVertex), visits(visits), requiredVertices(), availableChildren()
     {
 
     }

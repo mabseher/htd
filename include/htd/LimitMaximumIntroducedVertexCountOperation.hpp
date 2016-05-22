@@ -35,8 +35,21 @@ namespace htd
     class LimitMaximumIntroducedVertexCountOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
+            /**
+             *  Constructor for a new manipulation operation of type LimitMaximumIntroducedVertexCountOperation.
+             *
+             *  @param[in] limit    The maximum number of introduced vertices for a decomposition node.
+             *
+             *  @note Leaf nodes are not treated as introduce nodes by default, i.e. the provided limit does not apply to leaf nodes.
+             */
             LimitMaximumIntroducedVertexCountOperation(std::size_t limit);
 
+            /**
+             *  Constructor for a new manipulation operation of type LimitMaximumIntroducedVertexCountOperation.
+             *
+             *  @param[in] limit                            The maximum number of introduced vertices for a decomposition node.
+             *  @param[in] treatLeafNodesAsIntroduceNodes   A boolean flag whether leaf nodes shall be treated as introduce nodes in the context of this operation.
+             */
             LimitMaximumIntroducedVertexCountOperation(std::size_t limit, bool treatLeafNodesAsIntroduceNodes);
 
             ~LimitMaximumIntroducedVertexCountOperation();

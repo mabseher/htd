@@ -276,7 +276,7 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(node, childBagContent);
+        getChildBagSetUnion(node, childBagContent);
 
         if (htd::has_non_empty_set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end()))
         {
@@ -299,7 +299,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) co
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(node, childBagContent);
+        getChildBagSetUnion(node, childBagContent);
 
         if (htd::has_non_empty_set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end()))
         {
@@ -336,7 +336,7 @@ bool htd::TreeDecomposition::isForgetNode(htd::vertex_t vertex) const
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         ret = htd::has_non_empty_set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end());
     }
@@ -358,7 +358,7 @@ std::size_t htd::TreeDecomposition::introduceNodeCount(void) const
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(node, childBagContent);
+        getChildBagSetUnion(node, childBagContent);
 
         if (htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end()))
         {
@@ -381,7 +381,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void)
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(node, childBagContent);
+        getChildBagSetUnion(node, childBagContent);
 
         if (htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end()))
         {
@@ -418,7 +418,7 @@ bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t vertex) const
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         ret = htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end());
     }
@@ -513,7 +513,7 @@ std::size_t htd::TreeDecomposition::forgottenVertexCount(htd::vertex_t vertex) c
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         ret = htd::set_difference_size(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end());
     }
@@ -556,7 +556,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(ht
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         std::set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end(), std::back_inserter(result));
     }
@@ -597,7 +597,7 @@ void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> 
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         std::set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end(), std::back_inserter(target));
     }
@@ -678,7 +678,7 @@ std::size_t htd::TreeDecomposition::introducedVertexCount(htd::vertex_t vertex) 
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         ret = htd::set_difference_size(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end());
     }
@@ -721,7 +721,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(h
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         std::set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end(), std::back_inserter(result));
     }
@@ -762,7 +762,7 @@ void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         std::set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end(), std::back_inserter(target));
     }
@@ -843,7 +843,7 @@ std::size_t htd::TreeDecomposition::rememberedVertexCount(htd::vertex_t vertex) 
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         ret = htd::set_intersection_size(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end());
     }
@@ -886,7 +886,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(h
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         std::set_intersection(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end(), std::back_inserter(result));
     }
@@ -927,7 +927,7 @@ void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>
 
         std::vector<htd::vertex_t> childBagContent;
 
-        getChildrenVertexLabelSetUnion(vertex, childBagContent);
+        getChildBagSetUnion(vertex, childBagContent);
 
         std::set_intersection(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end(), std::back_inserter(target));
     }
@@ -998,44 +998,48 @@ bool htd::TreeDecomposition::isRememberedVertex(htd::vertex_t vertex, htd::verte
     return std::binary_search(rememberedVertexCollection.begin(), rememberedVertexCollection.end(), rememberedVertex);
 }
 
-void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const
+void htd::TreeDecomposition::getChildBagSetUnion(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
-    if (isVertex(vertex))
+    HTD_ASSERT(isVertex(vertex))
+
+    switch (nodes_.at(vertex)->children.size())
     {
-        switch (nodes_.at(vertex)->children.size())
+        case 0:
         {
-            case 0:
-            {
-                break;
-            }
-            case 1:
-            {
-                const std::vector<htd::vertex_t> & childBag = bagContent(childAtPosition(vertex, 0));
-
-                std::copy(childBag.begin(), childBag.end(), std::back_inserter(output));
-
-                break;
-            }
-            default:
-            {
-                for (auto child : children(vertex))
-                {
-                    const std::vector<htd::vertex_t> & childBag = bagContent(child);
-
-                    std::copy(childBag.begin(), childBag.end(), std::back_inserter(output));
-                }
-
-                std::sort(output.begin(), output.end());
-
-                output.erase(std::unique(output.begin(), output.end()), output.end());
-
-                break;
-            }
+            break;
         }
-    }
-    else
-    {
-        throw std::logic_error("void htd::TreeDecomposition::getChildrenVertexLabelSetUnion(htd::vertex_t, std::vector<htd::vertex_t> &) const");
+        case 1:
+        {
+            const std::vector<htd::vertex_t> & childBag = bagContent(childAtPosition(vertex, 0));
+
+            std::copy(childBag.begin(), childBag.end(), std::back_inserter(target));
+
+            break;
+        }
+        case 2:
+        {
+            const std::vector<htd::vertex_t> & childBag1 = bagContent(childAtPosition(vertex, 0));
+            const std::vector<htd::vertex_t> & childBag2 = bagContent(childAtPosition(vertex, 1));
+
+            htd::set_union(childBag1, childBag2, target);
+
+            break;
+        }
+        default:
+        {
+            for (auto child : children(vertex))
+            {
+                const std::vector<htd::vertex_t> & childBag = bagContent(child);
+
+                std::copy(childBag.begin(), childBag.end(), std::back_inserter(target));
+            }
+
+            std::sort(target.begin(), target.end());
+
+            target.erase(std::unique(target.begin(), target.end()), target.end());
+
+            break;
+        }
     }
 }
 

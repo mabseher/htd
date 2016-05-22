@@ -33,6 +33,9 @@ namespace htd
     class JoinNodeReplacementOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
+            /**
+             *  Constructor for a new manipulation operation of type JoinNodeReplacementOperation.
+             */
             JoinNodeReplacementOperation(void);
 
             ~JoinNodeReplacementOperation();

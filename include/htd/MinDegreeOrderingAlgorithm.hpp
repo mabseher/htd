@@ -49,6 +49,11 @@ namespace htd
             MinDegreeOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:
+            /**
+             *  Copy assignment operator for an ordering algorithm.
+             *
+             *  @note This operator is protected to prevent assignments to an already initialized algorithm.
+             */
             MinDegreeOrderingAlgorithm & operator=(const MinDegreeOrderingAlgorithm &) { return *this; }
     };
 }

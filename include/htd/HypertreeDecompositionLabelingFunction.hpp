@@ -35,16 +35,35 @@ namespace htd
     class HypertreeDecompositionLabelingFunction : public virtual htd::ILabelingFunction
     {
         public:
+            /**
+             *  Constructor for a new labeling function of type HypertreeDecompositionLabelingFunction.
+             *
+             *  @param[in] graph    The graph from which the edges required to cover each bag shall be computed.
+             */
             HypertreeDecompositionLabelingFunction(const htd::IMultiHypergraph & graph);
 
             ~HypertreeDecompositionLabelingFunction();
 	    
             std::string name() const HTD_OVERRIDE;
 
+            /**
+             *  Compute a new label based on a set of vertices (e.g., the bag of a graph decomposition).
+             *
+             *  @param[in] vertices The set of input vertices sorted in ascending order.
+             *
+             *  @return A new label based on the given set of vertices.
+             */
             htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const std::vector<htd::vertex_t> & vertices) const;
 
             htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const std::vector<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE;
-	        
+
+            /**
+             *  Compute a new label based on a set of vertices (e.g., the bag of a graph decomposition).
+             *
+             *  @param[in] vertices The set of input vertices sorted in ascending order.
+             *
+             *  @return A new label based on the given set of vertices.
+             */
             htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices) const;
 
             htd::Label<htd::ConstCollection<htd::Hyperedge>> * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE;

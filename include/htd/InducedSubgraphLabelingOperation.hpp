@@ -43,6 +43,11 @@ namespace htd
              */
             static constexpr const char * INDUCED_SUBGRAPH_LABEL_IDENTIFIER = "Induced Subgraph";
 
+            /**
+             *  Constructor for a new manipulation operation of type InducedSubgraphLabelingOperation.
+             *
+             *  @param[in] graph    The graph from which the edges induced by each bag shall be computed.
+             */
             InducedSubgraphLabelingOperation(const htd::IMultiHypergraph & graph);
 
             ~InducedSubgraphLabelingOperation();

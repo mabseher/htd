@@ -33,6 +33,9 @@ namespace htd
     class TreeDecompositionVerifier : public virtual htd::ITreeDecompositionVerifier
     {
         public:
+            /**
+             *  Constructor for a tree decomposition verifier.
+             */
             TreeDecompositionVerifier(void);
                         
             ~TreeDecompositionVerifier();
@@ -52,6 +55,11 @@ namespace htd
             htd::ConstCollection<htd::vertex_t> violationsConnectednessCriterion(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
 
         protected:
+            /**
+             *  Copy assignment operator for a tree decomposition verifier.
+             *
+             *  @note This operator is protected to prevent assignments to an already initialized tree decomposition verifier.
+             */
             TreeDecompositionVerifier & operator=(const TreeDecompositionVerifier &) { return *this; }
     };
 }

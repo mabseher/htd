@@ -34,6 +34,11 @@ namespace htd
     class LimitChildCountOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
+            /**
+             *  Constructor for a new manipulation operation of type LimitChildCountOperation.
+             *
+             *  @param[in] limit    The maximum number of children for a decomposition node.
+             */
             LimitChildCountOperation(std::size_t limit);
 
             ~LimitChildCountOperation();

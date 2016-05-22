@@ -93,6 +93,11 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
     limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
 }
 
+bool htd::NormalizationOperation::leafNodesTreatedAsIntroduceNodes(void) const
+{
+    return treatLeafNodesAsIntroduceNodes_;
+}
+
 htd::NormalizationOperation * htd::NormalizationOperation::clone(void) const
 {
     return new htd::NormalizationOperation(emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired(), treatLeafNodesAsIntroduceNodes_);

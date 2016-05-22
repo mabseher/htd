@@ -72,7 +72,7 @@ namespace htd
              *  decomposition algorithm. Deleting a manipulation operation provided to this method outside the decomposition algorithm
              *  or assigning the same manipulation operation multiple times will lead to undefined behavior.
              *
-             *  @return A new IGraphDecomposition object representing the decomposition of the given graph.
+             *  @return A new IHypertreeDecomposition object representing the decomposition of the given graph.
              */
             htd::IHypertreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, int manipulationOperationCount, ...) const;
 

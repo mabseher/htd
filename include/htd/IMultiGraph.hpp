@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent graphs with potentially duplicated edges.
+     */
     class IMultiGraph : public virtual htd::IMultiHypergraph
     {
         public:

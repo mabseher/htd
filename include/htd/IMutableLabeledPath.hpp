@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent mutable labeled paths.
+     */
     class IMutableLabeledPath : public virtual htd::ILabeledPath, public virtual htd::IMutablePath
     {
         public:

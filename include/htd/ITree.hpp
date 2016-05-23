@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent trees.
+     */
     class ITree : public virtual htd::IGraph
     {
         public:

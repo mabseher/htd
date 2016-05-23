@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms which solve the set-cover problem.
+     */
     class ISetCoverAlgorithm
     {
         public:

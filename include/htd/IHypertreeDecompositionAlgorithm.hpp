@@ -34,6 +34,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms which can be used to compute hypertree decompositions of a given graph.
+     */
     class IHypertreeDecompositionAlgorithm : public virtual htd::ITreeDecompositionAlgorithm
     {
         public:

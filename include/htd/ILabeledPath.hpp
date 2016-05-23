@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent labeled paths.
+     */
     class ILabeledPath : public virtual htd::ILabeledTree, public virtual htd::IPath
     {
         public:

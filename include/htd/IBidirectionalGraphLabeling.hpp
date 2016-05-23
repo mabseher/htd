@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for graph labelings providing bi-directional mappings between vertices (and/or edges) and labels.
+     */
     class IBidirectionalGraphLabeling : public htd::IGraphLabeling
     {
         public:

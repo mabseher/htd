@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent mutable labeled graphs.
+     */
     class IMutableLabeledGraph : public virtual htd::ILabeledGraph, public virtual htd::IMutableGraph
     {
         public:

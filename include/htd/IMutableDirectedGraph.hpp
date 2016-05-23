@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent mutable directed graphs.
+     */
     class IMutableDirectedGraph : public virtual htd::IDirectedGraph
     {
         public:

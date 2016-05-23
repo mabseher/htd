@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of a wrapper for iterators of immutable collections.
+     */
     template <typename Iter, typename T = typename Iter::value_type>
     class ConstIteratorWrapper : public std::iterator<std::forward_iterator_tag, T>, public htd::ConstIteratorBase<T>
     {

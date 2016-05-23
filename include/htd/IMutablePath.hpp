@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent mutable paths.
+     */
     class IMutablePath : public virtual htd::IPath
     {
         public:

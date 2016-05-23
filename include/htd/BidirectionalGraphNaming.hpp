@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     * Implementation of a graph naming providing bi-directional mappings between vertices (and/or edges) and their names.
+     */
     template <typename VertexNameType, typename EdgeNameType,
               typename VertexNameHashFunction = std::hash<VertexNameType>, typename VertexNameEqualityFunction = std::equal_to<VertexNameType>,
               typename EdgeNameHashFunction = std::hash<EdgeNameType>, typename EdgeNameEqualityFunction = std::equal_to<EdgeNameType>>

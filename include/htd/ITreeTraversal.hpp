@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms traversing a given input tree.
+     */
     class ITreeTraversal
     {
         public:

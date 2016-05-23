@@ -35,6 +35,9 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of the IOrderingAlgorithm interface based on the minimum-degree elimination ordering algorithm.
+     */
     class MinDegreeOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:

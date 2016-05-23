@@ -34,6 +34,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms which can be used to compute path decompositions of a given graph.
+     */
     class IPathDecompositionAlgorithm : public virtual htd::ITreeDecompositionAlgorithm
     {
         public:

@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms which can be used to compute vertex orderings.
+     */
     class IOrderingAlgorithm
     {
         public:

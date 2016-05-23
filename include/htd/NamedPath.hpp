@@ -39,6 +39,9 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of a path in which vertices and edges can be accessed by their names.
+     */
     template<typename VertexNameType, typename EdgeNameType>
     class NamedPath
     {

@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms traversing a given input graph.
+     */
     class IGraphTraversal
     {
         public:

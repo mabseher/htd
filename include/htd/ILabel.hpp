@@ -29,6 +29,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which can be used as label for vertices and edges of a graph.
+     */
     class ILabel
     {
         public:

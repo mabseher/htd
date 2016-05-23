@@ -39,6 +39,13 @@
 
 namespace htd
 {
+    /**
+     *  Adapter for instances of std::vector.
+     *
+     *  @note This adapter is necessary when it is desired to return a vector hidden behind an
+     *  instance of htd::Collection and htd::ConstCollection from a function because otherwise
+     *  the iterators used inside the collection wrappers are invalidated.
+     */
     template <typename T, class Allocator = std::allocator<T>>
     class VectorAdapter
     {

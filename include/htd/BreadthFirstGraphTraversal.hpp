@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Implementation of the IGraphTraversal interface based on breadth-first traversal.
+     */
     class BreadthFirstGraphTraversal : public virtual htd::IGraphTraversal
     {
         public:

@@ -39,6 +39,9 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of a graph with potentially duplicated edges in which vertices and edges can be accessed by their names.
+     */
     template<typename VertexNameType, typename EdgeNameType>
     class NamedMultiGraph
     {

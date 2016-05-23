@@ -34,6 +34,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent graph decompositions.
+     */
     class IGraphDecomposition : public virtual htd::ILabeledGraph
     {
         public:

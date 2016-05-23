@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent mutable labeled graphs with potentially duplicated edges.
+     */
     class IMutableLabeledMultiGraph : public virtual htd::ILabeledMultiGraph, public virtual htd::IMutableMultiGraph
     {
         public:

@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     * Implementation of the ITreeTraversal interface traversing the tree in post-order, that is, a node is visited after its children.
+     */
     class PostOrderTreeTraversal : public virtual htd::ITreeTraversal
     {
         public:

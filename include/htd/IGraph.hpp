@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent graphs.
+     */
     class IGraph : public virtual htd::IHypergraph
     {
         public:

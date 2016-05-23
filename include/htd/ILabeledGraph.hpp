@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent labeled graphs.
+     */
     class ILabeledGraph : public virtual htd::IGraph, public virtual htd::ILabeledHypergraph
     {
         public:

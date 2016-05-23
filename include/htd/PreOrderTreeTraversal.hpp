@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     * Implementation of the ITreeTraversal interface traversing the tree in pre-order, that is, a node is visited before its children.
+     */
     class PreOrderTreeTraversal : public virtual htd::ITreeTraversal
     {
         public:

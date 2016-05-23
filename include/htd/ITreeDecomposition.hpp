@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent tree decompositions.
+     */
     class ITreeDecomposition : public virtual htd::ILabeledTree, public virtual htd::IGraphDecomposition
     {
         public:

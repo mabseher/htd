@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent mutable tree decompositions.
+     */
     class IMutableTreeDecomposition : public virtual htd::IMutableLabeledTree, public virtual htd::ITreeDecomposition
     {
         public:

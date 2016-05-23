@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent labeled directed graphss.
+     */
     class ILabeledDirectedGraph : public virtual htd::IDirectedGraph, public virtual htd::ILabeledGraph
     {
         public:

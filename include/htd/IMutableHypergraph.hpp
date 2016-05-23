@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent mutable hypergraphs.
+     */
     class IMutableHypergraph : public virtual htd::IHypergraph
     {
         public:

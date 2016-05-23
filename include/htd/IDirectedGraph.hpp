@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent directed graphs.
+     */
     class IDirectedGraph : public virtual htd::IGraph
     {
         public:

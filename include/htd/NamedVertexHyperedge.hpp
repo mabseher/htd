@@ -35,7 +35,7 @@
 #include <vector>
 
 namespace htd
-    {
+{
     /**
      *  Class for the efficient storage of hyperedges of named graph types.
      */

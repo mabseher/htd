@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent labeled trees.
+     */
     class ILabeledTree : public virtual htd::ILabeledGraph, public virtual htd::ITree
     {
         public:

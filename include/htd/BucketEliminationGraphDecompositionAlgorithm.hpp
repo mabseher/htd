@@ -39,6 +39,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IGraphDecompositionAlgorithm interface based on bucket elimination.
+     */
     class BucketEliminationGraphDecompositionAlgorithm : public virtual htd::IGraphDecompositionAlgorithm
     {
         public:

@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent hypertree decompositions.
+     */
     class IHypertreeDecomposition : public virtual htd::ITreeDecomposition
     {
         public:

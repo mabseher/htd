@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent paths.
+     */
     class IPath : public virtual htd::ITree
     {
         public:

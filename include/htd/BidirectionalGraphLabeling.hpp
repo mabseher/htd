@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IBidirectionalGraphLabeling interface.
+     */
     class BidirectionalGraphLabeling : public virtual htd::IBidirectionalGraphLabeling
     {
         public:

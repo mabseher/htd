@@ -35,6 +35,9 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of a wrapper for iterators of immutable objects of type VectorAdapter.
+     */
     template <typename Iter, typename T = typename Iter::value_type, class Allocator = std::allocator<T>>
     class VectorAdapterIteratorWrapper : public htd::IteratorWrapper<Iter, T>
     {

@@ -34,6 +34,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IGraphLabeling interface.
+     */
     class GraphLabeling : public virtual htd::IGraphLabeling
     {
         public:

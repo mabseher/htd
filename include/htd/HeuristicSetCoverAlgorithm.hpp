@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     * Implementation of the ISetCoverAlgorithm interface based on local search.
+     */
     class HeuristicSetCoverAlgorithm : public virtual htd::ISetCoverAlgorithm
     {
         public:

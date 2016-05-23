@@ -35,6 +35,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the ILabelCollection interface.
+     */
     class LabelCollection : public virtual htd::ILabelCollection
     {
         public:

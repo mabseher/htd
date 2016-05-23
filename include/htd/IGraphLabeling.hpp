@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for graph labelings providing uni-directional mappings between vertices (and/or edges) and labels.
+     */
     class IGraphLabeling
     {
         public:

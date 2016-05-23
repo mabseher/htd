@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Implementation of the IConnectedComponentAlgorithm interface based on depth-first traversal.
+     */
     class DepthFirstConnectedComponentAlgorithm : public virtual htd::IConnectedComponentAlgorithm
     {
         public:

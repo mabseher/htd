@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of the IOrderingAlgorithm interface based on the maximum-cardinality search elimination ordering algorithm.
+     */
     class MaximumCardinalitySearchOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:

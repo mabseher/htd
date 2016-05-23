@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent mutable trees.
+     */
     class IMutableTree : public virtual htd::ITree
     {
         public:

@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms which determine the connected components of a given graph.
+     */
     class IConnectedComponentAlgorithm
     {
         public:

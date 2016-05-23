@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent hypergraphs.
+     */
     class IHypergraph : public virtual htd::IMultiHypergraph
     {
         public:

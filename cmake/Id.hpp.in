@@ -35,6 +35,9 @@ namespace htd
      */
     typedef @HTD_ID_TYPE@ id_t;
 
+    /**
+     *  Structure containing default values for special identifiers.
+     */
     struct Id
     {
         public:

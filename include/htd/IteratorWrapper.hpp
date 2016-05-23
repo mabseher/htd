@@ -34,6 +34,9 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of a wrapper for iterators of mutable collections.
+     */
     template <typename Iter, typename T = typename Iter::value_type>
     class IteratorWrapper : public std::iterator<std::forward_iterator_tag, T>, public htd::IteratorBase<T>
     {

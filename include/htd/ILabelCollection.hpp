@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for classes which represent collections of labels.
+     */
     class ILabelCollection
     {
         public:

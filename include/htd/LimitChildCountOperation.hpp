@@ -31,6 +31,11 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of the IDecompositionManipulationOperation interface which manipulates
+     *  given tree decompositions in such a way that the maximum number of children of each
+     *  join node is bounded by the given limit.
+     */
     class LimitChildCountOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:

@@ -31,6 +31,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms which verify the correctness of a given tree decomposition.
+     */
     class ITreeDecompositionVerifier
     {
         public:

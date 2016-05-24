@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms which manipulate a given path decomposition.
+     */
     class IPathDecompositionManipulationOperation : public virtual htd::IDecompositionManipulationOperation
     {
         public:

@@ -30,6 +30,9 @@
 
 namespace htd
 {
+    /**
+     * Implementation of the IConnectedComponentAlgorithm interface based on Robert Tarjan's algorithm.
+     */
     class TarjanStronglyConnectedComponentAlgorithm : public virtual htd::IStronglyConnectedComponentAlgorithm
     {
         public:

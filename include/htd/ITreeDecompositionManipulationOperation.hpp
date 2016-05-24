@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms which manipulate a given tree decomposition.
+     */
     class ITreeDecompositionManipulationOperation : public virtual htd::IDecompositionManipulationOperation
     {
         public:

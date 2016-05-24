@@ -31,6 +31,11 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of the IDecompositionManipulationOperation interface which manipulates
+     *  given tree and path decompositions in such a way that there is no bag which contains
+     *  introduced and forgotten vertices at the same time.
+     */
     class ExchangeNodeReplacementOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:

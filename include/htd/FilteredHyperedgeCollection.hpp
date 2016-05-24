@@ -36,6 +36,9 @@
 
 namespace htd
 {
+    /**
+     *  Class for the efficient storage of hyperedge collections based on existing vectors of hyperedges.
+     */
     class FilteredHyperedgeCollection
     {
         public:

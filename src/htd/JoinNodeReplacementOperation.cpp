@@ -34,6 +34,9 @@
 #include <unordered_set>
 #include <vector>
 
+/**
+ *  Internal data structure for the pre-order traversal of the tree decomposition.
+ */
 struct HistoryEntry
 {
     /**

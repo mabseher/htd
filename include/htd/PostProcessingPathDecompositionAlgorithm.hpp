@@ -38,6 +38,9 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the IPathDecompositionAlgorithm interface based on post-processing a tree decomposition.
+     */
     class PostProcessingPathDecompositionAlgorithm : public virtual htd::IPathDecompositionAlgorithm
     {
         public:

@@ -31,6 +31,11 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of the IDecompositionManipulationOperation interface which manipulates
+     *  given tree and path decompositions such that the resulting decomposition is fully
+     *  normalized.
+     */
     class NormalizationOperation : public htd::SemiNormalizationOperation
     {
         public:

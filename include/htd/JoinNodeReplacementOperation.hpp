@@ -30,6 +30,15 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of the IDecompositionManipulationOperation interface which manipulates
+     *  given tree decompositions in such a way that they do not contain any join nodes after
+     *  applying this operation.
+     *
+     *  @note This manipulation operation works by combining the child bags of join nodes. This might
+     *  lead to the fact that the bag sizes in the resulting path decomposition are larger than those
+     *  observed in the input tree decomposition.
+     */
     class JoinNodeReplacementOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:

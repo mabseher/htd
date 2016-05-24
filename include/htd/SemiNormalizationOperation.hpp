@@ -31,6 +31,12 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of the IDecompositionManipulationOperation interface which manipulates
+     *  given tree and path decompositions such that each child of a join node has the same
+     *  bag content as the join node itself and so that each join node has exactly two
+     *  children.
+     */
     class SemiNormalizationOperation : public htd::WeakNormalizationOperation
     {
         public:

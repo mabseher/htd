@@ -34,8 +34,11 @@
 
 namespace htd
 {
+    /**
+     *  Default implementation of the ILabel interface.
+     */
     template<typename T>
-    class Label : public virtual htd::ILabel
+    class Label : public htd::ILabel
     {
             public:
             /**

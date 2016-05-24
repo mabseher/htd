@@ -32,6 +32,12 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of the IDecompositionManipulationOperation interface which manipulates given
+     *  tree and path decompositions in such a way that for each decomposition node the cardinality
+     *  of the set difference between the set union of the node's child bags and the node's bag is
+     *  bounded by the given limit.
+     */
     class LimitMaximumForgottenVertexCountOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:

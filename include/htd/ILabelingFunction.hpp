@@ -35,6 +35,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms which compute corresponding labels for a decomposition node based on its bag content.
+     */
     class ILabelingFunction : public virtual htd::IDecompositionManipulationOperation
     {
         public:

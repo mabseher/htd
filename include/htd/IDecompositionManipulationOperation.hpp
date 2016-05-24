@@ -29,6 +29,9 @@
 
 namespace htd
 {
+    /**
+     * Interface for algorithms which manipulate a given decomposition.
+     */
     class IDecompositionManipulationOperation
     {
         public:

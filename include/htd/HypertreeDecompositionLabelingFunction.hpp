@@ -32,6 +32,9 @@
 
 namespace htd
 {
+    /**
+     *  Implementation of the ILabelingFunction interface which returns labels containing the hyperedges needed to cover the given bag.
+     */
     class HypertreeDecompositionLabelingFunction : public virtual htd::ILabelingFunction
     {
         public:

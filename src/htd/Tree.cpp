@@ -730,46 +730,34 @@ void htd::Tree::makeRoot(htd::vertex_t vertex)
 
     if (vertex != root_)
     {
-        htd::vertex_t oldParent = htd::Vertex::UNKNOWN;
-        htd::vertex_t newParent = htd::Vertex::UNKNOWN;
+        root_ = vertex;
 
-        std::deque<std::pair<htd::vertex_t, htd::vertex_t>> originDeque;
+        htd::vertex_t lastVertex = htd::Vertex::UNKNOWN;
+        htd::vertex_t nextVertex = htd::Vertex::UNKNOWN;
 
-        originDeque.push_back(std::make_pair(vertex, htd::Vertex::UNKNOWN));
-
-        while (!originDeque.empty())
+        while (vertex != htd::Vertex::UNKNOWN)
         {
-            vertex = originDeque.front().first;
-
             htd::Tree::Node & node = *(nodes_[vertex]);
+
+            nextVertex = node.parent;
 
             std::vector<htd::vertex_t> & currentChildren = node.children;
 
-            oldParent = node.parent;
-            newParent = originDeque.front().second;
-
-            if (newParent == htd::Vertex::UNKNOWN)
+            if (lastVertex != htd::Vertex::UNKNOWN)
             {
-                root_ = vertex;
-            }
-            else
-            {
-                currentChildren.erase(std::remove_if(currentChildren.begin(), currentChildren.end(), [&](htd::vertex_t currentVertex) { return currentVertex == newParent; }), currentChildren.end());
+                currentChildren.erase(std::lower_bound(currentChildren.begin(), currentChildren.end(), lastVertex));
             }
 
-            if (oldParent != htd::Vertex::UNKNOWN && oldParent != newParent)
+            if (nextVertex != htd::Vertex::UNKNOWN)
             {
-                currentChildren.insert(std::lower_bound(currentChildren.begin(), currentChildren.end(), oldParent), oldParent);
+                currentChildren.insert(std::lower_bound(currentChildren.begin(), currentChildren.end(), nextVertex), nextVertex);
             }
 
-            node.parent = newParent;
+            node.parent = lastVertex;
 
-            for (htd::vertex_t neighbor : currentChildren)
-            {
-                originDeque.push_back(std::make_pair(neighbor, vertex));
-            }
+            lastVertex = vertex;
 
-            originDeque.pop_front();
+            vertex = nextVertex;
         }
     }
 }

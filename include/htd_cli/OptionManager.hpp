@@ -1,0 +1,83 @@
+/*
+ * File:   OptionManager.hpp
+ *
+ * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
+ *
+ * Copyright 2015-2016, Michael Abseher
+ *    E-Mail: <abseher@dbai.tuwien.ac.at>
+ *
+ * This file is part of htd.
+ *
+ * htd is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * htd is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+ * License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with htd.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef HTD_CLI_OPTIONMANAGER_HPP
+#define	HTD_CLI_OPTIONMANAGER_HPP
+
+#include <htd_cli/Choice.hpp>
+#include <htd_cli/Option.hpp>
+#include <htd_cli/MultiValueOption.hpp>
+#include <htd_cli/SingleValueOption.hpp>
+#include <htd_cli/IObserver.hpp>
+
+#include <ostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+namespace htd_cli
+{
+    class OptionManager
+    {
+        public:
+            static const std::string GENERAL_SECTION;
+
+            OptionManager(void);
+
+            ~OptionManager();
+
+            void parse(int argc, const char * const * const argv);
+
+            void registerOption(htd_cli::Option * option, const std::string & section = GENERAL_SECTION);
+
+            void registerObserver(htd_cli::IObserver * observer);
+
+            void printHelp(std::ostream & stream) const;
+
+            const htd_cli::Option & accessOption(const std::string & name) const;
+
+            const htd_cli::Choice & accessChoice(const std::string & name) const;
+
+            const htd_cli::SingleValueOption & accessSingleValueOption(const std::string & name) const;
+
+            const htd_cli::MultiValueOption & accessMultiValueOption(const std::string & name) const;
+
+        private:
+            std::size_t maxNameLength_;
+
+            std::vector<std::string> sections_;
+
+            std::vector<htd_cli::Option *> options_;
+
+            std::vector<htd_cli::IObserver *> observers_;
+
+            std::unordered_map<std::string, htd_cli::Option *> optionMap_;
+
+            std::unordered_map<std::string, std::vector<htd_cli::Option *>> sectionMap_;
+
+            bool hasNameClash(const htd_cli::Option & option1, const htd_cli::Option & option2) const;
+    };
+}
+
+#endif /* HTD_CLI_OPTIONMANAGER_HPP */

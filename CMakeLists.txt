@@ -54,6 +54,7 @@ if (NOT DEFINED BUILD_TESTING)
 endif()
 
 subdirs(src/htd)
+subdirs(src/htd_cli)
 
 subdirs(test)
 

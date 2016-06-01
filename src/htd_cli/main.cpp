@@ -322,6 +322,8 @@ int main(int argc, const char * const * const argv)
 
                 ret = 1;
             }
+
+            delete exporter;
         }
     }
 

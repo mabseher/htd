@@ -27,7 +27,9 @@
 
 #include <htd/AddEmptyLeavesOperation.hpp>
 #include <htd/AddEmptyRootOperation.hpp>
+#include <htd/AddIdenticalJoinNodeParentOperation.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
+#include <htd/BidirectionalGraphNaming.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>
 #include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
@@ -48,6 +50,7 @@
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/FilteredHyperedgeCollection.hpp>
 #include <htd/Globals.hpp>
+#include <htd/GrFormatImporter.hpp>
 #include <htd/Graph.hpp>
 #include <htd/GraphDecomposition.hpp>
 #include <htd/GraphDecompositionAlgorithmFactory.hpp>
@@ -56,6 +59,7 @@
 #include <htd/GraphLabeling.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/HeuristicSetCoverAlgorithm.hpp>
+#include <htd/HumanReadableExporter.hpp>
 #include <htd/Hyperedge.hpp>
 #include <htd/Hypergraph.hpp>
 #include <htd/HypergraphFactory.hpp>
@@ -72,6 +76,7 @@
 #include <htd/IGraph.hpp>
 #include <htd/IGraphDecomposition.hpp>
 #include <htd/IGraphDecompositionAlgorithm.hpp>
+#include <htd/IGraphDecompositionExporter.hpp>
 #include <htd/IGraphDecompositionManipulationOperation.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/IGraphTraversal.hpp>
@@ -122,6 +127,8 @@
 #include <htd/ITree.hpp>
 #include <htd/ITreeDecomposition.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
+#include <htd/ITreeDecompositionExporter.hpp>
+#include <htd/ITreeDecompositionFitnessFunction.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionVerifier.hpp>
 #include <htd/ITreeTraversal.hpp>
@@ -157,6 +164,8 @@
 #include <htd/LimitChildCountOperation.hpp>
 #include <htd/LimitMaximumForgottenVertexCountOperation.hpp>
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
+#include <htd/LpFormatImporter.hpp>
+#include <htd/MGrFormatImporter.hpp>
 #include <htd/MaximumCardinalitySearchOrderingAlgorithm.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
@@ -189,6 +198,7 @@
 #include <htd/State.hpp>
 #include <htd/StronglyConnectedComponentAlgorithmFactory.hpp>
 #include <htd/TarjanStronglyConnectedComponentAlgorithm.hpp>
+#include <htd/TdFormatExporter.hpp>
 #include <htd/Tree.hpp>
 #include <htd/TreeDecomposition.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
@@ -199,5 +209,6 @@
 #include <htd/VectorAdapterIteratorWrapper.hpp>
 #include <htd/Vertex.hpp>
 #include <htd/WeakNormalizationOperation.hpp>
+#include <htd/WidthExporter.hpp>
 
 #endif /* HTD_HTD_MAIN_HPP */

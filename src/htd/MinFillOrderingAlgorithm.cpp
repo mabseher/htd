@@ -81,6 +81,8 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
     std::vector<htd::vertex_t> affectedVertices;
     affectedVertices.reserve(size);
 
+    std::size_t totalFill = 0;
+
     for (htd::vertex_t vertex : inputVertices)
     {
         auto & currentNeighborhood = neighborhood[vertex];
@@ -140,9 +142,11 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
         std::cout << "   MAXIMUM EDGE COUNT " << vertex << ": " << (neighborhoodSize * (neighborhoodSize - 1)) / 2 << std::endl;
         std::cout << "   INITIAL FILL VALUE " << vertex << ": " << requiredFillAmount[vertex] << std::endl;
         )
+
+        totalFill += currentFillValue;
     }
     
-    while (size > 0 && !htd::Library::instance().isAborted())
+    while (totalFill > 0 && !htd::Library::instance().isAborted())
     {
         if (pool.size() == 0)
         {
@@ -187,13 +191,15 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
         htd::vertex_t selectedVertex = pool[std::rand() % pool.size()];
 
         auto & selectedNeighborhood = neighborhood.at(selectedVertex);
-        
-        pool.erase(std::find(pool.begin(), pool.end(), selectedVertex), pool.end());
-        
+
+        pool.erase(std::remove(pool.begin(), pool.end(), selectedVertex), pool.end());
+
         updateStatus.at(selectedVertex) = 4;
         
         affectedVertices.clear();
-        
+
+        totalFill -= minFill;
+
         if (requiredFillAmount.at(selectedVertex) == 0)
         {
             for (auto vertex : selectedNeighborhood)
@@ -202,7 +208,11 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 {
                     auto & currentNeighborhood = neighborhood.at(vertex);
 
-                    requiredFillAmount[vertex] -= htd::set_difference_size(currentNeighborhood.begin(), currentNeighborhood.end(), selectedNeighborhood.begin(), selectedNeighborhood.end());
+                    std::size_t fillReduction = htd::set_difference_size(currentNeighborhood.begin(), currentNeighborhood.end(), selectedNeighborhood.begin(), selectedNeighborhood.end());
+
+                    requiredFillAmount[vertex] -= fillReduction;
+
+                    totalFill -= fillReduction;
 
                     /* Because 'vertex' is a neighbor of 'selectedVertex', std::lower_bound will always find 'selectedVertex' in 'currentNeighborhood'. */
                     // coverity[use_iterator]
@@ -337,10 +347,16 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                                     it++;
 
-                                    tmp -= htd::set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
+                                    std::size_t fillReduction = htd::set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
+
+                                    tmp -= fillReduction;
+
+                                    totalFill -= fillReduction;
                                 }
 
                                 tmp -= unaffectedNeighborCount;
+
+                                totalFill -= unaffectedNeighborCount;
 
                                 //TODO
                                 updateStatus.at(vertex) = 0;
@@ -376,13 +392,22 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                                 auto first = currentAdditionalNeighborhood.begin();
                                 auto last = currentAdditionalNeighborhood.end();
 
+                                std::size_t fillIncrease = 0;
+
                                 for (htd::vertex_t unaffectedVertex : currentUnaffectedNeighborhood)
                                 {
                                     auto & affectedVertices = existingNeighbors.at(unaffectedVertex);
 
-                                    tmp += htd::set_difference_size(first, last, affectedVertices.begin(), affectedVertices.end());
+                                    fillIncrease += htd::set_difference_size(first, last, affectedVertices.begin(), affectedVertices.end()) - 1;
+                                }
 
-                                    tmp--;
+                                if (fillIncrease > 0)
+                                {
+                                    pool.erase(std::remove(pool.begin(), pool.end(), vertex), pool.end());
+
+                                    tmp += fillIncrease;
+
+                                    totalFill += fillIncrease;
                                 }
 
                                 updateStatus.at(vertex) &= ~1;
@@ -419,6 +444,8 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                         }
                         else
                         {
+                            totalFill -= tmp;
+
                             tmp = 0;
 
                             //TODO
@@ -457,55 +484,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 }
             }
 
-    #ifdef TESTOUTPUT
-            std::cout << "SELECTED VERTEX: " << selectedVertex << std::endl;
-            std::cout << "   DIRECT NEIGHBORS:  ";
-            htd::print(selectedNeighborhood, false);
-            std::cout << std::endl;
-            for (auto vertex : selectedNeighborhood)
-            {
-                if (vertex != selectedVertex)
-                {
-                    std::cout << "      NEIGHBORHOOD " << vertex << ": ";
-                    htd::print(neighborhood[vertex], false);
-                    std::cout << std::endl;
-                    std::cout << "         EXISTING:   ";
-                    htd::print(existingNeighbors[vertex], false);
-                    std::cout << std::endl;
-                    std::cout << "         ADDITIONAL: ";
-                    htd::print(additionalNeighbors[vertex], false);
-                    std::cout << std::endl;
-                    std::cout << "         UNAFFECTED: ";
-                    htd::print(unaffectedNeighbors[vertex], false);
-                    std::cout << std::endl;
-                }
-            }
-            std::cout << "   ----- ----- -----" << std::endl;
-            std::cout << "   AFFECTED VERTICES: ";
-            htd::print(affectedVertices, false);
-            std::cout << std::endl;
-            for (auto vertex : affectedVertices)
-            {
-                std::cout << "      NEIGHBORHOOD " << vertex << ": ";
-                htd::print(neighborhood[vertex], false);
-                std::cout << std::endl;
-                std::cout << "         EXISTING:   ";
-                htd::print(existingNeighbors[vertex], false);
-                std::cout << std::endl;
-                std::cout << "         UNAFFECTED: ";
-                htd::print(unaffectedNeighbors[vertex], false);
-                std::cout << std::endl;
-            }
-            std::cout << std::endl;
-
-            std::cout << "STATUS: ";
-            std::vector<int> statusBefore;
-            std::copy(updateStatus.begin(), updateStatus.end(), std::back_inserter(statusBefore));
-            htd::print(statusBefore, false);
-            std::cout << std::endl;
-    #endif
-
-            for (auto vertex : affectedVertices)
+            for (htd::vertex_t vertex : affectedVertices)
             {
                 if (updateStatus.at(vertex) == 2)
                 {
@@ -529,7 +508,11 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                             it++;
                             index++;
 
-                            tmp -= htd::set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
+                            std::size_t fillReduction = htd::set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
+
+                            tmp -= fillReduction;
+
+                            totalFill -= fillReduction;
                         }
 
                         if (tmp <= minFill)
@@ -559,7 +542,9 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                         }
                     }
                     else
-                    {    
+                    {
+                        totalFill -= tmp;
+
                         tmp = 0;
 
                         std::size_t currentVertexDegree = neighborhood.at(vertex).size() - 1;
@@ -609,86 +594,100 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 }
             }
         }
-        
+
         selectedNeighborhood.clear();
         
         vertices.erase(selectedVertex);
-        
-        size--;
 
         target.push_back(selectedVertex);
 
-        //TODO Remove
-        /*
-        std::cout << "SELECTED: " << selectedVertex << std::endl;
-        for (htd::vertex_t vertex : vertices)
-        {
-            std::cout << "Vertex " << vertex << ": FILL=" << requiredFillAmount.at(vertex) << std::endl << "   ";
-            htd::print(neighborhood.at(vertex), std::cout, false);
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-        */
+        size--;
 
-#ifdef TESTOUTPUT
-        std::cout << "STATUS AFTER: ";
-        std::vector<int> statusAfter;
-        std::copy(updateStatus.begin(), updateStatus.end(), std::back_inserter(statusAfter));
-        htd::print(statusAfter, false);
-        std::cout << "   AVAILABLE: " << std::count(updateStatus.begin(), updateStatus.end(), 0) << std::endl;
-#endif
-        
 //#define VERIFY
 #ifdef VERIFY
-        long size = 0;
+        std::cout << "CHECK (ELIMINATED=" << selectedVertex << ", FILL=" << requiredFillAmount[selectedVertex] << "): " << std::endl;
         
-        //TODO
-        //std::cout << "CHECK (ELIMINATED=" << selectedVertex << "): " << std::endl;
-        
+        std::size_t minFill2 = (std::size_t)-1;
+
+        std::size_t totalFill2 = 0;
+
         for (htd::vertex_t vertex : vertices)
         {
-            if (updateStatus[vertex] == 0)
+            auto & currentNeighborhood = neighborhood[vertex];
+
+            std::size_t neighborCount = currentNeighborhood.size();
+
+            long actual = requiredFillAmount[vertex];
+
+            long maximumEdges = (neighborCount * (neighborCount - 1)) / 2;
+            long existingEdges = computeEdgeCount(neighborhood, currentNeighborhood);
+
+            long expected = maximumEdges - existingEdges;
+
+            if (actual != expected)
             {
-                auto & currentNeighborhood = neighborhood[vertex];
+                std::cout << "ERROR!!! Vertex " << vertex << " (Expected: " << expected << ", Actual: " << actual << ")" << std::endl;
 
-                size = currentNeighborhood.size();
-                
-                long actual = requiredFillAmount[vertex];
-                
-                long maximumEdges = (size * (size - 1)) / 2;
-                long existingEdges = computeEdgeCount(neighborhood, currentNeighborhood);
-                
-                long expected = maximumEdges - existingEdges;
-                
-                if (actual != expected)
+                std::cout << "VERTEX " << vertex << ":" << std::endl;
+                std::cout << "   NEIGHBORHOOD:   ";
+                htd::print(currentNeighborhood, false);
+                std::cout << std::endl;
+                for (auto vertex2 : currentNeighborhood)
                 {
-                    std::cout << "ERROR!!! Vertex " << vertex << " (Expected: " << expected << ", Actual: " << actual << ")" << std::endl;
-
-                    std::cout << "VERTEX " << vertex << ":" << std::endl;
-                    std::cout << "   NEIGHBORHOOD:   ";
-                    htd::print(currentNeighborhood, false);
-                    std::cout << std::endl;
-                    for (auto vertex2 : currentNeighborhood)
+                    if (vertex2 != vertex)
                     {
-                        if (vertex2 != vertex)
-                        {
-                            std::cout << "   NEIGHBORHOOD " << vertex2 << ": ";
-                            htd::print(neighborhood[vertex2], false);
-                            std::cout << std::endl;
-                        }
+                        std::cout << "   NEIGHBORHOOD " << vertex2 << ": ";
+                        htd::print(neighborhood[vertex2], false);
+                        std::cout << std::endl;
                     }
-                    std::cout << "EDGES " << vertex << ": " << existingEdges << "/" << maximumEdges << std::endl;
-                
-                    return;
                 }
+                std::cout << "EDGES " << vertex << ": " << existingEdges << "/" << maximumEdges << std::endl;
+
+                std::exit(1);
             }
+
+            if (actual < minFill2 && !pool.empty())
+            {
+                minFill2 = actual;
+            }
+
+            totalFill2 += expected;
         }
-            
-        //TODO
-        //std::cout << std::endl;
+
+        /*
+        for (htd::vertex_t vertex : vertices)
+        {
+            std::cout << "   " << vertex << ": " << requiredFillAmount.at(vertex) << std::endl;
+        }
+        */
+
+        if (minFill != minFill2 && !pool.empty())
+        {
+            std::cout << "ERROR: MIN FILL " << minFill << " != " << minFill2 << std::endl;
+
+            std::exit(1);
+        }
+
+        if (totalFill != totalFill2)
+        {
+            std::cout << "ERROR: TOTAL FILL " << totalFill << " != " << totalFill2 << std::endl;
+
+            std::exit(1);
+        };
+
+        for (htd::vertex_t vertex : pool)
+        {
+            std::cout << "POOL VERTEX: " << vertex << "   " << requiredFillAmount[vertex] << std::endl;
+        }
+
+        std::cout << "TOTAL FILL: " << totalFill << std::endl;
+
+        std::cout << std::endl << std::endl;
 #endif
     }
-    
+
+    std::copy(vertices.begin(), vertices.end(), std::back_inserter(target));
+
     DEBUGGING_CODE_LEVEL2(std::cout << std::endl;)
 }
 

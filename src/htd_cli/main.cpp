@@ -119,7 +119,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
             if (ret)
             {
-                ulong seed = std::stoul(seedOption.value(), &index, 10);
+                unsigned long seed = std::stoul(seedOption.value(), &index, 10);
 
                 if (index != seedOption.value().length())
                 {

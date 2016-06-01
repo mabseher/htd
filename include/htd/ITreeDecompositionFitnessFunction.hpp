@@ -52,7 +52,7 @@ namespace htd
              *
              *  @return A new ITreeDecompositionFitnessFunction object identical to the current fitness function.
              */
-            virtual ITreeDecompositionFitnessFunction * clone(void) const HTD_OVERRIDE = 0;
+            virtual ITreeDecompositionFitnessFunction * clone(void) const = 0;
     };
 
     inline htd::ITreeDecompositionFitnessFunction::~ITreeDecompositionFitnessFunction() { }

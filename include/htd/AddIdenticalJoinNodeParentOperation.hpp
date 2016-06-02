@@ -38,8 +38,13 @@ namespace htd
         public:
             /**
              *  Constructor for a new manipulation operation of type AddIdenticalJoinNodeParentOperation.
+             *
+             *  @param[in] enforceAdditionalNode    Set this option to true to enforce a new parent node for join
+             *  nodes also in those cases where the bag contents of the join node and its old parent did already
+             *  match. If this option is set to false, no action will be triggered for join nodes for which the
+             *  nodes' bag content already matches the parent's bag content.
              */
-            AddIdenticalJoinNodeParentOperation(void);
+            AddIdenticalJoinNodeParentOperation(bool enforceAdditionalNode = true);
 
             ~AddIdenticalJoinNodeParentOperation();
 
@@ -48,6 +53,9 @@ namespace htd
             void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
             AddIdenticalJoinNodeParentOperation * clone(void) const HTD_OVERRIDE;
+
+        private:
+            bool enforceAdditionalNode_;
     };
 }
 

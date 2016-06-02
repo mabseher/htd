@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/AddIdenticalJoinNodeParentOperation.hpp>
 
-htd::AddIdenticalJoinNodeParentOperation::AddIdenticalJoinNodeParentOperation(void)
+htd::AddIdenticalJoinNodeParentOperation::AddIdenticalJoinNodeParentOperation(bool enforceAdditionalNode) : enforceAdditionalNode_(enforceAdditionalNode)
 {
 
 }
@@ -58,7 +58,7 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(htd::IMutableTreeDecomposit
         std::cout << std::endl << std::endl;
         )
 
-        if (decomposition.bagContent(decomposition.parent(node)) != bag)
+        if (enforceAdditionalNode_ || decomposition.bagContent(decomposition.parent(node)) != bag)
         {
             htd::vertex_t newParent = decomposition.addParent(node);
 

@@ -38,12 +38,12 @@
 #include <utility>
 #include <deque>
 
-htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<htd::hyperedge_container>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::vector<htd::Hyperedge>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
 
 }
 
-htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), edges_(std::make_shared<htd::hyperedge_container>(*(original.edges_))), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), edges_(std::make_shared<std::vector<htd::Hyperedge>>(*(original.edges_))), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
     nodes_.reserve(original.nodes_.size());
     
@@ -53,7 +53,7 @@ htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(origi
     }
 }
 
-htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Vertex::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<htd::hyperedge_container>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Vertex::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::vector<htd::Hyperedge>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
     *this = original;
 }
@@ -1054,7 +1054,7 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
             next_vertex_ = htd::Vertex::FIRST;
         }
 
-        edges_ = std::make_shared<htd::hyperedge_container>(*(original.edges_));
+        edges_ = std::make_shared<std::vector<htd::Hyperedge>>(*(original.edges_));
 
         next_edge_ = original.next_edge_;
     }
@@ -1119,11 +1119,11 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
 
             const htd::ConstCollection<htd::Hyperedge> & originalEdges = original.hyperedges();
 
-            edges_ = std::make_shared<htd::hyperedge_container>(originalEdges.begin(), originalEdges.end());
+            edges_ = std::make_shared<std::vector<htd::Hyperedge>>(originalEdges.begin(), originalEdges.end());
 
             if (!edges_->empty())
             {
-                next_edge_ = edges_->rend()->id();
+                next_edge_ = edges_->rbegin()->id();
             }
         }
     }

@@ -31,7 +31,6 @@
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
-#include <htd/HypertreeDecompositionLabelingFunction.hpp>
 #include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
 
@@ -104,14 +103,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
     if (ret != nullptr)
     {
-        htd::HypertreeDecompositionLabelingFunction hypertreeDecompositionLabelingFunction(graph);
-
-        for (htd::vertex_t vertex : ret->vertices())
-        {
-            htd::ILabel * newLabel = hypertreeDecompositionLabelingFunction.computeLabel(ret->bagContent(vertex));
-
-            ret->setVertexLabel(hypertreeDecompositionLabelingFunction.name(), vertex, newLabel);
-        }
+        setCoveringEdges(graph, *ret);
 
         std::vector<htd::ILabelingFunction *> labelingFunctions;
 
@@ -249,6 +241,65 @@ htd::HypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithm::clo
     }
 
     return new htd::HypertreeDecompositionAlgorithm(manipulationOperations);
+}
+
+void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHypergraph & graph, htd::IMutableHypertreeDecomposition & decomposition) const
+{
+    std::vector<htd::id_t> relevantContainerIds;
+
+    std::vector<std::vector<htd::id_t>> relevantContainers;
+
+    const htd::ConstCollection<htd::Hyperedge> & hyperedges = graph.hyperedges();
+
+    for (auto it1 = hyperedges.begin(); it1 != hyperedges.end(); it1++)
+    {
+        const std::vector<htd::vertex_t> & elements1 = it1->sortedElements();
+
+        bool maximal = true;
+
+        auto it2 = it1;
+
+        ++it2;
+
+        while (it2 != hyperedges.end())
+        {
+            const std::vector<htd::vertex_t> & elements2 = it2->sortedElements();
+
+            if (std::includes(elements2.begin(), elements2.end(), elements1.begin(), elements1.end()))
+            {
+                maximal = false;
+            }
+
+            ++it2;
+        }
+
+        if (maximal)
+        {
+            relevantContainers.push_back(elements1);
+
+            relevantContainerIds.push_back(it1->id());
+        }
+    }
+
+    htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm();
+
+    for (htd::vertex_t vertex : decomposition.vertices())
+    {
+        std::vector<htd::index_t> selectedIndices;
+
+        setCoverAlgorithm->computeSetCover(decomposition.bagContent(vertex), relevantContainers, selectedIndices);
+
+        std::vector<htd::Hyperedge> selectedHyperedges;
+
+        for (htd::index_t selectedHyperedgeIndex : selectedIndices)
+        {
+            selectedHyperedges.push_back(htd::Hyperedge(relevantContainerIds[selectedHyperedgeIndex], relevantContainers[selectedHyperedgeIndex]));
+        }
+
+        decomposition.setCoveringEdges(vertex, selectedHyperedges);
+    }
+
+    delete setCoverAlgorithm;
 }
 
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_CPP */

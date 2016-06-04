@@ -57,6 +57,7 @@
 #include <htd/GraphDecompositionFactory.hpp>
 #include <htd/GraphFactory.hpp>
 #include <htd/GraphLabeling.hpp>
+#include <htd/GreedySetCoverAlgorithm.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/HeuristicSetCoverAlgorithm.hpp>
 #include <htd/HumanReadableExporter.hpp>
@@ -67,7 +68,6 @@
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
 #include <htd/HypertreeDecompositionAlgorithmFactory.hpp>
 #include <htd/HypertreeDecompositionFactory.hpp>
-#include <htd/HypertreeDecompositionLabelingFunction.hpp>
 #include <htd/IBidirectionalGraphLabeling.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
@@ -83,6 +83,7 @@
 #include <htd/IHypergraph.hpp>
 #include <htd/IHypertreeDecomposition.hpp>
 #include <htd/IHypertreeDecompositionAlgorithm.hpp>
+#include <htd/IHypertreeDecompositionExporter.hpp>
 #include <htd/ILabel.hpp>
 #include <htd/ILabelCollection.hpp>
 #include <htd/ILabeledDirectedGraph.hpp>

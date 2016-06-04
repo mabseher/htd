@@ -48,9 +48,9 @@ namespace htd
              *
              *  @param[in] vertex   The vertex for which the covering edges shall be returned.
              *
-             *  @return The collection of hyperedges covering the bag content of the specific vertex.
+             *  @return A vector of hyperedges covering the bag content of the specific vertex.
              */
-            virtual htd::ConstCollection<htd::Hyperedge> coveringEdges(htd::vertex_t vertex) const = 0;
+            virtual const std::vector<htd::Hyperedge> & coveringEdges(htd::vertex_t vertex) const = 0;
 
             /**
              *  Create a deep copy the current hypertree decomposition.

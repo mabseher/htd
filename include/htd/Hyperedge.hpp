@@ -241,11 +241,6 @@ namespace htd
 
             std::shared_ptr<std::vector<htd::vertex_t>> sortedElements_;
     };
-
-    /**
-     *  Datatype for storing hyperedges.
-     */
-    typedef std::vector<Hyperedge> hyperedge_container;
 }
 
 #endif /* HTD_HTD_HYPEREDGE_HPP */

@@ -29,6 +29,7 @@
 #include <htd/IHypertreeDecompositionAlgorithm.hpp>
 
 #include <htd/ILabelingFunction.hpp>
+#include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 
 #include <vector>
@@ -99,6 +100,8 @@ namespace htd
             std::vector<htd::ILabelingFunction *> labelingFunctions_;
 
             std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
+
+            void setCoveringEdges(const htd::IMultiHypergraph & graph, htd::IMutableHypertreeDecomposition & decomposition) const;
     };
 }
 

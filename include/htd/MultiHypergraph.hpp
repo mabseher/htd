@@ -172,7 +172,7 @@ namespace htd
 
             std::unordered_set<htd::vertex_t> deletions_;
 
-            std::shared_ptr<htd::hyperedge_container> edges_;
+            std::shared_ptr<std::vector<htd::Hyperedge>> edges_;
 
             std::vector<std::vector<htd::vertex_t>> neighborhood_;
     };

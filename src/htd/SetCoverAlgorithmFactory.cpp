@@ -28,13 +28,13 @@
 #include <htd/Globals.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
-#include <htd/HeuristicSetCoverAlgorithm.hpp>
+#include <htd/GreedySetCoverAlgorithm.hpp>
 
 #include <stdexcept>
 
 htd::SetCoverAlgorithmFactory::SetCoverAlgorithmFactory(void)
 {
-    constructionTemplate_ = new htd::HeuristicSetCoverAlgorithm();
+    constructionTemplate_ = new htd::GreedySetCoverAlgorithm();
 }
 
 htd::SetCoverAlgorithmFactory::~SetCoverAlgorithmFactory()

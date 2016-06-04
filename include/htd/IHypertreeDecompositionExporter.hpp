@@ -1,5 +1,5 @@
 /*
- * File:   ITreeDecompositionExporter.hpp
+ * File:   IHypertreeDecompositionExporter.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,12 +22,12 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_ITREEDECOMPOSITIONEXPORTER_HPP
-#define	HTD_HTD_ITREEDECOMPOSITIONEXPORTER_HPP
+#ifndef HTD_HTD_IHYPERTREEDECOMPOSITIONEXPORTER_HPP
+#define	HTD_HTD_IHYPERTREEDECOMPOSITIONEXPORTER_HPP
 
 #include <htd/IMultiHypergraph.hpp>
 #include <htd/NamedMultiHypergraph.hpp>
-#include <htd/ITreeDecomposition.hpp>
+#include <htd/IHypertreeDecomposition.hpp>
 
 #include <fstream>
 #include <iostream>
@@ -35,19 +35,19 @@
 namespace htd
 {
     /**
-     * Interface for algorithms which can be used to export tree decompositions to streams.
+     * Interface for algorithms which can be used to export hypertree decompositions to streams.
      */
-    class ITreeDecompositionExporter
+    class IHypertreeDecompositionExporter
     {
         public:
-            virtual ~ITreeDecompositionExporter() = 0;
+            virtual ~IHypertreeDecompositionExporter() = 0;
 
-            virtual void write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const = 0;
+            virtual void write(const htd::IHypertreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const = 0;
 
-            virtual void write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const = 0;
+            virtual void write(const htd::IHypertreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const = 0;
     };
 
-    inline htd::ITreeDecompositionExporter::~ITreeDecompositionExporter() { }
+    inline htd::IHypertreeDecompositionExporter::~IHypertreeDecompositionExporter() { }
 }
 
-#endif /* HTD_HTD_ITREEDECOMPOSITIONEXPORTER_HPP */
+#endif /* HTD_HTD_IHYPERTREEDECOMPOSITIONEXPORTER_HPP */

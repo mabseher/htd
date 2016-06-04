@@ -44,7 +44,7 @@ htd::MultiHypergraph::MultiHypergraph(void)
       vertices_(),
       selfLoops_(),
       deletions_(),
-      edges_(std::make_shared<htd::hyperedge_container>()),
+      edges_(std::make_shared<std::vector<htd::Hyperedge>>()),
       neighborhood_()
 {
 
@@ -57,7 +57,7 @@ htd::MultiHypergraph::MultiHypergraph(std::size_t initialSize)
       vertices_(),
       selfLoops_(),
       deletions_(),
-      edges_(std::make_shared<htd::hyperedge_container>()),
+      edges_(std::make_shared<std::vector<htd::Hyperedge>>()),
       neighborhood_()
 {
     addVertices(initialSize);
@@ -70,7 +70,7 @@ htd::MultiHypergraph::MultiHypergraph(const htd::MultiHypergraph & original)
       vertices_(original.vertices_),
       selfLoops_(original.selfLoops_),
       deletions_(original.deletions_),
-      edges_(std::make_shared<htd::hyperedge_container>(*(original.edges_))),
+      edges_(std::make_shared<std::vector<htd::Hyperedge>>(*(original.edges_))),
       neighborhood_(original.neighborhood_)
 {
 
@@ -83,7 +83,7 @@ htd::MultiHypergraph::MultiHypergraph(const htd::IMultiHypergraph & original)
       vertices_(),
       selfLoops_(),
       deletions_(),
-      edges_(std::make_shared<htd::hyperedge_container>()),
+      edges_(std::make_shared<std::vector<htd::Hyperedge>>()),
       neighborhood_()
 {
     *this = original;

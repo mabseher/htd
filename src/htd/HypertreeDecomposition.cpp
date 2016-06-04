@@ -56,45 +56,29 @@ htd::HypertreeDecomposition::~HypertreeDecomposition()
 
 }
 
-htd::ConstCollection<htd::Hyperedge> htd::HypertreeDecomposition::coveringEdges(htd::vertex_t vertex) const
+const std::vector<htd::Hyperedge> & htd::HypertreeDecomposition::coveringEdges(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::Hyperedge> htd::HypertreeDecomposition::coveringEdges(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
-    const htd::Label<htd::ConstCollection<htd::Hyperedge>> * edgeLabel = dynamic_cast<const htd::Label<htd::ConstCollection<htd::Hyperedge>> *>(&(vertexLabel(htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER, vertex)));
-
-    if (edgeLabel == nullptr)
-    {
-        throw std::logic_error("htd::ConstCollection<htd::Hyperedge> htd::HypertreeDecomposition::coveringEdges(htd::vertex_t) const");
-    }
-
-    return htd::ConstCollection<htd::Hyperedge>(edgeLabel->value());
+    return coveringEdges_.at(vertex);
 }
 
-void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const htd::hyperedge_container & content)
+void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const std::vector<htd::Hyperedge> & content)
 {
-    if (isVertex(vertex))
-    {
-        setVertexLabel(htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(htd::VectorAdapter<htd::Hyperedge>(content))));
-    }
-    else
-    {
-        throw std::logic_error("void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t, const htd::Hyperedge_container &))");
-    }
+    HTD_ASSERT(isVertex(vertex))
+
+    coveringEdges_[vertex] = content;
 }
 
 void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const htd::ConstCollection<htd::Hyperedge> & content)
 {
-    if (isVertex(vertex))
-    {
-        setVertexLabel(htd::IHypertreeDecomposition::EDGE_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(htd::VectorAdapter<htd::Hyperedge>(content))));
-    }
-    else
-    {
-        throw std::logic_error("void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t, const htd::ConstCollection<htd::Hyperedge> &)");
-    }
+    HTD_ASSERT(isVertex(vertex))
+
+    std::vector<htd::Hyperedge> & coveringEdges = coveringEdges_[vertex];
+
+    coveringEdges.clear();
+
+    std::copy(content.begin(), content.end(), std::back_inserter(coveringEdges));
 }
 
 htd::HypertreeDecomposition * htd::HypertreeDecomposition::clone(void) const
@@ -102,35 +86,62 @@ htd::HypertreeDecomposition * htd::HypertreeDecomposition::clone(void) const
     return new htd::HypertreeDecomposition(*this);
 }
 
-
 htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::ITree & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::TreeDecomposition::operator=(original);
+
+        for (htd::vertex_t vertex : original.vertices())
+        {
+            coveringEdges_[vertex] = std::vector<htd::Hyperedge>();
+        }
+    }
 
     return *this;
 }
 
 htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::ILabeledTree & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::TreeDecomposition::operator=(original);
+
+        for (htd::vertex_t vertex : original.vertices())
+        {
+            coveringEdges_[vertex] = std::vector<htd::Hyperedge>();
+        }
+    }
 
     return *this;
 }
 
 htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::ITreeDecomposition & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::TreeDecomposition::operator=(original);
+
+        for (htd::vertex_t vertex : original.vertices())
+        {
+            coveringEdges_[vertex] = std::vector<htd::Hyperedge>();
+        }
+    }
 
     return *this;
 }
 
 htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::IHypertreeDecomposition & original)
 {
-    //TODO Implement!
-    HTD_UNUSED(original)
+    if (this != &original)
+    {
+        htd::TreeDecomposition::operator=(original);
+
+        for (htd::vertex_t vertex : original.vertices())
+        {
+            coveringEdges_[vertex] = original.coveringEdges(vertex);
+        }
+    }
 
     return *this;
 }

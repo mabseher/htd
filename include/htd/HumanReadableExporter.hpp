@@ -26,13 +26,14 @@
 #define	HTD_HTD_HUMANREADABLEEXPORTER_HPP
 
 #include <htd/ITreeDecompositionExporter.hpp>
+#include <htd/IHypertreeDecompositionExporter.hpp>
 
 #include <fstream>
 #include <iostream>
 
 namespace htd
 {
-    class HumanReadableExporter : public htd::ITreeDecompositionExporter
+    class HumanReadableExporter : public htd::ITreeDecompositionExporter, public htd::IHypertreeDecompositionExporter
     {
         public:
             HumanReadableExporter(void);
@@ -42,6 +43,10 @@ namespace htd
             void write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
 
             void write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const HTD_OVERRIDE;
+
+            void write(const htd::IHypertreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
+
+            void write(const htd::IHypertreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const HTD_OVERRIDE;
     };
 }
 

@@ -59,9 +59,9 @@ namespace htd
 
             ~HypertreeDecomposition();
 
-            htd::ConstCollection<htd::Hyperedge> coveringEdges(htd::vertex_t vertex) const HTD_OVERRIDE;
+            const std::vector<htd::Hyperedge> & coveringEdges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void setCoveringEdges(htd::vertex_t vertex, const htd::hyperedge_container & content) HTD_OVERRIDE;
+            void setCoveringEdges(htd::vertex_t vertex, const std::vector<htd::Hyperedge> & content) HTD_OVERRIDE;
 
             void setCoveringEdges(htd::vertex_t vertex, const htd::ConstCollection<htd::Hyperedge> & content) HTD_OVERRIDE;
 
@@ -74,6 +74,9 @@ namespace htd
             HypertreeDecomposition & operator=(const htd::ITreeDecomposition & original) HTD_OVERRIDE;
 
             HypertreeDecomposition & operator=(const htd::IHypertreeDecomposition & original) HTD_OVERRIDE;
+
+        private:
+            std::unordered_map<htd::vertex_t, std::vector<htd::Hyperedge>> coveringEdges_;
     };
 }
 

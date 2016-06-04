@@ -46,6 +46,8 @@ namespace htd
              *  @param[in] elements     The set of elements which must be covered.
              *  @param[in] containers   The collection of containers which are available for covering the given elements.
              *  @param[out] target      The target vector to which the indices of the covering containers shall be appended.
+             *
+             *  @note The vector 'elements' and all vectors stored in the argument 'containers' must be sorted and must not contain duplicates, otherwise the result of this method is undefined.
              */
             virtual void computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const = 0;
 
@@ -55,6 +57,8 @@ namespace htd
              *  @param[in] elements     The set of elements which must be covered.
              *  @param[in] containers   The collection of containers which are available for covering the given elements.
              *  @param[out] target      The target vector to which the indices of the covering containers shall be appended.
+             *
+             *  @note The collection 'elements' and all vectors stored in the argument 'containers' must be sorted and must not contain duplicates, otherwise the result of this method is undefined.
              */
             virtual void computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const = 0;
 

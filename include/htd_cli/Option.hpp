@@ -29,34 +29,100 @@
 
 namespace htd_cli
 {
+    /**
+     *  Class for the definition of command line options.
+     */
     class Option
     {
         public:
+            /**
+             *  Constructor for a command line option.
+             *
+             *  @param[in] name         The name of the command line option.
+             *  @param[in] description  The description of the command line option.
+             */
             Option(const std::string & name, const std::string & description);
 
+            /**
+             *  Constructor for a command line option.
+             *
+             *  @param[in] name         The name of the command line option.
+             *  @param[in] description  The description of the command line option.
+             *  @param[in] shortName    The abbreviated name of the option which acts as an alias for the option name.
+             */
             Option(const std::string & name, const std::string & description, char shortName);
 
             virtual ~Option();
 
+            /**
+             *  Getter for the name of the command line option.
+             *
+             *  @return The name of the command line option.
+             */
             const std::string & name(void) const;
 
+            /**
+             *  Getter for the description of the command line option.
+             *
+             *  @return The description of the command line option.
+             */
             const std::string & description(void) const;
 
+            /**
+             *  Check whether the option has a short name.
+             *
+             *  @return True if the option has a short name, false otherwise.
+             */
             bool hasShortName(void) const;
 
+            /**
+             *  Getter for the abbreviated name of the option which acts as an alias for the option name.
+             *
+             *  @return The abbreviated name of the option which acts as an alias for the option name.
+             */
             char shortName(void) const;
 
+            /**
+             *  Check whether the option was provided via a command line argument.
+             *
+             *  @return True if the option was provided via a command line argument, false otherwise.
+             */
             bool used(void) const;
 
+            /**
+             *  Set a flag indicating that the option was provided via a command line argument.
+             */
             void setUsed(void);
 
+            /**
+             *  Print the help text for the option.
+             *
+             *  @param[out] stream          The stream to which the help text shall be written.
+             *  @param[in] maxNameLength    The maximum length of all option names to allow correct indenting.
+             */
             virtual void printHelp(std::ostream & stream, std::size_t maxNameLength = 0) const;
 
+            /**
+             *  Get the command line representation of the given option name by putting a single dash ('-') character in front of the name.
+             *
+             *  @param[in] name The name which shall be converted to its command line representation.
+             *
+             *  @return The command line representation of the given option name.
+             */
             static std::string getCommandLineRepresentation(char name);
 
+            /**
+             *  Get the command line representation of the given option name by putting one or two dash ('-') characters in front of the name.
+             *  Whether one or two dash characters are used depends on the length of the option name: When the name length is 1, only a single
+             *  dash is added, otherwise two dash characters will be added.
+             *
+             *  @param[in] name The name which shall be converted to its command line representation.
+             *
+             *  @return The command line representation of the given option name.
+             */
             static std::string getCommandLineRepresentation(const std::string & name);
 
-        protected:
+        private:
             bool used_;
 
             char shortName_;

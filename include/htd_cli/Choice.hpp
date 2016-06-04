@@ -31,19 +31,53 @@
 
 namespace htd_cli
 {
+    /**
+     *  Class for the definition of command line options which take a single argument from a given list of options.
+     */
     class Choice : public htd_cli::SingleValueOption
     {
         public:
+            /**
+             *  Constructor for a command line option.
+             *
+             *  @param[in] name             The name of the command line option.
+             *  @param[in] description      The description of the command line option.
+             *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
+             */
             Choice(const std::string & name, const std::string & description, const std::string & valuePlaceholder);
 
+            /**
+             *  Constructor for a command line option.
+             *
+             *  @param[in] name             The name of the command line option.
+             *  @param[in] description      The description of the command line option.
+             *  @param[in] shortName        The abbreviated name of the option which acts as an alias for the option name.
+             *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
+             */
             Choice(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName);
 
             ~Choice();
 
+            /**
+             *  Add a new possibility one can choose from.
+             *
+             *  @param[in] value        The value which shall be added as new possibility.
+             *  @param[in] description  The description of the new possibility.
+             */
             void addPossibility(const std::string & value, const std::string & description);
 
+            /**
+             *  Check whether the htd_cli::Choice object has a default value.
+             *
+             *  @return True if the htd_cli::Choice object has a default value, false otherwise.
+             */
             bool hasDefaultValue(void);
 
+            /**
+             *  Set the default value of the htd_cli::Choice object.
+             *
+             *  @param[in] value    The value of one of the added possibilities which shall be used as the new default value.
+             */
             void setDefaultValue(const std::string & value);
 
             const std::string & value(void) const HTD_OVERRIDE;

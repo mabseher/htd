@@ -32,11 +32,30 @@
 
 namespace htd
 {
+    /**
+     *  Importer which allows to read instances in the graph format 'mgr'.
+     *
+     *  (See https://github.com/mabseher/htd/formats.md for information about the available input formats.)
+     */
     class MGrFormatImporter
     {
         public:
+            /**
+             *  Create a new IMultiHypergraph instance based on the information stored in a given file.
+             *
+             *  @param[in] path The path to the file from which the information can be read.
+             *
+             *  @return A new IMultiHypergraph instance based on the information stored in the given file.
+             */
             htd::IMultiHypergraph * import(const std::string & path) const;
 
+            /**
+             *  Create a new IMultiHypergraph instance based on the information from a given stream.
+             *
+             *  @param[in] stream   The input stream from which the information can be read.
+             *
+             *  @return A new IMultiHypergraph instance based on the information from the given stream.
+             */
             htd::IMultiHypergraph * import(std::istream & stream) const;
     };
 }

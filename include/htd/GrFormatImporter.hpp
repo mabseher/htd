@@ -32,11 +32,30 @@
 
 namespace htd
 {
+    /**
+     *  Importer which allows to read instances in the graph format 'gr'.
+     *
+     *  (See https://github.com/mabseher/htd/formats.md for information about the available input formats.)
+     */
     class GrFormatImporter
     {
         public:
+            /**
+             *  Create a new IMultiGraph instance based on the information stored in a given file.
+             *
+             *  @param[in] path The path to the file from which the information can be read.
+             *
+             *  @return A new IMultiGraph instance based on the information stored in the given file.
+             */
             htd::IMultiGraph * import(const std::string & path) const;
 
+            /**
+             *  Create a new IMultiGraph instance based on the information from a given stream.
+             *
+             *  @param[in] stream   The input stream from which the information can be read.
+             *
+             *  @return A new IMultiGraph instance based on the information from the given stream.
+             */
             htd::IMultiGraph * import(std::istream & stream) const;
     };
 }

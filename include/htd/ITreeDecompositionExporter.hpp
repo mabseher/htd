@@ -42,8 +42,22 @@ namespace htd
         public:
             virtual ~ITreeDecompositionExporter() = 0;
 
+            /**
+             *  Write a tree decomposition to a given stream.
+             *
+             *  @param[in] decomposition    The tree decomposition which shall be exported.
+             *  @param[in] graph            The graph instance from which the given decomposition was constructed.
+             *  @param[out] outputStream    The output stream to which the information shall be written.
+             */
             virtual void write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const = 0;
 
+            /**
+             *  Write a tree decomposition to a given stream.
+             *
+             *  @param[in] decomposition    The tree decomposition which shall be exported.
+             *  @param[in] graph            The graph instance from which the given decomposition was constructed.
+             *  @param[out] outputStream    The output stream to which the information shall be written.
+             */
             virtual void write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const = 0;
     };
 

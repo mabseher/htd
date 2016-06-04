@@ -32,11 +32,30 @@
 
 namespace htd
 {
+    /**
+     *  Importer which allows to read instances in the graph format 'lp'.
+     *
+     *  (See https://github.com/mabseher/htd/formats.md for information about the available input formats.)
+     */
     class LpFormatImporter
     {
         public:
+            /**
+             *  Create a new htd::NamedMultiHypergraph<std::string, std::string> instance based on the information stored in a given file.
+             *
+             *  @param[in] path The path to the file from which the information can be read.
+             *
+             *  @return A new htd::NamedMultiHypergraph<std::string, std::string> instance based on the information stored in the given file.
+             */
             htd::NamedMultiHypergraph<std::string, std::string> * import(const std::string & path) const;
 
+            /**
+             *  Create a new htd::NamedMultiHypergraph<std::string, std::string> instance based on the information from a given stream.
+             *
+             *  @param[in] stream   The input stream from which the information can be read.
+             *
+             *  @return A new htd::NamedMultiHypergraph<std::string, std::string> instance based on the information from the given stream.
+             */
             htd::NamedMultiHypergraph<std::string, std::string> * import(std::istream & stream) const;
     };
 }

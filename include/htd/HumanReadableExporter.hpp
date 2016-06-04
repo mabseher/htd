@@ -33,6 +33,9 @@
 
 namespace htd
 {
+    /**
+     *  Exporter which allows to export tree decompositions in a human-readable format.
+     */
     class HumanReadableExporter : public htd::ITreeDecompositionExporter, public htd::IHypertreeDecompositionExporter
     {
         public:

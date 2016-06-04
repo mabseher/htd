@@ -62,16 +62,16 @@ void htd_cli::MultiValueOption::printHelp(std::ostream & stream, std::size_t max
 {
     std::ostringstream parameterDefinition;
 
-    parameterDefinition << htd_cli::Option::getCommandLineRepresentation(name_);
+    parameterDefinition << htd_cli::Option::getCommandLineRepresentation(name());
 
     if (hasShortName())
     {
-        parameterDefinition << ", " << htd_cli::Option::getCommandLineRepresentation(shortName_);
+        parameterDefinition << ", " << htd_cli::Option::getCommandLineRepresentation(shortName());
     }
 
     parameterDefinition << " <" << valuePlaceholder() << ">";
 
-    stream << std::left << std::setw(maxNameLength) << parameterDefinition.str() << "   " << description_ << std::endl;
+    stream << std::left << std::setw(maxNameLength) << parameterDefinition.str() << "   " << description() << std::endl;
 }
 
 #endif /* HTD_CLI_MULTIVALUEOPTION_CPP */

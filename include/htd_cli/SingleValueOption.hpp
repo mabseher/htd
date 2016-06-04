@@ -33,17 +33,47 @@
 
 namespace htd_cli
 {
+    /**
+     *  Class for the definition of command line options which take a single argument.
+     */
     class SingleValueOption : public htd_cli::ValueOption
     {
         public:
+            /**
+             *  Constructor for a command line option.
+             *
+             *  @param[in] name             The name of the command line option.
+             *  @param[in] description      The description of the command line option.
+             *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
+             */
             SingleValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder);
 
+            /**
+             *  Constructor for a command line option.
+             *
+             *  @param[in] name             The name of the command line option.
+             *  @param[in] description      The description of the command line option.
+             *  @param[in] shortName        The abbreviated name of the option which acts as an alias for the option name.
+             *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
+             */
             SingleValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName);
 
             ~SingleValueOption();
 
+            /**
+             *  Getter for the argument value assigned to the option.
+             *
+             *  @return The argument value assigned to the option.
+             */
             virtual const std::string & value(void) const;
 
+            /**
+             *  Register the given value representing the option's argument.
+             *
+             *  The new value will replace the previous one and the getter htd::SingleValueOption::used() will return true after calling this method.
+             *
+             *  @param[in] value    The value which shall be registered.
+             */
             void registerValue(const std::string & value) HTD_OVERRIDE;
 
             void printHelp(std::ostream & stream, std::size_t maxNameLength) const HTD_OVERRIDE;

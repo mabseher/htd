@@ -29,17 +29,45 @@
 
 namespace htd_cli
 {
+    /**
+     *  Class for the definition of command line options which take an argument.
+     */
     class ValueOption : public htd_cli::Option
     {
         public:
+            /**
+             *  Constructor for a command line option.
+             *
+             *  @param[in] name             The name of the command line option.
+             *  @param[in] description      The description of the command line option.
+             *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
+             */
             ValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder);
 
+            /**
+             *  Constructor for a command line option.
+             *
+             *  @param[in] name             The name of the command line option.
+             *  @param[in] description      The description of the command line option.
+             *  @param[in] shortName        The abbreviated name of the option which acts as an alias for the option name.
+             *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
+             */
             ValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName);
 
             ~ValueOption();
 
+            /**
+             *  Register the given value representing the option's argument.
+             *
+             *  @param[in] value    The value which shall be registered.
+             */
             virtual void registerValue(const std::string & value) = 0;
 
+            /**
+             *  Getter for the argument's placeholder which shall be used in the help text.
+             *
+             *  @return The argument's placeholder which shall be used in the help text.
+             */
             const std::string & valuePlaceholder(void) const;
 
         private:

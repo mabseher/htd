@@ -27,11 +27,17 @@
 
 namespace htd_cli
 {
+    /**
+     *  Interface for observers which can be used in the context of the class htd::OptionManager.
+     */
     class IObserver
     {
         public:
             virtual ~IObserver() = 0;
 
+            /**
+             *  Notify the observer instance.
+             */
             virtual void notify(void) = 0;
     };
 

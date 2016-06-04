@@ -37,6 +37,15 @@ htd_cli::OptionManager * createOptionManager(void)
 
     manager->registerOption(seedOption);
 
+    htd_cli::Choice * decompositionTypeChoice = new htd_cli::Choice("type", "Compute a graph decomposition of type <type>.", "type");
+
+    decompositionTypeChoice->addPossibility("tree", "Compute a tree decomposition of the input graph.");
+    decompositionTypeChoice->addPossibility("hypertree", "Compute a hypertree decomposition of the input graph.");
+
+    decompositionTypeChoice->setDefaultValue("tree");
+
+    manager->registerOption(decompositionTypeChoice, "Decomposition Options");
+
     htd_cli::Choice * inputFormatChoice = new htd_cli::Choice("input", "Assume that the input graph is given in format <format>.\n  (See https://github.com/mabseher/htd/formats.md for information about the available input formats.)", "format");
 
     inputFormatChoice->addPossibility("gr", "Use the input format 'gr'.");
@@ -61,11 +70,12 @@ htd_cli::OptionManager * createOptionManager(void)
 
     htd_cli::Choice * orderingAlgorithmChoice = new htd_cli::Choice("ordering", "Set the ordering algorithm which shall be used to <algorithm>.", "algorithm");
 
-    orderingAlgorithmChoice->addPossibility("min-fill", "Minimum-fill ordering algorithm");
+    orderingAlgorithmChoice->addPossibility("min-fill+", "Advanced minimum-fill ordering algorithm");
+    orderingAlgorithmChoice->addPossibility("min-fill", "Standard minimum-fill ordering algorithm");
     orderingAlgorithmChoice->addPossibility("min-degree", "Minimum-degree ordering algorithm");
     orderingAlgorithmChoice->addPossibility("max-cardinality", "Maximum cardinality search ordering algorithm");
 
-    orderingAlgorithmChoice->setDefaultValue("min-fill");
+    orderingAlgorithmChoice->setDefaultValue("min-fill+");
 
     manager->registerOption(orderingAlgorithmChoice, "Algorithm Options");
 
@@ -143,13 +153,17 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
     {
         const std::string & value = orderingAlgorithmChoice.value();
 
-        if (value == "min-fill")
+        if (value == "min-fill+")
         {
-            htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::MinFillOrderingAlgorithm);
+            htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::AdvancedMinFillOrderingAlgorithm());
+        }
+        else if (value == "min-fill")
+        {
+            htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::MinFillOrderingAlgorithm());
         }
         else if (value == "min-degree")
         {
-            htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::MinDegreeOrderingAlgorithm);
+            htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::MinDegreeOrderingAlgorithm());
         }
         else if (value == "max-cardinality")
         {
@@ -177,6 +191,39 @@ void decomposeGr(const htd::ITreeDecompositionExporter & exporter)
         htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
 
         htd::ITreeDecomposition * decomposition = algorithm->computeDecomposition(*graph);
+
+        delete algorithm;
+
+        if (decomposition != nullptr)
+        {
+            exporter.write(*decomposition, *graph, std::cout);
+
+            delete decomposition;
+        }
+        else
+        {
+            std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+        }
+
+        delete graph;
+    }
+    else
+    {
+        std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+    }
+}
+
+void decomposeGr(const htd::IHypertreeDecompositionExporter & exporter)
+{
+    htd::GrFormatImporter importer;
+
+    htd::IMultiGraph * graph = importer.import(std::cin);
+
+    if (graph != nullptr)
+    {
+        htd::IHypertreeDecompositionAlgorithm * algorithm = htd::HypertreeDecompositionAlgorithmFactory::instance().getHypertreeDecompositionAlgorithm();
+
+        htd::IHypertreeDecomposition * decomposition = algorithm->computeDecomposition(*graph);
 
         delete algorithm;
 
@@ -232,6 +279,39 @@ void decomposeLp(const htd::ITreeDecompositionExporter & exporter)
     }
 }
 
+void decomposeLp(const htd::IHypertreeDecompositionExporter & exporter)
+{
+    htd::LpFormatImporter importer;
+
+    htd::NamedMultiHypergraph<std::string, std::string> * graph = importer.import(std::cin);
+
+    if (graph != nullptr)
+    {
+        htd::IHypertreeDecompositionAlgorithm * algorithm = htd::HypertreeDecompositionAlgorithmFactory::instance().getHypertreeDecompositionAlgorithm();
+
+        htd::IHypertreeDecomposition * decomposition = algorithm->computeDecomposition(graph->internalGraph());
+
+        delete algorithm;
+
+        if (decomposition != nullptr)
+        {
+            exporter.write(*decomposition, *graph, std::cout);
+
+            delete decomposition;
+        }
+        else
+        {
+            std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+        }
+
+        delete graph;
+    }
+    else
+    {
+        std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+    }
+}
+
 void decomposeMGr(const htd::ITreeDecompositionExporter & exporter)
 {
     htd::MGrFormatImporter importer;
@@ -243,6 +323,39 @@ void decomposeMGr(const htd::ITreeDecompositionExporter & exporter)
         htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
 
         htd::ITreeDecomposition * decomposition = algorithm->computeDecomposition(*graph);
+
+        delete algorithm;
+
+        if (decomposition != nullptr)
+        {
+            exporter.write(*decomposition, *graph, std::cout);
+
+            delete decomposition;
+        }
+        else
+        {
+            std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+        }
+
+        delete graph;
+    }
+    else
+    {
+        std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+    }
+}
+
+void decomposeMGr(const htd::IHypertreeDecompositionExporter & exporter)
+{
+    htd::MGrFormatImporter importer;
+
+    htd::IMultiHypergraph * graph = importer.import(std::cin);
+
+    if (graph != nullptr)
+    {
+        htd::IHypertreeDecompositionAlgorithm * algorithm = htd::HypertreeDecompositionAlgorithmFactory::instance().getHypertreeDecompositionAlgorithm();
+
+        htd::IHypertreeDecomposition * decomposition = algorithm->computeDecomposition(*graph);
 
         delete algorithm;
 
@@ -277,53 +390,111 @@ int main(int argc, const char * const * const argv)
 
         const htd_cli::Choice & outputFormatChoice = optionManager->accessChoice("output");
 
+        const htd_cli::Choice & decompositionTypeChoice = optionManager->accessChoice("type");
+
         const std::string & outputFormat = outputFormatChoice.value();
 
-        htd::ITreeDecompositionExporter * exporter = nullptr;
+        bool hypertreeDecompositionRequested = decompositionTypeChoice.used() && decompositionTypeChoice.value() == "hypertree";
 
-        if (outputFormat == "td")
+        if (hypertreeDecompositionRequested)
         {
-            exporter = new htd::TdFormatExporter();
-        }
-        else if (outputFormat == "human")
-        {
-            exporter = new htd::HumanReadableExporter();
-        }
-        else if (outputFormat == "width")
-        {
-            exporter = new htd::WidthExporter();
-        }
-        else
-        {
-            std::cerr << "INVALID OUTPUT FORMAT: " << outputFormat << std::endl;
+            htd::IHypertreeDecompositionExporter * exporter = nullptr;
 
-            ret = 1;
-        }
-
-        if (ret == 0)
-        {
-            const std::string & inputFormat = inputFormatChoice.value();
-
-            if (inputFormat == "gr")
+            if (outputFormat == "td")
             {
-                decomposeGr(*exporter);
+                std::cerr << "INVALID OUTPUT FORMAT: Format 'td' only supports tree decompositions!" << std::endl;
+
+                ret = 1;
             }
-            else if (inputFormat == "lp")
+            else if (outputFormat == "human")
             {
-                decomposeLp(*exporter);
+                exporter = new htd::HumanReadableExporter();
             }
-            else if (inputFormat == "mgr")
+            else if (outputFormat == "width")
             {
-                decomposeMGr(*exporter);
+                exporter = new htd::WidthExporter();
             }
             else
             {
-                std::cerr << "INVALID INPUT FORMAT: " << inputFormat << std::endl;
+                std::cerr << "INVALID OUTPUT FORMAT: " << outputFormat << std::endl;
 
                 ret = 1;
             }
 
-            delete exporter;
+            if (ret == 0)
+            {
+                const std::string & inputFormat = inputFormatChoice.value();
+
+                if (inputFormat == "gr")
+                {
+                    decomposeGr(*exporter);
+                }
+                else if (inputFormat == "lp")
+                {
+                    decomposeLp(*exporter);
+                }
+                else if (inputFormat == "mgr")
+                {
+                    decomposeMGr(*exporter);
+                }
+                else
+                {
+                    std::cerr << "INVALID INPUT FORMAT: " << inputFormat << std::endl;
+
+                    ret = 1;
+                }
+
+                delete exporter;
+            }
+        }
+        else
+        {
+            htd::ITreeDecompositionExporter * exporter = nullptr;
+
+            if (outputFormat == "td")
+            {
+                exporter = new htd::TdFormatExporter();
+            }
+            else if (outputFormat == "human")
+            {
+                exporter = new htd::HumanReadableExporter();
+            }
+            else if (outputFormat == "width")
+            {
+                exporter = new htd::WidthExporter();
+            }
+            else
+            {
+                std::cerr << "INVALID OUTPUT FORMAT: " << outputFormat << std::endl;
+
+                ret = 1;
+            }
+
+            if (ret == 0)
+            {
+                const std::string & inputFormat = inputFormatChoice.value();
+
+                if (inputFormat == "gr")
+                {
+                    decomposeGr(*exporter);
+                }
+                else if (inputFormat == "lp")
+                {
+                    decomposeLp(*exporter);
+                }
+                else if (inputFormat == "mgr")
+                {
+                    decomposeMGr(*exporter);
+                }
+                else
+                {
+                    std::cerr << "INVALID INPUT FORMAT: " << inputFormat << std::endl;
+
+                    ret = 1;
+                }
+
+                delete exporter;
+            }
         }
     }
 

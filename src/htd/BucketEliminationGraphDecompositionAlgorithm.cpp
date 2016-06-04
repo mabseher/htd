@@ -404,7 +404,9 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     if (selectedBucket.size() + 1 > bucket.size())
                     {
-                        if (buckets[superset[minimumVertex]].size() <= selectedBucket.size())
+                        const std::vector<htd::vertex_t> & supersetBucket = buckets[superset[minimumVertex]];
+
+                        if (!std::includes(supersetBucket.begin(), supersetBucket.end(), selectedBucket.begin(), selectedBucket.end()))
                         {
                             superset[minimumVertex] = minimumVertex;
                         }
@@ -424,7 +426,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             {
                 htd::vertex_t vertex = *it;
 
-                auto & currentNeighborhood = neighbors[vertex];
+                const std::vector<htd::vertex_t> & currentNeighborhood = neighbors[vertex];
 
                 if (superset[vertex] != vertex)
                 {

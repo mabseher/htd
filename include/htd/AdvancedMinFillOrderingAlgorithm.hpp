@@ -1,5 +1,5 @@
 /* 
- * File:   MinFillOrderingAlgorithm.hpp
+ * File:   AdvancedMinFillOrderingAlgorithm.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MINFILLORDERINGALGORITHM_HPP
-#define	HTD_HTD_MINFILLORDERINGALGORITHM_HPP
+#ifndef HTD_HTD_ADVANCEDMINFILLORDERINGALGORITHM_HPP
+#define	HTD_HTD_ADVANCEDMINFILLORDERINGALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
@@ -36,19 +36,21 @@ namespace htd
 {
     /**
      *  Implementation of the IOrderingAlgorithm interface based on the minimum-fill elimination ordering algorithm.
+     *  If there are multiple vertices with the same, minimal fill value during an elimination step this algorithm
+     *  will select a vertex with minimum degree from the pool of vertices with minimum fill value.
      */
-    class MinFillOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
+    class AdvancedMinFillOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
-            MinFillOrderingAlgorithm(void);
+            AdvancedMinFillOrderingAlgorithm(void);
             
-            ~MinFillOrderingAlgorithm();
+            ~AdvancedMinFillOrderingAlgorithm();
             
             htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
             void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
-            MinFillOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
+            AdvancedMinFillOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:
             /**
@@ -56,7 +58,7 @@ namespace htd
              *
              *  @note This operator is protected to prevent assignments to an already initialized algorithm.
              */
-            MinFillOrderingAlgorithm & operator=(const MinFillOrderingAlgorithm &) { return *this; }
+            AdvancedMinFillOrderingAlgorithm & operator=(const AdvancedMinFillOrderingAlgorithm &) { return *this; }
 
         private:
             std::size_t computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const;
@@ -70,4 +72,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_MINFILLORDERINGALGORITHM_HPP */
+#endif /* HTD_HTD_ADVANCEDMINFILLORDERINGALGORITHM_HPP */

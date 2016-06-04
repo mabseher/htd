@@ -26,13 +26,14 @@
 #define	HTD_HTD_WIDTHEXPORTER_HPP
 
 #include <htd/IGraphDecompositionExporter.hpp>
+#include <htd/IHypertreeDecompositionExporter.hpp>
 
 #include <fstream>
 #include <iostream>
 
 namespace htd
 {
-    class WidthExporter : public htd::IGraphDecompositionExporter
+    class WidthExporter : public htd::IGraphDecompositionExporter, public htd::IHypertreeDecompositionExporter
     {
         public:
             WidthExporter(void);
@@ -43,9 +44,13 @@ namespace htd
 
             void write(const htd::IGraphDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
 
+            void write(const htd::IHypertreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
+
             void write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const HTD_OVERRIDE;
 
             void write(const htd::IGraphDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const HTD_OVERRIDE;
+
+            void write(const htd::IHypertreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const HTD_OVERRIDE;
     };
 }
 

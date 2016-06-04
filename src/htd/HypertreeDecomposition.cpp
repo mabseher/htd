@@ -81,6 +81,44 @@ void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const h
     std::copy(content.begin(), content.end(), std::back_inserter(coveringEdges));
 }
 
+std::size_t htd::HypertreeDecomposition::minimumCoveringEdgeAmount(void) const
+{
+    bool start = true;
+
+    std::size_t ret = 0;
+
+    for (htd::vertex_t vertex : vertices())
+    {
+        std::size_t currentCoveringEdgeAmount = coveringEdges(vertex).size();
+
+        if (start || currentCoveringEdgeAmount < ret)
+        {
+            ret = currentCoveringEdgeAmount;
+
+            start = false;
+        }
+    }
+
+    return ret;
+}
+
+std::size_t htd::HypertreeDecomposition::maximumCoveringEdgeAmount(void) const
+{
+    std::size_t ret = 0;
+
+    for (htd::vertex_t vertex : vertices())
+    {
+        std::size_t currentCoveringEdgeAmount = coveringEdges(vertex).size();
+
+        if (currentCoveringEdgeAmount > ret)
+        {
+            ret = currentCoveringEdgeAmount;
+        }
+    }
+
+    return ret;
+}
+
 htd::HypertreeDecomposition * htd::HypertreeDecomposition::clone(void) const
 {
     return new htd::HypertreeDecomposition(*this);

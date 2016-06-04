@@ -65,6 +65,10 @@ namespace htd
 
             void setCoveringEdges(htd::vertex_t vertex, const htd::ConstCollection<htd::Hyperedge> & content) HTD_OVERRIDE;
 
+            std::size_t minimumCoveringEdgeAmount(void) const HTD_OVERRIDE;
+
+            std::size_t maximumCoveringEdgeAmount(void) const HTD_OVERRIDE;
+
             HypertreeDecomposition * clone(void) const HTD_OVERRIDE;
 
             HypertreeDecomposition & operator=(const htd::ITree & original) HTD_OVERRIDE;

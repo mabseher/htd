@@ -27,13 +27,13 @@
 
 #include <htd/Globals.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
-#include <htd/MinFillOrderingAlgorithm.hpp>
+#include <htd/AdvancedMinFillOrderingAlgorithm.hpp>
 
 #include <stdexcept>
 
 htd::OrderingAlgorithmFactory::OrderingAlgorithmFactory(void)
 {
-    constructionTemplate_ = new htd::MinFillOrderingAlgorithm();
+    constructionTemplate_ = new htd::AdvancedMinFillOrderingAlgorithm();
 }
 
 htd::OrderingAlgorithmFactory::~OrderingAlgorithmFactory()

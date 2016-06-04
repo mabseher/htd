@@ -53,6 +53,20 @@ namespace htd
             virtual const std::vector<htd::Hyperedge> & coveringEdges(htd::vertex_t vertex) const = 0;
 
             /**
+             *  Getter for the minimum amount of hyperedges required to cover a bag of the decomposition.
+             *
+             *  @return The minimum amount of hyperedges required to cover a bag of the decomposition.
+             */
+            virtual std::size_t minimumCoveringEdgeAmount(void) const = 0;
+
+            /**
+             *  Getter for the maximum amount of hyperedges required to cover a bag of the decomposition.
+             *
+             *  @return The maximum amount of hyperedges required to cover a bag of the decomposition.
+             */
+            virtual std::size_t maximumCoveringEdgeAmount(void) const = 0;
+
+            /**
              *  Create a deep copy the current hypertree decomposition.
              *
              *  @return A new IHypertreeDecomposition object identical to the current hypertree decomposition.

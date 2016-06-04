@@ -26,7 +26,6 @@
 #define	HTD_HTD_MINDEGREEORDERINGALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IHypergraph.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
 
 #include <vector>

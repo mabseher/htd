@@ -25,11 +25,10 @@
 #ifndef HTD_HTD_MAXIMUMCARDINALITYSEARCHORDERINGALGORITHM_HPP
 #define	HTD_HTD_MAXIMUMCARDINALITYSEARCHORDERINGALGORITHM_HPP
 
-#include <vector>
-
 #include <htd/Globals.hpp>
-#include <htd/IMultiHypergraph.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
+
+#include <vector>
 
 namespace htd
 {

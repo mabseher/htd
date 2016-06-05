@@ -33,9 +33,11 @@
 #include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
+#include <htd/PostOrderTreeTraversal.hpp>
 
 #include <cstdarg>
 #include <stdexcept>
+#include <unordered_set>
 #include <vector>
 
 htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(void) : labelingFunctions_(), postProcessingOperations_()
@@ -241,13 +243,18 @@ htd::HypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithm::clo
 
 void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHypergraph & graph, htd::IMutableHypertreeDecomposition & decomposition) const
 {
-    std::vector<htd::id_t> relevantContainerIds;
+    //TODO Implement ISetCoverAlgorithm functionality which takes std::vector<htd::Hyperedge>!
+    std::vector<htd::Hyperedge> relevantHyperedges;
 
     std::vector<std::vector<htd::id_t>> relevantContainers;
 
     const htd::ConstCollection<htd::Hyperedge> & hyperedges = graph.hyperedges();
 
-    for (auto it1 = hyperedges.begin(); it1 != hyperedges.end(); it1++)
+    std::size_t edgeCount = graph.edgeCount();
+
+    auto it1 = hyperedges.begin();
+
+    for (htd::index_t index1 = 0; index1 < edgeCount; ++index1)
     {
         const std::vector<htd::vertex_t> & elements1 = it1->sortedElements();
 
@@ -257,7 +264,7 @@ void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHyp
 
         ++it2;
 
-        while (it2 != hyperedges.end())
+        for (htd::index_t index2 = index1 + 1; index2 < edgeCount; ++index2)
         {
             const std::vector<htd::vertex_t> & elements2 = it2->sortedElements();
 
@@ -271,16 +278,22 @@ void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHyp
 
         if (maximal)
         {
-            relevantContainers.push_back(elements1);
+            relevantHyperedges.push_back(*it1);
 
-            relevantContainerIds.push_back(it1->id());
+            relevantContainers.push_back(elements1);
         }
+
+        ++it1;
     }
 
     htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm();
 
-    for (htd::vertex_t vertex : decomposition.vertices())
+    htd::PostOrderTreeTraversal traversal;
+
+    traversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t depth)
     {
+        HTD_UNUSED(depth);
+
         std::vector<htd::index_t> selectedIndices;
 
         setCoverAlgorithm->computeSetCover(decomposition.bagContent(vertex), relevantContainers, selectedIndices);
@@ -289,11 +302,33 @@ void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHyp
 
         for (htd::index_t selectedHyperedgeIndex : selectedIndices)
         {
-            selectedHyperedges.push_back(htd::Hyperedge(relevantContainerIds[selectedHyperedgeIndex], relevantContainers[selectedHyperedgeIndex]));
+            selectedHyperedges.push_back(relevantHyperedges.at(selectedHyperedgeIndex));
         }
 
         decomposition.setCoveringEdges(vertex, selectedHyperedges);
-    }
+
+        if (parent != htd::Vertex::UNKNOWN)
+        {
+            std::vector<htd::vertex_t> forgottenVertices;
+
+            decomposition.copyForgottenVerticesTo(forgottenVertices, parent, vertex);
+
+            if (forgottenVertices.size() > 0)
+            {
+                relevantContainers.erase(std::remove_if(relevantContainers.begin(), relevantContainers.end(), [&](const std::vector<htd::id_t> & container)
+                {
+                    return htd::has_non_empty_set_intersection(container.begin(), container.end(), forgottenVertices.begin(), forgottenVertices.end());
+                }), relevantContainers.end());
+
+                relevantHyperedges.erase(std::remove_if(relevantHyperedges.begin(), relevantHyperedges.end(), [&](const htd::Hyperedge & hyperedge)
+                {
+                    const std::vector<htd::vertex_t> sortedElements = hyperedge.sortedElements();
+
+                    return htd::has_non_empty_set_intersection(sortedElements.begin(), sortedElements.end(), forgottenVertices.begin(), forgottenVertices.end());
+                }), relevantHyperedges.end());
+            }
+        }
+    });
 
     delete setCoverAlgorithm;
 }

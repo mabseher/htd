@@ -256,12 +256,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
         htd::IGraphDecomposition * graphDecomposition = graphDecompositionAlgorithm.computeDecomposition(graph);
 
-        /*
-        if (graphDecomposition == nullptr)
-        {
-            throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
-        }
-        */
+        HTD_ASSERT(graphDecomposition != nullptr)
 
         htd::IMutableGraphDecomposition & mutableGraphDecomposition = htd::GraphDecompositionFactory::instance().accessMutableGraphDecomposition(*graphDecomposition);
 
@@ -271,10 +266,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
             {
                 htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = htd::ConnectedComponentAlgorithmFactory::instance().getConnectedComponentAlgorithm();
 
-                if (connectedComponentAlgorithm == nullptr)
-                {
-                    throw std::logic_error("htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
-                }
+                HTD_ASSERT(connectedComponentAlgorithm != nullptr)
 
                 std::vector<std::vector<htd::vertex_t>> components;
 

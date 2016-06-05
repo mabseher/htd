@@ -29,7 +29,7 @@ extern "C"
 {
     const char * htd_version(void)
     {
-        return "0.1";
+        return "0.9.5";
     }
 }
 

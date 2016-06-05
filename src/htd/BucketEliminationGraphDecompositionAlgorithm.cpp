@@ -244,12 +244,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
     {
         htd::IOrderingAlgorithm * algorithm = htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm();
 
-        /*
-        if (algorithm == nullptr)
-        {
-            throw std::logic_error("htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeMutableDecomposition(const htd::IHypergraph &) const");
-        }
-        */
+        HTD_ASSERT(algorithm != nullptr)
 
         std::vector<htd::vertex_t> ordering;
 

@@ -90,10 +90,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
     htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
 
-    if (algorithm == nullptr)
-    {
-        throw std::logic_error("htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph &, const std::vector<htd::IDecompositionManipulationOperation *> &) const");
-    }
+    HTD_ASSERT(algorithm != nullptr)
 
     htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph);
 
@@ -101,81 +98,80 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
     ret = htd::HypertreeDecompositionFactory::instance().getHypertreeDecomposition(*treeDecomposition);
 
-    if (ret != nullptr)
+    HTD_ASSERT(ret != nullptr)
+
+    setCoveringEdges(graph, *ret);
+
+    std::vector<htd::ILabelingFunction *> labelingFunctions;
+
+    std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations;
+
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
-        setCoveringEdges(graph, *ret);
+        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
 
-        std::vector<htd::ILabelingFunction *> labelingFunctions;
-
-        std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations;
-
-        for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+        if (labelingFunction != nullptr)
         {
-            htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
-
-            if (labelingFunction != nullptr)
-            {
-                labelingFunctions.push_back(labelingFunction);
-            }
-
-            htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
-
-            if (manipulationOperation != nullptr)
-            {
-                postProcessingOperations.push_back(manipulationOperation);
-            }
+            labelingFunctions.push_back(labelingFunction);
         }
 
-        for (const auto & operation : postProcessingOperations_)
+        htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
+
+        if (manipulationOperation != nullptr)
         {
-            operation->apply(*ret);
+            postProcessingOperations.push_back(manipulationOperation);
         }
-
-        for (const auto & operation : postProcessingOperations)
-        {
-            operation->apply(*ret);
-        }
-
-        for (const auto & labelingFunction : labelingFunctions_)
-        {
-            for (htd::vertex_t vertex : ret->vertices())
-            {
-                htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
-
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
-
-                delete labelCollection;
-
-                ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
-            }
-        }
-
-        for (const auto & labelingFunction : labelingFunctions)
-        {
-            for (htd::vertex_t vertex : ret->vertices())
-            {
-                htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
-
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
-
-                delete labelCollection;
-
-                ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
-            }
-        }
-
-        for (auto & labelingFunction : labelingFunctions)
-        {
-            delete labelingFunction;
-        }
-
-        for (auto & postProcessingOperation : postProcessingOperations)
-        {
-            delete postProcessingOperation;
-        }
-
-        delete treeDecomposition;
     }
+
+    for (const auto & operation : postProcessingOperations_)
+    {
+        operation->apply(*ret);
+    }
+
+    for (const auto & operation : postProcessingOperations)
+    {
+        operation->apply(*ret);
+    }
+
+    for (const auto & labelingFunction : labelingFunctions_)
+    {
+        for (htd::vertex_t vertex : ret->vertices())
+        {
+            htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
+
+            htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
+
+            delete labelCollection;
+
+            ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
+        }
+    }
+
+    for (const auto & labelingFunction : labelingFunctions)
+    {
+        for (htd::vertex_t vertex : ret->vertices())
+        {
+            htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
+
+            htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
+
+            delete labelCollection;
+
+            ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
+        }
+    }
+
+    for (auto & labelingFunction : labelingFunctions)
+    {
+        delete labelingFunction;
+    }
+
+    for (auto & postProcessingOperation : postProcessingOperations)
+    {
+        delete postProcessingOperation;
+    }
+
+    delete treeDecomposition;
 
     return ret;
 }

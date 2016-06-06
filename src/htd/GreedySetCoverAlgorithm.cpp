@@ -107,6 +107,8 @@ void htd::GreedySetCoverAlgorithm::computeSetCover(const std::vector<htd::id_t> 
 
                     relevantContainers.swap(newRelevantContainers);
 
+                    newRelevantContainers.clear();
+
                     irrelevantContainers.clear();
                 }
                 else

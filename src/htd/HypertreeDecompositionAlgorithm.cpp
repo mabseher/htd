@@ -243,10 +243,13 @@ htd::HypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithm::clo
 
 void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHypergraph & graph, htd::IMutableHypertreeDecomposition & decomposition) const
 {
-    //TODO Implement ISetCoverAlgorithm functionality which takes std::vector<htd::Hyperedge>!
     std::vector<htd::Hyperedge> relevantHyperedges;
 
+    std::vector<htd::Hyperedge> newRelevantHyperedges;
+
     std::vector<std::vector<htd::id_t>> relevantContainers;
+
+    std::vector<std::vector<htd::id_t>> newRelevantContainers;
 
     const htd::ConstCollection<htd::Hyperedge> & hyperedges = graph.hyperedges();
 
@@ -315,17 +318,24 @@ void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHyp
 
             if (forgottenVertices.size() > 0)
             {
-                relevantContainers.erase(std::remove_if(relevantContainers.begin(), relevantContainers.end(), [&](const std::vector<htd::id_t> & container)
-                {
-                    return htd::has_non_empty_set_intersection(container.begin(), container.end(), forgottenVertices.begin(), forgottenVertices.end());
-                }), relevantContainers.end());
+                htd::index_t index = 0;
 
-                relevantHyperedges.erase(std::remove_if(relevantHyperedges.begin(), relevantHyperedges.end(), [&](const htd::Hyperedge & hyperedge)
+                for (std::vector<htd::id_t> & container : relevantContainers)
                 {
-                    const std::vector<htd::vertex_t> sortedElements = hyperedge.sortedElements();
+                    if (!htd::has_non_empty_set_intersection(container.begin(), container.end(), forgottenVertices.begin(), forgottenVertices.end()))
+                    {
+                        newRelevantContainers.push_back(std::move(container));
+                        newRelevantHyperedges.push_back(std::move(relevantHyperedges.at(index)));
+                    }
 
-                    return htd::has_non_empty_set_intersection(sortedElements.begin(), sortedElements.end(), forgottenVertices.begin(), forgottenVertices.end());
-                }), relevantHyperedges.end());
+                    ++index;
+                }
+
+                relevantContainers.swap(newRelevantContainers);
+                relevantHyperedges.swap(newRelevantHyperedges);
+
+                newRelevantContainers.clear();
+                newRelevantHyperedges.clear();
             }
         }
     });

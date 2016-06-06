@@ -31,6 +31,7 @@
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
+#include <numeric>
 
 htd::GreedySetCoverAlgorithm::GreedySetCoverAlgorithm(void)
 {
@@ -44,31 +45,21 @@ htd::GreedySetCoverAlgorithm::~GreedySetCoverAlgorithm()
 
 void htd::GreedySetCoverAlgorithm::computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const
 {
-    computeSetCover(htd::ConstCollection<htd::id_t>::getInstance(elements), htd::ConstCollection<std::vector<htd::id_t>>::getInstance(containers), target);
-}
-
-void htd::GreedySetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const
-{
     if (!elements.empty())
     {
         std::vector<htd::id_t> relevantElements(elements.begin(), elements.end());
 
-        std::vector<std::pair<htd::index_t, std::vector<htd::id_t>>> relevantContainers;
+        std::vector<htd::index_t> relevantContainers(containers.size());
+
+        std::vector<htd::index_t> newRelevantContainers;
 
         std::vector<htd::index_t> irrelevantContainers;
 
         std::vector<htd::index_t> result;
 
-        htd::index_t currentPosition = 0;
-
-        for (const std::vector<htd::id_t> & container : containers)
-        {
-            relevantContainers.push_back(std::make_pair(currentPosition, container));
-
-            ++currentPosition;
-        }
-
         std::size_t bestOverlap = 1;
+
+        std::iota(relevantContainers.begin(), relevantContainers.end(), 0);
 
         while (!relevantElements.empty() && bestOverlap > 0)
         {
@@ -76,31 +67,29 @@ void htd::GreedySetCoverAlgorithm::computeSetCover(const htd::ConstCollection<ht
 
             bestOverlap = 0;
 
-            currentPosition = 0;
-
             irrelevantContainers.clear();
 
-            for (const std::pair<htd::index_t, std::vector<htd::id_t>> & container : relevantContainers)
+            for (htd::index_t containerIndex : relevantContainers)
             {
-                std::size_t currentOverlap = htd::set_intersection_size(relevantElements.begin(), relevantElements.end(), container.second.begin(), container.second.end());
+                const std::vector<htd::id_t> & container = containers[containerIndex];
+
+                std::size_t currentOverlap = htd::set_intersection_size(relevantElements.begin(), relevantElements.end(), container.begin(), container.end());
 
                 if (currentOverlap == 0)
                 {
-                    irrelevantContainers.push_back(container.first);
+                    irrelevantContainers.push_back(containerIndex);
                 }
                 else if (currentOverlap > bestOverlap)
                 {
                     bestOverlap = currentOverlap;
 
-                    bestPosition = currentPosition;
+                    bestPosition = containerIndex;
                 }
-
-                ++currentPosition;
             }
 
-            result.push_back(relevantContainers[bestPosition].first);
+            result.push_back(bestPosition);
 
-            const std::vector<htd::id_t> & selectedContainer = relevantContainers[bestPosition].second;
+            const std::vector<htd::id_t> & selectedContainer = containers[bestPosition];
 
             std::vector<htd::vertex_t> newRelevantElements;
 
@@ -108,33 +97,27 @@ void htd::GreedySetCoverAlgorithm::computeSetCover(const htd::ConstCollection<ht
 
             std::swap(relevantElements, newRelevantElements);
 
-            relevantContainers.erase(relevantContainers.begin() + bestPosition);
-
             if (irrelevantContainers.size() > 0)
             {
-                currentPosition = 0;
+                std::set_difference(relevantContainers.begin(), relevantContainers.end(), irrelevantContainers.begin(), irrelevantContainers.end(), std::back_inserter(newRelevantContainers));
 
-                relevantContainers.erase(std::remove_if(relevantContainers.begin(), relevantContainers.end(), [&](const std::pair<htd::index_t, std::vector<htd::id_t>> & container)
-                {
-                    bool ret = false;
-
-                    if (currentPosition < irrelevantContainers.size() && container.first == irrelevantContainers[currentPosition])
-                    {
-                        ++currentPosition;
-
-                        ret = true;
-                    }
-
-                    return ret;
-                }), relevantContainers.end());
+                relevantContainers.swap(newRelevantContainers);
             }
 
-            currentPosition = 0;
+            relevantContainers.erase(std::lower_bound(relevantContainers.begin(), relevantContainers.end(), bestPosition));
         }
 
         std::sort(result.begin(), result.end());
 
         std::copy(result.begin(), result.end(), std::back_inserter(target));
+    }
+}
+
+void htd::GreedySetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const
+{
+    if (!elements.empty())
+    {
+        computeSetCover(std::vector<htd::id_t>(elements.begin(), elements.end()), std::vector<std::vector<htd::id_t>>(containers.begin(), containers.end()), target);
     }
 }
 

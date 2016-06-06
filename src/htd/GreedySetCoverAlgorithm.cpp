@@ -49,6 +49,8 @@ void htd::GreedySetCoverAlgorithm::computeSetCover(const std::vector<htd::id_t> 
     {
         std::vector<htd::id_t> relevantElements(elements.begin(), elements.end());
 
+        std::vector<htd::id_t> newRelevantElements;
+
         std::vector<htd::index_t> relevantContainers(containers.size());
 
         std::vector<htd::index_t> newRelevantContainers;
@@ -66,8 +68,6 @@ void htd::GreedySetCoverAlgorithm::computeSetCover(const std::vector<htd::id_t> 
             htd::index_t bestPosition = 0;
 
             bestOverlap = 0;
-
-            irrelevantContainers.clear();
 
             for (htd::index_t containerIndex : relevantContainers)
             {
@@ -87,24 +87,33 @@ void htd::GreedySetCoverAlgorithm::computeSetCover(const std::vector<htd::id_t> 
                 }
             }
 
-            result.push_back(bestPosition);
-
-            const std::vector<htd::id_t> & selectedContainer = containers[bestPosition];
-
-            std::vector<htd::vertex_t> newRelevantElements;
-
-            htd::set_difference(relevantElements, selectedContainer, newRelevantElements);
-
-            std::swap(relevantElements, newRelevantElements);
-
-            if (irrelevantContainers.size() > 0)
+            if (bestOverlap > 0)
             {
-                std::set_difference(relevantContainers.begin(), relevantContainers.end(), irrelevantContainers.begin(), irrelevantContainers.end(), std::back_inserter(newRelevantContainers));
+                result.push_back(bestPosition);
 
-                relevantContainers.swap(newRelevantContainers);
+                const std::vector<htd::id_t> & selectedContainer = containers[bestPosition];
+
+                newRelevantElements.clear();
+
+                htd::set_difference(relevantElements, selectedContainer, newRelevantElements);
+
+                std::swap(relevantElements, newRelevantElements);
+
+                if (irrelevantContainers.size() > 0)
+                {
+                    irrelevantContainers.insert(std::lower_bound(irrelevantContainers.begin(), irrelevantContainers.end(), bestPosition), bestPosition);
+
+                    std::set_difference(relevantContainers.begin(), relevantContainers.end(), irrelevantContainers.begin(), irrelevantContainers.end(), std::back_inserter(newRelevantContainers));
+
+                    relevantContainers.swap(newRelevantContainers);
+
+                    irrelevantContainers.clear();
+                }
+                else
+                {
+                    relevantContainers.erase(std::lower_bound(relevantContainers.begin(), relevantContainers.end(), bestPosition));
+                }
             }
-
-            relevantContainers.erase(std::lower_bound(relevantContainers.begin(), relevantContainers.end(), bestPosition));
         }
 
         std::sort(result.begin(), result.end());

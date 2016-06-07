@@ -50,7 +50,7 @@ htd_cli::OptionManager * createOptionManager(void)
 
     inputFormatChoice->addPossibility("gr", "Use the input format 'gr'.");
     //inputFormatChoice->addPossibility("hg", "Use the input format 'hg'.");
-    //inputFormatChoice->addPossibility("lp", "Use the input format 'lp'.");
+    inputFormatChoice->addPossibility("lp", "Use the input format 'lp'.");
     inputFormatChoice->addPossibility("mgr", "Use the input format 'mgr'.");
 
     inputFormatChoice->setDefaultValue("gr");

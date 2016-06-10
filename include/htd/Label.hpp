@@ -156,14 +156,7 @@ namespace htd
     template<typename OutputType>
     const OutputType & accessLabel(const htd::ILabel & input)
     {
-        const htd::Label<OutputType> * label = dynamic_cast<const htd::Label<OutputType> *>(&input);
-
-        if (label == nullptr)
-        {
-            throw std::logic_error("const OutputType & accessLabel(const htd::ILabel &)");
-        }
-
-        return label->value();
+        return static_cast<const htd::Label<OutputType> *>(&input)->value();
     }
 }
 

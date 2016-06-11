@@ -48,6 +48,13 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     std::vector<htd::vertex_t> joinNodes;
@@ -133,6 +140,13 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
             }
         }
     }
+}
+
+void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
 }
 
 htd::LimitChildCountOperation * htd::LimitChildCountOperation::clone(void) const

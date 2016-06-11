@@ -44,42 +44,42 @@ htd::WidthExporter::~WidthExporter()
 
 void htd::WidthExporter::write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const
 {
-    HTD_UNUSED(graph);
+    HTD_UNUSED(graph)
 
     outputStream << decomposition.maximumBagSize() << std::endl;
 }
 
 void htd::WidthExporter::write(const htd::IGraphDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const
 {
-    HTD_UNUSED(graph);
+    HTD_UNUSED(graph)
 
     outputStream << decomposition.maximumBagSize() << std::endl;
 }
 
 void htd::WidthExporter::write(const htd::IHypertreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const
 {
-    HTD_UNUSED(graph);
+    HTD_UNUSED(graph)
 
     outputStream << decomposition.maximumBagSize() << ", " << decomposition.maximumCoveringEdgeAmount() << std::endl;
 }
 
 void htd::WidthExporter::write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const
 {
-    HTD_UNUSED(graph);
+    HTD_UNUSED(graph)
 
     outputStream << decomposition.maximumBagSize() << std::endl;
 }
 
 void htd::WidthExporter::write(const htd::IGraphDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const
 {
-    HTD_UNUSED(graph);
+    HTD_UNUSED(graph)
 
     outputStream << decomposition.maximumBagSize() << std::endl;
 }
 
 void htd::WidthExporter::write(const htd::IHypertreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const
 {
-    HTD_UNUSED(graph);
+    HTD_UNUSED(graph)
 
     outputStream << decomposition.maximumBagSize() << ", " << decomposition.maximumCoveringEdgeAmount() << std::endl;
 }

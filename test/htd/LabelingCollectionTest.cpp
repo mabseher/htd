@@ -70,7 +70,7 @@ TEST(LabelingCollectionTest, TestEmptyLabelingCollection)
     }
     catch (const std::out_of_range & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 }
 
@@ -107,7 +107,7 @@ TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
     }
     catch (const std::out_of_range & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -118,7 +118,7 @@ TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     const htd::ILabelingCollection & reference1 = labelings;
@@ -140,7 +140,7 @@ TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ((std::size_t)0, labelings2.labeling("Label1").vertexLabelCount());

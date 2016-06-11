@@ -1039,7 +1039,7 @@ TEST(TreeDecompositionTest, TestVertexLabelModifications)
     }
     catch (const std::out_of_range & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_FALSE(td.isLabeledVertex("Label", 0));
@@ -1083,7 +1083,7 @@ TEST(TreeDecompositionTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -1094,7 +1094,7 @@ TEST(TreeDecompositionTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     td.swapVertexLabels(1, 1);
@@ -1130,7 +1130,7 @@ TEST(TreeDecompositionTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -1141,7 +1141,7 @@ TEST(TreeDecompositionTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -1152,7 +1152,7 @@ TEST(TreeDecompositionTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ(2, htd::accessLabel<int>(td.vertexLabel("Label", 2)));
@@ -1173,7 +1173,7 @@ TEST(TreeDecompositionTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ(33, htd::accessLabel<int>(td.vertexLabel("Label", 2)));
@@ -1194,7 +1194,7 @@ TEST(TreeDecompositionTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ(1, htd::accessLabel<int>(td.vertexLabel("Label2", 2)));
@@ -1228,7 +1228,7 @@ TEST(TreeDecompositionTest, TestEdgeLabelModifications)
     }
     catch (const std::out_of_range & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_FALSE(td.isLabeledEdge("Label", 0));
@@ -1272,7 +1272,7 @@ TEST(TreeDecompositionTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -1283,7 +1283,7 @@ TEST(TreeDecompositionTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     td.swapEdgeLabels(1, 1);
@@ -1319,7 +1319,7 @@ TEST(TreeDecompositionTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -1330,7 +1330,7 @@ TEST(TreeDecompositionTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -1341,7 +1341,7 @@ TEST(TreeDecompositionTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ(2, htd::accessLabel<int>(td.edgeLabel("Label", 2)));
@@ -1362,7 +1362,7 @@ TEST(TreeDecompositionTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ(33, htd::accessLabel<int>(td.edgeLabel("Label", 2)));
@@ -1383,7 +1383,7 @@ TEST(TreeDecompositionTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ(1, htd::accessLabel<int>(td.edgeLabel("Label2", 2)));

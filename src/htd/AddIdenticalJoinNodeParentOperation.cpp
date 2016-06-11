@@ -43,6 +43,13 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(htd::IMutableTreeDecomposit
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::AddIdenticalJoinNodeParentOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::AddIdenticalJoinNodeParentOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     const htd::ConstCollection<htd::vertex_t> & joinNodeCollection = decomposition.joinNodes();
@@ -78,6 +85,13 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(htd::IMutableTreeDecomposit
             }
         }
     }
+}
+
+void htd::AddIdenticalJoinNodeParentOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
 }
 
 htd::AddIdenticalJoinNodeParentOperation * htd::AddIdenticalJoinNodeParentOperation::clone(void) const

@@ -43,6 +43,13 @@ void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decompos
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     htd::vertex_t root = decomposition.root();
@@ -66,8 +73,22 @@ void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decompos
     }
 }
 
+void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
+}
+
 void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
@@ -92,6 +113,13 @@ void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decompos
             decomposition.setVertexLabel(labelingFunction->name(), newRoot, newLabel);
         }
     }
+}
+
+void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
 }
 
 htd::AddEmptyRootOperation * htd::AddEmptyRootOperation::clone(void) const

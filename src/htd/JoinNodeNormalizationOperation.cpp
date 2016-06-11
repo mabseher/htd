@@ -53,6 +53,13 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     const htd::ConstCollection<htd::vertex_t> & joinNodeCollection = decomposition.joinNodes();
@@ -125,6 +132,13 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
             }
         }
     }
+}
+
+void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
 }
 
 htd::JoinNodeNormalizationOperation * htd::JoinNodeNormalizationOperation::clone(void) const

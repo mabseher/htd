@@ -97,7 +97,7 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph1)
     }
     catch (const std::out_of_range & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ((htd::vertex_t)1, isolatedVertices[0]);
@@ -112,7 +112,7 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph1)
     }
     catch (const std::out_of_range & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ((std::size_t)0, graph.edgeCount((htd::vertex_t)1));
@@ -363,7 +363,7 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0).id());
@@ -377,7 +377,7 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -388,7 +388,7 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -399,7 +399,7 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
     }
     catch (const std::out_of_range & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_TRUE(graph.isEdge(edgeId1));
@@ -652,7 +652,7 @@ TEST(MultiHypergraphTest, CheckGraphModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -665,7 +665,7 @@ TEST(MultiHypergraphTest, CheckGraphModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     htd::Hyperedge hyperedge1((htd::id_t)1, std::vector<htd::vertex_t> { 1 });

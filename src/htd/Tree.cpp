@@ -1133,7 +1133,7 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
 
 void htd::Tree::handleSignal(int signal)
 {
-    HTD_UNUSED(signal);
+    HTD_UNUSED(signal)
 
     removeSubtree(root_);
 }

@@ -50,9 +50,16 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    HTD_UNUSED(labelingFunctions);
+    HTD_UNUSED(labelingFunctions)
 
     htd::index_t index = 0;
 
@@ -177,6 +184,13 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition
 
         decomposition.setVertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(label)));
     });
+}
+
+void htd::InducedSubgraphLabelingOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
 }
 
 void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
@@ -184,9 +198,16 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    HTD_UNUSED(labelingFunctions);
+    HTD_UNUSED(labelingFunctions)
 
     htd::index_t index = 0;
 
@@ -311,6 +332,13 @@ void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition
 
         decomposition.setVertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(label)));
     });
+}
+
+void htd::InducedSubgraphLabelingOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
 }
 
 htd::InducedSubgraphLabelingOperation * htd::InducedSubgraphLabelingOperation::clone(void) const

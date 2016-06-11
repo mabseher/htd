@@ -567,7 +567,7 @@ TEST(HypergraphTest, CheckGraphModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -580,7 +580,7 @@ TEST(HypergraphTest, CheckGraphModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     htd::Hyperedge hyperedge1((htd::id_t)1, std::vector<htd::vertex_t> { 1 });

@@ -46,6 +46,13 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     std::vector<htd::vertex_t> forgetNodes;
@@ -174,8 +181,22 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
     }
 }
 
+void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
+}
+
 void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
@@ -305,6 +326,13 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
             }
         }
     }
+}
+
+void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
 }
 
 htd::LimitMaximumForgottenVertexCountOperation * htd::LimitMaximumForgottenVertexCountOperation::clone(void) const

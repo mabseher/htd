@@ -86,6 +86,13 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     if (decomposition.vertexCount() > 0)
@@ -319,6 +326,13 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
             }
         }
     }
+}
+
+void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
 }
 
 void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const

@@ -94,21 +94,21 @@ TEST(HyperedgeTest, CheckEmptyHyperedge)
 
     for (htd::vertex_t vertex : hyperedge1)
     {
-        HTD_UNUSED(vertex);
+        HTD_UNUSED(vertex)
 
         FAIL();
     }
 
     for (htd::vertex_t vertex : hyperedge2)
     {
-        HTD_UNUSED(vertex);
+        HTD_UNUSED(vertex)
 
         FAIL();
     }
 
     for (htd::vertex_t vertex : hyperedge3)
     {
-        HTD_UNUSED(vertex);
+        HTD_UNUSED(vertex)
 
         FAIL();
     }

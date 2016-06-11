@@ -53,14 +53,29 @@ void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & dec
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     htd::WeakNormalizationOperation::apply(decomposition, labelingFunctions);
 }
 
+void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    htd::WeakNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions);
+}
+
 void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
 }
 
 void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -70,6 +85,15 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     htd::LimitChildCountOperation limitChildCountOperation(2);
 
     limitChildCountOperation.apply(decomposition, labelingFunctions);
+}
+
+void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    htd::WeakNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions);
+
+    htd::LimitChildCountOperation limitChildCountOperation(2);
+
+    limitChildCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
 }
 
 htd::SemiNormalizationOperation * htd::SemiNormalizationOperation::clone(void) const

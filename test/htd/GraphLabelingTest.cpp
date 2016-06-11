@@ -70,7 +70,7 @@ TEST(GraphLabelingTest, TestEmptyLabeling)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -81,7 +81,7 @@ TEST(GraphLabelingTest, TestEmptyLabeling)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 }
 
@@ -140,7 +140,7 @@ TEST(GraphLabelingTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -151,7 +151,7 @@ TEST(GraphLabelingTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     labeling.swapVertexLabels(1, 1);
@@ -188,7 +188,7 @@ TEST(GraphLabelingTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -199,7 +199,7 @@ TEST(GraphLabelingTest, TestVertexLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ(2, htd::accessLabel<int>(labeling.vertexLabel(2)));
@@ -276,7 +276,7 @@ TEST(GraphLabelingTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -287,7 +287,7 @@ TEST(GraphLabelingTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     labeling.swapEdgeLabels(1, 1);
@@ -323,7 +323,7 @@ TEST(GraphLabelingTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     try
@@ -334,7 +334,7 @@ TEST(GraphLabelingTest, TestEdgeLabelModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ(2, htd::accessLabel<int>(labeling.edgeLabel(2)));

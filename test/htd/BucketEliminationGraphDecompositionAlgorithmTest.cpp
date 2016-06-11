@@ -132,8 +132,8 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergra
 
     graph.addEdge(std::vector<htd::vertex_t> { vertex1 });
 
-    HTD_UNUSED(vertex2);
-    HTD_UNUSED(vertex3);
+    HTD_UNUSED(vertex2)
+    HTD_UNUSED(vertex3)
 
     htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
 
@@ -240,14 +240,14 @@ class BagSizeLabelingFunction : public htd::ILabelingFunction
 
         htd::ILabel * computeLabel(const std::vector<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE
         {
-            HTD_UNUSED(labels);
+            HTD_UNUSED(labels)
 
             return new htd::Label<std::size_t>(vertices.size());
         }
 
         htd::ILabel * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE
         {
-            HTD_UNUSED(labels);
+            HTD_UNUSED(labels)
 
             return new htd::Label<std::size_t>(vertices.size());
         }
@@ -311,14 +311,14 @@ class BagSizeLabelingFunction2 : public htd::ILabelingFunction
 
         htd::ILabel * computeLabel(const std::vector<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE
         {
-            HTD_UNUSED(labels);
+            HTD_UNUSED(labels)
 
             return new htd::Label<std::size_t>(vertices.size() + htd::accessLabel<std::size_t>(labels.label("BAG_SIZE")));
         }
 
         htd::ILabel * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE
         {
-            HTD_UNUSED(labels);
+            HTD_UNUSED(labels)
 
             return new htd::Label<std::size_t>(vertices.size() + htd::accessLabel<std::size_t>(labels.label("BAG_SIZE")));
         }

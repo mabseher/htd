@@ -467,7 +467,7 @@ TEST(MultiGraphTest, CheckGraphModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     graph.copyNeighborsTo(neighbors1, (htd::vertex_t)1);
@@ -484,7 +484,7 @@ TEST(MultiGraphTest, CheckGraphModifications)
     }
     catch (const std::logic_error & error)
     {
-        HTD_UNUSED(error);
+        HTD_UNUSED(error)
     }
 
     ASSERT_EQ((std::size_t)0, neighbors3.size());

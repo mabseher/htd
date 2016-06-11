@@ -295,7 +295,7 @@ void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHyp
 
     traversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t depth)
     {
-        HTD_UNUSED(depth);
+        HTD_UNUSED(depth)
 
         std::vector<htd::index_t> selectedIndices;
 

@@ -53,6 +53,13 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     std::vector<htd::vertex_t> introduceNodes;
@@ -245,11 +252,26 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
     }
 }
 
+
+void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
+}
+
 void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
-    
+
+void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     std::vector<htd::vertex_t> introduceNodes;
@@ -438,6 +460,13 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
             }
         }
     }
+}
+
+void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
 }
 
 htd::LimitMaximumIntroducedVertexCountOperation * htd::LimitMaximumIntroducedVertexCountOperation::clone(void) const

@@ -54,6 +54,11 @@ void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decompo
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     htd::SemiNormalizationOperation::apply(decomposition, labelingFunctions);
@@ -71,9 +76,31 @@ void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decompo
     limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
 }
 
+void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    htd::SemiNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions);
+
+    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
+
+    exchangeNodeReplacementOperation.apply(decomposition, relevantVertices, labelingFunctions);
+
+    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
+
+    limitMaximumForgottenVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
+
+    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
+
+    limitMaximumIntroducedVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
+}
+
 void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
 }
 
 void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -91,6 +118,23 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1, treatLeafNodesAsIntroduceNodes_);
 
     limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
+}
+
+void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    htd::SemiNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions);
+
+    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
+
+    exchangeNodeReplacementOperation.apply(decomposition, relevantVertices, labelingFunctions);
+
+    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
+
+    limitMaximumForgottenVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
+
+    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1, treatLeafNodesAsIntroduceNodes_);
+
+    limitMaximumIntroducedVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
 }
 
 bool htd::NormalizationOperation::leafNodesTreatedAsIntroduceNodes(void) const

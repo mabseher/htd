@@ -51,6 +51,11 @@ void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & dec
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+}
+
 void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     if (emptyRoot_)
@@ -68,9 +73,31 @@ void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & dec
     }
 }
 
+void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    if (emptyRoot_)
+    {
+        htd::AddEmptyRootOperation addEmptyRootOperation;
+
+        addEmptyRootOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    }
+
+    if (emptyLeaves_)
+    {
+        htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
+
+        addEmptyLeavesOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    }
+}
+
 void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
 {
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
+}
+
+void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
 }
 
 void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -92,6 +119,27 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(identicalJoinNodeParent_);
 
     joinNodeNormalizationOperation.apply(decomposition, labelingFunctions);
+}
+
+void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    if (emptyRoot_)
+    {
+        htd::AddEmptyRootOperation addEmptyRootOperation;
+
+        addEmptyRootOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    }
+
+    if (emptyLeaves_)
+    {
+        htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
+
+        addEmptyLeavesOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    }
+
+    htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(identicalJoinNodeParent_);
+
+    joinNodeNormalizationOperation.apply(decomposition, relevantVertices, labelingFunctions);
 }
 
 bool htd::WeakNormalizationOperation::emptyRootRequired(void) const

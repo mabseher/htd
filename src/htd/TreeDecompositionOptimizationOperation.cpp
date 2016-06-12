@@ -28,10 +28,11 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/TreeDecompositionOptimizationOperation.hpp>
+#include <htd/CompressionOperation.hpp>
 
 #include <algorithm>
 
-htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : fitnessFunction_(fitnessFunction.clone())
+htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
 {
 
 }
@@ -55,11 +56,60 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
 
 void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
+    if (decomposition.vertexCount() > 0)
+    {
+        const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
 
-    HTD_UNUSED(decomposition)
-    HTD_UNUSED(fitnessFunction)
-    HTD_UNUSED(labelingFunctions)
+        htd::vertex_t optimalRoot = decomposition.root();
+
+        double optimalFitness = fitnessFunction.fitness(decomposition);
+
+        for (htd::vertex_t vertex : decomposition.vertices())
+        {
+            if (!decomposition.isRoot(vertex))
+            {
+                if (!manipulationOperations_.empty())
+                {
+                    htd::vertex_t currentVertex = vertex;
+
+                    std::vector<htd::vertex_t> affectedVertices;
+
+                    while (!decomposition.isRoot(currentVertex))
+                    {
+                        affectedVertices.push_back(currentVertex);
+
+                        currentVertex = decomposition.parent(currentVertex);
+                    }
+
+                    affectedVertices.push_back(currentVertex);
+
+                    //std::cout << "AFFECTED VERTICES: " << affectedVertices << std::endl;
+
+                    htd::CompressionOperation compressionOperation;
+
+                    compressionOperation.apply(decomposition, affectedVertices);
+
+                    for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
+                    {
+                        operation->apply(decomposition, affectedVertices, labelingFunctions);
+                    }
+                }
+
+                decomposition.makeRoot(vertex);
+
+                double currentFitness = fitnessFunction.fitness(decomposition);
+
+                if (currentFitness > optimalFitness)
+                {
+                    optimalFitness = currentFitness;
+
+                    optimalRoot = vertex;
+                }
+            }
+        }
+
+        decomposition.makeRoot(optimalRoot);
+    }
 }
 
 void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const

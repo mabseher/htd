@@ -28,6 +28,9 @@
 #include <htd/Globals.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionFitnessFunction.hpp>
+#include <htd/ITreeDecompositionManipulationOperation.hpp>
+
+#include <vector>
 
 namespace htd
 {
@@ -60,6 +63,8 @@ namespace htd
 
         private:
             htd::ITreeDecompositionFitnessFunction * fitnessFunction_;
+
+            std::vector<htd::ITreeDecompositionManipulationOperation *> manipulationOperations_;
     };
 }
 

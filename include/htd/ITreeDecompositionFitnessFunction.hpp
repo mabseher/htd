@@ -45,7 +45,7 @@ namespace htd
              *
              *  @return The fitness value of the given tree decomposition.
              */
-            virtual double fitness(const ITreeDecomposition & decomposition) const = 0;
+            virtual double fitness(const htd::ITreeDecomposition & decomposition) const = 0;
 
             /**
              *  Create a deep copy the current fitness function.

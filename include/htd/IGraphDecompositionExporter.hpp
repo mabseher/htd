@@ -39,6 +39,8 @@ namespace htd
     class IGraphDecompositionExporter : public htd::ITreeDecompositionExporter
     {
         public:
+            using htd::ITreeDecompositionExporter::write;
+
             virtual ~IGraphDecompositionExporter() = 0;
 
             /**

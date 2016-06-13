@@ -54,15 +54,54 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
+//TODO Remove
+#include <htd/PreOrderTreeTraversal.hpp>
+
+void debug(const htd::ITreeDecomposition & decomposition)
+{
+    htd::PreOrderTreeTraversal traversal;
+
+    traversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToRoot)
+    {
+        HTD_UNUSED(parent)
+
+        for (htd::index_t index = 0; index < distanceToRoot; ++index)
+        {
+            std::cout << "   ";
+        }
+
+        std::cout << "NODE " << vertex << ": " << decomposition.bagContent(vertex) << std::endl;
+    });
+
+    std::cout << std::endl;
+}
+
 void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     if (decomposition.vertexCount() > 0)
     {
         const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
 
+        if (!manipulationOperations_.empty())
+        {
+            htd::CompressionOperation compressionOperation;
+
+            compressionOperation.apply(decomposition);
+
+            for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
+            {
+                operation->apply(decomposition, labelingFunctions);
+            }
+        }
+
         htd::vertex_t optimalRoot = decomposition.root();
 
         double optimalFitness = fitnessFunction.fitness(decomposition);
+
+        //TODO
+        debug(decomposition);
+
+        std::cout << "INITIAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
 
         for (htd::vertex_t vertex : decomposition.vertices())
         {
@@ -83,7 +122,9 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
 
                     affectedVertices.push_back(currentVertex);
 
-                    //std::cout << "AFFECTED VERTICES: " << affectedVertices << std::endl;
+                    std::cout << "AFFECTED VERTICES: " << affectedVertices << std::endl << std::endl;
+
+                    decomposition.makeRoot(vertex);
 
                     htd::CompressionOperation compressionOperation;
 
@@ -94,17 +135,28 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
                         operation->apply(decomposition, affectedVertices, labelingFunctions);
                     }
                 }
+                else
+                {
+                    decomposition.makeRoot(vertex);
+                }
 
-                decomposition.makeRoot(vertex);
+                //TODO
+                debug(decomposition);
 
                 double currentFitness = fitnessFunction.fitness(decomposition);
+
+                std::cout << "CURRENT FITNESS:     " << currentFitness << "   (ROOT: " << vertex << ")" << std::endl;
 
                 if (currentFitness > optimalFitness)
                 {
                     optimalFitness = currentFitness;
 
                     optimalRoot = vertex;
+
+                    std::cout << "NEW OPTIMAL FITNESS: " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl;
                 }
+
+                std::cout << std::endl << std::endl << std::endl;
             }
         }
 
@@ -117,6 +169,23 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
     HTD_UNUSED(relevantVertices)
 
     apply(decomposition, labelingFunctions);
+}
+
+void htd::TreeDecompositionOptimizationOperation::setManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations)
+{
+    manipulationOperations_.clear();
+
+    std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(manipulationOperations_));
+}
+
+void htd::TreeDecompositionOptimizationOperation::addManipulationOperation(htd::ITreeDecompositionManipulationOperation * manipulationOperation)
+{
+    manipulationOperations_.push_back(manipulationOperation);
+}
+
+void htd::TreeDecompositionOptimizationOperation::addManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations)
+{
+    std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(manipulationOperations_));
 }
 
 htd::TreeDecompositionOptimizationOperation * htd::TreeDecompositionOptimizationOperation::clone(void) const

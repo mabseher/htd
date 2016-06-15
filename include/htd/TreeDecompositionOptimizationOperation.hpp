@@ -29,6 +29,7 @@
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
 #include <htd/ITreeDecompositionFitnessFunction.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
+#include <htd/IVertexSelectionStrategy.hpp>
 
 #include <vector>
 
@@ -92,9 +93,22 @@ namespace htd
              */
             void addManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations);
 
+            /**
+             *  Set the strategy defining which vertices shall be considered as root of the tree decomposition.
+             *
+             *  @note When calling this method the control over the memory regions of the vertex selection strategy is transferred to the
+             *  optimization operation. Deleting the vertex selection strategy provided to this method outside the optimization operation
+             *  or assigning the same the vertex selection strategy multiple times will lead to undefined behavior.
+             *
+             *  @param[in] strategy The new vertex selection strategy which shall be used.
+             */
+            void setVertexSelectionStrategy(htd::IVertexSelectionStrategy * strategy);
+
             TreeDecompositionOptimizationOperation * clone(void) const HTD_OVERRIDE;
 
         private:
+            htd::IVertexSelectionStrategy * strategy_;
+
             htd::ITreeDecompositionFitnessFunction * fitnessFunction_;
 
             std::vector<htd::ITreeDecompositionManipulationOperation *> manipulationOperations_;

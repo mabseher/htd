@@ -28,18 +28,26 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/TreeDecompositionOptimizationOperation.hpp>
+#include <htd/ExhaustiveVertexSelectionStrategy.hpp>
 #include <htd/CompressionOperation.hpp>
 
 #include <algorithm>
 
-htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
+htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
 {
 
 }
 
 htd::TreeDecompositionOptimizationOperation::~TreeDecompositionOptimizationOperation()
 {
+    delete strategy_;
+
     delete fitnessFunction_;
+
+    for (htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
+    {
+        delete operation;
+    }
 }
 
 void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
@@ -94,7 +102,9 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
             }
         }
 
-        htd::vertex_t optimalRoot = decomposition.root();
+        htd::vertex_t initialRoot = decomposition.root();
+
+        htd::vertex_t optimalRoot = initialRoot;
 
         double optimalFitness = fitnessFunction.fitness(decomposition);
 
@@ -103,9 +113,13 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
 
         std::cout << "INITIAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
 
-        for (htd::vertex_t vertex : decomposition.vertices())
+        std::vector<htd::vertex_t> candidates;
+
+        strategy_->selectVertices(decomposition, candidates);
+
+        for (htd::vertex_t vertex : candidates)
         {
-            if (!decomposition.isRoot(vertex))
+            if (vertex != initialRoot)
             {
                 if (!manipulationOperations_.empty())
                 {
@@ -186,6 +200,15 @@ void htd::TreeDecompositionOptimizationOperation::addManipulationOperation(htd::
 void htd::TreeDecompositionOptimizationOperation::addManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations)
 {
     std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(manipulationOperations_));
+}
+
+void htd::TreeDecompositionOptimizationOperation::setVertexSelectionStrategy(htd::IVertexSelectionStrategy * strategy)
+{
+    HTD_ASSERT(strategy != nullptr)
+
+    delete strategy_;
+
+    strategy_ = strategy;
 }
 
 htd::TreeDecompositionOptimizationOperation * htd::TreeDecompositionOptimizationOperation::clone(void) const

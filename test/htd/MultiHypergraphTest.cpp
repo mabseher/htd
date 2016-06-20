@@ -336,28 +336,6 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
     ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0).id());
     ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
 
-    try
-    {
-        graph.hyperedgeAtPosition(1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        graph.hyperedgeAtPosition(1, 1);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     ASSERT_TRUE(graph.isEdge(edgeId1));
 
     ASSERT_EQ((std::size_t)1, graph.neighborCount((htd::vertex_t)1));

@@ -79,15 +79,8 @@ htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiG
 
 void htd::LabeledMultiGraphFactory::setConstructionTemplate(htd::IMutableLabeledMultiGraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::LabeledMultiGraphFactory::setConstructionTemplate(htd::IMutableLabeledMultiGraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::LabeledMultiGraphFactory::setConstructionTemplate(htd::IMutableLabeledMultiGraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

@@ -26,6 +26,7 @@
 #define HTD_HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/ConnectedComponentAlgorithmFactory.hpp>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
 
@@ -61,10 +62,7 @@ htd::IConnectedComponentAlgorithm * htd::ConnectedComponentAlgorithmFactory::get
 
 void htd::ConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IConnectedComponentAlgorithm * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::ConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IConnectedComponentAlgorithm *)");
-    }
+    HTD_ASSERT(original != nullptr)
 
     if (constructionTemplate_ != nullptr)
     {

@@ -26,6 +26,7 @@
 #define HTD_HTD_HYPERGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/HypergraphFactory.hpp>
 #include <htd/Hypergraph.hpp>
 
@@ -87,15 +88,8 @@ htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IMult
 
 void htd::HypergraphFactory::setConstructionTemplate(htd::IMutableHypergraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::HypergraphFactory::setConstructionTemplate(htd::IMutableHypergraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::HypergraphFactory::setConstructionTemplate(htd::IMutableHypergraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

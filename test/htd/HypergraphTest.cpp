@@ -559,30 +559,6 @@ TEST(HypergraphTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
 
-    try
-    {
-        graph.addEdge(htd::Hyperedge((htd::id_t)1, std::vector<htd::vertex_t> { }));
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        htd::Hyperedge testHyperedge((htd::id_t)1, std::vector<htd::vertex_t> { });
-
-        graph.addEdge(testHyperedge);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     htd::Hyperedge hyperedge1((htd::id_t)1, std::vector<htd::vertex_t> { 1 });
 
     htd::id_t edgeId5 = graph.addEdge(hyperedge1);

@@ -26,6 +26,7 @@
 #define HTD_HTD_TREEDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/TreeDecomposition.hpp>
@@ -70,15 +71,8 @@ htd::IMutableTreeDecomposition * htd::TreeDecompositionFactory::getTreeDecomposi
 
 void htd::TreeDecompositionFactory::setConstructionTemplate(htd::IMutableTreeDecomposition * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::TreeDecompositionFactory::setConstructionTemplate(htd::IMutableTreeDecomposition *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::TreeDecompositionFactory::setConstructionTemplate(htd::IMutableTreeDecomposition *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

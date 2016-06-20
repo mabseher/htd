@@ -216,10 +216,7 @@ htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(const ht
 
 htd::vertex_t htd::MultiHypergraph::vertexAtPosition(htd::index_t index) const
 {
-    if (index >= vertices_.size())
-    {
-        throw std::out_of_range("htd::vertex_t htd::MultiHypergraph::vertexAtPosition(htd::index_t) const");
-    }
+    HTD_ASSERT(index < vertices_.size())
 
     return vertices_[index];
 }
@@ -385,23 +382,13 @@ void htd::MultiHypergraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, 
 
 htd::vertex_t htd::MultiHypergraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    HTD_ASSERT(isVertex(vertex))
 
-    if (isVertex(vertex))
-    {
-        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+    const std::vector<htd::vertex_t> & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
 
-        if (index < currentNeighborhood.size())
-        {
-            ret = currentNeighborhood[index];
-        }
-        else
-        {
-            throw std::out_of_range("htd::vertex_t htd::MultiHypergraph::neighborAtPosition(htd::vertex_t, htd::index_t) const");
-        }
-    }
+    HTD_ASSERT(index < currentNeighborhood.size())
 
-    return ret;
+    return currentNeighborhood[index];
 }
 
 htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::vertices(void) const
@@ -413,9 +400,9 @@ std::size_t htd::MultiHypergraph::isolatedVertexCount(void) const
 {
     std::size_t ret = 0;
 
-    for (std::size_t vertex = htd::Vertex::FIRST; vertex < size_ + htd::Vertex::FIRST; vertex++)
+    for (htd::vertex_t vertex : vertices_)
     {
-        if (isVertex(vertex) && neighborhood_[vertex - htd::Vertex::FIRST].empty())
+        if (neighborhood_[vertex - htd::Vertex::FIRST].empty())
         {
             ret++;
         }
@@ -430,21 +417,18 @@ htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::isolatedVertices(void)
 
     auto & result = ret.container();
 
-    for (std::size_t vertex = htd::Vertex::FIRST; vertex < size_ + htd::Vertex::FIRST; vertex++)
+    for (htd::vertex_t vertex : vertices_)
     {
-        if (isVertex(vertex))
+        bool isolated = true;
+
+        for (auto it = edges_->begin(); isolated && it != edges_->end(); it++)
         {
-            bool isolated = true;
-            
-            for (auto it = edges_->begin(); isolated && it != edges_->end(); it++)
-            {
-                isolated = (*it).size() <= 1 || std::find((*it).begin(), (*it).end(), vertex) == (*it).end();
-            }
-            
-            if (isolated)
-            {
-                result.push_back(vertex);
-            }
+            isolated = (*it).size() <= 1 || std::find((*it).begin(), (*it).end(), vertex) == (*it).end();
+        }
+
+        if (isolated)
+        {
+            result.push_back(vertex);
         }
     }
 
@@ -455,10 +439,7 @@ htd::vertex_t htd::MultiHypergraph::isolatedVertexAtPosition(htd::index_t index)
 {
     const htd::ConstCollection<htd::vertex_t> & isolatedVertexCollection = isolatedVertices();
 
-    if (index >= isolatedVertexCollection.size())
-    {
-        throw std::out_of_range("htd::vertex_t htd::MultiHypergraph::isolatedVertexAtPosition(htd::index_t) const");
-    }
+    HTD_ASSERT(index < isolatedVertexCollection.size())
 
     htd::ConstIterator<htd::vertex_t> it = isolatedVertexCollection.begin();
 
@@ -469,16 +450,13 @@ htd::vertex_t htd::MultiHypergraph::isolatedVertexAtPosition(htd::index_t index)
 
 bool htd::MultiHypergraph::isIsolatedVertex(htd::vertex_t vertex) const
 {
-    bool ret = false;
+    HTD_ASSERT(isVertex(vertex))
 
-    if (isVertex(vertex))
+    bool ret = true;
+
+    for (auto it = edges_->begin(); ret && it != edges_->end(); it++)
     {
-        ret = true;
-
-        for (auto it = edges_->begin(); ret && it != edges_->end(); it++)
-        {
-            ret = (*it).size() <= 1 || std::find((*it).begin(), (*it).end(), vertex) == (*it).end();
-        }
+        ret = (*it).size() <= 1 || std::find((*it).begin(), (*it).end(), vertex) == (*it).end();
     }
 
     return ret;
@@ -491,10 +469,7 @@ htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(void) cons
 
 htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     htd::VectorAdapter<htd::Hyperedge> ret;
 
@@ -527,20 +502,14 @@ const htd::Hyperedge & htd::MultiHypergraph::hyperedge(htd::id_t edgeId) const
         }
     }
 
-    if (!found)
-    {
-        throw std::logic_error("const htd::Hyperedge & htd::MultiHypergraph::hyperedge(htd::id_t) const");
-    }
+    HTD_ASSERT(found)
 
     return *position;
 }
 
 const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t index) const
 {
-    if (index >= edges_->size())
-    {
-        throw std::out_of_range("const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t) const");
-    }
+    HTD_ASSERT(index < edges_->size())
 
     return edges_->at(index);
 }
@@ -791,18 +760,13 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::ConstCollection<htd::vertex_t
 
 htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 {
+    HTD_ASSERT(!hyperedge.empty())
+
     switch (hyperedge.size())
     {
-        case 0:
-        {
-            throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &)");
-        }
         case 1:
         {
-            if (!isVertex(hyperedge[0]))
-            {
-                throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &)");
-            }
+            HTD_ASSERT(isVertex(hyperedge[0]))
 
             edges_->push_back(htd::Hyperedge(next_edge_, hyperedge.elements()));
 
@@ -818,16 +782,11 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
         }
     }
 
-    bool ok = true;
-
-    for (auto it = hyperedge.begin(); ok && it != hyperedge.end(); it++)
+    for (htd::vertex_t vertex : hyperedge.elements())
     {
-        isVertex(*it);
-    }
+        HTD_UNUSED(vertex)
 
-    if (!ok)
-    {
-        throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge &)");
+        HTD_ASSERT(isVertex(vertex));
     }
 
     edges_->push_back(htd::Hyperedge(next_edge_, hyperedge.elements()));
@@ -870,18 +829,13 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 
 htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
 {
+    HTD_ASSERT(!hyperedge.empty())
+
     switch (hyperedge.size())
     {
-        case 0:
-        {
-            throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge &&)");
-        }
         case 1:
         {
-            if (!isVertex(hyperedge[0]))
-            {
-                throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge &&)");
-            }
+            HTD_ASSERT(isVertex(hyperedge[0]))
 
             htd::Hyperedge newHyperedge(std::move(hyperedge));
 
@@ -901,12 +855,11 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
         }
     }
 
-    for (htd::vertex_t vertex : hyperedge)
+    for (htd::vertex_t vertex : hyperedge.elements())
     {
-        if (!isVertex(vertex))
-        {
-            throw std::logic_error("htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge &&)");
-        }
+        HTD_UNUSED(vertex)
+
+        HTD_ASSERT(isVertex(vertex));
     }
 
     htd::Hyperedge newHyperedge(std::move(hyperedge));

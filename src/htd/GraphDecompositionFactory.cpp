@@ -26,6 +26,7 @@
 #define HTD_HTD_GRAPHDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/GraphDecompositionFactory.hpp>
 #include <htd/GraphDecomposition.hpp>
 
@@ -69,15 +70,8 @@ htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomp
 
 void htd::GraphDecompositionFactory::setConstructionTemplate(htd::IMutableGraphDecomposition * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::GraphDecompositionFactory::setConstructionTemplate(htd::IMutableGraphDecomposition *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::GraphDecompositionFactory::setConstructionTemplate(htd::IMutableGraphDecomposition *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

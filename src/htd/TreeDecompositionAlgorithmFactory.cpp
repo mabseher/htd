@@ -26,6 +26,7 @@
 #define HTD_HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
@@ -88,10 +89,7 @@ htd::ITreeDecompositionAlgorithm * htd::TreeDecompositionAlgorithmFactory::getTr
 
 void htd::TreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::ITreeDecompositionAlgorithm * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::TreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::ITreeDecompositionAlgorithm *)");
-    }
+    HTD_ASSERT(original != nullptr)
 
     if (constructionTemplate_ != nullptr)
     {

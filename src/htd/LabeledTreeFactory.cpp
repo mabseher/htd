@@ -70,15 +70,8 @@ htd::IMutableLabeledTree * htd::LabeledTreeFactory::getLabeledTree(const htd::IL
 
 void htd::LabeledTreeFactory::setConstructionTemplate(htd::IMutableLabeledTree * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::LabeledTreeFactory::setConstructionTemplate(htd::IMutableLabeledTree *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::LabeledTreeFactory::setConstructionTemplate(htd::IMutableLabeledTree *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

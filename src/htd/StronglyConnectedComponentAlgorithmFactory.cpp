@@ -26,6 +26,7 @@
 #define HTD_HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/StronglyConnectedComponentAlgorithmFactory.hpp>
 #include <htd/IStronglyConnectedComponentAlgorithm.hpp>
 #include <htd/TarjanStronglyConnectedComponentAlgorithm.hpp>
@@ -62,10 +63,7 @@ htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgor
 
 void htd::StronglyConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IStronglyConnectedComponentAlgorithm * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::StronglyConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IStronglyConnectedComponentAlgorithm *)");
-    }
+    HTD_ASSERT(original != nullptr)
 
     if (constructionTemplate_ != nullptr)
     {

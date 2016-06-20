@@ -26,6 +26,7 @@
 #define HTD_HTD_GRAPHDECOMPOSITIONALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/GraphDecompositionAlgorithmFactory.hpp>
 #include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>
 
@@ -87,10 +88,7 @@ htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::get
 
 void htd::GraphDecompositionAlgorithmFactory::setConstructionTemplate(htd::IGraphDecompositionAlgorithm * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::GraphDecompositionAlgorithmFactory::setConstructionTemplate(htd::IGraphDecompositionAlgorithm *)");
-    }
+    HTD_ASSERT(original != nullptr)
 
     if (constructionTemplate_ != nullptr)
     {

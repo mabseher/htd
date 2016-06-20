@@ -26,6 +26,7 @@
 #define HTD_HTD_GRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/GraphFactory.hpp>
 #include <htd/IMutableGraph.hpp>
 #include <htd/Graph.hpp>
@@ -88,15 +89,8 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IMultiGraph & origin
 
 void htd::GraphFactory::setConstructionTemplate(htd::IMutableGraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::GraphFactory::setConstructionTemplate(htd::IMutableGraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::GraphFactory::setConstructionTemplate(htd::IMutableGraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

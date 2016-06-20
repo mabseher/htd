@@ -88,15 +88,8 @@ htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd:
 
 void htd::LabeledGraphFactory::setConstructionTemplate(htd::IMutableLabeledGraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::LabeledGraphFactory::setConstructionTemplate(htd::IMutableLabeledGraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::LabeledGraphFactory::setConstructionTemplate(htd::IMutableLabeledGraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

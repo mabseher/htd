@@ -70,15 +70,8 @@ htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(const htd::IL
 
 void htd::LabeledPathFactory::setConstructionTemplate(htd::IMutableLabeledPath * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::LabeledPathFactory::setConstructionTemplate(htd::IMutableLabeledPath *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::LabeledPathFactory::setConstructionTemplate(htd::IMutableLabeledPath *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

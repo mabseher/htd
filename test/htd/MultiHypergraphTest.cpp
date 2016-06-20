@@ -89,31 +89,9 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph1)
     ASSERT_EQ((htd::vertex_t)1, graph.vertexAtPosition((htd::index_t)0));
     ASSERT_TRUE(graph.isVertex((htd::vertex_t)1));
 
-    try
-    {
-        graph.vertexAtPosition(1);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     ASSERT_EQ((htd::vertex_t)1, isolatedVertices[0]);
     ASSERT_EQ((htd::vertex_t)1, graph.isolatedVertexAtPosition((htd::index_t)0));
     ASSERT_TRUE(graph.isIsolatedVertex((htd::vertex_t)1));
-
-    try
-    {
-        graph.isolatedVertexAtPosition(1);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error)
-    }
 
     ASSERT_EQ((std::size_t)0, graph.edgeCount((htd::vertex_t)1));
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)1).size());
@@ -355,30 +333,8 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
     ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
 
-    try
-    {
-        graph.hyperedges(htd::Vertex::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0).id());
     ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
-
-    try
-    {
-        graph.hyperedge(htd::Id::UNKNOWN);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
 
     try
     {
@@ -643,30 +599,6 @@ TEST(MultiHypergraphTest, CheckGraphModifications)
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
-
-    try
-    {
-        graph.addEdge(htd::Hyperedge((htd::id_t)1, std::vector<htd::vertex_t> { }));
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        htd::Hyperedge testHyperedge((htd::id_t)1, std::vector<htd::vertex_t> { });
-
-        graph.addEdge(testHyperedge);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
 
     htd::Hyperedge hyperedge1((htd::id_t)1, std::vector<htd::vertex_t> { 1 });
 

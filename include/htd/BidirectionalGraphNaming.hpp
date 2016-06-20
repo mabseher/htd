@@ -130,30 +130,25 @@ namespace htd
              */
             void setVertexName(htd::vertex_t vertex, const VertexNameType & name)
             {
-                if (vertexNamesReverseMap_.find(name) == vertexNamesReverseMap_.end())
+                HTD_ASSERT(vertexNamesReverseMap_.count(name) == 0)
+
+                auto position = vertexNames_.find(vertex);
+
+                if (position != vertexNames_.end())
                 {
-                    auto position = vertexNames_.find(vertex);
-
-                    if (position != vertexNames_.end())
+                    if (!(position->second == name))
                     {
-                        if (!(position->second == name))
-                        {
-                            auto position2 = vertexNamesReverseMap_.find(position->second);
+                        auto position2 = vertexNamesReverseMap_.find(position->second);
 
-                            if (position2 != vertexNamesReverseMap_.end())
-                            {
-                                vertexNamesReverseMap_.erase(position2);
-                            }
+                        if (position2 != vertexNamesReverseMap_.end())
+                        {
+                            vertexNamesReverseMap_.erase(position2);
                         }
                     }
+                }
 
-                    vertexNames_[vertex] = name;
-                    vertexNamesReverseMap_[name] = vertex;
-                }
-                else
-                {
-                    throw std::logic_error("void htd::BidirectionalGraphNaming::setVertexName(htd::vertex_t, const VertexNameType &)");
-                }
+                vertexNames_[vertex] = name;
+                vertexNamesReverseMap_[name] = vertex;
             }
 
             /**
@@ -166,30 +161,25 @@ namespace htd
              */
             void setEdgeName(htd::id_t edgeId, const EdgeNameType & name)
             {
-                if (edgeNamesReverseMap_.find(name) == edgeNamesReverseMap_.end())
+                HTD_ASSERT(edgeNamesReverseMap_.count(name) == 0)
+
+                auto position = edgeNames_.find(edgeId);
+
+                if (position != edgeNames_.end())
                 {
-                    auto position = edgeNames_.find(edgeId);
-
-                    if (position != edgeNames_.end())
+                    if (!(position->second == name))
                     {
-                        if (!(position->second == name))
-                        {
-                            auto position2 = edgeNamesReverseMap_.find(position->second);
+                        auto position2 = edgeNamesReverseMap_.find(position->second);
 
-                            if (position2 != edgeNamesReverseMap_.end())
-                            {
-                                edgeNamesReverseMap_.erase(position2);
-                            }
+                        if (position2 != edgeNamesReverseMap_.end())
+                        {
+                            edgeNamesReverseMap_.erase(position2);
                         }
                     }
+                }
 
-                    edgeNames_[edgeId] = name;
-                    edgeNamesReverseMap_[name] = edgeId;
-                }
-                else
-                {
-                    throw std::logic_error("void htd::BidirectionalGraphNaming::setEdgeName(htd::id_t, const EdgeNameType &)");
-                }
+                edgeNames_[edgeId] = name;
+                edgeNamesReverseMap_[name] = edgeId;
             }
 
             /**
@@ -317,21 +307,16 @@ namespace htd
             {
                 auto position = vertexNames_.find(vertex);
 
-                if (position != vertexNames_.end())
-                {
-                    auto position2 = vertexNamesReverseMap_.find(position->second);
+                HTD_ASSERT(position != vertexNames_.end())
 
-                    if (position2 != vertexNamesReverseMap_.end())
-                    {
-                        vertexNamesReverseMap_.erase(position2);
-                    }
+                auto position2 = vertexNamesReverseMap_.find(position->second);
 
-                    vertexNames_.erase(position);
-                }
-                else
+                if (position2 != vertexNamesReverseMap_.end())
                 {
-                    throw std::out_of_range("htd::BidirectionalGraphNaming::removeVertexName(htd::vertex_t)");
+                    vertexNamesReverseMap_.erase(position2);
                 }
+
+                vertexNames_.erase(position);
             }
 
             /**
@@ -343,21 +328,16 @@ namespace htd
             {
                 auto position = edgeNames_.find(edgeId);
 
-                if (position != edgeNames_.end())
-                {
-                    auto position2 = edgeNamesReverseMap_.find(position->second);
+                HTD_ASSERT(position != edgeNames_.end())
 
-                    if (position2 != edgeNamesReverseMap_.end())
-                    {
-                        edgeNamesReverseMap_.erase(position2);
-                    }
+                auto position2 = edgeNamesReverseMap_.find(position->second);
 
-                    edgeNames_.erase(position);
-                }
-                else
+                if (position2 != edgeNamesReverseMap_.end())
                 {
-                    throw std::out_of_range("htd::BidirectionalGraphNaming::removeEdgeName(htd::id_t edgeId)");
+                    edgeNamesReverseMap_.erase(position2);
                 }
+
+                edgeNames_.erase(position);
             }
 
             /**

@@ -26,6 +26,7 @@
 #define HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/HypertreeDecompositionAlgorithmFactory.hpp>
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
@@ -88,10 +89,7 @@ htd::IHypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithmFact
 
 void htd::HypertreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::IHypertreeDecompositionAlgorithm * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::HypertreeDecompositionAlgorithmFactory::setConstructionTemplate(htd::IHypertreeDecompositionAlgorithm *)");
-    }
+    HTD_ASSERT(original != nullptr)
 
     if (constructionTemplate_ != nullptr)
     {

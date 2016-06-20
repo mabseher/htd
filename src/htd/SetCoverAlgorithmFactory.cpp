@@ -26,6 +26,7 @@
 #define HTD_HTD_SETCOVERALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
 #include <htd/GreedySetCoverAlgorithm.hpp>
@@ -61,10 +62,7 @@ htd::ISetCoverAlgorithm * htd::SetCoverAlgorithmFactory::getSetCoverAlgorithm(vo
 
 void htd::SetCoverAlgorithmFactory::setConstructionTemplate(htd::ISetCoverAlgorithm * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::SetCoverAlgorithmFactory::setConstructionTemplate(htd::ISetCoverAlgorithm *)");
-    }
+    HTD_ASSERT(original != nullptr)
 
     if (constructionTemplate_ != nullptr)
     {

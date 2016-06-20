@@ -88,15 +88,8 @@ htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHyperg
 
 void htd::LabeledHypergraphFactory::setConstructionTemplate(htd::IMutableLabeledHypergraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::LabeledHypergraphFactory::setConstructionTemplate(htd::IMutableLabeledHypergraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::LabeledHypergraphFactory::setConstructionTemplate(htd::IMutableLabeledHypergraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

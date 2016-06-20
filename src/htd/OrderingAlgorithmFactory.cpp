@@ -26,6 +26,7 @@
 #define HTD_HTD_ORDERINGALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/AdvancedMinFillOrderingAlgorithm.hpp>
 
@@ -60,10 +61,7 @@ htd::IOrderingAlgorithm * htd::OrderingAlgorithmFactory::getOrderingAlgorithm(vo
 
 void htd::OrderingAlgorithmFactory::setConstructionTemplate(htd::IOrderingAlgorithm * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::OrderingAlgorithmFactory::setConstructionTemplate(htd::IOrderingAlgorithm *)");
-    }
+    HTD_ASSERT(original != nullptr)
 
     if (constructionTemplate_ != nullptr)
     {

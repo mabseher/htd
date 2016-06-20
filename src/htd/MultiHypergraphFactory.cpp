@@ -26,6 +26,7 @@
 #define HTD_HTD_MULTIHYPERGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/MultiHypergraphFactory.hpp>
 #include <htd/MultiHypergraph.hpp>
 
@@ -78,15 +79,8 @@ htd::IMutableMultiHypergraph * htd::MultiHypergraphFactory::getMultiHypergraph(c
 
 void htd::MultiHypergraphFactory::setConstructionTemplate(htd::IMutableMultiHypergraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::MultiHypergraphFactory::setConstructionTemplate(htd::IMutableMultiHypergraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::MultiHypergraphFactory::setConstructionTemplate(htd::IMutableMultiHypergraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

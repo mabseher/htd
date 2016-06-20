@@ -88,15 +88,8 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
 
 void htd::LabeledDirectedGraphFactory::setConstructionTemplate(htd::IMutableLabeledDirectedGraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::LabeledDirectedGraphFactory::setConstructionTemplate(htd::IMutableLabeledDirectedGraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::LabeledDirectedGraphFactory::setConstructionTemplate(htd::IMutableLabeledDirectedGraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

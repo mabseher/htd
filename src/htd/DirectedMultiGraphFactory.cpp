@@ -26,6 +26,7 @@
 #define HTD_HTD_DIRECTEDMULTIGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/DirectedMultiGraphFactory.hpp>
 #include <htd/DirectedMultiGraph.hpp>
 
@@ -78,15 +79,8 @@ htd::IMutableDirectedMultiGraph * htd::DirectedMultiGraphFactory::getDirectedMul
 
 void htd::DirectedMultiGraphFactory::setConstructionTemplate(htd::IMutableDirectedMultiGraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::DirectedMultiGraphFactory::setConstructionTemplate(htd::IMutableDirectedMultiGraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::DirectedMultiGraphFactory::setConstructionTemplate(htd::IMutableDirectedMultiGraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

@@ -119,10 +119,7 @@ namespace htd
              */
             void setVertexName(htd::vertex_t vertex, const VertexNameType & name)
             {
-                if (!base_->isVertex(vertex))
-                {
-                    throw std::logic_error("void htd::NamedMultiGraph<VertexNameType, EdgeNameType>::setVertexName(htd::vertex_t, const VertexNameType &)");
-                }
+                HTD_ASSERT(base_->isVertex(vertex))
 
                 names_.setVertexName(vertex, name);
             }
@@ -149,10 +146,7 @@ namespace htd
              */
             void setEdgeName(htd::id_t edgeId, const EdgeNameType & name)
             {
-                if (!base_->isEdge(edgeId))
-                {
-                    throw std::logic_error("void htd::NamedMultiGraph<VertexNameType, EdgeNameType>::setEdgeName(htd::id_t, const EdgeNameType &)");
-                }
+                HTD_ASSERT(base_->isEdge(edgeId))
 
                 names_.setEdgeName(edgeId, name);
             }
@@ -166,10 +160,7 @@ namespace htd
              */
             const VertexNameType & vertexName(htd::vertex_t vertex) const
             {
-                if (!names_.isNamedVertex(vertex))
-                {
-                    throw std::logic_error("const VertexNameType & htd::NamedMultiGraph<VertexNameType, EdgeNameType>::vertexName(htd::vertex_t) const");
-                }
+                HTD_ASSERT(names_.isNamedVertex(vertex))
 
                 return names_.vertexName(vertex);
             }
@@ -183,10 +174,7 @@ namespace htd
              */
             const EdgeNameType & edgeName(htd::id_t edgeId) const
             {
-                if (!names_.isNamedEdge(edgeId))
-                {
-                    throw std::logic_error("const EdgeNameType & htd::NamedMultiGraph<VertexNameType, EdgeNameType>::edgeName(htd::id_t) const");
-                }
+                HTD_ASSERT(names_.isNamedEdge(edgeId))
 
                 return names_.edgeName(edgeId);
             }
@@ -200,10 +188,7 @@ namespace htd
              */
             htd::vertex_t lookupVertex(const VertexNameType & vertexName) const
             {
-                if (!names_.isVertexName(vertexName))
-                {
-                    throw std::logic_error("htd::vertex_t htd::NamedMultiGraph<VertexNameType, EdgeNameType>::lookupVertex(const VertexNameType &) const");
-                }
+                HTD_ASSERT(names_.isVertexName(vertexName))
 
                 return names_.lookupVertex(vertexName);
             }
@@ -293,10 +278,7 @@ namespace htd
              */
             htd::id_t associatedEdgeId(const EdgeNameType & edgeName) const
             {
-                if (!names_.isEdgeName(edgeName))
-                {
-                    throw std::logic_error("htd::id_t htd::NamedMultiGraph<VertexNameType, EdgeNameType>::associatedEdgeId(const EdgeNameType &) const");
-                }
+                HTD_ASSERT(names_.isEdgeName(edgeName))
 
                 return names_.lookupEdge(edgeName);
             }

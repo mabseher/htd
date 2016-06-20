@@ -26,6 +26,7 @@
 #define HTD_HTD_PATHDECOMPOSITIONALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/PathDecompositionAlgorithmFactory.hpp>
 #include <htd/PostProcessingPathDecompositionAlgorithm.hpp>
 
@@ -87,10 +88,7 @@ htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPa
 
 void htd::PathDecompositionAlgorithmFactory::setConstructionTemplate(htd::IPathDecompositionAlgorithm * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::PathDecompositionAlgorithmFactory::setConstructionTemplate(htd::IPathDecompositionAlgorithm *)");
-    }
+    HTD_ASSERT(original != nullptr)
 
     if (constructionTemplate_ != nullptr)
     {

@@ -26,6 +26,7 @@
 #define HTD_HTD_HYPERTREEDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
 #include <htd/HypertreeDecomposition.hpp>
@@ -72,15 +73,8 @@ htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHyp
 
 void htd::HypertreeDecompositionFactory::setConstructionTemplate(htd::IMutableHypertreeDecomposition * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::HypertreeDecompositionFactory::setConstructionTemplate(htd::IMutableHypertreeDecomposition *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::HypertreeDecompositionFactory::setConstructionTemplate(htd::IMutableHypertreeDecomposition *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

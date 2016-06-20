@@ -79,15 +79,8 @@ htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLab
 
 void htd::LabeledMultiHypergraphFactory::setConstructionTemplate(htd::IMutableLabeledMultiHypergraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::LabeledMultiHypergraphFactory::setConstructionTemplate(htd::IMutableLabeledMultiHypergraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::LabeledMultiHypergraphFactory::setConstructionTemplate(htd::IMutableLabeledMultiHypergraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

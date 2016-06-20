@@ -26,6 +26,7 @@
 #define HTD_HTD_DIRECTEDGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/DirectedGraphFactory.hpp>
 #include <htd/IMutableDirectedGraph.hpp>
 #include <htd/DirectedGraph.hpp>
@@ -88,15 +89,8 @@ htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(const h
 
 void htd::DirectedGraphFactory::setConstructionTemplate(htd::IMutableDirectedGraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::DirectedGraphFactory::setConstructionTemplate(htd::IMutableDirectedGraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::DirectedGraphFactory::setConstructionTemplate(htd::IMutableDirectedGraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

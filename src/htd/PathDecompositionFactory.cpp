@@ -26,6 +26,7 @@
 #define HTD_HTD_PATHDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/PathDecompositionFactory.hpp>
 #include <htd/PathDecomposition.hpp>
 
@@ -69,15 +70,8 @@ htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposi
 
 void htd::PathDecompositionFactory::setConstructionTemplate(htd::IMutablePathDecomposition * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::PathDecompositionFactory::setConstructionTemplate(htd::IMutablePathDecomposition *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::PathDecompositionFactory::setConstructionTemplate(htd::IMutablePathDecomposition *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

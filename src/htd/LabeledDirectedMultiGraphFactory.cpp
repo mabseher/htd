@@ -79,15 +79,8 @@ htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::
 
 void htd::LabeledDirectedMultiGraphFactory::setConstructionTemplate(htd::IMutableLabeledDirectedMultiGraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::LabeledDirectedMultiGraphFactory::setConstructionTemplate(htd::IMutableLabeledDirectedMultiGraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::LabeledDirectedMultiGraphFactory::setConstructionTemplate(htd::IMutableLabeledDirectedMultiGraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

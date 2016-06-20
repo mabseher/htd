@@ -26,6 +26,7 @@
 #define HTD_HTD_MULTIGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/MultiGraphFactory.hpp>
 #include <htd/MultiGraph.hpp>
 
@@ -78,15 +79,8 @@ htd::IMutableMultiGraph * htd::MultiGraphFactory::getMultiGraph(const htd::IMult
 
 void htd::MultiGraphFactory::setConstructionTemplate(htd::IMutableMultiGraph * original)
 {
-    if (original == nullptr)
-    {
-        throw std::logic_error("void htd::MultiGraphFactory::setConstructionTemplate(htd::IMutableMultiGraph *)");
-    }
-
-    if (original->vertexCount() > 0)
-    {
-        throw std::logic_error("void htd::MultiGraphFactory::setConstructionTemplate(htd::IMutableMultiGraph *)");
-    }
+    HTD_ASSERT(original != nullptr)
+    HTD_ASSERT(original->vertexCount() == 0)
 
     if (constructionTemplate_ != nullptr)
     {

@@ -217,18 +217,17 @@ namespace htd
              */
             htd::NamedVertexHyperedge<VertexNameType> lookupHyperedge(const EdgeNameType & edgeName) const
             {
-                if (!names_.isEdgeName(edgeName))
-                {
-                    throw std::logic_error("htd::NamedVertexHyperedge<VertexNameType> htd::NamedGraph<VertexNameType, EdgeNameType>::lookupHyperedge(const EdgeNameType &) const");
-                }
+                HTD_ASSERT(names_.isEdgeName(edgeName))
 
                 htd::id_t edgeId = names_.lookupEdge(edgeName);
 
                 NamedVertexHyperedge<VertexNameType> ret(edgeId);
 
+                std::vector<VertexNameType> & elements = ret.elements();
+
                 for (htd::vertex_t vertex : base_->hyperedge(edgeId))
                 {
-                    ret.push_back(vertexName(vertex));
+                    elements.push_back(vertexName(vertex));
                 }
 
                 return ret;
@@ -546,9 +545,11 @@ namespace htd
 
                     NamedVertexHyperedge<VertexNameType> & newHyperedge = container[container.size() - 1];
 
+                    std::vector<VertexNameType> & elements = newHyperedge.elements();
+
                     for (htd::vertex_t vertex : hyperedge)
                     {
-                        newHyperedge.push_back(vertexName(vertex));
+                        elements.push_back(vertexName(vertex));
                     }
                 }
 
@@ -574,9 +575,11 @@ namespace htd
 
                     NamedVertexHyperedge<VertexNameType> & newHyperedge = container[container.size() - 1];
 
+                    std::vector<VertexNameType> & elements = newHyperedge.elements();
+
                     for (htd::vertex_t vertex : hyperedge)
                     {
-                        newHyperedge.push_back(vertexName(vertex));
+                        elements.push_back(vertexName(vertex));
                     }
                 }
 
@@ -594,9 +597,11 @@ namespace htd
             {
                 NamedVertexHyperedge<VertexNameType> ret(edgeId);
 
+                std::vector<VertexNameType> & elements = ret.elements();
+
                 for (htd::vertex_t vertex : base_->hyperedge(edgeId))
                 {
-                    ret.push_back(vertexName(vertex));
+                    elements.push_back(vertexName(vertex));
                 }
 
                 return ret;
@@ -616,9 +621,11 @@ namespace htd
 
                 NamedVertexHyperedge<VertexNameType> ret(hyperedge.id());
 
+                std::vector<VertexNameType> & elements = ret.elements();
+
                 for (htd::vertex_t vertex : hyperedge)
                 {
-                    ret.push_back(vertexName(vertex));
+                    elements.push_back(vertexName(vertex));
                 }
 
                 return ret;

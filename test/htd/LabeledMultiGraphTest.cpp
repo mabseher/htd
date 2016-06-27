@@ -613,28 +613,6 @@ TEST(LabeledMultiGraphTest, TestVertexLabelModifications)
     ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
     ASSERT_EQ(33, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
 
-    try
-    {
-        graph.swapVertexLabels(0, 1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        graph.swapVertexLabels(1, 0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     graph.swapVertexLabels(1, 1);
 
     ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label", 1)));
@@ -660,28 +638,6 @@ TEST(LabeledMultiGraphTest, TestVertexLabelModifications)
     ASSERT_TRUE(graph.isLabeledVertex("Label", 2));
     ASSERT_TRUE(graph.isLabeledVertex("Label", 3));
 
-    try
-    {
-        graph.transferVertexLabel("Label", 0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        graph.vertexLabel("Label", 1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     ASSERT_EQ(2, htd::accessLabel<int>(graph.vertexLabel("Label", 2)));
     ASSERT_EQ(33, htd::accessLabel<int>(graph.vertexLabel("Label", 3)));
 
@@ -701,17 +657,6 @@ TEST(LabeledMultiGraphTest, TestVertexLabelModifications)
     graph.removeVertexLabel("Label", htd::Vertex::UNKNOWN);
     graph.removeVertexLabel("Label3", 2);
     graph.removeVertexLabel("Label3", htd::Vertex::UNKNOWN);
-
-    try
-    {
-        graph.vertexLabel("Label", 2);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
 
     ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label2", 2)));
 
@@ -770,28 +715,6 @@ TEST(LabeledMultiGraphTest, TestEdgeLabelModifications)
     ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
     ASSERT_EQ(33, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));
 
-    try
-    {
-        graph.swapEdgeLabels(0, 1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        graph.swapEdgeLabels(1, 0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     graph.swapEdgeLabels(1, 1);
 
     ASSERT_EQ(1, htd::accessLabel<int>(graph.edgeLabel("Label", 1)));
@@ -817,28 +740,6 @@ TEST(LabeledMultiGraphTest, TestEdgeLabelModifications)
     ASSERT_TRUE(graph.isLabeledEdge("Label", 3));
     ASSERT_FALSE(graph.isLabeledEdge("Label", 0));
 
-    try
-    {
-        graph.transferEdgeLabel("Label", 0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        graph.edgeLabel("Label", 1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     ASSERT_EQ(2, htd::accessLabel<int>(graph.edgeLabel("Label", 2)));
     ASSERT_EQ(33, htd::accessLabel<int>(graph.edgeLabel("Label", 3)));
 
@@ -858,17 +759,6 @@ TEST(LabeledMultiGraphTest, TestEdgeLabelModifications)
     graph.removeEdgeLabel("Label", htd::Vertex::UNKNOWN);
     graph.removeEdgeLabel("Label3", 2);
     graph.removeEdgeLabel("Label3", htd::Vertex::UNKNOWN);
-
-    try
-    {
-        graph.edgeLabel("Label", 2);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
 
     ASSERT_EQ(1, htd::accessLabel<int>(graph.edgeLabel("Label2", 2)));
 

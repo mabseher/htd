@@ -243,10 +243,6 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
                         }
                     }
                 }
-                else
-                {
-                    throw std::logic_error("void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition &) const");
-                }
             }
         }
     }

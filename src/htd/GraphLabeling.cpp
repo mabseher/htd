@@ -65,10 +65,7 @@ const htd::ILabel & htd::GraphLabeling::vertexLabel(htd::vertex_t vertex) const
 {
     auto label = vertexLabels_.find(vertex);
 
-    if (label == vertexLabels_.end())
-    {
-        throw std::logic_error("const htd::ILabel & htd::GraphLabeling::edgeLabel(htd::id_t) const");
-    }
+    HTD_ASSERT(label != vertexLabels_.end())
 
     return *(label->second);
 }
@@ -77,10 +74,7 @@ const htd::ILabel & htd::GraphLabeling::edgeLabel(htd::id_t edgeId) const
 {
     auto label = edgeLabels_.find(edgeId);
 
-    if (label == edgeLabels_.end())
-    {
-        throw std::logic_error("const htd::ILabel & htd::GraphLabeling::edgeLabel(htd::id_t) const");
-    }
+    HTD_ASSERT(label != edgeLabels_.end())
 
     return *(label->second);
 }
@@ -120,18 +114,14 @@ void htd::GraphLabeling::swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t v
     auto position1 = vertexLabels_.find(vertex1);
     auto position2 = vertexLabels_.find(vertex2);
 
-    if (position1 != vertexLabels_.end() && position2 != vertexLabels_.end())
-    {
-        auto label1 = position1->second;
+    HTD_ASSERT(position1 != vertexLabels_.end())
+    HTD_ASSERT(position2 != vertexLabels_.end())
 
-        position1->second = position2->second;
+    htd::ILabel * label1 = position1->second;
 
-        position2->second = label1;
-    }
-    else
-    {
-        throw std::out_of_range("htd::GraphLabeling::swapVertexLabels(htd::vertex_t, htd::vertex_t)");
-    }
+    position1->second = position2->second;
+
+    position2->second = label1;
 }
 
 void htd::GraphLabeling::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
@@ -139,28 +129,21 @@ void htd::GraphLabeling::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
     auto position1 = edgeLabels_.find(edgeId1);
     auto position2 = edgeLabels_.find(edgeId2);
 
-    if (position1 != edgeLabels_.end() && position2 != edgeLabels_.end())
-    {
-        auto label1 = position1->second;
+    HTD_ASSERT(position1 != edgeLabels_.end())
+    HTD_ASSERT(position2 != edgeLabels_.end())
 
-        position1->second = position2->second;
+    htd::ILabel * label1 = position1->second;
 
-        position2->second = label1;
-    }
-    else
-    {
-        throw std::out_of_range("htd::GraphLabeling::swapEdgeLabels(htd::id_t, htd::id_t)");
-    }
+    position1->second = position2->second;
+
+    position2->second = label1;
 }
 
 htd::ILabel * htd::GraphLabeling::transferVertexLabel(htd::vertex_t vertex)
 {
     auto position = vertexLabels_.find(vertex);
 
-    if (position == vertexLabels_.end())
-    {
-        throw std::logic_error("htd::ILabel * htd::GraphLabeling::transferVertexLabel(htd::vertex_t)");
-    }
+    HTD_ASSERT(position != vertexLabels_.end())
 
     htd::ILabel * ret = position->second;
 
@@ -173,10 +156,7 @@ htd::ILabel * htd::GraphLabeling::transferEdgeLabel(htd::id_t edgeId)
 {
     auto position = edgeLabels_.find(edgeId);
 
-    if (position == edgeLabels_.end())
-    {
-        throw std::logic_error("htd::ILabel * htd::GraphLabeling::transferEdgeLabel(htd::id_t)");
-    }
+    HTD_ASSERT(position != edgeLabels_.end())
 
     htd::ILabel * ret = position->second;
 

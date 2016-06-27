@@ -173,10 +173,6 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
                     }
                 }
             }
-            else
-            {
-                throw std::logic_error("void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition &) const");
-            }
         }
     }
 }

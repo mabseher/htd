@@ -87,9 +87,11 @@ const htd::ILabel & htd::LabelCollection::label(const std::string & labelName) c
 
 void htd::LabelCollection::setLabel(const std::string & labelName, htd::ILabel * label)
 {
-    if (content_.find(labelName) != content_.end())
+    auto oldPosition = content_.find(labelName);
+
+    if (oldPosition != content_.end())
     {
-        throw std::out_of_range("void htd::LabelCollection::setLabel(const std::string &, htd::ILabel *)");
+        content_.erase(oldPosition);
     }
 
     auto position = std::lower_bound(labelNames_.begin(), labelNames_.end(), labelName);

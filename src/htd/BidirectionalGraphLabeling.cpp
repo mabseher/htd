@@ -73,62 +73,52 @@ const htd::ILabel & htd::BidirectionalGraphLabeling::edgeLabel(htd::id_t edgeId)
 
 void htd::BidirectionalGraphLabeling::setVertexLabel(htd::vertex_t vertex, htd::ILabel * label)
 {
-    if (vertexLabelsReverseMap_.find(label) == vertexLabelsReverseMap_.end())
-    {
-        auto position = vertexLabels_.find(vertex);
+    HTD_ASSERT(vertexLabelsReverseMap_.count(label) == 0)
 
-        if (position != vertexLabels_.end())
+    auto position = vertexLabels_.find(vertex);
+
+    if (position != vertexLabels_.end())
+    {
+        if (!(*(position->second) == *label))
         {
-            if (!(*(position->second) == *label))
+            auto position2 = vertexLabelsReverseMap_.find(position->second);
+
+            if (position2 != vertexLabelsReverseMap_.end())
             {
-                auto position2 = vertexLabelsReverseMap_.find(position->second);
-
-                if (position2 != vertexLabelsReverseMap_.end())
-                {
-                    vertexLabelsReverseMap_.erase(position2);
-                }
-
-                delete position->second;
+                vertexLabelsReverseMap_.erase(position2);
             }
-        }
 
-        vertexLabels_[vertex] = label;
-        vertexLabelsReverseMap_[label] = vertex;
+            delete position->second;
+        }
     }
-    else
-    {
-        throw std::logic_error("void htd::BidirectionalGraphLabeling::setVertexLabel(htd::vertex_t, htd::ILabel *)");
-    }
+
+    vertexLabels_[vertex] = label;
+    vertexLabelsReverseMap_[label] = vertex;
 }
 
 void htd::BidirectionalGraphLabeling::setEdgeLabel(htd::id_t edgeId, htd::ILabel * label)
 {
-    if (edgeLabelsReverseMap_.find(label) == edgeLabelsReverseMap_.end())
-    {
-        auto position = edgeLabels_.find(edgeId);
+    HTD_ASSERT(edgeLabelsReverseMap_.count(label) == 0)
 
-        if (position != edgeLabels_.end())
+    auto position = edgeLabels_.find(edgeId);
+
+    if (position != edgeLabels_.end())
+    {
+        if (!(*(position->second) == *label))
         {
-            if (!(*(position->second) == *label))
+            auto position2 = edgeLabelsReverseMap_.find(position->second);
+
+            if (position2 != edgeLabelsReverseMap_.end())
             {
-                auto position2 = edgeLabelsReverseMap_.find(position->second);
-
-                if (position2 != edgeLabelsReverseMap_.end())
-                {
-                    edgeLabelsReverseMap_.erase(position2);
-                }
-
-                delete position->second;
+                edgeLabelsReverseMap_.erase(position2);
             }
-        }
 
-        edgeLabels_[edgeId] = label;
-        edgeLabelsReverseMap_[label] = edgeId;
+            delete position->second;
+        }
     }
-    else
-    {
-        throw std::logic_error("void htd::BidirectionalGraphLabeling::setEdgeLabel(htd::id_t, htd::ILabel *)");
-    }
+
+    edgeLabels_[edgeId] = label;
+    edgeLabelsReverseMap_[label] = edgeId;
 }
 
 void htd::BidirectionalGraphLabeling::swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
@@ -136,21 +126,17 @@ void htd::BidirectionalGraphLabeling::swapVertexLabels(htd::vertex_t vertex1, ht
     auto position1 = vertexLabels_.find(vertex1);
     auto position2 = vertexLabels_.find(vertex2);
 
-    if (position1 != vertexLabels_.end() && position2 != vertexLabels_.end())
-    {
-        auto label1 = position1->second;
+    HTD_ASSERT(position1 != vertexLabels_.end())
+    HTD_ASSERT(position2 != vertexLabels_.end())
 
-        position1->second = position2->second;
+    auto label1 = position1->second;
 
-        position2->second = label1;
+    position1->second = position2->second;
 
-        vertexLabelsReverseMap_[vertexLabels_[vertex1]] = vertex1;
-        vertexLabelsReverseMap_[vertexLabels_[vertex2]] = vertex2;
-    }
-    else
-    {
-        throw std::out_of_range("htd::BidirectionalGraphLabeling::swapVertexLabels(htd::vertex_t, htd::vertex_t)");
-    }
+    position2->second = label1;
+
+    vertexLabelsReverseMap_[vertexLabels_[vertex1]] = vertex1;
+    vertexLabelsReverseMap_[vertexLabels_[vertex2]] = vertex2;
 }
 
 void htd::BidirectionalGraphLabeling::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
@@ -158,21 +144,17 @@ void htd::BidirectionalGraphLabeling::swapEdgeLabels(htd::id_t edgeId1, htd::id_
     auto position1 = edgeLabels_.find(edgeId1);
     auto position2 = edgeLabels_.find(edgeId2);
 
-    if (position1 != edgeLabels_.end() && position2 != edgeLabels_.end())
-    {
-        auto label1 = position1->second;
+    HTD_ASSERT(position1 != edgeLabels_.end())
+    HTD_ASSERT(position2 != edgeLabels_.end())
 
-        position1->second = position2->second;
+    auto label1 = position1->second;
 
-        position2->second = label1;
+    position1->second = position2->second;
 
-        edgeLabelsReverseMap_[edgeLabels_[edgeId1]] = edgeId1;
-        edgeLabelsReverseMap_[edgeLabels_[edgeId2]] = edgeId2;
-    }
-    else
-    {
-        throw std::out_of_range("htd::BidirectionalGraphLabeling::swapEdgeLabels(htd::id_t, htd::id_t)");
-    }
+    position2->second = label1;
+
+    edgeLabelsReverseMap_[edgeLabels_[edgeId1]] = edgeId1;
+    edgeLabelsReverseMap_[edgeLabels_[edgeId2]] = edgeId2;
 }
 
 std::pair<htd::id_t, bool> htd::BidirectionalGraphLabeling::insertVertex(htd::ILabel * label, const std::function<htd::vertex_t(void)> & vertexCreationFunction)
@@ -205,10 +187,7 @@ htd::ILabel * htd::BidirectionalGraphLabeling::transferVertexLabel(htd::vertex_t
 {
     auto position = vertexLabels_.find(vertex);
 
-    if (position == vertexLabels_.end())
-    {
-        throw std::logic_error("htd::ILabel * htd::BidirectionalGraphLabeling::transferVertexLabel(htd::vertex_t)");
-    }
+    HTD_ASSERT(position != vertexLabels_.end())
 
     htd::ILabel * ret = position->second;
 
@@ -223,10 +202,7 @@ htd::ILabel * htd::BidirectionalGraphLabeling::transferEdgeLabel(htd::id_t edgeI
 {
     auto position = edgeLabels_.find(edgeId);
 
-    if (position == edgeLabels_.end())
-    {
-        throw std::logic_error("htd::ILabel * htd::BidirectionalGraphLabeling::transferEdgeLabel(htd::id_t)");
-    }
+    HTD_ASSERT(position != edgeLabels_.end())
 
     htd::ILabel * ret = position->second;
 
@@ -241,46 +217,36 @@ void htd::BidirectionalGraphLabeling::removeVertexLabel(htd::vertex_t vertex)
 {
     auto position = vertexLabels_.find(vertex);
 
-    if (position != vertexLabels_.end())
+    HTD_ASSERT(position != vertexLabels_.end())
+
+    auto position2 = vertexLabelsReverseMap_.find(position->second);
+
+    if (position2 != vertexLabelsReverseMap_.end())
     {
-        auto position2 = vertexLabelsReverseMap_.find(position->second);
-
-        if (position2 != vertexLabelsReverseMap_.end())
-        {
-            vertexLabelsReverseMap_.erase(position2);
-        }
-
-        delete position->second;
-
-        vertexLabels_.erase(position);
+        vertexLabelsReverseMap_.erase(position2);
     }
-    else
-    {
-        throw std::out_of_range("htd::BidirectionalGraphLabeling::removeVertexLabel(htd::vertex_t)");
-    }
+
+    delete position->second;
+
+    vertexLabels_.erase(position);
 }
 
 void htd::BidirectionalGraphLabeling::removeEdgeLabel(htd::id_t edgeId)
 {
     auto position = edgeLabels_.find(edgeId);
 
-    if (position != edgeLabels_.end())
+    HTD_ASSERT(position != edgeLabels_.end())
+
+    auto position2 = edgeLabelsReverseMap_.find(position->second);
+
+    if (position2 != edgeLabelsReverseMap_.end())
     {
-        auto position2 = edgeLabelsReverseMap_.find(position->second);
-
-        if (position2 != edgeLabelsReverseMap_.end())
-        {
-            edgeLabelsReverseMap_.erase(position2);
-        }
-
-        delete position->second;
-
-        edgeLabels_.erase(position);
+        edgeLabelsReverseMap_.erase(position2);
     }
-    else
-    {
-        throw std::out_of_range("htd::BidirectionalGraphLabeling::removeEdgeLabel(htd::id_t edgeId)");
-    }
+
+    delete position->second;
+
+    edgeLabels_.erase(position);
 }
 
 void htd::BidirectionalGraphLabeling::clear(void)

@@ -61,28 +61,6 @@ TEST(GraphLabelingTest, TestEmptyLabeling)
 
     ASSERT_FALSE(labeling.isLabeledVertex(0));
     ASSERT_FALSE(labeling.isLabeledEdge(0));
-
-    try
-    {
-        labeling.vertexLabel(0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        labeling.edgeLabel(0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
 }
 
 TEST(GraphLabelingTest, TestVertexLabelModifications)
@@ -132,28 +110,6 @@ TEST(GraphLabelingTest, TestVertexLabelModifications)
     ASSERT_EQ(2, htd::accessLabel<int>(labeling.vertexLabel(2)));
     ASSERT_EQ(33, htd::accessLabel<int>(labeling.vertexLabel(3)));
 
-    try
-    {
-        labeling.swapVertexLabels(0, 1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        labeling.swapVertexLabels(1, 0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     labeling.swapVertexLabels(1, 1);
 
     ASSERT_EQ(1, htd::accessLabel<int>(labeling.vertexLabel(1)));
@@ -179,28 +135,6 @@ TEST(GraphLabelingTest, TestVertexLabelModifications)
     ASSERT_TRUE(labeling.isLabeledVertex(2));
     ASSERT_TRUE(labeling.isLabeledVertex(3));
     ASSERT_FALSE(labeling.isLabeledEdge(0));
-
-    try
-    {
-        labeling.transferVertexLabel(0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        labeling.vertexLabel(1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
 
     ASSERT_EQ(2, htd::accessLabel<int>(labeling.vertexLabel(2)));
     ASSERT_EQ(33, htd::accessLabel<int>(labeling.vertexLabel(3)));
@@ -268,28 +202,6 @@ TEST(GraphLabelingTest, TestEdgeLabelModifications)
     ASSERT_EQ(2, htd::accessLabel<int>(labeling.edgeLabel(2)));
     ASSERT_EQ(33, htd::accessLabel<int>(labeling.edgeLabel(3)));
 
-    try
-    {
-        labeling.swapEdgeLabels(0, 1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        labeling.swapEdgeLabels(1, 0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     labeling.swapEdgeLabels(1, 1);
 
     ASSERT_EQ(1, htd::accessLabel<int>(labeling.edgeLabel(1)));
@@ -314,28 +226,6 @@ TEST(GraphLabelingTest, TestEdgeLabelModifications)
     ASSERT_TRUE(labeling.isLabeledEdge(2));
     ASSERT_TRUE(labeling.isLabeledEdge(3));
     ASSERT_FALSE(labeling.isLabeledEdge(0));
-
-    try
-    {
-        labeling.transferEdgeLabel(0);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        labeling.edgeLabel(1);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
 
     ASSERT_EQ(2, htd::accessLabel<int>(labeling.edgeLabel(2)));
     ASSERT_EQ(33, htd::accessLabel<int>(labeling.edgeLabel(3)));

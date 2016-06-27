@@ -150,6 +150,12 @@ namespace htd
 
             bool isChild(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;
 
+            std::size_t height(void) const HTD_OVERRIDE;
+
+            std::size_t height(htd::vertex_t vertex) const HTD_OVERRIDE;
+
+            std::size_t depth(htd::vertex_t vertex) const HTD_OVERRIDE;
+
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 
             void removeSubtree(htd::vertex_t subtreeRoot) HTD_OVERRIDE;

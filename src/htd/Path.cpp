@@ -713,6 +713,48 @@ bool htd::Path::isChild(htd::vertex_t vertex, htd::vertex_t child) const
     return ret;
 }
 
+
+std::size_t htd::Path::height(void) const
+{
+    return height(root_);
+}
+
+std::size_t htd::Path::height(htd::vertex_t vertex) const
+{
+    HTD_ASSERT(isVertex(vertex))
+
+    std::size_t ret = 0;
+
+    htd::vertex_t currentVertex = nodes_.at(vertex)->child;
+
+    while (currentVertex != htd::Vertex::UNKNOWN)
+    {
+        ++ret;
+
+        currentVertex = nodes_.at(currentVertex)->child;
+    }
+
+    return ret;
+}
+
+std::size_t htd::Path::depth(htd::vertex_t vertex) const
+{
+    HTD_ASSERT(isVertex(vertex))
+
+    std::size_t ret = 0;
+
+    htd::vertex_t currentVertex = nodes_.at(vertex)->parent;
+
+    while (currentVertex != htd::Vertex::UNKNOWN)
+    {
+        ++ret;
+
+        currentVertex = nodes_.at(currentVertex)->parent;
+    }
+
+    return ret;
+}
+
 void htd::Path::removeVertex(htd::vertex_t vertex)
 {
     if (isVertex(vertex))

@@ -156,6 +156,31 @@ namespace htd
             virtual bool isChild(htd::vertex_t vertex, htd::vertex_t child) const = 0;
 
             /**
+             *  Getter for the height of the tree.
+             *
+             *  @return The height of the tree.
+             */
+            virtual std::size_t height(void) const = 0;
+
+            /**
+             *  Getter for the height of a given vertex withing the tree.
+             *
+             *  @param[in] vertex   The vertex which's height shall be returned.
+             *
+             *  @return The height of the given vertex withing the tree.
+             */
+            virtual std::size_t height(htd::vertex_t vertex) const = 0;
+
+            /**
+             *  Getter for the depth of a given vertex withing the tree.
+             *
+             *  @param[in] vertex   The vertex which's depth shall be returned.
+             *
+             *  @return The depth of the given vertex withing the tree.
+             */
+            virtual std::size_t depth(htd::vertex_t vertex) const = 0;
+
+            /**
              *  Create a deep copy the current tree.
              *
              *  @return A new ITree object identical to the current tree.

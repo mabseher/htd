@@ -541,6 +541,51 @@ bool htd::Tree::isChild(htd::vertex_t vertex, htd::vertex_t child) const
     return std::find(children.begin(), children.end(), child) != children.end();
 }
 
+std::size_t htd::Tree::height(void) const
+{
+    return height(root_);
+}
+
+std::size_t htd::Tree::height(htd::vertex_t vertex) const
+{
+    HTD_ASSERT(isVertex(vertex))
+
+    std::size_t ret = 0;
+
+    htd::PreOrderTreeTraversal traversal;
+
+    traversal.traverse(*this, [&](htd::vertex_t currentVertex, htd::vertex_t parent, std::size_t distanceToVertex)
+    {
+        HTD_UNUSED(currentVertex)
+        HTD_UNUSED(parent)
+
+        if (distanceToVertex > ret)
+        {
+            ret = distanceToVertex;
+        }
+    }, vertex);
+
+    return ret;
+}
+
+std::size_t htd::Tree::depth(htd::vertex_t vertex) const
+{
+    HTD_ASSERT(isVertex(vertex))
+
+    std::size_t ret = 0;
+
+    htd::vertex_t currentVertex = nodes_.at(vertex)->parent;
+
+    while (currentVertex != htd::Vertex::UNKNOWN)
+    {
+        ++ret;
+
+        currentVertex = nodes_.at(currentVertex)->parent;
+    }
+
+    return ret;
+}
+
 void htd::Tree::removeVertex(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))

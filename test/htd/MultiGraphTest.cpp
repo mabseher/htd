@@ -459,33 +459,11 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_EQ((std::size_t)0, graph.neighbors((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)0, graph.neighbors((htd::vertex_t)2).size());
 
-    try
-    {
-        graph.neighbors((htd::vertex_t)3);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     graph.copyNeighborsTo(neighbors1, (htd::vertex_t)1);
     graph.copyNeighborsTo(neighbors2, (htd::vertex_t)2);
 
     ASSERT_EQ((std::size_t)0, neighbors1.size());
     ASSERT_EQ((std::size_t)0, neighbors2.size());
-
-    try
-    {
-        graph.copyNeighborsTo(neighbors3, (htd::vertex_t)3);
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
 
     ASSERT_EQ((std::size_t)0, neighbors3.size());
 

@@ -26,6 +26,7 @@
 #define	HTD_HTD_POSTORDERTREETRAVERSAL_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/PostOrderTreeTraversal.hpp>
 
 #include <stack>
@@ -52,10 +53,7 @@ void htd::PostOrderTreeTraversal::traverse(const htd::IPath & path, const std::f
 
 void htd::PostOrderTreeTraversal::traverse(const htd::IPath & path, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction, htd::vertex_t startingVertex) const
 {
-    if (!path.isVertex(startingVertex))
-    {
-        throw std::logic_error("void htd::PostOrderTreeTraversal::traverse(const htd::IPath &, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> &, htd::vertex_t) const");
-    }
+    HTD_ASSERT(path.isVertex(startingVertex))
 
     htd::vertex_t currentNode = startingVertex;
 
@@ -112,10 +110,7 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, const std::f
 
 void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction, htd::vertex_t startingVertex) const
 {
-    if (!tree.isVertex(startingVertex))
-    {
-        throw std::logic_error("void htd::PostOrderTreeTraversal::traverse(const htd::ITree &, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> &, htd::vertex_t) const");
-    }
+    HTD_ASSERT(tree.isVertex(startingVertex))
 
     htd::vertex_t lastNode = htd::Vertex::UNKNOWN;
 

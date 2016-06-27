@@ -90,12 +90,11 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
     htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
 
-    if (algorithm == nullptr)
-    {
-        throw std::logic_error("htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IHypergraph &, const std::vector<htd::IDecompositionManipulationOperation *> &) const");
-    }
+    HTD_ASSERT(algorithm != nullptr)
 
     htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph);
+
+    HTD_ASSERT(treeDecomposition != nullptr)
 
     delete algorithm;
 

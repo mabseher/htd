@@ -191,10 +191,7 @@ htd::ConstCollection<htd::id_t> htd::Tree::associatedEdgeIds(const htd::ConstCol
 
 htd::vertex_t htd::Tree::vertexAtPosition(htd::index_t index) const
 {
-    if (index >= vertices_.size())
-    {
-        throw std::out_of_range("htd::vertex_t htd::Tree::vertexAtPosition(htd::index_t) const");
-    }
+    HTD_ASSERT(index < vertices_.size())
 
     return vertices_[index];
 }
@@ -314,10 +311,7 @@ htd::vertex_t htd::Tree::neighborAtPosition(htd::vertex_t vertex, htd::index_t i
 
     const htd::ConstCollection<htd::vertex_t> & currentNeighbors = neighbors(vertex);
 
-    if (index >= currentNeighbors.size())
-    {
-        throw std::out_of_range("htd::vertex_t htd::Tree::neighborAtPosition(htd::vertex_t, htd::index_t) const");
-    }
+    HTD_ASSERT(index < currentNeighbors.size())
 
     return currentNeighbors[index];
 }
@@ -355,12 +349,7 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::isolatedVertices(void) const
 
 htd::vertex_t htd::Tree::isolatedVertexAtPosition(htd::index_t index) const
 {
-    HTD_UNUSED(index)
-
-    if (size_ != 1 || index > 0)
-    {
-        throw std::out_of_range("htd::vertex_t htd::Tree::isolatedVertexAtPosition(htd::index_t index) const");
-    }
+    HTD_ASSERT(size_ == 1 && index == 0)
 
     return root_;
 }
@@ -420,10 +409,7 @@ const htd::Hyperedge & htd::Tree::hyperedge(htd::id_t edgeId) const
 
 const htd::Hyperedge & htd::Tree::hyperedgeAtPosition(htd::index_t index) const
 {
-    if (index >= edges_->size())
-    {
-        throw std::out_of_range("const htd::Hyperedge & htd::Tree::hyperedgeAtPosition(htd::index_t) const");
-    }
+    HTD_ASSERT(index < edges_->size())
 
     return edges_->at(index);
 }
@@ -474,10 +460,7 @@ htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(std::vector<ht
 
 htd::vertex_t htd::Tree::root(void) const
 {
-    if (root_ == htd::Vertex::UNKNOWN)
-    {
-        throw std::logic_error("htd::vertex_t htd::Tree::root(void) const");
-    }
+    HTD_ASSERT(root_ != htd::Vertex::UNKNOWN)
 
     return root_;
 }
@@ -1011,10 +994,7 @@ htd::vertex_t htd::Tree::leafAtPosition(htd::index_t index) const
 {
     const htd::ConstCollection<htd::vertex_t> & leafNodeCollection = leaves();
 
-    if (index >= leafNodeCollection.size())
-    {
-        throw std::out_of_range("htd::vertex_t htd::Tree::leafAtPosition(htd::index_t) const");
-    }
+    HTD_ASSERT(index < leafNodeCollection.size())
 
     htd::ConstIterator<htd::vertex_t> it = leafNodeCollection.begin();
 

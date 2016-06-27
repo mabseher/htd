@@ -133,20 +133,16 @@ bool htd::DirectedGraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor
 
 bool htd::DirectedGraph::isIncomingNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
-    if (!isVertex(vertex) || !isVertex(neighbor))
-    {
-        throw std::out_of_range("bool htd::DirectedGraph::isIncomingNeighbor(htd::vertex_t, htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
+    HTD_ASSERT(isVertex(neighbor))
     
     return std::binary_search(incomingNeighborhood_[vertex - htd::Vertex::FIRST].begin(), incomingNeighborhood_[vertex - htd::Vertex::FIRST].end(), neighbor);
 }
 
 bool htd::DirectedGraph::isOutgoingNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
-    if (!isVertex(vertex) || !isVertex(neighbor))
-    {
-        throw std::out_of_range("bool htd::DirectedGraph::isOutgoingNeighbor(htd::vertex_t, htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
+    HTD_ASSERT(isVertex(neighbor))
 
     return std::binary_search(outgoingNeighborhood_[vertex - htd::Vertex::FIRST].begin(), outgoingNeighborhood_[vertex - htd::Vertex::FIRST].end(), neighbor);
 }
@@ -163,10 +159,8 @@ bool htd::DirectedGraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex
 
 bool htd::DirectedGraph::isReachable(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    if (!isVertex(vertex1) || !isVertex(vertex2))
-    {
-        throw std::out_of_range("bool htd::DirectedGraph::isReachable(htd::vertex_t, htd::vertex_t) const");
-    }
+    HTD_ASSERT(vertex1)
+    HTD_ASSERT(vertex2)
     
     bool ret = true;
 
@@ -216,40 +210,28 @@ std::size_t htd::DirectedGraph::neighborCount(htd::vertex_t vertex) const
 
 std::size_t htd::DirectedGraph::incomingNeighborCount(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("std::size_t htd::DirectedGraph::incomingNeighborCount(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return incomingNeighborhood_[vertex - htd::Vertex::FIRST].size();
 }
 
 std::size_t htd::DirectedGraph::outgoingNeighborCount(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("std::size_t htd::DirectedGraph::outgoingNeighborCount(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return outgoingNeighborhood_[vertex - htd::Vertex::FIRST].size();
 }
 
 htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::neighbors(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::neighbors(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return base_->neighbors(vertex);
 }
 
 void htd::DirectedGraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::DirectedGraph::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     base_->copyNeighborsTo(target, vertex);
 }
@@ -261,10 +243,7 @@ htd::vertex_t htd::DirectedGraph::neighborAtPosition(htd::vertex_t vertex, htd::
 
 htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::incomingNeighbors(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::incomingNeighbors(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     auto & currentNeighborhood = incomingNeighborhood_[vertex - htd::Vertex::FIRST];
 
@@ -279,10 +258,7 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::incomingNeighbors(htd::v
 
 htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::outgoingNeighbors(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::outgoingNeighbors(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     auto & currentNeighborhood = outgoingNeighborhood_[vertex - htd::Vertex::FIRST];
 
@@ -297,61 +273,32 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::outgoingNeighbors(htd::v
 
 htd::vertex_t htd::DirectedGraph::incomingNeighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    HTD_ASSERT(isVertex(vertex))
 
-    if (isVertex(vertex))
-    {
-        auto & neighborhood = incomingNeighborhood_[vertex - htd::Vertex::FIRST];
+    auto & neighborhood = incomingNeighborhood_[vertex - htd::Vertex::FIRST];
 
-        if (index < neighborhood.size())
-        {
-            auto position = neighborhood.begin();
+    HTD_ASSERT(index < neighborhood.size())
 
-            std::advance(position, index);
+    auto position = neighborhood.begin();
 
-            ret = *position;
-        }
-        else
-        {
-            throw std::out_of_range("htd::vertex_t htd::DirectedGraph::incomingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
-        }
-    }
-    else
-    {
-        throw std::out_of_range("htd::vertex_t htd::DirectedGraph::incomingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
-    }
+    std::advance(position, index);
 
-    return ret;
+    return *position;
 }
 
 htd::vertex_t htd::DirectedGraph::outgoingNeighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
+    HTD_ASSERT(isVertex(vertex))
 
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    auto & neighborhood = outgoingNeighborhood_[vertex - htd::Vertex::FIRST];
 
-    if (isVertex(vertex))
-    {
-        auto & neighborhood = outgoingNeighborhood_[vertex - htd::Vertex::FIRST];
+    HTD_ASSERT(index < neighborhood.size())
 
-        if (index < neighborhood.size())
-        {
-            auto position = neighborhood.begin();
+    auto position = neighborhood.begin();
 
-            std::advance(position, index);
+    std::advance(position, index);
 
-            ret = *position;
-        }
-        else
-        {
-            throw std::out_of_range("htd::vertex_t htd::DirectedGraph::outgoingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
-        }
-    }
-    else
-    {
-        throw std::out_of_range("htd::vertex_t htd::DirectedGraph::outgoingNeighborAtPosition(htd::vertex_t, htd::index_t) const");
-    }
-
-    return ret;
+    return *position;
 }
 
 htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::vertices(void) const
@@ -396,34 +343,12 @@ const htd::Hyperedge & htd::DirectedGraph::hyperedge(htd::id_t edgeId) const
 
 const htd::Hyperedge & htd::DirectedGraph::hyperedgeAtPosition(htd::index_t index) const
 {
-    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();
-
-    if (index >= hyperedgeCollection.size())
-    {
-        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedgeAtPosition(htd::index_t) const");
-    }
-
-    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
-
-    std::advance(it, index);
-
-    return *it;
+    return base_->hyperedgeAtPosition(index);
 }
 
 const htd::Hyperedge & htd::DirectedGraph::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges(vertex);
-
-    if (index >= hyperedgeCollection.size())
-    {
-        throw std::out_of_range("const htd::Hyperedge & htd::DirectedGraph::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
-    }
-
-    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
-
-    std::advance(it, index);
-
-    return *it;
+    return base_->hyperedgeAtPosition(index, vertex);
 }
 
 htd::FilteredHyperedgeCollection htd::DirectedGraph::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const

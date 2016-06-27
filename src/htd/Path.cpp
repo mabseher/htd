@@ -78,10 +78,7 @@ std::size_t htd::Path::vertexCount(void) const
 
 std::size_t htd::Path::vertexCount(htd::vertex_t subPathRoot) const
 {
-    if (!isVertex(subPathRoot))
-    {
-        throw std::logic_error("std::size_t htd::Path::vertexCount(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(subPathRoot))
 
     std::size_t ret = 0;
 
@@ -104,18 +101,9 @@ std::size_t htd::Path::edgeCount(void) const
 
 std::size_t htd::Path::edgeCount(htd::vertex_t vertex) const
 {
-    std::size_t ret = 0;
+    HTD_ASSERT(isVertex(vertex))
 
-    if (isVertex(vertex))
-    {
-        ret = neighborCount(vertex);
-    }
-    else
-    {
-        throw std::out_of_range("std::size_t htd::Path::edgeCount(htd::vertex_t) const");
-    }
-
-    return ret;
+    return neighborCount(vertex);
 }
 
 bool htd::Path::isVertex(htd::vertex_t vertex) const
@@ -209,10 +197,7 @@ htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(const htd::ConstCol
 
 htd::vertex_t htd::Path::vertexAtPosition(htd::index_t index) const
 {
-    if (index >= vertices_.size())
-    {
-        throw std::out_of_range("htd::vertex_t htd::Path::vertexAtPosition(htd::index_t) const");
-    }
+    HTD_ASSERT(index < vertices_.size())
 
     return vertices_[index];
 }
@@ -265,10 +250,7 @@ std::size_t htd::Path::neighborCount(htd::vertex_t vertex) const
 
 htd::ConstCollection<htd::vertex_t> htd::Path::neighbors(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::Path::neighbors(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -293,10 +275,7 @@ htd::ConstCollection<htd::vertex_t> htd::Path::neighbors(htd::vertex_t vertex) c
 
 void htd::Path::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::Path::copyNeighborsTo(std::vector<htd::vertex_t> &, htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     std::size_t size = target.size();
 
@@ -317,17 +296,11 @@ void htd::Path::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex
 
 htd::vertex_t htd::Path::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::vertex_t htd::Path::neighborAtPosition(htd::vertex_t, htd::index_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     const htd::ConstCollection<htd::vertex_t> & currentNeighbors = neighbors(vertex);
 
-    if (index >= currentNeighbors.size())
-    {
-        throw std::out_of_range("htd::vertex_t htd::Path::neighborAtPosition(htd::vertex_t, htd::index_t) const");
-    }
+    HTD_ASSERT(index < currentNeighbors.size())
     
     return currentNeighbors[index];
 }
@@ -349,9 +322,9 @@ htd::ConstCollection<htd::vertex_t> htd::Path::isolatedVertices(void) const
 
 htd::vertex_t htd::Path::isolatedVertexAtPosition(htd::index_t index) const
 {
-    HTD_UNUSED(index)
+    HTD_ASSERT(size_ == 1 && index == 0)
 
-    throw std::out_of_range("htd::vertex_t htd::Path::isolatedVertexAtPosition(htd::index_t index) const");
+    return root_;
 }
 
 bool htd::Path::isIsolatedVertex(htd::vertex_t vertex) const
@@ -410,10 +383,7 @@ htd::ConstCollection<htd::Hyperedge> htd::Path::hyperedges(void) const
 
 htd::ConstCollection<htd::Hyperedge> htd::Path::hyperedges(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::Hyperedge> htd::Path::hyperedges(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     htd::VectorAdapter<htd::Hyperedge> ret;
 
@@ -584,10 +554,7 @@ htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(std::vector<ht
 
 htd::vertex_t htd::Path::root(void) const
 {
-    if (root_ == htd::Vertex::UNKNOWN)
-    {
-        throw std::logic_error("htd::vertex_t htd::Path::root(void) const");
-    }
+    HTD_ASSERT(root_ != htd::Vertex::UNKNOWN)
 
     return root_;
 }
@@ -611,18 +578,10 @@ htd::vertex_t htd::Path::parent(htd::vertex_t vertex) const
 
 bool htd::Path::isParent(htd::vertex_t vertex, htd::vertex_t parent) const
 {
-    bool ret = false;
+    HTD_ASSERT(isVertex(vertex))
+    HTD_ASSERT(isVertex(parent))
 
-    if (isVertex(vertex))
-    {
-        ret = nodes_.at(vertex)->parent == parent;
-    }
-    else
-    {
-        throw std::out_of_range("bool htd::Path::isParent(htd::vertex_t, htd::vertex_t) const");
-    }
-
-    return ret;
+    return nodes_.at(vertex)->parent == parent;
 }
 
 std::size_t htd::Path::childCount(htd::vertex_t vertex) const
@@ -642,10 +601,7 @@ std::size_t htd::Path::childCount(htd::vertex_t vertex) const
 
 htd::ConstCollection<htd::vertex_t> htd::Path::children(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::ConstCollection<htd::vertex_t> htd::Path::children(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -659,60 +615,33 @@ htd::ConstCollection<htd::vertex_t> htd::Path::children(htd::vertex_t vertex) co
 
 htd::vertex_t htd::Path::child(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("htd::vertex_t htd::Path::child(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
-    const auto & node = *(nodes_.at(vertex));
+    htd::vertex_t child = nodes_.at(vertex)->child;
 
-    if (node.child == htd::Vertex::UNKNOWN)
-    {
-        throw std::out_of_range("htd::vertex_t htd::Path::child(htd::vertex_t) const");
-    }
+    HTD_ASSERT(child != htd::Vertex::UNKNOWN)
 
-    return node.child;
+    return child;
 }
 
 htd::vertex_t htd::Path::childAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
-    
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("bool htd::Path::childAtPosition(htd::vertex_t, htd::index_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
-    const auto & node = *(nodes_.at(vertex));
+    htd::vertex_t child = nodes_.at(vertex)->child;
 
-    if (index == 0 && node.child != htd::Vertex::UNKNOWN)
-    {
-        ret = node.child;
-    }
-    else
-    {
-        throw std::out_of_range("bool htd::Path::childAtPosition(htd::vertex_t, htd::index_t) const");
-    }
+    HTD_ASSERT(index == 0 && child != htd::Vertex::UNKNOWN)
     
-    return ret;
+    return child;
 }
 
 bool htd::Path::isChild(htd::vertex_t vertex, htd::vertex_t child) const
 {
-    bool ret = false;
+    HTD_ASSERT(isVertex(vertex))
+    HTD_ASSERT(isVertex(child))
 
-    if (isVertex(vertex))
-    {
-        ret = nodes_.at(vertex)->child == child;
-    }
-    else
-    {
-        throw std::logic_error("bool htd::Path::isChild(htd::vertex_t, htd::vertex_t) const");
-    }
-
-    return ret;
+    return nodes_.at(vertex)->child == child;
 }
-
 
 std::size_t htd::Path::height(void) const
 {
@@ -798,10 +727,7 @@ void htd::Path::removeVertex(htd::vertex_t vertex)
 
 void htd::Path::removeSubpath(htd::vertex_t subpathRoot)
 {
-    if (!isVertex(subpathRoot))
-    {
-        throw std::logic_error("void htd::Path::removeSubPath(htd::vertex_t)");
-    }
+    HTD_ASSERT(isVertex(subpathRoot))
 
     htd::PostOrderTreeTraversal treeTraversal;
 
@@ -870,92 +796,77 @@ htd::vertex_t htd::Path::addChild(htd::vertex_t vertex)
 
 void htd::Path::removeChild(htd::vertex_t vertex)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("void htd::Path::removeChild(htd::vertex_t)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
-    const auto & node = nodes_.at(vertex);
+    htd::vertex_t child = nodes_.at(vertex)->child;
 
-    if (node->child == htd::Vertex::UNKNOWN)
-    {
-        throw std::logic_error("void htd::Path::removeChild(htd::vertex_t)");
-    }
+    HTD_ASSERT(child != htd::Vertex::UNKNOWN)
 
-    removeVertex(node->child);
+    removeVertex(child);
 }
 
 void htd::Path::removeChild(htd::vertex_t vertex, htd::vertex_t child)
 {
-    if (isVertex(vertex) && isVertex(child))
-    {
-        const auto & node = nodes_.at(vertex);
+    HTD_ASSERT(isVertex(vertex))
+    HTD_ASSERT(isVertex(child))
 
-        if (node != nullptr && node->child == child)
-        {
-            removeVertex(child);
-        }
-        else
-        {
-            throw std::logic_error("void htd::Path::removeChild(htd::vertex_t, htd::vertex_t)");
-        }
+    const auto & node = nodes_.at(vertex);
+
+    if (node->child == child)
+    {
+        removeVertex(child);
     }
 }
 
 htd::vertex_t htd::Path::addParent(htd::vertex_t vertex)
 {
+    HTD_ASSERT(isVertex(vertex))
+
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
-    if (isVertex(vertex))
+    if (isRoot(vertex))
     {
-        if (isRoot(vertex))
+        auto & node = nodes_.at(vertex);
+
+        if (node != nullptr)
         {
-            auto & node = nodes_.at(vertex);
+            ret = next_vertex_;
 
-            if (node != nullptr)
-            {
-                ret = next_vertex_;
+            auto * newRootNode = new htd::Path::Node(ret, htd::Vertex::UNKNOWN);
 
-                auto * newRootNode = new htd::Path::Node(ret, htd::Vertex::UNKNOWN);
+            node->parent = ret;
 
-                node->parent = ret;
+            newRootNode->child = vertex;
 
-                newRootNode->child = vertex;
+            nodes_.insert(std::make_pair(ret, newRootNode));
 
-                nodes_.insert(std::make_pair(ret, newRootNode));
+            vertices_.push_back(ret);
 
-                vertices_.push_back(ret);
+            next_vertex_++;
 
-                next_vertex_++;
+            size_++;
 
-                size_++;
-
-                root_ = ret;
-            }
-        }
-        else
-        {
-            htd::vertex_t parentVertex = parent(vertex);
-
-            ret = addChild(parentVertex);
-
-            auto & parentNode = nodes_.at(parentVertex);
-            auto & selectedNode = nodes_.at(vertex);
-            auto & intermediateNode = nodes_.at(ret);
-
-            if (parentNode != nullptr && selectedNode != nullptr && intermediateNode != nullptr)
-            {
-                intermediateNode->parent = parentVertex;
-
-                intermediateNode->child = vertex;
-
-                selectedNode->parent = ret;
-            }
+            root_ = ret;
         }
     }
     else
     {
-        throw std::out_of_range("htd::vertex_t htd::Path::addParent(htd::vertex_t)");
+        htd::vertex_t parentVertex = parent(vertex);
+
+        ret = addChild(parentVertex);
+
+        auto & parentNode = nodes_.at(parentVertex);
+        auto & selectedNode = nodes_.at(vertex);
+        auto & intermediateNode = nodes_.at(ret);
+
+        if (parentNode != nullptr && selectedNode != nullptr && intermediateNode != nullptr)
+        {
+            intermediateNode->parent = parentVertex;
+
+            intermediateNode->child = vertex;
+
+            selectedNode->parent = ret;
+        }
     }
 
     return ret;
@@ -992,10 +903,7 @@ htd::ConstCollection<htd::vertex_t> htd::Path::leaves(void) const
 
 htd::vertex_t htd::Path::leaf(void) const
 {
-    if (size_ == 0)
-    {
-        throw std::out_of_range("htd::vertex_t htd::Path::leaf(void) const");
-    }
+    HTD_ASSERT(size_ > 0)
 
     for (const auto & node : nodes_)
     {
@@ -1010,28 +918,16 @@ htd::vertex_t htd::Path::leaf(void) const
 
 htd::vertex_t htd::Path::leafAtPosition(htd::index_t index) const
 {
-    if (size_ == 0 || index >= 1)
-    {
-        throw std::out_of_range("htd::vertex_t htd::Path::leafAtPosition(htd::index_t) const");
-    }
+    HTD_ASSERT(size_ > 0 && index == 0)
 
     return leaf();
 }
 
 bool htd::Path::isLeaf(htd::vertex_t vertex) const
 {
-    bool ret = false;
+    HTD_ASSERT(isVertex(vertex))
 
-    if (isVertex(vertex))
-    {
-        ret = nodes_.at(vertex)->child == htd::Vertex::UNKNOWN;
-    }
-    else
-    {
-        throw std::out_of_range("bool htd::Path::isLeaf(htd::vertex_t) const");
-    }
-
-    return ret;
+    return nodes_.at(vertex)->child == htd::Vertex::UNKNOWN;
 }
 
 void htd::Path::deleteNode(htd::Path::Node * node)

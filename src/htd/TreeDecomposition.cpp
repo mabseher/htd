@@ -91,10 +91,7 @@ void htd::TreeDecomposition::removeVertex(htd::vertex_t vertex)
 
 void htd::TreeDecomposition::removeSubtree(htd::vertex_t subtreeRoot)
 {
-    if (!isVertex(subtreeRoot))
-    {
-        throw std::logic_error("void htd::TreeDecomposition::removeSubtree(htd::vertex_t)");
-    }
+    HTD_ASSERT(isVertex(subtreeRoot))
 
     htd::PostOrderTreeTraversal treeTraversal;
 

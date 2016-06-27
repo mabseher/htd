@@ -80,10 +80,7 @@ void htd::PathDecomposition::removeVertex(htd::vertex_t vertex)
 
 void htd::PathDecomposition::removeSubpath(htd::vertex_t subpathRoot)
 {
-    if (!isVertex(subpathRoot))
-    {
-        throw std::logic_error("void htd::PathDecomposition::removeSubpath(htd::vertex_t)");
-    }
+    HTD_ASSERT(isVertex(subpathRoot))
 
     htd::PostOrderTreeTraversal treeTraversal;
 
@@ -224,10 +221,7 @@ htd::vertex_t htd::PathDecomposition::joinNodeAtPosition(htd::index_t index) con
 
 bool htd::PathDecomposition::isJoinNode(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::out_of_range("bool htd::PathDecomposition::isJoinNode(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return false;
 }
@@ -405,20 +399,14 @@ std::size_t htd::PathDecomposition::bagSize(htd::vertex_t vertex) const
 
 std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::vertex_t vertex)
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::vertex_t)");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return bagContent_.at(vertex);
 }
 
 const std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::vertex_t vertex) const
 {
-    if (!isVertex(vertex))
-    {
-        throw std::logic_error("const std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::vertex_t) const");
-    }
+    HTD_ASSERT(isVertex(vertex))
 
     return bagContent_.at(vertex);
 }

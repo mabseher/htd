@@ -26,6 +26,7 @@
 #define	HTD_HTD_LABELCOLLECTION_CPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/LabelCollection.hpp>
 
 #include <algorithm>
@@ -61,32 +62,27 @@ htd::ConstCollection<std::string> htd::LabelCollection::labelNames(void) const
 
 const std::string & htd::LabelCollection::labelNameAtPosition(htd::index_t index) const
 {
-    if (index >= labelNames_.size())
-    {
-        throw std::out_of_range("const std::string & htd::LabelCollection::labelNameAtPosition(htd::index_t) const");
-    }
+    HTD_ASSERT(index < labelNames_.size())
 
     return labelNames_.at(index);
 }
 
 htd::ILabel & htd::LabelCollection::label(const std::string & labelName)
 {
-    if (content_.find(labelName) == content_.end())
-    {
-        throw std::out_of_range("htd::ILabel & htd::LabelCollection::label(const std::string &)");
-    }
+    auto position = content_.find(labelName);
 
-    return *(content_.at(labelName));
+    HTD_ASSERT(position != content_.end())
+
+    return *(position->second);
 }
 
 const htd::ILabel & htd::LabelCollection::label(const std::string & labelName) const
 {
-    if (content_.find(labelName) == content_.end())
-    {
-        throw std::out_of_range("const htd::ILabel & htd::LabelCollection::label(const std::string &) const");
-    }
+    auto position = content_.find(labelName);
 
-    return *(content_.at(labelName));
+    HTD_ASSERT(position != content_.end())
+
+    return *(position->second);
 }
 
 void htd::LabelCollection::setLabel(const std::string & labelName, htd::ILabel * label)

@@ -84,32 +84,27 @@ htd::ConstCollection<std::string> htd::LabelingCollection::labelNames(void) cons
 
 const std::string & htd::LabelingCollection::labelNameAtPosition(htd::index_t index) const
 {
-    if (index >= labelNames_.size())
-    {
-        throw std::out_of_range("const std::string & htd::LabelingCollection::labelNameAtPosition(htd::index_t) const");
-    }
+    HTD_ASSERT(index < labelNames_.size())
 
     return labelNames_[index];
 }
 
 htd::IGraphLabeling & htd::LabelingCollection::labeling(const std::string & labelName)
 {
-    if (content_.find(labelName) == content_.end())
-    {
-        throw std::logic_error("htd::IGraphLabeling & htd::LabelingCollection::label(const std::string &)");
-    }
+    auto position = content_.find(labelName);
 
-    return *(content_.at(labelName));
+    HTD_ASSERT(position != content_.end())
+
+    return *(position->second);
 }
 
 const htd::IGraphLabeling & htd::LabelingCollection::labeling(const std::string & labelName) const
 {
-    if (content_.find(labelName) == content_.end())
-    {
-        throw std::logic_error("const htd::IGraphLabeling & htd::LabelingCollection::label(const std::string &) const");
-    }
+    auto position = content_.find(labelName);
 
-    return *(content_.at(labelName));
+    HTD_ASSERT(position != content_.end())
+
+    return *(position->second);
 }
 
 bool htd::LabelingCollection::isLabelName(const std::string & labelName) const

@@ -61,17 +61,6 @@ TEST(LabelingCollectionTest, TestEmptyLabelingCollection)
     ASSERT_EQ((std::size_t)0, labelings.labelNames().size());
 
     ASSERT_EQ(0, std::distance(labelings.begin(), labelings.end()));
-
-    try
-    {
-        labelings.labelNameAtPosition(0);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error)
-    }
 }
 
 TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
@@ -99,28 +88,6 @@ TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
 
     ASSERT_TRUE(labelings.isLabelName("Label1"));
 
-    try
-    {
-        labelings.labelNameAtPosition(1);
-
-        FAIL();
-    }
-    catch (const std::out_of_range & error)
-    {
-        HTD_UNUSED(error)
-    }
-
-    try
-    {
-        labelings.labeling("Label2");
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
-
     const htd::ILabelingCollection & reference1 = labelings;
 
     htd::LabelingCollection labelings2(labelings);
@@ -131,17 +98,6 @@ TEST(LabelingCollectionTest, TestLabelingCollectionWithOneLabeling)
 
     ASSERT_EQ((std::size_t)0, reference1["Label1"].vertexLabelCount());
     ASSERT_EQ((std::size_t)0, reference1["Label1"].edgeLabelCount());
-
-    try
-    {
-        reference1.labeling("Label2");
-
-        FAIL();
-    }
-    catch (const std::logic_error & error)
-    {
-        HTD_UNUSED(error)
-    }
 
     ASSERT_EQ((std::size_t)0, labelings2.labeling("Label1").vertexLabelCount());
     ASSERT_EQ((std::size_t)0, labelings2.labeling("Label1").edgeLabelCount());

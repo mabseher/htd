@@ -157,40 +157,28 @@ void htd::LabeledTree::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
 
 void htd::LabeledTree::swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        throw std::logic_error("void htd::LabeledTree::swapVertexLabel(const std::string &, htd::vertex_t, htd::vertex_t)");
-    }
+    HTD_ASSERT(labelings_->isLabelName(labelName))
 
     labelings_->labeling(labelName).swapVertexLabels(vertex1, vertex2);
 }
 
 void htd::LabeledTree::swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        throw std::logic_error("void htd::LabeledTree::swapEdgeLabel(const std::string &, htd::id_t, htd::id_t)");
-    }
+    HTD_ASSERT(labelings_->isLabelName(labelName))
 
     labelings_->labeling(labelName).swapEdgeLabels(edgeId1, edgeId2);
 }
 
 htd::ILabel * htd::LabeledTree::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        throw std::logic_error("htd::ILabel * htd::LabeledTree::transferVertexLabel(const std::string &, htd::vertex_t)");
-    }
+    HTD_ASSERT(labelings_->isLabelName(labelName))
 
     return labelings_->labeling(labelName).transferVertexLabel(vertex);
 }
 
 htd::ILabel * htd::LabeledTree::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        throw std::logic_error("htd::ILabel * htd::LabeledTree::transferEdgeLabel(const std::string &, htd::id_t)");
-    }
+    HTD_ASSERT(labelings_->isLabelName(labelName))
 
     return labelings_->labeling(labelName).transferEdgeLabel(edgeId);
 }

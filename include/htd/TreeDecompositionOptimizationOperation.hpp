@@ -112,6 +112,12 @@ namespace htd
             htd::ITreeDecompositionFitnessFunction * fitnessFunction_;
 
             std::vector<htd::ITreeDecompositionManipulationOperation *> manipulationOperations_;
+
+            void quickOptimization(htd::IMutableTreeDecomposition & decomposition) const;
+
+            void naiveOptimization(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const;
+
+            void intelligentOptimization(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const;
     };
 }
 

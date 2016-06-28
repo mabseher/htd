@@ -322,6 +322,8 @@ htd::ConstCollection<htd::vertex_t> htd::Path::isolatedVertices(void) const
 
 htd::vertex_t htd::Path::isolatedVertexAtPosition(htd::index_t index) const
 {
+    HTD_UNUSED(index)
+
     HTD_ASSERT(size_ == 1 && index == 0)
 
     return root_;
@@ -626,6 +628,8 @@ htd::vertex_t htd::Path::child(htd::vertex_t vertex) const
 
 htd::vertex_t htd::Path::childAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
+    HTD_UNUSED(index)
+
     HTD_ASSERT(isVertex(vertex))
 
     htd::vertex_t child = nodes_.at(vertex)->child;
@@ -918,6 +922,8 @@ htd::vertex_t htd::Path::leaf(void) const
 
 htd::vertex_t htd::Path::leafAtPosition(htd::index_t index) const
 {
+    HTD_UNUSED(index)
+
     HTD_ASSERT(size_ > 0 && index == 0)
 
     return leaf();

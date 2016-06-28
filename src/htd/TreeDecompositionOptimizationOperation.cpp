@@ -65,6 +65,9 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
 //TODO Remove
 #include <htd/PreOrderTreeTraversal.hpp>
 
+//TODO Remove
+//#define VERBOSE
+
 void debug(const htd::ITreeDecomposition & decomposition)
 {
     htd::PreOrderTreeTraversal traversal;
@@ -88,18 +91,223 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
 {
     if (decomposition.vertexCount() > 0)
     {
+        htd::CompressionOperation compressionOperation;
+
+        compressionOperation.apply(decomposition);
+
+        for (const htd::ILabelingFunction * labelingFunction : labelingFunctions)
+        {
+            for (htd::vertex_t vertex : decomposition.vertices())
+            {
+                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(vertex);
+
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(vertex), *labelCollection);
+
+                delete labelCollection;
+
+                decomposition.setVertexLabel(labelingFunction->name(), vertex, newLabel);
+            }
+        }
+
+        if (manipulationOperations_.empty())
+        {
+            quickOptimization(decomposition);
+        }
+        else
+        {
+            naiveOptimization(decomposition, labelingFunctions);
+        }
+    }
+}
+
+void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    HTD_UNUSED(relevantVertices)
+
+    apply(decomposition, labelingFunctions);
+}
+
+void htd::TreeDecompositionOptimizationOperation::setManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations)
+{
+    manipulationOperations_.clear();
+
+    std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(manipulationOperations_));
+}
+
+void htd::TreeDecompositionOptimizationOperation::addManipulationOperation(htd::ITreeDecompositionManipulationOperation * manipulationOperation)
+{
+    manipulationOperations_.push_back(manipulationOperation);
+}
+
+void htd::TreeDecompositionOptimizationOperation::addManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations)
+{
+    std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(manipulationOperations_));
+}
+
+void htd::TreeDecompositionOptimizationOperation::setVertexSelectionStrategy(htd::IVertexSelectionStrategy * strategy)
+{
+    HTD_ASSERT(strategy != nullptr)
+
+    delete strategy_;
+
+    strategy_ = strategy;
+}
+
+void htd::TreeDecompositionOptimizationOperation::quickOptimization(htd::IMutableTreeDecomposition & decomposition) const
+{
+    const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
+
+    htd::vertex_t initialRoot = decomposition.root();
+
+    htd::vertex_t optimalRoot = initialRoot;
+
+    double optimalFitness = fitnessFunction.fitness(decomposition);
+
+    //TODO
+#ifdef VERBOSE
+    debug(decomposition);
+#endif
+
+    std::cout << "INITIAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
+
+    std::vector<htd::vertex_t> candidates;
+
+    strategy_->selectVertices(decomposition, candidates);
+
+    for (htd::vertex_t vertex : candidates)
+    {
+        if (vertex != initialRoot)
+        {
+            decomposition.makeRoot(vertex);
+        }
+
+#ifdef VERBOSE
+        //TODO
+        debug(decomposition);
+#endif
+
+        double currentFitness = fitnessFunction.fitness(decomposition);
+
+#ifdef VERBOSE
+        std::cout << "CURRENT FITNESS:     " << currentFitness << "   (ROOT: " << vertex << ")" << std::endl;
+#endif
+
+        if (currentFitness > optimalFitness)
+        {
+            optimalFitness = currentFitness;
+
+            optimalRoot = vertex;
+
+#ifdef VERBOSE
+            std::cout << "NEW OPTIMAL FITNESS: " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl;
+#endif
+        }
+
+#ifdef VERBOSE
+        std::cout << std::endl << std::endl << std::endl;
+#endif
+    }
+
+    std::cout << "OPTIMAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
+
+    decomposition.makeRoot(optimalRoot);
+}
+
+void htd::TreeDecompositionOptimizationOperation::naiveOptimization(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    if (decomposition.vertexCount() > 0)
+    {
         const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
 
-        if (!manipulationOperations_.empty())
+        htd::IMutableTreeDecomposition * localDecomposition = decomposition.clone();
+
+        for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
         {
-            htd::CompressionOperation compressionOperation;
+            operation->apply(*localDecomposition, labelingFunctions);
+        }
 
-            compressionOperation.apply(decomposition);
+        htd::vertex_t initialRoot = decomposition.root();
 
-            for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
+        htd::vertex_t optimalRoot = initialRoot;
+
+        double optimalFitness = fitnessFunction.fitness(*localDecomposition);
+
+#ifdef VERBOSE
+        //TODO
+        debug(*localDecomposition);
+#endif
+
+        std::cout << "INITIAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
+
+        std::vector<htd::vertex_t> candidates;
+
+        strategy_->selectVertices(decomposition, candidates);
+
+        for (htd::vertex_t vertex : candidates)
+        {
+            if (vertex != initialRoot)
             {
-                operation->apply(decomposition, labelingFunctions);
+                delete localDecomposition;
+
+                localDecomposition = decomposition.clone();
+
+                localDecomposition->makeRoot(vertex);
+
+                for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
+                {
+                    operation->apply(*localDecomposition, labelingFunctions);
+                }
+
+                //TODO
+#ifdef VERBOSE
+                debug(*localDecomposition);
+#endif
+
+                double currentFitness = fitnessFunction.fitness(*localDecomposition);
+
+#ifdef VERBOSE
+                std::cout << "CURRENT FITNESS:     " << currentFitness << "   (ROOT: " << vertex << ")" << std::endl;
+#endif
+
+                if (currentFitness > optimalFitness)
+                {
+                    optimalFitness = currentFitness;
+
+                    optimalRoot = vertex;
+
+#ifdef VERBOSE
+                    std::cout << "NEW OPTIMAL FITNESS: " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl;
+#endif
+                }
+
+#ifdef VERBOSE
+                std::cout << std::endl << std::endl << std::endl;
+#endif
             }
+        }
+
+        delete localDecomposition;
+
+        std::cout << "OPTIMAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
+
+        decomposition.makeRoot(optimalRoot);
+
+        for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
+        {
+            operation->apply(decomposition, labelingFunctions);
+        }
+    }
+}
+
+void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+{
+    if (decomposition.vertexCount() > 0)
+    {
+        const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
+
+        for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
+        {
+            operation->apply(decomposition, labelingFunctions);
         }
 
         htd::vertex_t initialRoot = decomposition.root();
@@ -176,39 +384,6 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
 
         decomposition.makeRoot(optimalRoot);
     }
-}
-
-void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
-{
-    HTD_UNUSED(relevantVertices)
-
-    apply(decomposition, labelingFunctions);
-}
-
-void htd::TreeDecompositionOptimizationOperation::setManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations)
-{
-    manipulationOperations_.clear();
-
-    std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(manipulationOperations_));
-}
-
-void htd::TreeDecompositionOptimizationOperation::addManipulationOperation(htd::ITreeDecompositionManipulationOperation * manipulationOperation)
-{
-    manipulationOperations_.push_back(manipulationOperation);
-}
-
-void htd::TreeDecompositionOptimizationOperation::addManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations)
-{
-    std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(manipulationOperations_));
-}
-
-void htd::TreeDecompositionOptimizationOperation::setVertexSelectionStrategy(htd::IVertexSelectionStrategy * strategy)
-{
-    HTD_ASSERT(strategy != nullptr)
-
-    delete strategy_;
-
-    strategy_ = strategy;
 }
 
 htd::TreeDecompositionOptimizationOperation * htd::TreeDecompositionOptimizationOperation::clone(void) const

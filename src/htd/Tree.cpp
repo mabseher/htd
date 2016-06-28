@@ -349,6 +349,8 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::isolatedVertices(void) const
 
 htd::vertex_t htd::Tree::isolatedVertexAtPosition(htd::index_t index) const
 {
+    HTD_UNUSED(index)
+
     HTD_ASSERT(size_ == 1 && index == 0)
 
     return root_;

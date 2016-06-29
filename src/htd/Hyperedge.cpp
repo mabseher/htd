@@ -235,6 +235,147 @@ void htd::Hyperedge::setId(htd::id_t newId)
     id_ = newId;
 }
 
+void htd::Hyperedge::setElements(htd::vertex_t vertex1, htd::vertex_t vertex2)
+{
+    elements_->clear();
+
+    elements_->push_back(vertex1);
+    elements_->push_back(vertex2);
+
+    sortedElements_->clear();
+
+    if (vertex1 < vertex2)
+    {
+        sortedElements_->reserve(2);
+
+        sortedElements_->push_back(vertex1);
+        sortedElements_->push_back(vertex2);
+    }
+    else if (vertex1 > vertex2)
+    {
+        sortedElements_->reserve(2);
+
+        sortedElements_->push_back(vertex2);
+        sortedElements_->push_back(vertex1);
+    }
+    else
+    {
+        sortedElements_->push_back(vertex1);
+    }
+}
+
+void htd::Hyperedge::setElements(const std::vector<htd::vertex_t> & elements)
+{
+    elements_->clear();
+
+    elements_->reserve(elements.size());
+
+    std::copy(elements.begin(), elements.end(), std::back_inserter(*elements_));
+
+    sortedElements_->reserve(elements.size());
+
+    switch (elements_->size())
+    {
+        case 0:
+        {
+            break;
+        }
+        case 1:
+        {
+            sortedElements_->push_back(elements_->at(0));
+
+            break;
+        }
+        case 2:
+        {
+            htd::vertex_t vertex1 = elements_->at(0);
+            htd::vertex_t vertex2 = elements_->at(1);
+
+            if (vertex1 < vertex2)
+            {
+                sortedElements_->push_back(vertex1);
+                sortedElements_->push_back(vertex2);
+            }
+            else if (vertex1 > vertex2)
+            {
+                sortedElements_->push_back(vertex2);
+                sortedElements_->push_back(vertex1);
+            }
+            else
+            {
+                sortedElements_->push_back(vertex1);
+            }
+
+            break;
+        }
+        default:
+        {
+            std::copy(elements_->begin(), elements_->end(), std::back_inserter(*sortedElements_));
+
+            std::sort(sortedElements_->begin(), sortedElements_->end());
+
+            sortedElements_->erase(std::unique(sortedElements_->begin(), sortedElements_->end()), sortedElements_->end());
+
+            break;
+        }
+    }
+}
+
+void htd::Hyperedge::setElements(std::vector<htd::vertex_t> && elements)
+{
+    elements_->swap(elements);
+
+    elements_->shrink_to_fit();
+
+    sortedElements_->reserve(elements_->size());
+
+    switch (elements_->size())
+    {
+        case 0:
+        {
+            break;
+        }
+        case 1:
+        {
+            sortedElements_->push_back(elements_->at(0));
+
+            break;
+        }
+        case 2:
+        {
+            htd::vertex_t vertex1 = elements_->at(0);
+            htd::vertex_t vertex2 = elements_->at(1);
+
+            if (vertex1 < vertex2)
+            {
+                sortedElements_->push_back(vertex1);
+                sortedElements_->push_back(vertex2);
+            }
+            else if (vertex1 > vertex2)
+            {
+                sortedElements_->push_back(vertex2);
+                sortedElements_->push_back(vertex1);
+            }
+            else
+            {
+                sortedElements_->push_back(vertex1);
+            }
+
+            break;
+        }
+        default:
+        {
+            std::copy(elements_->begin(), elements_->end(), std::back_inserter(*sortedElements_));
+
+            std::sort(sortedElements_->begin(), sortedElements_->end());
+
+            sortedElements_->erase(std::unique(sortedElements_->begin(), sortedElements_->end()), sortedElements_->end());
+
+            break;
+        }
+    }
+}
+
 const std::vector<htd::vertex_t> & htd::Hyperedge::elements() const
 {
     return *elements_;
@@ -324,9 +465,19 @@ bool htd::Hyperedge::operator==(const htd::Hyperedge & rhs) const
     return *(rhs.elements_) == *elements_;
 }
 
+bool htd::Hyperedge::operator==(const std::vector<htd::vertex_t> & rhs) const
+{
+    return rhs == *elements_;
+}
+
 bool htd::Hyperedge::operator!=(const htd::Hyperedge & rhs) const
 {
     return *(rhs.elements_) != *elements_;
+}
+
+bool htd::Hyperedge::operator!=(const std::vector<htd::vertex_t> & rhs) const
+{
+    return rhs != *elements_;
 }
 
 #endif /* HTD_HTD_HYPEREDGE_CPP */

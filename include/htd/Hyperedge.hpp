@@ -114,6 +114,28 @@ namespace htd
             void setId(htd::id_t newId);
 
             /**
+             *  Set the endpoints of the hyperedge.
+             *
+             *  @param[in] vertex1  The first endpoint of the updated hyperedge.
+             *  @param[in] vertex2  The second endpoint of the updated hyperedge.
+             */
+            void setElements(htd::vertex_t vertex1, htd::vertex_t vertex2);
+
+            /**
+             *  Set the endpoints of the hyperedge.
+             *
+             *  @param[in] elements The new endpoints of the updated hyperedge.
+             */
+            void setElements(const std::vector<htd::vertex_t> & elements);
+
+            /**
+             *  Set the endpoints of the hyperedge.
+             *
+             *  @param[in] elements The new endpoints of the updated hyperedge.
+             */
+            void setElements(std::vector<htd::vertex_t> && elements);
+
+            /**
              *  Getter for the elements of the hyperedge.
              *
              *  @return The elements of the hyperedge.
@@ -226,6 +248,15 @@ namespace htd
             bool operator==(const Hyperedge & rhs) const;
 
             /**
+             *  Equality operator for a hyperedge.
+             *
+             *  @param[in] rhs  The hyperedge elements at the right-hand side of the operator.
+             *
+             *  @return True if the vector returned by the elements() is equal to rhs, false otherwise.
+             */
+            bool operator==(const std::vector<htd::vertex_t> & rhs) const;
+
+            /**
              *  Inequality operator for a hyperedge.
              *
              *  @param[in] rhs  The hyperedge at the right-hand side of the operator.
@@ -233,6 +264,15 @@ namespace htd
              *  @return True if the vector returned by the elements() is unequal to rhs.elements(), false otherwise.
              */
             bool operator!=(const Hyperedge & rhs) const;
+
+            /**
+             *  Inequality operator for a hyperedge.
+             *
+             *  @param[in] rhs  The hyperedge elements at the right-hand side of the operator.
+             *
+             *  @return True if the vector returned by the elements() is unequal to rhs, false otherwise.
+             */
+            bool operator!=(const std::vector<htd::vertex_t> & rhs) const;
 
         private:
             htd::id_t id_;

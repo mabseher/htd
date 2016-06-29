@@ -221,6 +221,8 @@ htd::vertex_t htd::PathDecomposition::joinNodeAtPosition(htd::index_t index) con
 
 bool htd::PathDecomposition::isJoinNode(htd::vertex_t vertex) const
 {
+    HTD_UNUSED(vertex)
+
     HTD_ASSERT(isVertex(vertex))
 
     return false;

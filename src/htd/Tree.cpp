@@ -942,16 +942,43 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
 
         node->parent = newParent;
 
-        //TODO Optimize!
-        edges_->erase(std::remove_if(edges_->begin(), edges_->end(), [&](const htd::Hyperedge & edge) { return edge.contains(oldParent) && edge.contains(vertex); }), edges_->end());
+        std::vector<htd::vertex_t> oldEdge;
+        std::vector<htd::vertex_t> newEdge;
 
-        if (vertex < newParent)
+        if (vertex < oldParent)
         {
-            edges_->push_back(htd::Hyperedge(next_edge_, vertex, newParent));
+            oldEdge = std::vector<htd::vertex_t> { vertex, oldParent };
         }
         else
         {
-            edges_->push_back(htd::Hyperedge(next_edge_, newParent, vertex));
+            oldEdge = std::vector<htd::vertex_t> { oldParent, vertex };
+        }
+
+        if (vertex < newParent)
+        {
+            newEdge = std::vector<htd::vertex_t> { vertex, newParent };
+        }
+        else
+        {
+            newEdge = std::vector<htd::vertex_t> { newParent, vertex };
+        }
+
+        auto it = edges_->begin();
+
+        while (it != edges_->end())
+        {
+            if (*it == oldEdge)
+            {
+                it->setId(next_edge_);
+
+                it->setElements(newEdge);
+
+                it = edges_->end();
+            }
+            else
+            {
+                ++it;
+            }
         }
 
         ++next_edge_;

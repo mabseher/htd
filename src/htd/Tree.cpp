@@ -575,6 +575,8 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 
+    edges_->erase(std::remove_if(edges_->begin(), edges_->end(), [&](const htd::Hyperedge & edge) { return edge.contains(vertex); }), edges_->end());
+
     auto & node = *(nodes_.at(vertex));
 
     const auto & children = node.children;
@@ -714,8 +716,6 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
             }
         }
     }
-
-    edges_->erase(std::remove_if(edges_->begin(), edges_->end(), [&](const htd::Hyperedge & edge) { return edge.contains(vertex); }), edges_->end());
 }
 
 void htd::Tree::removeSubtree(htd::vertex_t subtreeRoot)
@@ -1041,33 +1041,24 @@ bool htd::Tree::isLeaf(htd::vertex_t vertex) const
 
 void htd::Tree::deleteNode(const std::unique_ptr<htd::Tree::Node> & node)
 {
-    if (node != nullptr)
+    HTD_ASSERT(node != nullptr)
+
+    auto & parent = node->parent;
+
+    htd::vertex_t vertex = node->id;
+
+    if (parent != htd::Vertex::UNKNOWN)
     {
-        auto & parent = node->parent;
-        
-        htd::vertex_t vertex = node->id;
+        auto & children = nodes_.at(parent)->children;
 
-        if (parent != htd::Vertex::UNKNOWN)
-        {
-            auto & children = nodes_.at(parent)->children;
-
-            children.erase(std::lower_bound(children.begin(), children.end(), vertex));
-
-            size_--;
-
-            nodes_.erase(vertex);
-
-            vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
-        }
-        else
-        {
-            size_--;
-
-            nodes_.erase(vertex);
-
-            vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
-        }
+        children.erase(std::lower_bound(children.begin(), children.end(), vertex));
     }
+
+    vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
+
+    nodes_.erase(vertex);
+
+    size_--;
 }
 
 htd::Tree * htd::Tree::clone(void) const

@@ -200,6 +200,11 @@ namespace htd
                 htd::vertex_t parent;
 
                 /**
+                 *  The collection of all edge identifiers containing the tree node.
+                 */
+                std::vector<htd::id_t> edges;
+
+                /**
                  *  The collection of all children of the tree node.
                  */
                 std::vector<htd::vertex_t> children;
@@ -210,7 +215,7 @@ namespace htd
                  *  @param[in] id       The ID of the constructed tree node.
                  *  @param[in] parent   The parent of the constructed tree node.
                  */
-                Node(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), children()
+                Node(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), edges(), children()
                 {
 
                 }
@@ -220,7 +225,7 @@ namespace htd
                  *
                  *  @param[in] original  The original tree node.
                  */
-                Node(const Node & original) : id(original.id), parent(original.parent), children(original.children)
+                Node(const Node & original) : id(original.id), parent(original.parent), edges(original.edges), children(original.children)
                 {
 
                 }
@@ -230,7 +235,7 @@ namespace htd
                  *
                  *  @param[in] original  The original tree node.
                  */
-                Node(Node && original) : id(original.id), parent(original.parent), children(std::move(original.children))
+                Node(Node && original) : id(original.id), parent(original.parent), edges(std::move(original.edges)), children(std::move(original.children))
                 {
 
                 }
@@ -289,6 +294,9 @@ namespace htd
              *  @param[in] signal   The signal which was received.
              */
             void handleSignal(int signal);
+
+            //TODO Remove!
+            void debug(void) const;
     };
 }
 

@@ -514,8 +514,6 @@ TEST(TreeTest, CheckTreeManipulations2)
     ASSERT_EQ((std::size_t)1, tree.vertexCount());
     ASSERT_EQ((std::size_t)0, tree.edgeCount());
 
-    std::cout << "XXX" << std::endl;
-
     tree.removeVertex(node2);
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());

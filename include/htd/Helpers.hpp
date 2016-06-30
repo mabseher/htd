@@ -702,6 +702,54 @@ namespace htd
         std::inplace_merge(set1.begin(), set1.begin() + mid, set1.end());
     }
 
+    /**
+     *  Getter for the position of a hyperedge within a collection of hyperedges sorted by ID in ascending order.
+     *
+     *  @param[in] first    An iterator to the start of the hyperedge collection.
+     *  @param[in] last     An iterator to the end of the hyperedge collection.
+     *  @param[in] id       The identifier of the desired hyperedge.
+     *
+     *  @return An iterator to the hyperedge within the given collection of hyperedges. If no
+     *  hyperedge with the given identifier is found, the result of this function is equal to
+     *  last.
+     */
+    template <class InputIterator>
+    InputIterator hyperedgePosition(InputIterator first, InputIterator last, htd::id_t id)
+    {
+        auto it = first;
+
+        typename std::iterator_traits<InputIterator>::difference_type count = std::distance(first, last);
+
+        typename std::iterator_traits<InputIterator>::difference_type step = count / 2;
+
+        while (count > 0)
+        {
+            it = first;
+
+            step = count / 2;
+
+            std::advance(it, step);
+
+            if (it->id() < id)
+            {
+                first = ++it;
+
+                count -= step+1;
+            }
+            else
+            {
+                count=step;
+            }
+        }
+
+        if (first != last && first->id() != id)
+        {
+            first = last;
+        }
+
+        return first;
+    }
+
     template <class Rep, class Period = std::ratio<1> >
     void printDuration(const std::chrono::duration<Rep, Period>& duration)
     {

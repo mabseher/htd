@@ -575,17 +575,26 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 
-    edges_->erase(std::remove_if(edges_->begin(), edges_->end(), [&](const htd::Hyperedge & edge) { return edge.contains(vertex); }), edges_->end());
+    Node & node = *(nodes_.at(vertex));
 
-    auto & node = *(nodes_.at(vertex));
+    for (auto it = node.edges.rbegin(); it != node.edges.rend(); ++it)
+    {
+        edges_->erase(htd::hyperedgePosition(edges_->begin(), edges_->end(), *it));
+    }
 
     const auto & children = node.children;
 
     if (node.parent != htd::Vertex::UNKNOWN)
     {
-        auto & parent = nodes_.at(node.parent);
+        Node & parentNode = *(nodes_.at(node.parent));
 
-        auto & siblings = parent->children;
+        auto & siblings = parentNode.children;
+
+        std::vector<htd::id_t> newParentEdges;
+
+        std::set_difference(parentNode.edges.begin(), parentNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newParentEdges));
+
+        parentNode.edges.swap(newParentEdges);
 
         switch (children.size())
         {
@@ -597,7 +606,9 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
             {
                 htd::vertex_t child = children[0];
 
-                nodes_.at(child)->parent = node.parent;
+                Node & childNode = *(nodes_.at(child));
+
+                childNode.parent = node.parent;
 
                 auto position = std::lower_bound(siblings.begin(), siblings.end(), child);
 
@@ -608,12 +619,22 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                 if (node.parent < child)
                 {
-                    edges_->push_back(htd::Hyperedge(next_edge_, node.parent, child));
+                    edges_->emplace_back(next_edge_, node.parent, child);
                 }
                 else
                 {
-                    edges_->push_back(htd::Hyperedge(next_edge_, child, node.parent));
+                    edges_->emplace_back(next_edge_, child, node.parent);
                 }
+
+                std::vector<htd::id_t> newChildEdges;
+
+                std::set_difference(childNode.edges.begin(), childNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newChildEdges));
+
+                newChildEdges.push_back(next_edge_);
+
+                childNode.edges.swap(newChildEdges);
+
+                parentNode.edges.push_back(next_edge_);
 
                 ++next_edge_;
 
@@ -623,7 +644,9 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
             {
                 for (htd::vertex_t child : children)
                 {
-                    nodes_.at(child)->parent = node.parent;
+                    Node & childNode = *(nodes_.at(child));
+
+                    childNode.parent = node.parent;
 
                     auto position = std::lower_bound(siblings.begin(), siblings.end(), child);
 
@@ -634,12 +657,22 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                     if (node.parent < child)
                     {
-                        edges_->push_back(htd::Hyperedge(next_edge_, node.parent, child));
+                        edges_->emplace_back(next_edge_, node.parent, child);
                     }
                     else
                     {
-                        edges_->push_back(htd::Hyperedge(next_edge_, child, node.parent));
+                        edges_->emplace_back(next_edge_, child, node.parent);
                     }
+
+                    std::vector<htd::id_t> newChildEdges;
+
+                    std::set_difference(childNode.edges.begin(), childNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newChildEdges));
+
+                    newChildEdges.push_back(next_edge_);
+
+                    childNode.edges.swap(newChildEdges);
+
+                    parentNode.edges.push_back(next_edge_);
 
                     ++next_edge_;
                 }
@@ -671,7 +704,15 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
             {
                 root_ = children[0];
 
-                nodes_.at(root_)->parent = htd::Vertex::UNKNOWN;
+                Node & rootNode = *(nodes_.at(root_));
+
+                rootNode.parent = htd::Vertex::UNKNOWN;
+
+                std::vector<htd::id_t> newRootEdges;
+
+                std::set_difference(rootNode.edges.begin(), rootNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newRootEdges));
+
+                rootNode.edges.swap(newRootEdges);
 
                 deleteNode(nodes_.at(vertex));
 
@@ -681,17 +722,25 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
             {
                 root_ = children[0];
 
-                auto & newRootNode = *(nodes_.at(root_));
+                Node & rootNode = *(nodes_.at(root_));
 
-                std::vector<htd::vertex_t> & newRootChildren = newRootNode.children;
+                std::vector<htd::vertex_t> & newRootChildren = rootNode.children;
 
-                newRootNode.parent = htd::Vertex::UNKNOWN;
+                rootNode.parent = htd::Vertex::UNKNOWN;
+
+                std::vector<htd::id_t> newRootEdges;
+
+                std::set_difference(rootNode.edges.begin(), rootNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newRootEdges));
+
+                rootNode.edges.swap(newRootEdges);
 
                 for (auto it = children.begin() + 1; it != children.end(); ++it)
                 {
                     htd::vertex_t child = *it;
 
-                    nodes_.at(child)->parent = root_;
+                    Node & childNode = *(nodes_.at(child));
+
+                    childNode.parent = root_;
 
                     auto position = std::lower_bound(newRootChildren.begin(), newRootChildren.end(), child);
 
@@ -702,12 +751,24 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                     if (root_ < child)
                     {
-                        edges_->push_back(htd::Hyperedge(next_edge_, root_, child));
+                        edges_->emplace_back(next_edge_, root_, child);
                     }
                     else
                     {
-                        edges_->push_back(htd::Hyperedge(next_edge_, child, root_));
+                        edges_->emplace_back(next_edge_, child, root_);
                     }
+
+                    std::vector<htd::id_t> newChildEdges;
+
+                    std::set_difference(childNode.edges.begin(), childNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newChildEdges));
+
+                    newChildEdges.push_back(next_edge_);
+
+                    childNode.edges.swap(newChildEdges);
+
+                    rootNode.edges.push_back(next_edge_);
+
+                    ++next_edge_;
                 }
 
                 deleteNode(nodes_.at(vertex));
@@ -716,6 +777,9 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
             }
         }
     }
+
+    //std::cout << "removeVertex" << std::endl;
+    debug();
 }
 
 void htd::Tree::removeSubtree(htd::vertex_t subtreeRoot)
@@ -798,11 +862,11 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
 
-    auto & node = nodes_.at(vertex);
+    Node & node = *(nodes_.at(vertex));
 
     ret = next_vertex_;
 
-    node->children.push_back(ret);
+    node.children.push_back(ret);
 
     nodes_.insert(std::make_pair(ret, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(ret, vertex))));
 
@@ -814,8 +878,15 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
     edges_->push_back(htd::Hyperedge(next_edge_, vertex, ret));
 
+    node.edges.push_back(next_edge_);
+
+    nodes_.at(ret)->edges.push_back(next_edge_);
+
     ++next_edge_;
-    
+
+    //std::cout << "addChild" << std::endl;
+    debug();
+
     return ret;
 }
 
@@ -885,6 +956,33 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
         auto & selectedNode = nodes_.at(vertex);
         auto & intermediateNode = nodes_.at(ret);
 
+        htd::id_t oldHyperedge = htd::Id::UNKNOWN;
+
+        auto it = selectedNode->edges.begin();
+
+        while (it != selectedNode->edges.end())
+        {
+            auto position = htd::hyperedgePosition(edges_->begin(), edges_->end(), *it);
+
+            HTD_ASSERT(position != edges_->end())
+
+            if (position->contains(parentVertex))
+            {
+                oldHyperedge = position->id();
+
+                edges_->erase(position);
+
+                it = selectedNode->edges.end();
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        parentNode->edges.erase(std::lower_bound(parentNode->edges.begin(), parentNode->edges.end(), oldHyperedge));
+        selectedNode->edges.erase(std::lower_bound(selectedNode->edges.begin(), selectedNode->edges.end(), oldHyperedge));
+
         intermediateNode->parent = parentVertex;
 
         intermediateNode->children.push_back(vertex);
@@ -899,9 +997,15 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
         selectedNode->parent = ret;
     }
 
-    edges_->push_back(htd::Hyperedge(next_edge_, vertex, ret));
+    edges_->emplace_back(next_edge_, vertex, ret);
+
+    nodes_.at(vertex)->edges.push_back(next_edge_);
+    nodes_.at(ret)->edges.push_back(next_edge_);
 
     ++next_edge_;
+
+    //std::cout << "addParent" << std::endl;
+    debug();
 
     return ret;
 }
@@ -918,6 +1022,7 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
 
     if (oldParent != newParent)
     {
+        auto & oldParentNode = nodes_.at(node->parent);
         auto & newParentNode = nodes_.at(newParent);
 
         if (isRoot(vertex))
@@ -926,33 +1031,47 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
         }
         else
         {
-            auto & parentNode = nodes_.at(node->parent);
+            oldParentNode->children.erase(std::find(oldParentNode->children.begin(), oldParentNode->children.end(), vertex));
+        }
 
-            auto position = std::find(parentNode->children.begin(), parentNode->children.end(), vertex);
+        htd::id_t oldHyperedge = htd::Id::UNKNOWN;
 
-            if (position != parentNode->children.end())
+        auto it = oldParentNode->edges.begin();
+
+        while (it != oldParentNode->edges.end())
+        {
+            auto position = htd::hyperedgePosition(edges_->begin(), edges_->end(), *it);
+
+            HTD_ASSERT(position != edges_->end())
+
+            if (position->contains(vertex))
             {
-                parentNode->children.erase(position);
+                oldHyperedge = position->id();
+
+                edges_->erase(position);
+
+                it = oldParentNode->edges.end();
+            }
+            else
+            {
+                ++it;
             }
         }
+
+        node->edges.erase(std::lower_bound(node->edges.begin(), node->edges.end(), oldHyperedge));
+        oldParentNode->edges.erase(std::lower_bound(oldParentNode->edges.begin(), oldParentNode->edges.end(), oldHyperedge));
 
         auto position = std::lower_bound(newParentNode->children.begin(), newParentNode->children.end(), vertex);
 
         newParentNode->children.insert(position, vertex);
 
+        newParentNode->edges.push_back(next_edge_);
+
+        node->edges.push_back(next_edge_);
+
         node->parent = newParent;
 
-        std::vector<htd::vertex_t> oldEdge;
         std::vector<htd::vertex_t> newEdge;
-
-        if (vertex < oldParent)
-        {
-            oldEdge = std::vector<htd::vertex_t> { vertex, oldParent };
-        }
-        else
-        {
-            oldEdge = std::vector<htd::vertex_t> { oldParent, vertex };
-        }
 
         if (vertex < newParent)
         {
@@ -963,26 +1082,13 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
             newEdge = std::vector<htd::vertex_t> { newParent, vertex };
         }
 
-        auto it = edges_->begin();
-
-        while (it != edges_->end())
-        {
-            if (*it == oldEdge)
-            {
-                it->setId(next_edge_);
-
-                it->setElements(newEdge);
-
-                it = edges_->end();
-            }
-            else
-            {
-                ++it;
-            }
-        }
+        edges_->emplace_back(next_edge_, std::move(newEdge));
 
         ++next_edge_;
     }
+
+    //std::cout << "setParent" << std::endl;
+    debug();
 }
 
 std::size_t htd::Tree::leafCount(void) const
@@ -1181,6 +1287,43 @@ void htd::Tree::handleSignal(int signal)
     HTD_UNUSED(signal)
 
     removeSubtree(root_);
+}
+
+void htd::Tree::debug(void) const
+{
+    /*
+    std::cout << "DEBUG:" << std::endl;
+
+    for (htd::vertex_t vertex : vertices_)
+    {
+        Node & node = *(nodes_.at(vertex));
+
+        htd::id_t lastId = htd::Id::UNKNOWN;
+
+        std::cout << "NODE: " << vertex << std::endl;
+        for (htd::id_t edgeId : node.edges)
+        {
+            const htd::Hyperedge & hyperedge = *(htd::hyperedgePosition(edges_->begin(), edges_->end(), edgeId));
+
+            std::cout << "   " << edgeId << "   ID: " << hyperedge.id() << "   " << hyperedge.elements() << std::endl;
+
+            if (!hyperedge.contains(vertex))
+            {
+                throw std::logic_error("ERROR!!! INVALID");
+            }
+
+            if (edgeId == lastId)
+            {
+                throw std::logic_error("ERROR!!! DUPLICATE");
+            }
+
+            lastId = edgeId;
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << std::endl;
+    */
 }
 
 #endif /* HTD_HTD_TREE_CPP */

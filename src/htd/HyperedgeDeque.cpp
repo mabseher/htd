@@ -38,7 +38,7 @@ htd::HyperedgeDeque::HyperedgeDeque(std::deque<htd::Hyperedge> && baseCollection
 
 }
 
-htd::HyperedgeDeque::HyperedgeDeque(std::shared_ptr<std::deque<htd::Hyperedge>> baseCollection) : baseCollection_(baseCollection)
+htd::HyperedgeDeque::HyperedgeDeque(const std::shared_ptr<std::deque<htd::Hyperedge>> & baseCollection) : baseCollection_(baseCollection)
 {
 
 }

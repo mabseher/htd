@@ -38,7 +38,7 @@ htd::HyperedgeVector::HyperedgeVector(std::vector<htd::Hyperedge> && baseCollect
 
 }
 
-htd::HyperedgeVector::HyperedgeVector(std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection) : baseCollection_(baseCollection)
+htd::HyperedgeVector::HyperedgeVector(const std::shared_ptr<std::vector<htd::Hyperedge>> & baseCollection) : baseCollection_(baseCollection)
 {
 
 }

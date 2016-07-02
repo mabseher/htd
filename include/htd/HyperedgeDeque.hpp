@@ -58,7 +58,7 @@ namespace htd
              *
              *  @param[in] baseCollection   The underlying hyperedge collection.
              */
-            HyperedgeDeque(std::shared_ptr<std::deque<htd::Hyperedge>> baseCollection);
+            HyperedgeDeque(const std::shared_ptr<std::deque<htd::Hyperedge>> & baseCollection);
 
             /**
              *  Copy constructor for a HyperedgeDeque object.

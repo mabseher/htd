@@ -58,7 +58,7 @@ namespace htd
              *
              *  @param[in] baseCollection   The underlying hyperedge collection.
              */
-            HyperedgeVector(std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection);
+            HyperedgeVector(const std::shared_ptr<std::vector<htd::Hyperedge>> & baseCollection);
 
             /**
              *  Copy constructor for a HyperedgeVector object.

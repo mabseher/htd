@@ -42,6 +42,8 @@ namespace htd
              */
             typedef htd::Hyperedge value_type;
 
+            virtual ~IHyperedgeCollection() = 0;
+
             /**
              *  Check whether the collection is emtpy.
              *
@@ -113,6 +115,8 @@ namespace htd
              */
             virtual IHyperedgeCollection * clone(void) const = 0;
     };
+
+    inline htd::IHyperedgeCollection::~IHyperedgeCollection() { }
 }
 
 #endif /* HTD_HTD_IHYPEREDGECOLLECTION_HPP */

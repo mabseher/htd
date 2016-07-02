@@ -29,6 +29,7 @@
 
 #include <htd/Hyperedge.hpp>
 #include <htd/ConstCollection.hpp>
+#include <htd/IHyperedgeCollection.hpp>
 
 #include <array>
 #include <memory>
@@ -221,7 +222,7 @@ namespace htd
                     const htd::Hyperedge & operator*(void) const;
 
                 private:
-                    std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection_;
+                    std::shared_ptr<htd::IHyperedgeCollection> baseCollection_;
 
                     std::shared_ptr<std::vector<htd::index_t>> relevantIndices_;
 
@@ -236,34 +237,26 @@ namespace htd
             /**
              *  Constructor for a FilteredHyperedgeCollection.
              *
-             *  @param[in] baseCollection   The underlying hyperedge collection.
+             *  @param[in] baseCollection   A pointer to a wrapper of the underlying hyperedge collection.
              *  @param[in] relevantIndices  The relevant indices within the hyperedge collection.
+             *
+             *  @note When calling this constructor the control over the pointer to the wrapper of the base collection
+             *  is taken over by the hyperedge collection. The pointer of the provided wrapper of the base collection
+             *  must not be freed outside the context of the hyperedge collection.
              */
-            FilteredHyperedgeCollection(const std::vector<htd::Hyperedge> & baseCollection, const std::vector<htd::index_t> & relevantIndices);
+            FilteredHyperedgeCollection(htd::IHyperedgeCollection * baseCollection, const std::vector<htd::index_t> & relevantIndices);
 
             /**
              *  Constructor for a FilteredHyperedgeCollection.
              *
-             *  @param[in] baseCollection   The underlying hyperedge collection.
+             *  @param[in] baseCollection   A pointer to a wrapper of the underlying hyperedge collection.
              *  @param[in] relevantIndices  The relevant indices within the hyperedge collection.
-             */
-            FilteredHyperedgeCollection(std::vector<htd::Hyperedge> && baseCollection, std::vector<htd::index_t> && relevantIndices);
-
-            /**
-             *  Constructor for a FilteredHyperedgeCollection.
              *
-             *  @param[in] baseCollection   The underlying hyperedge collection.
-             *  @param[in] relevantIndices  The relevant indices within the hyperedge collection.
+             *  @note When calling this constructor the control over the pointer to the wrapper of the base collection
+             *  is taken over by the hyperedge collection. The pointer of the provided wrapper of the base collection
+             *  must not be freed outside the context of the hyperedge collection.
              */
-            FilteredHyperedgeCollection(std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection, const std::vector<htd::index_t> & relevantIndices);
-
-            /**
-             *  Constructor for a FilteredHyperedgeCollection.
-             *
-             *  @param[in] baseCollection   The underlying hyperedge collection.
-             *  @param[in] relevantIndices  The relevant indices within the hyperedge collection.
-             */
-            FilteredHyperedgeCollection(std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection, std::vector<htd::index_t> && relevantIndices);
+            FilteredHyperedgeCollection(htd::IHyperedgeCollection * baseCollection, std::vector<htd::index_t> && relevantIndices);
 
             /**
              *  Copy constructor for a FilteredHyperedgeCollection object.
@@ -345,7 +338,7 @@ namespace htd
             void restrictTo(const std::vector<htd::vertex_t> & vertices);
 
         private:
-            std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection_;
+            std::shared_ptr<htd::IHyperedgeCollection> baseCollection_;
 
             std::shared_ptr<std::vector<htd::index_t>> relevantIndices_;
     };

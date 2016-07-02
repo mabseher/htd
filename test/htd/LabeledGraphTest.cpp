@@ -433,7 +433,7 @@ TEST(LabeledGraphTest, CheckCopyConstructors)
 {
     htd::Hyperedge h1(1, 1, 2);
 
-    htd::FilteredHyperedgeCollection hyperedges1(std::vector<htd::Hyperedge> { h1 }, std::vector<htd::index_t> { 0 });
+    htd::FilteredHyperedgeCollection hyperedges1(new htd::HyperedgeVector(std::vector<htd::Hyperedge> { h1 }), std::vector<htd::index_t> { 0 });
 
     htd::LabeledGraph graph1;
 

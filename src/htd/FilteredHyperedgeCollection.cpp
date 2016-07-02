@@ -29,31 +29,22 @@
 #include <htd/Helpers.hpp>
 
 #include <htd/FilteredHyperedgeCollection.hpp>
+#include <htd/HyperedgeVector.hpp>
 
 #include <algorithm>
 #include <stdexcept>
 
-htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(void) : baseCollection_(std::make_shared<std::vector<htd::Hyperedge>>()), relevantIndices_(std::make_shared<std::vector<htd::index_t>>())
+htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(void) : baseCollection_(new htd::HyperedgeVector(std::make_shared<std::vector<htd::Hyperedge>>())), relevantIndices_(std::make_shared<std::vector<htd::index_t>>())
 {
 
 }
 
-htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(const std::vector<htd::Hyperedge> & baseCollection, const std::vector<htd::index_t> & relevantIndices) : baseCollection_(std::make_shared<std::vector<htd::Hyperedge>>(baseCollection)), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(relevantIndices))
+htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(htd::IHyperedgeCollection * baseCollection, const std::vector<htd::index_t> & relevantIndices) : baseCollection_(baseCollection), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(relevantIndices))
 {
 
 }
 
-htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(std::vector<htd::Hyperedge> && baseCollection, std::vector<htd::index_t> && relevantIndices) : baseCollection_(std::make_shared<std::vector<htd::Hyperedge>>(std::move(baseCollection))), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(std::move(relevantIndices)))
-{
-
-}
-
-htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection, const std::vector<htd::index_t> & relevantIndices) : baseCollection_(baseCollection), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(relevantIndices))
-{
-
-}
-
-htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection, std::vector<htd::index_t> && relevantIndices) : baseCollection_(baseCollection), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(std::move(relevantIndices)))
+htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(htd::IHyperedgeCollection * baseCollection, std::vector<htd::index_t> && relevantIndices) : baseCollection_(baseCollection), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(std::move(relevantIndices)))
 {
 
 }

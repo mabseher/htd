@@ -30,6 +30,7 @@
 #include <htd/Path.hpp>
 #include <htd/PostOrderTreeTraversal.hpp>
 #include <htd/VectorAdapter.hpp>
+#include <htd/HyperedgeVector.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -506,7 +507,7 @@ htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(const std::vec
         }
     }
 
-    return htd::FilteredHyperedgeCollection(hyperedges, indices);
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(hyperedges), indices);
 }
 
 htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
@@ -551,7 +552,7 @@ htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(std::vector<ht
         }
     }
 
-    return htd::FilteredHyperedgeCollection(hyperedges, std::move(indices));
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(hyperedges), std::move(indices));
 }
 
 htd::vertex_t htd::Path::root(void) const

@@ -31,19 +31,19 @@
 #include <htd/VectorAdapter.hpp>
 #include <htd/PreOrderTreeTraversal.hpp>
 #include <htd/PostOrderTreeTraversal.hpp>
+#include <htd/HyperedgeDeque.hpp>
 
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
 #include <utility>
-#include <deque>
 
-htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::vector<htd::Hyperedge>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
 
 }
 
-htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), edges_(std::make_shared<std::vector<htd::Hyperedge>>(*(original.edges_))), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge>>(*(original.edges_))), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
     nodes_.reserve(original.nodes_.size());
     
@@ -53,7 +53,7 @@ htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(origi
     }
 }
 
-htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Vertex::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::vector<htd::Hyperedge>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Vertex::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
     *this = original;
 }
@@ -445,7 +445,7 @@ htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(const std::vec
     }
     #endif
 
-    return htd::FilteredHyperedgeCollection(edges_, indices);
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgeDeque(edges_), indices);
 }
 
 htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
@@ -457,7 +457,7 @@ htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(std::vector<ht
     }
     #endif
 
-    return htd::FilteredHyperedgeCollection(edges_, std::move(indices));
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgeDeque(edges_), std::move(indices));
 }
 
 htd::vertex_t htd::Tree::root(void) const
@@ -1205,7 +1205,7 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
             next_vertex_ = htd::Vertex::FIRST;
         }
 
-        edges_ = std::make_shared<std::vector<htd::Hyperedge>>(*(original.edges_));
+        edges_ = std::make_shared<std::deque<htd::Hyperedge>>(*(original.edges_));
 
         next_edge_ = original.next_edge_;
     }
@@ -1270,7 +1270,7 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
 
             const htd::ConstCollection<htd::Hyperedge> & originalEdges = original.hyperedges();
 
-            edges_ = std::make_shared<std::vector<htd::Hyperedge>>(originalEdges.begin(), originalEdges.end());
+            edges_ = std::make_shared<std::deque<htd::Hyperedge>>(originalEdges.begin(), originalEdges.end());
 
             if (!edges_->empty())
             {

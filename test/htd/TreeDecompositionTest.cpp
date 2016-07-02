@@ -975,8 +975,8 @@ TEST(TreeDecompositionTest, CheckInducedHyperedges1)
 
     std::vector<htd::Hyperedge> inputEdges1 { h1, h2, h3 };
 
-    htd::FilteredHyperedgeCollection hyperedges1(inputEdges1, std::vector<htd::index_t> { 0, 1, 2 });
-    htd::FilteredHyperedgeCollection hyperedges2(inputEdges1, std::vector<htd::index_t> { 2, 1, 0 });
+    htd::FilteredHyperedgeCollection hyperedges1(new htd::HyperedgeVector(inputEdges1), std::vector<htd::index_t> { 0, 1, 2 });
+    htd::FilteredHyperedgeCollection hyperedges2(new htd::HyperedgeVector(inputEdges1), std::vector<htd::index_t> { 2, 1, 0 });
 
     td.inducedHyperedges(node1) = hyperedges1;
 

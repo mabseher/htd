@@ -29,6 +29,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/MultiHypergraph.hpp>
 #include <htd/VectorAdapter.hpp>
+#include <htd/HyperedgeVector.hpp>
 
 #include <algorithm>
 #include <array>
@@ -536,12 +537,12 @@ const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t in
 
 htd::FilteredHyperedgeCollection htd::MultiHypergraph::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
 {
-    return htd::FilteredHyperedgeCollection(edges_, indices);
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(edges_), indices);
 }
 
 htd::FilteredHyperedgeCollection htd::MultiHypergraph::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
 {
-    return htd::FilteredHyperedgeCollection(edges_, std::move(indices));
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(edges_), std::move(indices));
 }
 
 htd::vertex_t htd::MultiHypergraph::addVertex(void)
@@ -641,7 +642,7 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t ver
 {
     HTD_ASSERT(isVertex(vertex1) && isVertex(vertex2))
 
-    edges_->push_back(htd::Hyperedge(next_edge_, vertex1, vertex2));
+    edges_->emplace_back(next_edge_, vertex1, vertex2);
 
     if (vertex1 == vertex2)
     {
@@ -694,7 +695,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
         {
             HTD_ASSERT(isVertex(elements[0]))
 
-            edges_->push_back(htd::Hyperedge(next_edge_, std::move(elements)));
+            edges_->emplace_back(next_edge_, std::move(elements));
 
             return next_edge_++;
         }
@@ -728,7 +729,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
     sortedElements.erase(position, sortedElements.end());
 
-    edges_->push_back(htd::Hyperedge(next_edge_, std::move(elements)));
+    edges_->emplace_back(next_edge_, std::move(elements));
 
     std::vector<htd::vertex_t> newNeighborhood;
 
@@ -768,7 +769,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
         {
             HTD_ASSERT(isVertex(hyperedge[0]))
 
-            edges_->push_back(htd::Hyperedge(next_edge_, hyperedge.elements()));
+            edges_->emplace_back(next_edge_, hyperedge.elements());
 
             return next_edge_++;
         }
@@ -789,7 +790,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
         HTD_ASSERT(isVertex(vertex));
     }
 
-    edges_->push_back(htd::Hyperedge(next_edge_, hyperedge.elements()));
+    edges_->emplace_back(next_edge_, hyperedge.elements());
 
     std::vector<htd::vertex_t> sortedElements(hyperedge.begin(), hyperedge.end());
 
@@ -837,11 +838,9 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
         {
             HTD_ASSERT(isVertex(hyperedge[0]))
 
-            htd::Hyperedge newHyperedge(std::move(hyperedge));
+            hyperedge.setId(next_edge_);
 
-            newHyperedge.setId(next_edge_);
-
-            edges_->push_back(newHyperedge);
+            edges_->emplace_back(std::move(hyperedge));
 
             return next_edge_++;
         }

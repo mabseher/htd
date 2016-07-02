@@ -100,8 +100,8 @@ TEST(FilteredHyperedgeCollectionTest, TestConstructors)
     inputEdges3->push_back(h4);
     inputEdges3->push_back(h5);
 
-    htd::FilteredHyperedgeCollection hyperedges1(inputEdges1, std::vector<htd::index_t> { 1, 3, 3, 2 });
-    htd::FilteredHyperedgeCollection hyperedges2(inputEdges2, std::vector<htd::index_t> { 1, 3, 2, 3 });
+    htd::FilteredHyperedgeCollection hyperedges1(new htd::HyperedgeVector(inputEdges1), std::vector<htd::index_t> { 1, 3, 3, 2 });
+    htd::FilteredHyperedgeCollection hyperedges2(new htd::HyperedgeVector(inputEdges2), std::vector<htd::index_t> { 1, 3, 2, 3 });
 
     ASSERT_EQ((std::size_t)4, hyperedges1.size());
     ASSERT_EQ((std::size_t)4, hyperedges2.size());
@@ -116,7 +116,7 @@ TEST(FilteredHyperedgeCollectionTest, TestConstructors)
     ASSERT_TRUE(hyperedges2 != hyperedges1);
     ASSERT_FALSE(hyperedges2 != hyperedges2);
 
-    htd::FilteredHyperedgeCollection hyperedges3(std::vector<htd::Hyperedge> { h1, h2, h3, h4 }, std::vector<htd::index_t> { 1, 3, 2, 3, 0 });
+    htd::FilteredHyperedgeCollection hyperedges3(new htd::HyperedgeVector(std::vector<htd::Hyperedge> { h1, h2, h3, h4 }), std::vector<htd::index_t> { 1, 3, 2, 3, 0 });
 
     ASSERT_EQ((std::size_t)5, hyperedges3.size());
 
@@ -132,7 +132,7 @@ TEST(FilteredHyperedgeCollectionTest, TestConstructors)
 
     std::vector<htd::index_t> indices4 { 0, 1 };
 
-    htd::FilteredHyperedgeCollection hyperedges4(std::vector<htd::Hyperedge> { h1, h2, h3, h4 }, indices4);
+    htd::FilteredHyperedgeCollection hyperedges4(new htd::HyperedgeVector(std::vector<htd::Hyperedge> { h1, h2, h3, h4 }), indices4);
 
     ASSERT_EQ((std::size_t)2, hyperedges4.size());
 
@@ -169,7 +169,7 @@ TEST(FilteredHyperedgeCollectionTest, TestConstructors)
 
     ASSERT_EQ(5, std::distance(hyperedges6.begin(), hyperedges6.end()));
 
-    htd::FilteredHyperedgeCollection hyperedges7(inputEdges3, std::vector<htd::index_t> { 1, 3, 2, 3 });
+    htd::FilteredHyperedgeCollection hyperedges7(new htd::HyperedgeVector(inputEdges3), std::vector<htd::index_t> { 1, 3, 2, 3 });
 
     ASSERT_EQ((std::size_t)4, hyperedges7.size());
 
@@ -194,8 +194,7 @@ TEST(FilteredHyperedgeCollectionTest, TestIterators)
 
     std::vector<htd::Hyperedge> inputEdges1 { h1, h2, h3, h4, h5 };
 
-    htd::FilteredHyperedgeCollection hyperedges1(inputEdges1, std::vector<htd::index_t> { 1, 3, 3, 2, 0, 4 });
-    htd::FilteredHyperedgeCollection hyperedges2(inputEdges1, std::vector<htd::index_t> { 1, 3, 3, 2, 0, 4 });
+    htd::FilteredHyperedgeCollection hyperedges1(new htd::HyperedgeVector(inputEdges1), std::vector<htd::index_t> { 1, 3, 3, 2, 0, 4 });
 
     ASSERT_EQ(6, std::distance(hyperedges1.begin(), hyperedges1.end()));
 
@@ -300,7 +299,7 @@ TEST(FilteredHyperedgeCollectionTest, TestRestriction)
 
     std::vector<htd::Hyperedge> inputEdges1 { h1, h2, h3, h4, h5 };
 
-    htd::FilteredHyperedgeCollection hyperedges1(inputEdges1, std::vector<htd::index_t> { 0, 1, 2, 3, 4 });
+    htd::FilteredHyperedgeCollection hyperedges1(new htd::HyperedgeVector(inputEdges1), std::vector<htd::index_t> { 0, 1, 2, 3, 4 });
 
     htd::FilteredHyperedgeCollection hyperedges2(hyperedges1);
 

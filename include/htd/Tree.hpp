@@ -32,6 +32,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <deque>
 
 namespace htd
 {
@@ -274,7 +275,7 @@ namespace htd
             /**
              *  The collection of all hyperedges which exist in the tree.
              */
-            std::shared_ptr<std::vector<htd::Hyperedge>> edges_;
+            std::shared_ptr<std::deque<htd::Hyperedge>> edges_;
 
             /**
              *  The ID of the signal handler associated to the tree.

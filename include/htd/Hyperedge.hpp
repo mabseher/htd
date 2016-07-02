@@ -277,9 +277,9 @@ namespace htd
         private:
             htd::id_t id_;
 
-            std::shared_ptr<std::vector<htd::vertex_t>> elements_;
+            std::unique_ptr<std::vector<htd::vertex_t>> elements_;
 
-            std::shared_ptr<std::vector<htd::vertex_t>> sortedElements_;
+            std::unique_ptr<std::vector<htd::vertex_t>> sortedElements_;
     };
 }
 

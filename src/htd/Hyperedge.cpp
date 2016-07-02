@@ -27,7 +27,7 @@
 
 #include <htd/Hyperedge.hpp>
 
-htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT : id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>(std::initializer_list<htd::vertex_t> { vertex1, vertex2 })), sortedElements_(std::make_shared<std::vector<htd::vertex_t>>())
+htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT : id_(id), elements_(new std::vector<htd::vertex_t>(std::initializer_list<htd::vertex_t> { vertex1, vertex2 })), sortedElements_(new std::vector<htd::vertex_t>())
 {
     if (vertex1 < vertex2)
     {
@@ -49,7 +49,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t ver
     }
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements) : id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>(elements.begin(), elements.end())), sortedElements_(std::make_shared<std::vector<htd::vertex_t>>())
+htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements) : id_(id), elements_(new std::vector<htd::vertex_t>(elements.begin(), elements.end())), sortedElements_(new std::vector<htd::vertex_t>())
 {
     elements_->shrink_to_fit();
 
@@ -102,7 +102,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & eleme
     }
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>()), sortedElements_(std::make_shared<std::vector<htd::vertex_t>>())
+htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : id_(id), elements_(new std::vector<htd::vertex_t>()), sortedElements_(new std::vector<htd::vertex_t>())
 {
     elements_->swap(elements);
 
@@ -157,7 +157,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) 
     }
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements) : id_(id), elements_(std::make_shared<std::vector<htd::vertex_t>>(elements.begin(), elements.end())), sortedElements_(std::make_shared<std::vector<htd::vertex_t>>())
+htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements) : id_(id), elements_(new std::vector<htd::vertex_t>(elements.begin(), elements.end())), sortedElements_(new std::vector<htd::vertex_t>())
 {
     elements_->shrink_to_fit();
 
@@ -210,7 +210,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t
     }
 }
 
-htd::Hyperedge::Hyperedge(const htd::Hyperedge & original) : id_(original.id_), elements_(original.elements_), sortedElements_(original.sortedElements_)
+htd::Hyperedge::Hyperedge(const htd::Hyperedge & original) : id_(original.id_), elements_(new std::vector<htd::vertex_t>(*(original.elements_))), sortedElements_(new std::vector<htd::vertex_t>(*(original.sortedElements_)))
 {
 
 }
@@ -403,8 +403,8 @@ bool htd::Hyperedge::contains(htd::vertex_t vertex) const
 
 void htd::Hyperedge::erase(htd::vertex_t vertex)
 {
-    std::shared_ptr<std::vector<htd::vertex_t>> newElements = std::make_shared<std::vector<htd::vertex_t>>();
-    std::shared_ptr<std::vector<htd::vertex_t>> newSortedElements = std::make_shared<std::vector<htd::vertex_t>>();
+    std::unique_ptr<std::vector<htd::vertex_t>> newElements(new std::vector<htd::vertex_t>());
+    std::unique_ptr<std::vector<htd::vertex_t>> newSortedElements(new std::vector<htd::vertex_t>());
 
     std::copy_if(elements_->begin(), elements_->end(), std::back_inserter(*newElements), [&](htd::vertex_t element) { return element != vertex; });
     std::copy_if(sortedElements_->begin(), sortedElements_->end(), std::back_inserter(*newSortedElements), [&](htd::vertex_t element) { return element != vertex; });
@@ -432,9 +432,9 @@ htd::Hyperedge & htd::Hyperedge::operator=(const htd::Hyperedge & original)
 {
     id_ = original.id_;
 
-    elements_ = original.elements_;
+    elements_ = std::unique_ptr<std::vector<htd::vertex_t>>(new std::vector<htd::vertex_t>(*(original.elements_)));
 
-    sortedElements_ = original.sortedElements_;
+    sortedElements_ = std::unique_ptr<std::vector<htd::vertex_t>>(new std::vector<htd::vertex_t>(*(original.sortedElements_)));
 
     return *this;
 }

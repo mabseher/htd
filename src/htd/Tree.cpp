@@ -142,7 +142,7 @@ htd::ConstCollection<htd::id_t> htd::Tree::associatedEdgeIds(htd::vertex_t verte
     {
         if (edge[0] == vertex1 && edge[1] == vertex2)
         {
-            result.push_back(edge.id());
+            result.emplace_back(edge.id());
         }
     }
 
@@ -161,7 +161,7 @@ htd::ConstCollection<htd::id_t> htd::Tree::associatedEdgeIds(const std::vector<h
         {
             if (std::equal(edge.begin(), edge.end(), elements.begin()))
             {
-                result.push_back(edge.id());
+                result.emplace_back(edge.id());
             }
         }
     }
@@ -181,7 +181,7 @@ htd::ConstCollection<htd::id_t> htd::Tree::associatedEdgeIds(const htd::ConstCol
         {
             if (std::equal(edge.begin(), edge.end(), elements.begin()))
             {
-                result.push_back(edge.id());
+                result.emplace_back(edge.id());
             }
         }
     }
@@ -275,7 +275,7 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::neighbors(htd::vertex_t vertex) c
 
     if (node.parent != htd::Vertex::UNKNOWN)
     {
-        result.push_back(node.parent);
+        result.emplace_back(node.parent);
     }
 
     std::copy(children.begin(), children.end(), std::back_inserter(result));
@@ -297,7 +297,7 @@ void htd::Tree::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex
 
     if (node.parent != htd::Vertex::UNKNOWN)
     {
-        target.push_back(node.parent);
+        target.emplace_back(node.parent);
     }
 
     std::copy(children.begin(), children.end(), std::back_inserter(target));
@@ -339,7 +339,7 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::isolatedVertices(void) const
     {
         htd::VectorAdapter<htd::vertex_t> result;
 
-        result.container().push_back(root_);
+        result.container().emplace_back(root_);
 
         return htd::ConstCollection<htd::vertex_t>(result.begin(), result.end());
     }
@@ -378,7 +378,7 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t vertex)
     {
         if (edge.contains(vertex))
         {
-            result.push_back(edge);
+            result.emplace_back(edge);
         }
     }
 
@@ -630,11 +630,11 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                 std::set_difference(childNode.edges.begin(), childNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newChildEdges));
 
-                newChildEdges.push_back(next_edge_);
+                newChildEdges.emplace_back(next_edge_);
 
                 childNode.edges.swap(newChildEdges);
 
-                parentNode.edges.push_back(next_edge_);
+                parentNode.edges.emplace_back(next_edge_);
 
                 ++next_edge_;
 
@@ -668,11 +668,11 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                     std::set_difference(childNode.edges.begin(), childNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newChildEdges));
 
-                    newChildEdges.push_back(next_edge_);
+                    newChildEdges.emplace_back(next_edge_);
 
                     childNode.edges.swap(newChildEdges);
 
-                    parentNode.edges.push_back(next_edge_);
+                    parentNode.edges.emplace_back(next_edge_);
 
                     ++next_edge_;
                 }
@@ -762,11 +762,11 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                     std::set_difference(childNode.edges.begin(), childNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newChildEdges));
 
-                    newChildEdges.push_back(next_edge_);
+                    newChildEdges.emplace_back(next_edge_);
 
                     childNode.edges.swap(newChildEdges);
 
-                    rootNode.edges.push_back(next_edge_);
+                    rootNode.edges.emplace_back(next_edge_);
 
                     ++next_edge_;
                 }
@@ -810,7 +810,7 @@ htd::vertex_t htd::Tree::insertRoot(void)
         nodes_.clear();
         nodes_.insert(std::make_pair(root_, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(root_, htd::Vertex::UNKNOWN))));
 
-        vertices_.push_back(root_);
+        vertices_.emplace_back(root_);
 
         size_ = 1;
     }
@@ -866,21 +866,21 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
     ret = next_vertex_;
 
-    node.children.push_back(ret);
+    node.children.emplace_back(ret);
 
     nodes_.insert(std::make_pair(ret, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(ret, vertex))));
 
-    vertices_.push_back(ret);
+    vertices_.emplace_back(ret);
 
     ++next_vertex_;
 
     size_++;
 
-    edges_->push_back(htd::Hyperedge(next_edge_, vertex, ret));
+    edges_->emplace_back(next_edge_, vertex, ret);
 
-    node.edges.push_back(next_edge_);
+    node.edges.emplace_back(next_edge_);
 
-    nodes_.at(ret)->edges.push_back(next_edge_);
+    nodes_.at(ret)->edges.emplace_back(next_edge_);
 
     ++next_edge_;
 
@@ -934,11 +934,11 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
         std::unique_ptr<htd::Tree::Node> newRootNode(new htd::Tree::Node(ret, htd::Vertex::UNKNOWN));
 
-        newRootNode->children.push_back(vertex);
+        newRootNode->children.emplace_back(vertex);
 
         nodes_.insert(std::make_pair(ret, std::move(newRootNode)));
 
-        vertices_.push_back(ret);
+        vertices_.emplace_back(ret);
 
         ++next_vertex_;
 
@@ -985,7 +985,7 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
         intermediateNode->parent = parentVertex;
 
-        intermediateNode->children.push_back(vertex);
+        intermediateNode->children.emplace_back(vertex);
 
         auto position = std::find(parentNode->children.begin(), parentNode->children.end(), vertex);
 
@@ -999,8 +999,8 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
     edges_->emplace_back(next_edge_, vertex, ret);
 
-    nodes_.at(vertex)->edges.push_back(next_edge_);
-    nodes_.at(ret)->edges.push_back(next_edge_);
+    nodes_.at(vertex)->edges.emplace_back(next_edge_);
+    nodes_.at(ret)->edges.emplace_back(next_edge_);
 
     ++next_edge_;
 
@@ -1065,9 +1065,9 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
 
         newParentNode->children.insert(position, vertex);
 
-        newParentNode->edges.push_back(next_edge_);
+        newParentNode->edges.emplace_back(next_edge_);
 
-        node->edges.push_back(next_edge_);
+        node->edges.emplace_back(next_edge_);
 
         node->parent = newParent;
 
@@ -1116,7 +1116,7 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::leaves(void) const
     {
         if (node.second->children.empty())
         {
-            result.push_back(node.first);
+            result.emplace_back(node.first);
         }
     }
 

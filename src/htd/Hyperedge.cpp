@@ -33,19 +33,19 @@ htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t ver
     {
         sortedElements_->reserve(2);
 
-        sortedElements_->push_back(vertex1);
-        sortedElements_->push_back(vertex2);
+        sortedElements_->emplace_back(vertex1);
+        sortedElements_->emplace_back(vertex2);
     }
     else if (vertex1 > vertex2)
     {
         sortedElements_->reserve(2);
 
-        sortedElements_->push_back(vertex2);
-        sortedElements_->push_back(vertex1);
+        sortedElements_->emplace_back(vertex2);
+        sortedElements_->emplace_back(vertex1);
     }
     else
     {
-        sortedElements_->push_back(vertex1);
+        sortedElements_->emplace_back(vertex1);
     }
 }
 
@@ -63,7 +63,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & eleme
         }
         case 1:
         {
-            sortedElements_->push_back(elements_->at(0));
+            sortedElements_->emplace_back(elements_->at(0));
 
             break;
         }
@@ -74,17 +74,17 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & eleme
 
             if (vertex1 < vertex2)
             {
-                sortedElements_->push_back(vertex1);
-                sortedElements_->push_back(vertex2);
+                sortedElements_->emplace_back(vertex1);
+                sortedElements_->emplace_back(vertex2);
             }
             else if (vertex1 > vertex2)
             {
-                sortedElements_->push_back(vertex2);
-                sortedElements_->push_back(vertex1);
+                sortedElements_->emplace_back(vertex2);
+                sortedElements_->emplace_back(vertex1);
             }
             else
             {
-                sortedElements_->push_back(vertex1);
+                sortedElements_->emplace_back(vertex1);
             }
 
             break;
@@ -118,7 +118,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) 
         }
         case 1:
         {
-            sortedElements_->push_back(elements_->at(0));
+            sortedElements_->emplace_back(elements_->at(0));
 
             break;
         }
@@ -129,17 +129,17 @@ htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) 
 
             if (vertex1 < vertex2)
             {
-                sortedElements_->push_back(vertex1);
-                sortedElements_->push_back(vertex2);
+                sortedElements_->emplace_back(vertex1);
+                sortedElements_->emplace_back(vertex2);
             }
             else if (vertex1 > vertex2)
             {
-                sortedElements_->push_back(vertex2);
-                sortedElements_->push_back(vertex1);
+                sortedElements_->emplace_back(vertex2);
+                sortedElements_->emplace_back(vertex1);
             }
             else
             {
-                sortedElements_->push_back(vertex1);
+                sortedElements_->emplace_back(vertex1);
             }
 
             break;
@@ -171,7 +171,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t
         }
         case 1:
         {
-            sortedElements_->push_back(elements_->at(0));
+            sortedElements_->emplace_back(elements_->at(0));
 
             break;
         }
@@ -182,17 +182,17 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t
 
             if (vertex1 < vertex2)
             {
-                sortedElements_->push_back(vertex1);
-                sortedElements_->push_back(vertex2);
+                sortedElements_->emplace_back(vertex1);
+                sortedElements_->emplace_back(vertex2);
             }
             else if (vertex1 > vertex2)
             {
-                sortedElements_->push_back(vertex2);
-                sortedElements_->push_back(vertex1);
+                sortedElements_->emplace_back(vertex2);
+                sortedElements_->emplace_back(vertex1);
             }
             else
             {
-                sortedElements_->push_back(vertex1);
+                sortedElements_->emplace_back(vertex1);
             }
 
             break;
@@ -239,8 +239,8 @@ void htd::Hyperedge::setElements(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
     elements_->clear();
 
-    elements_->push_back(vertex1);
-    elements_->push_back(vertex2);
+    elements_->emplace_back(vertex1);
+    elements_->emplace_back(vertex2);
 
     sortedElements_->clear();
 
@@ -248,19 +248,19 @@ void htd::Hyperedge::setElements(htd::vertex_t vertex1, htd::vertex_t vertex2)
     {
         sortedElements_->reserve(2);
 
-        sortedElements_->push_back(vertex1);
-        sortedElements_->push_back(vertex2);
+        sortedElements_->emplace_back(vertex1);
+        sortedElements_->emplace_back(vertex2);
     }
     else if (vertex1 > vertex2)
     {
         sortedElements_->reserve(2);
 
-        sortedElements_->push_back(vertex2);
-        sortedElements_->push_back(vertex1);
+        sortedElements_->emplace_back(vertex2);
+        sortedElements_->emplace_back(vertex1);
     }
     else
     {
-        sortedElements_->push_back(vertex1);
+        sortedElements_->emplace_back(vertex1);
     }
 }
 
@@ -282,7 +282,7 @@ void htd::Hyperedge::setElements(const std::vector<htd::vertex_t> & elements)
         }
         case 1:
         {
-            sortedElements_->push_back(elements_->at(0));
+            sortedElements_->emplace_back(elements_->at(0));
 
             break;
         }
@@ -293,17 +293,17 @@ void htd::Hyperedge::setElements(const std::vector<htd::vertex_t> & elements)
 
             if (vertex1 < vertex2)
             {
-                sortedElements_->push_back(vertex1);
-                sortedElements_->push_back(vertex2);
+                sortedElements_->emplace_back(vertex1);
+                sortedElements_->emplace_back(vertex2);
             }
             else if (vertex1 > vertex2)
             {
-                sortedElements_->push_back(vertex2);
-                sortedElements_->push_back(vertex1);
+                sortedElements_->emplace_back(vertex2);
+                sortedElements_->emplace_back(vertex1);
             }
             else
             {
-                sortedElements_->push_back(vertex1);
+                sortedElements_->emplace_back(vertex1);
             }
 
             break;
@@ -337,7 +337,7 @@ void htd::Hyperedge::setElements(std::vector<htd::vertex_t> && elements)
         }
         case 1:
         {
-            sortedElements_->push_back(elements_->at(0));
+            sortedElements_->emplace_back(elements_->at(0));
 
             break;
         }
@@ -348,17 +348,17 @@ void htd::Hyperedge::setElements(std::vector<htd::vertex_t> && elements)
 
             if (vertex1 < vertex2)
             {
-                sortedElements_->push_back(vertex1);
-                sortedElements_->push_back(vertex2);
+                sortedElements_->emplace_back(vertex1);
+                sortedElements_->emplace_back(vertex2);
             }
             else if (vertex1 > vertex2)
             {
-                sortedElements_->push_back(vertex2);
-                sortedElements_->push_back(vertex1);
+                sortedElements_->emplace_back(vertex2);
+                sortedElements_->emplace_back(vertex1);
             }
             else
             {
-                sortedElements_->push_back(vertex1);
+                sortedElements_->emplace_back(vertex1);
             }
 
             break;

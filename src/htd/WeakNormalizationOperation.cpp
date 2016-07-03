@@ -95,9 +95,9 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -121,25 +121,45 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     joinNodeNormalizationOperation.apply(decomposition, labelingFunctions);
 }
 
-void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     if (emptyRoot_)
     {
         htd::AddEmptyRootOperation addEmptyRootOperation;
 
-        addEmptyRootOperation.apply(decomposition, relevantVertices, labelingFunctions);
+        addEmptyRootOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
     }
 
     if (emptyLeaves_)
     {
         htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
 
-        addEmptyLeavesOperation.apply(decomposition, relevantVertices, labelingFunctions);
+        addEmptyLeavesOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
     }
 
     htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(identicalJoinNodeParent_);
 
-    joinNodeNormalizationOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    joinNodeNormalizationOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+}
+
+bool htd::WeakNormalizationOperation::isLocalOperation(void) const
+{
+    return true;
+}
+
+bool htd::WeakNormalizationOperation::createsTreeNodes(void) const
+{
+    return true;
+}
+
+bool htd::WeakNormalizationOperation::removesTreeNodes(void) const
+{
+    return false;
+}
+
+bool htd::WeakNormalizationOperation::modifiesBagContents(void) const
+{
+    return false;
 }
 
 bool htd::WeakNormalizationOperation::emptyRootRequired(void) const

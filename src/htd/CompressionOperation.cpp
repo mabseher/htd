@@ -101,11 +101,9 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -144,11 +142,33 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
     }
 }
 
-void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     HTD_UNUSED(relevantVertices)
+    HTD_UNUSED(createdVertices)
+    HTD_UNUSED(removedVertices)
 
     apply(decomposition, labelingFunctions);
+}
+
+bool htd::CompressionOperation::isLocalOperation(void) const
+{
+    return true;
+}
+
+bool htd::CompressionOperation::createsTreeNodes(void) const
+{
+    return false;
+}
+
+bool htd::CompressionOperation::removesTreeNodes(void) const
+{
+    return true;
+}
+
+bool htd::CompressionOperation::modifiesBagContents(void) const
+{
+    return false;
 }
 
 htd::CompressionOperation * htd::CompressionOperation::clone(void) const

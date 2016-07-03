@@ -98,9 +98,9 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -120,21 +120,41 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
     limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
 }
 
-void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    htd::SemiNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions);
+    htd::SemiNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
-    exchangeNodeReplacementOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    exchangeNodeReplacementOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
-    limitMaximumForgottenVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    limitMaximumForgottenVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1, treatLeafNodesAsIntroduceNodes_);
 
-    limitMaximumIntroducedVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    limitMaximumIntroducedVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+}
+
+bool htd::NormalizationOperation::isLocalOperation(void) const
+{
+    return true;
+}
+
+bool htd::NormalizationOperation::createsTreeNodes(void) const
+{
+    return true;
+}
+
+bool htd::NormalizationOperation::removesTreeNodes(void) const
+{
+    return false;
+}
+
+bool htd::NormalizationOperation::modifiesBagContents(void) const
+{
+    return false;
 }
 
 bool htd::NormalizationOperation::leafNodesTreatedAsIntroduceNodes(void) const

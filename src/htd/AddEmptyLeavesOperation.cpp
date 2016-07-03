@@ -93,11 +93,9 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -128,11 +126,33 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
     }
 }
 
-void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     HTD_UNUSED(relevantVertices)
+    HTD_UNUSED(createdVertices)
+    HTD_UNUSED(removedVertices)
 
     apply(decomposition, labelingFunctions);
+}
+
+bool htd::AddEmptyLeavesOperation::isLocalOperation(void) const
+{
+    return true;
+}
+
+bool htd::AddEmptyLeavesOperation::createsTreeNodes(void) const
+{
+    return true;
+}
+
+bool htd::AddEmptyLeavesOperation::removesTreeNodes(void) const
+{
+    return false;
+}
+
+bool htd::AddEmptyLeavesOperation::modifiesBagContents(void) const
+{
+    return false;
 }
 
 htd::AddEmptyLeavesOperation * htd::AddEmptyLeavesOperation::clone(void) const

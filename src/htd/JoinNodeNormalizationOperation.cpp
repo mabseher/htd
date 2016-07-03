@@ -53,11 +53,9 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -134,11 +132,33 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
     }
 }
 
-void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     HTD_UNUSED(relevantVertices)
+    HTD_UNUSED(createdVertices)
+    HTD_UNUSED(removedVertices)
 
     apply(decomposition, labelingFunctions);
+}
+
+bool htd::JoinNodeNormalizationOperation::isLocalOperation(void) const
+{
+    return true;
+}
+
+bool htd::JoinNodeNormalizationOperation::createsTreeNodes(void) const
+{
+    return true;
+}
+
+bool htd::JoinNodeNormalizationOperation::removesTreeNodes(void) const
+{
+    return false;
+}
+
+bool htd::JoinNodeNormalizationOperation::modifiesBagContents(void) const
+{
+    return false;
 }
 
 htd::JoinNodeNormalizationOperation * htd::JoinNodeNormalizationOperation::clone(void) const

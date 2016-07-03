@@ -60,11 +60,19 @@ namespace htd
 
             void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
-            void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const HTD_OVERRIDE;
+            void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
 
             void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
-            void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
+
+            bool isLocalOperation(void) const HTD_OVERRIDE;
+
+            bool createsTreeNodes(void) const HTD_OVERRIDE;
+
+            bool removesTreeNodes(void) const HTD_OVERRIDE;
+
+            bool modifiesBagContents(void) const HTD_OVERRIDE;
 
             LimitMaximumForgottenVertexCountOperation * clone(void) const HTD_OVERRIDE;
 

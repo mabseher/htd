@@ -261,11 +261,9 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -458,11 +456,33 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
     }
 }
 
-void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     HTD_UNUSED(relevantVertices)
+    HTD_UNUSED(createdVertices)
+    HTD_UNUSED(removedVertices)
 
     apply(decomposition, labelingFunctions);
+}
+
+bool htd::LimitMaximumIntroducedVertexCountOperation::isLocalOperation(void) const
+{
+    return true;
+}
+
+bool htd::LimitMaximumIntroducedVertexCountOperation::createsTreeNodes(void) const
+{
+    return true;
+}
+
+bool htd::LimitMaximumIntroducedVertexCountOperation::removesTreeNodes(void) const
+{
+    return false;
+}
+
+bool htd::LimitMaximumIntroducedVertexCountOperation::modifiesBagContents(void) const
+{
+    return false;
 }
 
 htd::LimitMaximumIntroducedVertexCountOperation * htd::LimitMaximumIntroducedVertexCountOperation::clone(void) const

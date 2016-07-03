@@ -73,9 +73,9 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -87,13 +87,33 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     limitChildCountOperation.apply(decomposition, labelingFunctions);
 }
 
-void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    htd::WeakNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions);
+    htd::WeakNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
 
     htd::LimitChildCountOperation limitChildCountOperation(2);
 
-    limitChildCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    limitChildCountOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+}
+
+bool htd::SemiNormalizationOperation::isLocalOperation(void) const
+{
+    return true;
+}
+
+bool htd::SemiNormalizationOperation::createsTreeNodes(void) const
+{
+    return true;
+}
+
+bool htd::SemiNormalizationOperation::removesTreeNodes(void) const
+{
+    return false;
+}
+
+bool htd::SemiNormalizationOperation::modifiesBagContents(void) const
+{
+    return false;
 }
 
 htd::SemiNormalizationOperation * htd::SemiNormalizationOperation::clone(void) const

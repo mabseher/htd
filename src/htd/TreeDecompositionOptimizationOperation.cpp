@@ -55,11 +55,9 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
     apply(decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 //TODO Remove
@@ -120,11 +118,54 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
     }
 }
 
-void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     HTD_UNUSED(relevantVertices)
+    HTD_UNUSED(createdVertices)
+    HTD_UNUSED(removedVertices)
 
     apply(decomposition, labelingFunctions);
+}
+
+bool htd::TreeDecompositionOptimizationOperation::isLocalOperation(void) const
+{
+    return false;
+}
+
+bool htd::TreeDecompositionOptimizationOperation::createsTreeNodes(void) const
+{
+    bool ret = false;
+
+    for (auto it = manipulationOperations_.begin(); !ret && it != manipulationOperations_.end(); ++it)
+    {
+        ret = (*it)->createsTreeNodes();
+    }
+
+    return ret;
+}
+
+bool htd::TreeDecompositionOptimizationOperation::removesTreeNodes(void) const
+{
+    bool ret = false;
+
+    for (auto it = manipulationOperations_.begin(); !ret && it != manipulationOperations_.end(); ++it)
+    {
+        ret = (*it)->removesTreeNodes();
+    }
+
+    return ret;
+}
+
+bool htd::TreeDecompositionOptimizationOperation::modifiesBagContents(void) const
+{
+    bool ret = false;
+
+    for (auto it = manipulationOperations_.begin(); !ret && it != manipulationOperations_.end(); ++it)
+    {
+        ret = (*it)->modifiesBagContents();
+    }
+
+    return ret;
 }
 
 void htd::TreeDecompositionOptimizationOperation::setManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations)
@@ -325,6 +366,9 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
 
         strategy_->selectVertices(decomposition, candidates);
 
+        std::vector<htd::vertex_t> createdVertices;
+        std::vector<htd::vertex_t> removedVertices;
+
         for (htd::vertex_t vertex : candidates)
         {
             if (vertex != initialRoot)
@@ -350,11 +394,11 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
 
                     htd::CompressionOperation compressionOperation;
 
-                    compressionOperation.apply(decomposition, affectedVertices);
+                    compressionOperation.apply(decomposition, affectedVertices, createdVertices, removedVertices);
 
                     for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
                     {
-                        operation->apply(decomposition, affectedVertices, labelingFunctions);
+                        operation->apply(decomposition, affectedVertices, labelingFunctions, createdVertices, removedVertices);
                     }
                 }
                 else

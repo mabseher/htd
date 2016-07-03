@@ -56,8 +56,10 @@ namespace htd
              *
              *  @param[in] decomposition    The tree decomposition which shall be modified.
              *  @param[in] relevantVertices The collection of vertices to which the manipulation shall be applied.
+             *  @param[out] createdVertices A vector of vertices which were created by the manipulation operation.
+             *  @param[out] removedVertices A vector of vertices which were removed by the manipulation operation.
              */
-            virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const = 0;
+            virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const = 0;
 
             /**
              *  Apply the manipulation operation to the given tree decomposition.
@@ -77,8 +79,38 @@ namespace htd
              *  @param[in] decomposition        The tree decomposition which shall be modified.
              *  @param[in] relevantVertices     The collection of vertices to which the manipulation shall be applied.
              *  @param[in] labelingFunctions    A vector of labeling functions which shall be applied after the modifications.
+             *  @param[out] createdVertices A vector of vertices which were created by the manipulation operation.
+             *  @param[out] removedVertices A vector of vertices which were removed by the manipulation operation.
              */
-            virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+            virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const = 0;
+
+            /**
+             *  Check whether the manipulation operation - when given a set of relevant vertices - only applies to those vertices and their direct neighbors.
+             *
+             *  @return True if the manipulation operation - when given a set of relevant vertices - only applies to those vertices and their direct neighbors, false otherwise.
+             */
+            virtual bool isLocalOperation(void) const = 0;
+
+            /**
+             *  Check whether the manipulation operation potentially creates new tree decomposition nodes.
+             *
+             *  @return True if the manipulation operation potentially creates new tree decomposition nodes, false otherwise.
+             */
+            virtual bool createsTreeNodes(void) const = 0;
+
+            /**
+             *  Check whether the manipulation operation potentially removes existing tree decomposition nodes.
+             *
+             *  @return True if the manipulation operation potentially removes existing tree decomposition nodes, false otherwise.
+             */
+            virtual bool removesTreeNodes(void) const = 0;
+
+            /**
+             *  Check whether the manipulation operation modifies the bag content of existing tree decomposition nodes.
+             *
+             *  @return True if the manipulation operation modifies the bag content of existing tree decomposition nodes, false otherwise.
+             */
+            virtual bool modifiesBagContents(void) const = 0;
 
             /**
              *  Create a deep copy the current tree decomposition manipulation operation.

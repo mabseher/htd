@@ -355,6 +355,11 @@ bool htd::JoinNodeReplacementOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::JoinNodeReplacementOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const
 {
     std::unordered_set<htd::vertex_t> result;

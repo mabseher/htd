@@ -169,6 +169,11 @@ bool htd::LimitChildCountOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::LimitChildCountOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 htd::LimitChildCountOperation * htd::LimitChildCountOperation::clone(void) const
 {
     return new htd::LimitChildCountOperation(limit_);

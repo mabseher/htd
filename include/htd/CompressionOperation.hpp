@@ -70,6 +70,8 @@ namespace htd
 
             bool modifiesBagContents(void) const HTD_OVERRIDE;
 
+            bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
+
             CompressionOperation * clone(void) const HTD_OVERRIDE;
     };
 }

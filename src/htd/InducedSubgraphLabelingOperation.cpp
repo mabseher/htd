@@ -361,6 +361,11 @@ bool htd::InducedSubgraphLabelingOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::InducedSubgraphLabelingOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 htd::InducedSubgraphLabelingOperation * htd::InducedSubgraphLabelingOperation::clone(void) const
 {
     return new htd::InducedSubgraphLabelingOperation(graph_);

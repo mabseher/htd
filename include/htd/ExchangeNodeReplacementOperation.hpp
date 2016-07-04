@@ -67,6 +67,8 @@ namespace htd
 
             bool modifiesBagContents(void) const HTD_OVERRIDE;
 
+            bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
+
             ExchangeNodeReplacementOperation * clone(void) const HTD_OVERRIDE;
     };
 }

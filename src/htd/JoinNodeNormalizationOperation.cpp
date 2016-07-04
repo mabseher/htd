@@ -161,6 +161,11 @@ bool htd::JoinNodeNormalizationOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::JoinNodeNormalizationOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 htd::JoinNodeNormalizationOperation * htd::JoinNodeNormalizationOperation::clone(void) const
 {
     return new htd::JoinNodeNormalizationOperation(identicalParent_);

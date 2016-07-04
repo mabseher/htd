@@ -171,6 +171,11 @@ bool htd::CompressionOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::CompressionOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 htd::CompressionOperation * htd::CompressionOperation::clone(void) const
 {
     return new htd::CompressionOperation();

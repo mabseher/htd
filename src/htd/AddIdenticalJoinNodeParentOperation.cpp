@@ -114,6 +114,11 @@ bool htd::AddIdenticalJoinNodeParentOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::AddIdenticalJoinNodeParentOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 htd::AddIdenticalJoinNodeParentOperation * htd::AddIdenticalJoinNodeParentOperation::clone(void) const
 {
     return new htd::AddIdenticalJoinNodeParentOperation();

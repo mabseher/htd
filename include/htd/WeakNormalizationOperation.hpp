@@ -80,6 +80,8 @@ namespace htd
 
             bool modifiesBagContents(void) const HTD_OVERRIDE;
 
+            bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
+
             /**
              *  Check whether the flag is set that the decomposition shall have a root node with empty bag.
              *

@@ -80,6 +80,8 @@ namespace htd
 
             bool modifiesBagContents(void) const HTD_OVERRIDE;
 
+            bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
+
             /**
              *  Check whether the flag is set that leaf nodes shall be treated as introduce nodes in the context of this operation.
              *

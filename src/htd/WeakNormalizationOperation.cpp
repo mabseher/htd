@@ -177,6 +177,11 @@ bool htd::WeakNormalizationOperation::identicalJoinNodeParentRequired(void) cons
     return identicalJoinNodeParent_;
 }
 
+bool htd::WeakNormalizationOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 htd::WeakNormalizationOperation * htd::WeakNormalizationOperation::clone(void) const
 {
     return new htd::WeakNormalizationOperation(emptyRoot_, emptyLeaves_, identicalJoinNodeParent_);

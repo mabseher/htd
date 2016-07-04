@@ -64,6 +64,8 @@ namespace htd
 
             bool modifiesBagContents(void) const HTD_OVERRIDE;
 
+            bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
+
             AddIdenticalJoinNodeParentOperation * clone(void) const HTD_OVERRIDE;
 
         private:

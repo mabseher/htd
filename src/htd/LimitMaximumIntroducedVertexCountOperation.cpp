@@ -485,6 +485,11 @@ bool htd::LimitMaximumIntroducedVertexCountOperation::modifiesBagContents(void) 
     return false;
 }
 
+bool htd::LimitMaximumIntroducedVertexCountOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 htd::LimitMaximumIntroducedVertexCountOperation * htd::LimitMaximumIntroducedVertexCountOperation::clone(void) const
 {
     return new htd::LimitMaximumIntroducedVertexCountOperation(limit_);

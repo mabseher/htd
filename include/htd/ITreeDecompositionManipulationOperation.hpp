@@ -113,6 +113,15 @@ namespace htd
             virtual bool modifiesBagContents(void) const = 0;
 
             /**
+             *  Check whether the manipulation operation creates labels which are dependend on the position or neighbors of a
+             *  vertex within the decomposition (in case of vertex labels) or the endpoints of an edge (in case of edge labels).
+             *
+             *  @return True if the manipulation operation creates labels which are dependend on the position or neighbors of a
+             *  vertex within the decomposition (in case of vertex labels) or the endpoints of an edge (in case of edge labels), false otherwise.
+             */
+            virtual bool createsLocationDependendLabels(void) const = 0;
+
+            /**
              *  Create a deep copy the current tree decomposition manipulation operation.
              *
              *  @return A new ITreeDecompositionManipulationOperation object identical to the current tree decomposition manipulation operation.

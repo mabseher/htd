@@ -116,6 +116,11 @@ bool htd::SemiNormalizationOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::SemiNormalizationOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 htd::SemiNormalizationOperation * htd::SemiNormalizationOperation::clone(void) const
 {
     return new htd::SemiNormalizationOperation(emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired());

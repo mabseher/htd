@@ -157,6 +157,11 @@ bool htd::NormalizationOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::NormalizationOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 bool htd::NormalizationOperation::leafNodesTreatedAsIntroduceNodes(void) const
 {
     return treatLeafNodesAsIntroduceNodes_;

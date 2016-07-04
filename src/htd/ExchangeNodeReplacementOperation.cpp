@@ -216,6 +216,11 @@ bool htd::ExchangeNodeReplacementOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::ExchangeNodeReplacementOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 htd::ExchangeNodeReplacementOperation * htd::ExchangeNodeReplacementOperation::clone(void) const
 {
     return new htd::ExchangeNodeReplacementOperation();

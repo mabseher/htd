@@ -155,6 +155,11 @@ bool htd::AddEmptyLeavesOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::AddEmptyLeavesOperation::createsLocationDependendLabels(void) const
+{
+    return false;
+}
+
 htd::AddEmptyLeavesOperation * htd::AddEmptyLeavesOperation::clone(void) const
 {
     return new htd::AddEmptyLeavesOperation();

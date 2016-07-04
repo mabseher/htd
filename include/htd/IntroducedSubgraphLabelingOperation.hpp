@@ -79,6 +79,8 @@ namespace htd
 
             bool modifiesBagContents(void) const HTD_OVERRIDE;
 
+            bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
+
             IntroducedSubgraphLabelingOperation * clone(void) const HTD_OVERRIDE;
 
         private:

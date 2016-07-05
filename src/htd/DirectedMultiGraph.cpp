@@ -361,6 +361,16 @@ htd::FilteredHyperedgeCollection htd::DirectedMultiGraph::hyperedgesAtPositions(
     return base_->hyperedgesAtPositions(std::move(indices));
 }
 
+htd::vertex_t htd::DirectedMultiGraph::nextVertex(void) const
+{
+    return base_->nextVertex();
+}
+
+htd::id_t htd::DirectedMultiGraph::nextEdge(void) const
+{
+    return base_->nextEdge();
+}
+
 htd::vertex_t htd::DirectedMultiGraph::addVertex(void)
 {
     htd::vertex_t ret = base_->addVertex();

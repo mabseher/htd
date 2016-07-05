@@ -39,12 +39,12 @@
 #include <utility>
 #include <vector>
 
-htd::Path::Path(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_vertex_(htd::Vertex::FIRST), nodes_()
+htd::Path::Path(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_()
 {
 
 }
 
-htd::Path::Path(const htd::Path & original) : size_(original.size_), root_(original.root_), next_vertex_(htd::Vertex::FIRST), vertices_(original.vertices_), nodes_()
+htd::Path::Path(const htd::Path & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(htd::Vertex::FIRST), vertices_(original.vertices_), nodes_()
 {
     nodes_.reserve(original.nodes_.size());
 
@@ -54,7 +54,7 @@ htd::Path::Path(const htd::Path & original) : size_(original.size_), root_(origi
     }
 }
 
-htd::Path::Path(const htd::IPath & original) : size_(0), root_(original.root()), next_vertex_(htd::Vertex::FIRST), nodes_()
+htd::Path::Path(const htd::IPath & original) : size_(0), root_(original.root()), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_()
 {
     *this = original;
 }
@@ -689,6 +689,16 @@ std::size_t htd::Path::depth(htd::vertex_t vertex) const
     return ret;
 }
 
+htd::vertex_t htd::Path::nextVertex(void) const
+{
+    return next_vertex_;
+}
+
+htd::id_t htd::Path::nextEdge(void) const
+{
+    return next_edge_;
+}
+
 void htd::Path::removeVertex(htd::vertex_t vertex)
 {
     if (isVertex(vertex))
@@ -977,6 +987,46 @@ void htd::Path::deleteNode(htd::Path::Node * node)
 
             vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), nodeIdentifier));
         }
+    }
+}
+
+void htd::Path::swapWithParent(htd::vertex_t vertex)
+{
+    HTD_ASSERT(isVertex(vertex))
+
+    Node & node = *(nodes_.at(vertex));
+
+    htd::vertex_t parent = node.parent;
+
+    HTD_ASSERT(parent != htd::Vertex::UNKNOWN)
+
+    Node & parentNode = *(nodes_.at(parent));
+
+    std::swap(node.child, parentNode.child);
+
+    node.parent = parentNode.parent;
+
+    parentNode.parent = vertex;
+
+    node.child = parent;
+
+    if (node.parent == htd::Vertex::UNKNOWN)
+    {
+        root_ = vertex;
+    }
+    else
+    {
+        nodes_.at(node.parent)->child = vertex;
+    }
+
+    if (node.child != htd::Vertex::UNKNOWN)
+    {
+        nodes_.at(node.child)->parent = vertex;
+    }
+
+    if (parentNode.child != htd::Vertex::UNKNOWN)
+    {
+        nodes_.at(parentNode.child)->parent = parent;
     }
 }
 

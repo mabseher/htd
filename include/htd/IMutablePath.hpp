@@ -42,6 +42,20 @@ namespace htd
             virtual ~IMutablePath() = 0;
 
             /**
+             *  Getter for the next vertex identifier.
+             *
+             *  @return The ID the next vertex added to the graph will get.
+             */
+            virtual htd::vertex_t nextVertex(void) const = 0;
+
+            /**
+             *  Getter for the next edge identifier.
+             *
+             *  @return The ID the next edge added to the graph will get.
+             */
+            virtual htd::id_t nextEdge(void) const = 0;
+
+            /**
              *  Insert the root of the path if it does not already exist.
              *
              *  @return The ID of the root of the path.
@@ -102,6 +116,13 @@ namespace htd
              *  @note If the given vertex already has a parent, the old parent will be attached to the new vertex in order to keep the path structure valid.
              */
             virtual htd::vertex_t addParent(htd::vertex_t vertex) = 0;
+
+            /**
+             *  Swap the positions of a vertex and its parent.
+             *
+             *  @param[in] vertex   The vertex which's position shall be swapped with its parent.
+             */
+            virtual void swapWithParent(htd::vertex_t vertex) = 0;
 
             /**
              *  Create a deep copy the current mutable path.

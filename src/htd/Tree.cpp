@@ -571,6 +571,16 @@ std::size_t htd::Tree::depth(htd::vertex_t vertex) const
     return ret;
 }
 
+htd::vertex_t htd::Tree::nextVertex(void) const
+{
+    return next_vertex_;
+}
+
+htd::id_t htd::Tree::nextEdge(void) const
+{
+    return next_edge_;
+}
+
 void htd::Tree::removeVertex(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
@@ -1165,6 +1175,52 @@ void htd::Tree::deleteNode(const std::unique_ptr<htd::Tree::Node> & node)
     nodes_.erase(vertex);
 
     size_--;
+}
+
+void htd::Tree::swapWithParent(htd::vertex_t vertex)
+{
+    HTD_ASSERT(isVertex(vertex))
+
+    Node & node = *(nodes_.at(vertex));
+
+    htd::vertex_t parent = node.parent;
+
+    HTD_ASSERT(parent != htd::Vertex::UNKNOWN)
+
+    Node & parentNode = *(nodes_.at(parent));
+
+    node.children.swap(parentNode.children);
+
+    node.parent = parentNode.parent;
+
+    parentNode.parent = vertex;
+
+    node.children.erase(std::lower_bound(node.children.begin(), node.children.end(), vertex));
+
+    node.children.insert(std::lower_bound(node.children.begin(), node.children.end(), parent), parent);
+
+    if (node.parent == htd::Vertex::UNKNOWN)
+    {
+        root_ = vertex;
+    }
+    else
+    {
+        Node & grandParentNode = *(nodes_.at(node.parent));
+
+        grandParentNode.children.erase(std::lower_bound(grandParentNode.children.begin(), grandParentNode.children.end(), parent));
+
+        grandParentNode.children.insert(std::lower_bound(grandParentNode.children.begin(), grandParentNode.children.end(), vertex), vertex);
+    }
+
+    for (htd::vertex_t child : node.children)
+    {
+        nodes_.at(child)->parent = vertex;
+    }
+
+    for (htd::vertex_t child : parentNode.children)
+    {
+        nodes_.at(child)->parent = parent;
+    }
 }
 
 htd::Tree * htd::Tree::clone(void) const

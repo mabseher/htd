@@ -30,7 +30,6 @@
 #include <htd/CompressionOperation.hpp>
 #include <htd/PostOrderTreeTraversal.hpp>
 
-#include <stack>
 #include <vector>
 
 htd::CompressionOperation::CompressionOperation(void)
@@ -63,16 +62,28 @@ void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposi
     {
         htd::PostOrderTreeTraversal treeTraversal;
 
+        std::vector<htd::vertex_t> vertices;
+
+        vertices.reserve(decomposition.vertexCount());
+
         treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
         {
+            HTD_UNUSED(parent)
             HTD_UNUSED(distanceToSubtreeRoot)
 
-            if (parent != htd::Vertex::UNKNOWN)
+            vertices.push_back(vertex);
+        });
+
+        for (htd::vertex_t vertex : vertices)
+        {
+            if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
             {
+                htd::vertex_t parent = decomposition.parent(vertex);
+
                 const std::vector<htd::vertex_t> & currentBag = decomposition.bagContent(vertex);
                 const std::vector<htd::vertex_t> & parentBag = decomposition.bagContent(parent);
 
-                std::pair<std::size_t, std::size_t> result = htd::symmetric_difference_sizes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end());
+                const std::pair<std::size_t, std::size_t> & result = htd::symmetric_difference_sizes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end());
 
                 if (result.first > 0 && result.second == 0)
                 {
@@ -80,12 +91,12 @@ void htd::CompressionOperation::apply(htd::IMutablePathDecomposition & decomposi
                 }
                 else if (result.first == 0 && result.second > 0)
                 {
-                    decomposition.swapVertexLabels(vertex, parent);
+                    decomposition.swapWithParent(vertex);
 
-                    decomposition.removeVertex(vertex);
+                    decomposition.removeVertex(parent);
                 }
             }
-        });
+        }
     }
 }
 
@@ -114,12 +125,24 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
     {
         htd::PostOrderTreeTraversal treeTraversal;
 
+        std::vector<htd::vertex_t> vertices;
+
+        vertices.reserve(decomposition.vertexCount());
+
         treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
         {
+            HTD_UNUSED(parent)
             HTD_UNUSED(distanceToSubtreeRoot)
 
-            if (parent != htd::Vertex::UNKNOWN)
+            vertices.push_back(vertex);
+        });
+
+        for (htd::vertex_t vertex : vertices)
+        {
+            if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
             {
+                htd::vertex_t parent = decomposition.parent(vertex);
+
                 const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
 
                 if (std::get<0>(result) == 0)
@@ -128,27 +151,64 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
                 }
                 else if (std::get<2>(result) == 0)
                 {
-                    decomposition.swapVertexLabels(vertex, parent);
+                    decomposition.swapWithParent(vertex);
 
-                    for (htd::vertex_t child : decomposition.children(vertex))
-                    {
-                        decomposition.setParent(child, parent);
-                    }
-
-                    decomposition.removeVertex(vertex);
+                    decomposition.removeVertex(parent);
                 }
             }
-        });
+        }
     }
 }
 
 void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
+    HTD_UNUSED(labelingFunctions)
     HTD_UNUSED(createdVertices)
     HTD_UNUSED(removedVertices)
 
-    apply(decomposition, labelingFunctions);
+    for (htd::vertex_t vertex : relevantVertices)
+    {
+        if (decomposition.isVertex(vertex))
+        {
+            if (!decomposition.isRoot(vertex))
+            {
+                htd::vertex_t parent = decomposition.parent(vertex);
+
+                const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
+
+                if (std::get<0>(result) == 0)
+                {
+                    decomposition.removeVertex(vertex);
+                }
+                else if (std::get<2>(result) == 0)
+                {
+                    decomposition.swapWithParent(vertex);
+
+                    decomposition.removeVertex(parent);
+                }
+            }
+
+            const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(vertex);
+
+            std::vector<htd::vertex_t> children(childCollection.begin(), childCollection.end());
+
+            for (htd::vertex_t child : children)
+            {
+                const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(child), decomposition.bagContent(vertex));
+
+                if (std::get<0>(result) == 0)
+                {
+                    decomposition.removeVertex(child);
+                }
+                else if (std::get<2>(result) == 0)
+                {
+                    decomposition.swapWithParent(child);
+
+                    decomposition.removeVertex(vertex);
+                }
+            }
+        }
+    }
 }
 
 bool htd::CompressionOperation::isLocalOperation(void) const

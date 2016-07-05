@@ -160,6 +160,10 @@ namespace htd
 
             std::size_t depth(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            htd::vertex_t nextVertex(void) const HTD_OVERRIDE;
+
+            htd::id_t nextEdge(void) const HTD_OVERRIDE;
+
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 
             void removeSubpath(htd::vertex_t subpathRoot) HTD_OVERRIDE;
@@ -173,6 +177,8 @@ namespace htd
             void removeChild(htd::vertex_t vertex) HTD_OVERRIDE;
 
             void removeChild(htd::vertex_t vertex, htd::vertex_t child) HTD_OVERRIDE;
+
+            void swapWithParent(htd::vertex_t vertex) HTD_OVERRIDE;
 
             Path * clone(void) const HTD_OVERRIDE;
 
@@ -227,6 +233,11 @@ namespace htd
              *  The root vertex of the path.
              */
             htd::vertex_t root_;
+
+            /**
+             *  The ID the next edge added to the tree will get.
+             */
+            htd::id_t next_edge_;
 
             /**
              *  The ID the next vertex added to the path will get.

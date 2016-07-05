@@ -225,6 +225,16 @@ const htd::Hyperedge & htd::Hypergraph::hyperedgeAtPosition(htd::index_t index, 
     return base_->hyperedgeAtPosition(index, vertex);
 }
 
+htd::vertex_t htd::Hypergraph::nextVertex(void) const
+{
+    return base_->nextVertex();
+}
+
+htd::id_t htd::Hypergraph::nextEdge(void) const
+{
+    return base_->nextEdge();
+}
+
 htd::vertex_t htd::Hypergraph::addVertex(void)
 {
     return base_->addVertex();

@@ -42,6 +42,20 @@ namespace htd
             virtual ~IMutableTree() = 0;
 
             /**
+             *  Getter for the next vertex identifier.
+             *
+             *  @return The ID the next vertex added to the graph will get.
+             */
+            virtual htd::vertex_t nextVertex(void) const = 0;
+
+            /**
+             *  Getter for the next edge identifier.
+             *
+             *  @return The ID the next edge added to the graph will get.
+             */
+            virtual htd::id_t nextEdge(void) const = 0;
+
+            /**
              *  Remove a vertex from the tree.
              *
              *  @param[in] vertex   The ID of the vertex which shall be removed.
@@ -106,6 +120,13 @@ namespace htd
              *  @param[in] newParent    The desired parent.
              */
             virtual void setParent(htd::vertex_t vertex, htd::vertex_t newParent) = 0;
+
+            /**
+             *  Swap the positions of a vertex and its parent.
+             *
+             *  @param[in] vertex   The vertex which's position shall be swapped with its parent.
+             */
+            virtual void swapWithParent(htd::vertex_t vertex) = 0;
 
             /**
              *  Create a deep copy the current mutable tree.

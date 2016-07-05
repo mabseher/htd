@@ -157,6 +157,10 @@ namespace htd
 
             std::size_t depth(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            htd::vertex_t nextVertex(void) const HTD_OVERRIDE;
+
+            htd::id_t nextEdge(void) const HTD_OVERRIDE;
+
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 
             void removeSubtree(htd::vertex_t subtreeRoot) HTD_OVERRIDE;
@@ -172,6 +176,8 @@ namespace htd
             void setParent(htd::vertex_t vertex, htd::vertex_t newParent) HTD_OVERRIDE;
 
             void removeChild(htd::vertex_t vertex, htd::vertex_t child) HTD_OVERRIDE;
+
+            void swapWithParent(htd::vertex_t vertex) HTD_OVERRIDE;
 
             Tree * clone(void) const HTD_OVERRIDE;
 

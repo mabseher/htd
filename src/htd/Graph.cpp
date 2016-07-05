@@ -226,6 +226,16 @@ htd::FilteredHyperedgeCollection htd::Graph::hyperedgesAtPositions(std::vector<h
     return base_->hyperedgesAtPositions(std::move(indices));
 }
 
+htd::vertex_t htd::Graph::nextVertex(void) const
+{
+    return base_->nextVertex();
+}
+
+htd::id_t htd::Graph::nextEdge(void) const
+{
+    return base_->nextEdge();
+}
+
 htd::vertex_t htd::Graph::addVertex(void)
 {
     return base_->addVertex();

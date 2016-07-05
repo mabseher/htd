@@ -41,6 +41,20 @@ namespace htd
             virtual ~IMutableDirectedMultiGraph() = 0;
 
             /**
+             *  Getter for the next vertex identifier.
+             *
+             *  @return The ID the next vertex added to the graph will get.
+             */
+            virtual htd::vertex_t nextVertex(void) const = 0;
+
+            /**
+             *  Getter for the next edge identifier.
+             *
+             *  @return The ID the next edge added to the graph will get.
+             */
+            virtual htd::id_t nextEdge(void) const = 0;
+
+            /**
              *  Add a new vertex to the directed multi-graph.
              *
              *  @return The ID of the new vertex.

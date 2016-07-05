@@ -115,6 +115,13 @@ void htd::FilteredHyperedgeCollection::restrictTo(const std::vector<htd::vertex_
     }), relevantIndices_->end());
 }
 
+void htd::FilteredHyperedgeCollection::swap(FilteredHyperedgeCollection & other)
+{
+    baseCollection_.swap(other.baseCollection_);
+
+    relevantIndices_.swap(other.relevantIndices_);
+}
+
 htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator htd::FilteredHyperedgeCollection::begin(void) const
 {
     return htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator(*this, 0);

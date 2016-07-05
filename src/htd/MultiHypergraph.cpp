@@ -545,6 +545,16 @@ htd::FilteredHyperedgeCollection htd::MultiHypergraph::hyperedgesAtPositions(std
     return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(edges_), std::move(indices));
 }
 
+htd::vertex_t htd::MultiHypergraph::nextVertex(void) const
+{
+    return next_vertex_;
+}
+
+htd::id_t htd::MultiHypergraph::nextEdge(void) const
+{
+    return next_edge_;
+}
+
 htd::vertex_t htd::MultiHypergraph::addVertex(void)
 {
     htd::vertex_t ret = next_vertex_;

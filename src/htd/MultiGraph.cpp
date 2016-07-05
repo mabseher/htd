@@ -226,6 +226,16 @@ htd::FilteredHyperedgeCollection htd::MultiGraph::hyperedgesAtPositions(std::vec
     return base_->hyperedgesAtPositions(std::move(indices));
 }
 
+htd::vertex_t htd::MultiGraph::nextVertex(void) const
+{
+    return base_->nextVertex();
+}
+
+htd::id_t htd::MultiGraph::nextEdge(void) const
+{
+    return base_->nextEdge();
+}
+
 htd::vertex_t htd::MultiGraph::addVertex(void)
 {
     return base_->addVertex();

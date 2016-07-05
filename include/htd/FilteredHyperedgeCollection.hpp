@@ -337,6 +337,13 @@ namespace htd
              */
             void restrictTo(const std::vector<htd::vertex_t> & vertices);
 
+            /**
+             *  Swap the contents of a FilteredHyperedgeCollection object and another.
+             *
+             *  @param[in] other    The FilteredHyperedgeCollection object which shall be swapped with this object.
+             */
+            void swap(FilteredHyperedgeCollection & other);
+
         private:
             std::shared_ptr<htd::IHyperedgeCollection> baseCollection_;
 

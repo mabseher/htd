@@ -32,6 +32,7 @@
 #include <htd/CompressionOperation.hpp>
 
 #include <algorithm>
+#include <stack>
 
 htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
 {
@@ -326,6 +327,8 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
 
         strategy_->selectVertices(decomposition, candidates);
 
+        htd::vertex_t lastRegularVertex = decomposition.nextVertex() - 1;
+
         for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
         {
             operation->apply(decomposition, labelingFunctions);
@@ -343,8 +346,6 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
         std::vector<htd::vertex_t> createdVertices;
         std::vector<htd::vertex_t> removedVertices;
 
-        htd::CompressionOperation compressionOperation;
-
         for (htd::vertex_t vertex : candidates)
         {
             if (vertex != initialRoot)
@@ -355,18 +356,29 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
 
                 while (!decomposition.isRoot(currentVertex))
                 {
-                    affectedVertices.push_back(currentVertex);
+                    htd::vertex_t nextVertex = decomposition.parent(currentVertex);
 
-                    currentVertex = decomposition.parent(currentVertex);
+                    if (currentVertex <= lastRegularVertex)
+                    {
+                        affectedVertices.push_back(currentVertex);
+                    }
+
+                    currentVertex = nextVertex;
                 }
 
-                affectedVertices.push_back(currentVertex);
+                if (currentVertex <= lastRegularVertex)
+                {
+                    affectedVertices.push_back(currentVertex);
+                }
+
+                for (htd::vertex_t affectedVertex : affectedVertices)
+                {
+                    removeCreatedNodes(decomposition, affectedVertex, lastRegularVertex);
+                }
 
                 std::cout << "AFFECTED VERTICES: " << affectedVertices << std::endl << std::endl;
 
                 decomposition.makeRoot(vertex);
-
-                compressionOperation.apply(decomposition, affectedVertices, createdVertices, removedVertices);
 
                 for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
                 {
@@ -399,18 +411,29 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
 
         while (!decomposition.isRoot(currentVertex))
         {
-            affectedVertices.push_back(currentVertex);
+            htd::vertex_t nextVertex = decomposition.parent(currentVertex);
 
-            currentVertex = decomposition.parent(currentVertex);
+            if (currentVertex <= lastRegularVertex)
+            {
+                affectedVertices.push_back(currentVertex);
+            }
+
+            currentVertex = nextVertex;
         }
 
-        affectedVertices.push_back(currentVertex);
+        if (currentVertex <= lastRegularVertex)
+        {
+            affectedVertices.push_back(currentVertex);
+        }
+
+        for (htd::vertex_t affectedVertex : affectedVertices)
+        {
+            removeCreatedNodes(decomposition, affectedVertex, lastRegularVertex);
+        }
 
         std::cout << "AFFECTED VERTICES: " << affectedVertices << std::endl << std::endl;
 
         decomposition.makeRoot(optimalRoot);
-
-        compressionOperation.apply(decomposition, affectedVertices, createdVertices, removedVertices);
 
         for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
         {
@@ -430,6 +453,57 @@ bool htd::TreeDecompositionOptimizationOperation::isSafeOperation(const htd::ITr
            !manipulationOperation.removesTreeNodes() &&
            !manipulationOperation.modifiesBagContents() &&
            !manipulationOperation.createsLocationDependendLabels();
+}
+
+void htd::TreeDecompositionOptimizationOperation::removeCreatedNodes(htd::IMutableTreeDecomposition & decomposition, htd::vertex_t start, htd::vertex_t lastRegularVertex) const
+{
+    std::stack<htd::vertex_t> originStack;
+
+    htd::vertex_t last = start;
+
+    htd::vertex_t current = start;
+
+    std::vector<htd::vertex_t> removableVertices;
+
+    if (current > lastRegularVertex)
+    {
+        removableVertices.push_back(current);
+    }
+
+    for (htd::vertex_t neighbor : decomposition.neighbors(current))
+    {
+        if (neighbor > lastRegularVertex)
+        {
+            originStack.push(neighbor);
+        }
+    }
+
+    while (!originStack.empty())
+    {
+        last = current;
+
+        current = originStack.top();
+
+        originStack.pop();
+
+        if (current > lastRegularVertex)
+        {
+            removableVertices.push_back(current);
+        }
+
+        for (htd::vertex_t neighbor : decomposition.neighbors(current))
+        {
+            if (neighbor != last && neighbor > lastRegularVertex)
+            {
+                originStack.push(neighbor);
+            }
+        }
+    }
+
+    for (htd::vertex_t vertex : removableVertices)
+    {
+        decomposition.removeVertex(vertex);
+    }
 }
 
 htd::TreeDecompositionOptimizationOperation * htd::TreeDecompositionOptimizationOperation::clone(void) const

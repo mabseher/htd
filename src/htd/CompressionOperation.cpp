@@ -187,7 +187,10 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
                     decomposition.removeVertex(parent);
                 }
             }
+        }
 
+        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0)
+        {
             const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(vertex);
 
             std::vector<htd::vertex_t> children(childCollection.begin(), childCollection.end());

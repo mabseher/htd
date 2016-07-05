@@ -33,6 +33,7 @@
 
 #include <algorithm>
 #include <stack>
+#include <unordered_set>
 
 htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
 {
@@ -459,16 +460,18 @@ void htd::TreeDecompositionOptimizationOperation::removeCreatedNodes(htd::IMutab
 {
     std::stack<htd::vertex_t> originStack;
 
-    htd::vertex_t last = start;
-
     htd::vertex_t current = start;
 
     std::vector<htd::vertex_t> removableVertices;
+
+    std::unordered_set<htd::vertex_t> visitedVertices;
 
     if (current > lastRegularVertex)
     {
         removableVertices.push_back(current);
     }
+
+    visitedVertices.insert(current);
 
     for (htd::vertex_t neighbor : decomposition.neighbors(current))
     {
@@ -480,8 +483,6 @@ void htd::TreeDecompositionOptimizationOperation::removeCreatedNodes(htd::IMutab
 
     while (!originStack.empty())
     {
-        last = current;
-
         current = originStack.top();
 
         originStack.pop();
@@ -491,9 +492,11 @@ void htd::TreeDecompositionOptimizationOperation::removeCreatedNodes(htd::IMutab
             removableVertices.push_back(current);
         }
 
+        visitedVertices.insert(current);
+
         for (htd::vertex_t neighbor : decomposition.neighbors(current))
         {
-            if (neighbor != last && neighbor > lastRegularVertex)
+            if (neighbor > lastRegularVertex && visitedVertices.count(neighbor) == 0)
             {
                 originStack.push(neighbor);
             }

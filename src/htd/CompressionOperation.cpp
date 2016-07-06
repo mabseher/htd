@@ -179,12 +179,16 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
                 if (std::get<0>(result) == 0)
                 {
                     decomposition.removeVertex(vertex);
+
+                    removedVertices.push_back(vertex);
                 }
                 else if (std::get<2>(result) == 0)
                 {
                     decomposition.swapWithParent(vertex);
 
                     decomposition.removeVertex(parent);
+
+                    removedVertices.push_back(parent);
                 }
             }
         }
@@ -202,15 +206,21 @@ void htd::CompressionOperation::apply(htd::IMutableTreeDecomposition & decomposi
                 if (std::get<0>(result) == 0)
                 {
                     decomposition.removeVertex(child);
+
+                    removedVertices.push_back(child);
                 }
                 else if (std::get<2>(result) == 0)
                 {
                     decomposition.swapWithParent(child);
 
                     decomposition.removeVertex(vertex);
+
+                    removedVertices.push_back(vertex);
                 }
             }
         }
+
+        std::sort(removedVertices.begin(), removedVertices.end());
     }
 }
 

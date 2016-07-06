@@ -128,11 +128,28 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
 
 void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-    HTD_UNUSED(createdVertices)
     HTD_UNUSED(removedVertices)
 
-    apply(decomposition, labelingFunctions);
+    for (htd::vertex_t vertex : relevantVertices)
+    {
+        if (decomposition.isLeaf(vertex) && decomposition.bagSize(vertex) > 0)
+        {
+            htd::vertex_t newLeaf = decomposition.addChild(vertex);
+
+            for (auto & labelingFunction : labelingFunctions)
+            {
+                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newLeaf);
+
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newLeaf), *labelCollection);
+
+                delete labelCollection;
+
+                decomposition.setVertexLabel(labelingFunction->name(), newLeaf, newLabel);
+            }
+
+            createdVertices.push_back(newLeaf);
+        }
+    }
 }
 
 bool htd::AddEmptyLeavesOperation::isLocalOperation(void) const

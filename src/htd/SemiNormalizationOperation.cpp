@@ -89,11 +89,26 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
 void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    htd::WeakNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+    std::size_t newVertexCount = 0;
+
+    std::size_t oldCreatedVerticesCount = createdVertices.size();
+
+    std::vector<htd::vertex_t> newRelevantVertices(relevantVertices.begin(), relevantVertices.end());
+
+    htd::WeakNormalizationOperation::apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+
+    newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
+
+    if (newVertexCount > 0)
+    {
+        std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(newRelevantVertices));
+
+        oldCreatedVerticesCount = createdVertices.size();
+    }
 
     htd::LimitChildCountOperation limitChildCountOperation(2);
 
-    limitChildCountOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+    limitChildCountOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
 
 bool htd::SemiNormalizationOperation::isLocalOperation(void) const

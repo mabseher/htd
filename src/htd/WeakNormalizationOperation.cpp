@@ -123,23 +123,47 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
 void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
+    std::size_t newVertexCount = 0;
+
+    std::size_t oldCreatedVerticesCount = createdVertices.size();
+
+    std::vector<htd::vertex_t> newRelevantVertices(relevantVertices.begin(), relevantVertices.end());
+
     if (emptyRoot_)
     {
         htd::AddEmptyRootOperation addEmptyRootOperation;
 
-        addEmptyRootOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+        addEmptyRootOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+
+        newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
+
+        if (newVertexCount > 0)
+        {
+            std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(newRelevantVertices));
+
+            oldCreatedVerticesCount = createdVertices.size();
+        }
     }
 
     if (emptyLeaves_)
     {
         htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
 
-        addEmptyLeavesOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+        addEmptyLeavesOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+
+        newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
+
+        if (newVertexCount > 0)
+        {
+            std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(newRelevantVertices));
+
+            oldCreatedVerticesCount = createdVertices.size();
+        }
     }
 
     htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(identicalJoinNodeParent_);
 
-    joinNodeNormalizationOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+    joinNodeNormalizationOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
 
 bool htd::WeakNormalizationOperation::isLocalOperation(void) const

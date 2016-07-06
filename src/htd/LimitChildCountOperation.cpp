@@ -142,11 +142,89 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
 void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-    HTD_UNUSED(createdVertices)
     HTD_UNUSED(removedVertices)
 
-    apply(decomposition, labelingFunctions);
+    for (htd::vertex_t vertex : relevantVertices)
+    {
+        std::size_t childCount = decomposition.childCount(vertex);
+
+        if (childCount > limit_)
+        {
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+
+            const htd::FilteredHyperedgeCollection & inducedHyperedges = decomposition.inducedHyperedges(vertex);
+
+            std::vector<htd::vertex_t> children;
+
+            const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(vertex);
+
+            std::copy(childCollection.begin(), childCollection.end(), std::back_inserter(children));
+
+            htd::index_t index = limit_ - 1;
+
+            htd::vertex_t attachmentPoint = vertex;
+
+            while (childCount - index > limit_)
+            {
+                htd::vertex_t newNode = decomposition.addChild(attachmentPoint);
+
+                decomposition.bagContent(newNode) = bag;
+
+                decomposition.inducedHyperedges(newNode) = inducedHyperedges;
+
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
+                }
+
+                attachmentPoint = newNode;
+
+                for (htd::index_t childPosition = index; childPosition < index + limit_ - 1; ++childPosition)
+                {
+                    decomposition.setParent(children[childPosition], attachmentPoint);
+                }
+
+                createdVertices.push_back(newNode);
+
+                index += limit_ - 1;
+            }
+
+            if (index < childCount)
+            {
+                htd::vertex_t newNode = decomposition.addChild(attachmentPoint);
+
+                decomposition.bagContent(newNode) = bag;
+
+                decomposition.inducedHyperedges(newNode) = inducedHyperedges;
+
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
+                }
+
+                attachmentPoint = newNode;
+
+                for (htd::index_t childPosition = index; childPosition < childCount; ++childPosition)
+                {
+                    decomposition.setParent(children[childPosition], attachmentPoint);
+                }
+
+                createdVertices.push_back(newNode);
+            }
+        }
+    }
 }
 
 bool htd::LimitChildCountOperation::isLocalOperation(void) const

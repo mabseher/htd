@@ -115,11 +115,36 @@ void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decompos
 
 void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-    HTD_UNUSED(createdVertices)
     HTD_UNUSED(removedVertices)
 
-    apply(decomposition, labelingFunctions);
+    bool rootVisited = false;
+
+    for (auto it = relevantVertices.begin(); !rootVisited && it != relevantVertices.end(); ++it)
+    {
+        htd::vertex_t vertex = *it;
+
+        if (decomposition.isRoot(vertex) && decomposition.bagSize(vertex) > 0)
+        {
+            htd::vertex_t newRoot = decomposition.addParent(vertex);
+
+            for (auto & labelingFunction : labelingFunctions)
+            {
+                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newRoot);
+
+                const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(newRoot);
+
+                htd::ILabel * newLabel = labelingFunction->computeLabel(bagContent, *labelCollection);
+
+                delete labelCollection;
+
+                decomposition.setVertexLabel(labelingFunction->name(), newRoot, newLabel);
+            }
+
+            createdVertices.push_back(newRoot);
+
+            rootVisited = true;
+        }
+    }
 }
 
 bool htd::AddEmptyRootOperation::isLocalOperation(void) const

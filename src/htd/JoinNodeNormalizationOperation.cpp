@@ -134,11 +134,83 @@ void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition &
 
 void htd::JoinNodeNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-    HTD_UNUSED(createdVertices)
     HTD_UNUSED(removedVertices)
 
-    apply(decomposition, labelingFunctions);
+    for (htd::vertex_t vertex : relevantVertices)
+    {
+        if (decomposition.isJoinNode(vertex))
+        {
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+
+            const htd::FilteredHyperedgeCollection & inducedHyperedges = decomposition.inducedHyperedges(vertex);
+
+            DEBUGGING_CODE(
+            std::cout << "JOIN NODE: " << vertex << std::endl;
+            std::cout << "   ";
+            htd::print(bag, false);
+            std::cout << std::endl << std::endl;
+            )
+
+            if (identicalParent_)
+            {
+                if (decomposition.bagContent(decomposition.parent(vertex)) != bag)
+                {
+                    htd::vertex_t newParent = decomposition.addParent(vertex);
+
+                    decomposition.bagContent(newParent) = bag;
+
+                    decomposition.inducedHyperedges(newParent) = inducedHyperedges;
+
+                    for (auto & labelingFunction : labelingFunctions)
+                    {
+                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newParent);
+
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(bag, *labelCollection);
+
+                        delete labelCollection;
+
+                        decomposition.setVertexLabel(labelingFunction->name(), newParent, newLabel);
+                    }
+
+                    createdVertices.push_back(newParent);
+                }
+            }
+
+            std::vector<htd::vertex_t> children;
+
+            const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(vertex);
+
+            std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+
+            for (htd::vertex_t child : children)
+            {
+                if (decomposition.bagContent(child) != bag)
+                {
+                    DEBUGGING_CODE(
+                    std::cout << "   ADDING INTERMEDIATE NODE BETWEEN NODES " << vertex << " AND " << child << " ..." << std::endl;
+                    std::cout << "      BAG CONTENT: ";
+                    htd::print(bag, false);
+                    std::cout << std::endl << std::endl;
+                    )
+
+                    htd::vertex_t intermediateVertex = decomposition.addParent(child, bag, inducedHyperedges);
+
+                    for (auto & labelingFunction : labelingFunctions)
+                    {
+                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(intermediateVertex);
+
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(bag, *labelCollection);
+
+                        delete labelCollection;
+
+                        decomposition.setVertexLabel(labelingFunction->name(), intermediateVertex, newLabel);
+                    }
+
+                    createdVertices.push_back(intermediateVertex);
+                }
+            }
+        }
+    }
 }
 
 bool htd::JoinNodeNormalizationOperation::isLocalOperation(void) const

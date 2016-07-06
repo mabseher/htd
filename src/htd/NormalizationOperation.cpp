@@ -122,19 +122,52 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
 void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    htd::SemiNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+    std::size_t newVertexCount = 0;
+
+    std::size_t oldCreatedVerticesCount = createdVertices.size();
+
+    std::vector<htd::vertex_t> newRelevantVertices(relevantVertices.begin(), relevantVertices.end());
+
+    htd::SemiNormalizationOperation::apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+
+    newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
+
+    if (newVertexCount > 0)
+    {
+        std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(newRelevantVertices));
+
+        oldCreatedVerticesCount = createdVertices.size();
+    }
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
-    exchangeNodeReplacementOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+    exchangeNodeReplacementOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+
+    newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
+
+    if (newVertexCount > 0)
+    {
+        std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(newRelevantVertices));
+
+        oldCreatedVerticesCount = createdVertices.size();
+    }
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
-    limitMaximumForgottenVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+    limitMaximumForgottenVertexCountOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+
+    newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
+
+    if (newVertexCount > 0)
+    {
+        std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(newRelevantVertices));
+
+        oldCreatedVerticesCount = createdVertices.size();
+    }
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1, treatLeafNodesAsIntroduceNodes_);
 
-    limitMaximumIntroducedVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
+    limitMaximumIntroducedVertexCountOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
 
 bool htd::NormalizationOperation::isLocalOperation(void) const

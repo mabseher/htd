@@ -35,6 +35,11 @@
 #include <stack>
 #include <unordered_set>
 
+htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(void) : enforceNaiveOptimization_(false), strategy_(), fitnessFunction_(), manipulationOperations_()
+{
+
+}
+
 htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : enforceNaiveOptimization_(false), strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
 {
 
@@ -47,9 +52,15 @@ htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperat
 
 htd::TreeDecompositionOptimizationOperation::~TreeDecompositionOptimizationOperation()
 {
-    delete strategy_;
+    if (strategy_ != nullptr)
+    {
+        delete strategy_;
+    }
 
-    delete fitnessFunction_;
+    if (fitnessFunction_ != nullptr)
+    {
+        delete fitnessFunction_;
+    }
 
     for (htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
     {
@@ -115,26 +126,36 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
             }
         }
 
-        if (manipulationOperations_.empty())
+        if (fitnessFunction_ != nullptr)
         {
-            quickOptimization(decomposition);
-        }
-        else
-        {
-            bool isSafe = !enforceNaiveOptimization_;
-
-            for (auto it = manipulationOperations_.begin(); isSafe && it != manipulationOperations_.end(); ++it)
+            if (manipulationOperations_.empty())
             {
-                isSafe = isSafeOperation(*(*it));
-            }
-
-            if (isSafe)
-            {
-                intelligentOptimization(decomposition, labelingFunctions);
+                quickOptimization(decomposition);
             }
             else
             {
-                naiveOptimization(decomposition, labelingFunctions);
+                bool isSafe = !enforceNaiveOptimization_;
+
+                for (auto it = manipulationOperations_.begin(); isSafe && it != manipulationOperations_.end(); ++it)
+                {
+                    isSafe = isSafeOperation(*(*it));
+                }
+
+                if (isSafe)
+                {
+                    intelligentOptimization(decomposition, labelingFunctions);
+                }
+                else
+                {
+                    naiveOptimization(decomposition, labelingFunctions);
+                }
+            }
+        }
+        else
+        {
+            for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
+            {
+                operation->apply(decomposition, labelingFunctions);
             }
         }
     }
@@ -223,7 +244,10 @@ void htd::TreeDecompositionOptimizationOperation::setVertexSelectionStrategy(htd
 {
     HTD_ASSERT(strategy != nullptr)
 
-    delete strategy_;
+    if (strategy_ != nullptr)
+    {
+        delete strategy_;
+    }
 
     strategy_ = strategy;
 }

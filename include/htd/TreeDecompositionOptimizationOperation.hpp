@@ -46,6 +46,15 @@ namespace htd
             /**
              *  Constructor for a new manipulation operation of type TreeDecompositionOptimizationOperation.
              *
+             *  @note This constructor creates an optimization operation which actually does not perform any optimization tasks
+             *  due to the lack of a fitness function. That is, applying the constructed operation to a decomposition will only
+             *  apply the desired manipulation operations and add requested labels.
+             */
+            TreeDecompositionOptimizationOperation(void);
+
+            /**
+             *  Constructor for a new manipulation operation of type TreeDecompositionOptimizationOperation.
+             *
              *  @param[in] fitnessFunction  The fitness function which is used to determine the quality of tree decompositions.
              */
             TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction);

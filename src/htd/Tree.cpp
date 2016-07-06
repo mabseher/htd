@@ -587,9 +587,11 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
     Node & node = *(nodes_.at(vertex));
 
+    auto end = edges_->end();
+
     for (auto it = node.edges.rbegin(); it != node.edges.rend(); ++it)
     {
-        edges_->erase(htd::hyperedgePosition(edges_->begin(), edges_->end(), *it));
+        end = edges_->erase(htd::hyperedgePosition(edges_->begin(), end, *it));
     }
 
     const auto & children = node.children;
@@ -787,9 +789,6 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
             }
         }
     }
-
-    //std::cout << "removeVertex" << std::endl;
-    debug();
 }
 
 void htd::Tree::removeSubtree(htd::vertex_t subtreeRoot)
@@ -893,9 +892,6 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
     nodes_.at(ret)->edges.emplace_back(next_edge_);
 
     ++next_edge_;
-
-    //std::cout << "addChild" << std::endl;
-    debug();
 
     return ret;
 }
@@ -1014,9 +1010,6 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
     ++next_edge_;
 
-    //std::cout << "addParent" << std::endl;
-    debug();
-
     return ret;
 }
 
@@ -1096,9 +1089,6 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
 
         ++next_edge_;
     }
-
-    //std::cout << "setParent" << std::endl;
-    debug();
 }
 
 std::size_t htd::Tree::leafCount(void) const

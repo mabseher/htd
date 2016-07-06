@@ -87,11 +87,44 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(htd::IMutableTreeDecomposit
 
 void htd::AddIdenticalJoinNodeParentOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-    HTD_UNUSED(createdVertices)
     HTD_UNUSED(removedVertices)
 
-    apply(decomposition, labelingFunctions);
+    for (htd::vertex_t vertex : relevantVertices)
+    {
+        if (decomposition.isJoinNode(vertex))
+        {
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+
+            DEBUGGING_CODE(
+            std::cout << "JOIN NODE: " << vertex << std::endl;
+            std::cout << "   ";
+            htd::print(bag, false);
+            std::cout << std::endl << std::endl;
+            )
+
+            if (enforceAdditionalNode_ || decomposition.bagContent(decomposition.parent(vertex)) != bag)
+            {
+                htd::vertex_t newParent = decomposition.addParent(vertex);
+
+                decomposition.bagContent(newParent) = bag;
+
+                decomposition.inducedHyperedges(newParent) = decomposition.inducedHyperedges(vertex);
+
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newParent);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(bag, *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), newParent, newLabel);
+                }
+
+                createdVertices.push_back(newParent);
+            }
+        }
+    }
 }
 
 bool htd::AddIdenticalJoinNodeParentOperation::isLocalOperation(void) const

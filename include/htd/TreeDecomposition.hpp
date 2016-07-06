@@ -119,6 +119,14 @@ namespace htd
 
             bool isIntroduceNode(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            std::size_t exchangeNodeCount(void) const HTD_OVERRIDE;
+
+            htd::ConstCollection<htd::vertex_t> exchangeNodes(void) const HTD_OVERRIDE;
+
+            htd::vertex_t exchangeNodeAtPosition(htd::index_t index) const HTD_OVERRIDE;
+
+            bool isExchangeNode(htd::vertex_t vertex) const HTD_OVERRIDE;
+
             std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) HTD_OVERRIDE;

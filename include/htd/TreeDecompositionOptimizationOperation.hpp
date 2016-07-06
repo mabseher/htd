@@ -50,6 +50,14 @@ namespace htd
              */
             TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction);
 
+            /**
+             *  Constructor for a new manipulation operation of type TreeDecompositionOptimizationOperation.
+             *
+             *  @param[in] fitnessFunction          The fitness function which is used to determine the quality of tree decompositions.
+             *  @param[in] enforceNaiveOptimization Enforce that each iteration of the optimization algorithm starts from scratch with a copy of the given decomposition.
+             */
+            TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction, bool enforceNaiveOptimization);
+
             ~TreeDecompositionOptimizationOperation();
 
             void apply(htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
@@ -117,6 +125,8 @@ namespace htd
             TreeDecompositionOptimizationOperation * clone(void) const HTD_OVERRIDE;
 
         private:
+            bool enforceNaiveOptimization_;
+
             htd::IVertexSelectionStrategy * strategy_;
 
             htd::ITreeDecompositionFitnessFunction * fitnessFunction_;

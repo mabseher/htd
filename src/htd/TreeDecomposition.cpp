@@ -203,7 +203,7 @@ std::size_t htd::TreeDecomposition::joinNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices())
+    for (htd::vertex_t node : vertices_)
     {
         if (childCount(node) > 1)
         {
@@ -220,7 +220,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::joinNodes(void) cons
 
     auto & result = ret.container();
 
-    for (htd::vertex_t node : vertices())
+    for (htd::vertex_t node : vertices_)
     {
         if (childCount(node) > 1)
         {
@@ -255,7 +255,7 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices())
+    for (htd::vertex_t node : vertices_)
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
@@ -278,7 +278,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) co
 
     auto & result = ret.container();
 
-    for (htd::vertex_t node : vertices())
+    for (htd::vertex_t node : vertices_)
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
@@ -325,7 +325,7 @@ std::size_t htd::TreeDecomposition::introduceNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices())
+    for (htd::vertex_t node : vertices_)
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
@@ -348,7 +348,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void)
 
     auto & result = ret.container();
 
-    for (htd::vertex_t node : vertices())
+    for (htd::vertex_t node : vertices_)
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
@@ -389,6 +389,82 @@ bool htd::TreeDecomposition::isIntroduceNode(htd::vertex_t vertex) const
     getChildBagSetUnion(vertex, childBagContent);
 
     return htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end());
+}
+
+std::size_t htd::TreeDecomposition::exchangeNodeCount(void) const
+{
+    std::size_t ret = 0;
+
+    for (htd::vertex_t node : vertices_)
+    {
+        const std::vector<htd::vertex_t> & bag = bagContent(node);
+
+        std::vector<htd::vertex_t> childBagContent;
+
+        getChildBagSetUnion(node, childBagContent);
+
+        std::pair<std::size_t, std::size_t> symmetricDifference = htd::symmetric_difference_sizes(bag, childBagContent);
+
+        if (symmetricDifference.first > 0 && symmetricDifference.second > 0)
+        {
+            ret++;
+        }
+    }
+
+    return ret;
+}
+
+htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::exchangeNodes(void) const
+{
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    auto & result = ret.container();
+
+    for (htd::vertex_t node : vertices_)
+    {
+        const std::vector<htd::vertex_t> & bag = bagContent(node);
+
+        std::vector<htd::vertex_t> childBagContent;
+
+        getChildBagSetUnion(node, childBagContent);
+
+        std::pair<std::size_t, std::size_t> symmetricDifference = htd::symmetric_difference_sizes(bag, childBagContent);
+
+        if (symmetricDifference.first > 0 && symmetricDifference.second > 0)
+        {
+            result.push_back(node);
+        }
+    }
+
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+htd::vertex_t htd::TreeDecomposition::exchangeNodeAtPosition(htd::index_t index) const
+{
+    const htd::ConstCollection<htd::vertex_t> & exchangeNodeCollection = exchangeNodes();
+
+    HTD_ASSERT(index < exchangeNodeCollection.size())
+
+    htd::ConstIterator<htd::vertex_t> it = exchangeNodeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
+}
+
+bool htd::TreeDecomposition::isExchangeNode(htd::vertex_t vertex) const
+{
+    HTD_ASSERT(isVertex(vertex))
+
+    const std::vector<htd::vertex_t> & bag = bagContent(vertex);
+
+    std::vector<htd::vertex_t> childBagContent;
+
+    getChildBagSetUnion(vertex, childBagContent);
+
+    std::pair<std::size_t, std::size_t> symmetricDifference = htd::symmetric_difference_sizes(bag, childBagContent);
+
+    return symmetricDifference.first > 0 && symmetricDifference.second > 0;
 }
 
 std::size_t htd::TreeDecomposition::bagSize(htd::vertex_t vertex) const
@@ -432,7 +508,7 @@ std::size_t htd::TreeDecomposition::minimumBagSize(void) const
 
     std::size_t ret = 0;
 
-    for (htd::vertex_t vertex : vertices())
+    for (htd::vertex_t vertex : vertices_)
     {
         std::size_t currentBagSize = bagSize(vertex);
 
@@ -451,7 +527,7 @@ std::size_t htd::TreeDecomposition::maximumBagSize(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t vertex : vertices())
+    for (htd::vertex_t vertex : vertices_)
     {
         std::size_t currentBagSize = bagSize(vertex);
 
@@ -892,7 +968,7 @@ htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::TreeDecomp
     {
         htd::LabeledTree::operator=(original);
 
-        for (htd::vertex_t vertex : original.vertices())
+        for (htd::vertex_t vertex : original.vertices_)
         {
             bagContent_[vertex] = original.bagContent(vertex);
 

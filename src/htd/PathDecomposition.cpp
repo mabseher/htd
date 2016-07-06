@@ -232,7 +232,7 @@ std::size_t htd::PathDecomposition::forgetNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices())
+    for (htd::vertex_t node : vertices_)
     {
         if (childCount(node) > 0)
         {
@@ -255,7 +255,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgetNodes(void) co
 
     auto & result = ret.container();
 
-    for (htd::vertex_t node : vertices())
+    for (htd::vertex_t node : vertices_)
     {
         if (childCount(node) > 0)
         {
@@ -306,7 +306,7 @@ std::size_t htd::PathDecomposition::introduceNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices())
+    for (htd::vertex_t node : vertices_)
     {
         if (childCount(node) > 0)
         {
@@ -329,7 +329,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introduceNodes(void)
 
     auto & result = ret.container();
 
-    for (htd::vertex_t node : vertices())
+    for (htd::vertex_t node : vertices_)
     {
         if (childCount(node) > 0)
         {
@@ -376,6 +376,92 @@ bool htd::PathDecomposition::isIntroduceNode(htd::vertex_t vertex) const
     return ret;
 }
 
+std::size_t htd::PathDecomposition::exchangeNodeCount(void) const
+{
+    std::size_t ret = 0;
+
+    for (htd::vertex_t node : vertices_)
+    {
+        htd::vertex_t child = nodes_.at(node)->child;
+
+        if (child != htd::Vertex::UNKNOWN)
+        {
+            const std::vector<htd::vertex_t> & bag = bagContent(node);
+            const std::vector<htd::vertex_t> & childBag = bagContent(child);
+
+            std::pair<std::size_t, std::size_t> symmetricDifference = htd::symmetric_difference_sizes(bag, childBag);
+
+            if (symmetricDifference.first > 0 && symmetricDifference.second > 0)
+            {
+                ret++;
+            }
+        }
+    }
+
+    return ret;
+}
+
+htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::exchangeNodes(void) const
+{
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    auto & result = ret.container();
+
+    for (htd::vertex_t node : vertices_)
+    {
+        htd::vertex_t child = nodes_.at(node)->child;
+
+        if (child != htd::Vertex::UNKNOWN)
+        {
+            const std::vector<htd::vertex_t> & bag = bagContent(node);
+            const std::vector<htd::vertex_t> & childBag = bagContent(child);
+
+            std::pair<std::size_t, std::size_t> symmetricDifference = htd::symmetric_difference_sizes(bag, childBag);
+
+            if (symmetricDifference.first > 0 && symmetricDifference.second > 0)
+            {
+                result.push_back(node);
+            }
+        }
+    }
+
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+htd::vertex_t htd::PathDecomposition::exchangeNodeAtPosition(htd::index_t index) const
+{
+    const htd::ConstCollection<htd::vertex_t> & exchangeNodeCollection = exchangeNodes();
+
+    HTD_ASSERT(index < exchangeNodeCollection.size())
+
+    htd::ConstIterator<htd::vertex_t> it = exchangeNodeCollection.begin();
+
+    std::advance(it, index);
+
+    return *it;
+}
+
+bool htd::PathDecomposition::isExchangeNode(htd::vertex_t vertex) const
+{
+    HTD_ASSERT(isVertex(vertex))
+
+    bool ret = false;
+
+    htd::vertex_t child = nodes_.at(vertex)->child;
+
+    if (child != htd::Vertex::UNKNOWN)
+    {
+        const std::vector<htd::vertex_t> & bag = bagContent(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContent(child);
+
+        std::pair<std::size_t, std::size_t> symmetricDifference = htd::symmetric_difference_sizes(bag, childBag);
+
+        ret = symmetricDifference.first > 0 && symmetricDifference.second > 0;
+    }
+
+    return ret;
+}
+
 std::size_t htd::PathDecomposition::bagSize(htd::vertex_t vertex) const
 {
     HTD_ASSERT(isVertex(vertex))
@@ -417,7 +503,7 @@ std::size_t htd::PathDecomposition::minimumBagSize(void) const
 
     std::size_t ret = 0;
 
-    for (htd::vertex_t vertex : vertices())
+    for (htd::vertex_t vertex : vertices_)
     {
         std::size_t currentBagSize = bagSize(vertex);
 
@@ -436,7 +522,7 @@ std::size_t htd::PathDecomposition::maximumBagSize(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t vertex : vertices())
+    for (htd::vertex_t vertex : vertices_)
     {
         std::size_t currentBagSize = bagSize(vertex);
 

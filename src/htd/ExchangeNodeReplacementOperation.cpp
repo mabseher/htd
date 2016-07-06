@@ -54,17 +54,13 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
 
 void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    std::vector<htd::vertex_t> forgetNodes;
     std::vector<htd::vertex_t> exchangeNodes;
-    std::vector<htd::vertex_t> introduceNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
-    const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = decomposition.introduceNodes();
+    const htd::ConstCollection<htd::vertex_t> & exchangeNodeCollection = decomposition.exchangeNodes();
 
-    std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
-    std::copy(introduceNodeCollection.begin(), introduceNodeCollection.end(), std::back_inserter(introduceNodes));
+    std::copy(exchangeNodeCollection.begin(), exchangeNodeCollection.end(), std::back_inserter(exchangeNodes));
 
-    std::set_intersection(forgetNodes.begin(), forgetNodes.end(), introduceNodes.begin(), introduceNodes.end(), std::back_inserter(exchangeNodes));
+    std::vector<htd::vertex_t> rememberedVertices;
 
     for (htd::vertex_t node : exchangeNodes)
     {
@@ -75,8 +71,6 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
         const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 
         std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
-
-        std::vector<htd::vertex_t> rememberedVertices;
 
         for (htd::vertex_t child : children)
         {
@@ -130,17 +124,13 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
 void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    std::vector<htd::vertex_t> forgetNodes;
     std::vector<htd::vertex_t> exchangeNodes;
-    std::vector<htd::vertex_t> introduceNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
-    const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = decomposition.introduceNodes();
+    const htd::ConstCollection<htd::vertex_t> & exchangeNodeCollection = decomposition.exchangeNodes();
 
-    std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
-    std::copy(introduceNodeCollection.begin(), introduceNodeCollection.end(), std::back_inserter(introduceNodes));
+    std::copy(exchangeNodeCollection.begin(), exchangeNodeCollection.end(), std::back_inserter(exchangeNodes));
 
-    std::set_intersection(forgetNodes.begin(), forgetNodes.end(), introduceNodes.begin(), introduceNodes.end(), std::back_inserter(exchangeNodes));
+    std::vector<htd::vertex_t> rememberedVertices;
 
     for (htd::vertex_t node : exchangeNodes)
     {
@@ -151,8 +141,6 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
         const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
 
         std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
-
-        std::vector<htd::vertex_t> rememberedVertices;
 
         for (htd::vertex_t child : children)
         {
@@ -181,19 +169,64 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
                     decomposition.setVertexLabel(labelingFunction->name(), newVertex, newLabel);
                 }
             }
-        }
 
-        rememberedVertices.clear();
+            rememberedVertices.clear();
+        }
     }
 }
 
 void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-    HTD_UNUSED(createdVertices)
     HTD_UNUSED(removedVertices)
 
-    apply(decomposition, labelingFunctions);
+    std::vector<htd::vertex_t> rememberedVertices;
+
+    for (htd::vertex_t vertex : relevantVertices)
+    {
+        if (decomposition.isExchangeNode(vertex))
+        {
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+
+            std::vector<htd::vertex_t> children;
+
+            const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(vertex);
+
+            std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+
+            for (htd::vertex_t child : children)
+            {
+                decomposition.copyRememberedVerticesTo(rememberedVertices, vertex, child);
+
+                if (bag.size() != rememberedVertices.size() || !std::equal(bag.begin(), bag.end(), rememberedVertices.begin()))
+                {
+                    htd::vertex_t newVertex = decomposition.addParent(child);
+
+                    decomposition.bagContent(newVertex) = rememberedVertices;
+
+                    htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(vertex);
+
+                    newInducedHyperedges.restrictTo(rememberedVertices);
+
+                    decomposition.inducedHyperedges(newVertex) = std::move(newInducedHyperedges);
+
+                    for (auto & labelingFunction : labelingFunctions)
+                    {
+                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newVertex);
+
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(rememberedVertices, *labelCollection);
+
+                        delete labelCollection;
+
+                        decomposition.setVertexLabel(labelingFunction->name(), newVertex, newLabel);
+                    }
+
+                    createdVertices.push_back(newVertex);
+                }
+
+                rememberedVertices.clear();
+            }
+        }
+    }
 }
 
 bool htd::ExchangeNodeReplacementOperation::isLocalOperation(void) const

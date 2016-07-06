@@ -138,6 +138,38 @@ namespace htd
             virtual bool isIntroduceNode(htd::vertex_t vertex) const = 0;
 
             /**
+             *  Getter for the number of exchange nodes of the decomposition.
+             *
+             *  @return The number of exchange nodes of the decomposition.
+             */
+            virtual std::size_t exchangeNodeCount(void) const = 0;
+
+            /**
+             *  Access the collection of all exchange nodes in the decomposition.
+             *
+             *  @return The collection of all exchange nodes in the decomposition sorted by ID in ascending order.
+             */
+            virtual htd::ConstCollection<htd::vertex_t> exchangeNodes(void) const = 0;
+
+            /**
+             *  Access the exchange node at the specific position.
+             *
+             *  @param[in] index     The position of the exchange node.
+             *
+             *  @return The ID of the exchange node at the specific position.
+             */
+            virtual htd::vertex_t exchangeNodeAtPosition(htd::index_t index) const = 0;
+
+            /**
+             *  Check whether a vertex is an exchange node in the decomposition.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return True if the given vertex is an exchange node in the decomposition, false otherwise.
+             */
+            virtual bool isExchangeNode(htd::vertex_t vertex) const = 0;
+
+            /**
              *  Getter for the number of vertices which are present in at least one child bag but not in the bag of the given vertex.
              *
              *  @param[in] vertex   The vertex.

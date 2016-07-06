@@ -35,7 +35,12 @@
 #include <stack>
 #include <unordered_set>
 
-htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
+htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : enforceNaiveOptimization_(false), strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
+{
+
+}
+
+htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction, bool enforceNaiveOptimization) : enforceNaiveOptimization_(enforceNaiveOptimization), strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
 {
 
 }
@@ -62,12 +67,13 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
     apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
-//TODO Remove
-#include <htd/PreOrderTreeTraversal.hpp>
-
-//TODO Remove
+//TODO Remove!
 //#define VERBOSE
 
+//TODO Remove!
+#include <htd/PreOrderTreeTraversal.hpp>
+
+//TODO Remove!
 void debug(const htd::ITreeDecomposition & decomposition)
 {
     htd::PreOrderTreeTraversal traversal;
@@ -115,7 +121,7 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
         }
         else
         {
-            bool isSafe = true;
+            bool isSafe = !enforceNaiveOptimization_;
 
             for (auto it = manipulationOperations_.begin(); isSafe && it != manipulationOperations_.end(); ++it)
             {
@@ -279,6 +285,13 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(htd::IMutabl
 
         double optimalFitness = fitnessFunction.fitness(*localDecomposition);
 
+#ifdef VERBOSE
+        //TODO
+        debug(*localDecomposition);
+
+        std::cout << "INITIAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
+#endif
+
         for (htd::vertex_t vertex : candidates)
         {
             if (vertex != initialRoot)
@@ -296,12 +309,27 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(htd::IMutabl
 
                 double currentFitness = fitnessFunction.fitness(*localDecomposition);
 
+#ifdef VERBOSE
+                //TODO
+                debug(*localDecomposition);
+
+                std::cout << "CURRENT FITNESS:     " << currentFitness << "   (ROOT: " << vertex << ")" << std::endl;
+#endif
+
                 if (currentFitness > optimalFitness)
                 {
                     optimalFitness = currentFitness;
 
                     optimalRoot = vertex;
+
+#ifdef VERBOSE
+                    std::cout << "NEW OPTIMAL FITNESS: " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl;
+#endif
                 }
+
+#ifdef VERBOSE
+                std::cout << std::endl << std::endl << std::endl;
+#endif
             }
         }
 
@@ -313,6 +341,13 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(htd::IMutabl
         {
             operation->apply(decomposition, labelingFunctions);
         }
+
+#ifdef VERBOSE
+        //TODO
+        debug(decomposition);
+
+        std::cout << "OPTIMAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
+#endif
     }
 }
 
@@ -339,10 +374,12 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
 
         double optimalFitness = fitnessFunction.fitness(decomposition);
 
+#ifdef VERBOSE
         //TODO
         debug(decomposition);
 
         std::cout << "INITIAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
+#endif
 
         std::vector<htd::vertex_t> createdVertices;
         std::vector<htd::vertex_t> removedVertices;
@@ -377,21 +414,34 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
                     removeCreatedNodes(decomposition, affectedVertex, lastRegularVertex);
                 }
 
-                std::cout << "AFFECTED VERTICES: " << affectedVertices << std::endl << std::endl;
+                std::size_t newVertexCount = 0;
+
+                std::size_t oldCreatedVerticesCount = createdVertices.size();
 
                 decomposition.makeRoot(vertex);
 
                 for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
                 {
                     operation->apply(decomposition, affectedVertices, labelingFunctions, createdVertices, removedVertices);
-                }
 
-                //TODO
-                debug(decomposition);
+                    newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
+
+                    if (newVertexCount > 0)
+                    {
+                        std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(affectedVertices));
+
+                        oldCreatedVerticesCount = createdVertices.size();
+                    }
+                }
 
                 double currentFitness = fitnessFunction.fitness(decomposition);
 
+#ifdef VERBOSE
+                //TODO
+                debug(decomposition);
+
                 std::cout << "CURRENT FITNESS:     " << currentFitness << "   (ROOT: " << vertex << ")" << std::endl;
+#endif
 
                 if (currentFitness > optimalFitness)
                 {
@@ -399,10 +449,14 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
 
                     optimalRoot = vertex;
 
+#ifdef VERBOSE
                     std::cout << "NEW OPTIMAL FITNESS: " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl;
+#endif
                 }
 
+#ifdef VERBOSE
                 std::cout << std::endl << std::endl << std::endl;
+#endif
             }
         }
 
@@ -432,19 +486,32 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
             removeCreatedNodes(decomposition, affectedVertex, lastRegularVertex);
         }
 
-        std::cout << "AFFECTED VERTICES: " << affectedVertices << std::endl << std::endl;
+        std::size_t newVertexCount = 0;
+
+        std::size_t oldCreatedVerticesCount = createdVertices.size();
 
         decomposition.makeRoot(optimalRoot);
 
         for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
         {
             operation->apply(decomposition, affectedVertices, labelingFunctions, createdVertices, removedVertices);
+
+            newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
+
+            if (newVertexCount > 0)
+            {
+                std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(affectedVertices));
+
+                oldCreatedVerticesCount = createdVertices.size();
+            }
         }
 
+#ifdef VERBOSE
         //TODO
         debug(decomposition);
 
         std::cout << "OPTIMAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
+#endif
     }
 }
 

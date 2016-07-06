@@ -347,12 +347,12 @@ bool htd::JoinNodeReplacementOperation::createsTreeNodes(void) const
 
 bool htd::JoinNodeReplacementOperation::removesTreeNodes(void) const
 {
-    return false;
+    return true;
 }
 
 bool htd::JoinNodeReplacementOperation::modifiesBagContents(void) const
 {
-    return false;
+    return true;
 }
 
 bool htd::JoinNodeReplacementOperation::createsLocationDependendLabels(void) const

@@ -363,7 +363,8 @@ bool htd::InducedSubgraphLabelingOperation::modifiesBagContents(void) const
 
 bool htd::InducedSubgraphLabelingOperation::createsLocationDependendLabels(void) const
 {
-    return false;
+    //TODO Change?
+    return true;
 }
 
 htd::InducedSubgraphLabelingOperation * htd::InducedSubgraphLabelingOperation::clone(void) const

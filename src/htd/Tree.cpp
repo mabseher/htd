@@ -591,7 +591,19 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
     for (auto it = node.edges.rbegin(); it != node.edges.rend(); ++it)
     {
-        end = edges_->erase(htd::hyperedgePosition(edges_->begin(), end, *it));
+        auto position = htd::hyperedgePosition(edges_->begin(), end, *it);
+
+        for (htd::vertex_t currentVertex : position->sortedElements())
+        {
+            if (currentVertex != vertex)
+            {
+                std::vector<htd::id_t> & currentEdges = nodes_.at(currentVertex)->edges;
+
+                currentEdges.erase(std::lower_bound(currentEdges.begin(), currentEdges.end(), *it));
+            }
+        }
+
+        end = edges_->erase(position);
     }
 
     const auto & children = node.children;
@@ -601,12 +613,6 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
         Node & parentNode = *(nodes_.at(node.parent));
 
         auto & siblings = parentNode.children;
-
-        std::vector<htd::id_t> newParentEdges;
-
-        std::set_difference(parentNode.edges.begin(), parentNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newParentEdges));
-
-        parentNode.edges.swap(newParentEdges);
 
         switch (children.size())
         {
@@ -638,13 +644,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                     edges_->emplace_back(next_edge_, child, node.parent);
                 }
 
-                std::vector<htd::id_t> newChildEdges;
-
-                std::set_difference(childNode.edges.begin(), childNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newChildEdges));
-
-                newChildEdges.emplace_back(next_edge_);
-
-                childNode.edges.swap(newChildEdges);
+                childNode.edges.emplace_back(next_edge_);
 
                 parentNode.edges.emplace_back(next_edge_);
 
@@ -676,13 +676,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                         edges_->emplace_back(next_edge_, child, node.parent);
                     }
 
-                    std::vector<htd::id_t> newChildEdges;
-
-                    std::set_difference(childNode.edges.begin(), childNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newChildEdges));
-
-                    newChildEdges.emplace_back(next_edge_);
-
-                    childNode.edges.swap(newChildEdges);
+                    childNode.edges.emplace_back(next_edge_);
 
                     parentNode.edges.emplace_back(next_edge_);
 
@@ -716,15 +710,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
             {
                 root_ = children[0];
 
-                Node & rootNode = *(nodes_.at(root_));
-
-                rootNode.parent = htd::Vertex::UNKNOWN;
-
-                std::vector<htd::id_t> newRootEdges;
-
-                std::set_difference(rootNode.edges.begin(), rootNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newRootEdges));
-
-                rootNode.edges.swap(newRootEdges);
+                nodes_.at(root_)->parent = htd::Vertex::UNKNOWN;
 
                 deleteNode(nodes_.at(vertex));
 
@@ -736,15 +722,9 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                 Node & rootNode = *(nodes_.at(root_));
 
-                std::vector<htd::vertex_t> & newRootChildren = rootNode.children;
-
                 rootNode.parent = htd::Vertex::UNKNOWN;
 
-                std::vector<htd::id_t> newRootEdges;
-
-                std::set_difference(rootNode.edges.begin(), rootNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newRootEdges));
-
-                rootNode.edges.swap(newRootEdges);
+                std::vector<htd::vertex_t> & newRootChildren = rootNode.children;
 
                 for (auto it = children.begin() + 1; it != children.end(); ++it)
                 {
@@ -770,13 +750,7 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                         edges_->emplace_back(next_edge_, child, root_);
                     }
 
-                    std::vector<htd::id_t> newChildEdges;
-
-                    std::set_difference(childNode.edges.begin(), childNode.edges.end(), node.edges.begin(), node.edges.end(), std::back_inserter(newChildEdges));
-
-                    newChildEdges.emplace_back(next_edge_);
-
-                    childNode.edges.swap(newChildEdges);
+                    childNode.edges.emplace_back(next_edge_);
 
                     rootNode.edges.emplace_back(next_edge_);
 

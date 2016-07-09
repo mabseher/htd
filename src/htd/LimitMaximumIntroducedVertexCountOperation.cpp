@@ -669,6 +669,11 @@ bool htd::LimitMaximumIntroducedVertexCountOperation::modifiesBagContents(void) 
     return false;
 }
 
+bool htd::LimitMaximumIntroducedVertexCountOperation::createsSubsetMaximalBags(void) const
+{
+    return false;
+}
+
 bool htd::LimitMaximumIntroducedVertexCountOperation::createsLocationDependendLabels(void) const
 {
     return false;

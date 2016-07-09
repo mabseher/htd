@@ -244,6 +244,11 @@ bool htd::CompressionOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::CompressionOperation::createsSubsetMaximalBags(void) const
+{
+    return false;
+}
+
 bool htd::CompressionOperation::createsLocationDependendLabels(void) const
 {
     return false;

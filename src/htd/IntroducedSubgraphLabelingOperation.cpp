@@ -357,6 +357,11 @@ bool htd::IntroducedSubgraphLabelingOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::IntroducedSubgraphLabelingOperation::createsSubsetMaximalBags(void) const
+{
+    return false;
+}
+
 bool htd::IntroducedSubgraphLabelingOperation::createsLocationDependendLabels(void) const
 {
     //TODO Change?

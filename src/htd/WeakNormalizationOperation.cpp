@@ -196,14 +196,19 @@ bool htd::WeakNormalizationOperation::emptyLeavesRequired(void) const
     return emptyLeaves_;
 }
 
-bool htd::WeakNormalizationOperation::identicalJoinNodeParentRequired(void) const
+bool htd::WeakNormalizationOperation::createsSubsetMaximalBags(void) const
 {
-    return identicalJoinNodeParent_;
+    return false;
 }
 
 bool htd::WeakNormalizationOperation::createsLocationDependendLabels(void) const
 {
     return false;
+}
+
+bool htd::WeakNormalizationOperation::identicalJoinNodeParentRequired(void) const
+{
+    return identicalJoinNodeParent_;
 }
 
 htd::WeakNormalizationOperation * htd::WeakNormalizationOperation::clone(void) const

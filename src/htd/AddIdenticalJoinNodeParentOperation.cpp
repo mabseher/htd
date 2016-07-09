@@ -147,6 +147,11 @@ bool htd::AddIdenticalJoinNodeParentOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::AddIdenticalJoinNodeParentOperation::createsSubsetMaximalBags(void) const
+{
+    return false;
+}
+
 bool htd::AddIdenticalJoinNodeParentOperation::createsLocationDependendLabels(void) const
 {
     return false;

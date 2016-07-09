@@ -473,6 +473,11 @@ bool htd::LimitMaximumForgottenVertexCountOperation::modifiesBagContents(void) c
     return false;
 }
 
+bool htd::LimitMaximumForgottenVertexCountOperation::createsSubsetMaximalBags(void) const
+{
+    return false;
+}
+
 bool htd::LimitMaximumForgottenVertexCountOperation::createsLocationDependendLabels(void) const
 {
     return false;

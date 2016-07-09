@@ -355,6 +355,11 @@ bool htd::JoinNodeReplacementOperation::modifiesBagContents(void) const
     return true;
 }
 
+bool htd::JoinNodeReplacementOperation::createsSubsetMaximalBags(void) const
+{
+    return true;
+}
+
 bool htd::JoinNodeReplacementOperation::createsLocationDependendLabels(void) const
 {
     return false;

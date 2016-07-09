@@ -211,6 +211,18 @@ bool htd::TreeDecompositionOptimizationOperation::modifiesBagContents(void) cons
     return ret;
 }
 
+bool htd::TreeDecompositionOptimizationOperation::createsSubsetMaximalBags(void) const
+{
+    bool ret = false;
+
+    for (auto it = manipulationOperations_.begin(); !ret && it != manipulationOperations_.end(); ++it)
+    {
+        ret = (*it)->createsSubsetMaximalBags();
+    }
+
+    return ret;
+}
+
 bool htd::TreeDecompositionOptimizationOperation::createsLocationDependendLabels(void) const
 {
     bool ret = false;
@@ -544,6 +556,7 @@ bool htd::TreeDecompositionOptimizationOperation::isSafeOperation(const htd::ITr
     return manipulationOperation.isLocalOperation() &&
            !manipulationOperation.removesTreeNodes() &&
            !manipulationOperation.modifiesBagContents() &&
+           !manipulationOperation.createsSubsetMaximalBags() &&
            !manipulationOperation.createsLocationDependendLabels();
 }
 
@@ -593,6 +606,8 @@ void htd::TreeDecompositionOptimizationOperation::removeCreatedNodes(htd::IMutab
             }
         }
     }
+
+    std::sort(removableVertices.begin(), removableVertices.end(), std::greater<htd::vertex_t>());
 
     for (htd::vertex_t vertex : removableVertices)
     {

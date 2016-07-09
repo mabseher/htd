@@ -84,6 +84,8 @@ namespace htd
 
             bool modifiesBagContents(void) const HTD_OVERRIDE;
 
+            bool createsSubsetMaximalBags(void) const HTD_OVERRIDE;
+
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
             LimitMaximumIntroducedVertexCountOperation * clone(void) const HTD_OVERRIDE;

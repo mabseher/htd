@@ -247,6 +247,11 @@ bool htd::LimitChildCountOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::LimitChildCountOperation::createsSubsetMaximalBags(void) const
+{
+    return false;
+}
+
 bool htd::LimitChildCountOperation::createsLocationDependendLabels(void) const
 {
     return false;

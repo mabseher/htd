@@ -131,6 +131,11 @@ bool htd::SemiNormalizationOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::SemiNormalizationOperation::createsSubsetMaximalBags(void) const
+{
+    return false;
+}
+
 bool htd::SemiNormalizationOperation::createsLocationDependendLabels(void) const
 {
     return false;

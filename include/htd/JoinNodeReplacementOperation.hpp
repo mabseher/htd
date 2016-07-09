@@ -65,6 +65,8 @@ namespace htd
 
             bool modifiesBagContents(void) const HTD_OVERRIDE;
 
+            bool createsSubsetMaximalBags(void) const HTD_OVERRIDE;
+
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
             JoinNodeReplacementOperation * clone(void) const HTD_OVERRIDE;

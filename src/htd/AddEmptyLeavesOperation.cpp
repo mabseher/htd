@@ -172,6 +172,11 @@ bool htd::AddEmptyLeavesOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::AddEmptyLeavesOperation::createsSubsetMaximalBags(void) const
+{
+    return true;
+}
+
 bool htd::AddEmptyLeavesOperation::createsLocationDependendLabels(void) const
 {
     return false;

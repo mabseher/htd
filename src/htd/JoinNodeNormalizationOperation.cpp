@@ -233,6 +233,11 @@ bool htd::JoinNodeNormalizationOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::JoinNodeNormalizationOperation::createsSubsetMaximalBags(void) const
+{
+    return false;
+}
+
 bool htd::JoinNodeNormalizationOperation::createsLocationDependendLabels(void) const
 {
     return false;

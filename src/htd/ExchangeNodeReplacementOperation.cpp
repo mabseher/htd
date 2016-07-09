@@ -249,6 +249,11 @@ bool htd::ExchangeNodeReplacementOperation::modifiesBagContents(void) const
     return false;
 }
 
+bool htd::ExchangeNodeReplacementOperation::createsSubsetMaximalBags(void) const
+{
+    return false;
+}
+
 bool htd::ExchangeNodeReplacementOperation::createsLocationDependendLabels(void) const
 {
     return false;

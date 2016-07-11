@@ -42,7 +42,6 @@
 #include <htd/ConstIterator.hpp>
 #include <htd/ConstIteratorWrapper.hpp>
 #include <htd/ConstPointerIteratorWrapper.hpp>
-#include <htd/ConstPointerIteratorWrapper.hpp~>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
 #include <htd/DepthFirstGraphTraversal.hpp>
 #include <htd/DirectedGraphFactory.hpp>

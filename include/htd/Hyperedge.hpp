@@ -290,12 +290,15 @@ namespace htd
              */
             bool operator!=(const std::vector<htd::vertex_t> & rhs) const;
 
-        private:
-            class ElementInformation;
+            /**
+             *  Forward declaration of internal class for storing the element information of a hyperedge.
+             */
+            class IElementInformation;
 
+        private:
             htd::id_t id_;
 
-            std::unique_ptr<ElementInformation> content_;
+            std::unique_ptr<IElementInformation> content_;
     };
 }
 

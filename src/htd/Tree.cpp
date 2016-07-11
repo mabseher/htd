@@ -31,35 +31,46 @@
 #include <htd/VectorAdapter.hpp>
 #include <htd/PreOrderTreeTraversal.hpp>
 #include <htd/PostOrderTreeTraversal.hpp>
-#include <htd/HyperedgeDeque.hpp>
+#include <htd/HyperedgePointerDeque.hpp>
+#include <htd/ConstPointerIteratorWrapper.hpp>
 
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
 #include <utility>
 
-htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge *>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
 
 }
 
-htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge>>(*(original.edges_))), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge *>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
     nodes_.reserve(original.nodes_.size());
     
+    for (const htd::Hyperedge * edge : *(original.edges_))
+    {
+        edges_->emplace_back(new htd::Hyperedge(*edge));
+    }
+
     for (const auto & node : original.nodes_)
     {
         nodes_.insert(std::make_pair(node.first, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(*(node.second)))));
     }
 }
 
-htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Vertex::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Vertex::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge *>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
 {
     *this = original;
 }
 
 htd::Tree::~Tree()
 {
+    for (htd::Hyperedge * edge : *edges_)
+    {
+        delete edge;
+    }
+
     htd::Library::instance().unregisterSignalHandler(signalHandlerId_);
 }
 
@@ -363,7 +374,8 @@ bool htd::Tree::isIsolatedVertex(htd::vertex_t vertex) const
 
 htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(void) const
 {
-    return htd::ConstCollection<htd::Hyperedge>::getInstance(*edges_);
+    return htd::ConstCollection<htd::Hyperedge>(static_cast<htd::ConstIteratorBase<htd::Hyperedge> *>(new htd::ConstPointerIteratorWrapper<std::deque<htd::Hyperedge *>::const_iterator, htd::Hyperedge>(edges_->begin())),
+                                                static_cast<htd::ConstIteratorBase<htd::Hyperedge> *>(new htd::ConstPointerIteratorWrapper<std::deque<htd::Hyperedge *>::const_iterator, htd::Hyperedge>(edges_->end())));
 }
 
 htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t vertex) const
@@ -376,9 +388,9 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t vertex)
 
     for (auto & edge : *edges_)
     {
-        if (edge.contains(vertex))
+        if (edge->contains(vertex))
         {
-            result.emplace_back(edge);
+            result.emplace_back(*edge);
         }
     }
 
@@ -393,7 +405,7 @@ const htd::Hyperedge & htd::Tree::hyperedge(htd::id_t edgeId) const
 
     for (auto it = edges_->begin(); !found && it != edges_->end(); ++it)
     {
-        if (it->id() == edgeId)
+        if ((*it)->id() == edgeId)
         {
             position = it;
 
@@ -406,21 +418,21 @@ const htd::Hyperedge & htd::Tree::hyperedge(htd::id_t edgeId) const
         throw std::logic_error("const htd::Hyperedge & htd::Tree::hyperedge(htd::id_t) const");
     }
 
-    return *position;
+    return **position;
 }
 
 const htd::Hyperedge & htd::Tree::hyperedgeAtPosition(htd::index_t index) const
 {
     HTD_ASSERT(index < edges_->size())
 
-    return edges_->at(index);
+    return *(edges_->at(index));
 }
 
 const htd::Hyperedge & htd::Tree::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
     for (auto it = edges_->begin(); it != edges_->end(); ++it)
     {
-        const htd::Hyperedge & hyperedge = *it;
+        const htd::Hyperedge & hyperedge = **it;
 
         if (hyperedge.contains(vertex))
         {
@@ -445,7 +457,7 @@ htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(const std::vec
     }
     #endif
 
-    return htd::FilteredHyperedgeCollection(new htd::HyperedgeDeque(edges_), indices);
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgePointerDeque(edges_), indices);
 }
 
 htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
@@ -457,7 +469,7 @@ htd::FilteredHyperedgeCollection htd::Tree::hyperedgesAtPositions(std::vector<ht
     }
     #endif
 
-    return htd::FilteredHyperedgeCollection(new htd::HyperedgeDeque(edges_), std::move(indices));
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgePointerDeque(edges_), std::move(indices));
 }
 
 htd::vertex_t htd::Tree::root(void) const
@@ -591,9 +603,9 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
     for (auto it = node.edges.rbegin(); it != node.edges.rend(); ++it)
     {
-        auto position = htd::hyperedgePosition(edges_->begin(), end, *it);
+        auto position = htd::hyperedgePointerPosition(edges_->begin(), end, *it);
 
-        for (htd::vertex_t currentVertex : position->sortedElements())
+        for (htd::vertex_t currentVertex : (*position)->sortedElements())
         {
             if (currentVertex != vertex)
             {
@@ -602,6 +614,8 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
                 currentEdges.erase(std::lower_bound(currentEdges.begin(), currentEdges.end(), *it));
             }
         }
+
+        delete *position;
 
         end = edges_->erase(position);
     }
@@ -637,11 +651,11 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                 if (node.parent < child)
                 {
-                    edges_->emplace_back(next_edge_, node.parent, child);
+                    edges_->emplace_back(new htd::Hyperedge(next_edge_, node.parent, child));
                 }
                 else
                 {
-                    edges_->emplace_back(next_edge_, child, node.parent);
+                    edges_->emplace_back(new htd::Hyperedge(next_edge_, child, node.parent));
                 }
 
                 childNode.edges.emplace_back(next_edge_);
@@ -669,11 +683,11 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                     if (node.parent < child)
                     {
-                        edges_->emplace_back(next_edge_, node.parent, child);
+                        edges_->emplace_back(new htd::Hyperedge(next_edge_, node.parent, child));
                     }
                     else
                     {
-                        edges_->emplace_back(next_edge_, child, node.parent);
+                        edges_->emplace_back(new htd::Hyperedge(next_edge_, child, node.parent));
                     }
 
                     childNode.edges.emplace_back(next_edge_);
@@ -743,11 +757,11 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                     if (root_ < child)
                     {
-                        edges_->emplace_back(next_edge_, root_, child);
+                        edges_->emplace_back(new htd::Hyperedge(next_edge_, root_, child));
                     }
                     else
                     {
-                        edges_->emplace_back(next_edge_, child, root_);
+                        edges_->emplace_back(new htd::Hyperedge(next_edge_, child, root_));
                     }
 
                     childNode.edges.emplace_back(next_edge_);
@@ -859,7 +873,7 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
     size_++;
 
-    edges_->emplace_back(next_edge_, vertex, ret);
+    edges_->emplace_back(new htd::Hyperedge(next_edge_, vertex, ret));
 
     node.edges.emplace_back(next_edge_);
 
@@ -930,11 +944,8 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
     {
         htd::vertex_t parentVertex = parent(vertex);
 
-        ret = addChild(parentVertex);
-
         auto & parentNode = nodes_.at(parentVertex);
         auto & selectedNode = nodes_.at(vertex);
-        auto & intermediateNode = nodes_.at(ret);
 
         htd::id_t oldHyperedge = htd::Id::UNKNOWN;
 
@@ -942,13 +953,15 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
         while (it != selectedNode->edges.end())
         {
-            auto position = htd::hyperedgePosition(edges_->begin(), edges_->end(), *it);
+            auto position = htd::hyperedgePointerPosition(edges_->begin(), edges_->end(), *it);
 
             HTD_ASSERT(position != edges_->end())
 
-            if (position->contains(parentVertex))
+            if ((*position)->contains(parentVertex))
             {
-                oldHyperedge = position->id();
+                oldHyperedge = (*position)->id();
+
+                delete *position;
 
                 edges_->erase(position);
 
@@ -962,6 +975,10 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
         parentNode->edges.erase(std::lower_bound(parentNode->edges.begin(), parentNode->edges.end(), oldHyperedge));
         selectedNode->edges.erase(std::lower_bound(selectedNode->edges.begin(), selectedNode->edges.end(), oldHyperedge));
+
+        ret = addChild(parentVertex);
+
+        auto & intermediateNode = nodes_.at(ret);
 
         intermediateNode->parent = parentVertex;
 
@@ -977,7 +994,7 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
         selectedNode->parent = ret;
     }
 
-    edges_->emplace_back(next_edge_, vertex, ret);
+    edges_->emplace_back(new htd::Hyperedge(next_edge_, vertex, ret));
 
     nodes_.at(vertex)->edges.emplace_back(next_edge_);
     nodes_.at(ret)->edges.emplace_back(next_edge_);
@@ -1017,13 +1034,15 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
 
         while (it != oldParentNode->edges.end())
         {
-            auto position = htd::hyperedgePosition(edges_->begin(), edges_->end(), *it);
+            auto position = htd::hyperedgePointerPosition(edges_->begin(), edges_->end(), *it);
 
             HTD_ASSERT(position != edges_->end())
 
-            if (position->contains(vertex))
+            if ((*position)->contains(vertex))
             {
-                oldHyperedge = position->id();
+                oldHyperedge = (*position)->id();
+
+                delete *position;
 
                 edges_->erase(position);
 
@@ -1048,18 +1067,14 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
 
         node->parent = newParent;
 
-        std::vector<htd::vertex_t> newEdge;
-
         if (vertex < newParent)
         {
-            newEdge = std::vector<htd::vertex_t> { vertex, newParent };
+            edges_->emplace_back(new htd::Hyperedge(next_edge_, vertex, newParent));
         }
         else
         {
-            newEdge = std::vector<htd::vertex_t> { newParent, vertex };
+            edges_->emplace_back(new htd::Hyperedge(next_edge_, newParent, vertex));
         }
-
-        edges_->emplace_back(next_edge_, std::move(newEdge));
 
         ++next_edge_;
     }
@@ -1225,7 +1240,17 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
             next_vertex_ = htd::Vertex::FIRST;
         }
 
-        edges_ = std::make_shared<std::deque<htd::Hyperedge>>(*(original.edges_));
+        for (htd::Hyperedge * edge : *edges_)
+        {
+            delete edge;
+        }
+
+        edges_->clear();
+
+        for (htd::Hyperedge * edge : *(original.edges_))
+        {
+            edges_->emplace_back(new htd::Hyperedge(*edge));
+        }
 
         next_edge_ = original.next_edge_;
     }
@@ -1290,11 +1315,21 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
 
             const htd::ConstCollection<htd::Hyperedge> & originalEdges = original.hyperedges();
 
-            edges_ = std::make_shared<std::deque<htd::Hyperedge>>(originalEdges.begin(), originalEdges.end());
+            for (htd::Hyperedge * edge : *edges_)
+            {
+                delete edge;
+            }
+
+            edges_->clear();
+
+            for (auto it = originalEdges.begin(); it != originalEdges.end(); ++it)
+            {
+                edges_->emplace_back(new htd::Hyperedge(*it));
+            }
 
             if (!edges_->empty())
             {
-                next_edge_ = edges_->rbegin()->id();
+                next_edge_ = (*(edges_->rbegin()))->id() + 1;
             }
         }
     }

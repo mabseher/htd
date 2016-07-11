@@ -62,7 +62,7 @@ namespace htd
              *  @param[in] id       The ID of the constructed hyperedge.
              *  @param[in] elements The endpoints of the constructed hyperedge.
              */
-            Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements);
+            Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT;
 
             /**
              *  Constructor for a hyperedge.
@@ -78,14 +78,14 @@ namespace htd
              *  @param[in] id       The ID of the constructed hyperedge.
              *  @param[in] elements The endpoints of the constructed hyperedge.
              */
-            Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements);
+            Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements) HTD_NOEXCEPT;
 
             /**
              *  Copy constructor for a hyperedge.
              *
              *  @param[in] original  The original hyperedge.
              */
-            Hyperedge(const Hyperedge & original);
+            Hyperedge(const Hyperedge & original) HTD_NOEXCEPT;
 
             /**
              *  Move constructor for a hyperedge.

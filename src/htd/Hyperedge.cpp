@@ -27,10 +27,19 @@
 
 #include <htd/Hyperedge.hpp>
 
+/**
+ *  Internal class for storing the element information of a hyperedge.
+ */
 class htd::Hyperedge::ElementInformation
 {
     public:
-        ElementInformation(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT  : elements_(std::initializer_list<htd::vertex_t> { vertex1, vertex2 }), sortedElements_()
+        /**
+         *  Constructor for a hyperedge element information.
+         *
+         *  @param[in] vertex1  The first endpoint of the constructed hyperedge.
+         *  @param[in] vertex2  The second endpoint of the constructed hyperedge.
+         */
+        ElementInformation(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT : elements_(std::initializer_list<htd::vertex_t> { vertex1, vertex2 }), sortedElements_()
         {
             if (vertex1 < vertex2)
             {
@@ -52,7 +61,12 @@ class htd::Hyperedge::ElementInformation
             }
         }
 
-        ElementInformation(const std::vector<htd::vertex_t> & elements) : elements_(elements.begin(), elements.end()), sortedElements_()
+        /**
+         *  Constructor for a hyperedge element information.
+         *
+         *  @param[in] elements The endpoints of the constructed hyperedge.
+         */
+        ElementInformation(const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT : elements_(elements.begin(), elements.end()), sortedElements_()
         {
             elements_.shrink_to_fit();
 
@@ -105,6 +119,11 @@ class htd::Hyperedge::ElementInformation
             }
         }
 
+        /**
+         *  Constructor for a hyperedge element information.
+         *
+         *  @param[in] elements The endpoints of the constructed hyperedge.
+         */
         ElementInformation(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : elements_(), sortedElements_()
         {
             elements_.swap(elements);
@@ -160,7 +179,12 @@ class htd::Hyperedge::ElementInformation
             }
         }
 
-        ElementInformation(const htd::ConstCollection<htd::vertex_t> & elements) : elements_(elements.begin(), elements.end()), sortedElements_()
+        /**
+         *  Constructor for a hyperedge element information.
+         *
+         *  @param[in] elements The endpoints of the constructed hyperedge.
+         */
+        ElementInformation(const htd::ConstCollection<htd::vertex_t> & elements) HTD_NOEXCEPT : elements_(elements.begin(), elements.end()), sortedElements_()
         {
             elements_.shrink_to_fit();
 
@@ -213,6 +237,12 @@ class htd::Hyperedge::ElementInformation
             }
         }
 
+        /**
+         *  Set the endpoints of the hyperedge.
+         *
+         *  @param[in] vertex1  The first endpoint of the updated hyperedge.
+         *  @param[in] vertex2  The second endpoint of the updated hyperedge.
+         */
         void setElements(htd::vertex_t vertex1, htd::vertex_t vertex2)
         {
             elements_.clear();
@@ -242,6 +272,11 @@ class htd::Hyperedge::ElementInformation
             }
         }
 
+        /**
+         *  Set the endpoints of the hyperedge.
+         *
+         *  @param[in] elements The new endpoints of the updated hyperedge.
+         */
         void setElements(const std::vector<htd::vertex_t> & elements)
         {
             elements_.reserve(elements.size());
@@ -297,6 +332,11 @@ class htd::Hyperedge::ElementInformation
             }
         }
 
+        /**
+         *  Set the endpoints of the hyperedge.
+         *
+         *  @param[in] elements The new endpoints of the updated hyperedge.
+         */
         void setElements(std::vector<htd::vertex_t> && elements)
         {
             elements_.swap(elements);
@@ -352,36 +392,73 @@ class htd::Hyperedge::ElementInformation
             }
         }
 
+        /**
+         *  Set the endpoints of the hyperedge.
+         *
+         *  @param[in] elements The new endpoints of the updated hyperedge.
+         */
         void setElements(const htd::ConstCollection<htd::vertex_t> & elements)
         {
             setElements(std::vector<htd::vertex_t>(elements.begin(), elements.end()));
         }
 
+        /**
+         *  Getter for the elements of the hyperedge.
+         *
+         *  @return The elements of the hyperedge.
+         */
         const std::vector<htd::vertex_t> & elements(void) const
         {
             return elements_;
         }
 
+        /**
+         *  Getter for the elements of the hyperedge in ascending order without duplicates.
+         *
+         *  @return The elements of the hyperedge in ascending order without duplicates.
+         */
         const std::vector<htd::vertex_t> & sortedElements(void) const
         {
             return sortedElements_;
         }
 
+        /**
+         *  Check whether the hyperedge contains no elements.
+         *
+         *  @return True if the hyperedge contains no elements, false otherwise.
+         */
         bool empty(void) const
         {
             return elements_.empty();
         }
 
+        /**
+         *  Getter for the number of elements of the hyperedge.
+         *
+         *  @return The number of elements of the hyperedge.
+         */
         std::size_t size(void) const
         {
             return elements_.size();
         }
 
+        /**
+         *  Check whether the hyperedge contains a specific vertex.
+         *
+         *  @param[in] vertex   The specific vertex to test for existence.
+         *
+         *  @return True if the hyperedge contains the specific vertex, false otherwise.
+         */
         bool contains(htd::vertex_t vertex) const
         {
             return std::binary_search(sortedElements_.begin(), sortedElements_.end(), vertex);
         }
 
+        /**
+         *  Erase a specific vertex from the hyperedge in case the vertex is contained in the hyperedge.
+         *
+         *  @param[in] vertex   The specific vertex which shall be removed.
+         */
         void erase(htd::vertex_t vertex)
         {
             elements_.erase(std::remove(elements_.begin(), elements_.end(), vertex), elements_.end());
@@ -394,21 +471,45 @@ class htd::Hyperedge::ElementInformation
             }
         }
 
+        /**
+         *  Getter for a const_iterator pointing to the first element in the hyperedge.
+         *
+         *  @return A const_iterator pointing to the first element in the hyperedge.
+         */
         std::vector<htd::vertex_t>::const_iterator begin(void) const
         {
             return elements_.begin();
         }
 
+        /**
+         *  Getter for a const_iterator pointing to the end of the elements in the hyperedge.
+         *
+         *  @return A const_iterator pointing to the end of the elements in the hyperedge.
+         */
         std::vector<htd::vertex_t>::const_iterator end(void) const
         {
             return elements_.end();
         }
 
+        /**
+         *  Access the element at the specific position within the hyperedge.
+         *
+         *  @param[in] index    The position of the element.
+         *
+         *  @return The element at the specific position.
+         */
         const htd::vertex_t & at(htd::index_t index) const
         {
             return elements_.at(index);
         }
 
+        /**
+         *  Access the element at the specific position within the hyperedge.
+         *
+         *  @param[in] index    The position of the element.
+         *
+         *  @return The element at the specific position.
+         */
         const htd::vertex_t & operator[](htd::index_t index) const
         {
             return elements_.at(index);
@@ -425,7 +526,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t ver
 
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements) : id_(id), content_(new ElementInformation(elements))
+htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT : id_(id), content_(new ElementInformation(elements))
 {
 
 }
@@ -435,12 +536,12 @@ htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) 
 
 }
 
-htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements) : id_(id), content_(new ElementInformation(elements))
+htd::Hyperedge::Hyperedge(htd::id_t id, const htd::ConstCollection<htd::vertex_t> & elements) HTD_NOEXCEPT : id_(id), content_(new ElementInformation(elements))
 {
 
 }
 
-htd::Hyperedge::Hyperedge(const htd::Hyperedge & original) : id_(original.id_), content_(new ElementInformation(*(original.content_)))
+htd::Hyperedge::Hyperedge(const htd::Hyperedge & original) HTD_NOEXCEPT : id_(original.id_), content_(new ElementInformation(*(original.content_)))
 {
 
 }

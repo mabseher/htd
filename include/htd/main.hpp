@@ -41,6 +41,8 @@
 #include <htd/ConstIteratorBase.hpp>
 #include <htd/ConstIterator.hpp>
 #include <htd/ConstIteratorWrapper.hpp>
+#include <htd/ConstPointerIteratorWrapper.hpp>
+#include <htd/ConstPointerIteratorWrapper.hpp~>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
 #include <htd/DepthFirstGraphTraversal.hpp>
 #include <htd/DirectedGraphFactory.hpp>
@@ -64,6 +66,8 @@
 #include <htd/HumanReadableExporter.hpp>
 #include <htd/HyperedgeDeque.hpp>
 #include <htd/Hyperedge.hpp>
+#include <htd/HyperedgePointerDeque.hpp>
+#include <htd/HyperedgePointerVector.hpp>
 #include <htd/HyperedgeVector.hpp>
 #include <htd/HypergraphFactory.hpp>
 #include <htd/Hypergraph.hpp>

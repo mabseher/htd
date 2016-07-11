@@ -577,7 +577,11 @@ void htd::TreeDecompositionOptimizationOperation::removeCreatedNodes(htd::IMutab
 
     visitedVertices.insert(current);
 
-    for (htd::vertex_t neighbor : decomposition.neighbors(current))
+    std::vector<htd::vertex_t> neighbors;
+
+    decomposition.copyNeighborsTo(neighbors, current);
+
+    for (htd::vertex_t neighbor : neighbors)
     {
         if (neighbor > lastRegularVertex)
         {
@@ -598,7 +602,11 @@ void htd::TreeDecompositionOptimizationOperation::removeCreatedNodes(htd::IMutab
 
         visitedVertices.insert(current);
 
-        for (htd::vertex_t neighbor : decomposition.neighbors(current))
+        neighbors.clear();
+
+        decomposition.copyNeighborsTo(neighbors, current);
+
+        for (htd::vertex_t neighbor : neighbors)
         {
             if (neighbor > lastRegularVertex && visitedVertices.count(neighbor) == 0)
             {

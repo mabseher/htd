@@ -101,6 +101,8 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> joinNodes(void) const HTD_OVERRIDE;
 
+            void copyJoinNodesTo(std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+
             htd::vertex_t joinNodeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             bool isJoinNode(htd::vertex_t vertex) const HTD_OVERRIDE;
@@ -108,6 +110,8 @@ namespace htd
             std::size_t forgetNodeCount(void) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> forgetNodes(void) const HTD_OVERRIDE;
+
+            void copyForgetNodesTo(std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
             htd::vertex_t forgetNodeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
@@ -117,6 +121,8 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> introduceNodes(void) const HTD_OVERRIDE;
 
+            void copyIntroduceNodesTo(std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+
             htd::vertex_t introduceNodeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             bool isIntroduceNode(htd::vertex_t vertex) const HTD_OVERRIDE;
@@ -124,6 +130,8 @@ namespace htd
             std::size_t exchangeNodeCount(void) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> exchangeNodes(void) const HTD_OVERRIDE;
+
+            void copyExchangeNodesTo(std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
             htd::vertex_t exchangeNodeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 

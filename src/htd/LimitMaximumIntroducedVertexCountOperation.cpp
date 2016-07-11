@@ -64,9 +64,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 {
     std::vector<htd::vertex_t> introduceNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = decomposition.introduceNodes();
-
-    std::copy(introduceNodeCollection.begin(), introduceNodeCollection.end(), std::back_inserter(introduceNodes));
+    decomposition.copyIntroduceNodesTo(introduceNodes);
 
     for (htd::vertex_t node : introduceNodes)
     {
@@ -104,9 +102,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
                 std::vector<htd::vertex_t> children;
 
-                const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
-
-                std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+                decomposition.copyChildrenTo(children, node);
 
                 if (children.empty())
                 {
@@ -270,9 +266,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 {
     std::vector<htd::vertex_t> introduceNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & introduceNodeCollection = decomposition.introduceNodes();
-
-    std::copy(introduceNodeCollection.begin(), introduceNodeCollection.end(), std::back_inserter(introduceNodes));
+    decomposition.copyIntroduceNodesTo(introduceNodes);
 
     for (htd::vertex_t node : introduceNodes)
     {
@@ -310,9 +304,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                 std::vector<htd::vertex_t> children;
 
-                const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
-
-                std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+                decomposition.copyChildrenTo(children, node);
 
                 if (children.empty())
                 {
@@ -498,9 +490,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
                     std::vector<htd::vertex_t> children;
 
-                    const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(vertex);
-
-                    std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+                    decomposition.copyChildrenTo(children, vertex);
 
                     if (children.empty())
                     {

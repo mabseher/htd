@@ -57,9 +57,7 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 {
     std::vector<htd::vertex_t> joinNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & joinNodeCollection = decomposition.joinNodes();
-
-    std::copy(joinNodeCollection.begin(), joinNodeCollection.end(), std::back_inserter(joinNodes));
+    decomposition.copyJoinNodesTo(joinNodes);
 
     for (htd::vertex_t node : joinNodes)
     {
@@ -73,9 +71,7 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
             std::vector<htd::vertex_t> children;
 
-            const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(node);
-
-            std::copy(childCollection.begin(), childCollection.end(), std::back_inserter(children));
+            decomposition.copyChildrenTo(children, node);
 
             htd::index_t index = limit_ - 1;
 
@@ -156,9 +152,7 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
             std::vector<htd::vertex_t> children;
 
-            const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(vertex);
-
-            std::copy(childCollection.begin(), childCollection.end(), std::back_inserter(children));
+            decomposition.copyChildrenTo(children, vertex);
 
             htd::index_t index = limit_ - 1;
 

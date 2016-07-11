@@ -56,6 +56,13 @@ namespace htd
             virtual htd::ConstCollection<htd::vertex_t> joinNodes(void) const = 0;
 
             /**
+             *  Get the collection of all join nodes and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the join nodes shall be appended.
+             */
+            virtual void copyJoinNodesTo(std::vector<htd::vertex_t> & target) const = 0;
+
+            /**
              *  Access the join node at the specific position.
              *
              *  @param[in] index     The position of the join node.
@@ -86,6 +93,13 @@ namespace htd
              *  @return The collection of all forget nodes in the decomposition sorted by ID in ascending order.
              */
             virtual htd::ConstCollection<htd::vertex_t> forgetNodes(void) const = 0;
+
+            /**
+             *  Get the collection of all forget nodes and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the forget nodes shall be appended.
+             */
+            virtual void copyForgetNodesTo(std::vector<htd::vertex_t> & target) const = 0;
 
             /**
              *  Access the forget node at the specific position.
@@ -120,6 +134,13 @@ namespace htd
             virtual htd::ConstCollection<htd::vertex_t> introduceNodes(void) const = 0;
 
             /**
+             *  Get the collection of all introduce nodes and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the introduce nodes shall be appended.
+             */
+            virtual void copyIntroduceNodesTo(std::vector<htd::vertex_t> & target) const = 0;
+
+            /**
              *  Access the introduce node at the specific position.
              *
              *  @param[in] index     The position of the introduce node.
@@ -150,6 +171,13 @@ namespace htd
              *  @return The collection of all exchange nodes in the decomposition sorted by ID in ascending order.
              */
             virtual htd::ConstCollection<htd::vertex_t> exchangeNodes(void) const = 0;
+
+            /**
+             *  Get the collection of all exchange nodes and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the exchange nodes shall be appended.
+             */
+            virtual void copyExchangeNodesTo(std::vector<htd::vertex_t> & target) const = 0;
 
             /**
              *  Access the exchange node at the specific position.

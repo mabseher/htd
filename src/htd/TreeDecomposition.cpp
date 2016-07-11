@@ -218,17 +218,20 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::joinNodes(void) cons
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
+    copyJoinNodesTo(ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::TreeDecomposition::copyJoinNodesTo(std::vector<htd::vertex_t> & target) const
+{
     for (htd::vertex_t node : vertices_)
     {
         if (childCount(node) > 1)
         {
-            result.push_back(node);
+            target.push_back(node);
         }
     }
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::joinNodeAtPosition(htd::index_t index) const
@@ -276,8 +279,13 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) co
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
+    copyForgetNodesTo(ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::TreeDecomposition::copyForgetNodesTo(std::vector<htd::vertex_t> & target) const
+{
     for (htd::vertex_t node : vertices_)
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
@@ -288,11 +296,9 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) co
 
         if (htd::has_non_empty_set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end()))
         {
-            result.push_back(node);
+            target.push_back(node);
         }
     }
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::forgetNodeAtPosition(htd::index_t index) const
@@ -346,8 +352,13 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void)
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
+    copyIntroduceNodesTo(ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::TreeDecomposition::copyIntroduceNodesTo(std::vector<htd::vertex_t> & target) const
+{
     for (htd::vertex_t node : vertices_)
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
@@ -358,11 +369,9 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void)
 
         if (htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end()))
         {
-            result.push_back(node);
+            target.push_back(node);
         }
     }
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::introduceNodeAtPosition(htd::index_t index) const
@@ -418,8 +427,13 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::exchangeNodes(void) 
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
+    copyExchangeNodesTo(ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::TreeDecomposition::copyExchangeNodesTo(std::vector<htd::vertex_t> & target) const
+{
     for (htd::vertex_t node : vertices_)
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
@@ -432,11 +446,9 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::exchangeNodes(void) 
 
         if (symmetricDifference.first > 0 && symmetricDifference.second > 0)
         {
-            result.push_back(node);
+            target.push_back(node);
         }
     }
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::TreeDecomposition::exchangeNodeAtPosition(htd::index_t index) const

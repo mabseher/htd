@@ -212,6 +212,11 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::joinNodes(void) cons
     return htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>());
 }
 
+void htd::PathDecomposition::copyJoinNodesTo(std::vector<htd::vertex_t> & target) const
+{
+    HTD_UNUSED(target)
+}
+
 htd::vertex_t htd::PathDecomposition::joinNodeAtPosition(htd::index_t index) const
 {
     HTD_UNUSED(index)
@@ -253,8 +258,13 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgetNodes(void) co
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
+    copyForgetNodesTo(ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::PathDecomposition::copyForgetNodesTo(std::vector<htd::vertex_t> & target) const
+{
     for (htd::vertex_t node : vertices_)
     {
         if (childCount(node) > 0)
@@ -264,12 +274,10 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgetNodes(void) co
 
             if (htd::has_non_empty_set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end()))
             {
-                result.push_back(node);
+                target.push_back(node);
             }
         }
     }
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::PathDecomposition::forgetNodeAtPosition(htd::index_t index) const
@@ -327,8 +335,13 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introduceNodes(void)
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
+    copyIntroduceNodesTo(ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::PathDecomposition::copyIntroduceNodesTo(std::vector<htd::vertex_t> & target) const
+{
     for (htd::vertex_t node : vertices_)
     {
         if (childCount(node) > 0)
@@ -338,12 +351,10 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introduceNodes(void)
 
             if (htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
             {
-                result.push_back(node);
+                target.push_back(node);
             }
         }
     }
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::PathDecomposition::introduceNodeAtPosition(htd::index_t index) const
@@ -405,8 +416,13 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::exchangeNodes(void) 
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
+    copyExchangeNodesTo(ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::PathDecomposition::copyExchangeNodesTo(std::vector<htd::vertex_t> & target) const
+{
     for (htd::vertex_t node : vertices_)
     {
         htd::vertex_t child = nodes_.at(node)->child;
@@ -420,12 +436,10 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::exchangeNodes(void) 
 
             if (symmetricDifference.first > 0 && symmetricDifference.second > 0)
             {
-                result.push_back(node);
+                target.push_back(node);
             }
         }
     }
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::PathDecomposition::exchangeNodeAtPosition(htd::index_t index) const

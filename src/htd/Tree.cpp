@@ -517,6 +517,15 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::children(htd::vertex_t vertex) co
     return htd::ConstCollection<htd::vertex_t>::getInstance(nodes_.at(vertex)->children);
 }
 
+void htd::Tree::copyChildrenTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+{
+    HTD_ASSERT(isVertex(vertex))
+
+    const std::vector<htd::vertex_t> & childCollection = nodes_.at(vertex)->children;
+
+    std::copy(childCollection.begin(), childCollection.end(), std::back_inserter(target));
+}
+
 htd::vertex_t htd::Tree::childAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     HTD_ASSERT(isVertex(vertex))

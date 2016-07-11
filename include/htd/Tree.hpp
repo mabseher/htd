@@ -146,7 +146,9 @@ namespace htd
             std::size_t childCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> children(htd::vertex_t vertex) const HTD_OVERRIDE;
-            
+
+            void copyChildrenTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const HTD_OVERRIDE;
+
             htd::vertex_t childAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
             bool isChild(htd::vertex_t vertex, htd::vertex_t child) const HTD_OVERRIDE;

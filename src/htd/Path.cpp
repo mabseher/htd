@@ -616,6 +616,16 @@ htd::ConstCollection<htd::vertex_t> htd::Path::children(htd::vertex_t vertex) co
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
+void htd::Path::copyChildrenTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+{
+    HTD_ASSERT(isVertex(vertex))
+
+    if (nodes_.at(vertex)->child != htd::Vertex::UNKNOWN)
+    {
+        target.push_back(nodes_.at(vertex)->child);
+    }
+}
+
 htd::vertex_t htd::Path::child(htd::vertex_t vertex) const
 {
     HTD_ASSERT(isVertex(vertex))

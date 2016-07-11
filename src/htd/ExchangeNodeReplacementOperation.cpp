@@ -56,9 +56,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
 {
     std::vector<htd::vertex_t> exchangeNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & exchangeNodeCollection = decomposition.exchangeNodes();
-
-    std::copy(exchangeNodeCollection.begin(), exchangeNodeCollection.end(), std::back_inserter(exchangeNodes));
+    decomposition.copyExchangeNodesTo(exchangeNodes);
 
     std::vector<htd::vertex_t> rememberedVertices;
 
@@ -68,9 +66,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
 
         std::vector<htd::vertex_t> children;
 
-        const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
-
-        std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+        decomposition.copyChildrenTo(children, node);
 
         for (htd::vertex_t child : children)
         {
@@ -126,9 +122,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 {
     std::vector<htd::vertex_t> exchangeNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & exchangeNodeCollection = decomposition.exchangeNodes();
-
-    std::copy(exchangeNodeCollection.begin(), exchangeNodeCollection.end(), std::back_inserter(exchangeNodes));
+    decomposition.copyExchangeNodesTo(exchangeNodes);
 
     std::vector<htd::vertex_t> rememberedVertices;
 
@@ -138,9 +132,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
         std::vector<htd::vertex_t> children;
 
-        const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
-
-        std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+        decomposition.copyChildrenTo(children, node);
 
         for (htd::vertex_t child : children)
         {
@@ -189,9 +181,7 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
             std::vector<htd::vertex_t> children;
 
-            const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(vertex);
-
-            std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+            decomposition.copyChildrenTo(children, vertex);
 
             for (htd::vertex_t child : children)
             {

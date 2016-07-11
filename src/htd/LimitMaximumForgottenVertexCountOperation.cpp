@@ -57,9 +57,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 {
     std::vector<htd::vertex_t> forgetNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
-
-    std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
+    decomposition.copyForgetNodesTo(forgetNodes);
 
     for (htd::vertex_t node : forgetNodes)
     {
@@ -95,9 +93,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
             std::vector<htd::vertex_t> children;
 
-            const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
-
-            std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+            decomposition.copyChildrenTo(children, node);
 
             if (children.size() == 1)
             {
@@ -198,9 +194,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 {
     std::vector<htd::vertex_t> forgetNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & forgetNodeCollection = decomposition.forgetNodes();
-
-    std::copy(forgetNodeCollection.begin(), forgetNodeCollection.end(), std::back_inserter(forgetNodes));
+    decomposition.copyForgetNodesTo(forgetNodes);
 
     for (htd::vertex_t node : forgetNodes)
     {
@@ -236,9 +230,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
             std::vector<htd::vertex_t> children;
 
-            const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(node);
-
-            std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+            decomposition.copyChildrenTo(children, node);
 
             if (children.size() == 1)
             {
@@ -362,9 +354,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
                 std::vector<htd::vertex_t> children;
 
-                const htd::ConstCollection<htd::vertex_t> & childContainer = decomposition.children(vertex);
-
-                std::copy(childContainer.begin(), childContainer.end(), std::back_inserter(children));
+                decomposition.copyChildrenTo(children, vertex);
 
                 if (children.size() == 1)
                 {

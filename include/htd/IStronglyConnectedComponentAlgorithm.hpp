@@ -60,7 +60,7 @@ namespace htd
             virtual void determineComponent(const htd::IDirectedMultiGraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const = 0;
 
             /**
-             *  Create a deep copy the current strongly connected component algorithm.
+             *  Create a deep copy of the current strongly connected component algorithm.
              *
              *  @return A new IStronglyConnectedComponentAlgorithm object identical to the current strongly connected component algorithm.
              */

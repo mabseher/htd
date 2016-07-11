@@ -40,7 +40,7 @@ namespace htd
             virtual ~IMultiGraph() = 0;
 
             /**
-             *  Create a deep copy the current multi-graph.
+             *  Create a deep copy of the current multi-graph.
              *
              *  @return A new IMultiGraph object identical to the current multi-graph.
              */

@@ -993,7 +993,7 @@ namespace htd
             }
 
             /**
-             *  Create a deep copy the current tree.
+             *  Create a deep copy of the current tree.
              *
              *  @return A new NamedTree object identical to the current path.
              */

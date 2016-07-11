@@ -78,7 +78,7 @@ namespace htd
             virtual bool operator!=(const ConstIteratorBase<T> & rhs) const = 0;
 
             /**
-             *  Create a deep copy the current iterator.
+             *  Create a deep copy of the current iterator.
              *
              *  @return A new ConstIteratorBase<T> object identical to the current iterator.
              */

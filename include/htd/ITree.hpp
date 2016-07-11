@@ -181,7 +181,7 @@ namespace htd
             virtual std::size_t depth(htd::vertex_t vertex) const = 0;
 
             /**
-             *  Create a deep copy the current tree.
+             *  Create a deep copy of the current tree.
              *
              *  @return A new ITree object identical to the current tree.
              */

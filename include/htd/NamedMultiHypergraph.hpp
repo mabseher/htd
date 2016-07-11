@@ -1066,7 +1066,7 @@ namespace htd
             }
 
             /**
-             *  Create a deep copy the current multi-hypergraph.
+             *  Create a deep copy of the current multi-hypergraph.
              *
              *  @return A new NamedMultiHypergraph object identical to the current multi-hypergraph.
              */

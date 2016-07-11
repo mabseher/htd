@@ -106,7 +106,7 @@ namespace htd
             virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
             /**
-             *  Create a deep copy the current mutable directed graph.
+             *  Create a deep copy of the current mutable directed graph.
              *
              *  @return A new IMutableDirectedGraph object identical to the current mutable directed graph.
              */

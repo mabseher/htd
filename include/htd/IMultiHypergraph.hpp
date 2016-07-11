@@ -314,7 +314,7 @@ namespace htd
             virtual bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const = 0;
 
             /**
-             *  Create a deep copy the current multi-hypergraph.
+             *  Create a deep copy of the current multi-hypergraph.
              *
              *  @return A new IMultiHypergraph object identical to the current multi-hypergraph.
              */

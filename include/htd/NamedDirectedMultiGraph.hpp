@@ -1076,7 +1076,7 @@ namespace htd
             }
 
             /**
-             *  Create a deep copy the current directed multi-graph.
+             *  Create a deep copy of the current directed multi-graph.
              *
              *  @return A new NamedDirectedMultiGraph object identical to the current directed multi-graph.
              */

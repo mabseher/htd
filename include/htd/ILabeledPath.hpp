@@ -40,7 +40,7 @@ namespace htd
             virtual ~ILabeledPath() = 0;
 
             /**
-             *  Create a deep copy the current labeled path.
+             *  Create a deep copy of the current labeled path.
              *
              *  @return A new ILabeledPath object identical to the current labeled path.
              */

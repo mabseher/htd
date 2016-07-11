@@ -98,7 +98,7 @@ namespace htd
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
             /**
-             *  Create a deep copy the current mutable multi-graph.
+             *  Create a deep copy of the current mutable multi-graph.
              *
              *  @return A new IMutableMultiGraph object identical to the current mutable multi-graph.
              */

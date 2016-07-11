@@ -42,7 +42,7 @@ namespace htd
             virtual ~ILabeledGraph() = 0;
 
             /**
-             *  Create a deep copy the current labeled graph.
+             *  Create a deep copy of the current labeled graph.
              *
              *  @return A new ILabeledGraph object identical to the current labeled graph.
              */

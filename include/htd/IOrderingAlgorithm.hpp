@@ -57,7 +57,7 @@ namespace htd
             virtual void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const = 0;
 
             /**
-             *  Create a deep copy the current ordering algorithm.
+             *  Create a deep copy of the current ordering algorithm.
              *
              *  @return A new IOrderingAlgorithm object identical to the current ordering algorithm.
              */

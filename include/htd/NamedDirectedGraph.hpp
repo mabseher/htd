@@ -1089,7 +1089,7 @@ namespace htd
             }
 
             /**
-             *  Create a deep copy the current directed graph.
+             *  Create a deep copy of the current directed graph.
              *
              *  @return A new NamedDirectedGraph object identical to the current directed graph.
              */

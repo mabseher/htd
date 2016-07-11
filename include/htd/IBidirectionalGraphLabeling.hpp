@@ -92,7 +92,7 @@ namespace htd
             virtual htd::id_t lookupEdge(const htd::ILabel & label) const = 0;
 
             /**
-             *  Create a deep copy the current bi-directional graph labeling.
+             *  Create a deep copy of the current bi-directional graph labeling.
              *
              *  @return A new IBidirectionalGraphLabeling object identical to the current bi-directional graph labeling.
              */

@@ -129,7 +129,7 @@ namespace htd
             virtual bool createsLocationDependendLabels(void) const = 0;
 
             /**
-             *  Create a deep copy the current tree decomposition manipulation operation.
+             *  Create a deep copy of the current tree decomposition manipulation operation.
              *
              *  @return A new ITreeDecompositionManipulationOperation object identical to the current tree decomposition manipulation operation.
              */

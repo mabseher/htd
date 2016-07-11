@@ -40,7 +40,7 @@ namespace htd
             virtual ~IPathDecomposition() = 0;
 
             /**
-             *  Create a deep copy the current path decomposition.
+             *  Create a deep copy of the current path decomposition.
              *
              *  @return A new IPathDecomposition object identical to the current path decomposition.
              */

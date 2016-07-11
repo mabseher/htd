@@ -38,7 +38,7 @@ namespace htd
             virtual ~IDecompositionManipulationOperation() = 0;
 
             /**
-             *  Create a deep copy the current decomposition manipulation operation.
+             *  Create a deep copy of the current decomposition manipulation operation.
              *
              *  @return A new IDecompositionManipulationOperation object identical to the current decomposition manipulation operation.
              */

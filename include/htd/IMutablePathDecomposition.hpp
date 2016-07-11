@@ -120,7 +120,7 @@ namespace htd
             virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
 
             /**
-             *  Create a deep copy the current mutable path decomposition.
+             *  Create a deep copy of the current mutable path decomposition.
              *
              *  @return A new IMutablePathDecomposition object identical to the current mutable path decomposition.
              */

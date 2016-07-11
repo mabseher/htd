@@ -67,7 +67,7 @@ namespace htd
             virtual std::size_t maximumCoveringEdgeAmount(void) const = 0;
 
             /**
-             *  Create a deep copy the current hypertree decomposition.
+             *  Create a deep copy of the current hypertree decomposition.
              *
              *  @return A new IHypertreeDecomposition object identical to the current hypertree decomposition.
              */

@@ -143,7 +143,7 @@ namespace htd
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
             /**
-             *  Create a deep copy the current mutable multi-hypergraph.
+             *  Create a deep copy of the current mutable multi-hypergraph.
              *
              *  @return A new IMutableMultiHypergraph object identical to the current mutable multi-hypergraph.
              */

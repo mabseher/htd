@@ -41,7 +41,7 @@ namespace htd
             virtual ~IGraph() = 0;
 
             /**
-             *  Create a deep copy the current graph.
+             *  Create a deep copy of the current graph.
              *
              *  @return A new IGraph object identical to the current graph.
              */

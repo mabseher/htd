@@ -175,7 +175,7 @@ namespace htd
             virtual void removeEdgeLabel(htd::id_t edgeId) = 0;
 
             /**
-             *  Create a deep copy the current graph labeling.
+             *  Create a deep copy of the current graph labeling.
              *
              *  @return A new IGraphLabeling object identical to the current graph labeling.
              */

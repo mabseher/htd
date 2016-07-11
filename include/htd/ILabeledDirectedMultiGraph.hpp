@@ -42,7 +42,7 @@ namespace htd
             virtual ~ILabeledDirectedMultiGraph() = 0;
 
             /**
-             *  Create a deep copy the current labeled directed multi-graph.
+             *  Create a deep copy of the current labeled directed multi-graph.
              *
              *  @return A new ILabeledDirectedMultiGraph object identical to the current labeled directed multi-graph.
              */

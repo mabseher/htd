@@ -165,7 +165,7 @@ namespace htd
             virtual void removeEdge(const htd::ConstCollection<htd::vertex_t> & elements) = 0;
 
             /**
-             *  Create a deep copy the current mutable hypergraph.
+             *  Create a deep copy of the current mutable hypergraph.
              *
              *  @return A new IMutableHypergraph object identical to the current mutable hypergraph.
              */

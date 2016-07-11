@@ -1008,7 +1008,7 @@ namespace htd
             }
 
             /**
-             *  Create a deep copy the current multi-graph.
+             *  Create a deep copy of the current multi-graph.
              *
              *  @return A new NamedMultiGraph object identical to the current multi-graph.
              */

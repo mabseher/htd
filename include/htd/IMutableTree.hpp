@@ -129,7 +129,7 @@ namespace htd
             virtual void swapWithParent(htd::vertex_t vertex) = 0;
 
             /**
-             *  Create a deep copy the current mutable tree.
+             *  Create a deep copy of the current mutable tree.
              *
              *  @return A new IMutableTree object identical to the current mutable tree.
              */

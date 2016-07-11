@@ -153,7 +153,7 @@ namespace htd
             virtual htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId) = 0;
 
             /**
-             *  Create a deep copy the current mutable labeled directed multi-graph.
+             *  Create a deep copy of the current mutable labeled directed multi-graph.
              *
              *  @return A new IMutableLabeledDirectedMultiGraph object identical to the current mutable labeled directed multi-graph.
              */

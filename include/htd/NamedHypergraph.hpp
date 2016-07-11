@@ -1117,7 +1117,7 @@ namespace htd
             }
 
             /**
-             *  Create a deep copy the current hypergraph.
+             *  Create a deep copy of the current hypergraph.
              *
              *  @return A new NamedHypergraph object identical to the current hypergraph.
              */

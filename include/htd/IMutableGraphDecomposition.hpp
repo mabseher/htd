@@ -86,7 +86,7 @@ namespace htd
             virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
 
             /**
-             *  Create a deep copy the current mutable graph decomposition.
+             *  Create a deep copy of the current mutable graph decomposition.
              *
              *  @return A new IMutableGraphDecomposition object identical to the current mutable graph decomposition.
              */

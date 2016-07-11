@@ -125,7 +125,7 @@ namespace htd
             virtual bool isReachable(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
 
             /**
-             *  Create a deep copy the current directed multi-graph.
+             *  Create a deep copy of the current directed multi-graph.
              *
              *  @return A new IDirectedMultiGraph object identical to the current directed multi-graph.
              */

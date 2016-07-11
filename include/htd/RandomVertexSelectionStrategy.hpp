@@ -49,7 +49,7 @@ namespace htd
             void selectVertices(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
             /**
-             *  Create a deep copy the current vertex selection strategy.
+             *  Create a deep copy of the current vertex selection strategy.
              *
              *  @return A new RandomVertexSelectionStrategy object identical to the current vertex selection strategy.
              */

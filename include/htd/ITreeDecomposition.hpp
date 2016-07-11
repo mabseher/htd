@@ -461,7 +461,7 @@ namespace htd
             virtual bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const = 0;
 
             /**
-             *  Create a deep copy the current tree decomposition.
+             *  Create a deep copy of the current tree decomposition.
              *
              *  @return A new ITreeDecomposition object identical to the current tree decomposition.
              */

@@ -48,7 +48,7 @@ namespace htd
             virtual double fitness(const htd::ITreeDecomposition & decomposition) const = 0;
 
             /**
-             *  Create a deep copy the current fitness function.
+             *  Create a deep copy of the current fitness function.
              *
              *  @return A new ITreeDecompositionFitnessFunction object identical to the current fitness function.
              */

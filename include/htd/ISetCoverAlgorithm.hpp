@@ -63,7 +63,7 @@ namespace htd
             virtual void computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const = 0;
 
             /**
-             *  Create a deep copy the current set-cover algorithm.
+             *  Create a deep copy of the current set-cover algorithm.
              *
              *  @return A new ISetCoverAlgorithm object identical to the current set-cover algorithm.
              */

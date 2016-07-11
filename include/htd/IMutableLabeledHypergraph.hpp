@@ -154,7 +154,7 @@ namespace htd
             virtual htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId) = 0;
 
             /**
-             *  Create a deep copy the current mutable labeled hypergraph.
+             *  Create a deep copy of the current mutable labeled hypergraph.
              *
              *  @return A new IMutableLabeledHypergraph object identical to the current mutable labeled hypergraph.
              */

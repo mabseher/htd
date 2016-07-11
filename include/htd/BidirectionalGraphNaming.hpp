@@ -389,7 +389,7 @@ namespace htd
             }
 
             /**
-             *  Create a deep copy the current graph naming.
+             *  Create a deep of copy the current graph naming.
              *
              *  @return A new BidirectionalGraphNaming object identical to the current graph naming.
              */

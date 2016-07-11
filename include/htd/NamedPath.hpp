@@ -1002,7 +1002,7 @@ namespace htd
             }
 
             /**
-             *  Create a deep copy the current path.
+             *  Create a deep copy of the current path.
              *
              *  @return A new NamedPath object identical to the current path.
              */

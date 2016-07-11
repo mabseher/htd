@@ -42,7 +42,7 @@ namespace htd
             virtual ~IHypergraph() = 0;
 
             /**
-             *  Create a deep copy the current hypergraph.
+             *  Create a deep copy of the current hypergraph.
              *
              *  @return A new IHypergraph object identical to the current hypergraph.
              */

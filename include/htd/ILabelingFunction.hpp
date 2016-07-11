@@ -71,7 +71,7 @@ namespace htd
             virtual htd::ILabel * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const = 0;
 
             /**
-             *  Create a deep copy the current labeling function.
+             *  Create a deep copy of the current labeling function.
              *
              *  @return A new ILabelingFunction object identical to the current labeling function.
              */

@@ -42,7 +42,7 @@ namespace htd
             virtual ~ILabeledDirectedGraph() = 0;
 
             /**
-             *  Create a deep copy the current labeled directed graph.
+             *  Create a deep copy of the current labeled directed graph.
              *
              *  @return A new ILabeledDirectedGraph object identical to the current labeled directed graph.
              */

@@ -109,7 +109,7 @@ namespace htd
             virtual bool operator!=(const IHyperedgeCollection & rhs) const = 0;
 
             /**
-             *  Create a deep copy the current hyperedge collection.
+             *  Create a deep copy of the current hyperedge collection.
              *
              *  @return A new IHyperedgeCollection object identical to the current hyperedge collection.
              */

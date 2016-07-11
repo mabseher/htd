@@ -136,6 +136,13 @@ namespace htd
             void setElements(std::vector<htd::vertex_t> && elements);
 
             /**
+             *  Set the endpoints of the hyperedge.
+             *
+             *  @param[in] elements The new endpoints of the updated hyperedge.
+             */
+            void setElements(const htd::ConstCollection<htd::vertex_t> & elements);
+
+            /**
              *  Getter for the elements of the hyperedge.
              *
              *  @return The elements of the hyperedge.
@@ -192,6 +199,15 @@ namespace htd
              *  @return A const_iterator pointing to the end of the elements in the hyperedge.
              */
             std::vector<htd::vertex_t>::const_iterator end(void) const;
+
+            /**
+             *  Access the element at the specific position within the hyperedge.
+             *
+             *  @param[in] index    The position of the element.
+             *
+             *  @return The element at the specific position.
+             */
+            const htd::vertex_t & at(htd::index_t index) const;
 
             /**
              *  Access the element at the specific position within the hyperedge.
@@ -275,11 +291,11 @@ namespace htd
             bool operator!=(const std::vector<htd::vertex_t> & rhs) const;
 
         private:
+            class ElementInformation;
+
             htd::id_t id_;
 
-            std::unique_ptr<std::vector<htd::vertex_t>> elements_;
-
-            std::unique_ptr<std::vector<htd::vertex_t>> sortedElements_;
+            std::unique_ptr<ElementInformation> content_;
     };
 }
 

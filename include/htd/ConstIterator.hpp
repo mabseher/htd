@@ -100,8 +100,12 @@ namespace htd
              *  Constructor for an iterator.
              *
              *  @param[in] iterator The underlying iterator.
+             *
+             *  @note When calling this method the control over the memory region of the provided base iterator will be transferred to
+             *  the new iterator wrapper. Deleting the base iterator outside the iterator wrapper or using the same base iterator in
+             *  different iterator wrappers will lead to undefined behavior.
              */
-            ConstIterator(htd::VectorAdapterConstIteratorWrapper<typename std::vector<T>::const_iterator> * iterator) : baseIterator_(iterator)
+            ConstIterator(htd::ConstIteratorBase<T> * iterator) : baseIterator_(iterator)
             {
 
             }

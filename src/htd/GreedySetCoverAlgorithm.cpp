@@ -33,7 +33,7 @@
 #include <algorithm>
 #include <numeric>
 
-htd::GreedySetCoverAlgorithm::GreedySetCoverAlgorithm(void)
+htd::GreedySetCoverAlgorithm::GreedySetCoverAlgorithm(void) : htd::LibraryObject()
 {
     
 }

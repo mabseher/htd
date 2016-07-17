@@ -33,12 +33,12 @@
 
 #include <algorithm>
 
-htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(void) : identicalParent_(false)
+htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(void) : htd::LibraryObject(), identicalParent_(false)
 {
 
 }
 
-htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(bool identicalParent) : identicalParent_(identicalParent)
+htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(bool identicalParent) : htd::LibraryObject(), identicalParent_(identicalParent)
 {
 
 }

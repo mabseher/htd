@@ -31,7 +31,7 @@
 #include <algorithm>
 #include <vector>
 
-htd::AddEmptyLeavesOperation::AddEmptyLeavesOperation(void)
+htd::AddEmptyLeavesOperation::AddEmptyLeavesOperation(void) : htd::LibraryObject()
 {
 
 }
@@ -57,12 +57,12 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomp
 {
     std::vector<htd::vertex_t> leafNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & leafNodeContainer = decomposition.leaves();
+    decomposition.copyLeavesTo(leafNodes);
 
-    std::copy(leafNodeContainer.begin(), leafNodeContainer.end(), std::back_inserter(leafNodes));
-
-    for (htd::vertex_t leaf : leafNodes)
+    for (auto it = leafNodes.begin(); it != leafNodes.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t leaf = *it;
+
         if (decomposition.bagSize(leaf) > 0)
         {
             htd::vertex_t newLeaf = decomposition.addChild(leaf);
@@ -102,12 +102,12 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
 {
     std::vector<htd::vertex_t> leafNodes;
 
-    const htd::ConstCollection<htd::vertex_t> & leafNodeContainer = decomposition.leaves();
+    decomposition.copyLeavesTo(leafNodes);
 
-    std::copy(leafNodeContainer.begin(), leafNodeContainer.end(), std::back_inserter(leafNodes));
-
-    for (htd::vertex_t leaf : leafNodes)
+    for (auto it = leafNodes.begin(); it != leafNodes.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t leaf = *it;
+
         if (decomposition.bagSize(leaf) > 0)
         {
             htd::vertex_t newLeaf = decomposition.addChild(leaf);
@@ -130,8 +130,10 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
 {
     HTD_UNUSED(removedVertices)
 
-    for (htd::vertex_t vertex : relevantVertices)
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t vertex = *it;
+
         if (decomposition.isLeaf(vertex) && decomposition.bagSize(vertex) > 0)
         {
             htd::vertex_t newLeaf = decomposition.addChild(vertex);

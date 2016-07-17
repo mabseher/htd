@@ -81,6 +81,13 @@ namespace htd
             virtual htd::ConstCollection<htd::vertex_t> leaves(void) const = 0;
 
             /**
+             *  Get the collection of all leaf nodes of the tree and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the leaves shall be appended.
+             */
+            virtual void copyLeavesTo(std::vector<htd::vertex_t> & target) const = 0;
+
+            /**
              *  Access the leaf node at the specific position.
              *
              *  @param[in] index    The position of the leaf node.

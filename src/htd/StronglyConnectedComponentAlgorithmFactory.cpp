@@ -56,9 +56,18 @@ htd::StronglyConnectedComponentAlgorithmFactory & htd::StronglyConnectedComponen
     return instance_;
 }
 
-htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgorithmFactory::getStronglyConnectedComponentAlgorithm(void)
+htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgorithmFactory::getStronglyConnectedComponentAlgorithm(void) const
 {
     return constructionTemplate_->clone();
+}
+
+htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgorithmFactory::getStronglyConnectedComponentAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+{
+    htd::IStronglyConnectedComponentAlgorithm * ret = constructionTemplate_->clone();
+
+    ret->setManagementInstance(instance);
+
+    return ret;
 }
 
 void htd::StronglyConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IStronglyConnectedComponentAlgorithm * original)

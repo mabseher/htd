@@ -170,6 +170,8 @@
 #include <htd/Label.hpp>
 #include <htd/LabelingCollection.hpp>
 #include <htd/Library.hpp>
+#include <htd/LibraryInstance.hpp>
+#include <htd/LibraryObject.hpp>
 #include <htd/LimitChildCountOperation.hpp>
 #include <htd/LimitMaximumForgottenVertexCountOperation.hpp>
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>

@@ -32,7 +32,7 @@
 
 #include <vector>
 
-htd::CompressionOperation::CompressionOperation(void)
+htd::CompressionOperation::CompressionOperation(void) : htd::LibraryObject()
 {
 
 }

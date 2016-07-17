@@ -56,7 +56,16 @@ namespace htd
              *
              *  @return A new IGraphDecompositionAlgorithm object.
              */
-            htd::IGraphDecompositionAlgorithm * getGraphDecompositionAlgorithm(void);
+            htd::IGraphDecompositionAlgorithm * getGraphDecompositionAlgorithm(void) const;
+
+            /**
+             *  Create a new IGraphDecompositionAlgorithm object.
+             *
+             *  @param[in] instance The management instance which shall be assigned to the new IGraphDecompositionAlgorithm object.
+             *
+             *  @return A new IGraphDecompositionAlgorithm object.
+             */
+            htd::IGraphDecompositionAlgorithm * getGraphDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
 
             /**
              *  Set the default implementation of the IGraphDecompositionAlgorithm interface.

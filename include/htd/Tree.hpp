@@ -135,6 +135,8 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> leaves(void) const HTD_OVERRIDE;
 
+            void copyLeavesTo(std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+
             htd::vertex_t leafAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             bool isLeaf(htd::vertex_t vertex) const HTD_OVERRIDE;
@@ -284,11 +286,6 @@ namespace htd
              *  The collection of all hyperedges which exist in the tree.
              */
             std::shared_ptr<std::deque<htd::Hyperedge *>> edges_;
-
-            /**
-             *  The ID of the signal handler associated to the tree.
-             */
-            htd::id_t signalHandlerId_;
 
             /**
              *  Delete a node of the tree and perform an update of the internal state.

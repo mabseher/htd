@@ -34,7 +34,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(void)
+htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(void) : htd::LibraryObject()
 {
     
 }
@@ -82,8 +82,10 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
     std::size_t totalFill = 0;
 
-    for (htd::vertex_t vertex : inputVertices)
+    for (auto it = inputVertices.begin(); it != inputVertices.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t vertex = *it;
+
         auto & currentNeighborhood = neighborhood[vertex];
 
         graph.copyNeighborsTo(currentNeighborhood, vertex);
@@ -98,8 +100,10 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
         updateStatus[vertex] = htd::State::UNKNOWN;
     }
 
-    for (htd::vertex_t vertex : inputVertices)
+    for (auto it = inputVertices.begin(); it != inputVertices.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t vertex = *it;
+
         auto & currentNeighborhood = neighborhood.at(vertex);
         
         std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
@@ -131,7 +135,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
         totalFill += currentFillValue;
     }
     
-    while (totalFill > 0 && !htd::Library::instance().isAborted())
+    while (totalFill > 0 && !isTerminated())
     {
         if (pool.size() == 0)
         {

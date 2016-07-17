@@ -33,6 +33,16 @@
 #include <string>
 #include <stdexcept>
 
+htd::GrFormatImporter::GrFormatImporter(void) : htd::LibraryObject()
+{
+
+}
+
+htd::GrFormatImporter::~GrFormatImporter(void)
+{
+
+}
+
 htd::IMultiGraph * htd::GrFormatImporter::import(const std::string & path) const
 {
     std::ifstream stream(path);
@@ -55,7 +65,7 @@ htd::IMultiGraph * htd::GrFormatImporter::import(std::istream & stream) const
     {
         std::string line;
 
-        while (!error && std::getline(stream, line))
+        while (!error && std::getline(stream, line) && !isTerminated())
         {
             if (line.empty())
             {
@@ -129,7 +139,7 @@ htd::IMultiGraph * htd::GrFormatImporter::import(std::istream & stream) const
             }
         }
 
-        if (edgeCount != 0)
+        if (edgeCount != 0 && !isTerminated())
         {
             error = true;
         }

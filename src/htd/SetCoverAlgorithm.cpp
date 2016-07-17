@@ -36,7 +36,7 @@
 #include <unordered_map>
 #include <vector>
 
-htd::SetCoverAlgorithm::SetCoverAlgorithm(void)
+htd::SetCoverAlgorithm::SetCoverAlgorithm(void) : htd::LibraryObject()
 {
     
 }

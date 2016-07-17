@@ -34,7 +34,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-htd::MaximumCardinalitySearchOrderingAlgorithm::MaximumCardinalitySearchOrderingAlgorithm(void)
+htd::MaximumCardinalitySearchOrderingAlgorithm::MaximumCardinalitySearchOrderingAlgorithm(void) : htd::LibraryObject()
 {
     
 }
@@ -90,7 +90,7 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
         }
     }
 
-    while (size > 0 && !htd::Library::instance().isAborted())
+    while (size > 0 && !isTerminated())
     {
         if (pool.size() == 0)
         {

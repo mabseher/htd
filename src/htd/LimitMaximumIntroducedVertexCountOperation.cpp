@@ -33,12 +33,12 @@
 #include <stdexcept>
 #include <iterator>
 
-htd::LimitMaximumIntroducedVertexCountOperation::LimitMaximumIntroducedVertexCountOperation(std::size_t limit) : limit_(limit), treatLeafNodesAsIntroduceNodes_(false)
+htd::LimitMaximumIntroducedVertexCountOperation::LimitMaximumIntroducedVertexCountOperation(std::size_t limit) : htd::LibraryObject(), limit_(limit), treatLeafNodesAsIntroduceNodes_(false)
 {
 
 }
 
-htd::LimitMaximumIntroducedVertexCountOperation::LimitMaximumIntroducedVertexCountOperation(std::size_t limit, bool treatLeafNodesAsIntroduceNodes) : limit_(limit), treatLeafNodesAsIntroduceNodes_(treatLeafNodesAsIntroduceNodes)
+htd::LimitMaximumIntroducedVertexCountOperation::LimitMaximumIntroducedVertexCountOperation(std::size_t limit, bool treatLeafNodesAsIntroduceNodes) : htd::LibraryObject(), limit_(limit), treatLeafNodesAsIntroduceNodes_(treatLeafNodesAsIntroduceNodes)
 {
   
 }
@@ -66,8 +66,10 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutablePathDec
 
     decomposition.copyIntroduceNodesTo(introduceNodes);
 
-    for (htd::vertex_t node : introduceNodes)
+    for (auto it = introduceNodes.begin(); it != introduceNodes.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t node = *it;
+
         if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
         {
             std::vector<htd::vertex_t> bagContent;
@@ -268,8 +270,10 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 
     decomposition.copyIntroduceNodesTo(introduceNodes);
 
-    for (htd::vertex_t node : introduceNodes)
+    for (auto it = introduceNodes.begin(); it != introduceNodes.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t node = *it;
+
         if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
         {
             std::vector<htd::vertex_t> bagContent;
@@ -452,8 +456,10 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(htd::IMutableTreeDec
 {
     HTD_UNUSED(removedVertices)
 
-    for (htd::vertex_t vertex : relevantVertices)
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t vertex = *it;
+
         if (decomposition.isIntroduceNode(vertex))
         {
             if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(vertex))

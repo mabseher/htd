@@ -55,9 +55,18 @@ htd::ConnectedComponentAlgorithmFactory & htd::ConnectedComponentAlgorithmFactor
     return instance_;
 }
 
-htd::IConnectedComponentAlgorithm * htd::ConnectedComponentAlgorithmFactory::getConnectedComponentAlgorithm(void)
+htd::IConnectedComponentAlgorithm * htd::ConnectedComponentAlgorithmFactory::getConnectedComponentAlgorithm(void) const
 {
     return constructionTemplate_->clone();
+}
+
+htd::IConnectedComponentAlgorithm * htd::ConnectedComponentAlgorithmFactory::getConnectedComponentAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+{
+    htd::IConnectedComponentAlgorithm * ret = constructionTemplate_->clone();
+
+    ret->setManagementInstance(instance);
+
+    return ret;
 }
 
 void htd::ConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IConnectedComponentAlgorithm * original)

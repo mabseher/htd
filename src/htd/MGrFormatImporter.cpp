@@ -33,6 +33,16 @@
 #include <string>
 #include <stdexcept>
 
+htd::MGrFormatImporter::MGrFormatImporter(void) : htd::LibraryObject()
+{
+
+}
+
+htd::MGrFormatImporter::~MGrFormatImporter(void)
+{
+
+}
+
 htd::IMultiHypergraph * htd::MGrFormatImporter::import(const std::string & path) const
 {
     std::ifstream stream(path);
@@ -55,7 +65,7 @@ htd::IMultiHypergraph * htd::MGrFormatImporter::import(std::istream & stream) co
     {
         std::string line;
 
-        while (!error && std::getline(stream, line))
+        while (!error && std::getline(stream, line) && !isTerminated())
         {
             if (line.empty())
             {
@@ -136,7 +146,7 @@ htd::IMultiHypergraph * htd::MGrFormatImporter::import(std::istream & stream) co
             }
         }
 
-        if (edgeCount != 0)
+        if (edgeCount != 0 && !isTerminated())
         {
             error = true;
         }

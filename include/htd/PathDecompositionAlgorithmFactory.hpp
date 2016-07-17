@@ -55,7 +55,16 @@ namespace htd
              *
              *  @return A new IPathDecompositionAlgorithm object.
              */
-            htd::IPathDecompositionAlgorithm * getPathDecompositionAlgorithm(void);
+            htd::IPathDecompositionAlgorithm * getPathDecompositionAlgorithm(void) const;
+
+            /**
+             *  Create a new IPathDecompositionAlgorithm object.
+             *
+             *  @param[in] instance The management instance which shall be assigned to the new IPathDecompositionAlgorithm object.
+             *
+             *  @return A new IPathDecompositionAlgorithm object.
+             */
+            htd::IPathDecompositionAlgorithm * getPathDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
 
             /**
              *  Set the default implementation of the IPathDecompositionAlgorithm interface.

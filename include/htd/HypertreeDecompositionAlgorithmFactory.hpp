@@ -55,7 +55,16 @@ namespace htd
              *
              *  @return A new IHypertreeDecompositionAlgorithm object.
              */
-            htd::IHypertreeDecompositionAlgorithm * getHypertreeDecompositionAlgorithm(void);
+            htd::IHypertreeDecompositionAlgorithm * getHypertreeDecompositionAlgorithm(void) const;
+
+            /**
+             *  Create a new IHypertreeDecompositionAlgorithm object.
+             *
+             *  @param[in] instance The management instance which shall be assigned to the new IHypertreeDecompositionAlgorithm object.
+             *
+             *  @return A new IHypertreeDecompositionAlgorithm object.
+             */
+            htd::IHypertreeDecompositionAlgorithm * getHypertreeDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
 
             /**
              *  Set the default implementation of the IHypertreeDecompositionAlgorithm interface.

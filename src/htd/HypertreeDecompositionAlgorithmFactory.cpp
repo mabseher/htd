@@ -70,7 +70,7 @@ htd::HypertreeDecompositionAlgorithmFactory & htd::HypertreeDecompositionAlgorit
     return instance_;
 }
 
-htd::IHypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithmFactory::getHypertreeDecompositionAlgorithm(void)
+htd::IHypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithmFactory::getHypertreeDecompositionAlgorithm(void) const
 {
     htd::IHypertreeDecompositionAlgorithm * ret = constructionTemplate_->clone();
 
@@ -82,6 +82,33 @@ htd::IHypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithmFact
     for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
     {
         ret->addManipulationOperation(postProcessingOperation->clone());
+    }
+
+    return ret;
+}
+
+htd::IHypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithmFactory::getHypertreeDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+{
+    htd::IHypertreeDecompositionAlgorithm * ret = constructionTemplate_->clone();
+
+    ret->setManagementInstance(instance);
+
+    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    {
+        htd::ILabelingFunction * clone = labelingFunction->clone();
+
+        clone->setManagementInstance(instance);
+
+        ret->addManipulationOperation(clone);
+    }
+
+    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    {
+        htd::ITreeDecompositionManipulationOperation * clone = postProcessingOperation->clone();
+
+        clone->setManagementInstance(instance);
+
+        ret->addManipulationOperation(clone);
     }
 
     return ret;

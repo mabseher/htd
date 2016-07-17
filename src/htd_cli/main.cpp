@@ -25,6 +25,8 @@
 #include <htd/main.hpp>
 #include <htd_cli/main.hpp>
 
+#include <csignal>
+
 htd_cli::OptionManager * createOptionManager(void)
 {
     htd_cli::OptionManager * manager = new htd_cli::OptionManager();
@@ -180,201 +182,344 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
     return ret;
 }
 
-void decomposeGr(const htd::ITreeDecompositionExporter & exporter)
+void decomposeGr(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionExporter & exporter)
 {
     htd::GrFormatImporter importer;
 
+    importer.setManagementInstance(algorithm.managementInstance());
+
     htd::IMultiGraph * graph = importer.import(std::cin);
 
-    if (graph != nullptr)
+    if (graph != nullptr && !importer.isTerminated())
     {
-        htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
-
-        htd::ITreeDecomposition * decomposition = algorithm->computeDecomposition(*graph);
-
-        delete algorithm;
+        htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(*graph);
 
         if (decomposition != nullptr)
         {
-            exporter.write(*decomposition, *graph, std::cout);
+            if (!algorithm.isTerminated())
+            {
+                exporter.write(*decomposition, *graph, std::cout);
+            }
+            else
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
 
             delete decomposition;
         }
         else
         {
-            std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            if (algorithm.isTerminated())
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
+            else
+            {
+                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            }
         }
 
         delete graph;
     }
     else
     {
-        std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        if (importer.isTerminated())
+        {
+            std::cerr << "Program was terminated successfully!" << std::endl;
+        }
+        else
+        {
+            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        }
     }
 }
 
-void decomposeGr(const htd::IHypertreeDecompositionExporter & exporter)
+void decomposeGr(const htd::IHypertreeDecompositionAlgorithm & algorithm, const htd::IHypertreeDecompositionExporter & exporter)
 {
     htd::GrFormatImporter importer;
 
+    importer.setManagementInstance(algorithm.managementInstance());
+
     htd::IMultiGraph * graph = importer.import(std::cin);
 
-    if (graph != nullptr)
+    if (graph != nullptr && !importer.isTerminated())
     {
-        htd::IHypertreeDecompositionAlgorithm * algorithm = htd::HypertreeDecompositionAlgorithmFactory::instance().getHypertreeDecompositionAlgorithm();
-
-        htd::IHypertreeDecomposition * decomposition = algorithm->computeDecomposition(*graph);
-
-        delete algorithm;
+        htd::IHypertreeDecomposition * decomposition = algorithm.computeDecomposition(*graph);
 
         if (decomposition != nullptr)
         {
-            exporter.write(*decomposition, *graph, std::cout);
+            if (!algorithm.isTerminated())
+            {
+                exporter.write(*decomposition, *graph, std::cout);
+            }
+            else
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
 
             delete decomposition;
         }
         else
         {
-            std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            if (algorithm.isTerminated())
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
+            else
+            {
+                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            }
         }
 
         delete graph;
     }
     else
     {
-        std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        if (importer.isTerminated())
+        {
+            std::cerr << "Program was terminated successfully!" << std::endl;
+        }
+        else
+        {
+            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        }
     }
 }
 
-void decomposeLp(const htd::ITreeDecompositionExporter & exporter)
+void decomposeLp(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionExporter & exporter)
 {
     htd::LpFormatImporter importer;
 
+    importer.setManagementInstance(algorithm.managementInstance());
+
     htd::NamedMultiHypergraph<std::string, std::string> * graph = importer.import(std::cin);
 
-    if (graph != nullptr)
+    if (graph != nullptr && !importer.isTerminated())
     {
-        htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
-
-        htd::ITreeDecomposition * decomposition = algorithm->computeDecomposition(graph->internalGraph());
-
-        delete algorithm;
+        htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph->internalGraph());
 
         if (decomposition != nullptr)
         {
-            exporter.write(*decomposition, *graph, std::cout);
+            if (!algorithm.isTerminated())
+            {
+                exporter.write(*decomposition, *graph, std::cout);
+            }
+            else
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
 
             delete decomposition;
         }
         else
         {
-            std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            if (algorithm.isTerminated())
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
+            else
+            {
+                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            }
         }
 
         delete graph;
     }
     else
     {
-        std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        if (importer.isTerminated())
+        {
+            std::cerr << "Program was terminated successfully!" << std::endl;
+        }
+        else
+        {
+            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        }
     }
 }
 
-void decomposeLp(const htd::IHypertreeDecompositionExporter & exporter)
+void decomposeLp(const htd::IHypertreeDecompositionAlgorithm & algorithm, const htd::IHypertreeDecompositionExporter & exporter)
 {
     htd::LpFormatImporter importer;
 
+    importer.setManagementInstance(algorithm.managementInstance());
+
     htd::NamedMultiHypergraph<std::string, std::string> * graph = importer.import(std::cin);
 
-    if (graph != nullptr)
+    if (graph != nullptr && !importer.isTerminated())
     {
-        htd::IHypertreeDecompositionAlgorithm * algorithm = htd::HypertreeDecompositionAlgorithmFactory::instance().getHypertreeDecompositionAlgorithm();
-
-        htd::IHypertreeDecomposition * decomposition = algorithm->computeDecomposition(graph->internalGraph());
-
-        delete algorithm;
+        htd::IHypertreeDecomposition * decomposition = algorithm.computeDecomposition(graph->internalGraph());
 
         if (decomposition != nullptr)
         {
-            exporter.write(*decomposition, *graph, std::cout);
+            if (!algorithm.isTerminated())
+            {
+                exporter.write(*decomposition, *graph, std::cout);
+            }
+            else
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
 
             delete decomposition;
         }
         else
         {
-            std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            if (algorithm.isTerminated())
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
+            else
+            {
+                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            }
         }
 
         delete graph;
     }
     else
     {
-        std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        if (importer.isTerminated())
+        {
+            std::cerr << "Program was terminated successfully!" << std::endl;
+        }
+        else
+        {
+            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        }
     }
 }
 
-void decomposeMGr(const htd::ITreeDecompositionExporter & exporter)
+void decomposeMGr(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionExporter & exporter)
 {
     htd::MGrFormatImporter importer;
 
+    importer.setManagementInstance(algorithm.managementInstance());
+
     htd::IMultiHypergraph * graph = importer.import(std::cin);
 
-    if (graph != nullptr)
+    if (graph != nullptr && !importer.isTerminated())
     {
-        htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
-
-        htd::ITreeDecomposition * decomposition = algorithm->computeDecomposition(*graph);
-
-        delete algorithm;
+        htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(*graph);
 
         if (decomposition != nullptr)
         {
-            exporter.write(*decomposition, *graph, std::cout);
+            if (!algorithm.isTerminated())
+            {
+                exporter.write(*decomposition, *graph, std::cout);
+            }
+            else
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
 
             delete decomposition;
         }
         else
         {
-            std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            if (algorithm.isTerminated())
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
+            else
+            {
+                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            }
         }
 
         delete graph;
     }
     else
     {
-        std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        if (importer.isTerminated())
+        {
+            std::cerr << "Program was terminated successfully!" << std::endl;
+        }
+        else
+        {
+            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        }
     }
 }
 
-void decomposeMGr(const htd::IHypertreeDecompositionExporter & exporter)
+void decomposeMGr(const htd::IHypertreeDecompositionAlgorithm & algorithm, const htd::IHypertreeDecompositionExporter & exporter)
 {
     htd::MGrFormatImporter importer;
 
+    importer.setManagementInstance(algorithm.managementInstance());
+
     htd::IMultiHypergraph * graph = importer.import(std::cin);
 
-    if (graph != nullptr)
+    if (graph != nullptr && !importer.isTerminated())
     {
-        htd::IHypertreeDecompositionAlgorithm * algorithm = htd::HypertreeDecompositionAlgorithmFactory::instance().getHypertreeDecompositionAlgorithm();
-
-        htd::IHypertreeDecomposition * decomposition = algorithm->computeDecomposition(*graph);
-
-        delete algorithm;
+        htd::IHypertreeDecomposition * decomposition = algorithm.computeDecomposition(*graph);
 
         if (decomposition != nullptr)
         {
-            exporter.write(*decomposition, *graph, std::cout);
+            if (!algorithm.isTerminated())
+            {
+                exporter.write(*decomposition, *graph, std::cout);
+            }
+            else
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
 
             delete decomposition;
         }
         else
         {
-            std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            if (algorithm.isTerminated())
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
+            else
+            {
+                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            }
         }
 
         delete graph;
     }
     else
     {
-        std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        if (importer.isTerminated())
+        {
+            std::cerr << "Program was terminated successfully!" << std::endl;
+        }
+        else
+        {
+            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        }
+    }
+}
+
+void handleSignal(int signal)
+{
+    switch (signal)
+    {
+        case SIGUSR1:
+        {
+            std::cout << (std::size_t)-1 << std::endl;
+
+            break;
+        }
+        case SIGINT:
+        {
+            htd::Library::instance().terminate();
+
+            break;
+        }
+        case SIGTERM:
+        {
+            htd::Library::instance().terminate();
+
+            break;
+        }
+        default:
+        {
+            break;
+        }
     }
 }
 
@@ -382,7 +527,13 @@ int main(int argc, const char * const * const argv)
 {
     int ret = 0;
 
+    std::signal(SIGUSR1, handleSignal);
+    std::signal(SIGINT, handleSignal);
+    std::signal(SIGTERM, handleSignal);
+
     htd_cli::OptionManager * optionManager = createOptionManager();
+
+    std::shared_ptr<htd::LibraryInstance> libraryInstance = htd::Library::instance().createManagementInstance();
 
     if (handleOptions(argc, argv, *optionManager))
     {
@@ -398,6 +549,8 @@ int main(int argc, const char * const * const argv)
 
         if (hypertreeDecompositionRequested)
         {
+            htd::IHypertreeDecompositionAlgorithm * algorithm = htd::HypertreeDecompositionAlgorithmFactory::instance().getHypertreeDecompositionAlgorithm(libraryInstance);
+
             htd::IHypertreeDecompositionExporter * exporter = nullptr;
 
             if (outputFormat == "td")
@@ -427,15 +580,15 @@ int main(int argc, const char * const * const argv)
 
                 if (inputFormat == "gr")
                 {
-                    decomposeGr(*exporter);
+                    decomposeGr(*algorithm, *exporter);
                 }
                 else if (inputFormat == "lp")
                 {
-                    decomposeLp(*exporter);
+                    decomposeLp(*algorithm, *exporter);
                 }
                 else if (inputFormat == "mgr")
                 {
-                    decomposeMGr(*exporter);
+                    decomposeMGr(*algorithm, *exporter);
                 }
                 else
                 {
@@ -446,9 +599,13 @@ int main(int argc, const char * const * const argv)
 
                 delete exporter;
             }
+
+            delete algorithm;
         }
         else
         {
+            htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm(libraryInstance);
+
             htd::ITreeDecompositionExporter * exporter = nullptr;
 
             if (outputFormat == "td")
@@ -476,15 +633,15 @@ int main(int argc, const char * const * const argv)
 
                 if (inputFormat == "gr")
                 {
-                    decomposeGr(*exporter);
+                    decomposeGr(*algorithm, *exporter);
                 }
                 else if (inputFormat == "lp")
                 {
-                    decomposeLp(*exporter);
+                    decomposeLp(*algorithm, *exporter);
                 }
                 else if (inputFormat == "mgr")
                 {
-                    decomposeMGr(*exporter);
+                    decomposeMGr(*algorithm, *exporter);
                 }
                 else
                 {
@@ -495,6 +652,8 @@ int main(int argc, const char * const * const argv)
 
                 delete exporter;
             }
+
+            delete algorithm;
         }
     }
 

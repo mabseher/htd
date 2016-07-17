@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/AddIdenticalJoinNodeParentOperation.hpp>
 
-htd::AddIdenticalJoinNodeParentOperation::AddIdenticalJoinNodeParentOperation(bool enforceAdditionalNode) : enforceAdditionalNode_(enforceAdditionalNode)
+htd::AddIdenticalJoinNodeParentOperation::AddIdenticalJoinNodeParentOperation(bool enforceAdditionalNode) : htd::LibraryObject(), enforceAdditionalNode_(enforceAdditionalNode)
 {
 
 }

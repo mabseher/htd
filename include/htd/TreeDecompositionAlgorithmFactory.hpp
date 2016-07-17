@@ -55,7 +55,16 @@ namespace htd
              *
              *  @return A new ITreeDecompositionAlgorithm object.
              */
-            htd::ITreeDecompositionAlgorithm * getTreeDecompositionAlgorithm(void);
+            htd::ITreeDecompositionAlgorithm * getTreeDecompositionAlgorithm(void) const;
+
+            /**
+             *  Create a new ITreeDecompositionAlgorithm object.
+             *
+             *  @param[in] instance The management instance which shall be assigned to the new ITreeDecompositionAlgorithm object.
+             *
+             *  @return A new ITreeDecompositionAlgorithm object.
+             */
+            htd::ITreeDecompositionAlgorithm * getTreeDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
 
             /**
              *  Set the default implementation of the ITreeDecompositionAlgorithm interface.

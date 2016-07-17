@@ -26,54 +26,73 @@
 #define HTD_HTD_LIBRARY_CPP
 
 #include <htd/Library.hpp>
+#include <htd/Helpers.hpp>
 
-htd::Library::Library(void) : aborted_(false), nextHandlerId_(htd::Id::FIRST), signalHandlers_()
+#include <csignal>
+
+htd::Library::Library(void) : nextInstanceId_(htd::Id::FIRST), managementInstances_()
 {
 
 }
 
 htd::Library::~Library()
 {
-
+    for (auto & instance : managementInstances_)
+    {
+        if (!instance.second->isTerminated())
+        {
+            instance.second->terminate();
+        }
+    }
 }
 
-htd::Library & htd::Library::instance(void)
+htd::Library & htd::Library::instance(void) HTD_NOEXCEPT
 {
     static htd::Library instance_;
 
     return instance_;
 }
 
-bool htd::Library::isAborted(void)
+void htd::Library::terminate(void) HTD_NOEXCEPT
 {
-    return aborted_;
-}
-
-void htd::Library::abort(int signal)
-{
-    aborted_ = true;
-
-    for (const auto & signalHandler : signalHandlers_)
+    for (auto & instance : managementInstances_)
     {
-        signalHandler.second(signal);
+        if (!instance.second->isTerminated())
+        {
+            instance.second->terminate();
+        }
     }
 }
 
-void htd::Library::reset(void)
+void htd::Library::reset(void) HTD_NOEXCEPT
 {
-    aborted_ = false;
+    for (auto & instance : managementInstances_)
+    {
+        instance.second.reset();
+    }
 }
 
-htd::id_t htd::Library::registerSignalHandler(const std::function<void(int)> & handler)
+std::shared_ptr<htd::LibraryInstance> htd::Library::createManagementInstance(void)
 {
-    signalHandlers_[nextHandlerId_] = handler;
+    std::shared_ptr<htd::LibraryInstance> ret = std::make_shared<htd::LibraryInstance>(nextInstanceId_);
 
-    return nextHandlerId_++;
+    managementInstances_[nextInstanceId_] = ret;
+
+    ++nextInstanceId_;
+
+    return ret;
 }
 
-void htd::Library::unregisterSignalHandler(htd::id_t handlerId)
+void htd::Library::removeManagementInstance(htd::id_t id)
 {
-    signalHandlers_.erase(handlerId);
+    auto it = managementInstances_.find(id);
+
+    HTD_ASSERT(it != managementInstances_.end())
+
+    if (!it->second->isTerminated())
+    {
+        it->second->terminate();
+    }
 }
 
 #endif /* HTD_HTD_LIBRARY_CPP */

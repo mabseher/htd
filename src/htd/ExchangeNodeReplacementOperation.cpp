@@ -30,7 +30,7 @@
 
 #include <algorithm>
 
-htd::ExchangeNodeReplacementOperation::ExchangeNodeReplacementOperation(void)
+htd::ExchangeNodeReplacementOperation::ExchangeNodeReplacementOperation(void) : htd::LibraryObject()
 {
   
 }
@@ -60,8 +60,10 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutablePathDecomposition
 
     std::vector<htd::vertex_t> rememberedVertices;
 
-    for (htd::vertex_t node : exchangeNodes)
+    for (auto it = exchangeNodes.begin(); it != exchangeNodes.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t node = *it;
+
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         std::vector<htd::vertex_t> children;
@@ -126,8 +128,10 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
     std::vector<htd::vertex_t> rememberedVertices;
 
-    for (htd::vertex_t node : exchangeNodes)
+    for (auto it = exchangeNodes.begin(); it != exchangeNodes.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t node = *it;
+
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
         std::vector<htd::vertex_t> children;
@@ -173,8 +177,10 @@ void htd::ExchangeNodeReplacementOperation::apply(htd::IMutableTreeDecomposition
 
     std::vector<htd::vertex_t> rememberedVertices;
 
-    for (htd::vertex_t vertex : relevantVertices)
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t vertex = *it;
+
         if (decomposition.isExchangeNode(vertex))
         {
             const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);

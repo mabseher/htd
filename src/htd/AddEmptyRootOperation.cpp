@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/AddEmptyRootOperation.hpp>
 
-htd::AddEmptyRootOperation::AddEmptyRootOperation(void)
+htd::AddEmptyRootOperation::AddEmptyRootOperation(void) : htd::LibraryObject()
 {
 
 }

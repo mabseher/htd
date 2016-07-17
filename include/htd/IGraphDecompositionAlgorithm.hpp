@@ -29,6 +29,7 @@
 #include <htd/IHypergraph.hpp>
 #include <htd/IGraphDecomposition.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
+#include <htd/LibraryObject.hpp>
 
 #include <vector>
 
@@ -37,7 +38,7 @@ namespace htd
     /**
      * Interface for algorithms which can be used to compute graph decompositions of a given graph.
      */
-    class IGraphDecompositionAlgorithm
+    class IGraphDecompositionAlgorithm : public virtual htd::LibraryObject
     {
         public:
             virtual ~IGraphDecompositionAlgorithm() = 0;

@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ConstCollection.hpp>
+#include <htd/LibraryObject.hpp>
 
 #include <vector>
 
@@ -35,7 +36,7 @@ namespace htd
     /**
      * Interface for algorithms which solve the set-cover problem.
      */
-    class ISetCoverAlgorithm
+    class ISetCoverAlgorithm : public virtual htd::LibraryObject
     {
         public:
             virtual ~ISetCoverAlgorithm() = 0;

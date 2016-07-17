@@ -40,7 +40,7 @@ namespace htd
     template<typename T>
     class Label : public htd::ILabel
     {
-            public:
+        public:
             /**
              *  Constructor for a label.
              *

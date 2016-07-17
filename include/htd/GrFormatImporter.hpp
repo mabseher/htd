@@ -26,6 +26,7 @@
 #define	HTD_HTD_GRFORMATIMPORTER_HPP
 
 #include <htd/IMultiGraph.hpp>
+#include <htd/LibraryObject.hpp>
 
 #include <string>
 #include <iostream>
@@ -37,9 +38,19 @@ namespace htd
      *
      *  (See https://github.com/mabseher/htd/formats.md for information about the available input formats.)
      */
-    class GrFormatImporter
+    class GrFormatImporter : public htd::LibraryObject
     {
         public:
+            /**
+             *  Constructor for a new graph importer.
+             */
+            GrFormatImporter(void);
+
+            /**
+             *  Destructor of a graph importer.
+             */
+            ~GrFormatImporter();
+
             /**
              *  Create a new IMultiGraph instance based on the information stored in a given file.
              *

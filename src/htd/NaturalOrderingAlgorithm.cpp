@@ -31,7 +31,7 @@
 
 #include <algorithm>
 
-htd::NaturalOrderingAlgorithm::NaturalOrderingAlgorithm(void)
+htd::NaturalOrderingAlgorithm::NaturalOrderingAlgorithm(void) : htd::LibraryObject()
 {
     
 }

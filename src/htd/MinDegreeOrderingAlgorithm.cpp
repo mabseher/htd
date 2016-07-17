@@ -34,7 +34,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-htd::MinDegreeOrderingAlgorithm::MinDegreeOrderingAlgorithm(void)
+htd::MinDegreeOrderingAlgorithm::MinDegreeOrderingAlgorithm(void) : htd::LibraryObject()
 {
     
 }
@@ -104,7 +104,7 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
         )
     }
     
-    while (size > 0 && !htd::Library::instance().isAborted())
+    while (size > 0 && !isTerminated())
     {
         if (pool.size() == 0)
         {

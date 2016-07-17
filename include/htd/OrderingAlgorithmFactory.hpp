@@ -53,7 +53,16 @@ namespace htd
              *
              *  @return A new IOrderingAlgorithm object.
              */
-            htd::IOrderingAlgorithm * getOrderingAlgorithm(void);
+            htd::IOrderingAlgorithm * getOrderingAlgorithm(void) const;
+
+            /**
+             *  Create a new IOrderingAlgorithm object.
+             *
+             *  @param[in] instance The management instance which shall be assigned to the new IOrderingAlgorithm object.
+             *
+             *  @return A new IOrderingAlgorithm object.
+             */
+            htd::IOrderingAlgorithm * getOrderingAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
 
             /**
              *  Set the default implementation of the IOrderingAlgorithm interface.

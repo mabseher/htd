@@ -31,6 +31,16 @@
 #include <iostream>
 #include <string>
 
+htd::LpFormatImporter::LpFormatImporter(void) : htd::LibraryObject()
+{
+
+}
+
+htd::LpFormatImporter::~LpFormatImporter(void)
+{
+
+}
+
 htd::NamedMultiHypergraph<std::string, std::string> * htd::LpFormatImporter::import(const std::string & path) const
 {
     std::ifstream stream(path);
@@ -54,7 +64,7 @@ htd::NamedMultiHypergraph<std::string, std::string> * htd::LpFormatImporter::imp
         
         std::size_t finishPosition = 0;
         
-        while (!error && std::getline(stream, line))
+        while (!error && std::getline(stream, line) && !isTerminated())
         {
             finishPosition = 0;
             

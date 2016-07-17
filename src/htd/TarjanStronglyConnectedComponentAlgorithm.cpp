@@ -48,7 +48,7 @@ struct Node
 };
 */
 
-htd::TarjanStronglyConnectedComponentAlgorithm::TarjanStronglyConnectedComponentAlgorithm(void)
+htd::TarjanStronglyConnectedComponentAlgorithm::TarjanStronglyConnectedComponentAlgorithm(void) : htd::LibraryObject()
 {
 
 }

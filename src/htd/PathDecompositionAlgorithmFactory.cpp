@@ -69,7 +69,7 @@ htd::PathDecompositionAlgorithmFactory & htd::PathDecompositionAlgorithmFactory:
     return instance_;
 }
 
-htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPathDecompositionAlgorithm(void)
+htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPathDecompositionAlgorithm(void) const
 {
     htd::IPathDecompositionAlgorithm * ret = constructionTemplate_->clone();
 
@@ -81,6 +81,33 @@ htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPa
     for (htd::IPathDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
     {
         ret->addManipulationOperation(postProcessingOperation->clone());
+    }
+
+    return ret;
+}
+
+htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPathDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+{
+    htd::IPathDecompositionAlgorithm * ret = constructionTemplate_->clone();
+
+    ret->setManagementInstance(instance);
+
+    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    {
+        htd::ILabelingFunction * clone = labelingFunction->clone();
+
+        clone->setManagementInstance(instance);
+
+        ret->addManipulationOperation(clone);
+    }
+
+    for (htd::IPathDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    {
+        htd::IPathDecompositionManipulationOperation * clone = postProcessingOperation->clone();
+
+        clone->setManagementInstance(instance);
+
+        ret->addManipulationOperation(clone);
     }
 
     return ret;

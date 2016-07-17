@@ -36,7 +36,7 @@
 #include <random>
 #include <unordered_set>
 
-htd::HeuristicSetCoverAlgorithm::HeuristicSetCoverAlgorithm(void)
+htd::HeuristicSetCoverAlgorithm::HeuristicSetCoverAlgorithm(void) : htd::LibraryObject()
 {
     
 }

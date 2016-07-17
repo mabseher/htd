@@ -27,12 +27,14 @@
 
 #include <htd/Globals.hpp>
 
+#include <htd/LibraryObject.hpp>
+
 namespace htd
 {
     /**
      * Interface for algorithms which manipulate a given decomposition.
      */
-    class IDecompositionManipulationOperation
+    class IDecompositionManipulationOperation : public virtual htd::LibraryObject
     {
         public:
             virtual ~IDecompositionManipulationOperation() = 0;

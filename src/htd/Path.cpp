@@ -913,17 +913,22 @@ htd::ConstCollection<htd::vertex_t> htd::Path::leaves(void) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
+    copyLeavesTo(ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::Path::copyLeavesTo(std::vector<htd::vertex_t> & target) const
+{
     for (const auto & node : nodes_)
     {
         if (node.second->child == htd::Vertex::UNKNOWN)
         {
-            result.push_back(node.first);
+            target.push_back(node.first);
         }
     }
 
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+    std::sort(target.begin(), target.end());
 }
 
 htd::vertex_t htd::Path::leaf(void) const

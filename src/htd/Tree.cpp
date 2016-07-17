@@ -39,12 +39,12 @@
 #include <stdexcept>
 #include <utility>
 
-htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge *>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge *>>())
 {
 
 }
 
-htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge *>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(original.next_vertex_ >= htd::Vertex::FIRST ? original.next_vertex_ : htd::Vertex::FIRST), vertices_(original.vertices_), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge *>>())
 {
     nodes_.reserve(original.nodes_.size());
     
@@ -59,7 +59,7 @@ htd::Tree::Tree(const htd::Tree & original) : size_(original.size_), root_(origi
     }
 }
 
-htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Vertex::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge *>>()), signalHandlerId_(htd::Library::instance().registerSignalHandler(std::bind(&htd::Tree::handleSignal, this, std::placeholders::_1)))
+htd::Tree::Tree(const htd::ITree & original) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Vertex::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge *>>())
 {
     *this = original;
 }
@@ -70,8 +70,6 @@ htd::Tree::~Tree()
     {
         delete edge;
     }
-
-    htd::Library::instance().unregisterSignalHandler(signalHandlerId_);
 }
 
 std::size_t htd::Tree::vertexCount(void) const
@@ -1108,19 +1106,22 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::leaves(void) const
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
+    copyLeavesTo(ret.container());
 
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
+void htd::Tree::copyLeavesTo(std::vector<htd::vertex_t> & target) const
+{
     for (const auto & node : nodes_)
     {
         if (node.second->children.empty())
         {
-            result.emplace_back(node.first);
+            target.emplace_back(node.first);
         }
     }
 
-    std::sort(result.begin(), result.end());
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+    std::sort(target.begin(), target.end());
 }
 
 htd::vertex_t htd::Tree::leafAtPosition(htd::index_t index) const
@@ -1350,7 +1351,10 @@ void htd::Tree::handleSignal(int signal)
 {
     HTD_UNUSED(signal)
 
-    removeSubtree(root_);
+    if (root_ != htd::Vertex::UNKNOWN)
+    {
+        removeSubtree(root_);
+    }
 }
 
 void htd::Tree::debug(void) const

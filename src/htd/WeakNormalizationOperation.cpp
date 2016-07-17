@@ -31,12 +31,12 @@
 #include <htd/AddEmptyRootOperation.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 
-htd::WeakNormalizationOperation::WeakNormalizationOperation(void) : emptyRoot_(false), emptyLeaves_(false), identicalJoinNodeParent_(false)
+htd::WeakNormalizationOperation::WeakNormalizationOperation(void) : htd::LibraryObject(), emptyRoot_(false), emptyLeaves_(false), identicalJoinNodeParent_(false)
 {
 
 }
 
-htd::WeakNormalizationOperation::WeakNormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent) : emptyRoot_(emptyRoot), emptyLeaves_(emptyLeaves), identicalJoinNodeParent_(identicalJoinNodeParent)
+htd::WeakNormalizationOperation::WeakNormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent) : htd::LibraryObject(), emptyRoot_(emptyRoot), emptyLeaves_(emptyLeaves), identicalJoinNodeParent_(identicalJoinNodeParent)
 {
 
 }
@@ -62,12 +62,16 @@ void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & dec
     {
         htd::AddEmptyRootOperation addEmptyRootOperation;
 
+        addEmptyRootOperation.setManagementInstance(managementInstance());
+
         addEmptyRootOperation.apply(decomposition, labelingFunctions);
     }
 
     if (emptyLeaves_)
     {
         htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
+
+        addEmptyLeavesOperation.setManagementInstance(managementInstance());
 
         addEmptyLeavesOperation.apply(decomposition, labelingFunctions);
     }
@@ -79,12 +83,16 @@ void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & dec
     {
         htd::AddEmptyRootOperation addEmptyRootOperation;
 
+        addEmptyRootOperation.setManagementInstance(managementInstance());
+
         addEmptyRootOperation.apply(decomposition, relevantVertices, labelingFunctions);
     }
 
     if (emptyLeaves_)
     {
         htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
+
+        addEmptyLeavesOperation.setManagementInstance(managementInstance());
 
         addEmptyLeavesOperation.apply(decomposition, relevantVertices, labelingFunctions);
     }
@@ -106,6 +114,8 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     {
         htd::AddEmptyRootOperation addEmptyRootOperation;
 
+        addEmptyRootOperation.setManagementInstance(managementInstance());
+
         addEmptyRootOperation.apply(decomposition, labelingFunctions);
     }
 
@@ -113,10 +123,14 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     {
         htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
 
+        addEmptyLeavesOperation.setManagementInstance(managementInstance());
+
         addEmptyLeavesOperation.apply(decomposition, labelingFunctions);
     }
 
     htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(identicalJoinNodeParent_);
+
+    joinNodeNormalizationOperation.setManagementInstance(managementInstance());
 
     joinNodeNormalizationOperation.apply(decomposition, labelingFunctions);
 }
@@ -132,6 +146,8 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     if (emptyRoot_)
     {
         htd::AddEmptyRootOperation addEmptyRootOperation;
+
+        addEmptyRootOperation.setManagementInstance(managementInstance());
 
         addEmptyRootOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
@@ -149,6 +165,8 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     {
         htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
 
+        addEmptyLeavesOperation.setManagementInstance(managementInstance());
+
         addEmptyLeavesOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
         newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
@@ -162,6 +180,8 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     }
 
     htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(identicalJoinNodeParent_);
+
+    joinNodeNormalizationOperation.setManagementInstance(managementInstance());
 
     joinNodeNormalizationOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }

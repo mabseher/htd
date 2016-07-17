@@ -29,13 +29,14 @@
 
 #include <htd/IHypergraph.hpp>
 #include <htd/ConstCollection.hpp>
+#include <htd/LibraryObject.hpp>
 
 namespace htd
 {
     /**
      * Interface for algorithms which determine the connected components of a given graph.
      */
-    class IConnectedComponentAlgorithm
+    class IConnectedComponentAlgorithm : public virtual htd::LibraryObject
     {
         public:
             virtual ~IConnectedComponentAlgorithm() = 0;

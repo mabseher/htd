@@ -53,7 +53,16 @@ namespace htd
              *
              *  @return A new IStronglyConnectedComponentAlgorithm object.
              */
-            htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(void);
+            htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(void) const;
+
+            /**
+             *  Create a new IStronglyConnectedComponentAlgorithm object.
+             *
+             *  @param[in] instance The management instance which shall be assigned to the new IStronglyConnectedComponentAlgorithm object.
+             *
+             *  @return A new IStronglyConnectedComponentAlgorithm object.
+             */
+            htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
 
             /**
              *  Set the default implementation of the IStronglyConnectedComponentAlgorithm interface.

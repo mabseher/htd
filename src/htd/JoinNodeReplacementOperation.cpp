@@ -71,7 +71,7 @@ struct HistoryEntry
     }
 };
 
-htd::JoinNodeReplacementOperation::JoinNodeReplacementOperation(void)
+htd::JoinNodeReplacementOperation::JoinNodeReplacementOperation(void) : htd::LibraryObject()
 {
 
 }

@@ -35,7 +35,7 @@
 #include <stack>
 #include <stdexcept>
 
-htd::DepthFirstConnectedComponentAlgorithm::DepthFirstConnectedComponentAlgorithm(void)
+htd::DepthFirstConnectedComponentAlgorithm::DepthFirstConnectedComponentAlgorithm(void) : htd::LibraryObject()
 {
 
 }

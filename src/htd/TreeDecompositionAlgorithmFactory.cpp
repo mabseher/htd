@@ -70,7 +70,7 @@ htd::TreeDecompositionAlgorithmFactory & htd::TreeDecompositionAlgorithmFactory:
     return instance_;
 }
 
-htd::ITreeDecompositionAlgorithm * htd::TreeDecompositionAlgorithmFactory::getTreeDecompositionAlgorithm(void)
+htd::ITreeDecompositionAlgorithm * htd::TreeDecompositionAlgorithmFactory::getTreeDecompositionAlgorithm(void) const
 {
     htd::ITreeDecompositionAlgorithm * ret = constructionTemplate_->clone();
 
@@ -82,6 +82,33 @@ htd::ITreeDecompositionAlgorithm * htd::TreeDecompositionAlgorithmFactory::getTr
     for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
     {
         ret->addManipulationOperation(postProcessingOperation->clone());
+    }
+
+    return ret;
+}
+
+htd::ITreeDecompositionAlgorithm * htd::TreeDecompositionAlgorithmFactory::getTreeDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+{
+    htd::ITreeDecompositionAlgorithm * ret = constructionTemplate_->clone();
+
+    ret->setManagementInstance(instance);
+
+    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    {
+        htd::ILabelingFunction * clone = labelingFunction->clone();
+
+        clone->setManagementInstance(instance);
+
+        ret->addManipulationOperation(clone);
+    }
+
+    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    {
+        htd::ITreeDecompositionManipulationOperation * clone = postProcessingOperation->clone();
+
+        clone->setManagementInstance(instance);
+
+        ret->addManipulationOperation(clone);
     }
 
     return ret;

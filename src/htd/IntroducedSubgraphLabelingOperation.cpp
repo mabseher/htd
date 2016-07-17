@@ -35,7 +35,7 @@
 #include <unordered_map>
 #include <vector>
 
-htd::IntroducedSubgraphLabelingOperation::IntroducedSubgraphLabelingOperation(const htd::IMultiHypergraph & graph) : graph_(graph)
+htd::IntroducedSubgraphLabelingOperation::IntroducedSubgraphLabelingOperation(const htd::IMultiHypergraph & graph) : htd::LibraryObject(), graph_(graph)
 {
 
 }

@@ -27,9 +27,12 @@
 
 #include <htd/Globals.hpp>
 
+#include <htd/LibraryInstance.hpp>
+
 #include <functional>
 #include <map>
 #include <memory>
+#include <unordered_map>
 
 namespace htd
 {
@@ -42,53 +45,54 @@ namespace htd
             ~Library();
 
             /**
-             *  Access the singleton instance of the management class.
+             *  Access the singleton instance of the central management class.
              *
-             *  @return The singleton instance of the management class.
+             *  @return The singleton instance of the central management class.
              */
-            static Library & instance(void);
+            static Library & instance(void) HTD_NOEXCEPT;
 
             /**
-             *  Check whether the abort() function was called.
+             *  Send a termination signal to all management instances.
              *
-             *  @return True if the abort() function was called, false otherwise.
+             *  The management instances will pass the SIGTERM signal to each of their registered
+             *  signal handlers and algorithms still running may decide to terminate gracefully
+             *  when the corresponding management instance is terminated.
+             *
+             *  @note After calling this method, no further algorithms from the library shall be
+             *  run until the reset() method is called, otherwise the outcome of the algorithms
+             *  is undefined!
              */
-            bool isAborted(void);
+            void terminate(void) HTD_NOEXCEPT;
 
             /**
-             *  Send a termination signal to running algorithms of the library to allow them freeing allocated resources before termination.
+             *  Reset all management instances.
              *
-             *  @param[in] signal   The signal which shall be sent to each signal handler.
+             *  Calling this method sets the value of htd::LibraryInstance::isTerminated() for each
+             *  management instance created via this central management class back to false. This
+             *  allows to re-run the library's algorithms after terminate() was called.
              */
-            void abort(int signal);
-            
-            /**
-             *  Reset the library, i.e. to re-initialize it after the abort() method was called.
-             */
-            void reset(void);
+            void reset(void) HTD_NOEXCEPT;
 
             /**
-             *  Register a new signal handler.
+             *  Create a new management instance.
              *
-             *  @param[in] handler  A callback function which shall be called on arrival of a new signal.
-             *
-             *  @return The ID of the new signal handler.
+             *  @return A shared pointer to a new management instance.
              */
-            htd::id_t registerSignalHandler(const std::function<void(int)> & handler);
+            std::shared_ptr<htd::LibraryInstance> createManagementInstance(void);
 
             /**
-             *  Unregister an existing signal handler.
+             *  Removes an existing management instance.
              *
-             *  @param[in] handlerId    The ID of the signal handler which shall be removed.
+             *  @note This method calls the htd::LibraryInstance::terminate(void) method for the given management instance.
+             *
+             *  @param[in] id   The ID of the management instance which shall be removed.
              */
-            void unregisterSignalHandler(htd::id_t handlerId);
-            
+            void removeManagementInstance(htd::id_t id);
+
         private:
-            bool aborted_;
+            htd::id_t nextInstanceId_;
 
-            htd::id_t nextHandlerId_;
-
-            std::map<htd::id_t, std::function<void(int)>> signalHandlers_;
+            std::unordered_map<htd::id_t, std::shared_ptr<htd::LibraryInstance>> managementInstances_;
 
             Library(void);
 

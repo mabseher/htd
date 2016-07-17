@@ -53,7 +53,16 @@ namespace htd
              *
              *  @return A new ISetCoverAlgorithm object.
              */
-            htd::ISetCoverAlgorithm * getSetCoverAlgorithm(void);
+            htd::ISetCoverAlgorithm * getSetCoverAlgorithm(void) const;
+
+            /**
+             *  Create a new ISetCoverAlgorithm object.
+             *
+             *  @param[in] instance The management instance which shall be assigned to the new ISetCoverAlgorithm object.
+             *
+             *  @return A new ISetCoverAlgorithm object.
+             */
+            htd::ISetCoverAlgorithm * getSetCoverAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
 
             /**
              *  Set the default implementation of the ISetCoverAlgorithm interface.

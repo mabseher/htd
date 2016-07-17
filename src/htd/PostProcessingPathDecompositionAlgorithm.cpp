@@ -38,7 +38,7 @@
 #include <stdexcept>
 #include <vector>
 
-htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(void) : labelingFunctions_(), postProcessingOperations_()
+htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(void) : htd::LibraryObject(), labelingFunctions_(), postProcessingOperations_()
 {
 
 }
@@ -88,7 +88,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 {
     htd::IMutablePathDecomposition * ret = nullptr;
 
-    htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
+    htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm(managementInstance());
 
     HTD_ASSERT(algorithm != nullptr)
 

@@ -28,13 +28,14 @@
 #include <htd/Globals.hpp>
 #include <htd/IMultiHypergraph.hpp>
 #include <htd/ConstCollection.hpp>
+#include <htd/LibraryObject.hpp>
 
 namespace htd
 {
     /**
      * Interface for algorithms which can be used to compute vertex orderings.
      */
-    class IOrderingAlgorithm
+    class IOrderingAlgorithm : public virtual htd::LibraryObject
     {
         public:
             virtual ~IOrderingAlgorithm() = 0;

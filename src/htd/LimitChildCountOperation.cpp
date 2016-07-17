@@ -33,7 +33,7 @@
 #include <stdexcept>
 #include <iterator>
 
-htd::LimitChildCountOperation::LimitChildCountOperation(std::size_t limit) : limit_(limit)
+htd::LimitChildCountOperation::LimitChildCountOperation(std::size_t limit) : htd::LibraryObject(), limit_(limit)
 {
 
 }
@@ -59,8 +59,10 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 
     decomposition.copyJoinNodesTo(joinNodes);
 
-    for (htd::vertex_t node : joinNodes)
+    for (auto it = joinNodes.begin(); it != joinNodes.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t node = *it;
+
         std::size_t childCount = decomposition.childCount(node);
 
         if (childCount > limit_)
@@ -140,8 +142,10 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
 {
     HTD_UNUSED(removedVertices)
 
-    for (htd::vertex_t vertex : relevantVertices)
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t vertex = *it;
+
         std::size_t childCount = decomposition.childCount(vertex);
 
         if (childCount > limit_)

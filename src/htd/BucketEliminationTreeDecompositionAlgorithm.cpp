@@ -48,7 +48,7 @@
 #include <utility>
 #include <vector>
 
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(void) : labelingFunctions_(), postProcessingOperations_()
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(void) : htd::LibraryObject(), labelingFunctions_(), postProcessingOperations_()
 {
 
 }
@@ -254,17 +254,19 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
     {
         htd::BucketEliminationGraphDecompositionAlgorithm graphDecompositionAlgorithm;
 
+        graphDecompositionAlgorithm.setManagementInstance(managementInstance());
+
         htd::IGraphDecomposition * graphDecomposition = graphDecompositionAlgorithm.computeDecomposition(graph);
 
         HTD_ASSERT(graphDecomposition != nullptr)
 
         htd::IMutableGraphDecomposition & mutableGraphDecomposition = htd::GraphDecompositionFactory::instance().accessMutableGraphDecomposition(*graphDecomposition);
 
-        if (!htd::Library::instance().isAborted())
+        if (!isTerminated())
         {
             if (mutableGraphDecomposition.edgeCount() + 1 != mutableGraphDecomposition.vertexCount() || mutableGraphDecomposition.isolatedVertexCount() > 0)
             {
-                htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = htd::ConnectedComponentAlgorithmFactory::instance().getConnectedComponentAlgorithm();
+                htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = htd::ConnectedComponentAlgorithmFactory::instance().getConnectedComponentAlgorithm(managementInstance());
 
                 HTD_ASSERT(connectedComponentAlgorithm != nullptr)
 

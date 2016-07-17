@@ -84,6 +84,8 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
     htd::LimitChildCountOperation limitChildCountOperation(2);
 
+    limitChildCountOperation.setManagementInstance(managementInstance());
+
     limitChildCountOperation.apply(decomposition, labelingFunctions);
 }
 
@@ -107,6 +109,8 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
     }
 
     htd::LimitChildCountOperation limitChildCountOperation(2);
+
+    limitChildCountOperation.setManagementInstance(managementInstance());
 
     limitChildCountOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }

@@ -55,9 +55,18 @@ htd::SetCoverAlgorithmFactory & htd::SetCoverAlgorithmFactory::instance(void)
     return instance_;
 }
 
-htd::ISetCoverAlgorithm * htd::SetCoverAlgorithmFactory::getSetCoverAlgorithm(void)
+htd::ISetCoverAlgorithm * htd::SetCoverAlgorithmFactory::getSetCoverAlgorithm(void) const
 {
     return constructionTemplate_->clone();
+}
+
+htd::ISetCoverAlgorithm * htd::SetCoverAlgorithmFactory::getSetCoverAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+{
+    htd::ISetCoverAlgorithm * ret = constructionTemplate_->clone();
+
+    ret->setManagementInstance(instance);
+
+    return ret;
 }
 
 void htd::SetCoverAlgorithmFactory::setConstructionTemplate(htd::ISetCoverAlgorithm * original)

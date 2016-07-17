@@ -31,7 +31,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-htd::LimitMaximumForgottenVertexCountOperation::LimitMaximumForgottenVertexCountOperation(std::size_t limit) : limit_(limit)
+htd::LimitMaximumForgottenVertexCountOperation::LimitMaximumForgottenVertexCountOperation(std::size_t limit) : htd::LibraryObject(), limit_(limit)
 {
   
 }
@@ -59,8 +59,10 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
 
     decomposition.copyForgetNodesTo(forgetNodes);
 
-    for (htd::vertex_t node : forgetNodes)
+    for (auto it = forgetNodes.begin(); it != forgetNodes.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t node = *it;
+
         std::vector<htd::vertex_t> bagContent;
 
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
@@ -196,8 +198,10 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 
     decomposition.copyForgetNodesTo(forgetNodes);
 
-    for (htd::vertex_t node : forgetNodes)
+    for (auto it = forgetNodes.begin(); it != forgetNodes.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t node = *it;
+
         std::vector<htd::vertex_t> bagContent;
 
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
@@ -318,8 +322,10 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
 {
     HTD_UNUSED(removedVertices)
 
-    for (htd::vertex_t vertex : relevantVertices)
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t vertex = *it;
+
         if (decomposition.isForgetNode(vertex))
         {
             std::vector<htd::vertex_t> bagContent;

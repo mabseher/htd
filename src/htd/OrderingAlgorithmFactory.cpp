@@ -54,9 +54,18 @@ htd::OrderingAlgorithmFactory & htd::OrderingAlgorithmFactory::instance(void)
     return instance_;
 }
 
-htd::IOrderingAlgorithm * htd::OrderingAlgorithmFactory::getOrderingAlgorithm(void)
+htd::IOrderingAlgorithm * htd::OrderingAlgorithmFactory::getOrderingAlgorithm(void) const
 {
     return constructionTemplate_->clone();
+}
+
+htd::IOrderingAlgorithm * htd::OrderingAlgorithmFactory::getOrderingAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+{
+    htd::IOrderingAlgorithm * ret = constructionTemplate_->clone();
+
+    ret->setManagementInstance(instance);
+
+    return ret;
 }
 
 void htd::OrderingAlgorithmFactory::setConstructionTemplate(htd::IOrderingAlgorithm * original)

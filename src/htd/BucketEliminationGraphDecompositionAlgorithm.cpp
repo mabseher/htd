@@ -46,12 +46,12 @@
 #include <utility>
 #include <vector>
 
-htd::BucketEliminationGraphDecompositionAlgorithm::BucketEliminationGraphDecompositionAlgorithm(void) : labelingFunctions_(), postProcessingOperations_()
+htd::BucketEliminationGraphDecompositionAlgorithm::BucketEliminationGraphDecompositionAlgorithm(void) : htd::LibraryObject(), labelingFunctions_(), postProcessingOperations_()
 {
 
 }
 
-htd::BucketEliminationGraphDecompositionAlgorithm::BucketEliminationGraphDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : labelingFunctions_(), postProcessingOperations_()
+htd::BucketEliminationGraphDecompositionAlgorithm::BucketEliminationGraphDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : htd::LibraryObject(), labelingFunctions_(), postProcessingOperations_()
 {
     setManipulationOperations(manipulationOperations);
 }
@@ -242,7 +242,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
     if (size > 0)
     {
-        htd::IOrderingAlgorithm * algorithm = htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm();
+        htd::IOrderingAlgorithm * algorithm = htd::OrderingAlgorithmFactory::instance().getOrderingAlgorithm(managementInstance());
 
         HTD_ASSERT(algorithm != nullptr)
 
@@ -252,7 +252,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
         delete algorithm;
 
-        if (!htd::Library::instance().isAborted())
+        if (!isTerminated())
         {
             std::unordered_map<htd::vertex_t, htd::index_t> indices(size);
 
@@ -281,7 +281,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             auto it = hyperedges.begin();
 
-            for (htd::index_t index = 0; index < edgeCount && !htd::Library::instance().isAborted(); ++index)
+            for (htd::index_t index = 0; index < edgeCount && !isTerminated(); ++index)
             {
                 const htd::Hyperedge & edge = *it;
 
@@ -354,7 +354,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 ++it;
             }
 
-            for (auto it = ordering.begin(); it != ordering.end() && !htd::Library::instance().isAborted(); ++it)
+            for (auto it = ordering.begin(); it != ordering.end() && !isTerminated(); ++it)
             {
                 htd::vertex_t selection = *it;
 
@@ -417,7 +417,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             std::function<htd::vertex_t(void)> vertexCreationFunction(std::bind(&htd::IMutableGraph::addVertex, ret));
 
-            for (auto it = ordering.begin(); it != ordering.end() && !htd::Library::instance().isAborted(); ++it)
+            for (auto it = ordering.begin(); it != ordering.end() && !isTerminated(); ++it)
             {
                 htd::vertex_t vertex = *it;
 
@@ -530,7 +530,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             std::stack<htd::vertex_t> originStack;
 
-            for (index = 0; index < edgeCount && !htd::Library::instance().isAborted(); ++index)
+            for (index = 0; index < edgeCount && !isTerminated(); ++index)
             {
                 distributeEdge(index, it->sortedElements(), superset[edgeTarget[index]], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
 
@@ -539,7 +539,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             htd::index_t nodeCount = ret->vertexCount();
 
-            for (htd::vertex_t vertex = 1; vertex <= nodeCount; ++vertex)
+            for (htd::vertex_t vertex = 1; vertex <= nodeCount && !isTerminated(); ++vertex)
             {
                 htd::vertex_t vertexName = graphNaming.vertexName(vertex);
 
@@ -551,7 +551,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
     }
     else
     {
-        if (!htd::Library::instance().isAborted())
+        if (!isTerminated())
         {
             ret->addVertex();
         }

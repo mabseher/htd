@@ -65,13 +65,19 @@ void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decompo
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
+    exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
+
     exchangeNodeReplacementOperation.apply(decomposition, labelingFunctions);
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
+    limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
+
     limitMaximumForgottenVertexCountOperation.apply(decomposition, labelingFunctions);
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
+
+    limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
 
     limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
 }
@@ -82,13 +88,19 @@ void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decompo
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
+    exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
+
     exchangeNodeReplacementOperation.apply(decomposition, relevantVertices, labelingFunctions);
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
+    limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
+
     limitMaximumForgottenVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
+
+    limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
 
     limitMaximumIntroducedVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
 }
@@ -109,13 +121,19 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
+    exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
+
     exchangeNodeReplacementOperation.apply(decomposition, labelingFunctions);
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
+    limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
+
     limitMaximumForgottenVertexCountOperation.apply(decomposition, labelingFunctions);
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1, treatLeafNodesAsIntroduceNodes_);
+
+    limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
 
     limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
 }
@@ -141,6 +159,8 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
+    exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
+
     exchangeNodeReplacementOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
     newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
@@ -154,6 +174,8 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
+    limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
+
     limitMaximumForgottenVertexCountOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
     newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
@@ -166,6 +188,8 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
     }
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1, treatLeafNodesAsIntroduceNodes_);
+
+    limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
 
     limitMaximumIntroducedVertexCountOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }

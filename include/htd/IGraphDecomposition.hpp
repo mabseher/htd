@@ -26,8 +26,7 @@
 #define	HTD_HTD_IGRAPHDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/ILabeledGraph.hpp>
-#include <htd/ConstCollection.hpp>
+#include <htd/ILabeledMultiHypergraph.hpp>
 #include <htd/FilteredHyperedgeCollection.hpp>
 
 #include <vector>
@@ -37,7 +36,7 @@ namespace htd
     /**
      * Interface for classes which represent graph decompositions.
      */
-    class IGraphDecomposition : public virtual htd::ILabeledGraph
+    class IGraphDecomposition : public virtual htd::ILabeledMultiHypergraph
     {
         public:
             virtual ~IGraphDecomposition() = 0;

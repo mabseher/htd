@@ -310,10 +310,10 @@ TEST(GraphDecompositionTest, CheckSelfLoop)
 
     htd::id_t edgeId2 = graph.addEdge(1, 1);
 
-    ASSERT_EQ(edgeId1, edgeId2);
+    ASSERT_NE(edgeId1, edgeId2);
 
-    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
-    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedges((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
 
     ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0).id());
@@ -326,7 +326,7 @@ TEST(GraphDecompositionTest, CheckSelfLoop)
 
     ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)1, (htd::index_t)0));
 
-    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
 
     ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
 
@@ -334,33 +334,35 @@ TEST(GraphDecompositionTest, CheckSelfLoop)
 
     graph.removeEdge(edgeId1);
 
-    ASSERT_EQ((std::size_t)0, graph.hyperedges().size());
-    ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
 
     htd::id_t edgeId3 = graph.addEdge(1, 2);
 
-    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
-    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)2, graph.hyperedges((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)2).size());
 
     ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0).id());
     ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
-    ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)2).id());
+    ASSERT_EQ((htd::id_t)3, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)2).id());
 
-    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
+    ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
     ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2 }));
     ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 2, 1 }));
 
-    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge11)));
+    ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge11)));
     ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge12)));
     ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge21)));
 
     graph.removeEdge(edgeId3);
 
-    ASSERT_EQ((std::size_t)0, graph.hyperedges().size());
-    ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
+
+    graph.removeEdge(edgeId2);
 
     ASSERT_FALSE(graph.isEdge(edgeId1));
     ASSERT_FALSE(graph.isEdge(edgeId2));
@@ -516,9 +518,9 @@ TEST(GraphDecompositionTest, CheckCopyConstructors)
     ASSERT_TRUE(graph3.isLabeledEdge("Label", edgeId1));
     ASSERT_EQ(123, htd::accessLabel<int>(graph3.edgeLabel("Label", 1)));
 
-    const htd::IGraph & graphReference1 = graph1;
+    const htd::IMultiHypergraph & graphReference1 = graph1;
 
-    const htd::ILabeledGraph & labeledGraphReference1 = graph1;
+    const htd::ILabeledMultiHypergraph & labeledGraphReference1 = graph1;
 
     const htd::IGraphDecomposition & graphDecompositionReference1 = graph1;
 
@@ -665,12 +667,15 @@ TEST(GraphDecompositionTest, CheckConversionFunctions)
     gd1 = graph;
     gd2 = labeledGraph;
 
-    ASSERT_EQ((std::size_t)1, gd1.edgeCount());
-    ASSERT_EQ((std::size_t)2, gd2.edgeCount());
+    ASSERT_EQ((std::size_t)2, gd1.edgeCount());
+    ASSERT_EQ((std::size_t)4, gd2.edgeCount());
 
     ASSERT_EQ((htd::id_t)1, gd1.hyperedgeAtPosition(0).id());
+    ASSERT_EQ((htd::id_t)2, gd1.hyperedgeAtPosition(1).id());
     ASSERT_EQ((htd::id_t)1, gd2.hyperedgeAtPosition(0).id());
-    ASSERT_EQ((htd::id_t)3, gd2.hyperedgeAtPosition(1).id());
+    ASSERT_EQ((htd::id_t)2, gd2.hyperedgeAtPosition(1).id());
+    ASSERT_EQ((htd::id_t)3, gd2.hyperedgeAtPosition(2).id());
+    ASSERT_EQ((htd::id_t)4, gd2.hyperedgeAtPosition(3).id());
 }
 
 int main(int argc, char **argv)

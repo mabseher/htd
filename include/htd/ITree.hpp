@@ -71,7 +71,7 @@ namespace htd
              *
              *  @return The number of leaf nodes of the tree.
              */
-            virtual std::size_t leafCount(void) const = 0;
+            virtual std::size_t leafCount(void) const HTD_NOEXCEPT = 0;
 
             /**
              *  Access the collection of all leaf nodes of the tree.

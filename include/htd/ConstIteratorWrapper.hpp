@@ -44,7 +44,7 @@ namespace htd
              *
              *  @param[in] baseIterator The underlying iterator which shall be wrapped.
              */
-            ConstIteratorWrapper(Iter baseIterator) : baseIterator_(baseIterator)
+            ConstIteratorWrapper(Iter baseIterator) HTD_NOEXCEPT : baseIterator_(baseIterator)
             {
 
             }
@@ -54,7 +54,7 @@ namespace htd
              *
              *  @param[in] original  The original iterator wrapper.
              */
-            ConstIteratorWrapper<Iter, T>(const ConstIteratorWrapper<Iter, T> & original) : baseIterator_(original.baseIterator_)
+            ConstIteratorWrapper<Iter, T>(const ConstIteratorWrapper<Iter, T> & original) HTD_NOEXCEPT : baseIterator_(original.baseIterator_)
             {
 
             }
@@ -64,7 +64,7 @@ namespace htd
              *
              *  @param[in] original  The original iterator wrapper.
              */
-            ConstIteratorWrapper<Iter, T>(ConstIteratorWrapper<Iter, T> && original) : baseIterator_(std::move(original.baseIterator_))
+            ConstIteratorWrapper<Iter, T>(ConstIteratorWrapper<Iter, T> && original) HTD_NOEXCEPT : baseIterator_(std::move(original.baseIterator_))
             {
 
             }
@@ -79,14 +79,14 @@ namespace htd
              *
              *  @param[in] original  The original iterator wrapper.
              */
-            ConstIteratorWrapper & operator=(ConstIteratorWrapper & original)
+            ConstIteratorWrapper & operator=(ConstIteratorWrapper & original) HTD_NOEXCEPT
             {
                 baseIterator_ = original.baseIterator_;
 
                 return *this;
             }
 
-            ConstIteratorWrapper<Iter, T> & operator++(void) HTD_OVERRIDE
+            ConstIteratorWrapper<Iter, T> & operator++(void) HTD_NOEXCEPT HTD_OVERRIDE
             {
                 ++baseIterator_;
 
@@ -98,7 +98,7 @@ namespace htd
              *
              *  @return A copy of the iterator reflecting the state before the increment operation took place.
              */
-            ConstIteratorWrapper<Iter, T> operator++(int)
+            ConstIteratorWrapper<Iter, T> operator++(int) HTD_NOEXCEPT
             {
                 ConstIteratorWrapper<Iter, T> ret(*this);
 
@@ -107,7 +107,7 @@ namespace htd
                 return ret;
             }
 
-            bool operator==(const ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
+            bool operator==(const ConstIteratorBase<T> & rhs) const HTD_NOEXCEPT HTD_OVERRIDE
             {
                 return baseIterator_ == static_cast<const ConstIteratorWrapper<Iter, T> *>(&rhs)->baseIterator_;
             }
@@ -119,12 +119,12 @@ namespace htd
              *
              *  @return True if the iterator points to the same element as the iterator at the right-hand side of the operator, false otherwise.
              */
-            bool operator==(const ConstIteratorWrapper<Iter, T> & rhs) const
+            bool operator==(const ConstIteratorWrapper<Iter, T> & rhs) const HTD_NOEXCEPT
             {
                 return baseIterator_ == rhs.baseIterator_;
             }
 
-            bool operator!=(const ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
+            bool operator!=(const ConstIteratorBase<T> & rhs) const HTD_NOEXCEPT HTD_OVERRIDE
             {
                 return baseIterator_ != static_cast<const ConstIteratorWrapper<Iter, T> *>(&rhs)->baseIterator_;
             }
@@ -136,7 +136,7 @@ namespace htd
              *
              *  @return True if the iterator does not point to the same element as the iterator at the right-hand side of the operator, false otherwise.
              */
-            bool operator!=(const ConstIteratorWrapper<Iter, T> & rhs) const
+            bool operator!=(const ConstIteratorWrapper<Iter, T> & rhs) const HTD_NOEXCEPT
             {
                 return baseIterator_ != rhs.baseIterator_;
             }
@@ -151,7 +151,7 @@ namespace htd
                 return *baseIterator_;
             }
 
-            ConstIteratorWrapper<Iter, T> * clone(void) const HTD_OVERRIDE
+            ConstIteratorWrapper<Iter, T> * clone(void) const HTD_NOEXCEPT HTD_OVERRIDE
             {
                 return new ConstIteratorWrapper<Iter, T>(*this);
             }

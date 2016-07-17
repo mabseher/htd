@@ -777,12 +777,12 @@ htd::Hyperedge::~Hyperedge()
 
 }
 
-htd::id_t htd::Hyperedge::id(void) const
+htd::id_t htd::Hyperedge::id(void) const HTD_NOEXCEPT
 {
     return id_;
 }
 
-void htd::Hyperedge::setId(htd::id_t newId)
+void htd::Hyperedge::setId(htd::id_t newId) HTD_NOEXCEPT
 {
     id_ = newId;
 }
@@ -874,42 +874,42 @@ void htd::Hyperedge::setElements(const htd::ConstCollection<htd::vertex_t> & ele
     setElements(std::vector<htd::vertex_t>(elements.begin(), elements.end()));
 }
 
-const std::vector<htd::vertex_t> & htd::Hyperedge::elements(void) const
+const std::vector<htd::vertex_t> & htd::Hyperedge::elements(void) const HTD_NOEXCEPT
 {
     return content_->elements();
 }
 
-const std::vector<htd::vertex_t> & htd::Hyperedge::sortedElements(void) const
+const std::vector<htd::vertex_t> & htd::Hyperedge::sortedElements(void) const HTD_NOEXCEPT
 {
     return content_->sortedElements();
 }
 
-bool htd::Hyperedge::empty(void) const
+bool htd::Hyperedge::empty(void) const HTD_NOEXCEPT
 {
     return content_->empty();
 }
 
-std::size_t htd::Hyperedge::size(void) const
+std::size_t htd::Hyperedge::size(void) const HTD_NOEXCEPT
 {
     return content_->size();
 }
 
-bool htd::Hyperedge::contains(htd::vertex_t vertex) const
+bool htd::Hyperedge::contains(htd::vertex_t vertex) const HTD_NOEXCEPT
 {
     return content_->contains(vertex);
 }
 
-void htd::Hyperedge::erase(htd::vertex_t vertex)
+void htd::Hyperedge::erase(htd::vertex_t vertex) HTD_NOEXCEPT
 {
     content_->erase(vertex);
 }
 
-std::vector<htd::vertex_t>::const_iterator htd::Hyperedge::begin(void) const
+std::vector<htd::vertex_t>::const_iterator htd::Hyperedge::begin(void) const HTD_NOEXCEPT
 {
     return content_->begin();
 }
 
-std::vector<htd::vertex_t>::const_iterator htd::Hyperedge::end(void) const
+std::vector<htd::vertex_t>::const_iterator htd::Hyperedge::end(void) const HTD_NOEXCEPT
 {
     return content_->end();
 }

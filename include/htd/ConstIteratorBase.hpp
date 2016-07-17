@@ -43,7 +43,7 @@ namespace htd
              *
              *  @return A reference to the incremented iterator.
              */
-            virtual ConstIteratorBase<T> & operator++(void) = 0;
+            virtual ConstIteratorBase<T> & operator++(void) HTD_NOEXCEPT = 0;
 
             /**
              *  Dereference the iterator.
@@ -66,7 +66,7 @@ namespace htd
              *
              *  @return True if the iterator points to the same element as the iterator at the right-hand side of the operator, false otherwise.
              */
-            virtual bool operator==(const ConstIteratorBase<T> & rhs) const = 0;
+            virtual bool operator==(const ConstIteratorBase<T> & rhs) const HTD_NOEXCEPT = 0;
 
             /**
              *  Inequality operator for an iterator.
@@ -75,14 +75,14 @@ namespace htd
              *
              *  @return True if the iterator does not point to the same element as the iterator at the right-hand side of the operator, false otherwise.
              */
-            virtual bool operator!=(const ConstIteratorBase<T> & rhs) const = 0;
+            virtual bool operator!=(const ConstIteratorBase<T> & rhs) const HTD_NOEXCEPT = 0;
 
             /**
              *  Create a deep copy of the current iterator.
              *
              *  @return A new ConstIteratorBase<T> object identical to the current iterator.
              */
-            virtual ConstIteratorBase<T> * clone(void) const = 0;
+            virtual ConstIteratorBase<T> * clone(void) const HTD_NOEXCEPT = 0;
     };
 
     template <typename T>

@@ -97,21 +97,21 @@ namespace htd
             /**
              *  Destructor for a Hyperedge object.
              */
-            ~Hyperedge();
+            ~Hyperedge() HTD_NOEXCEPT;
 
             /**
              *  Getter for the ID of the hyperedge.
              *
              *  @return The ID of the hyperedge.
              */
-            htd::id_t id() const;
+            htd::id_t id(void) const HTD_NOEXCEPT;
 
             /**
              *  Setter for the ID of the hyperedge.
              *
              *  @param[in] newId    The new ID of the hyperedge.
              */
-            void setId(htd::id_t newId);
+            void setId(htd::id_t newId) HTD_NOEXCEPT;
 
             /**
              *  Set the endpoints of the hyperedge.
@@ -147,28 +147,28 @@ namespace htd
              *
              *  @return The elements of the hyperedge.
              */
-            const std::vector<htd::vertex_t> & elements(void) const;
+            const std::vector<htd::vertex_t> & elements(void) const HTD_NOEXCEPT;
 
             /**
              *  Getter for the elements of the hyperedge in ascending order without duplicates.
              *
              *  @return The elements of the hyperedge in ascending order without duplicates.
              */
-            const std::vector<htd::vertex_t> & sortedElements(void) const;
+            const std::vector<htd::vertex_t> & sortedElements(void) const HTD_NOEXCEPT;
 
             /**
              *  Check whether the hyperedge contains no elements.
              *
              *  @return True if the hyperedge contains no elements, false otherwise.
              */
-            bool empty(void) const;
+            bool empty(void) const HTD_NOEXCEPT;
 
             /**
              *  Getter for the number of elements of the hyperedge.
              *
              *  @return The number of elements of the hyperedge.
              */
-            std::size_t size(void) const;
+            std::size_t size(void) const HTD_NOEXCEPT;
 
             /**
              *  Check whether the hyperedge contains a specific vertex.
@@ -177,28 +177,28 @@ namespace htd
              *
              *  @return True if the hyperedge contains the specific vertex, false otherwise.
              */
-            bool contains(htd::vertex_t vertex) const;
+            bool contains(htd::vertex_t vertex) const HTD_NOEXCEPT;
 
             /**
              *  Erase a specific vertex from the hyperedge in case the vertex is contained in the hyperedge.
              *
              *  @param[in] vertex   The specific vertex which shall be removed.
              */
-            void erase(htd::vertex_t vertex);
+            void erase(htd::vertex_t vertex) HTD_NOEXCEPT;
 
             /**
              *  Getter for a const_iterator pointing to the first element in the hyperedge.
              *
              *  @return A const_iterator pointing to the first element in the hyperedge.
              */
-            std::vector<htd::vertex_t>::const_iterator begin(void) const;
+            std::vector<htd::vertex_t>::const_iterator begin(void) const HTD_NOEXCEPT;
 
             /**
              *  Getter for a const_iterator pointing to the end of the elements in the hyperedge.
              *
              *  @return A const_iterator pointing to the end of the elements in the hyperedge.
              */
-            std::vector<htd::vertex_t>::const_iterator end(void) const;
+            std::vector<htd::vertex_t>::const_iterator end(void) const HTD_NOEXCEPT;
 
             /**
              *  Access the element at the specific position within the hyperedge.

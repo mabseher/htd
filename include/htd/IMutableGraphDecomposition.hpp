@@ -26,7 +26,7 @@
 #define	HTD_HTD_IMUTABLEGRAPHDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableLabeledGraph.hpp>
+#include <htd/IMutableLabeledMultiHypergraph.hpp>
 #include <htd/IGraphDecomposition.hpp>
 
 namespace htd
@@ -34,10 +34,10 @@ namespace htd
     /**
      * Interface for classes which represent mutable graph decompositions.
      */
-    class IMutableGraphDecomposition : public virtual htd::IMutableLabeledGraph, public virtual htd::IGraphDecomposition
+    class IMutableGraphDecomposition : public virtual htd::IMutableLabeledMultiHypergraph, public virtual htd::IGraphDecomposition
     {
         public:
-            using htd::IMutableGraph::addVertex;
+            using htd::IMutableLabeledMultiHypergraph::addVertex;
 
             using htd::IGraphDecomposition::bagContent;
             using htd::IGraphDecomposition::inducedHyperedges;
@@ -95,30 +95,16 @@ namespace htd
             /**
              *  Copy assignment operator for a mutable graph decomposition.
              *
-             *  @param[in] original  The original graph.
+             *  @param[in] original  The original multi-hypergraph.
              */
-            virtual IMutableGraphDecomposition & operator=(const htd::IGraph & original) = 0;
+            virtual IMutableGraphDecomposition & operator=(const htd::IMultiHypergraph & original) = 0;
 
             /**
              *  Copy assignment operator for a mutable graph decomposition.
              *
-             *  @param[in] original  The original multi-graph.
+             *  @param[in] original  The original labeled multi-hypergraph.
              */
-            virtual IMutableGraphDecomposition & operator=(const htd::IMultiGraph & original) = 0;
-
-            /**
-             *  Copy assignment operator for a mutable graph decomposition.
-             *
-             *  @param[in] original  The original labeled graph.
-             */
-            virtual IMutableGraphDecomposition & operator=(const htd::ILabeledGraph & original) = 0;
-
-            /**
-             *  Copy assignment operator for a mutable graph decomposition.
-             *
-             *  @param[in] original  The original labeled multi-graph.
-             */
-            virtual IMutableGraphDecomposition & operator=(const htd::ILabeledMultiGraph & original) = 0;
+            virtual IMutableGraphDecomposition & operator=(const htd::ILabeledMultiHypergraph & original) = 0;
 
             /**
              *  Copy assignment operator for a mutable graph decomposition.

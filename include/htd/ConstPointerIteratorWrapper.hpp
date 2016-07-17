@@ -44,7 +44,7 @@ namespace htd
              *
              *  @param[in] baseIterator The underlying iterator which shall be wrapped.
              */
-            ConstPointerIteratorWrapper(Iter baseIterator) : baseIterator_(baseIterator)
+            ConstPointerIteratorWrapper(Iter baseIterator) HTD_NOEXCEPT : baseIterator_(baseIterator)
             {
 
             }
@@ -54,7 +54,7 @@ namespace htd
              *
              *  @param[in] original  The original iterator wrapper.
              */
-            ConstPointerIteratorWrapper<Iter, T>(const ConstPointerIteratorWrapper<Iter, T> & original) : baseIterator_(original.baseIterator_)
+            ConstPointerIteratorWrapper<Iter, T>(const ConstPointerIteratorWrapper<Iter, T> & original) HTD_NOEXCEPT : baseIterator_(original.baseIterator_)
             {
 
             }
@@ -64,7 +64,7 @@ namespace htd
              *
              *  @param[in] original  The original iterator wrapper.
              */
-            ConstPointerIteratorWrapper<Iter, T>(ConstPointerIteratorWrapper<Iter, T> && original) : baseIterator_(std::move(original.baseIterator_))
+            ConstPointerIteratorWrapper<Iter, T>(ConstPointerIteratorWrapper<Iter, T> && original) HTD_NOEXCEPT : baseIterator_(std::move(original.baseIterator_))
             {
 
             }
@@ -86,7 +86,7 @@ namespace htd
                 return *this;
             }
 
-            ConstPointerIteratorWrapper<Iter, T> & operator++(void) HTD_OVERRIDE
+            ConstPointerIteratorWrapper<Iter, T> & operator++(void) HTD_NOEXCEPT HTD_OVERRIDE
             {
                 ++baseIterator_;
 
@@ -107,7 +107,7 @@ namespace htd
                 return ret;
             }
 
-            bool operator==(const htd::ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
+            bool operator==(const htd::ConstIteratorBase<T> & rhs) const HTD_NOEXCEPT HTD_OVERRIDE
             {
                 return baseIterator_ == static_cast<const ConstPointerIteratorWrapper<Iter, T> *>(&rhs)->baseIterator_;
             }
@@ -124,7 +124,7 @@ namespace htd
                 return baseIterator_ == rhs.baseIterator_;
             }
 
-            bool operator!=(const htd::ConstIteratorBase<T> & rhs) const HTD_OVERRIDE
+            bool operator!=(const htd::ConstIteratorBase<T> & rhs) const HTD_NOEXCEPT HTD_OVERRIDE
             {
                 return baseIterator_ != static_cast<const ConstPointerIteratorWrapper<Iter, T> *>(&rhs)->baseIterator_;
             }
@@ -151,7 +151,7 @@ namespace htd
                 return *(*baseIterator_);
             }
 
-            ConstPointerIteratorWrapper<Iter, T> * clone(void) const HTD_OVERRIDE
+            ConstPointerIteratorWrapper<Iter, T> * clone(void) const HTD_NOEXCEPT HTD_OVERRIDE
             {
                 return new ConstPointerIteratorWrapper<Iter, T>(*this);
             }

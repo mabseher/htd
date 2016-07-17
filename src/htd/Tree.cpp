@@ -1087,7 +1087,7 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
     }
 }
 
-std::size_t htd::Tree::leafCount(void) const
+std::size_t htd::Tree::leafCount(void) const HTD_NOEXCEPT
 {
     std::size_t ret = 0;
 

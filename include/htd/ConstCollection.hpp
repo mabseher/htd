@@ -48,7 +48,7 @@ namespace htd
             /**
              *  Constructor for a ConstCollection object representing an empty collection.
              */
-            ConstCollection(void) : begin_(), end_(), size_(0)
+            ConstCollection(void) HTD_NOEXCEPT : begin_(), end_(), size_(0)
             {
 
             }
@@ -59,7 +59,7 @@ namespace htd
              *  @param[in] begin    The begin of the collection to be wrapped.
              *  @param[in] end      The end of the collection to be wrapped.
              */
-            ConstCollection(const htd::ConstIterator<T> & begin, const htd::ConstIterator<T> & end) : begin_(begin), end_(end), size_(std::distance(begin, end))
+            ConstCollection(const htd::ConstIterator<T> & begin, const htd::ConstIterator<T> & end) HTD_NOEXCEPT : begin_(begin), end_(end), size_(std::distance(begin, end))
             {
 
             }
@@ -69,7 +69,7 @@ namespace htd
              *
              *  @param[in] original  The original ConstCollection object.
              */
-            ConstCollection(const htd::ConstCollection<T> & original) : begin_(original.begin_), end_(original.end_), size_(original.size_)
+            ConstCollection(const htd::ConstCollection<T> & original) HTD_NOEXCEPT : begin_(original.begin_), end_(original.end_), size_(original.size_)
             {
 
             }
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @param[in] original  The original ConstCollection object.
              */
-            ConstCollection(htd::ConstCollection<T> && original) : begin_(std::move(original.begin_)), end_(std::move(original.end_)), size_(original.size_)
+            ConstCollection(htd::ConstCollection<T> && original) HTD_NOEXCEPT : begin_(std::move(original.begin_)), end_(std::move(original.end_)), size_(original.size_)
             {
 
             }
@@ -97,7 +97,7 @@ namespace htd
              *
              *  @return True if the collection is empty, false otherwise.
              */
-            bool empty() const
+            bool empty(void) const HTD_NOEXCEPT
             {
                 return begin_ == end_;
             }
@@ -107,7 +107,7 @@ namespace htd
              *
              *  @return The size of the collection.
              */
-            std::size_t size() const
+            std::size_t size(void) const HTD_NOEXCEPT
             {
                 return size_;
             }
@@ -117,7 +117,7 @@ namespace htd
              *
              *  @return An iterator to the first element in the collection.
              */
-            htd::ConstIterator<T> begin(void) const
+            htd::ConstIterator<T> begin(void) const HTD_NOEXCEPT
             {
                 return begin_;
             }
@@ -127,7 +127,7 @@ namespace htd
              *
              *  @return An iterator to the end of the collection.
              */
-            htd::ConstIterator<T> end(void) const
+            htd::ConstIterator<T> end(void) const HTD_NOEXCEPT
             {
                 return end_;
             }
@@ -153,7 +153,7 @@ namespace htd
              *
              *  @param[in] original  The original ConstCollection object.
              */
-            ConstCollection<T> & operator=(const ConstCollection<T> & original)
+            ConstCollection<T> & operator=(const ConstCollection<T> & original) HTD_NOEXCEPT
             {
                 begin_ = original.begin_;
                 end_ = original.end_;
@@ -166,7 +166,7 @@ namespace htd
              *
              *  @param[in] original  The original ConstCollection object.
              */
-            ConstCollection<T> & operator=(ConstCollection<T> && original)
+            ConstCollection<T> & operator=(ConstCollection<T> && original) HTD_NOEXCEPT
             {
                 begin_ = std::move(original.begin_);
                 end_ = std::move(original.end_);
@@ -195,7 +195,7 @@ namespace htd
              *
              *  @return True if the collection is equal to the collection at the right-hand side of the operator, false otherwise.
              */
-            inline bool operator==(const htd::ConstCollection<T> & rhs) const
+            inline bool operator==(const htd::ConstCollection<T> & rhs) const HTD_NOEXCEPT
             {
                 return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
             }
@@ -207,9 +207,9 @@ namespace htd
              *
              *  @return True if the collection is not equal to the collection at the right-hand side of the operator, false otherwise.
              */
-            inline bool operator!=(const htd::ConstCollection<T> & rhs) const
+            inline bool operator!=(const htd::ConstCollection<T> & rhs) const HTD_NOEXCEPT
             {
-                return !(*this == rhs);
+                return size() != rhs.size() || !std::equal(begin(), end(), rhs.begin());
             }
 
             /**

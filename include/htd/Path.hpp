@@ -130,7 +130,7 @@ namespace htd
 
             bool isRoot(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            std::size_t leafCount(void) const HTD_OVERRIDE;
+            std::size_t leafCount(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> leaves(void) const HTD_OVERRIDE;
 

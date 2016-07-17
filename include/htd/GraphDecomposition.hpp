@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/IMutableGraphDecomposition.hpp>
-#include <htd/LabeledGraph.hpp>
+#include <htd/LabeledMultiHypergraph.hpp>
 
 #include <unordered_map>
 
@@ -37,7 +37,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableGraphDecomposition interface.
      */
-    class GraphDecomposition : public htd::LabeledGraph, public virtual htd::IMutableGraphDecomposition
+    class GraphDecomposition : public htd::LabeledMultiHypergraph, public virtual htd::IMutableGraphDecomposition
     {
         public:
             /**
@@ -55,16 +55,16 @@ namespace htd
             /**
              *  Copy constructor for a graph decomposition.
              *
-             *  @param[in] original  The original graph.
+             *  @param[in] original  The original multi-hypergraph.
              */
-            GraphDecomposition(const htd::IGraph & original);
+            GraphDecomposition(const htd::IMultiHypergraph & original);
 
             /**
              *  Copy constructor for a graph decomposition.
              *
-             *  @param[in] original  The original labeled graph.
+             *  @param[in] original  The original labeled multi-hypergraph.
              */
-            GraphDecomposition(const htd::ILabeledGraph & original);
+            GraphDecomposition(const htd::ILabeledMultiHypergraph & original);
 
             /**
              *  Copy constructor for a graph decomposition.
@@ -108,13 +108,9 @@ namespace htd
              */
             GraphDecomposition & operator=(const GraphDecomposition & original);
 
-            GraphDecomposition & operator=(const htd::IGraph & original) HTD_OVERRIDE;
+            GraphDecomposition & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
 
-            GraphDecomposition & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;
-
-            GraphDecomposition & operator=(const htd::ILabeledGraph & original) HTD_OVERRIDE;
-
-            GraphDecomposition & operator=(const htd::ILabeledMultiGraph & original) HTD_OVERRIDE;
+            GraphDecomposition & operator=(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
 
             GraphDecomposition & operator=(const htd::IGraphDecomposition & original) HTD_OVERRIDE;
 

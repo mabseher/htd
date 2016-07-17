@@ -232,7 +232,7 @@ namespace htd
             /**
              *  Constructor for a FilteredHyperedgeCollection object representing an empty collection.
              */
-            FilteredHyperedgeCollection(void);
+            FilteredHyperedgeCollection(void) HTD_NOEXCEPT;
 
             /**
              *  Constructor for a FilteredHyperedgeCollection.
@@ -263,14 +263,14 @@ namespace htd
              *
              *  @param[in] original  The original FilteredHyperedgeCollection object.
              */
-            FilteredHyperedgeCollection(const FilteredHyperedgeCollection & original);
+            FilteredHyperedgeCollection(const FilteredHyperedgeCollection & original) HTD_NOEXCEPT;
 
             /**
              *  Move constructor for a FilteredHyperedgeCollection object.
              *
              *  @param[in] original  The original FilteredHyperedgeCollection object.
              */
-            FilteredHyperedgeCollection(FilteredHyperedgeCollection && original);
+            FilteredHyperedgeCollection(FilteredHyperedgeCollection && original) HTD_NOEXCEPT;
 
             /**
              *  Destructor for a FilteredHyperedgeCollection object.
@@ -282,35 +282,35 @@ namespace htd
              *
              *  @return The size of the collection.
              */
-            std::size_t size(void) const;
+            std::size_t size(void) const HTD_NOEXCEPT;
 
             /**
              *  Getter for the iterator to the first element in the collection.
              *
              *  @return An iterator to the first element in the collection.
              */
-            FilteredHyperedgeCollectionConstIterator begin(void) const;
+            FilteredHyperedgeCollectionConstIterator begin(void) const HTD_NOEXCEPT;
 
             /**
              *  Getter for the iterator to the end of the collection.
              *
              *  @return An iterator to the end of the collection.
              */
-            FilteredHyperedgeCollectionConstIterator end(void) const;
+            FilteredHyperedgeCollectionConstIterator end(void) const HTD_NOEXCEPT;
 
             /**
              *  Copy assignment operator for a FilteredHyperedgeCollection object.
              *
              *  @param[in] original  The original FilteredHyperedgeCollection object.
              */
-            FilteredHyperedgeCollection & operator=(const FilteredHyperedgeCollection & original);
+            FilteredHyperedgeCollection & operator=(const FilteredHyperedgeCollection & original) HTD_NOEXCEPT;
 
             /**
              *  Move assignment operator for a FilteredHyperedgeCollection object.
              *
              *  @param[in] original  The original FilteredHyperedgeCollection object.
              */
-            FilteredHyperedgeCollection & operator=(FilteredHyperedgeCollection && original);
+            FilteredHyperedgeCollection & operator=(FilteredHyperedgeCollection && original) HTD_NOEXCEPT;
 
             /**
              *  Equality operator for a hyperedge collection.
@@ -319,7 +319,7 @@ namespace htd
              *
              *  @return True if the hyperedge collection is equal to the hyperedge collection at the right-hand side of the operator, false otherwise.
              */
-            bool operator==(const FilteredHyperedgeCollection & rhs) const;
+            bool operator==(const FilteredHyperedgeCollection & rhs) const HTD_NOEXCEPT;
 
             /**
              *  Inequality operator for a hyperedge collection.
@@ -328,7 +328,7 @@ namespace htd
              *
              *  @return True if the hyperedge collection is not equal to the hyperedge collection at the right-hand side of the operator, false otherwise.
              */
-            bool operator!=(const FilteredHyperedgeCollection & rhs) const;
+            bool operator!=(const FilteredHyperedgeCollection & rhs) const HTD_NOEXCEPT;
 
             /**
              *  Remove all hyperedges from the collection which contain also other vertices than those provided to this method.

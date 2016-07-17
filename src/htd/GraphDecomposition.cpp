@@ -33,39 +33,42 @@
 #include <algorithm>
 #include <stdexcept>
 
-htd::GraphDecomposition::GraphDecomposition(void) : htd::LabeledGraph::LabeledGraph(), bagContent_(), inducedEdges_()
+htd::GraphDecomposition::GraphDecomposition(void) : htd::LabeledMultiHypergraph::LabeledMultiHypergraph(), bagContent_(), inducedEdges_()
 {
 
 }
 
-htd::GraphDecomposition::GraphDecomposition(const htd::GraphDecomposition & original) : htd::LabeledGraph::LabeledGraph(original), bagContent_(original.bagContent_), inducedEdges_(original.inducedEdges_)
+htd::GraphDecomposition::GraphDecomposition(const htd::GraphDecomposition & original) : htd::LabeledMultiHypergraph::LabeledMultiHypergraph(original), bagContent_(original.bagContent_), inducedEdges_(original.inducedEdges_)
 {
 
 }
 
-htd::GraphDecomposition::GraphDecomposition(const htd::IGraph & original) : htd::LabeledGraph::LabeledGraph(original), bagContent_(), inducedEdges_()
-{
-    for (htd::vertex_t vertex : original.vertices())
-    {
-        bagContent_[vertex] = std::vector<htd::vertex_t>();
-        inducedEdges_[vertex] = htd::FilteredHyperedgeCollection();
-    }
-}
-
-htd::GraphDecomposition::GraphDecomposition(const htd::ILabeledGraph & original) : htd::LabeledGraph::LabeledGraph(original), bagContent_(), inducedEdges_()
+htd::GraphDecomposition::GraphDecomposition(const htd::IMultiHypergraph & original) : htd::LabeledMultiHypergraph::LabeledMultiHypergraph(original), bagContent_(), inducedEdges_()
 {
     for (htd::vertex_t vertex : original.vertices())
     {
-        bagContent_[vertex] = std::vector<htd::vertex_t>();
-        inducedEdges_[vertex] = htd::FilteredHyperedgeCollection();
+        bagContent_.emplace(vertex, std::vector<htd::vertex_t>());
+
+        inducedEdges_.emplace(vertex, htd::FilteredHyperedgeCollection());
     }
 }
 
-htd::GraphDecomposition::GraphDecomposition(const htd::IGraphDecomposition & original) : htd::LabeledGraph::LabeledGraph(original), bagContent_(), inducedEdges_()
+htd::GraphDecomposition::GraphDecomposition(const htd::ILabeledMultiHypergraph & original) : htd::LabeledMultiHypergraph::LabeledMultiHypergraph(original), bagContent_(), inducedEdges_()
+{
+    for (htd::vertex_t vertex : original.vertices())
+    {
+        bagContent_.emplace(vertex, std::vector<htd::vertex_t>());
+
+        inducedEdges_.emplace(vertex, htd::FilteredHyperedgeCollection());
+    }
+}
+
+htd::GraphDecomposition::GraphDecomposition(const htd::IGraphDecomposition & original) : htd::LabeledMultiHypergraph::LabeledMultiHypergraph(original), bagContent_(), inducedEdges_()
 {
     for (htd::vertex_t vertex : original.vertices())
     {
         bagContent_[vertex] = original.bagContent(vertex);
+
         inducedEdges_[vertex] = original.inducedHyperedges(vertex);
     }
 }
@@ -77,18 +80,18 @@ htd::GraphDecomposition::~GraphDecomposition()
 
 htd::vertex_t htd::GraphDecomposition::addVertex(void)
 {
-    htd::vertex_t ret = htd::Graph::addVertex();
+    htd::vertex_t ret = htd::LabeledMultiHypergraph::addVertex();
 
-    bagContent_[ret] = std::vector<htd::vertex_t>();
+    bagContent_.emplace(ret, std::vector<htd::vertex_t>());
 
-    inducedEdges_[ret] = htd::FilteredHyperedgeCollection();
+    inducedEdges_.emplace(ret, htd::FilteredHyperedgeCollection());
 
     return ret;
 }
 
 htd::vertex_t htd::GraphDecomposition::addVertex(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
 {
-    htd::vertex_t ret = htd::Graph::addVertex();
+    htd::vertex_t ret = htd::LabeledMultiHypergraph::addVertex();
 
     bagContent_[ret] = bagContent;
 
@@ -99,24 +102,24 @@ htd::vertex_t htd::GraphDecomposition::addVertex(const std::vector<htd::vertex_t
 
 htd::vertex_t htd::GraphDecomposition::addVertex(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
 {
-    htd::vertex_t ret = htd::Graph::addVertex();
+    htd::vertex_t ret = htd::LabeledMultiHypergraph::addVertex();
 
-    bagContent_[ret] = std::move(bagContent);
+    bagContent_.emplace(ret, std::move(bagContent));
 
-    inducedEdges_[ret] = std::move(inducedEdges);
+    inducedEdges_.emplace(ret, std::move(inducedEdges));
 
     return ret;
 }
 
 htd::vertex_t htd::GraphDecomposition::addVertices(std::size_t count)
 {
-    htd::vertex_t ret = htd::Graph::addVertices(count);
+    htd::vertex_t ret = htd::LabeledMultiHypergraph::addVertices(count);
 
     for (htd::index_t index = 0; index < count; ++index)
     {
-        bagContent_[ret + index] = std::vector<htd::vertex_t>();
+        bagContent_.emplace(ret + index, std::vector<htd::vertex_t>());
 
-        inducedEdges_[ret + index] = htd::FilteredHyperedgeCollection();
+        inducedEdges_.emplace(ret + index, htd::FilteredHyperedgeCollection());
     }
 
     return ret;
@@ -124,7 +127,7 @@ htd::vertex_t htd::GraphDecomposition::addVertices(std::size_t count)
 
 void htd::GraphDecomposition::removeVertex(htd::vertex_t vertex)
 {
-    htd::Graph::removeVertex(vertex);
+    htd::LabeledMultiHypergraph::removeVertex(vertex);
 
     bagContent_.erase(vertex);
 
@@ -213,12 +216,12 @@ htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::GraphDec
 {
     if (this != &original)
     {
-        htd::LabeledGraph::operator=(original);
+        htd::LabeledMultiHypergraph::operator=(original);
 
         bagContent_.clear();
         inducedEdges_.clear();
 
-        const htd::ConstCollection<htd::vertex_t> & vertices = htd::Graph::vertices();
+        const htd::ConstCollection<htd::vertex_t> & vertices = htd::LabeledMultiHypergraph::vertices();
 
         auto it = vertices.begin();
 
@@ -237,16 +240,16 @@ htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::GraphDec
     return *this;
 }
 
-htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::IGraph & original)
+htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::IMultiHypergraph & original)
 {
     if (this != &original)
     {
-        htd::LabeledGraph::operator=(original);
+        htd::LabeledMultiHypergraph::operator=(original);
 
         bagContent_.clear();
         inducedEdges_.clear();
 
-        const htd::ConstCollection<htd::vertex_t> & vertices = htd::Graph::vertices();
+        const htd::ConstCollection<htd::vertex_t> & vertices = htd::LabeledMultiHypergraph::vertices();
 
         auto it = vertices.begin();
 
@@ -265,41 +268,16 @@ htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::IGraph &
     return *this;
 }
 
-htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::IMultiGraph & original)
-{
-    htd::LabeledGraph::operator=(original);
-
-    bagContent_.clear();
-    inducedEdges_.clear();
-
-    const htd::ConstCollection<htd::vertex_t> & vertices = htd::Graph::vertices();
-
-    auto it = vertices.begin();
-
-    std::size_t count = vertices.size();
-
-    for (htd::index_t index = 0; index < count; ++index)
-    {
-        bagContent_[*it] = std::vector<htd::vertex_t>();
-
-        inducedEdges_[*it] = htd::FilteredHyperedgeCollection();
-
-        ++it;
-    }
-
-    return *this;
-}
-
-htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::ILabeledGraph & original)
+htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::ILabeledMultiHypergraph & original)
 {
     if (this != &original)
     {
-        htd::LabeledGraph::operator=(original);
+        htd::LabeledMultiHypergraph::operator=(original);
 
         bagContent_.clear();
         inducedEdges_.clear();
 
-        const htd::ConstCollection<htd::vertex_t> & vertices = htd::Graph::vertices();
+        const htd::ConstCollection<htd::vertex_t> & vertices = htd::LabeledMultiHypergraph::vertices();
 
         auto it = vertices.begin();
 
@@ -313,31 +291,6 @@ htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::ILabeled
 
             ++it;
         }
-    }
-
-    return *this;
-}
-
-htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::ILabeledMultiGraph & original)
-{
-    htd::LabeledGraph::operator=(original);
-
-    bagContent_.clear();
-    inducedEdges_.clear();
-
-    const htd::ConstCollection<htd::vertex_t> & vertices = htd::Graph::vertices();
-
-    auto it = vertices.begin();
-
-    std::size_t count = vertices.size();
-
-    for (htd::index_t index = 0; index < count; ++index)
-    {
-        bagContent_[*it] = std::vector<htd::vertex_t>();
-
-        inducedEdges_[*it] = htd::FilteredHyperedgeCollection();
-
-        ++it;
     }
 
     return *this;
@@ -347,12 +300,12 @@ htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::IGraphDe
 {
     if (this != &original)
     {
-        htd::LabeledGraph::operator=(original);
+        htd::LabeledMultiHypergraph::operator=(original);
 
         bagContent_.clear();
         inducedEdges_.clear();
 
-        const htd::ConstCollection<htd::vertex_t> & vertices = htd::Graph::vertices();
+        const htd::ConstCollection<htd::vertex_t> & vertices = htd::LabeledMultiHypergraph::vertices();
 
         auto it = vertices.begin();
 

@@ -897,7 +897,7 @@ htd::vertex_t htd::Path::addParent(htd::vertex_t vertex)
     return ret;
 }
 
-std::size_t htd::Path::leafCount(void) const
+std::size_t htd::Path::leafCount(void) const HTD_NOEXCEPT
 {
     std::size_t ret = 0;
 

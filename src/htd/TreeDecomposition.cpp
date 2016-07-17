@@ -49,9 +49,9 @@ htd::TreeDecomposition::TreeDecomposition(const htd::ITree & original) : htd::La
 {
     for (htd::vertex_t vertex : original.vertices())
     {
-        bagContent_[vertex] = std::vector<htd::vertex_t>();
+        bagContent_.emplace(vertex, std::vector<htd::vertex_t>());
 
-        inducedEdges_[vertex] = htd::FilteredHyperedgeCollection();
+        inducedEdges_.emplace(vertex, htd::FilteredHyperedgeCollection());
     }
 }
 
@@ -59,9 +59,9 @@ htd::TreeDecomposition::TreeDecomposition(const htd::ILabeledTree & original) : 
 {
     for (htd::vertex_t vertex : original.vertices())
     {
-        bagContent_[vertex] = std::vector<htd::vertex_t>();
+        bagContent_.emplace(vertex, std::vector<htd::vertex_t>());
 
-        inducedEdges_[vertex] = htd::FilteredHyperedgeCollection();
+        inducedEdges_.emplace(vertex, htd::FilteredHyperedgeCollection());
     }
 }
 
@@ -116,9 +116,9 @@ htd::vertex_t htd::TreeDecomposition::insertRoot(void)
 
     if (inserted)
     {
-        bagContent_[ret] = std::vector<htd::vertex_t>();
+        bagContent_.emplace(ret, std::vector<htd::vertex_t>());
 
-        inducedEdges_[ret] = htd::FilteredHyperedgeCollection();
+        inducedEdges_.emplace(ret, htd::FilteredHyperedgeCollection());
     }
 
     return ret;
@@ -128,9 +128,9 @@ htd::vertex_t htd::TreeDecomposition::addChild(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::Tree::addChild(vertex);
 
-    bagContent_[ret] = std::vector<htd::vertex_t>();
+    bagContent_.emplace(ret, std::vector<htd::vertex_t>());
 
-    inducedEdges_[ret] = htd::FilteredHyperedgeCollection();
+    inducedEdges_.emplace(ret, htd::FilteredHyperedgeCollection());
 
     return ret;
 }
@@ -150,9 +150,9 @@ htd::vertex_t htd::TreeDecomposition::addChild(htd::vertex_t vertex, std::vector
 {
     htd::vertex_t ret = htd::Tree::addChild(vertex);
 
-    bagContent_[ret] = std::move(bagContent);
+    bagContent_.emplace(ret, std::move(bagContent));
 
-    inducedEdges_[ret] = std::move(inducedEdges);
+    inducedEdges_.emplace(ret, std::move(inducedEdges));
 
     return ret;
 }
@@ -161,9 +161,9 @@ htd::vertex_t htd::TreeDecomposition::addParent(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::Tree::addParent(vertex);
 
-    bagContent_[ret] = std::vector<htd::vertex_t>();
+    bagContent_.emplace(ret, std::vector<htd::vertex_t>());
 
-    inducedEdges_[ret] = htd::FilteredHyperedgeCollection();
+    inducedEdges_.emplace(ret, htd::FilteredHyperedgeCollection());
 
     return ret;
 }
@@ -183,9 +183,9 @@ htd::vertex_t htd::TreeDecomposition::addParent(htd::vertex_t vertex, std::vecto
 {
     htd::vertex_t ret = htd::Tree::addParent(vertex);
 
-    bagContent_[ret] = std::move(bagContent);
+    bagContent_.emplace(ret, std::move(bagContent));
 
-    inducedEdges_[ret] = std::move(inducedEdges);
+    inducedEdges_.emplace(ret, std::move(inducedEdges));
 
     return ret;
 }

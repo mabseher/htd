@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ITreeDecomposition.hpp>
+#include <htd/FitnessEvaluation.hpp>
 
 namespace htd
 {
@@ -39,13 +40,13 @@ namespace htd
             virtual ~ITreeDecompositionFitnessFunction() = 0;
 
             /**
-             *  Compute the fitness value of a given tree decomposition.
+             *  Compute the fitness evaluation of a given tree decomposition.
              *
              *  @param[in] decomposition    The tree decomposition which's fitness shall be computed.
              *
-             *  @return The fitness value of the given tree decomposition.
+             *  @return The fitness evaluation of the given tree decomposition.
              */
-            virtual double fitness(const htd::ITreeDecomposition & decomposition) const = 0;
+            virtual htd::FitnessEvaluation * fitness(const htd::ITreeDecomposition & decomposition) const = 0;
 
             /**
              *  Create a deep copy of the current fitness function.

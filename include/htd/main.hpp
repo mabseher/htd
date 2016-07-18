@@ -51,6 +51,7 @@
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/ExhaustiveVertexSelectionStrategy.hpp>
 #include <htd/FilteredHyperedgeCollection.hpp>
+#include <htd/FitnessEvaluation.hpp>
 #include <htd/Globals.hpp>
 #include <htd/GraphDecompositionAlgorithmFactory.hpp>
 #include <htd/GraphDecompositionFactory.hpp>

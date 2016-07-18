@@ -233,7 +233,11 @@ bool htd::WeakNormalizationOperation::identicalJoinNodeParentRequired(void) cons
 
 htd::WeakNormalizationOperation * htd::WeakNormalizationOperation::clone(void) const
 {
-    return new htd::WeakNormalizationOperation(emptyRoot_, emptyLeaves_, identicalJoinNodeParent_);
+    htd::WeakNormalizationOperation * ret = new htd::WeakNormalizationOperation(emptyRoot_, emptyLeaves_, identicalJoinNodeParent_);
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_WEAKNORMALIZATIONOPERATION_CPP */

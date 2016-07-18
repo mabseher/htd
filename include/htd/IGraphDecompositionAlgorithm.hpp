@@ -102,6 +102,13 @@ namespace htd
             virtual void addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) = 0;
 
             /**
+             *  Check whether the algorithm always returns a valid decomposition (or nulltpr) in case it is interrupted.
+             *
+             *  @return True if the algorithm always returns a valid decomposition (or nulltpr) in case it is interrupted, false otherwise.
+             */
+            virtual bool isSafelyInterruptible(void) const = 0;
+
+            /**
              *  Create a deep copy of the current graph decomposition algorithm.
              *
              *  @return A new IGraphDecompositionAlgorithm object identical to the current graph decomposition algorithm.

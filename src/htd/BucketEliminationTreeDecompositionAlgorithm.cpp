@@ -229,21 +229,28 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::addManipulationOperations
     }
 }
 
+bool htd::BucketEliminationTreeDecompositionAlgorithm::isSafelyInterruptible(void) const
+{
+    return false;
+}
+
 htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDecompositionAlgorithm::clone(void) const
 {
-    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+    htd::BucketEliminationTreeDecompositionAlgorithm * ret = new htd::BucketEliminationTreeDecompositionAlgorithm();
 
     for (const auto & labelingFunction : labelingFunctions_)
     {
-        manipulationOperations.push_back(labelingFunction->clone());
+        ret->addManipulationOperation(labelingFunction->clone());
     }
 
     for (const auto & postProcessingOperation : postProcessingOperations_)
     {
-        manipulationOperations.push_back(postProcessingOperation->clone());
+        ret->addManipulationOperation(postProcessingOperation->clone());
     }
 
-    return new htd::BucketEliminationTreeDecompositionAlgorithm(manipulationOperations);
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IMultiHypergraph & graph) const

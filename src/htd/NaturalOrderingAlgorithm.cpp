@@ -57,7 +57,11 @@ void htd::NaturalOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
 htd::NaturalOrderingAlgorithm * htd::NaturalOrderingAlgorithm::clone(void) const
 {
-    return new htd::NaturalOrderingAlgorithm();
+    htd::NaturalOrderingAlgorithm * ret = new htd::NaturalOrderingAlgorithm();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_NATURALORDERINGALGORITHM_CPP */

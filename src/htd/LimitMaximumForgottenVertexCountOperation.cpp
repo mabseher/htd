@@ -481,7 +481,11 @@ bool htd::LimitMaximumForgottenVertexCountOperation::createsLocationDependendLab
 
 htd::LimitMaximumForgottenVertexCountOperation * htd::LimitMaximumForgottenVertexCountOperation::clone(void) const
 {
-    return new htd::LimitMaximumForgottenVertexCountOperation(limit_);
+    htd::LimitMaximumForgottenVertexCountOperation * ret = new htd::LimitMaximumForgottenVertexCountOperation(limit_);
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_LIMITMAXIMUMFORGOTTENVERTEXCOUNTOPERATION_CPP */

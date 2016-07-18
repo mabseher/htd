@@ -677,7 +677,11 @@ bool htd::LimitMaximumIntroducedVertexCountOperation::createsLocationDependendLa
 
 htd::LimitMaximumIntroducedVertexCountOperation * htd::LimitMaximumIntroducedVertexCountOperation::clone(void) const
 {
-    return new htd::LimitMaximumIntroducedVertexCountOperation(limit_);
+    htd::LimitMaximumIntroducedVertexCountOperation * ret = new htd::LimitMaximumIntroducedVertexCountOperation(limit_);
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_LIMITMAXIMUMINTRODUCEDVERTEXCOUNTOPERATION_CPP */

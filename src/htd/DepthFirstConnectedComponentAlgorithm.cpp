@@ -90,7 +90,11 @@ void htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::I
 
 htd::DepthFirstConnectedComponentAlgorithm * htd::DepthFirstConnectedComponentAlgorithm::clone(void) const
 {
-    return new DepthFirstConnectedComponentAlgorithm();
+    htd::DepthFirstConnectedComponentAlgorithm * ret = new htd::DepthFirstConnectedComponentAlgorithm();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_DEPTHFIRSTCONNECTEDCOMPONENTALGORITHM_CPP */

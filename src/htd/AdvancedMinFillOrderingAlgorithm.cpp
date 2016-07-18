@@ -807,7 +807,11 @@ void htd::AdvancedMinFillOrderingAlgorithm::decompose_sets(const std::vector<htd
 
 htd::AdvancedMinFillOrderingAlgorithm * htd::AdvancedMinFillOrderingAlgorithm::clone(void) const
 {
-    return new htd::AdvancedMinFillOrderingAlgorithm();
+    htd::AdvancedMinFillOrderingAlgorithm * ret = new htd::AdvancedMinFillOrderingAlgorithm();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_ADVANCEDMINFILLORDERINGALGORITHM_CPP */

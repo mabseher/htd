@@ -274,21 +274,28 @@ void htd::PostProcessingPathDecompositionAlgorithm::addManipulationOperations(co
     }
 }
 
+bool htd::PostProcessingPathDecompositionAlgorithm::isSafelyInterruptible(void) const
+{
+    return false;
+}
+
 htd::PostProcessingPathDecompositionAlgorithm * htd::PostProcessingPathDecompositionAlgorithm::clone(void) const
 {
-    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+    htd::PostProcessingPathDecompositionAlgorithm * ret = new htd::PostProcessingPathDecompositionAlgorithm();
 
     for (const auto & labelingFunction : labelingFunctions_)
     {
-        manipulationOperations.push_back(labelingFunction->clone());
+        ret->addManipulationOperation(labelingFunction->clone());
     }
 
     for (const auto & postProcessingOperation : postProcessingOperations_)
     {
-        manipulationOperations.push_back(postProcessingOperation->clone());
+        ret->addManipulationOperation(postProcessingOperation->clone());
     }
 
-    return new htd::PostProcessingPathDecompositionAlgorithm(manipulationOperations);
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_POSTPROCESSINGPATHDECOMPOSITIONALGORITHM_CPP */

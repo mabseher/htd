@@ -179,7 +179,11 @@ bool htd::AddEmptyRootOperation::createsLocationDependendLabels(void) const
 
 htd::AddEmptyRootOperation * htd::AddEmptyRootOperation::clone(void) const
 {
-    return new htd::AddEmptyRootOperation();
+    htd::AddEmptyRootOperation * ret = new htd::AddEmptyRootOperation();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_ADDEMPTYROOTOPERATION_CPP */

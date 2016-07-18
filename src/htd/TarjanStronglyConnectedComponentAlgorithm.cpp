@@ -89,7 +89,11 @@ void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const ht
 
 htd::TarjanStronglyConnectedComponentAlgorithm * htd::TarjanStronglyConnectedComponentAlgorithm::clone(void) const
 {
-    return new TarjanStronglyConnectedComponentAlgorithm();
+    htd::TarjanStronglyConnectedComponentAlgorithm * ret = new htd::TarjanStronglyConnectedComponentAlgorithm();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_TARJANSTRONGLYCONNECTEDCOMPONENTALGORITHM_CPP */

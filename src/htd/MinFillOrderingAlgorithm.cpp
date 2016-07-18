@@ -706,7 +706,11 @@ void htd::MinFillOrderingAlgorithm::decompose_sets(const std::vector<htd::vertex
 
 htd::MinFillOrderingAlgorithm * htd::MinFillOrderingAlgorithm::clone(void) const
 {
-    return new htd::MinFillOrderingAlgorithm();
+    htd::MinFillOrderingAlgorithm * ret = new htd::MinFillOrderingAlgorithm();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_MINFILLORDERINGALGORITHM_CPP */

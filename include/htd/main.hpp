@@ -137,6 +137,7 @@
 #include <htd/IPath.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
 #include <htd/IStronglyConnectedComponentAlgorithm.hpp>
+#include <htd/IterativeImprovementTreeDecompositionAlgorithm.hpp>
 #include <htd/IteratorBase.hpp>
 #include <htd/Iterator.hpp>
 #include <htd/IteratorWrapper.hpp>

@@ -231,7 +231,11 @@ bool htd::NormalizationOperation::leafNodesTreatedAsIntroduceNodes(void) const
 
 htd::NormalizationOperation * htd::NormalizationOperation::clone(void) const
 {
-    return new htd::NormalizationOperation(emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired(), treatLeafNodesAsIntroduceNodes_);
+    htd::NormalizationOperation * ret = new htd::NormalizationOperation(emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired(), treatLeafNodesAsIntroduceNodes_);
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_NORMALIZATIONOPERATION_CPP */

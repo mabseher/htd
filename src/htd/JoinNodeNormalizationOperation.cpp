@@ -243,7 +243,11 @@ bool htd::JoinNodeNormalizationOperation::createsLocationDependendLabels(void) c
 
 htd::JoinNodeNormalizationOperation * htd::JoinNodeNormalizationOperation::clone(void) const
 {
-    return new htd::JoinNodeNormalizationOperation(identicalParent_);
+    htd::JoinNodeNormalizationOperation * ret = new htd::JoinNodeNormalizationOperation(identicalParent_);
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_JOINNODENORMALIZATIONOPERATION_CPP */

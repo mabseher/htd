@@ -340,7 +340,11 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
 
 htd::SetCoverAlgorithm * htd::SetCoverAlgorithm::clone(void) const
 {
-    return new htd::SetCoverAlgorithm();
+    htd::SetCoverAlgorithm * ret = new htd::SetCoverAlgorithm();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_SETCOVERALGORITHM_CPP */

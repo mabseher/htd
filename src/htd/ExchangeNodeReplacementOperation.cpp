@@ -257,7 +257,11 @@ bool htd::ExchangeNodeReplacementOperation::createsLocationDependendLabels(void)
 
 htd::ExchangeNodeReplacementOperation * htd::ExchangeNodeReplacementOperation::clone(void) const
 {
-    return new htd::ExchangeNodeReplacementOperation();
+    htd::ExchangeNodeReplacementOperation * ret = new htd::ExchangeNodeReplacementOperation();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_EXCHANGENODEREPLACEMENTOPERATION_CPP */

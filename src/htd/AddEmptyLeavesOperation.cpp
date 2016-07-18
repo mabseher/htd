@@ -186,7 +186,11 @@ bool htd::AddEmptyLeavesOperation::createsLocationDependendLabels(void) const
 
 htd::AddEmptyLeavesOperation * htd::AddEmptyLeavesOperation::clone(void) const
 {
-    return new htd::AddEmptyLeavesOperation();
+    htd::AddEmptyLeavesOperation * ret = new htd::AddEmptyLeavesOperation();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_ADDEMPTYLEAVESOPERATION_CPP */

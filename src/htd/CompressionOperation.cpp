@@ -256,7 +256,11 @@ bool htd::CompressionOperation::createsLocationDependendLabels(void) const
 
 htd::CompressionOperation * htd::CompressionOperation::clone(void) const
 {
-    return new htd::CompressionOperation();
+    htd::CompressionOperation * ret = new htd::CompressionOperation();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_COMPRESSIONOPERATION_CPP */

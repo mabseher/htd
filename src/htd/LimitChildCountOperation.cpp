@@ -257,7 +257,11 @@ bool htd::LimitChildCountOperation::createsLocationDependendLabels(void) const
 
 htd::LimitChildCountOperation * htd::LimitChildCountOperation::clone(void) const
 {
-    return new htd::LimitChildCountOperation(limit_);
+    htd::LimitChildCountOperation * ret = new htd::LimitChildCountOperation(limit_);
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_LIMITCHILDCOUNTOPERATION_CPP */

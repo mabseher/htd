@@ -159,7 +159,11 @@ bool htd::AddIdenticalJoinNodeParentOperation::createsLocationDependendLabels(vo
 
 htd::AddIdenticalJoinNodeParentOperation * htd::AddIdenticalJoinNodeParentOperation::clone(void) const
 {
-    return new htd::AddIdenticalJoinNodeParentOperation();
+    htd::AddIdenticalJoinNodeParentOperation * ret = new htd::AddIdenticalJoinNodeParentOperation();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_ADDIDENTICALJOINNODEPARENTOPERATION_CPP */

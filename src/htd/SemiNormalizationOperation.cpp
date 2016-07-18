@@ -147,7 +147,11 @@ bool htd::SemiNormalizationOperation::createsLocationDependendLabels(void) const
 
 htd::SemiNormalizationOperation * htd::SemiNormalizationOperation::clone(void) const
 {
-    return new htd::SemiNormalizationOperation(emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired());
+    htd::SemiNormalizationOperation * ret = new htd::SemiNormalizationOperation(emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired());
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_SEMINORMALIZATIONOPERATION_CPP */

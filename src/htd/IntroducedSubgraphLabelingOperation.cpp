@@ -370,7 +370,11 @@ bool htd::IntroducedSubgraphLabelingOperation::createsLocationDependendLabels(vo
 
 htd::IntroducedSubgraphLabelingOperation * htd::IntroducedSubgraphLabelingOperation::clone(void) const
 {
-    return new htd::IntroducedSubgraphLabelingOperation(graph_);
+    htd::IntroducedSubgraphLabelingOperation * ret = new htd::IntroducedSubgraphLabelingOperation(graph_);
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_INTRODUCEDSUBGRAPHLABELINGOPERATION_CPP */

@@ -234,7 +234,11 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
 
 htd::MinDegreeOrderingAlgorithm * htd::MinDegreeOrderingAlgorithm::clone(void) const
 {
-    return new htd::MinDegreeOrderingAlgorithm();
+    htd::MinDegreeOrderingAlgorithm * ret = new htd::MinDegreeOrderingAlgorithm();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_MINDEGREEORDERINGALGORITHM_CPP */

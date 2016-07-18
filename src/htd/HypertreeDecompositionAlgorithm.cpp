@@ -224,21 +224,28 @@ void htd::HypertreeDecompositionAlgorithm::addManipulationOperations(const std::
     }
 }
 
+bool htd::HypertreeDecompositionAlgorithm::isSafelyInterruptible(void) const
+{
+    return false;
+}
+
 htd::HypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithm::clone(void) const
 {
-    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+    htd::HypertreeDecompositionAlgorithm * ret = new htd::HypertreeDecompositionAlgorithm();
 
     for (const auto & labelingFunction : labelingFunctions_)
     {
-        manipulationOperations.push_back(labelingFunction->clone());
+        ret->addManipulationOperation(labelingFunction->clone());
     }
 
     for (const auto & postProcessingOperation : postProcessingOperations_)
     {
-        manipulationOperations.push_back(postProcessingOperation->clone());
+        ret->addManipulationOperation(postProcessingOperation->clone());
     }
 
-    return new htd::HypertreeDecompositionAlgorithm(manipulationOperations);
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHypergraph & graph, htd::IMutableHypertreeDecomposition & decomposition) const

@@ -134,7 +134,11 @@ void htd::GreedySetCoverAlgorithm::computeSetCover(const htd::ConstCollection<ht
 
 htd::GreedySetCoverAlgorithm * htd::GreedySetCoverAlgorithm::clone(void) const
 {
-    return new htd::GreedySetCoverAlgorithm();
+    htd::GreedySetCoverAlgorithm * ret = new htd::GreedySetCoverAlgorithm();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_GREEDYSETCOVERALGORITHM_CPP */

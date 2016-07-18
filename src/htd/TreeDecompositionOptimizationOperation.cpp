@@ -687,7 +687,16 @@ void htd::TreeDecompositionOptimizationOperation::removeCreatedNodes(htd::IMutab
 
 htd::TreeDecompositionOptimizationOperation * htd::TreeDecompositionOptimizationOperation::clone(void) const
 {
-    return new htd::TreeDecompositionOptimizationOperation(*fitnessFunction_);
+    htd::TreeDecompositionOptimizationOperation * ret = new htd::TreeDecompositionOptimizationOperation(*fitnessFunction_);
+
+    for (const auto & manipulationOperation : manipulationOperations_)
+    {
+        ret->addManipulationOperation(manipulationOperation->clone());
+    }
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_TREEDECOMPOSITIONOPTIMIZATIONOPERATION_CPP */

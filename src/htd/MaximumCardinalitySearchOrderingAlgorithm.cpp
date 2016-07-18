@@ -154,7 +154,11 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
 
 htd::MaximumCardinalitySearchOrderingAlgorithm * htd::MaximumCardinalitySearchOrderingAlgorithm::clone(void) const
 {
-    return new htd::MaximumCardinalitySearchOrderingAlgorithm();
+    htd::MaximumCardinalitySearchOrderingAlgorithm * ret = new htd::MaximumCardinalitySearchOrderingAlgorithm();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_MAXIMUMCARDINALITYSEARCHORDERINGALGORITHM_CPP */

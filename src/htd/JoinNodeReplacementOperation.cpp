@@ -387,7 +387,11 @@ void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd
 
 htd::JoinNodeReplacementOperation * htd::JoinNodeReplacementOperation::clone(void) const
 {
-    return new htd::JoinNodeReplacementOperation();
+    htd::JoinNodeReplacementOperation * ret = new htd::JoinNodeReplacementOperation();
+
+    ret->setManagementInstance(managementInstance());
+
+    return ret;
 }
 
 #endif /* HTD_HTD_JOINNODEREPLACEMENTOPERATION_CPP */

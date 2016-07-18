@@ -196,7 +196,7 @@ void decomposeGr(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::
 
         if (decomposition != nullptr)
         {
-            if (!algorithm.isTerminated())
+            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
             {
                 exporter.write(*decomposition, *graph, std::cout);
             }
@@ -248,7 +248,7 @@ void decomposeGr(const htd::IHypertreeDecompositionAlgorithm & algorithm, const 
 
         if (decomposition != nullptr)
         {
-            if (!algorithm.isTerminated())
+            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
             {
                 exporter.write(*decomposition, *graph, std::cout);
             }
@@ -300,7 +300,7 @@ void decomposeLp(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::
 
         if (decomposition != nullptr)
         {
-            if (!algorithm.isTerminated())
+            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
             {
                 exporter.write(*decomposition, *graph, std::cout);
             }
@@ -352,7 +352,7 @@ void decomposeLp(const htd::IHypertreeDecompositionAlgorithm & algorithm, const 
 
         if (decomposition != nullptr)
         {
-            if (!algorithm.isTerminated())
+            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
             {
                 exporter.write(*decomposition, *graph, std::cout);
             }
@@ -404,7 +404,7 @@ void decomposeMGr(const htd::ITreeDecompositionAlgorithm & algorithm, const htd:
 
         if (decomposition != nullptr)
         {
-            if (!algorithm.isTerminated())
+            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
             {
                 exporter.write(*decomposition, *graph, std::cout);
             }
@@ -456,7 +456,7 @@ void decomposeMGr(const htd::IHypertreeDecompositionAlgorithm & algorithm, const
 
         if (decomposition != nullptr)
         {
-            if (!algorithm.isTerminated())
+            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
             {
                 exporter.write(*decomposition, *graph, std::cout);
             }

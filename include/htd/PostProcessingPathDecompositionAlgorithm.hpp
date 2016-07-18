@@ -88,6 +88,8 @@ namespace htd
 
             void addManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) HTD_OVERRIDE;
 
+            bool isSafelyInterruptible(void) const HTD_OVERRIDE;
+
             PostProcessingPathDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:

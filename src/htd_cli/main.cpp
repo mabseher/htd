@@ -81,6 +81,23 @@ htd_cli::OptionManager * createOptionManager(void)
 
     manager->registerOption(orderingAlgorithmChoice, "Algorithm Options");
 
+    htd_cli::Choice * optimizationChoice = new htd_cli::Choice("opt", "Iteratively compute a decomposition which optimizes <criterion>.", "criterion");
+
+    optimizationChoice->addPossibility("none", "Do not perform any optimization.");
+    optimizationChoice->addPossibility("width", "Minimize the maximum bag size of the computed decomposition.");
+
+    optimizationChoice->setDefaultValue("none");
+
+    manager->registerOption(optimizationChoice, "Optimization Options");
+
+    htd_cli::SingleValueOption * iterationOption = new htd_cli::SingleValueOption("iterations", "Set the number of iterations to be performed during optimization to <count> (0 = infinite). (Default: 10)", "count");
+
+    manager->registerOption(iterationOption, "Optimization Options");
+
+    htd_cli::Option * printProgressOption = new htd_cli::Option("print-opt-progress", "Print progress whenever a new optimal decomposition is found.");
+
+    manager->registerOption(printProgressOption, "Optimization Options");
+
     return manager;
 }
 
@@ -101,9 +118,19 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
     const htd_cli::Option & helpOption = optionManager.accessOption("help");
 
+    const htd_cli::Choice & outputFormatChoice = optionManager.accessChoice("output");
+
+    const htd_cli::Choice & decompositionTypeChoice = optionManager.accessChoice("type");
+
     const htd_cli::Choice & orderingAlgorithmChoice = optionManager.accessChoice("ordering");
 
     const htd_cli::SingleValueOption & seedOption = optionManager.accessSingleValueOption("seed");
+
+    const htd_cli::Choice & optimizationChoice = optionManager.accessChoice("opt");
+
+    const htd_cli::SingleValueOption & iterationOption = optionManager.accessSingleValueOption("iterations");
+
+    const htd_cli::Option & printProgressOption = optionManager.accessOption("print-opt-progress");
 
     if (ret && helpOption.used())
     {
@@ -179,20 +206,82 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
         }
     }
 
+    if (ret && decompositionTypeChoice.used())
+    {
+        if (outputFormatChoice.used() && outputFormatChoice.value() == "td")
+        {
+            std::cerr << "INVALID OUTPUT FORMAT: Format 'td' only supports tree decompositions!" << std::endl;
+
+            ret = false;
+        }
+
+        if (optimizationChoice.used() && optimizationChoice.value() == "width")
+        {
+            std::cerr << "INVALID PROGRAM CALL: Currently, optimization is supported only for tree decompositions!" << std::endl;
+
+            ret = false;
+        }
+    }
+
+    if (ret)
+    {
+        if (iterationOption.used())
+        {
+            if (optimizationChoice.used() && optimizationChoice.value() == "width")
+            {
+                std::size_t index = 0;
+
+                const std::string & value = iterationOption.value();
+
+                if (value.empty() || value.find_first_not_of("01234567890") != std::string::npos)
+                {
+                    std::cerr << "INVALID NUMBER OF ITERATIONS: " << iterationOption.value() << std::endl;
+
+                    ret = false;
+                }
+
+                if (ret)
+                {
+                    std::stoul(iterationOption.value(), &index, 10);
+
+                    if (index != iterationOption.value().length())
+                    {
+                        std::cerr << "INVALID NUMBER OF ITERATIONS: " << iterationOption.value() << std::endl;
+
+                        ret = false;
+                    }
+                }
+            }
+            else
+            {
+                std::cerr << "INVALID PROGRAM CALL: Option --iterations may only be used when option --opt is set to \"width\"!" << std::endl;
+
+                ret = false;
+            }
+        }
+    }
+
+    if (ret)
+    {
+        if (printProgressOption.used() && !optimizationChoice.used())
+        {
+            std::cerr << "INVALID PROGRAM CALL: Option --print-opt-progress may only be used when option --opt is set to \"width\"!" << std::endl;
+
+            ret = false;
+        }
+    }
+
     return ret;
 }
 
-void decomposeGr(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionExporter & exporter)
+template <typename DecompositionAlgorithm, typename Importer, typename Exporter>
+void decompose(const DecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter)
 {
-    htd::GrFormatImporter importer;
-
-    importer.setManagementInstance(algorithm.managementInstance());
-
-    htd::IMultiGraph * graph = importer.import(std::cin);
+    auto * graph = importer.import(std::cin);
 
     if (graph != nullptr && !importer.isTerminated())
     {
-        htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(*graph);
+        auto * decomposition = algorithm.computeDecomposition(*graph);
 
         if (decomposition != nullptr)
         {
@@ -234,17 +323,14 @@ void decomposeGr(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::
     }
 }
 
-void decomposeGr(const htd::IHypertreeDecompositionAlgorithm & algorithm, const htd::IHypertreeDecompositionExporter & exporter)
+template <typename DecompositionAlgorithm, typename Importer, typename Exporter>
+void decomposeNamed(const DecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter)
 {
-    htd::GrFormatImporter importer;
-
-    importer.setManagementInstance(algorithm.managementInstance());
-
-    htd::IMultiGraph * graph = importer.import(std::cin);
+    auto * graph = importer.import(std::cin);
 
     if (graph != nullptr && !importer.isTerminated())
     {
-        htd::IHypertreeDecomposition * decomposition = algorithm.computeDecomposition(*graph);
+        auto * decomposition = algorithm.computeDecomposition(graph->internalGraph());
 
         if (decomposition != nullptr)
         {
@@ -286,17 +372,44 @@ void decomposeGr(const htd::IHypertreeDecompositionAlgorithm & algorithm, const 
     }
 }
 
-void decomposeLp(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionExporter & exporter)
+template <typename Importer, typename Exporter>
+void optimize(const htd::IterativeImprovementTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
 {
-    htd::LpFormatImporter importer;
-
-    importer.setManagementInstance(algorithm.managementInstance());
-
-    htd::NamedMultiHypergraph<std::string, std::string> * graph = importer.import(std::cin);
+    auto * graph = importer.import(std::cin);
 
     if (graph != nullptr && !importer.isTerminated())
     {
-        htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph->internalGraph());
+        std::size_t optimalBagSize = (std::size_t)-1;
+
+        htd::ITreeDecomposition * decomposition =
+            algorithm.computeDecomposition(*graph, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
+            {
+                HTD_UNUSED(graph)
+                HTD_UNUSED(decomposition)
+
+                if (printProgress)
+                {
+                    std::size_t bagSize = -fitness.at(0);
+
+                    if (bagSize < optimalBagSize)
+                    {
+                        optimalBagSize = bagSize;
+
+                        std::chrono::milliseconds::rep msSinceEpoch =
+                            std::chrono::duration_cast<std::chrono::milliseconds>
+                                (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                        if (outputFormat == "td")
+                        {
+                            std::cout << "c status " << optimalBagSize << " " << msSinceEpoch << std::endl;
+                        }
+                        else
+                        {
+                            std::cerr << "New optimal bag size: " << optimalBagSize << std::endl;
+                        }
+                    }
+                }
+            });
 
         if (decomposition != nullptr)
         {
@@ -324,31 +437,47 @@ void decomposeLp(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::
         }
 
         delete graph;
-    }
-    else
-    {
-        if (importer.isTerminated())
-        {
-            std::cerr << "Program was terminated successfully!" << std::endl;
-        }
-        else
-        {
-            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
-        }
     }
 }
 
-void decomposeLp(const htd::IHypertreeDecompositionAlgorithm & algorithm, const htd::IHypertreeDecompositionExporter & exporter)
+template <typename Importer, typename Exporter>
+void optimizeNamed(const htd::IterativeImprovementTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
 {
-    htd::LpFormatImporter importer;
-
-    importer.setManagementInstance(algorithm.managementInstance());
-
-    htd::NamedMultiHypergraph<std::string, std::string> * graph = importer.import(std::cin);
+    auto * graph = importer.import(std::cin);
 
     if (graph != nullptr && !importer.isTerminated())
     {
-        htd::IHypertreeDecomposition * decomposition = algorithm.computeDecomposition(graph->internalGraph());
+        std::size_t optimalBagSize = (std::size_t)-1;
+
+        htd::ITreeDecomposition * decomposition =
+            algorithm.computeDecomposition(graph->internalGraph(), [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
+            {
+                HTD_UNUSED(graph)
+                HTD_UNUSED(decomposition)
+
+                if (printProgress)
+                {
+                    std::size_t bagSize = -fitness.at(0);
+
+                    if (bagSize < optimalBagSize)
+                    {
+                        optimalBagSize = bagSize;
+
+                        std::chrono::milliseconds::rep msSinceEpoch =
+                            std::chrono::duration_cast<std::chrono::milliseconds>
+                                (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                        if (outputFormat == "td")
+                        {
+                            std::cout << "c status " << optimalBagSize << " " << msSinceEpoch << std::endl;
+                        }
+                        else
+                        {
+                            std::cerr << "New optimal bag size: " << optimalBagSize << std::endl;
+                        }
+                    }
+                }
+            });
 
         if (decomposition != nullptr)
         {
@@ -376,121 +505,35 @@ void decomposeLp(const htd::IHypertreeDecompositionAlgorithm & algorithm, const 
         }
 
         delete graph;
-    }
-    else
-    {
-        if (importer.isTerminated())
-        {
-            std::cerr << "Program was terminated successfully!" << std::endl;
-        }
-        else
-        {
-            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
-        }
     }
 }
 
-void decomposeMGr(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionExporter & exporter)
+template <typename DecompositionAlgorithm, typename Exporter>
+void run(const DecompositionAlgorithm & algorithm, const Exporter & exporter, const std::string & inputFormat)
 {
-    htd::MGrFormatImporter importer;
-
-    importer.setManagementInstance(algorithm.managementInstance());
-
-    htd::IMultiHypergraph * graph = importer.import(std::cin);
-
-    if (graph != nullptr && !importer.isTerminated())
+    if (inputFormat == "gr")
     {
-        htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(*graph);
+        htd::GrFormatImporter importer;
 
-        if (decomposition != nullptr)
-        {
-            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
-            {
-                exporter.write(*decomposition, *graph, std::cout);
-            }
-            else
-            {
-                std::cerr << "Program was terminated successfully!" << std::endl;
-            }
+        importer.setManagementInstance(algorithm.managementInstance());
 
-            delete decomposition;
-        }
-        else
-        {
-            if (algorithm.isTerminated())
-            {
-                std::cerr << "Program was terminated successfully!" << std::endl;
-            }
-            else
-            {
-                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
-            }
-        }
-
-        delete graph;
+        decompose(algorithm, importer, exporter);
     }
-    else
+    else if (inputFormat == "lp")
     {
-        if (importer.isTerminated())
-        {
-            std::cerr << "Program was terminated successfully!" << std::endl;
-        }
-        else
-        {
-            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
-        }
+        htd::LpFormatImporter importer;
+
+        importer.setManagementInstance(algorithm.managementInstance());
+
+        decomposeNamed(algorithm, importer, exporter);
     }
-}
-
-void decomposeMGr(const htd::IHypertreeDecompositionAlgorithm & algorithm, const htd::IHypertreeDecompositionExporter & exporter)
-{
-    htd::MGrFormatImporter importer;
-
-    importer.setManagementInstance(algorithm.managementInstance());
-
-    htd::IMultiHypergraph * graph = importer.import(std::cin);
-
-    if (graph != nullptr && !importer.isTerminated())
+    else if (inputFormat == "mgr")
     {
-        htd::IHypertreeDecomposition * decomposition = algorithm.computeDecomposition(*graph);
+        htd::MGrFormatImporter importer;
 
-        if (decomposition != nullptr)
-        {
-            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
-            {
-                exporter.write(*decomposition, *graph, std::cout);
-            }
-            else
-            {
-                std::cerr << "Program was terminated successfully!" << std::endl;
-            }
+        importer.setManagementInstance(algorithm.managementInstance());
 
-            delete decomposition;
-        }
-        else
-        {
-            if (algorithm.isTerminated())
-            {
-                std::cerr << "Program was terminated successfully!" << std::endl;
-            }
-            else
-            {
-                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
-            }
-        }
-
-        delete graph;
-    }
-    else
-    {
-        if (importer.isTerminated())
-        {
-            std::cerr << "Program was terminated successfully!" << std::endl;
-        }
-        else
-        {
-            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
-        }
+        decompose(algorithm, importer, exporter);
     }
 }
 
@@ -498,12 +541,6 @@ void handleSignal(int signal)
 {
     switch (signal)
     {
-        case SIGUSR1:
-        {
-            std::cout << (std::size_t)-1 << std::endl;
-
-            break;
-        }
         case SIGINT:
         {
             htd::Library::instance().terminate();
@@ -522,6 +559,32 @@ void handleSignal(int signal)
         }
     }
 }
+
+class WidthMinimizingFitnessFunction : public htd::ITreeDecompositionFitnessFunction
+{
+    public:
+        WidthMinimizingFitnessFunction(void)
+        {
+
+        }
+
+        ~WidthMinimizingFitnessFunction()
+        {
+
+        }
+
+        htd::FitnessEvaluation * fitness(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
+        {
+            HTD_UNUSED(graph)
+
+            return new htd::FitnessEvaluation(1, -(double)(decomposition.maximumBagSize()));
+        }
+
+        WidthMinimizingFitnessFunction * clone(void) const
+        {
+            return new WidthMinimizingFitnessFunction();
+        }
+};
 
 int main(int argc, const char * const * const argv)
 {
@@ -543,6 +606,12 @@ int main(int argc, const char * const * const argv)
 
         const htd_cli::Choice & decompositionTypeChoice = optionManager->accessChoice("type");
 
+        const htd_cli::Choice & optimizationChoice = optionManager->accessChoice("opt");
+
+        const htd_cli::SingleValueOption & iterationOption = optionManager->accessSingleValueOption("iterations");
+
+        const htd_cli::Option & printProgressOption = optionManager->accessOption("print-opt-progress");
+
         const std::string & outputFormat = outputFormatChoice.value();
 
         bool hypertreeDecompositionRequested = decompositionTypeChoice.used() && decompositionTypeChoice.value() == "hypertree";
@@ -553,13 +622,7 @@ int main(int argc, const char * const * const argv)
 
             htd::IHypertreeDecompositionExporter * exporter = nullptr;
 
-            if (outputFormat == "td")
-            {
-                std::cerr << "INVALID OUTPUT FORMAT: Format 'td' only supports tree decompositions!" << std::endl;
-
-                ret = 1;
-            }
-            else if (outputFormat == "human")
+            if (outputFormat == "human")
             {
                 exporter = new htd::HumanReadableExporter();
             }
@@ -567,45 +630,14 @@ int main(int argc, const char * const * const argv)
             {
                 exporter = new htd::WidthExporter();
             }
-            else
-            {
-                std::cerr << "INVALID OUTPUT FORMAT: " << outputFormat << std::endl;
 
-                ret = 1;
-            }
-
-            if (ret == 0)
-            {
-                const std::string & inputFormat = inputFormatChoice.value();
-
-                if (inputFormat == "gr")
-                {
-                    decomposeGr(*algorithm, *exporter);
-                }
-                else if (inputFormat == "lp")
-                {
-                    decomposeLp(*algorithm, *exporter);
-                }
-                else if (inputFormat == "mgr")
-                {
-                    decomposeMGr(*algorithm, *exporter);
-                }
-                else
-                {
-                    std::cerr << "INVALID INPUT FORMAT: " << inputFormat << std::endl;
-
-                    ret = 1;
-                }
-
-                delete exporter;
-            }
+            run(*algorithm, *exporter, inputFormatChoice.value());
 
             delete algorithm;
+            delete exporter;
         }
         else
         {
-            htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm(libraryInstance);
-
             htd::ITreeDecompositionExporter * exporter = nullptr;
 
             if (outputFormat == "td")
@@ -620,40 +652,53 @@ int main(int argc, const char * const * const argv)
             {
                 exporter = new htd::WidthExporter();
             }
+
+            if (optimizationChoice.used() && optimizationChoice.value() == "width")
+            {
+                htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm(libraryInstance), WidthMinimizingFitnessFunction());
+
+                algorithm.setManagementInstance(libraryInstance);
+
+                if (iterationOption.used())
+                {
+                    algorithm.setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
+                }
+
+                if (inputFormatChoice.value() == "gr")
+                {
+                    htd::GrFormatImporter importer;
+
+                    importer.setManagementInstance(algorithm.managementInstance());
+
+                    optimize(algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                }
+                else if (inputFormatChoice.value() == "lp")
+                {
+                    htd::LpFormatImporter importer;
+
+                    importer.setManagementInstance(algorithm.managementInstance());
+
+                    optimizeNamed(algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                }
+                else if (inputFormatChoice.value() == "mgr")
+                {
+                    htd::MGrFormatImporter importer;
+
+                    importer.setManagementInstance(algorithm.managementInstance());
+
+                    optimize(algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                }
+            }
             else
             {
-                std::cerr << "INVALID OUTPUT FORMAT: " << outputFormat << std::endl;
+                htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm(libraryInstance);
 
-                ret = 1;
+                run(*algorithm, *exporter, inputFormatChoice.value());
+
+                delete algorithm;
             }
 
-            if (ret == 0)
-            {
-                const std::string & inputFormat = inputFormatChoice.value();
-
-                if (inputFormat == "gr")
-                {
-                    decomposeGr(*algorithm, *exporter);
-                }
-                else if (inputFormat == "lp")
-                {
-                    decomposeLp(*algorithm, *exporter);
-                }
-                else if (inputFormat == "mgr")
-                {
-                    decomposeMGr(*algorithm, *exporter);
-                }
-                else
-                {
-                    std::cerr << "INVALID INPUT FORMAT: " << inputFormat << std::endl;
-
-                    ret = 1;
-                }
-
-                delete exporter;
-            }
-
-            delete algorithm;
+            delete exporter;
         }
     }
 

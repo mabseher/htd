@@ -105,7 +105,7 @@ void htd_cli::OptionManager::registerOption(htd_cli::Option * option, const std:
 {
     const std::string & name = option->name();
 
-    if (name.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_") != std::string::npos)
+    if (name.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890-_") != std::string::npos)
     {
         std::ostringstream message;
 

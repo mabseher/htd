@@ -46,17 +46,17 @@ htd::WeakNormalizationOperation::~WeakNormalizationOperation()
 
 }
 
-void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     if (emptyRoot_)
     {
@@ -64,7 +64,7 @@ void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & dec
 
         addEmptyRootOperation.setManagementInstance(managementInstance());
 
-        addEmptyRootOperation.apply(decomposition, labelingFunctions);
+        addEmptyRootOperation.apply(graph, decomposition, labelingFunctions);
     }
 
     if (emptyLeaves_)
@@ -73,11 +73,11 @@ void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & dec
 
         addEmptyLeavesOperation.setManagementInstance(managementInstance());
 
-        addEmptyLeavesOperation.apply(decomposition, labelingFunctions);
+        addEmptyLeavesOperation.apply(graph, decomposition, labelingFunctions);
     }
 }
 
-void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     if (emptyRoot_)
     {
@@ -85,7 +85,7 @@ void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & dec
 
         addEmptyRootOperation.setManagementInstance(managementInstance());
 
-        addEmptyRootOperation.apply(decomposition, relevantVertices, labelingFunctions);
+        addEmptyRootOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
     }
 
     if (emptyLeaves_)
@@ -94,21 +94,21 @@ void htd::WeakNormalizationOperation::apply(htd::IMutablePathDecomposition & dec
 
         addEmptyLeavesOperation.setManagementInstance(managementInstance());
 
-        addEmptyLeavesOperation.apply(decomposition, relevantVertices, labelingFunctions);
+        addEmptyLeavesOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
     }
 }
 
-void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
-void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     if (emptyRoot_)
     {
@@ -116,7 +116,7 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
         addEmptyRootOperation.setManagementInstance(managementInstance());
 
-        addEmptyRootOperation.apply(decomposition, labelingFunctions);
+        addEmptyRootOperation.apply(graph, decomposition, labelingFunctions);
     }
 
     if (emptyLeaves_)
@@ -125,17 +125,17 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
         addEmptyLeavesOperation.setManagementInstance(managementInstance());
 
-        addEmptyLeavesOperation.apply(decomposition, labelingFunctions);
+        addEmptyLeavesOperation.apply(graph, decomposition, labelingFunctions);
     }
 
     htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(identicalJoinNodeParent_);
 
     joinNodeNormalizationOperation.setManagementInstance(managementInstance());
 
-    joinNodeNormalizationOperation.apply(decomposition, labelingFunctions);
+    joinNodeNormalizationOperation.apply(graph, decomposition, labelingFunctions);
 }
 
-void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     std::size_t newVertexCount = 0;
 
@@ -149,7 +149,7 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
         addEmptyRootOperation.setManagementInstance(managementInstance());
 
-        addEmptyRootOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+        addEmptyRootOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
         newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
 
@@ -167,7 +167,7 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
         addEmptyLeavesOperation.setManagementInstance(managementInstance());
 
-        addEmptyLeavesOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+        addEmptyLeavesOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
         newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
 
@@ -183,7 +183,7 @@ void htd::WeakNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
     joinNodeNormalizationOperation.setManagementInstance(managementInstance());
 
-    joinNodeNormalizationOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+    joinNodeNormalizationOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
 
 bool htd::WeakNormalizationOperation::isLocalOperation(void) const

@@ -48,48 +48,48 @@ htd::SemiNormalizationOperation::~SemiNormalizationOperation()
 
 }
 
-void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::WeakNormalizationOperation::apply(decomposition, labelingFunctions);
+    htd::WeakNormalizationOperation::apply(graph, decomposition, labelingFunctions);
 }
 
-void htd::SemiNormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::WeakNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions);
+    htd::WeakNormalizationOperation::apply(graph, decomposition, relevantVertices, labelingFunctions);
 }
 
-void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
-void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::WeakNormalizationOperation::apply(decomposition, labelingFunctions);
+    htd::WeakNormalizationOperation::apply(graph, decomposition, labelingFunctions);
 
     htd::LimitChildCountOperation limitChildCountOperation(2);
 
     limitChildCountOperation.setManagementInstance(managementInstance());
 
-    limitChildCountOperation.apply(decomposition, labelingFunctions);
+    limitChildCountOperation.apply(graph, decomposition, labelingFunctions);
 }
 
-void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     std::size_t newVertexCount = 0;
 
@@ -97,7 +97,7 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
     std::vector<htd::vertex_t> newRelevantVertices(relevantVertices.begin(), relevantVertices.end());
 
-    htd::WeakNormalizationOperation::apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+    htd::WeakNormalizationOperation::apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
     newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
 
@@ -112,7 +112,7 @@ void htd::SemiNormalizationOperation::apply(htd::IMutableTreeDecomposition & dec
 
     limitChildCountOperation.setManagementInstance(managementInstance());
 
-    limitChildCountOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+    limitChildCountOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
 
 bool htd::SemiNormalizationOperation::isLocalOperation(void) const

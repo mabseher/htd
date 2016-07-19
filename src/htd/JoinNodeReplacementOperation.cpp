@@ -81,18 +81,20 @@ htd::JoinNodeReplacementOperation::~JoinNodeReplacementOperation()
 
 }
 
-void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+void htd::JoinNodeReplacementOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::JoinNodeReplacementOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
-void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::JoinNodeReplacementOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
+    HTD_UNUSED(graph)
+
     if (decomposition.vertexCount() > 0)
     {
         std::size_t currentVisits = 0;
@@ -326,13 +328,13 @@ void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & d
     }
 }
 
-void htd::JoinNodeReplacementOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::JoinNodeReplacementOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     HTD_UNUSED(relevantVertices)
     HTD_UNUSED(createdVertices)
     HTD_UNUSED(removedVertices)
 
-    apply(decomposition, labelingFunctions);
+    apply(graph, decomposition, labelingFunctions);
 }
 
 bool htd::JoinNodeReplacementOperation::isLocalOperation(void) const

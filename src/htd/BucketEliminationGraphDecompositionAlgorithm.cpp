@@ -103,12 +103,12 @@ htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::co
     {
         for (const auto & operation : postProcessingOperations_)
         {
-            operation->apply(*ret);
+            operation->apply(graph, *ret);
         }
 
         for (const auto & operation : postProcessingOperations)
         {
-            operation->apply(*ret);
+            operation->apply(graph, *ret);
         }
 
         for (const auto & labelingFunction : labelingFunctions_)

@@ -160,19 +160,19 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
             {
                 const auto & operation = *it;
 
-                operation->apply(*currentDecomposition);
+                operation->apply(graph, *currentDecomposition);
             }
 
             for (auto it = postProcessingOperations.begin(); it != postProcessingOperations.end() && !isTerminated(); ++it)
             {
                 const auto & operation = *it;
 
-                operation->apply(*currentDecomposition);
+                operation->apply(graph, *currentDecomposition);
             }
 
             if (!isTerminated())
             {
-                htd::FitnessEvaluation * currentEvaluation = fitnessFunction_->fitness(*currentDecomposition);
+                htd::FitnessEvaluation * currentEvaluation = fitnessFunction_->fitness(graph, *currentDecomposition);
 
                 if (!isTerminated())
                 {

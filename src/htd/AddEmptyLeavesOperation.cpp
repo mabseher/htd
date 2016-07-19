@@ -41,20 +41,22 @@ htd::AddEmptyLeavesOperation::~AddEmptyLeavesOperation()
 
 }
 
-void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
 {
     HTD_UNUSED(relevantVertices)
 
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
+    HTD_UNUSED(graph)
+
     std::vector<htd::vertex_t> leafNodes;
 
     decomposition.copyLeavesTo(leafNodes);
@@ -81,25 +83,27 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomp
     }
 }
 
-void htd::AddEmptyLeavesOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     HTD_UNUSED(relevantVertices)
 
-    apply(decomposition, labelingFunctions);
+    apply(graph, decomposition, labelingFunctions);
 }
 
-void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
-void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
+    HTD_UNUSED(graph)
+
     std::vector<htd::vertex_t> leafNodes;
 
     decomposition.copyLeavesTo(leafNodes);
@@ -126,8 +130,9 @@ void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomp
     }
 }
 
-void htd::AddEmptyLeavesOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
+    HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
     for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)

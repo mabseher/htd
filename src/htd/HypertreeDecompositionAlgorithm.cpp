@@ -127,12 +127,12 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
     for (const auto & operation : postProcessingOperations_)
     {
-        operation->apply(*ret);
+        operation->apply(graph, *ret);
     }
 
     for (const auto & operation : postProcessingOperations)
     {
-        operation->apply(*ret);
+        operation->apply(graph, *ret);
     }
 
     for (const auto & labelingFunction : labelingFunctions_)

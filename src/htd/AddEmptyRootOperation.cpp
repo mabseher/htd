@@ -38,20 +38,22 @@ htd::AddEmptyRootOperation::~AddEmptyRootOperation()
 
 }
 
-void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+void htd::AddEmptyRootOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::AddEmptyRootOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
 {
     HTD_UNUSED(relevantVertices)
 
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::AddEmptyRootOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
+    HTD_UNUSED(graph)
+
     htd::vertex_t root = decomposition.root();
 
     if (decomposition.bagSize(root) > 0)
@@ -73,25 +75,27 @@ void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decompos
     }
 }
 
-void htd::AddEmptyRootOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::AddEmptyRootOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     HTD_UNUSED(relevantVertices)
 
-    apply(decomposition, labelingFunctions);
+    apply(graph, decomposition, labelingFunctions);
 }
 
-void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+void htd::AddEmptyRootOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::AddEmptyRootOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
-void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::AddEmptyRootOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
+    HTD_UNUSED(graph)
+
     htd::vertex_t root = decomposition.root();
 
     if (decomposition.bagSize(root) > 0)
@@ -113,8 +117,9 @@ void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decompos
     }
 }
 
-void htd::AddEmptyRootOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::AddEmptyRootOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
+    HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
     bool rootVisited = false;

@@ -41,20 +41,22 @@ htd::LimitMaximumForgottenVertexCountOperation::~LimitMaximumForgottenVertexCoun
   
 }
 
-void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
 {
     HTD_UNUSED(relevantVertices)
 
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
+    HTD_UNUSED(graph)
+
     std::vector<htd::vertex_t> forgetNodes;
 
     decomposition.copyForgetNodesTo(forgetNodes);
@@ -175,25 +177,27 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDeco
     }
 }
 
-void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     HTD_UNUSED(relevantVertices)
 
-    apply(decomposition, labelingFunctions);
+    apply(graph, decomposition, labelingFunctions);
 }
 
-void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
-void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
+    HTD_UNUSED(graph)
+
     std::vector<htd::vertex_t> forgetNodes;
 
     decomposition.copyForgetNodesTo(forgetNodes);
@@ -318,8 +322,9 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
     }
 }
 
-void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
+    HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
     for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
@@ -442,7 +447,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDeco
                 }
                 else
                 {
-                    throw std::logic_error("void htd::LimitMaximumForgottenVertexCountOperation::apply(htd::IMutableTreeDecomposition &, const std::vector<htd::vertex_t> &, const std::vector<htd::ILabelingFunction *> &, std::vector<htd::vertex_t> &, std::vector<htd::vertex_t> &) const");
+                    throw std::logic_error("void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHypergraph &, htd::IMutableTreeDecomposition &, const std::vector<htd::vertex_t> &, const std::vector<htd::ILabelingFunction *> &, std::vector<htd::vertex_t> &, std::vector<htd::vertex_t> &) const");
                 }
             }
         }

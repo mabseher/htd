@@ -49,96 +49,96 @@ htd::NormalizationOperation::~NormalizationOperation()
 
 }
 
-void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition) const
+void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::SemiNormalizationOperation::apply(decomposition, labelingFunctions);
+    htd::SemiNormalizationOperation::apply(graph, decomposition, labelingFunctions);
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
     exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
 
-    exchangeNodeReplacementOperation.apply(decomposition, labelingFunctions);
+    exchangeNodeReplacementOperation.apply(graph, decomposition, labelingFunctions);
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
     limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
 
-    limitMaximumForgottenVertexCountOperation.apply(decomposition, labelingFunctions);
+    limitMaximumForgottenVertexCountOperation.apply(graph, decomposition, labelingFunctions);
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
 
     limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
 
-    limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
+    limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, labelingFunctions);
 }
 
-void htd::NormalizationOperation::apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::SemiNormalizationOperation::apply(decomposition, relevantVertices, labelingFunctions);
+    htd::SemiNormalizationOperation::apply(graph, decomposition, relevantVertices, labelingFunctions);
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
     exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
 
-    exchangeNodeReplacementOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    exchangeNodeReplacementOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
     limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
 
-    limitMaximumForgottenVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    limitMaximumForgottenVertexCountOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
 
     limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
 
-    limitMaximumIntroducedVertexCountOperation.apply(decomposition, relevantVertices, labelingFunctions);
+    limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
 }
 
-void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
-void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    htd::SemiNormalizationOperation::apply(decomposition, labelingFunctions);
+    htd::SemiNormalizationOperation::apply(graph, decomposition, labelingFunctions);
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
 
     exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
 
-    exchangeNodeReplacementOperation.apply(decomposition, labelingFunctions);
+    exchangeNodeReplacementOperation.apply(graph, decomposition, labelingFunctions);
 
     htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
 
     limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
 
-    limitMaximumForgottenVertexCountOperation.apply(decomposition, labelingFunctions);
+    limitMaximumForgottenVertexCountOperation.apply(graph, decomposition, labelingFunctions);
 
     htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1, treatLeafNodesAsIntroduceNodes_);
 
     limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
 
-    limitMaximumIntroducedVertexCountOperation.apply(decomposition, labelingFunctions);
+    limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, labelingFunctions);
 }
 
-void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     std::size_t newVertexCount = 0;
 
@@ -146,7 +146,7 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
     std::vector<htd::vertex_t> newRelevantVertices(relevantVertices.begin(), relevantVertices.end());
 
-    htd::SemiNormalizationOperation::apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+    htd::SemiNormalizationOperation::apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
     newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
 
@@ -161,7 +161,7 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
     exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
 
-    exchangeNodeReplacementOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+    exchangeNodeReplacementOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
     newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
 
@@ -176,7 +176,7 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
     limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
 
-    limitMaximumForgottenVertexCountOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+    limitMaximumForgottenVertexCountOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
     newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
 
@@ -191,7 +191,7 @@ void htd::NormalizationOperation::apply(htd::IMutableTreeDecomposition & decompo
 
     limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
 
-    limitMaximumIntroducedVertexCountOperation.apply(decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+    limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
 
 bool htd::NormalizationOperation::isLocalOperation(void) const

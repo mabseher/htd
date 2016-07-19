@@ -35,7 +35,7 @@
 
 htd::LimitChildCountOperation::LimitChildCountOperation(std::size_t limit) : htd::LibraryObject(), limit_(limit)
 {
-
+    HTD_ASSERT(limit > 0)
 }
 
 htd::LimitChildCountOperation::~LimitChildCountOperation()
@@ -43,18 +43,20 @@ htd::LimitChildCountOperation::~LimitChildCountOperation()
 
 }
 
-void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
-void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
+    HTD_UNUSED(graph)
+
     std::vector<htd::vertex_t> joinNodes;
 
     decomposition.copyJoinNodesTo(joinNodes);
@@ -138,8 +140,9 @@ void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decom
     }
 }
 
-void htd::LimitChildCountOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
+    HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
     for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)

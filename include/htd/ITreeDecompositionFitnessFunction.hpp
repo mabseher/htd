@@ -42,11 +42,12 @@ namespace htd
             /**
              *  Compute the fitness evaluation of a given tree decomposition.
              *
+             *  @param[in] graph            The graph from which the decomposition was computed.
              *  @param[in] decomposition    The tree decomposition which's fitness shall be computed.
              *
              *  @return The fitness evaluation of the given tree decomposition.
              */
-            virtual htd::FitnessEvaluation * fitness(const htd::ITreeDecomposition & decomposition) const = 0;
+            virtual htd::FitnessEvaluation * fitness(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const = 0;
 
             /**
              *  Create a deep copy of the current fitness function.

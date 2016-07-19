@@ -43,9 +43,10 @@ namespace htd
             /**
              *  Apply the manipulation operation to the given path decomposition.
              *
+             *  @param[in] graph            The graph from which the decomposition was computed.
              *  @param[in] decomposition    The path decomposition which shall be modified.
              */
-            virtual void apply(htd::IMutablePathDecomposition & decomposition) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const = 0;
 
             /**
              *  Apply the manipulation operation to the given path decomposition under the assumption that only certain vertices need to be manipulated.
@@ -54,18 +55,20 @@ namespace htd
              *  it only indicates which vertices of the decomposition shall be considered at least. Depending on its implementation, an algorithm may
              *  also manipulate the complete decomposition.
              *
+             *  @param[in] graph            The graph from which the decomposition was computed.
              *  @param[in] decomposition    The path decomposition which shall be modified.
              *  @param[in] relevantVertices The collection of vertices to which the manipulation shall be applied.
              */
-            virtual void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const = 0;
 
             /**
              *  Apply the manipulation operation to the given path decomposition.
              *
+             *  @param[in] graph                The graph from which the decomposition was computed.
              *  @param[in] decomposition        The path decomposition which shall be modified.
              *  @param[in] labelingFunctions    A vector of labeling functions which shall be applied after the modifications.
              */
-            virtual void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
             /**
              *  Apply the manipulation operation to the given path decomposition under the assumption that only certain vertices need to be manipulated.
@@ -74,11 +77,12 @@ namespace htd
              *  it only indicates which vertices of the decomposition shall be considered at least. Depending on its implementation, an algorithm may
              *  also manipulate the complete decomposition.
              *
+             *  @param[in] graph                The graph from which the decomposition was computed.
              *  @param[in] decomposition        The path decomposition which shall be modified.
              *  @param[in] relevantVertices     The collection of vertices to which the manipulation shall be applied.
              *  @param[in] labelingFunctions    A vector of labeling functions which shall be applied after the modifications.
              */
-            virtual void apply(htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
             /**
              *  Create a deep copy of the current path decomposition manipulation operation.

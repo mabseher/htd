@@ -68,14 +68,14 @@ htd::TreeDecompositionOptimizationOperation::~TreeDecompositionOptimizationOpera
     }
 }
 
-void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition) const
+void htd::TreeDecompositionOptimizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
-    apply(decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::TreeDecompositionOptimizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 //TODO Remove!
@@ -104,7 +104,7 @@ void debug(const htd::ITreeDecomposition & decomposition)
     std::cout << std::endl;
 }
 
-void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::TreeDecompositionOptimizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     if (decomposition.vertexCount() > 0)
     {
@@ -112,7 +112,7 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
 
         compressionOperation.setManagementInstance(managementInstance());
 
-        compressionOperation.apply(decomposition);
+        compressionOperation.apply(graph, decomposition);
 
         for (const htd::ILabelingFunction * labelingFunction : labelingFunctions)
         {
@@ -136,7 +136,7 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
         {
             if (manipulationOperations_.empty())
             {
-                quickOptimization(decomposition);
+                quickOptimization(graph, decomposition);
             }
             else
             {
@@ -149,11 +149,11 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
 
                 if (isSafe)
                 {
-                    intelligentOptimization(decomposition, labelingFunctions);
+                    intelligentOptimization(graph, decomposition, labelingFunctions);
                 }
                 else
                 {
-                    naiveOptimization(decomposition, labelingFunctions);
+                    naiveOptimization(graph, decomposition, labelingFunctions);
                 }
             }
         }
@@ -161,19 +161,19 @@ void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecompo
         {
             for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
             {
-                operation->apply(decomposition, labelingFunctions);
+                operation->apply(graph, decomposition, labelingFunctions);
             }
         }
     }
 }
 
-void htd::TreeDecompositionOptimizationOperation::apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
+void htd::TreeDecompositionOptimizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     HTD_UNUSED(relevantVertices)
     HTD_UNUSED(createdVertices)
     HTD_UNUSED(removedVertices)
 
-    apply(decomposition, labelingFunctions);
+    apply(graph, decomposition, labelingFunctions);
 }
 
 bool htd::TreeDecompositionOptimizationOperation::isLocalOperation(void) const
@@ -270,7 +270,7 @@ void htd::TreeDecompositionOptimizationOperation::setVertexSelectionStrategy(htd
     strategy_ = strategy;
 }
 
-void htd::TreeDecompositionOptimizationOperation::quickOptimization(htd::IMutableTreeDecomposition & decomposition) const
+void htd::TreeDecompositionOptimizationOperation::quickOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
     const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
 
@@ -282,7 +282,7 @@ void htd::TreeDecompositionOptimizationOperation::quickOptimization(htd::IMutabl
 
     strategy_->selectVertices(decomposition, candidates);
 
-    htd::FitnessEvaluation * optimalFitness = fitnessFunction.fitness(decomposition);
+    htd::FitnessEvaluation * optimalFitness = fitnessFunction.fitness(graph, decomposition);
 
     HTD_ASSERT(optimalFitness != nullptr)
 
@@ -295,7 +295,7 @@ void htd::TreeDecompositionOptimizationOperation::quickOptimization(htd::IMutabl
             decomposition.makeRoot(vertex);
         }
 
-        htd::FitnessEvaluation * currentFitness = fitnessFunction.fitness(decomposition);
+        htd::FitnessEvaluation * currentFitness = fitnessFunction.fitness(graph, decomposition);
 
         HTD_ASSERT(currentFitness != nullptr)
 
@@ -318,7 +318,7 @@ void htd::TreeDecompositionOptimizationOperation::quickOptimization(htd::IMutabl
     delete optimalFitness;
 }
 
-void htd::TreeDecompositionOptimizationOperation::naiveOptimization(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::TreeDecompositionOptimizationOperation::naiveOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
 
@@ -340,12 +340,12 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(htd::IMutabl
 
         clonedManipulationOperations.push_back(clone);
 
-        clone->apply(*localDecomposition, labelingFunctions);
+        clone->apply(graph, *localDecomposition, labelingFunctions);
     }
 
     htd::vertex_t optimalRoot = initialRoot;
 
-    htd::FitnessEvaluation * optimalFitness = fitnessFunction.fitness(*localDecomposition);
+    htd::FitnessEvaluation * optimalFitness = fitnessFunction.fitness(graph, *localDecomposition);
 
     HTD_ASSERT(optimalFitness != nullptr)
 
@@ -370,10 +370,10 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(htd::IMutabl
 
             for (const htd::ITreeDecompositionManipulationOperation * operation : clonedManipulationOperations)
             {
-                operation->apply(*localDecomposition, labelingFunctions);
+                operation->apply(graph, *localDecomposition, labelingFunctions);
             }
 
-            htd::FitnessEvaluation * currentFitness = fitnessFunction.fitness(*localDecomposition);
+            htd::FitnessEvaluation * currentFitness = fitnessFunction.fitness(graph, *localDecomposition);
 
             HTD_ASSERT(currentFitness != nullptr)
 
@@ -413,7 +413,7 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(htd::IMutabl
 
     for (const htd::ITreeDecompositionManipulationOperation * operation : clonedManipulationOperations)
     {
-        operation->apply(decomposition, labelingFunctions);
+        operation->apply(graph, decomposition, labelingFunctions);
 
         delete operation;
     }
@@ -428,7 +428,7 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(htd::IMutabl
     delete optimalFitness;
 }
 
-void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
 
@@ -450,12 +450,12 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
 
         clonedManipulationOperations.push_back(clone);
 
-        clone->apply(decomposition, labelingFunctions);
+        clone->apply(graph, decomposition, labelingFunctions);
     }
 
     htd::vertex_t optimalRoot = initialRoot;
 
-    htd::FitnessEvaluation * optimalFitness = fitnessFunction.fitness(decomposition);
+    htd::FitnessEvaluation * optimalFitness = fitnessFunction.fitness(graph, decomposition);
 
     HTD_ASSERT(optimalFitness != nullptr)
 
@@ -509,7 +509,7 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
 
             for (const htd::ITreeDecompositionManipulationOperation * operation : clonedManipulationOperations)
             {
-                operation->apply(decomposition, affectedVertices, labelingFunctions, createdVertices, removedVertices);
+                operation->apply(graph, decomposition, affectedVertices, labelingFunctions, createdVertices, removedVertices);
 
                 newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
 
@@ -521,7 +521,7 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
                 }
             }
 
-            htd::FitnessEvaluation * currentFitness = fitnessFunction.fitness(decomposition);
+            htd::FitnessEvaluation * currentFitness = fitnessFunction.fitness(graph, decomposition);
 
             HTD_ASSERT(currentFitness != nullptr)
 
@@ -589,7 +589,7 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(htd::I
 
     for (const htd::ITreeDecompositionManipulationOperation * operation : clonedManipulationOperations)
     {
-        operation->apply(decomposition, affectedVertices, labelingFunctions, createdVertices, removedVertices);
+        operation->apply(graph, decomposition, affectedVertices, labelingFunctions, createdVertices, removedVertices);
 
         newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
 

@@ -102,11 +102,11 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
     htd::CompressionOperation compressionOperation;
 
-    compressionOperation.apply(mutableTreeDecomposition);
+    compressionOperation.apply(graph, mutableTreeDecomposition);
 
     htd::JoinNodeReplacementOperation joinNodeReplacementOperation;
 
-    joinNodeReplacementOperation.apply(mutableTreeDecomposition);
+    joinNodeReplacementOperation.apply(graph, mutableTreeDecomposition);
 
     ret = toPathDecomposition(mutableTreeDecomposition);
 
@@ -135,12 +135,12 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
     for (const auto & operation : postProcessingOperations_)
     {
-        operation->apply(*ret);
+        operation->apply(graph, *ret);
     }
 
     for (const auto & operation : postProcessingOperations)
     {
-        operation->apply(*ret);
+        operation->apply(graph, *ret);
     }
 
     for (const auto & labelingFunction : labelingFunctions_)

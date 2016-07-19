@@ -43,17 +43,19 @@ namespace htd
             /**
              *  Apply the manipulation operation to the given graph decomposition.
              *
+             *  @param[in] graph            The graph from which the decomposition was computed.
              *  @param[in] decomposition    The graph decomposition which shall be modified.
              */
-            virtual void apply(htd::IMutableGraphDecomposition & decomposition) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutableGraphDecomposition & decomposition) const = 0;
 
             /**
              *  Apply the manipulation operation to the given graph decomposition.
              *
+             *  @param[in] graph                The graph from which the decomposition was computed.
              *  @param[in] decomposition        The graph decomposition which shall be modified.
              *  @param[in] labelingFunctions    A vector of labeling functions which shall be applied after the modifications.
              */
-            virtual void apply(htd::IMutableGraphDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutableGraphDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
             /**
              *  Create a deep copy of the current graph decomposition manipulation operation.

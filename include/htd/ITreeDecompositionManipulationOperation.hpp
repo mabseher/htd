@@ -43,9 +43,10 @@ namespace htd
             /**
              *  Apply the manipulation operation to the given tree decomposition.
              *
+             *  @param[in] graph                The graph from which the decomposition was computed.
              *  @param[in] decomposition    The tree decomposition which shall be modified.
              */
-            virtual void apply(htd::IMutableTreeDecomposition & decomposition) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const = 0;
 
             /**
              *  Apply the manipulation operation to the given tree decomposition under the assumption that only certain vertices need to be manipulated.
@@ -54,20 +55,22 @@ namespace htd
              *  it only indicates which vertices of the decomposition shall be considered at least. Depending on its implementation, an algorithm may
              *  also manipulate the complete decomposition.
              *
+             *  @param[in] graph            The graph from which the decomposition was computed.
              *  @param[in] decomposition    The tree decomposition which shall be modified.
              *  @param[in] relevantVertices The collection of vertices to which the manipulation shall be applied.
              *  @param[out] createdVertices A vector of vertices which were created by the manipulation operation.
              *  @param[out] removedVertices A vector of vertices which were removed by the manipulation operation.
              */
-            virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const = 0;
 
             /**
              *  Apply the manipulation operation to the given tree decomposition.
              *
+             *  @param[in] graph                The graph from which the decomposition was computed.
              *  @param[in] decomposition        The tree decomposition which shall be modified.
              *  @param[in] labelingFunctions    A vector of labeling functions which shall be applied after the modifications.
              */
-            virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
             /**
              *  Apply the manipulation operation to the given tree decomposition under the assumption that only certain vertices need to be manipulated.
@@ -76,13 +79,14 @@ namespace htd
              *  it only indicates which vertices of the decomposition shall be considered at least. Depending on its implementation, an algorithm may
              *  also manipulate the complete decomposition.
              *
+             *  @param[in] graph                The graph from which the decomposition was computed.
              *  @param[in] decomposition        The tree decomposition which shall be modified.
              *  @param[in] relevantVertices     The collection of vertices to which the manipulation shall be applied.
              *  @param[in] labelingFunctions    A vector of labeling functions which shall be applied after the modifications.
-             *  @param[out] createdVertices A vector of vertices which were created by the manipulation operation.
-             *  @param[out] removedVertices A vector of vertices which were removed by the manipulation operation.
+             *  @param[out] createdVertices     A vector of vertices which were created by the manipulation operation.
+             *  @param[out] removedVertices     A vector of vertices which were removed by the manipulation operation.
              */
-            virtual void apply(htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const = 0;
 
             /**
              *  Check whether the manipulation operation - when given a set of relevant vertices - only applies to those vertices and their direct neighbors.

@@ -72,10 +72,24 @@ htd::IterativeImprovementTreeDecompositionAlgorithm::~IterativeImprovementTreeDe
 
 htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph) const
 {
-    return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>());
+    return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){});
 }
 
-htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
+htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                    const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
+{
+    return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>(), progressCallback);
+}
+
+htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                    const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
+{
+    return computeDecomposition(graph, manipulationOperations, [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){});
+}
+
+htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                    const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
+                                                                                                    const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
 {
     std::vector<htd::ILabelingFunction *> labelingFunctions;
 
@@ -102,14 +116,18 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
 
     htd::FitnessEvaluation * bestEvaluation = nullptr;
 
-    for (htd::index_t iteration = 0; (iteration == 0 || iteration < iterationCount_) && !isTerminated(); ++iteration)
+    std::size_t nonImprovementCount = 0;
+
+    for (htd::index_t iteration = 0; (iteration == 0 || iterationCount_ == 0 || iteration < iterationCount_) && nonImprovementCount <= nonImprovementLimit_ && !isTerminated(); ++iteration)
     {
         htd::IMutableTreeDecomposition * currentDecomposition = dynamic_cast<htd::IMutableTreeDecomposition *>(algorithm_->computeDecomposition(graph));
 
         if (currentDecomposition != nullptr)
         {
-            for (const auto & labelingFunction : labelingFunctions_)
+            for (auto it = labelingFunctions_.begin(); it != labelingFunctions_.end() && !isTerminated(); ++it)
             {
+                const auto & labelingFunction = *it;
+
                 for (htd::vertex_t vertex : currentDecomposition->vertices())
                 {
                     htd::ILabelCollection * labelCollection = currentDecomposition->labelings().exportVertexLabelCollection(vertex);
@@ -122,8 +140,10 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
                 }
             }
 
-            for (const auto & labelingFunction : labelingFunctions)
+            for (auto it = labelingFunctions.begin(); it != labelingFunctions.end() && !isTerminated(); ++it)
             {
+                const auto & labelingFunction = *it;
+
                 for (htd::vertex_t vertex : currentDecomposition->vertices())
                 {
                     htd::ILabelCollection * labelCollection = currentDecomposition->labelings().exportVertexLabelCollection(vertex);
@@ -136,13 +156,17 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
                 }
             }
 
-            for (const auto & operation : postProcessingOperations_)
+            for (auto it = postProcessingOperations_.begin(); it != postProcessingOperations_.end() && !isTerminated(); ++it)
             {
+                const auto & operation = *it;
+
                 operation->apply(*currentDecomposition);
             }
 
-            for (const auto & operation : postProcessingOperations)
+            for (auto it = postProcessingOperations.begin(); it != postProcessingOperations.end() && !isTerminated(); ++it)
             {
+                const auto & operation = *it;
+
                 operation->apply(*currentDecomposition);
             }
 
@@ -152,6 +176,8 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
 
                 if (!isTerminated())
                 {
+                    progressCallback(graph, *currentDecomposition, *currentEvaluation);
+
                     if (iteration == 0 || *currentEvaluation > *bestEvaluation)
                     {
                         if (iteration > 0)
@@ -164,12 +190,16 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
                         ret = currentDecomposition;
 
                         bestEvaluation = currentEvaluation;
+
+                        nonImprovementCount = 0;
                     }
                     else
                     {
                         delete currentDecomposition;
 
                         delete currentEvaluation;
+
+                        ++nonImprovementCount;
                     }
                 }
                 else
@@ -183,6 +213,10 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
             {
                 delete currentDecomposition;
             }
+        }
+        else
+        {
+            ++nonImprovementCount;
         }
     }
 

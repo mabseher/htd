@@ -34,6 +34,7 @@
 #include <htd/ITreeDecompositionFitnessFunction.hpp>
 
 #include <vector>
+#include <functional>
 
 namespace htd
 {
@@ -102,7 +103,15 @@ namespace htd
 
             htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
-            htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
+            htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                           const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const;
+
+            htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                           const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
+
+            htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                           const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
+                                                           const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const;
 
             /**
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.

@@ -159,13 +159,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
             }
         }
 
-        auto selectedVertexPosition = pool.begin();
-
-        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
-        // coverity[dont_call]
-        std::advance(selectedVertexPosition, std::rand() % pool.size());
-
-        htd::vertex_t selectedVertex = *selectedVertexPosition;
+        htd::vertex_t selectedVertex = selectRandomElement<htd::vertex_t>(pool);
 
         auto & selectedNeighborhood = neighborhood.at(selectedVertex);
 

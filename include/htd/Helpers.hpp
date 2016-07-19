@@ -340,6 +340,18 @@ namespace htd
         }
     }
 
+    template <typename T, typename Collection>
+    const T & selectRandomElement(const Collection & collection)
+    {
+        auto position = collection.begin();
+
+        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+        // coverity[dont_call]
+        std::advance(position, std::rand() % collection.size());
+
+        return *position;
+    }
+
     void set_union(const std::vector<htd::vertex_t> & set1,
                    const std::vector<htd::vertex_t> & set2,
                    htd::vertex_t ignoredVertex,

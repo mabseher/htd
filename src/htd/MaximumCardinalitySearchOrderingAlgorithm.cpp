@@ -114,13 +114,7 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
             }
         }
 
-        auto it = pool.begin();
-
-        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
-        // coverity[dont_call]
-        std::advance(it, std::rand() % pool.size());
-
-        htd::vertex_t selectedVertex = *it;
+        htd::vertex_t selectedVertex = selectRandomElement<htd::vertex_t>(pool);
 
         auto & selectedNeighborhood = neighborhood.at(selectedVertex);
 

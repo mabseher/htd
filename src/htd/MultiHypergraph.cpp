@@ -563,7 +563,7 @@ htd::vertex_t htd::MultiHypergraph::addVertex(void)
 
     next_vertex_++;
 
-    neighborhood_.push_back(std::vector<htd::vertex_t>());
+    neighborhood_.emplace_back(std::vector<htd::vertex_t>());
 
     vertices_.push_back(ret);
 

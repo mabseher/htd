@@ -60,7 +60,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
     std::size_t minFill = (std::size_t)-1;
     std::size_t minDegree = (std::size_t)-1;
 
-    std::vector<htd::vertex_t> pool(size);
+    std::unordered_set<htd::vertex_t> pool(size);
 
     const htd::ConstCollection<htd::vertex_t> & inputVertices = graph.vertices();
 
@@ -131,7 +131,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                     pool.clear();
                 }
 
-                pool.push_back(vertex);
+                pool.insert(vertex);
             }
         }
 
@@ -184,19 +184,23 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                             pool.clear();
                         }
 
-                        pool.push_back(vertex);
+                        pool.insert(vertex);
                     }
                 } 
             }
         }
 
+        auto selectedVertexPosition = pool.begin();
+
         /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
         // coverity[dont_call]
-        htd::vertex_t selectedVertex = pool[std::rand() % pool.size()];
+        std::advance(selectedVertexPosition, std::rand() % pool.size());
+
+        htd::vertex_t selectedVertex = *selectedVertexPosition;
 
         auto & selectedNeighborhood = neighborhood.at(selectedVertex);
 
-        pool.erase(std::remove(pool.begin(), pool.end(), selectedVertex), pool.end());
+        pool.erase(selectedVertex);
 
         updateStatus.at(selectedVertex) = 4;
         
@@ -387,7 +391,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                                             pool.clear();
                                         }
 
-                                        pool.push_back(vertex);
+                                        pool.insert(vertex);
                                     }
                                 }
                             }
@@ -407,7 +411,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
 
                                 if (fillIncrease > 0)
                                 {
-                                    pool.erase(std::remove(pool.begin(), pool.end(), vertex), pool.end());
+                                    pool.erase(vertex);
 
                                     tmp += fillIncrease;
 
@@ -440,7 +444,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                                                 pool.clear();
                                             }
 
-                                            pool.push_back(vertex);
+                                            pool.insert(vertex);
                                         }
                                     }
                                 }
@@ -475,7 +479,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                                     pool.clear();
                                 }
 
-                                pool.push_back(vertex);
+                                pool.insert(vertex);
                             }
                         }
 
@@ -541,7 +545,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                                     pool.clear();
                                 }
 
-                                pool.push_back(vertex);
+                                pool.insert(vertex);
                             }
                         }
                     }
@@ -571,7 +575,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                                 pool.clear();
                             }
 
-                            pool.push_back(vertex);
+                            pool.insert(vertex);
                         }
                     }
 

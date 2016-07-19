@@ -59,7 +59,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
     std::size_t minFill = (std::size_t)-1;
 
-    std::vector<htd::vertex_t> pool(size);
+    std::unordered_set<htd::vertex_t> pool;
 
     const htd::ConstCollection<htd::vertex_t> & inputVertices = graph.vertices();
 
@@ -117,7 +117,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 pool.clear();
             }
 
-            pool.push_back(vertex);
+            pool.insert(vertex);
         }
 
         requiredFillAmount[vertex] = currentFillValue;
@@ -154,18 +154,22 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                         pool.clear();
                     }
 
-                    pool.push_back(vertex);
+                    pool.insert(vertex);
                 } 
             }
         }
 
+        auto selectedVertexPosition = pool.begin();
+
         /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
         // coverity[dont_call]
-        htd::vertex_t selectedVertex = pool[std::rand() % pool.size()];
+        std::advance(selectedVertexPosition, std::rand() % pool.size());
+
+        htd::vertex_t selectedVertex = *selectedVertexPosition;
 
         auto & selectedNeighborhood = neighborhood.at(selectedVertex);
 
-        pool.erase(std::remove(pool.begin(), pool.end(), selectedVertex), pool.end());
+        pool.erase(selectedVertex);
 
         updateStatus.at(selectedVertex) = 4;
         
@@ -343,7 +347,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                                         pool.clear();
                                     }
 
-                                    pool.push_back(vertex);
+                                    pool.insert(vertex);
                                 }
                             }
                             else
@@ -362,7 +366,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                                 if (fillIncrease > 0)
                                 {
-                                    pool.erase(std::remove(pool.begin(), pool.end(), vertex), pool.end());
+                                    pool.erase(vertex);
 
                                     tmp += fillIncrease;
 
@@ -382,7 +386,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                                             pool.clear();
                                         }
 
-                                        pool.push_back(vertex);
+                                        pool.insert(vertex);
                                     }
                                 }
                             }
@@ -403,7 +407,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                                 pool.clear();
                             }
 
-                            pool.push_back(vertex);
+                            pool.insert(vertex);
                         }
 
                         requiredFillAmount.at(vertex) = tmp;
@@ -455,7 +459,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                                 pool.clear();
                             }
 
-                            pool.push_back(vertex);
+                            pool.insert(vertex);
                         }
                     }
                     else
@@ -471,7 +475,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                             pool.clear();
                         }
 
-                        pool.push_back(vertex);
+                        pool.insert(vertex);
                     }
 
                     requiredFillAmount.at(vertex) = tmp;

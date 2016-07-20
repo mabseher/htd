@@ -113,6 +113,38 @@ htd::vertex_t htd::PathDecomposition::insertRoot(void)
     return ret;
 }
 
+htd::vertex_t htd::PathDecomposition::insertRoot(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    bool inserted = vertexCount() == 0;
+
+    htd::vertex_t ret = htd::Path::insertRoot();
+
+    if (inserted)
+    {
+        bagContent_[ret] = bagContent;
+
+        inducedEdges_[ret] = inducedEdges;
+    }
+
+    return ret;
+}
+
+htd::vertex_t htd::PathDecomposition::insertRoot(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    bool inserted = vertexCount() == 0;
+
+    htd::vertex_t ret = htd::Path::insertRoot();
+
+    if (inserted)
+    {
+        bagContent_.emplace(ret, std::move(bagContent));
+
+        inducedEdges_.emplace(ret, std::move(inducedEdges));
+    }
+
+    return ret;
+}
+
 htd::vertex_t htd::PathDecomposition::addChild(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::Path::addChild(vertex);

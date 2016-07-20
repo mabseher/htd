@@ -38,6 +38,7 @@ namespace htd
     class IMutableTreeDecomposition : public virtual htd::IMutableLabeledTree, public virtual htd::ITreeDecomposition
     {
         public:
+            using htd::IMutableTree::insertRoot;
             using htd::IMutableTree::addChild;
             using htd::IMutableTree::addParent;
 
@@ -48,6 +49,26 @@ namespace htd
              *  Destructor for an IMutableTreeDecomposition object.
              */
             virtual ~IMutableTreeDecomposition() = 0;
+
+            /**
+             *  Insert the root of the tree if it does not already exist.
+             *
+             *  @param[in] bagContent   The bag content associated with the new vertex.
+             *  @param[in] inducedEdges The collection of induced edges associated with the new vertex.
+             *
+             *  @return The ID of the root of the tree.
+             */
+            virtual htd::vertex_t insertRoot(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
+
+            /**
+             *  Insert the root of the tree if it does not already exist.
+             *
+             *  @param[in] bagContent   The bag content associated with the new vertex.
+             *  @param[in] inducedEdges The collection of induced edges associated with the new vertex.
+             *
+             *  @return The ID of the root of the tree.
+             */
+            virtual htd::vertex_t insertRoot(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
 
             /**
              *  Add a new child to the given vertex.

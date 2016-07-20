@@ -47,7 +47,7 @@ namespace htd
              *
              *  @return The vertex ordering of the given graph.
              */
-            virtual htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const = 0;
+            virtual htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT = 0;
 
             /**
              *  Compute the vertex ordering of a given graph and write it to the end of a given vector.
@@ -55,7 +55,7 @@ namespace htd
              *  @param[in] graph    The input graph for which the vertex ordering shall be computed.
              *  @param[out] target  The target vector to which the ordering shall be appended.
              */
-            virtual void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const = 0;
+            virtual void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT = 0;
 
             /**
              *  Create a deep copy of the current ordering algorithm.

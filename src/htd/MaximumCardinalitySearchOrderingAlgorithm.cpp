@@ -44,7 +44,7 @@ htd::MaximumCardinalitySearchOrderingAlgorithm::~MaximumCardinalitySearchOrderin
     
 }
 
-htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const
+htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -53,7 +53,7 @@ htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorit
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const
+void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT
 {
     std::size_t size = graph.vertexCount();
 
@@ -61,14 +61,18 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
 
     std::unordered_set<htd::vertex_t> pool(size);
 
-    std::unordered_set<htd::vertex_t> vertices(graph.vertices().begin(), graph.vertices().end());
+    std::unordered_set<htd::vertex_t> vertices;
 
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> neighborhood(size);
 
     std::unordered_map<htd::vertex_t, std::size_t> weights(size);
 
-    for (htd::vertex_t vertex : vertices)
+    htd::fillSet(graph.vertices(), vertices);
+
+    for (auto it = vertices.begin(); it != vertices.end() && !isTerminated(); ++it)
     {
+        htd::vertex_t vertex = *it;
+
         auto & currentNeighborhood = neighborhood[vertex];
 
         graph.copyNeighborsTo(currentNeighborhood, vertex);

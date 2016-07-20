@@ -830,6 +830,21 @@ namespace htd
             std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() / 1000 << "." << std::setw(3) << std::setfill('0') << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() % 1000 << " seconds";
         }
     }
+
+    template <typename Set, typename Collection>
+    void fillSet(const Collection & collection, Set & set)
+    {
+        std::size_t count = collection.size();
+
+        auto it = collection.begin();
+
+        for (htd::index_t index = 0; index < count; ++index)
+        {
+            set.insert(*it);
+
+            ++it;
+        }
+    }
 }
 
 namespace std

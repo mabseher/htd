@@ -69,12 +69,22 @@ void htd::BreadthFirstGraphTraversal::traverse(const htd::IMultiHypergraph & gra
 
             visitedVertices.insert(currentVertex);
 
-            for (htd::vertex_t neighbor : graph.neighbors(currentVertex))
+            const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(currentVertex);
+
+            std::size_t neighborCount = graph.neighborCount(currentVertex);
+
+            auto it = neighborCollection.begin();
+
+            for (htd::index_t index = 0; index < neighborCount; ++index)
             {
+                htd::vertex_t neighbor = *it;
+
                 if (visitedVertices.count(neighbor) == 0)
                 {
                     originDeque.push_back(std::make_tuple(neighbor, currentVertex, currentDistance + 1));
                 }
+
+                ++it;
             }
         }
 

@@ -44,7 +44,7 @@ htd::MinFillOrderingAlgorithm::~MinFillOrderingAlgorithm()
     
 }
 
-htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const
+htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
     htd::VectorAdapter<htd::vertex_t> ret;
 
@@ -53,7 +53,7 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const
+void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT
 {
     std::size_t size = graph.vertexCount();
 
@@ -61,9 +61,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
     std::unordered_set<htd::vertex_t> pool;
 
-    const htd::ConstCollection<htd::vertex_t> & inputVertices = graph.vertices();
-
-    std::unordered_set<htd::vertex_t> vertices(inputVertices.begin(), inputVertices.end());
+    std::unordered_set<htd::vertex_t> vertices;
 
     std::unordered_map<htd::vertex_t, htd::state_t> updateStatus(size);
 
@@ -74,7 +72,9 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> existingNeighbors(size);
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> additionalNeighbors(size);
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> unaffectedNeighbors(size);
-    
+
+    htd::fillSet(graph.vertices(), vertices);
+
     std::vector<htd::vertex_t> newNeighborhood;
     
     std::vector<htd::vertex_t> affectedVertices;
@@ -82,7 +82,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
     std::size_t totalFill = 0;
 
-    for (auto it = inputVertices.begin(); it != inputVertices.end() && !isTerminated(); ++it)
+    for (auto it = vertices.begin(); it != vertices.end() && !isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
@@ -100,7 +100,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
         updateStatus[vertex] = htd::State::UNKNOWN;
     }
 
-    for (auto it = inputVertices.begin(); it != inputVertices.end() && !isTerminated(); ++it)
+    for (auto it = vertices.begin(); it != vertices.end() && !isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 

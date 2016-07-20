@@ -68,14 +68,22 @@ void htd::TdFormatExporter::write(const htd::ITreeDecomposition & decomposition,
             ++index;
         }
 
-        for (const htd::Hyperedge & hyperedge : decomposition.hyperedges())
+        const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = decomposition.hyperedges();
+
+        std::size_t edgeCount = decomposition.edgeCount();
+
+        auto it = hyperedgeCollection.begin();
+
+        for (htd::index_t index = 0; index < edgeCount; ++index)
         {
-            for (htd::vertex_t vertex : hyperedge)
+            for (htd::vertex_t vertex : *it)
             {
                 outputStream << indices[vertex] << " ";
             }
 
             outputStream << "\n";
+
+            ++it;
         }
     }
 }
@@ -106,9 +114,15 @@ void htd::TdFormatExporter::write(const htd::ITreeDecomposition & decomposition,
             ++index;
         }
 
-        for (const htd::Hyperedge & hyperedge : decomposition.hyperedges())
+        const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = decomposition.hyperedges();
+
+        std::size_t edgeCount = decomposition.edgeCount();
+
+        auto it = hyperedgeCollection.begin();
+
+        for (htd::index_t index = 0; index < edgeCount; ++index)
         {
-            for (htd::vertex_t vertex : hyperedge)
+            for (htd::vertex_t vertex : *it)
             {
                 outputStream << indices[vertex] << " ";
             }

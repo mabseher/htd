@@ -38,6 +38,7 @@ namespace htd
     class IMutablePathDecomposition : public virtual htd::IMutableLabeledPath, public virtual htd::IPathDecomposition
     {
         public:
+            using htd::IMutablePath::insertRoot;
             using htd::IMutablePath::addChild;
             using htd::IMutablePath::addParent;
 
@@ -48,6 +49,26 @@ namespace htd
              *  Destructor for an IMutablePathDecomposition object.
              */
             virtual ~IMutablePathDecomposition() = 0;
+
+            /**
+             *  Insert the root of the path if it does not already exist.
+             *
+             *  @param[in] bagContent   The bag content associated with the new vertex.
+             *  @param[in] inducedEdges The collection of induced edges associated with the new vertex.
+             *
+             *  @return The ID of the root of the path.
+             */
+            virtual htd::vertex_t insertRoot(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) = 0;
+
+            /**
+             *  Insert the root of the path if it does not already exist.
+             *
+             *  @param[in] bagContent   The bag content associated with the new vertex.
+             *  @param[in] inducedEdges The collection of induced edges associated with the new vertex.
+             *
+             *  @return The ID of the root of the path.
+             */
+            virtual htd::vertex_t insertRoot(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) = 0;
 
             /**
              *  Add a new child to the given vertex.

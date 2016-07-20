@@ -124,6 +124,38 @@ htd::vertex_t htd::TreeDecomposition::insertRoot(void)
     return ret;
 }
 
+htd::vertex_t htd::TreeDecomposition::insertRoot(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    bool inserted = vertexCount() == 0;
+
+    htd::vertex_t ret = htd::Tree::insertRoot();
+
+    if (inserted)
+    {
+        bagContent_[ret] = bagContent;
+
+        inducedEdges_[ret] = inducedEdges;
+    }
+
+    return ret;
+}
+
+htd::vertex_t htd::TreeDecomposition::insertRoot(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    bool inserted = vertexCount() == 0;
+
+    htd::vertex_t ret = htd::Tree::insertRoot();
+
+    if (inserted)
+    {
+        bagContent_.emplace(ret, std::move(bagContent));
+
+        inducedEdges_.emplace(ret, std::move(inducedEdges));
+    }
+
+    return ret;
+}
+
 htd::vertex_t htd::TreeDecomposition::addChild(htd::vertex_t vertex)
 {
     htd::vertex_t ret = htd::Tree::addChild(vertex);

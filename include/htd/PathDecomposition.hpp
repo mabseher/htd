@@ -81,6 +81,10 @@ namespace htd
 
             htd::vertex_t insertRoot(void) HTD_OVERRIDE;
 
+            htd::vertex_t insertRoot(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;
+
+            htd::vertex_t insertRoot(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) HTD_OVERRIDE;
+
             htd::vertex_t addChild(htd::vertex_t vertex) HTD_OVERRIDE;
 
             htd::vertex_t addChild(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;

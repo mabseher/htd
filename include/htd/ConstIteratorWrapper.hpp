@@ -86,6 +86,18 @@ namespace htd
                 return *this;
             }
 
+            /**
+             *  Move assignment operator for an iterator wrapper.
+             *
+             *  @param[in] original  The original iterator wrapper.
+             */
+            ConstIteratorWrapper & operator=(ConstIteratorWrapper && original) HTD_NOEXCEPT
+            {
+                baseIterator_ = std::move(original.baseIterator_);
+
+                return *this;
+            }
+
             ConstIteratorWrapper<Iter, T> & operator++(void) HTD_NOEXCEPT HTD_OVERRIDE
             {
                 ++baseIterator_;

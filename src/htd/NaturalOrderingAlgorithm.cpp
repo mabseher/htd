@@ -41,14 +41,14 @@ htd::NaturalOrderingAlgorithm::~NaturalOrderingAlgorithm()
     
 }
 
-htd::ConstCollection<htd::vertex_t> htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const
+htd::ConstCollection<htd::vertex_t> htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
     htd::VectorAdapter<htd::vertex_t> ret(graph.vertices());
 
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
-void htd::NaturalOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const
+void htd::NaturalOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT
 {
     const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
 

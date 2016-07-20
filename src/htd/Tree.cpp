@@ -951,14 +951,14 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
     {
         htd::vertex_t parentVertex = parent(vertex);
 
-        auto & parentNode = nodes_.at(parentVertex);
-        auto & selectedNode = nodes_.at(vertex);
+        Node & parentNode = *(nodes_.at(parentVertex));
+        Node & selectedNode = *(nodes_.at(vertex));
 
         htd::id_t oldHyperedge = htd::Id::UNKNOWN;
 
-        auto it = selectedNode->edges.begin();
+        auto it = selectedNode.edges.begin();
 
-        while (it != selectedNode->edges.end())
+        while (it != selectedNode.edges.end())
         {
             auto position = htd::hyperedgePointerPosition(edges_->begin(), edges_->end(), *it);
 
@@ -972,7 +972,7 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
                 edges_->erase(position);
 
-                it = selectedNode->edges.end();
+                it = selectedNode.edges.end();
             }
             else
             {
@@ -980,25 +980,25 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
             }
         }
 
-        parentNode->edges.erase(std::lower_bound(parentNode->edges.begin(), parentNode->edges.end(), oldHyperedge));
-        selectedNode->edges.erase(std::lower_bound(selectedNode->edges.begin(), selectedNode->edges.end(), oldHyperedge));
+        parentNode.edges.erase(std::lower_bound(parentNode.edges.begin(), parentNode.edges.end(), oldHyperedge));
+        selectedNode.edges.erase(std::lower_bound(selectedNode.edges.begin(), selectedNode.edges.end(), oldHyperedge));
 
         ret = addChild(parentVertex);
 
-        auto & intermediateNode = nodes_.at(ret);
+        auto & intermediateNode = *(nodes_.at(ret));
 
-        intermediateNode->parent = parentVertex;
+        intermediateNode.parent = parentVertex;
 
-        intermediateNode->children.emplace_back(vertex);
+        intermediateNode.children.emplace_back(vertex);
 
-        auto position = std::find(parentNode->children.begin(), parentNode->children.end(), vertex);
+        auto position = std::find(parentNode.children.begin(), parentNode.children.end(), vertex);
 
-        if (position != parentNode->children.end())
+        if (position != parentNode.children.end())
         {
-            parentNode->children.erase(position);
+            parentNode.children.erase(position);
         }
 
-        selectedNode->parent = ret;
+        selectedNode.parent = ret;
     }
 
     edges_->emplace_back(new htd::Hyperedge(next_edge_, vertex, ret));

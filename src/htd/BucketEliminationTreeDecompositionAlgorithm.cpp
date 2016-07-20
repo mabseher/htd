@@ -319,11 +319,8 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
                 if (predecessor == htd::Vertex::UNKNOWN)
                 {
-                    node = ret->insertRoot();
-
-                    ret->bagContent(node) = std::move(mutableGraphDecomposition.bagContent(vertex));
-
-                    ret->inducedHyperedges(node) = std::move(mutableGraphDecomposition.inducedHyperedges(vertex));
+                    node = ret->insertRoot(std::move(mutableGraphDecomposition.bagContent(vertex)),
+                                           std::move(mutableGraphDecomposition.inducedHyperedges(vertex)));
                 }
                 else
                 {

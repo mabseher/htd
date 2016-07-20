@@ -46,6 +46,20 @@ set_target_properties(htd_main
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
+if (UNIX)
+    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_exhaustive.sh"
+                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_minfill_exhaustive.sh" COPYONLY)
+
+    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_iterative_256_64.sh"
+                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_minfill_iterative_256_64.sh" COPYONLY)
+
+    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_mindegree_exhaustive.sh"
+                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_mindegree_exhaustive.sh" COPYONLY)
+
+    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_mindegree_iterative_256_64.sh"
+                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_mindegree_iterative_256_64.sh" COPYONLY)
+endif(UNIX)
+
 target_link_libraries(htd_main htd htd_cli)
 
 install(TARGETS htd_main DESTINATION bin)

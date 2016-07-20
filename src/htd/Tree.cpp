@@ -872,7 +872,7 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
     node.children.emplace_back(ret);
 
-    nodes_.insert(std::make_pair(ret, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(ret, vertex))));
+    nodes_.emplace(ret, std::unique_ptr<htd::Tree::Node>(new htd::Tree::Node(ret, vertex)));
 
     vertices_.emplace_back(ret);
 

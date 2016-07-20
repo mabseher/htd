@@ -94,6 +94,10 @@ htd_cli::OptionManager * createOptionManager(void)
 
     manager->registerOption(iterationOption, "Optimization Options");
 
+    htd_cli::SingleValueOption * nonImprovementLimitOption = new htd_cli::SingleValueOption("non-improvement-limit", "Terminate the algorithm if more than <count> iterations did not lead to an improvement (-1 = infinite). (Default: 10)", "count");
+
+    manager->registerOption(nonImprovementLimitOption, "Optimization Options");
+
     htd_cli::Option * printProgressOption = new htd_cli::Option("print-opt-progress", "Print progress whenever a new optimal decomposition is found.");
 
     manager->registerOption(printProgressOption, "Optimization Options");
@@ -129,6 +133,8 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
     const htd_cli::Choice & optimizationChoice = optionManager.accessChoice("opt");
 
     const htd_cli::SingleValueOption & iterationOption = optionManager.accessSingleValueOption("iterations");
+
+    const htd_cli::SingleValueOption & nonImprovementLimitOption = optionManager.accessSingleValueOption("non-improvement-limit");
 
     const htd_cli::Option & printProgressOption = optionManager.accessOption("print-opt-progress");
 
@@ -255,6 +261,44 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
             else
             {
                 std::cerr << "INVALID PROGRAM CALL: Option --iterations may only be used when option --opt is set to \"width\"!" << std::endl;
+
+                ret = false;
+            }
+        }
+    }
+
+    if (ret)
+    {
+        if (nonImprovementLimitOption.used())
+        {
+            if (optimizationChoice.used() && optimizationChoice.value() == "width")
+            {
+                std::size_t index = 0;
+
+                const std::string & value = nonImprovementLimitOption.value();
+
+                if (value.empty() || (value != "-1" && value.find_first_not_of("01234567890") != std::string::npos))
+                {
+                    std::cerr << "INVALID MAXIMUM NUMBER OF NON-IMPROVED DECOMPOSITIONS: " << nonImprovementLimitOption.value() << std::endl;
+
+                    ret = false;
+                }
+
+                if (ret && value != "-1")
+                {
+                    std::stoul(nonImprovementLimitOption.value(), &index, 10);
+
+                    if (index != nonImprovementLimitOption.value().length())
+                    {
+                        std::cerr << "INVALID MAXIMUM NUMBER OF NON-IMPROVED DECOMPOSITIONS: " << nonImprovementLimitOption.value() << std::endl;
+
+                        ret = false;
+                    }
+                }
+            }
+            else
+            {
+                std::cerr << "INVALID PROGRAM CALL: Option --non-improvement-limit may only be used when option --opt is set to \"width\"!" << std::endl;
 
                 ret = false;
             }
@@ -617,6 +661,8 @@ int main(int argc, const char * const * const argv)
 
         const htd_cli::SingleValueOption & iterationOption = optionManager->accessSingleValueOption("iterations");
 
+        const htd_cli::SingleValueOption & nonImprovementLimitOption = optionManager->accessSingleValueOption("non-improvement-limit");
+
         const htd_cli::Option & printProgressOption = optionManager->accessOption("print-opt-progress");
 
         const std::string & outputFormat = outputFormatChoice.value();
@@ -669,6 +715,18 @@ int main(int argc, const char * const * const argv)
                 if (iterationOption.used())
                 {
                     algorithm.setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
+                }
+
+                if (nonImprovementLimitOption.used())
+                {
+                    if (nonImprovementLimitOption.value() == "-1")
+                    {
+                        algorithm.setNonImprovementLimit((std::size_t)-1);
+                    }
+                    else
+                    {
+                        algorithm.setNonImprovementLimit(std::stoul(nonImprovementLimitOption.value(), nullptr, 10));
+                    }
                 }
 
                 if (inputFormatChoice.value() == "gr")

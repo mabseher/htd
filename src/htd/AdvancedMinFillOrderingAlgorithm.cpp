@@ -693,7 +693,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
     DEBUGGING_CODE_LEVEL2(std::cout << std::endl;)
 }
 
-std::size_t htd::AdvancedMinFillOrderingAlgorithm::computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const
+std::size_t htd::AdvancedMinFillOrderingAlgorithm::computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const HTD_NOEXCEPT
 {
     std::size_t ret = 0;
 
@@ -723,11 +723,11 @@ std::size_t htd::AdvancedMinFillOrderingAlgorithm::computeEdgeCount(const std::u
 }
             
 void htd::AdvancedMinFillOrderingAlgorithm::decompose_sets(const std::vector<htd::vertex_t> & set1,
-                                                   const std::vector<htd::vertex_t> & set2,
-                                                   htd::vertex_t ignoredVertex,
-                                                   std::vector<htd::vertex_t> & resultOnlySet1,
-                                                   std::vector<htd::vertex_t> & resultOnlySet2,
-                                                   std::vector<htd::vertex_t> & resultIntersection) const
+                                                           const std::vector<htd::vertex_t> & set2,
+                                                           htd::vertex_t ignoredVertex,
+                                                           std::vector<htd::vertex_t> & resultOnlySet1,
+                                                           std::vector<htd::vertex_t> & resultOnlySet2,
+                                                           std::vector<htd::vertex_t> & resultIntersection) const HTD_NOEXCEPT
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();
@@ -740,8 +740,8 @@ void htd::AdvancedMinFillOrderingAlgorithm::decompose_sets(const std::vector<htd
     
     while (index1 < count1 && index2 < count2)
     {
-        auto value1 = *first1;
-        auto value2 = *first2;
+        htd::vertex_t value1 = *first1;
+        htd::vertex_t value2 = *first2;
 
         if (value1 < value2) 
         {

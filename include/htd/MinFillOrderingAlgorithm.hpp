@@ -59,14 +59,14 @@ namespace htd
             MinFillOrderingAlgorithm & operator=(const MinFillOrderingAlgorithm &) { return *this; }
 
         private:
-            std::size_t computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const;
+            std::size_t computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const HTD_NOEXCEPT;
 
             void decompose_sets(const std::vector<htd::vertex_t> & set1,
                                 const std::vector<htd::vertex_t> & set2,
                                 htd::vertex_t ignoredVertex,
                                 std::vector<htd::vertex_t> & resultOnlySet1,
                                 std::vector<htd::vertex_t> & resultOnlySet2,
-                                std::vector<htd::vertex_t> & resultIntersection) const;
+                                std::vector<htd::vertex_t> & resultIntersection) const HTD_NOEXCEPT;
     };
 }
 

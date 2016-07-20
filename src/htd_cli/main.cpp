@@ -94,7 +94,7 @@ htd_cli::OptionManager * createOptionManager(void)
 
     manager->registerOption(iterationOption, "Optimization Options");
 
-    htd_cli::SingleValueOption * nonImprovementLimitOption = new htd_cli::SingleValueOption("non-improvement-limit", "Terminate the algorithm if more than <count> iterations did not lead to an improvement (-1 = infinite). (Default: 10)", "count");
+    htd_cli::SingleValueOption * nonImprovementLimitOption = new htd_cli::SingleValueOption("non-improvement-limit", "Terminate the algorithm if more than <count> iterations did not lead to an improvement (-1 = infinite). (Default: -1)", "count");
 
     manager->registerOption(nonImprovementLimitOption, "Optimization Options");
 

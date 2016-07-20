@@ -377,63 +377,70 @@ void optimize(const htd::IterativeImprovementTreeDecompositionAlgorithm & algori
 {
     auto * graph = importer.import(std::cin);
 
-    if (graph != nullptr && !importer.isTerminated())
+    if (graph != nullptr)
     {
-        std::size_t optimalBagSize = (std::size_t)-1;
+        if (!importer.isTerminated())
+        {
+            std::size_t optimalBagSize = (std::size_t)-1;
 
-        htd::ITreeDecomposition * decomposition =
-            algorithm.computeDecomposition(*graph, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
-            {
-                HTD_UNUSED(graph)
-                HTD_UNUSED(decomposition)
-
-                if (printProgress)
+            htd::ITreeDecomposition * decomposition =
+                algorithm.computeDecomposition(*graph, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
                 {
-                    std::size_t bagSize = -fitness.at(0);
+                    HTD_UNUSED(graph)
+                    HTD_UNUSED(decomposition)
 
-                    if (bagSize < optimalBagSize)
+                    if (printProgress)
                     {
-                        optimalBagSize = bagSize;
+                        std::size_t bagSize = -fitness.at(0);
 
-                        std::chrono::milliseconds::rep msSinceEpoch =
-                            std::chrono::duration_cast<std::chrono::milliseconds>
-                                (std::chrono::system_clock::now().time_since_epoch()).count();
+                        if (bagSize < optimalBagSize)
+                        {
+                            optimalBagSize = bagSize;
 
-                        if (outputFormat == "td")
-                        {
-                            std::cout << "c status " << optimalBagSize << " " << msSinceEpoch << std::endl;
-                        }
-                        else
-                        {
-                            std::cerr << "New optimal bag size: " << optimalBagSize << std::endl;
+                            std::chrono::milliseconds::rep msSinceEpoch =
+                                std::chrono::duration_cast<std::chrono::milliseconds>
+                                    (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                            if (outputFormat == "td")
+                            {
+                                std::cout << "c status " << optimalBagSize << " " << msSinceEpoch << std::endl;
+                            }
+                            else
+                            {
+                                std::cerr << "New optimal bag size: " << optimalBagSize << std::endl;
+                            }
                         }
                     }
-                }
-            });
+                });
 
-        if (decomposition != nullptr)
-        {
-            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
+            if (decomposition != nullptr)
             {
-                exporter.write(*decomposition, *graph, std::cout);
+                if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
+                {
+                    exporter.write(*decomposition, *graph, std::cout);
+                }
+                else
+                {
+                    std::cerr << "Program was terminated successfully!" << std::endl;
+                }
+
+                delete decomposition;
             }
             else
             {
-                std::cerr << "Program was terminated successfully!" << std::endl;
+                if (algorithm.isTerminated())
+                {
+                    std::cerr << "Program was terminated successfully!" << std::endl;
+                }
+                else
+                {
+                    std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+                }
             }
-
-            delete decomposition;
         }
         else
         {
-            if (algorithm.isTerminated())
-            {
-                std::cerr << "Program was terminated successfully!" << std::endl;
-            }
-            else
-            {
-                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
-            }
+            std::cerr << "Program was terminated successfully!" << std::endl;
         }
 
         delete graph;

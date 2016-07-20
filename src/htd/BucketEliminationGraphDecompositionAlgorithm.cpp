@@ -611,13 +611,16 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             for (std::pair<htd::vertex_t, htd::vertex_t> * edge : decompositionEdges)
             {
-                if (edge->first < edge->second)
+                if (!isTerminated())
                 {
-                    ret->addEdge(edge->first, edge->second);
-                }
-                else
-                {
-                    ret->addEdge(edge->second, edge->first);
+                    if (edge->first < edge->second)
+                    {
+                        ret->addEdge(edge->first, edge->second);
+                    }
+                    else
+                    {
+                        ret->addEdge(edge->second, edge->first);
+                    }
                 }
 
                 delete edge;

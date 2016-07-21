@@ -63,6 +63,7 @@
 #include <htd/GrFormatImporter.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/HeuristicSetCoverAlgorithm.hpp>
+#include <htd/HgrFormatImporter.hpp>
 #include <htd/HumanReadableExporter.hpp>
 #include <htd/HyperedgeDeque.hpp>
 #include <htd/Hyperedge.hpp>
@@ -179,7 +180,6 @@
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 #include <htd/LpFormatImporter.hpp>
 #include <htd/MaximumCardinalitySearchOrderingAlgorithm.hpp>
-#include <htd/MGrFormatImporter.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
 #include <htd/MultiGraphFactory.hpp>

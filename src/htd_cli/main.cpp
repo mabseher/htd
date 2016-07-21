@@ -48,18 +48,18 @@ htd_cli::OptionManager * createOptionManager(void)
 
     manager->registerOption(decompositionTypeChoice, "Decomposition Options");
 
-    htd_cli::Choice * inputFormatChoice = new htd_cli::Choice("input", "Assume that the input graph is given in format <format>.\n  (See https://github.com/mabseher/htd/formats.md for information about the available input formats.)", "format");
+    htd_cli::Choice * inputFormatChoice = new htd_cli::Choice("input", "Assume that the input graph is given in format <format>.\n  (See https://github.com/mabseher/htd/FORMATS.md for information about the available input formats.)", "format");
 
     inputFormatChoice->addPossibility("gr", "Use the input format 'gr'.");
     //inputFormatChoice->addPossibility("hg", "Use the input format 'hg'.");
     inputFormatChoice->addPossibility("lp", "Use the input format 'lp'.");
-    inputFormatChoice->addPossibility("mgr", "Use the input format 'mgr'.");
+    inputFormatChoice->addPossibility("hgr", "Use the input format 'hgr'.");
 
     inputFormatChoice->setDefaultValue("gr");
 
     manager->registerOption(inputFormatChoice, "Input-Specific Options");
 
-    htd_cli::Choice * outputFormatChoice = new htd_cli::Choice("output", "Set the output format of the decomposition to <format>.\n  (See https://github.com/mabseher/htd/formats.md for information about the available output formats.)", "format");
+    htd_cli::Choice * outputFormatChoice = new htd_cli::Choice("output", "Set the output format of the decomposition to <format>.\n  (See https://github.com/mabseher/htd/FORMATS.md for information about the available output formats.)", "format");
 
     outputFormatChoice->addPossibility("td", "Use the output format 'td'.");
     //outputFormatChoice->addPossibility("graphml", "Use the output format 'graphml'.");
@@ -578,9 +578,9 @@ void run(const DecompositionAlgorithm & algorithm, const Exporter & exporter, co
 
         decomposeNamed(algorithm, importer, exporter);
     }
-    else if (inputFormat == "mgr")
+    else if (inputFormat == "hgr")
     {
-        htd::MGrFormatImporter importer;
+        htd::HgrFormatImporter importer;
 
         importer.setManagementInstance(algorithm.managementInstance());
 
@@ -745,9 +745,9 @@ int main(int argc, const char * const * const argv)
 
                     optimizeNamed(algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
                 }
-                else if (inputFormatChoice.value() == "mgr")
+                else if (inputFormatChoice.value() == "hgr")
                 {
-                    htd::MGrFormatImporter importer;
+                    htd::HgrFormatImporter importer;
 
                     importer.setManagementInstance(algorithm.managementInstance());
 

@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Importer which allows to read instances in the graph format 'lp'.
      *
-     *  (See https://github.com/mabseher/htd/formats.md for information about the available input formats.)
+     *  (See https://github.com/mabseher/htd/FORMATS.md for information about the available input formats.)
      */
     class LpFormatImporter : public htd::LibraryObject
     {

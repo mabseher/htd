@@ -35,7 +35,7 @@ namespace htd
     /**
      *  Exporter which allows to export tree decompositions in the tree decomposition format 'td'.
      *
-     *  (See https://github.com/mabseher/htd/formats.md for information about the available output formats.)
+     *  (See https://github.com/mabseher/htd/FORMATS.md for information about the available output formats.)
      */
     class TdFormatExporter : public htd::ITreeDecompositionExporter
     {

@@ -1,5 +1,5 @@
 /*
- * File:   MGrFormatImporter.cpp
+ * File:   HgrFormatImporter.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,10 +22,10 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_MGRFORMATIMPORTER_CPP
-#define	HTD_HTD_MGRFORMATIMPORTER_CPP
+#ifndef HTD_HTD_HGRFORMATIMPORTER_CPP
+#define	HTD_HTD_HGRFORMATIMPORTER_CPP
 
-#include <htd/MGrFormatImporter.hpp>
+#include <htd/HgrFormatImporter.hpp>
 
 #include <htd/MultiHypergraphFactory.hpp>
 
@@ -33,24 +33,24 @@
 #include <string>
 #include <stdexcept>
 
-htd::MGrFormatImporter::MGrFormatImporter(void) : htd::LibraryObject()
+htd::HgrFormatImporter::HgrFormatImporter(void) : htd::LibraryObject()
 {
 
 }
 
-htd::MGrFormatImporter::~MGrFormatImporter(void)
+htd::HgrFormatImporter::~HgrFormatImporter(void)
 {
 
 }
 
-htd::IMultiHypergraph * htd::MGrFormatImporter::import(const std::string & path) const
+htd::IMultiHypergraph * htd::HgrFormatImporter::import(const std::string & path) const
 {
     std::ifstream stream(path);
 
     return import(stream);
 }
 
-htd::IMultiHypergraph * htd::MGrFormatImporter::import(std::istream & stream) const
+htd::IMultiHypergraph * htd::HgrFormatImporter::import(std::istream & stream) const
 {
     std::size_t vertexCount = 0;
     std::size_t edgeCount = 0;
@@ -166,4 +166,4 @@ htd::IMultiHypergraph * htd::MGrFormatImporter::import(std::istream & stream) co
     return ret;
 }
 
-#endif /* HTD_HTD_MGRFORMATIMPORTER_CPP */
+#endif /* HTD_HTD_HGRFORMATIMPORTER_CPP */

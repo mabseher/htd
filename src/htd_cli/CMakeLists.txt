@@ -29,7 +29,7 @@ install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd_cli" DESTINATION include)
 
 set(HTD_MAIN_VERSION_MAJOR 0)
 set(HTD_MAIN_VERSION_MINOR 9)
-set(HTD_MAIN_VERSION_PATCH 5)
+set(HTD_MAIN_VERSION_PATCH 9)
 set(HTD_MAIN_VERSION ${HTD_MAIN_VERSION_MAJOR}.${HTD_MAIN_VERSION_MINOR}.${HTD_MAIN_VERSION_PATCH} )
 
 add_executable(htd_main "main.cpp")
@@ -50,11 +50,17 @@ if (UNIX)
     configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_exhaustive.sh"
                    "${CMAKE_BINARY_DIR}/bin/htd_gr2td_minfill_exhaustive.sh" COPYONLY)
 
+    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_iterative_100_20.sh"
+                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_minfill_iterative_100_20.sh" COPYONLY)
+
     configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_iterative_256_64.sh"
                    "${CMAKE_BINARY_DIR}/bin/htd_gr2td_minfill_iterative_256_64.sh" COPYONLY)
 
     configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_mindegree_exhaustive.sh"
                    "${CMAKE_BINARY_DIR}/bin/htd_gr2td_mindegree_exhaustive.sh" COPYONLY)
+
+    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_mindegree_iterative_100_20.sh"
+                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_mindegree_iterative_100_20.sh" COPYONLY)
 
     configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_mindegree_iterative_256_64.sh"
                    "${CMAKE_BINARY_DIR}/bin/htd_gr2td_mindegree_iterative_256_64.sh" COPYONLY)

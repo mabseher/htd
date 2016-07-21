@@ -28,45 +28,45 @@ A program call for **htd_main** is of the following form:
 Options are organized in the following groups:
 
 * General Options:
-  * --help, -h                        Print usage information and exit.
-  * --seed, -s <seed>                 Set the seed for the random number generator to <seed>
+  * --help, -h :                      Print usage information and exit.
+  * --seed, -s <seed> :               Set the seed for the random number generator to <seed>
 
   * Decomposition Options:
-  * --type <type>                     Compute a graph decomposition of type <type>.
+  * --type <type> :                   Compute a graph decomposition of type <type>.
     * Permitted Values:
-      * .) tree        Compute a tree decomposition of the input graph. (default)
-      * .) hypertree   Compute a hypertree decomposition of the input graph.
+      * .) tree      : Compute a tree decomposition of the input graph. (default)
+      * .) hypertree : Compute a hypertree decomposition of the input graph.
 
   * Input-Specific Options:
-    * --input <format>                  Assume that the input graph is given in format <format>. (See [FORMATS](https://github.com/mabseher/htd/formats.md) for information about the available input formats.)
+    * --input <format> :              Assume that the input graph is given in format <format>. (See [FORMATS](https://github.com/mabseher/htd/formats.md) for information about the available input formats.)
       * Permitted Values:
-        * .) gr    Use the input format 'gr'. (default)
-        * .) lp    Use the input format 'lp'.
-        * .) mgr   Use the input format 'mgr'.
+        * .) gr  : Use the input format 'gr'. (default)
+        * .) lp  : Use the input format 'lp'.
+        * .) mgr : Use the input format 'mgr'.
 
-  * Output-Specific Options:
-    * --output <format>                 Set the output format of the decomposition to <format>. (See [FORMATS](https://github.com/mabseher/htd/formats.md) for information about the available output formats.)
-      * Permitted Values:
-        * .) td      Use the output format 'td'. (default)
-        * .) human   Provide a human-readable output of the decomposition.
-        * .) width   Provide only the maximum bag size of the decomposition.
+* Output-Specific Options:
+  * --output <format> :               Set the output format of the decomposition to <format>. (See [FORMATS](https://github.com/mabseher/htd/formats.md) for information about the available output formats.)
+    * Permitted Values:
+      * .) td    : Use the output format 'td'. (default)
+      * .) human : Provide a human-readable output of the decomposition.
+      * .) width : Provide only the maximum bag size of the decomposition.
 
-  * Algorithm Options:
-    * --ordering <algorithm>            Set the ordering algorithm which shall be used to <algorithm>.
-      * Permitted Values:
-        * .) min-fill+         Advanced minimum-fill ordering algorithm (default)
-        * .) min-fill          Standard minimum-fill ordering algorithm
-        * .) min-degree        Minimum-degree ordering algorithm
-        * .) max-cardinality   Maximum cardinality search ordering algorithm
+* Algorithm Options:
+  * --ordering <algorithm> :          Set the ordering algorithm which shall be used to <algorithm>.
+    * Permitted Values:
+      * .) min-fill+       : Advanced minimum-fill ordering algorithm (default)
+      * .) min-fill        : Standard minimum-fill ordering algorithm
+      * .) min-degree      : Minimum-degree ordering algorithm
+      * .) max-cardinality : Maximum cardinality search ordering algorithm
 
-  * Optimization Options:
-    * --opt <criterion>                 Iteratively compute a decomposition which optimizes <criterion>.
-      * Permitted Values:
-        * .) none    Do not perform any optimization. (default)
-        * .) width   Minimize the maximum bag size of the computed decomposition.
-    * --iterations <count>              Set the number of iterations to be performed during optimization to <count> (0 = infinite). (Default: 10)
-    * --non-improvement-limit <count>   Terminate the algorithm if more than <count> iterations did not lead to an improvement (-1 = infinite). (Default: -1)
-    * --print-opt-progress              Print progress whenever a new optimal decomposition is found.
+* Optimization Options:
+  * --opt <criterion> :               Iteratively compute a decomposition which optimizes <criterion>.
+    * Permitted Values:
+      * .) none  : Do not perform any optimization. (default)
+      * .) width : Minimize the maximum bag size of the computed decomposition.
+  * --iterations <count> :            Set the number of iterations to be performed during optimization to <count> (0 = infinite). (Default: 10)
+  * --non-improvement-limit <count> : Terminate the algorithm if more than <count> iterations did not lead to an improvement (-1 = infinite). (Default: -1)
+  * --print-opt-progress :            Print progress whenever a new optimal decomposition is found.
 
 ## LICENSE
 

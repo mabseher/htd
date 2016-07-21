@@ -70,7 +70,9 @@ Options are organized in the following groups:
 
 ### Using htd as a developer
 
-The following example code uses the most important features of **htd**. A full API documentation can be generated via `make doc` (requires [Doxygen](www.doxygen.org/)):
+The following example code uses the most important features of **htd**. 
+
+A full API documentation can be generated via `make doc` (requires [Doxygen](www.doxygen.org/)):
 
 ```cpp
 #include <htd/main.hpp>
@@ -100,14 +102,18 @@ class FitnessFunction : public htd::ITreeDecompositionFitnessFunction
 
         }
 
-        htd::FitnessEvaluation * fitness(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
+        htd::FitnessEvaluation * fitness(const htd::IMultiHypergraph & graph, 
+                                         const htd::ITreeDecomposition & decomposition) const
         {
             HTD_UNUSED(graph)
 
             /**
-              * Here we specify the fitness evaluation for a given decomposition. In this case, we select the maximum bag size and the height.
+              * Here we specify the fitness evaluation for a given decomposition. 
+              * In this case, we select the maximum bag size and the height.
               */
-            return new htd::FitnessEvaluation(2, -(double)(decomposition.maximumBagSize()), -(double)(decomposition.height()));
+            return new htd::FitnessEvaluation(2, 
+                                              -(double)(decomposition.maximumBagSize()), 
+                                              -(double)(decomposition.height()));
         }
 
         FitnessFunction * clone(void) const
@@ -155,7 +161,8 @@ int main(int argc, const char * const * const argv)
     htd::GrFormatImporter importer;
 
     // Create a new management instance to support graceful termination of algorithms.
-    std::shared_ptr<htd::LibraryInstance> libraryInstance = htd::Library::instance().createManagementInstance();
+    std::shared_ptr<htd::LibraryInstance> libraryInstance = 
+        htd::Library::instance().createManagementInstance();
 
     // Import graph f.
     htd::IMultiGraph * graph = importer.import(argv[1]);
@@ -167,11 +174,13 @@ int main(int argc, const char * const * const argv)
         FitnessFunction fitnessFunction;
 
         /**
-         *  This operation changes the root of a given decomposition so that the fitness function is maximized.
-         *
-         *  When no fitness function is provided, the optimization operation does not perform any optimization and only applies provided manipulations.
+         *  This operation changes the root of a given decomposition so that the provided 
+         *  fitness function is maximized. When no fitness function is provided to the
+         *  constructor, the constructed optimization operation does not perform any 
+         *  optimization and only applies provided manipulations.
          */
-        htd::TreeDecompositionOptimizationOperation * operation = new htd::TreeDecompositionOptimizationOperation(fitnessFunction);
+        htd::TreeDecompositionOptimizationOperation * operation = 
+            new htd::TreeDecompositionOptimizationOperation(fitnessFunction);
 
         /**
          *  Set the previously created management instance to support graceful termination.
@@ -186,29 +195,31 @@ int main(int argc, const char * const * const argv)
         operation->setVertexSelectionStrategy(new htd::RandomVertexSelectionStrategy(10));
 
         /**
-          * Set desired manipulations. In this case we want a nice (= normalized) tree decomposition.
-          */
+         *  Set desired manipulations. In this case we want a nice (= normalized) tree decomposition.
+         */
         operation->addManipulationOperation(new htd::NormalizationOperation(true, true, false, false));
 
         /**
-          * Optionally, we can set the vertex elimination algorithm. We decide to use the min-degree heuristic.
+          * Optionally, we can set the vertex elimination algorithm. 
+          * We decide to use the min-degree heuristic in this case.
           */
-        htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::MinDegreeOrderingAlgorithm());
+        htd::OrderingAlgorithmFactory::instance()
+            .setConstructionTemplate(new htd::MinDegreeOrderingAlgorithm());
+
+        // Get the default tree decomposition algorithm. One can also choose a custom one.
+        htd::ITreeDecompositionAlgorithm * baseAlgorithm = 
+            htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
 
         /**
-         *  Get the default tree decomposition algorithm. One can also choose a custom one.
-         */
-        htd::ITreeDecompositionAlgorithm * baseAlgorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
-
-        /**
-         *  Set the optimization operation as manipulation operation in order to choose the optimal root reducing height of the tree decomposition.
+         *  Set the optimization operation as manipulation operation in order 
+         *  to choose the optimal root reducing height of the tree decomposition.
          */
         baseAlgorithm->addManipulationOperation(operation);
 
         /**
-         *  Create a new instance of htd::IterativeImprovementTreeDecompositionAlgorithm based on the base algorithm and the fitness function.
-         *
-         *  Note that the fitness function can be an arbiraty one and can differ from the one used in the optimization operation.
+         *  Create a new instance of htd::IterativeImprovementTreeDecompositionAlgorithm based 
+         *  on the base algorithm and the fitness function. Note that the fitness function can 
+         *  be an arbiraty one and can differ from the one used in the optimization operation.
          */
         htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(baseAlgorithm, fitnessFunction);
 
@@ -218,16 +229,17 @@ int main(int argc, const char * const * const argv)
         algorithm.setManagementInstance(libraryInstance);
 
         /**
-         *  Set the maximum number of iterations after which the best decomposition with respect to the fitness function shall be returned.
-         *
-         *  Use value 1 to make the iterative algorithm return the first decomposition found.
+         *  Set the maximum number of iterations after which the best decomposition with 
+         *  respect to the fitness function shall be returned. Use value 1 to make the 
+         *  iterative algorithm return the first decomposition found.
          */
         algorithm.setIterationCount(10);
 
         /**
-         *  Set the maximum number of iterations without improvement after which the algorithm returns best decomposition with respect to
-         *  the fitness function found so far. A limit of 0 aborts the algorithm after the first non-improving solution has been found,
-         *  i.e. the algorithm will perform a simple hill-climbing approach.
+         *  Set the maximum number of iterations without improvement after which the algorithm returns 
+         *  best decomposition with respect to the fitness function found so far. A limit of 0 aborts 
+         *  the algorithm after the first non-improving solution has been found, i.e. the algorithm 
+         *  will perform a simple hill-climbing approach.
          */
         algorithm.setNonImprovementLimit(3);
 
@@ -235,12 +247,15 @@ int main(int argc, const char * const * const argv)
         std::size_t optimalBagSize = (std::size_t)-1;
 
         /**
-         *  Compute the decomposition. Note that the additional, optional parameter for computeDecomposition() in case
-         *  of htd::IterativeImprovementTreeDecompositionAlgorithm can be used to intercept every new decomposition.
-         *  In this case we output some intermediate information upon perceiving a new best width.
+         *  Compute the decomposition. Note that the additional, optional parameter of the function 
+         *  computeDecomposition() in case of htd::IterativeImprovementTreeDecompositionAlgorithm 
+         *  can be used to intercept every new decomposition. In this case we output some 
+         *  intermediate information upon perceiving an improved decompostion.
          */
         htd::ITreeDecomposition * decomposition =
-            algorithm.computeDecomposition(*graph, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
+            algorithm.computeDecomposition(*graph, [&](const htd::IMultiHypergraph & graph, 
+                                                       const htd::ITreeDecomposition & decomposition, 
+                                                       const htd::FitnessEvaluation & fitness)
         {
             // Disable warnings concerning unused variables.
             HTD_UNUSED(graph)
@@ -248,7 +263,10 @@ int main(int argc, const char * const * const argv)
 
             std::size_t bagSize = -fitness.at(0);
 
-            // After each improvement we print the current optimal width + 1 and the time when the decomposition was found.
+            /**
+             *  After each improvement we print the current optimal 
+             *  width + 1 and the time when the decomposition was found.
+             */
             if (bagSize < optimalBagSize)
             {
                 optimalBagSize = bagSize;

@@ -64,6 +64,9 @@ if (UNIX)
 
     configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_mindegree_iterative_256_64.sh"
                    "${CMAKE_BINARY_DIR}/bin/htd_gr2td_mindegree_iterative_256_64.sh" COPYONLY)
+
+    configure_file("${CMAKE_SOURCE_DIR}/scripts/pace16_build_test.sh"
+                   "${CMAKE_BINARY_DIR}/bin/pace16_build_test.sh" COPYONLY)
 endif(UNIX)
 
 target_link_libraries(htd_main htd htd_cli)

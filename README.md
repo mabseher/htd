@@ -38,14 +38,14 @@ Options are organized in the following groups:
       * `.) hypertree : Compute a hypertree decomposition of the input graph.`
 
   * Input-Specific Options:
-    * `--input <format> :              Assume that the input graph is given in format <format>.` (See [FORMATS](https://github.com/mabseher/htd/FORMATS.md) for information about the available input formats.)
+    * `--input <format> :              Assume that the input graph is given in format <format>.` (See [FORMATS](https://github.com/mabseher/htd/blob/master/FORMATS.md) for information about the available input formats.)
       * `Permitted Values:`
         * `.) gr  : Use the input format 'gr'. (default)`
         * `.) lp  : Use the input format 'lp'.`
         * `.) hgr : Use the input format 'hgr'.`
 
 * Output-Specific Options:
-  * `--output <format> :               Set the output format of the decomposition to <format>.` (See [FORMATS](https://github.com/mabseher/htd/FORMATS.md) for information about the available output formats.)
+  * `--output <format> :               Set the output format of the decomposition to <format>.` (See [FORMATS](https://github.com/mabseher/htd/blob/master/FORMATS.md) for information about the available output formats.)
     * `Permitted Values:`
       * `.) td    : Use the output format 'td'. (default)`
       * `.) human : Provide a human-readable output of the decomposition.`

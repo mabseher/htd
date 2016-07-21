@@ -48,7 +48,7 @@ htd_cli::OptionManager * createOptionManager(void)
 
     manager->registerOption(decompositionTypeChoice, "Decomposition Options");
 
-    htd_cli::Choice * inputFormatChoice = new htd_cli::Choice("input", "Assume that the input graph is given in format <format>.\n  (See https://github.com/mabseher/htd/FORMATS.md for information about the available input formats.)", "format");
+    htd_cli::Choice * inputFormatChoice = new htd_cli::Choice("input", "Assume that the input graph is given in format <format>.\n  (See https://github.com/mabseher/htd/blob/master/FORMATS.md for information about the available input formats.)", "format");
 
     inputFormatChoice->addPossibility("gr", "Use the input format 'gr'.");
     //inputFormatChoice->addPossibility("hg", "Use the input format 'hg'.");
@@ -59,7 +59,7 @@ htd_cli::OptionManager * createOptionManager(void)
 
     manager->registerOption(inputFormatChoice, "Input-Specific Options");
 
-    htd_cli::Choice * outputFormatChoice = new htd_cli::Choice("output", "Set the output format of the decomposition to <format>.\n  (See https://github.com/mabseher/htd/FORMATS.md for information about the available output formats.)", "format");
+    htd_cli::Choice * outputFormatChoice = new htd_cli::Choice("output", "Set the output format of the decomposition to <format>.\n  (See https://github.com/mabseher/htd/blob/master/FORMATS.md for information about the available output formats.)", "format");
 
     outputFormatChoice->addPossibility("td", "Use the output format 'td'.");
     //outputFormatChoice->addPossibility("graphml", "Use the output format 'graphml'.");

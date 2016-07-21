@@ -35,7 +35,7 @@ htd_cli::OptionManager * createOptionManager(void)
 
     manager->registerOption(helpOption);
 
-    htd_cli::SingleValueOption * seedOption = new htd_cli::SingleValueOption("seed", "Set the seed for the random number generator to <seed>", "seed", 's');
+    htd_cli::SingleValueOption * seedOption = new htd_cli::SingleValueOption("seed", "Set the seed for the random number generator to <seed>.", "seed", 's');
 
     manager->registerOption(seedOption);
 

@@ -300,6 +300,8 @@ void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHyp
 
     htd::PostOrderTreeTraversal traversal;
 
+    std::vector<htd::vertex_t> forgottenVertices;
+
     traversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t depth)
     {
         HTD_UNUSED(depth)
@@ -319,9 +321,11 @@ void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHyp
 
         if (parent != htd::Vertex::UNKNOWN)
         {
-            std::vector<htd::vertex_t> forgottenVertices;
+            std::size_t forgottenVertexCount = forgottenVertices.size();
 
             decomposition.copyForgottenVerticesTo(forgottenVertices, parent, vertex);
+
+            std::inplace_merge(forgottenVertices.begin(), forgottenVertices.begin() + forgottenVertexCount, forgottenVertices.end());
 
             if (forgottenVertices.size() > 0)
             {
@@ -329,7 +333,7 @@ void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHyp
 
                 for (std::vector<htd::id_t> & container : relevantContainers)
                 {
-                    if (!htd::has_non_empty_set_intersection(container.begin(), container.end(), forgottenVertices.begin(), forgottenVertices.end()))
+                    if (!std::includes(forgottenVertices.begin(), forgottenVertices.end(), container.begin(), container.end()))
                     {
                         newRelevantContainers.push_back(std::move(container));
                         newRelevantHyperedges.push_back(std::move(relevantHyperedges.at(index)));

@@ -300,9 +300,6 @@ namespace htd
              *  @param[in] signal   The signal which was received.
              */
             void handleSignal(int signal);
-
-            //TODO Remove!
-            void debug(void) const;
     };
 }
 

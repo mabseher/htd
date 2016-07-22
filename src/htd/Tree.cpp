@@ -1357,41 +1357,4 @@ void htd::Tree::handleSignal(int signal)
     }
 }
 
-void htd::Tree::debug(void) const
-{
-    /*
-    std::cout << "DEBUG:" << std::endl;
-
-    for (htd::vertex_t vertex : vertices_)
-    {
-        Node & node = *(nodes_.at(vertex));
-
-        htd::id_t lastId = htd::Id::UNKNOWN;
-
-        std::cout << "NODE: " << vertex << std::endl;
-        for (htd::id_t edgeId : node.edges)
-        {
-            const htd::Hyperedge & hyperedge = *(htd::hyperedgePosition(edges_->begin(), edges_->end(), edgeId));
-
-            std::cout << "   " << edgeId << "   ID: " << hyperedge.id() << "   " << hyperedge.elements() << std::endl;
-
-            if (!hyperedge.contains(vertex))
-            {
-                throw std::logic_error("ERROR!!! INVALID");
-            }
-
-            if (edgeId == lastId)
-            {
-                throw std::logic_error("ERROR!!! DUPLICATE");
-            }
-
-            lastId = edgeId;
-        }
-        std::cout << std::endl;
-    }
-
-    std::cout << std::endl;
-    */
-}
-
 #endif /* HTD_HTD_TREE_CPP */

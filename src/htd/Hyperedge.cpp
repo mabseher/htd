@@ -43,28 +43,28 @@ class htd::Hyperedge::IElementInformation
          *  @param[in] vertex1  The first endpoint of the updated hyperedge.
          *  @param[in] vertex2  The second endpoint of the updated hyperedge.
          */
-        virtual void setElements(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
+        virtual void setElements(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT = 0;
 
         /**
          *  Set the endpoints of the hyperedge.
          *
          *  @param[in] elements The new endpoints of the updated hyperedge.
          */
-        virtual void setElements(const std::vector<htd::vertex_t> & elements) = 0;
+        virtual void setElements(const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT = 0;
 
         /**
          *  Set the endpoints of the hyperedge.
          *
          *  @param[in] elements The new endpoints of the updated hyperedge.
          */
-        virtual void setElements(std::vector<htd::vertex_t> && elements) = 0;
+        virtual void setElements(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT = 0;
 
         /**
          *  Set the endpoints of the hyperedge.
          *
          *  @param[in] elements The new endpoints of the updated hyperedge.
          */
-        virtual void setElements(const htd::ConstCollection<htd::vertex_t> & elements) = 0;
+        virtual void setElements(const htd::ConstCollection<htd::vertex_t> & elements) HTD_NOEXCEPT = 0;
 
         /**
          *  Getter for the elements of the hyperedge.
@@ -359,7 +359,7 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
         }
 
-        void setElements(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE
+        void setElements(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT HTD_OVERRIDE
         {
             elements_.clear();
 
@@ -388,7 +388,7 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
         }
 
-        void setElements(const std::vector<htd::vertex_t> & elements) HTD_OVERRIDE
+        void setElements(const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT HTD_OVERRIDE
         {
             elements_.reserve(elements.size());
 
@@ -443,7 +443,7 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
         }
 
-        void setElements(std::vector<htd::vertex_t> && elements) HTD_OVERRIDE
+        void setElements(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT HTD_OVERRIDE
         {
             elements_.swap(elements);
 
@@ -498,7 +498,7 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
         }
 
-        void setElements(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE
+        void setElements(const htd::ConstCollection<htd::vertex_t> & elements) HTD_NOEXCEPT HTD_OVERRIDE
         {
             setElements(std::vector<htd::vertex_t>(elements.begin(), elements.end()));
         }
@@ -625,7 +625,7 @@ class SortedElementInformation : public htd::Hyperedge::IElementInformation
             elements_.shrink_to_fit();
         }
 
-        void setElements(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE
+        void setElements(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT HTD_OVERRIDE
         {
             elements_.clear();
 
@@ -633,21 +633,21 @@ class SortedElementInformation : public htd::Hyperedge::IElementInformation
             elements_.emplace_back(vertex2);
         }
 
-        void setElements(const std::vector<htd::vertex_t> & elements) HTD_OVERRIDE
+        void setElements(const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT HTD_OVERRIDE
         {
             elements_.reserve(elements.size());
 
             elements_ = elements;
         }
 
-        void setElements(std::vector<htd::vertex_t> && elements) HTD_OVERRIDE
+        void setElements(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT HTD_OVERRIDE
         {
             elements_.swap(elements);
 
             elements_.shrink_to_fit();
         }
 
-        void setElements(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE
+        void setElements(const htd::ConstCollection<htd::vertex_t> & elements) HTD_NOEXCEPT HTD_OVERRIDE
         {
             setElements(std::vector<htd::vertex_t>(elements.begin(), elements.end()));
         }
@@ -787,7 +787,7 @@ void htd::Hyperedge::setId(htd::id_t newId) HTD_NOEXCEPT
     id_ = newId;
 }
 
-void htd::Hyperedge::setElements(htd::vertex_t vertex1, htd::vertex_t vertex2)
+void htd::Hyperedge::setElements(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT
 {
     if (content_->isSortedElementInformation())
     {
@@ -813,7 +813,7 @@ void htd::Hyperedge::setElements(htd::vertex_t vertex1, htd::vertex_t vertex2)
     }
 }
 
-void htd::Hyperedge::setElements(const std::vector<htd::vertex_t> & elements)
+void htd::Hyperedge::setElements(const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT
 {
     bool sorted = std::is_sorted(elements.begin(), elements.end(), std::less_equal<htd::vertex_t>());
 
@@ -841,7 +841,7 @@ void htd::Hyperedge::setElements(const std::vector<htd::vertex_t> & elements)
     }
 }
 
-void htd::Hyperedge::setElements(std::vector<htd::vertex_t> && elements)
+void htd::Hyperedge::setElements(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT
 {
     bool sorted = std::is_sorted(elements.begin(), elements.end(), std::less_equal<htd::vertex_t>());
 
@@ -869,7 +869,7 @@ void htd::Hyperedge::setElements(std::vector<htd::vertex_t> && elements)
     }
 }
 
-void htd::Hyperedge::setElements(const htd::ConstCollection<htd::vertex_t> & elements)
+void htd::Hyperedge::setElements(const htd::ConstCollection<htd::vertex_t> & elements) HTD_NOEXCEPT
 {
     setElements(std::vector<htd::vertex_t>(elements.begin(), elements.end()));
 }

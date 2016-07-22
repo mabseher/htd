@@ -41,7 +41,7 @@ htd::DirectedMultiGraph::DirectedMultiGraph(void) : base_(htd::MultiHypergraphFa
 
 }
 
-htd::DirectedMultiGraph::DirectedMultiGraph(std::size_t initialSize) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph(initialSize)), incomingNeighborhood_(), outgoingNeighborhood_()
+htd::DirectedMultiGraph::DirectedMultiGraph(std::size_t initialSize) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph(initialSize)), incomingNeighborhood_(initialSize + 1), outgoingNeighborhood_(initialSize + 1)
 {
 
 }

@@ -611,27 +611,36 @@ void handleSignal(int signal)
     }
 }
 
+/**
+ *  Implementation of the htd::ITreeDecompositionFitnessFunction interface which prefers decompositions of minimal width.
+ */
 class WidthMinimizingFitnessFunction : public htd::ITreeDecompositionFitnessFunction
 {
     public:
+        /**
+         *  Constructor of class WidthMinimizingFitnessFunction.
+         */
         WidthMinimizingFitnessFunction(void)
         {
 
         }
 
+        /**
+         *  Destructor of class WidthMinimizingFitnessFunction.
+         */
         ~WidthMinimizingFitnessFunction()
         {
 
         }
 
-        htd::FitnessEvaluation * fitness(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const
+        htd::FitnessEvaluation * fitness(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE
         {
             HTD_UNUSED(graph)
 
             return new htd::FitnessEvaluation(1, -(double)(decomposition.maximumBagSize()));
         }
 
-        WidthMinimizingFitnessFunction * clone(void) const
+        WidthMinimizingFitnessFunction * clone(void) const HTD_OVERRIDE
         {
             return new WidthMinimizingFitnessFunction();
         }

@@ -119,28 +119,28 @@ namespace htd
              *  @param[in] vertex1  The first endpoint of the updated hyperedge.
              *  @param[in] vertex2  The second endpoint of the updated hyperedge.
              */
-            void setElements(htd::vertex_t vertex1, htd::vertex_t vertex2);
+            void setElements(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT;
 
             /**
              *  Set the endpoints of the hyperedge.
              *
              *  @param[in] elements The new endpoints of the updated hyperedge.
              */
-            void setElements(const std::vector<htd::vertex_t> & elements);
+            void setElements(const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT;
 
             /**
              *  Set the endpoints of the hyperedge.
              *
              *  @param[in] elements The new endpoints of the updated hyperedge.
              */
-            void setElements(std::vector<htd::vertex_t> && elements);
+            void setElements(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT;
 
             /**
              *  Set the endpoints of the hyperedge.
              *
              *  @param[in] elements The new endpoints of the updated hyperedge.
              */
-            void setElements(const htd::ConstCollection<htd::vertex_t> & elements);
+            void setElements(const htd::ConstCollection<htd::vertex_t> & elements) HTD_NOEXCEPT;
 
             /**
              *  Getter for the elements of the hyperedge.

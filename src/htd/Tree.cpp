@@ -397,26 +397,14 @@ htd::ConstCollection<htd::Hyperedge> htd::Tree::hyperedges(htd::vertex_t vertex)
 
 const htd::Hyperedge & htd::Tree::hyperedge(htd::id_t edgeId) const
 {
-    bool found = false;
+    auto it = htd::hyperedgePointerPosition(edges_->begin(), edges_->end(), edgeId);
 
-    auto position = edges_->begin();
-
-    for (auto it = edges_->begin(); !found && it != edges_->end(); ++it)
-    {
-        if ((*it)->id() == edgeId)
-        {
-            position = it;
-
-            found = true;
-        }
-    }
-
-    if (!found)
+    if (it == edges_->end())
     {
         throw std::logic_error("const htd::Hyperedge & htd::Tree::hyperedge(htd::id_t) const");
     }
 
-    return **position;
+    return **it;
 }
 
 const htd::Hyperedge & htd::Tree::hyperedgeAtPosition(htd::index_t index) const

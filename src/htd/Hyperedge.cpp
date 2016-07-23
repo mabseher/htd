@@ -161,6 +161,8 @@ inline htd::Hyperedge::IElementInformation::~IElementInformation() { }
 
 /**
  *  Internal class for storing the element information of a hyperedge.
+ *
+ *  This internal class is only used when the elements are not sorted in ascending order.
  */
 class ElementInformation : public htd::Hyperedge::IElementInformation
 {
@@ -171,15 +173,13 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
          *  @param[in] vertex1  The first endpoint of the constructed hyperedge.
          *  @param[in] vertex2  The second endpoint of the constructed hyperedge.
          */
-        ElementInformation(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT : elements_(std::initializer_list<htd::vertex_t> { vertex1, vertex2 }), sortedElements_(std::initializer_list<htd::vertex_t> { vertex1, vertex2 })
+        ElementInformation(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT : elements_(std::initializer_list<htd::vertex_t> { vertex1, vertex2 }), sortedElements_()
         {
+            sortedElements_.emplace_back(vertex2);
+
             if (vertex1 > vertex2)
             {
-                std::swap(sortedElements_[0], sortedElements_[1]);
-            }
-            else if (vertex1 == vertex2)
-            {
-                sortedElements_.pop_back();
+                sortedElements_.emplace_back(vertex1);
             }
         }
 
@@ -194,50 +194,28 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
             sortedElements_.reserve(elements_.size());
 
-            switch (elements_.size())
+            if (elements_.size() == 2)
             {
-                case 0:
+                htd::vertex_t vertex1 = elements_.at(0);
+                htd::vertex_t vertex2 = elements_.at(1);
+
+                if (vertex1 > vertex2)
                 {
-                    break;
+                    sortedElements_.emplace_back(vertex2);
+                    sortedElements_.emplace_back(vertex1);
                 }
-                case 1:
+                else
                 {
-                    sortedElements_.emplace_back(elements_.at(0));
-
-                    break;
+                    sortedElements_.emplace_back(vertex1);
                 }
-                case 2:
-                {
-                    htd::vertex_t vertex1 = elements_.at(0);
-                    htd::vertex_t vertex2 = elements_.at(1);
+            }
+            else
+            {
+                std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
 
-                    if (vertex1 < vertex2)
-                    {
-                        sortedElements_.emplace_back(vertex1);
-                        sortedElements_.emplace_back(vertex2);
-                    }
-                    else if (vertex1 > vertex2)
-                    {
-                        sortedElements_.emplace_back(vertex2);
-                        sortedElements_.emplace_back(vertex1);
-                    }
-                    else
-                    {
-                        sortedElements_.emplace_back(vertex1);
-                    }
+                std::sort(sortedElements_.begin(), sortedElements_.end());
 
-                    break;
-                }
-                default:
-                {
-                    std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
-
-                    std::sort(sortedElements_.begin(), sortedElements_.end());
-
-                    sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
-
-                    break;
-                }
+                sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
             }
         }
 
@@ -254,50 +232,28 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
             sortedElements_.reserve(elements_.size());
 
-            switch (elements_.size())
+            if (elements_.size() == 2)
             {
-                case 0:
+                htd::vertex_t vertex1 = elements_.at(0);
+                htd::vertex_t vertex2 = elements_.at(1);
+
+                if (vertex1 > vertex2)
                 {
-                    break;
+                    sortedElements_.emplace_back(vertex2);
+                    sortedElements_.emplace_back(vertex1);
                 }
-                case 1:
+                else
                 {
-                    sortedElements_.emplace_back(elements_.at(0));
-
-                    break;
+                    sortedElements_.emplace_back(vertex1);
                 }
-                case 2:
-                {
-                    htd::vertex_t vertex1 = elements_.at(0);
-                    htd::vertex_t vertex2 = elements_.at(1);
+            }
+            else
+            {
+                std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
 
-                    if (vertex1 < vertex2)
-                    {
-                        sortedElements_.emplace_back(vertex1);
-                        sortedElements_.emplace_back(vertex2);
-                    }
-                    else if (vertex1 > vertex2)
-                    {
-                        sortedElements_.emplace_back(vertex2);
-                        sortedElements_.emplace_back(vertex1);
-                    }
-                    else
-                    {
-                        sortedElements_.emplace_back(vertex1);
-                    }
+                std::sort(sortedElements_.begin(), sortedElements_.end());
 
-                    break;
-                }
-                default:
-                {
-                    std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
-
-                    std::sort(sortedElements_.begin(), sortedElements_.end());
-
-                    sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
-
-                    break;
-                }
+                sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
             }
         }
 
@@ -312,50 +268,28 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
             sortedElements_.reserve(elements_.size());
 
-            switch (elements.size())
+            if (elements.size() == 2)
             {
-                case 0:
+                htd::vertex_t vertex1 = elements_.at(0);
+                htd::vertex_t vertex2 = elements_.at(1);
+
+                if (vertex1 > vertex2)
                 {
-                    break;
+                    sortedElements_.emplace_back(vertex2);
+                    sortedElements_.emplace_back(vertex1);
                 }
-                case 1:
+                else
                 {
-                    sortedElements_.emplace_back(elements_.at(0));
-
-                    break;
+                    sortedElements_.emplace_back(vertex1);
                 }
-                case 2:
-                {
-                    htd::vertex_t vertex1 = elements_.at(0);
-                    htd::vertex_t vertex2 = elements_.at(1);
+            }
+            else
+            {
+                std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
 
-                    if (vertex1 < vertex2)
-                    {
-                        sortedElements_.emplace_back(vertex1);
-                        sortedElements_.emplace_back(vertex2);
-                    }
-                    else if (vertex1 > vertex2)
-                    {
-                        sortedElements_.emplace_back(vertex2);
-                        sortedElements_.emplace_back(vertex1);
-                    }
-                    else
-                    {
-                        sortedElements_.emplace_back(vertex1);
-                    }
+                std::sort(sortedElements_.begin(), sortedElements_.end());
 
-                    break;
-                }
-                default:
-                {
-                    std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
-
-                    std::sort(sortedElements_.begin(), sortedElements_.end());
-
-                    sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
-
-                    break;
-                }
+                sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
             }
         }
 
@@ -368,21 +302,9 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
             sortedElements_.clear();
 
-            if (vertex1 < vertex2)
-            {
-                sortedElements_.reserve(2);
+            sortedElements_.emplace_back(vertex2);
 
-                sortedElements_.emplace_back(vertex1);
-                sortedElements_.emplace_back(vertex2);
-            }
-            else if (vertex1 > vertex2)
-            {
-                sortedElements_.reserve(2);
-
-                sortedElements_.emplace_back(vertex2);
-                sortedElements_.emplace_back(vertex1);
-            }
-            else
+            if (vertex1 > vertex2)
             {
                 sortedElements_.emplace_back(vertex1);
             }
@@ -396,50 +318,28 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
             sortedElements_.reserve(elements_.size());
 
-            switch (elements_.size())
+            if (elements_.size() == 2)
             {
-                case 0:
+                htd::vertex_t vertex1 = elements_.at(0);
+                htd::vertex_t vertex2 = elements_.at(1);
+
+                if (vertex1 > vertex2)
                 {
-                    break;
+                    sortedElements_.emplace_back(vertex2);
+                    sortedElements_.emplace_back(vertex1);
                 }
-                case 1:
+                else
                 {
-                    sortedElements_.emplace_back(elements_.at(0));
-
-                    break;
+                    sortedElements_.emplace_back(vertex1);
                 }
-                case 2:
-                {
-                    htd::vertex_t vertex1 = elements_.at(0);
-                    htd::vertex_t vertex2 = elements_.at(1);
+            }
+            else
+            {
+                std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
 
-                    if (vertex1 < vertex2)
-                    {
-                        sortedElements_.emplace_back(vertex1);
-                        sortedElements_.emplace_back(vertex2);
-                    }
-                    else if (vertex1 > vertex2)
-                    {
-                        sortedElements_.emplace_back(vertex2);
-                        sortedElements_.emplace_back(vertex1);
-                    }
-                    else
-                    {
-                        sortedElements_.emplace_back(vertex1);
-                    }
+                std::sort(sortedElements_.begin(), sortedElements_.end());
 
-                    break;
-                }
-                default:
-                {
-                    std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
-
-                    std::sort(sortedElements_.begin(), sortedElements_.end());
-
-                    sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
-
-                    break;
-                }
+                sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
             }
         }
 
@@ -451,50 +351,28 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
             sortedElements_.reserve(elements_.size());
 
-            switch (elements_.size())
+            if (elements_.size() == 2)
             {
-                case 0:
+                htd::vertex_t vertex1 = elements_.at(0);
+                htd::vertex_t vertex2 = elements_.at(1);
+
+                if (vertex1 > vertex2)
                 {
-                    break;
+                    sortedElements_.emplace_back(vertex2);
+                    sortedElements_.emplace_back(vertex1);
                 }
-                case 1:
+                else
                 {
-                    sortedElements_.emplace_back(elements_.at(0));
-
-                    break;
+                    sortedElements_.emplace_back(vertex1);
                 }
-                case 2:
-                {
-                    htd::vertex_t vertex1 = elements_.at(0);
-                    htd::vertex_t vertex2 = elements_.at(1);
+            }
+            else
+            {
+                std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
 
-                    if (vertex1 < vertex2)
-                    {
-                        sortedElements_.emplace_back(vertex1);
-                        sortedElements_.emplace_back(vertex2);
-                    }
-                    else if (vertex1 > vertex2)
-                    {
-                        sortedElements_.emplace_back(vertex2);
-                        sortedElements_.emplace_back(vertex1);
-                    }
-                    else
-                    {
-                        sortedElements_.emplace_back(vertex1);
-                    }
+                std::sort(sortedElements_.begin(), sortedElements_.end());
 
-                    break;
-                }
-                default:
-                {
-                    std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
-
-                    std::sort(sortedElements_.begin(), sortedElements_.end());
-
-                    sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
-
-                    break;
-                }
+                sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
             }
         }
 

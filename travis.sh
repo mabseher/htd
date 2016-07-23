@@ -19,8 +19,9 @@ cmake -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
 
 make VERBOSE=1
 
-#if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
-#    lcov --directory .. --zerocounters
-#fi
+if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
+    lcov --directory .. --base-directory ../.. --zerocounters
+    lcov --directory .. --base-directory ../.. --capture --initial --output-file coverage.info
+fi
 
 make test

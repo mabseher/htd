@@ -595,7 +595,7 @@ htd::vertex_t htd::Tree::nextVertex(void) const
     return next_vertex_;
 }
 
-htd::id_t htd::Tree::nextEdge(void) const
+htd::id_t htd::Tree::nextEdgeId(void) const
 {
     return next_edge_;
 }
@@ -1194,7 +1194,11 @@ void htd::Tree::swapWithParent(htd::vertex_t vertex)
     }
     else
     {
-        Node & grandParentNode = *(nodes_.at(node.parent));
+        htd::vertex_t grandParent = node.parent;
+
+        Node & grandParentNode = *(nodes_.at(grandParent));
+
+        updateEdgesAfterSwapWithParent(node, parentNode, grandParentNode);
 
         grandParentNode.children.erase(std::lower_bound(grandParentNode.children.begin(), grandParentNode.children.end(), parent));
 
@@ -1203,18 +1207,45 @@ void htd::Tree::swapWithParent(htd::vertex_t vertex)
 
     for (htd::vertex_t child : node.children)
     {
-        nodes_.at(child)->parent = vertex;
+        htd::vertex_t & parentReference = nodes_.at(child)->parent;
+
+        if (parentReference != vertex)
+        {
+            Node & childNode = *(nodes_.at(child));
+
+            htd::vertex_t & parentReference = childNode.parent;
+
+            if (parentReference != vertex)
+            {
+                Node & oldParentNode = *(nodes_.at(parentReference));
+
+                updateEdgesAfterSwapWithParent(childNode, oldParentNode, parentNode);
+
+                parentReference = vertex;
+            }
+        }
     }
 
     for (htd::vertex_t child : parentNode.children)
     {
-        nodes_.at(child)->parent = parent;
+        Node & childNode = *(nodes_.at(child));
+
+        htd::vertex_t & parentReference = childNode.parent;
+
+        if (parentReference != parent)
+        {
+            Node & oldParentNode = *(nodes_.at(parentReference));
+
+            updateEdgesAfterSwapWithParent(parentNode, oldParentNode, childNode);
+
+            parentReference = parent;
+        }
     }
 }
 
 htd::Tree * htd::Tree::clone(void) const
 {
-    return new Tree(*this);
+    return new htd::Tree(*this);
 }
 
 htd::Tree & htd::Tree::operator=(const htd::Tree & original)
@@ -1355,6 +1386,50 @@ void htd::Tree::handleSignal(int signal)
     {
         removeSubtree(root_);
     }
+}
+
+void htd::Tree::updateEdgesAfterSwapWithParent(htd::Tree::Node & node, htd::Tree::Node & parentNode, htd::Tree::Node & grandParentNode)
+{
+    htd::vertex_t vertex = node.id;
+    htd::vertex_t parent = parentNode.id;
+    htd::vertex_t grandParent = grandParentNode.id;
+
+    auto relevantEdgePosition = edges_->end();
+
+    for (auto it = grandParentNode.edges.begin(); it != grandParentNode.edges.end() && relevantEdgePosition == edges_->end(); ++it)
+    {
+        auto edgePosition = htd::hyperedgePointerPosition(edges_->begin(), edges_->end(), *it);
+
+        if ((*edgePosition)->contains(parent))
+        {
+            relevantEdgePosition = edgePosition;
+        }
+    }
+
+    htd::id_t oldEdgeId = (*relevantEdgePosition)->id();
+
+    parentNode.edges.erase(std::lower_bound(parentNode.edges.begin(), parentNode.edges.end(), oldEdgeId));
+
+    grandParentNode.edges.erase(std::lower_bound(grandParentNode.edges.begin(), grandParentNode.edges.end(), oldEdgeId));
+
+    node.edges.emplace_back(next_edge_);
+
+    grandParentNode.edges.emplace_back(next_edge_);
+
+    (*relevantEdgePosition)->setId(next_edge_);
+
+    if (vertex < grandParent)
+    {
+        (*relevantEdgePosition)->setElements(vertex, grandParent);
+    }
+    else
+    {
+        (*relevantEdgePosition)->setElements(grandParent, vertex);
+    }
+
+    ++next_edge_;
+
+    std::rotate(relevantEdgePosition, relevantEdgePosition + 1, edges_->end());
 }
 
 #endif /* HTD_HTD_TREE_CPP */

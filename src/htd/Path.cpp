@@ -704,7 +704,7 @@ htd::vertex_t htd::Path::nextVertex(void) const
     return next_vertex_;
 }
 
-htd::id_t htd::Path::nextEdge(void) const
+htd::id_t htd::Path::nextEdgeId(void) const
 {
     return next_edge_;
 }

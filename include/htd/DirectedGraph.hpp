@@ -148,7 +148,7 @@ namespace htd
 
             htd::vertex_t nextVertex(void) const HTD_OVERRIDE;
 
-            htd::id_t nextEdge(void) const HTD_OVERRIDE;
+            htd::id_t nextEdgeId(void) const HTD_OVERRIDE;
 
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
 

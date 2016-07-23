@@ -231,9 +231,9 @@ htd::vertex_t htd::Graph::nextVertex(void) const
     return base_->nextVertex();
 }
 
-htd::id_t htd::Graph::nextEdge(void) const
+htd::id_t htd::Graph::nextEdgeId(void) const
 {
-    return base_->nextEdge();
+    return base_->nextEdgeId();
 }
 
 htd::vertex_t htd::Graph::addVertex(void)

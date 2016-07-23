@@ -166,7 +166,7 @@ namespace htd
 
             htd::vertex_t nextVertex(void) const HTD_OVERRIDE;
 
-            htd::id_t nextEdge(void) const HTD_OVERRIDE;
+            htd::id_t nextEdgeId(void) const HTD_OVERRIDE;
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 

@@ -550,7 +550,7 @@ htd::vertex_t htd::MultiHypergraph::nextVertex(void) const
     return next_vertex_;
 }
 
-htd::id_t htd::MultiHypergraph::nextEdge(void) const
+htd::id_t htd::MultiHypergraph::nextEdgeId(void) const
 {
     return next_edge_;
 }

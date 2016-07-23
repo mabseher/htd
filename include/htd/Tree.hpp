@@ -163,7 +163,7 @@ namespace htd
 
             htd::vertex_t nextVertex(void) const HTD_OVERRIDE;
 
-            htd::id_t nextEdge(void) const HTD_OVERRIDE;
+            htd::id_t nextEdgeId(void) const HTD_OVERRIDE;
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 
@@ -300,6 +300,15 @@ namespace htd
              *  @param[in] signal   The signal which was received.
              */
             void handleSignal(int signal);
+
+            /**
+             *  Updates the edge information for the nodes affected by a call to swapWithParent(htd::vertex_t).
+             *
+             *  @param[in] node             The node for which swapWithParent(htd::vertex_t) was called.
+             *  @param[in] parentNode       The parent node of the swapped node.
+             *  @param[in] grandParentNode  The grandparent node of the swapped node.
+             */
+            void updateEdgesAfterSwapWithParent(htd::Tree::Node & node, htd::Tree::Node & parentNode, htd::Tree::Node & grandParentNode);
     };
 }
 

@@ -70,6 +70,10 @@ TEST(TreeTest, CheckEmptyTree)
     ASSERT_EQ((std::size_t)0, tree.leafCount());
 
     ASSERT_EQ((std::size_t)0, tree.isolatedVertexCount());
+
+    ASSERT_EQ(htd::Vertex::FIRST, tree.nextVertex());
+
+    ASSERT_EQ(htd::Id::FIRST, tree.nextEdgeId());
 }
 
 TEST(TreeTest, CheckSize1Tree)
@@ -116,6 +120,14 @@ TEST(TreeTest, CheckSize1Tree)
     ASSERT_EQ(root, tree.isolatedVertices()[0]);
     ASSERT_EQ(root, tree.isolatedVertexAtPosition(0));
     ASSERT_TRUE(tree.isIsolatedVertex(root));
+
+    ASSERT_EQ(htd::Vertex::FIRST + 1, tree.nextVertex());
+
+    ASSERT_EQ(htd::Id::FIRST, tree.nextEdgeId());
+
+    ASSERT_EQ((std::size_t)0, tree.height());
+    ASSERT_EQ((std::size_t)0, tree.height(1));
+    ASSERT_EQ((std::size_t)0, tree.depth(1));
 }
 
 TEST(TreeTest, CheckSize3Tree)
@@ -342,6 +354,18 @@ TEST(TreeTest, CheckSize3Tree)
 
     ASSERT_EQ(root, (*position)[0]);
     ASSERT_EQ(newRoot, (*position)[1]);
+
+    ASSERT_EQ(htd::Vertex::FIRST + 3, tree.nextVertex());
+
+    ASSERT_EQ(htd::Id::FIRST + 2, tree.nextEdgeId());
+
+    ASSERT_EQ((std::size_t)2, tree.height());
+    ASSERT_EQ((std::size_t)2, tree.height(newRoot));
+    ASSERT_EQ((std::size_t)1, tree.height(root));
+    ASSERT_EQ((std::size_t)0, tree.height(child));
+    ASSERT_EQ((std::size_t)0, tree.depth(newRoot));
+    ASSERT_EQ((std::size_t)1, tree.depth(root));
+    ASSERT_EQ((std::size_t)2, tree.depth(child));
 }
 
 TEST(TreeTest, CheckTreeManipulations1)
@@ -517,6 +541,65 @@ TEST(TreeTest, CheckTreeManipulations2)
     tree.removeVertex(node2);
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
+}
+
+TEST(TreeTest, CheckTreeManipulations3)
+{
+    htd::Tree tree;
+
+    htd::vertex_t root = tree.insertRoot();
+
+    htd::vertex_t child = tree.addChild(root);
+
+    htd::vertex_t intermediateNode = tree.addParent(child);
+
+    ASSERT_EQ(htd::Vertex::FIRST + 3, tree.nextVertex());
+
+    ASSERT_EQ(htd::Id::FIRST + 3, tree.nextEdgeId());
+
+    ASSERT_EQ((std::size_t)2, tree.height());
+    ASSERT_EQ((std::size_t)2, tree.height(root));
+    ASSERT_EQ((std::size_t)1, tree.height(intermediateNode));
+    ASSERT_EQ((std::size_t)0, tree.height(child));
+    ASSERT_EQ((std::size_t)0, tree.depth(root));
+    ASSERT_EQ((std::size_t)1, tree.depth(intermediateNode));
+    ASSERT_EQ((std::size_t)2, tree.depth(child));
+
+    tree.swapWithParent(child);
+
+    ASSERT_EQ(htd::Vertex::FIRST + 3, tree.nextVertex());
+
+    ASSERT_EQ(htd::Id::FIRST + 4, tree.nextEdgeId());
+
+    ASSERT_EQ((std::size_t)2, tree.height());
+    ASSERT_EQ((std::size_t)2, tree.height(root));
+    ASSERT_EQ((std::size_t)0, tree.height(intermediateNode));
+    ASSERT_EQ((std::size_t)1, tree.height(child));
+    ASSERT_EQ((std::size_t)0, tree.depth(root));
+    ASSERT_EQ((std::size_t)2, tree.depth(intermediateNode));
+    ASSERT_EQ((std::size_t)1, tree.depth(child));
+
+    ASSERT_EQ(root, tree.root());
+
+    htd::vertex_t intermediateNode2 = tree.addChild(child);
+
+    tree.swapWithParent(child);
+
+    ASSERT_EQ(child, tree.root());
+
+    ASSERT_EQ(htd::Vertex::FIRST + 4, tree.nextVertex());
+
+    ASSERT_EQ(htd::Id::FIRST + 7, tree.nextEdgeId());
+
+    ASSERT_EQ((std::size_t)2, tree.height());
+    ASSERT_EQ((std::size_t)1, tree.height(root));
+    ASSERT_EQ((std::size_t)0, tree.height(intermediateNode));
+    ASSERT_EQ((std::size_t)0, tree.height(intermediateNode2));
+    ASSERT_EQ((std::size_t)2, tree.height(child));
+    ASSERT_EQ((std::size_t)1, tree.depth(root));
+    ASSERT_EQ((std::size_t)2, tree.depth(intermediateNode));
+    ASSERT_EQ((std::size_t)2, tree.depth(intermediateNode2));
+    ASSERT_EQ((std::size_t)0, tree.depth(child));
 }
 
 TEST(TreeTest, CheckMakeRootFunctionality1)

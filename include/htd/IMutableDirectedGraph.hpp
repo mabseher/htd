@@ -53,7 +53,7 @@ namespace htd
              *
              *  @return The ID the next edge added to the graph will get.
              */
-            virtual htd::id_t nextEdge(void) const = 0;
+            virtual htd::id_t nextEdgeId(void) const = 0;
 
             /**
              *  Add a new vertex to the directed graph.

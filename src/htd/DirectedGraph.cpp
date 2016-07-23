@@ -366,9 +366,9 @@ htd::vertex_t htd::DirectedGraph::nextVertex(void) const
     return base_->nextVertex();
 }
 
-htd::id_t htd::DirectedGraph::nextEdge(void) const
+htd::id_t htd::DirectedGraph::nextEdgeId(void) const
 {
-    return base_->nextEdge();
+    return base_->nextEdgeId();
 }
 
 htd::vertex_t htd::DirectedGraph::addVertex(void)

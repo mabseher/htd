@@ -231,9 +231,9 @@ htd::vertex_t htd::MultiGraph::nextVertex(void) const
     return base_->nextVertex();
 }
 
-htd::id_t htd::MultiGraph::nextEdge(void) const
+htd::id_t htd::MultiGraph::nextEdgeId(void) const
 {
-    return base_->nextEdge();
+    return base_->nextEdgeId();
 }
 
 htd::vertex_t htd::MultiGraph::addVertex(void)

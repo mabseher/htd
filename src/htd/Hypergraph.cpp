@@ -230,9 +230,9 @@ htd::vertex_t htd::Hypergraph::nextVertex(void) const
     return base_->nextVertex();
 }
 
-htd::id_t htd::Hypergraph::nextEdge(void) const
+htd::id_t htd::Hypergraph::nextEdgeId(void) const
 {
-    return base_->nextEdge();
+    return base_->nextEdgeId();
 }
 
 htd::vertex_t htd::Hypergraph::addVertex(void)

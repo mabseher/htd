@@ -39,6 +39,8 @@ namespace htd
     class IBidirectionalGraphLabeling : public htd::IGraphLabeling
     {
         public:
+            using htd::IGraphLabeling::clone;
+
             virtual ~IBidirectionalGraphLabeling() = 0;
 
             /**

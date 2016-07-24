@@ -37,6 +37,9 @@ namespace htd
     class ILabeledPath : public virtual htd::ILabeledTree, public virtual htd::IPath
     {
         public:
+            using htd::ILabeledTree::clone;
+            using htd::IPath::clone;
+
             virtual ~ILabeledPath() = 0;
 
             /**
@@ -44,7 +47,7 @@ namespace htd
              *
              *  @return A new ILabeledPath object identical to the current labeled path.
              */
-            virtual ILabeledPath * clone(void) const = 0;
+            virtual ILabeledPath * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::ILabeledPath::~ILabeledPath() { }

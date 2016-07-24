@@ -37,6 +37,9 @@ namespace htd
     class IPathDecomposition : public virtual htd::ILabeledPath, public virtual htd::ITreeDecomposition
     {
         public:
+            using htd::ILabeledPath::clone;
+            using htd::ITreeDecomposition::clone;
+
             virtual ~IPathDecomposition() = 0;
 
             /**
@@ -44,7 +47,7 @@ namespace htd
              *
              *  @return A new IPathDecomposition object identical to the current path decomposition.
              */
-            virtual IPathDecomposition * clone(void) const = 0;
+            virtual IPathDecomposition * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::IPathDecomposition::~IPathDecomposition() { }

@@ -41,6 +41,8 @@ namespace htd
     class Path : public virtual htd::IMutablePath
     {
         public:
+            using htd::IMutablePath::clone;
+
             /**
              *  Constructor for a path.
              */

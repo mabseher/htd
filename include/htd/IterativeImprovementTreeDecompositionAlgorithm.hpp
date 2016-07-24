@@ -49,9 +49,11 @@ namespace htd
      *  decomposition algorithm and the given manipulations (or nullptr) also if it was interrupted
      *  by a call to htd::LibraryInstance::terminate().
      */
-    class IterativeImprovementTreeDecompositionAlgorithm : public virtual htd::ITreeDecompositionAlgorithm
+    class IterativeImprovementTreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
     {
         public:
+            using htd::ITreeDecompositionAlgorithm::clone;
+
             /**
              *  Constructor for a new iterative improvement tree decomposition algorithm.
              *

@@ -42,9 +42,11 @@ namespace htd
     /**
      *  Default implementation of the IGraphDecompositionAlgorithm interface based on bucket elimination.
      */
-    class BucketEliminationGraphDecompositionAlgorithm : public virtual htd::IGraphDecompositionAlgorithm
+    class BucketEliminationGraphDecompositionAlgorithm : public htd::IGraphDecompositionAlgorithm
     {
         public:
+            using htd::IGraphDecompositionAlgorithm::clone;
+
             /**
              *  Constructor for a graph decomposition algorithm based on bucket elimination.
              */

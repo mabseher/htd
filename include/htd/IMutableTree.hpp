@@ -36,6 +36,8 @@ namespace htd
     class IMutableTree : public virtual htd::ITree
     {
         public:
+            using htd::ITree::clone;
+
             /**
              *  Destructor for an IMutableTree object.
              */
@@ -133,7 +135,7 @@ namespace htd
              *
              *  @return A new IMutableTree object identical to the current mutable tree.
              */
-            virtual IMutableTree * clone(void) const = 0;
+            virtual IMutableTree * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable tree.

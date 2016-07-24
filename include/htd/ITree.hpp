@@ -37,9 +37,10 @@ namespace htd
     class ITree : public virtual htd::IGraph
     {
         public:
-            virtual ~ITree() = 0;
-
+            using htd::IGraph::clone;
             using htd::IGraph::vertexCount;
+
+            virtual ~ITree() = 0;
 
             /**
              *  Getter for the number of vertices in the subtree.
@@ -200,7 +201,7 @@ namespace htd
              *
              *  @return A new ITree object identical to the current tree.
              */
-            virtual ITree * clone(void) const = 0;
+            virtual ITree * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::ITree::~ITree() { }

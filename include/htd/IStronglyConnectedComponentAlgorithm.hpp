@@ -37,6 +37,8 @@ namespace htd
     class IStronglyConnectedComponentAlgorithm : public htd::IConnectedComponentAlgorithm
     {
         public:
+            using htd::IConnectedComponentAlgorithm::clone;
+
             using htd::IConnectedComponentAlgorithm::determineComponents;
             using htd::IConnectedComponentAlgorithm::determineComponent;
 
@@ -64,7 +66,7 @@ namespace htd
              *
              *  @return A new IStronglyConnectedComponentAlgorithm object identical to the current strongly connected component algorithm.
              */
-            virtual IStronglyConnectedComponentAlgorithm * clone(void) const = 0;
+            virtual IStronglyConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::IStronglyConnectedComponentAlgorithm::~IStronglyConnectedComponentAlgorithm() { }

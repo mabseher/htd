@@ -40,6 +40,9 @@ namespace htd
     class GraphDecomposition : public htd::LabeledMultiHypergraph, public virtual htd::IMutableGraphDecomposition
     {
         public:
+            using htd::LabeledMultiHypergraph::clone;
+            using htd::IMutableGraphDecomposition::clone;
+
             /**
              *  Constructor for a graph decomposition.
              */

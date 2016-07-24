@@ -37,6 +37,9 @@ namespace htd
     class IMutableLabeledDirectedMultiGraph : public virtual htd::ILabeledDirectedMultiGraph, public virtual htd::IMutableDirectedMultiGraph
     {
         public:
+            using htd::ILabeledDirectedMultiGraph::clone;
+            using htd::IMutableDirectedMultiGraph::clone;
+
             /**
              *  Destructor for an IMutableLabeledDirectedMultiGraph object.
              */
@@ -157,7 +160,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledDirectedMultiGraph object identical to the current mutable labeled directed multi-graph.
              */
-            virtual IMutableLabeledDirectedMultiGraph * clone(void) const = 0;
+            virtual IMutableLabeledDirectedMultiGraph * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable labeled directed multi-graph.

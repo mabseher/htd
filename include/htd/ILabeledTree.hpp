@@ -37,6 +37,9 @@ namespace htd
     class ILabeledTree : public virtual htd::ILabeledGraph, public virtual htd::ITree
     {
         public:
+            using htd::ILabeledGraph::clone;
+            using htd::ITree::clone;
+
             virtual ~ILabeledTree() = 0;
 
             /**
@@ -44,7 +47,7 @@ namespace htd
              *
              *  @return A new ILabeledTree object identical to the current labeled tree.
              */
-            virtual ILabeledTree * clone(void) const = 0;
+            virtual ILabeledTree * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::ILabeledTree::~ILabeledTree() { }

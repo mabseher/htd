@@ -36,6 +36,8 @@ namespace htd
     class IDirectedMultiGraph : public virtual htd::IMultiGraph
     {
         public:
+            using htd::IMultiGraph::clone;
+
             virtual ~IDirectedMultiGraph() = 0;
 
             /**

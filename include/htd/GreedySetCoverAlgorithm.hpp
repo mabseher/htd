@@ -35,9 +35,11 @@ namespace htd
     /**
      * Implementation of the ISetCoverAlgorithm interface based on greedy search.
      */
-    class GreedySetCoverAlgorithm : public virtual htd::ISetCoverAlgorithm
+    class GreedySetCoverAlgorithm : public htd::ISetCoverAlgorithm
     {
         public:
+            using htd::ISetCoverAlgorithm::clone;
+
             GreedySetCoverAlgorithm(void);
             
             ~GreedySetCoverAlgorithm();

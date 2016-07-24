@@ -37,6 +37,9 @@ namespace htd
     class IMutableLabeledMultiHypergraph : public virtual htd::ILabeledMultiHypergraph, public virtual htd::IMutableMultiHypergraph
     {
         public:
+            using htd::ILabeledMultiHypergraph::clone;
+            using htd::IMutableMultiHypergraph::clone;
+
             /**
              *  Destructor for an IMutableLabeledMultiHypergraph object.
              */
@@ -157,7 +160,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledMultiHypergraph object identical to the current mutable labeled multi-hypergraph.
              */
-            virtual IMutableLabeledMultiHypergraph * clone(void) const = 0;
+            virtual IMutableLabeledMultiHypergraph * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable labeled multi-hypergraph.

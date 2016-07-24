@@ -36,6 +36,8 @@ namespace htd
     class IMutableDirectedGraph : public virtual htd::IDirectedGraph
     {
         public:
+            using htd::IDirectedGraph::clone;
+
             /**
              *  Destructor for an IMutableDirectedGraph object.
              */
@@ -110,7 +112,7 @@ namespace htd
              *
              *  @return A new IMutableDirectedGraph object identical to the current mutable directed graph.
              */
-            virtual IMutableDirectedGraph * clone(void) const = 0;
+            virtual IMutableDirectedGraph * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable directed graph.

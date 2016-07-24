@@ -37,6 +37,8 @@ namespace htd
     class IMutableGraph : public virtual htd::IGraph
     {
         public:
+            using htd::IGraph::clone;
+
             /**
              *  Destructor for an IMutableGraph object.
              */
@@ -111,7 +113,7 @@ namespace htd
              *
              *  @return A new IMutableGraph object identical to the current mutable graph.
              */
-            virtual IMutableGraph * clone(void) const = 0;
+            virtual IMutableGraph * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable graph.

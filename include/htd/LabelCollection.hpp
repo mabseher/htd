@@ -38,9 +38,11 @@ namespace htd
     /**
      *  Default implementation of the ILabelCollection interface.
      */
-    class LabelCollection : public virtual htd::ILabelCollection
+    class LabelCollection : public htd::ILabelCollection
     {
         public:
+            using htd::ILabelCollection::clone;
+
             LabelCollection(void);
 	    
             ~LabelCollection();

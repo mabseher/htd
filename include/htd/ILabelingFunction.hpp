@@ -41,6 +41,8 @@ namespace htd
     class ILabelingFunction : public virtual htd::IDecompositionManipulationOperation
     {
         public:
+            using htd::IDecompositionManipulationOperation::clone;
+
             virtual ~ILabelingFunction() = 0;
 
             /**

@@ -36,6 +36,8 @@ namespace htd
     class IPath : public virtual htd::ITree
     {
         public:
+            using htd::ITree::clone;
+
             virtual ~IPath() = 0;
 
             /**
@@ -59,7 +61,7 @@ namespace htd
              *
              *  @return A new IPath object identical to the current path.
              */
-            virtual IPath * clone(void) const = 0;
+            virtual IPath * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::IPath::~IPath() { }

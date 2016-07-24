@@ -38,6 +38,9 @@ namespace htd
     class IMutablePathDecomposition : public virtual htd::IMutableLabeledPath, public virtual htd::IPathDecomposition
     {
         public:
+            using htd::IMutableLabeledPath::clone;
+            using htd::IPathDecomposition::clone;
+
             using htd::IMutablePath::insertRoot;
             using htd::IMutablePath::addChild;
             using htd::IMutablePath::addParent;
@@ -145,7 +148,7 @@ namespace htd
              *
              *  @return A new IMutablePathDecomposition object identical to the current mutable path decomposition.
              */
-            virtual IMutablePathDecomposition * clone(void) const = 0;
+            virtual IMutablePathDecomposition * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable path decomposition.

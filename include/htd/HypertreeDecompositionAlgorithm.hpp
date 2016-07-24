@@ -39,9 +39,11 @@ namespace htd
     /**
      *  Default implementation of the IHypertreeDecompositionAlgorithm interface.
      */
-    class HypertreeDecompositionAlgorithm : public virtual htd::IHypertreeDecompositionAlgorithm
+    class HypertreeDecompositionAlgorithm : public htd::IHypertreeDecompositionAlgorithm
     {
         public:
+            using htd::IHypertreeDecompositionAlgorithm::clone;
+
             /**
              *  Constructor for a hypertree decomposition algorithm.
              */

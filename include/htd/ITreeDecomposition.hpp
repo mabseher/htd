@@ -39,6 +39,9 @@ namespace htd
     class ITreeDecomposition : public virtual htd::ILabeledTree, public virtual htd::IGraphDecomposition
     {
         public:
+            using htd::ILabeledTree::clone;
+            using htd::IGraphDecomposition::clone;
+
             virtual ~ITreeDecomposition() = 0;
 
             /**
@@ -493,7 +496,7 @@ namespace htd
              *
              *  @return A new ITreeDecomposition object identical to the current tree decomposition.
              */
-            virtual ITreeDecomposition * clone(void) const = 0;
+            virtual ITreeDecomposition * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::ITreeDecomposition::~ITreeDecomposition() { }

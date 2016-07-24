@@ -38,6 +38,9 @@ namespace htd
     class HypertreeDecomposition : public htd::TreeDecomposition, public virtual htd::IMutableHypertreeDecomposition
     {
         public:
+            using htd::TreeDecomposition::clone;
+            using htd::IMutableHypertreeDecomposition::clone;
+
             /**
              *  Constructor for a hypertree decomposition.
              */

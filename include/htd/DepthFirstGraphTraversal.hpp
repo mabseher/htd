@@ -33,7 +33,7 @@ namespace htd
     /**
      * Implementation of the IGraphTraversal interface based on depth-first traversal.
      */
-    class DepthFirstGraphTraversal : public virtual htd::IGraphTraversal
+    class DepthFirstGraphTraversal : public htd::IGraphTraversal
     {
         public:
             DepthFirstGraphTraversal(void);

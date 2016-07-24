@@ -37,6 +37,9 @@ namespace htd
     class IMutableLabeledTree : public virtual htd::ILabeledTree, public virtual htd::IMutableTree
     {
         public:
+            using htd::ILabeledTree::clone;
+            using htd::IMutableTree::clone;
+
             /**
              *  Destructor for an IMutableLabeledTree object.
              */

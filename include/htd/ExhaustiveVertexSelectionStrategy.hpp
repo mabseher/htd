@@ -37,6 +37,8 @@ namespace htd
     class ExhaustiveVertexSelectionStrategy : public htd::IVertexSelectionStrategy
     {
         public:
+            using htd::IVertexSelectionStrategy::clone;
+
             ExhaustiveVertexSelectionStrategy(void);
 
             ~ExhaustiveVertexSelectionStrategy();

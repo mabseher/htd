@@ -36,6 +36,8 @@ namespace htd
     class IMutablePath : public virtual htd::IPath
     {
         public:
+            using htd::IPath::clone;
+
             /**
              *  Destructor for an IMutablePath object.
              */
@@ -129,7 +131,7 @@ namespace htd
              *
              *  @return A new IMutablePath object identical to the current mutable path.
              */
-            virtual IMutablePath * clone(void) const = 0;
+            virtual IMutablePath * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable path.

@@ -36,6 +36,8 @@ namespace htd
     class IMutableHypergraph : public virtual htd::IHypergraph
     {
         public:
+            using htd::IHypergraph::clone;
+
             /**
              *  Destructor for an IMutableHypergraph object.
              */
@@ -169,7 +171,7 @@ namespace htd
              *
              *  @return A new IMutableHypergraph object identical to the current mutable hypergraph.
              */
-            virtual IMutableHypergraph * clone(void) const = 0;
+            virtual IMutableHypergraph * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable hypergraph.

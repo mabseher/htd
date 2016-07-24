@@ -37,6 +37,9 @@ namespace htd
     class IMutableGraphDecomposition : public virtual htd::IMutableLabeledMultiHypergraph, public virtual htd::IGraphDecomposition
     {
         public:
+            using htd::IMutableLabeledMultiHypergraph::clone;
+            using htd::IGraphDecomposition::clone;
+
             using htd::IMutableLabeledMultiHypergraph::addVertex;
 
             using htd::IGraphDecomposition::bagContent;
@@ -90,7 +93,7 @@ namespace htd
              *
              *  @return A new IMutableGraphDecomposition object identical to the current mutable graph decomposition.
              */
-            virtual IMutableGraphDecomposition * clone(void) const = 0;
+            virtual IMutableGraphDecomposition * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable graph decomposition.

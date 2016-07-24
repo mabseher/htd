@@ -37,6 +37,9 @@ namespace htd
     class IMutableLabeledPath : public virtual htd::ILabeledPath, public virtual htd::IMutablePath
     {
         public:
+            using htd::ILabeledPath::clone;
+            using htd::IMutablePath::clone;
+
             /**
              *  Destructor for an IMutableLabeledPath object.
              */
@@ -157,7 +160,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledPath object identical to the current mutable labeled path.
              */
-            virtual IMutableLabeledPath * clone(void) const = 0;
+            virtual IMutableLabeledPath * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable labeled path.

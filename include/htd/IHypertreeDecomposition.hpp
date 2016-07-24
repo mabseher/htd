@@ -41,6 +41,8 @@ namespace htd
              */
             static constexpr const char * EDGE_LABEL_IDENTIFIER = "Edges";
 
+            using htd::ITreeDecomposition::clone;
+
             virtual ~IHypertreeDecomposition() = 0;
 
             /**

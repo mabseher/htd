@@ -40,6 +40,8 @@ namespace htd
     class IHypertreeDecompositionAlgorithm : public virtual htd::ITreeDecompositionAlgorithm
     {
         public:
+            using htd::ITreeDecompositionAlgorithm::clone;
+
             virtual ~IHypertreeDecompositionAlgorithm() = 0;
 
             /**

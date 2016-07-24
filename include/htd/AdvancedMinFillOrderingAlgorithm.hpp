@@ -39,9 +39,11 @@ namespace htd
      *  If there are multiple vertices with the same, minimal fill value during an elimination step this algorithm
      *  will select a vertex with minimum degree from the pool of vertices with minimum fill value.
      */
-    class AdvancedMinFillOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
+    class AdvancedMinFillOrderingAlgorithm : public htd::IOrderingAlgorithm
     {
         public:
+            using htd::IOrderingAlgorithm::clone;
+
             AdvancedMinFillOrderingAlgorithm(void);
             
             ~AdvancedMinFillOrderingAlgorithm();

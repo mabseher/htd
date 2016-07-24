@@ -36,6 +36,8 @@ namespace htd
     class IDirectedGraph : public virtual htd::IGraph
     {
         public:
+            using htd::IGraph::clone;
+
             virtual ~IDirectedGraph() = 0;
 
             /**
@@ -129,7 +131,7 @@ namespace htd
              *
              *  @return A new IDirectedGraph object identical to the current directed graph.
              */
-            virtual IDirectedGraph * clone(void) const = 0;
+            virtual IDirectedGraph * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::IDirectedGraph::~IDirectedGraph() { }

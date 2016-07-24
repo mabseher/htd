@@ -38,6 +38,8 @@ namespace htd
     class IGraph : public virtual htd::IHypergraph
     {
         public:
+            using htd::IHypergraph::clone;
+
             virtual ~IGraph() = 0;
 
             /**
@@ -45,7 +47,7 @@ namespace htd
              *
              *  @return A new IGraph object identical to the current graph.
              */
-            virtual IGraph * clone(void) const = 0;
+            virtual IGraph * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::IGraph::~IGraph() { }

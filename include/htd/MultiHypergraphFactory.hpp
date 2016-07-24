@@ -76,6 +76,10 @@ namespace htd
             /**
              *  Set the default implementation of the IMutableMultiHypergraph interface.
              *
+             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
+             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
+             *  assigning the same object instance multiple times will lead to undefined behavior.
+             *
              *  @param[in] original The new default implementation of the IMutableMultiHypergraph interface.
              */
             void setConstructionTemplate(htd::IMutableMultiHypergraph * original);

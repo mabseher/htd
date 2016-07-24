@@ -105,6 +105,10 @@ namespace htd
 
             LabeledPath * clone(void) const HTD_OVERRIDE;
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+#endif
+
             /**
              *  Copy assignment operator for a mutable labeled path.
              *

@@ -200,6 +200,13 @@ htd::LabeledDirectedGraph * htd::LabeledDirectedGraph::clone(void) const
     return new htd::LabeledDirectedGraph(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::LabeledDirectedGraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::LabeledDirectedGraph & original)
 {
     if (this != &original)

@@ -83,15 +83,7 @@ namespace htd
 
             htd::id_t lookupEdge(const htd::ILabel & label) const HTD_OVERRIDE;
 
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             BidirectionalGraphLabeling * clone(void) const HTD_OVERRIDE;
-#else
-            BidirectionalGraphLabeling * clone(void) const;
-
-            htd::IGraphLabeling * cloneGraphLabeling(void) const HTD_OVERRIDE;
-
-            BidirectionalGraphLabeling * cloneBidirectionalGraphLabeling(void) const HTD_OVERRIDE;
-#endif
 
         private:
             class ILabelPointerHashFunction

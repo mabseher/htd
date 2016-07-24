@@ -450,8 +450,15 @@ void htd::DirectedGraph::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2
 
 htd::DirectedGraph * htd::DirectedGraph::clone(void) const
 {
-    return new DirectedGraph(*this);
+    return new htd::DirectedGraph(*this);
 }
+
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::DirectedGraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
 
 htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::DirectedGraph & original)
 {

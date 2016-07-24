@@ -1236,6 +1236,13 @@ htd::Tree * htd::Tree::clone(void) const
     return new htd::Tree(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::Tree::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::Tree & htd::Tree::operator=(const htd::Tree & original)
 {
     if (this != &original)

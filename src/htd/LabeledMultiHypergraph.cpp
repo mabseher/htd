@@ -195,6 +195,13 @@ htd::LabeledMultiHypergraph * htd::LabeledMultiHypergraph::clone(void) const
     return new htd::LabeledMultiHypergraph(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::LabeledMultiHypergraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::LabeledMultiHypergraph & htd::LabeledMultiHypergraph::operator=(const htd::LabeledMultiHypergraph & original)
 {
     if (this != &original)

@@ -188,6 +188,13 @@ htd::LabeledTree * htd::LabeledTree::clone(void) const
     return new htd::LabeledTree(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::LabeledTree::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::LabeledTree & htd::LabeledTree::operator=(const htd::LabeledTree & original)
 {
     if (this != &original)

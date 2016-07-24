@@ -434,8 +434,15 @@ void htd::DirectedMultiGraph::removeEdge(htd::id_t edgeId)
 
 htd::DirectedMultiGraph * htd::DirectedMultiGraph::clone(void) const
 {
-    return new DirectedMultiGraph(*this);
+    return new htd::DirectedMultiGraph(*this);
 }
+
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::DirectedMultiGraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
 
 htd::DirectedMultiGraph & htd::DirectedMultiGraph::operator=(const htd::DirectedMultiGraph & original)
 {

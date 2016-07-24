@@ -91,21 +91,12 @@ namespace htd
              */
             virtual htd::id_t lookupEdge(const htd::ILabel & label) const = 0;
 
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current bi-directional graph labeling.
              *
              *  @return A new IBidirectionalGraphLabeling object identical to the current bi-directional graph labeling.
              */
             virtual IBidirectionalGraphLabeling * clone(void) const HTD_OVERRIDE = 0;
-#else
-            /**
-             *  Create a deep copy of the current bi-directional graph labeling.
-             *
-             *  @return A new IBidirectionalGraphLabeling object identical to the current bi-directional graph labeling.
-             */
-            virtual IBidirectionalGraphLabeling * cloneBidirectionalGraphLabeling(void) const = 0;
-#endif
     };
     
     inline htd::IBidirectionalGraphLabeling::~IBidirectionalGraphLabeling() { }

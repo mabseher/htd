@@ -365,6 +365,13 @@ htd::Hypergraph * htd::Hypergraph::clone(void) const
     return new htd::Hypergraph(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::Hypergraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::Hypergraph & htd::Hypergraph::operator=(const htd::Hypergraph & original)
 {
     if (this != &original)

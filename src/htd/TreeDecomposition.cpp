@@ -1006,6 +1006,13 @@ htd::TreeDecomposition * htd::TreeDecomposition::clone(void) const
     return new htd::TreeDecomposition(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::TreeDecomposition::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::TreeDecomposition & original)
 {
     if (this != &original)

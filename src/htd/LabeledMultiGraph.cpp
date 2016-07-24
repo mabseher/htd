@@ -200,6 +200,13 @@ htd::LabeledMultiGraph * htd::LabeledMultiGraph::clone(void) const
     return new htd::LabeledMultiGraph(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::LabeledMultiGraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::LabeledMultiGraph & htd::LabeledMultiGraph::operator=(const htd::LabeledMultiGraph & original)
 {
     if (this != &original)

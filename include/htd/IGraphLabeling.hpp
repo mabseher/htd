@@ -26,8 +26,6 @@
 #define	HTD_HTD_IGRAPHLABELING_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
-
 #include <htd/ILabel.hpp>
 
 namespace htd
@@ -176,21 +174,12 @@ namespace htd
              */
             virtual void removeEdgeLabel(htd::id_t edgeId) = 0;
 
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current graph labeling.
              *
              *  @return A new IGraphLabeling object identical to the current graph labeling.
              */
             virtual IGraphLabeling * clone(void) const = 0;
-#else
-            /**
-             *  Create a deep copy of the current graph labeling.
-             *
-             *  @return A new IGraphLabeling object identical to the current graph labeling.
-             */
-            virtual IGraphLabeling * cloneGraphLabeling(void) const = 0;
-#endif
 
             /**
              *  Remove all labels from the current labeling.

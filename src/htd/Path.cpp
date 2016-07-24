@@ -1050,6 +1050,13 @@ htd::Path * htd::Path::clone(void) const
     return new htd::Path(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::Path::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::Path & htd::Path::operator=(const htd::Path & original)
 {
     if (this != &original)

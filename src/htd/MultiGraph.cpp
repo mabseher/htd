@@ -263,8 +263,15 @@ void htd::MultiGraph::removeEdge(htd::id_t edgeId)
 
 htd::MultiGraph * htd::MultiGraph::clone(void) const
 {
-    return new MultiGraph(*this);
+    return new htd::MultiGraph(*this);
 }
+
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::MultiGraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
 
 htd::MultiGraph & htd::MultiGraph::operator=(const htd::MultiGraph & original)
 {

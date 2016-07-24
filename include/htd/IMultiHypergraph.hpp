@@ -26,6 +26,7 @@
 #define	HTD_HTD_IMULTIHYPERGRAPH_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 #include <htd/ConstCollection.hpp>
 #include <htd/FilteredHyperedgeCollection.hpp>
 #include <htd/Hyperedge.hpp>
@@ -319,6 +320,15 @@ namespace htd
              *  @return A new IMultiHypergraph object identical to the current multi-hypergraph.
              */
             virtual IMultiHypergraph * clone(void) const = 0;
+
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            /**
+             *  Create a deep copy of the current multi-hypergraph.
+             *
+             *  @return A new IMultiHypergraph object identical to the current multi-hypergraph.
+             */
+            virtual IMultiHypergraph * cloneMultiHypergraph(void) const = 0;
+#endif
     };
 
     inline htd::IMultiHypergraph::~IMultiHypergraph() { }

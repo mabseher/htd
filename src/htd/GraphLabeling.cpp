@@ -229,11 +229,4 @@ htd::GraphLabeling * htd::GraphLabeling::clone(void) const
     return ret;
 }
 
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-htd::GraphLabeling * htd::GraphLabeling::cloneGraphLabeling(void) const
-{
-    return clone();
-}
-#endif
-
 #endif /* HTD_HTD_GRAPHLABELING_CPP */

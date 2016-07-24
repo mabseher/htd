@@ -209,8 +209,15 @@ std::size_t htd::GraphDecomposition::maximumBagSize(void) const
 
 htd::GraphDecomposition * htd::GraphDecomposition::clone(void) const
 {
-    return new GraphDecomposition(*this);
+    return new htd::GraphDecomposition(*this);
 }
+
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::GraphDecomposition::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
 
 htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::GraphDecomposition & original)
 {

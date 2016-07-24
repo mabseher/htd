@@ -200,6 +200,13 @@ htd::LabeledHypergraph * htd::LabeledHypergraph::clone(void) const
     return new htd::LabeledHypergraph(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::LabeledHypergraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::LabeledHypergraph & original)
 {
     if (this != &original)

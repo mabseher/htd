@@ -188,6 +188,13 @@ htd::LabeledPath * htd::LabeledPath::clone(void) const
     return new htd::LabeledPath(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::LabeledPath::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::LabeledPath & htd::LabeledPath::operator=(const htd::LabeledPath & original)
 {
     if (this != &original)

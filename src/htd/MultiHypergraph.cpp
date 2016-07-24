@@ -1001,6 +1001,13 @@ htd::MultiHypergraph * htd::MultiHypergraph::clone(void) const
     return new htd::MultiHypergraph(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::MultiHypergraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
+
 htd::MultiHypergraph & htd::MultiHypergraph::operator=(const htd::MultiHypergraph & original)
 {
     if (this != &original)

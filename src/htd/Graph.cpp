@@ -273,8 +273,15 @@ void htd::Graph::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 
 htd::Graph * htd::Graph::clone(void) const
 {
-    return new Graph(*this);
+    return new htd::Graph(*this);
 }
+
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiHypergraph * htd::Graph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+#endif
 
 htd::Graph & htd::Graph::operator=(const htd::Graph & original)
 {

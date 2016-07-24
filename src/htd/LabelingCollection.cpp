@@ -47,11 +47,7 @@ htd::LabelingCollection::LabelingCollection(const LabelingCollection & original)
 {
     for (const std::string & labelName : original.labelNames_)
     {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         setLabeling(labelName, original.content_.at(labelName)->clone());
-#else
-        setLabeling(labelName, original.content_.at(labelName)->cloneGraphLabeling());
-#endif
     }
 }
 
@@ -59,11 +55,7 @@ htd::LabelingCollection::LabelingCollection(const htd::ILabelingCollection & ori
 {
     for (const std::string & labelName : original.labelNames())
     {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         setLabeling(labelName, original.labeling(labelName).clone());
-#else
-        setLabeling(labelName, original.labeling(labelName).cloneGraphLabeling());
-#endif
     }
 }
 
@@ -238,11 +230,7 @@ htd::LabelingCollection * htd::LabelingCollection::clone(void) const
 
     for (const std::string & labelName : labelNames_)
     {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->setLabeling(labelName, content_.at(labelName)->clone());
-#else
-        ret->setLabeling(labelName, content_.at(labelName)->cloneGraphLabeling());
-#endif
     }
 
     return ret;

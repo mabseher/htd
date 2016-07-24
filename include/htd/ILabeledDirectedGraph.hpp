@@ -39,6 +39,9 @@ namespace htd
     class ILabeledDirectedGraph : public virtual htd::IDirectedGraph, public virtual htd::ILabeledGraph
     {
         public:
+            using htd::IDirectedGraph::clone;
+            using htd::ILabeledGraph::clone;
+
             virtual ~ILabeledDirectedGraph() = 0;
 
             /**
@@ -46,7 +49,7 @@ namespace htd
              *
              *  @return A new ILabeledDirectedGraph object identical to the current labeled directed graph.
              */
-            virtual ILabeledDirectedGraph * clone(void) const = 0;
+            virtual ILabeledDirectedGraph * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::ILabeledDirectedGraph::~ILabeledDirectedGraph() { }

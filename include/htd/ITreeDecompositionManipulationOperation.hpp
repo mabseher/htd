@@ -38,6 +38,8 @@ namespace htd
     class ITreeDecompositionManipulationOperation : public virtual htd::IDecompositionManipulationOperation
     {
         public:
+            using htd::IDecompositionManipulationOperation::clone;
+
             virtual ~ITreeDecompositionManipulationOperation() = 0;
 
             /**

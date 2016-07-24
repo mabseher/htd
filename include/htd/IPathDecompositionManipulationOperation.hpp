@@ -38,6 +38,8 @@ namespace htd
     class IPathDecompositionManipulationOperation : public virtual htd::IDecompositionManipulationOperation
     {
         public:
+            using htd::IDecompositionManipulationOperation::clone;
+
             virtual ~IPathDecompositionManipulationOperation() = 0;
 
             /**

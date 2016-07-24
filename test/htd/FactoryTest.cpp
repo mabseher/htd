@@ -151,6 +151,82 @@ TEST(FactoryTest, CheckHypergraphFactory)
     delete multiHypergraph1;
 }
 
+TEST(FactoryTest, CheckMultiHypergraphFactory)
+{
+    htd::IMutableMultiHypergraph * multiHypergraph1 = htd::MultiHypergraphFactory::instance().getMultiHypergraph();
+
+    htd::IMultiHypergraph & multiHypergraphReference1 = *multiHypergraph1;
+    const htd::IMultiHypergraph & multiHypergraphConstReference1 = *multiHypergraph1;
+
+    ASSERT_EQ((std::size_t)0, multiHypergraphReference1.vertexCount());
+    ASSERT_EQ((std::size_t)0, multiHypergraphConstReference1.vertexCount());
+
+    ASSERT_NE(nullptr, dynamic_cast<htd::IMutableMultiHypergraph *>(&multiHypergraphReference1));
+    ASSERT_NE(nullptr, dynamic_cast<const htd::IMutableMultiHypergraph *>(&multiHypergraphConstReference1));
+
+    multiHypergraph1->addVertex();
+
+    ASSERT_EQ((std::size_t)1, multiHypergraphReference1.vertexCount());
+    ASSERT_EQ((std::size_t)1, multiHypergraphConstReference1.vertexCount());
+
+    ASSERT_NE(nullptr, &(htd::MultiHypergraphFactory::instance().accessMutableMultiHypergraph(multiHypergraphReference1)));
+    ASSERT_NE(nullptr, &(htd::MultiHypergraphFactory::instance().accessMutableMultiHypergraph(multiHypergraphConstReference1)));
+
+    htd::IMutableMultiHypergraph * multiHypergraph2 = htd::MultiHypergraphFactory::instance().getMultiHypergraph(3);
+
+    htd::IMultiHypergraph & multiHypergraphReference2 = *multiHypergraph2;
+    const htd::IMultiHypergraph & multiHypergraphConstReference2 = *multiHypergraph2;
+
+    ASSERT_EQ((std::size_t)3, multiHypergraphReference2.vertexCount());
+    ASSERT_EQ((std::size_t)3, multiHypergraphConstReference2.vertexCount());
+
+    ASSERT_NE(nullptr, dynamic_cast<htd::IMutableMultiHypergraph *>(&multiHypergraphReference2));
+    ASSERT_NE(nullptr, dynamic_cast<const htd::IMutableMultiHypergraph *>(&multiHypergraphConstReference2));
+
+    multiHypergraph2->addVertex();
+
+    ASSERT_EQ((std::size_t)4, multiHypergraphReference2.vertexCount());
+    ASSERT_EQ((std::size_t)4, multiHypergraphConstReference2.vertexCount());
+
+    ASSERT_NE(nullptr, &(htd::MultiHypergraphFactory::instance().accessMutableMultiHypergraph(multiHypergraphReference2)));
+    ASSERT_NE(nullptr, &(htd::MultiHypergraphFactory::instance().accessMutableMultiHypergraph(multiHypergraphConstReference2)));
+
+    multiHypergraph1->removeVertex(1);
+
+    htd::MultiHypergraphFactory::instance().setConstructionTemplate(multiHypergraph1->clone());
+
+    htd::IMutableMultiHypergraph * multiHypergraph3 = htd::MultiHypergraphFactory::instance().getMultiHypergraph();
+
+    htd::IMultiHypergraph & multiHypergraphReference3 = *multiHypergraph3;
+    const htd::IMultiHypergraph & multiHypergraphConstReference3 = *multiHypergraph3;
+
+    ASSERT_EQ((std::size_t)0, multiHypergraphReference3.vertexCount());
+    ASSERT_EQ((std::size_t)0, multiHypergraphConstReference3.vertexCount());
+
+    ASSERT_NE(nullptr, dynamic_cast<htd::IMutableMultiHypergraph *>(&multiHypergraphReference3));
+    ASSERT_NE(nullptr, dynamic_cast<const htd::IMutableMultiHypergraph *>(&multiHypergraphConstReference3));
+
+    multiHypergraph3->addVertex();
+    multiHypergraph3->addVertex();
+
+    ASSERT_EQ((std::size_t)2, multiHypergraphReference3.vertexCount());
+    ASSERT_EQ((std::size_t)2, multiHypergraphConstReference3.vertexCount());
+
+    ASSERT_NE(nullptr, &(htd::MultiHypergraphFactory::instance().accessMutableMultiHypergraph(multiHypergraphReference3)));
+    ASSERT_NE(nullptr, &(htd::MultiHypergraphFactory::instance().accessMutableMultiHypergraph(multiHypergraphConstReference3)));
+
+    htd::IMutableMultiHypergraph * multiHypergraph4 = htd::MultiHypergraphFactory::instance().getMultiHypergraph(*multiHypergraph2);
+
+    ASSERT_NE(multiHypergraph2, multiHypergraph4);
+
+    ASSERT_EQ((std::size_t)4, multiHypergraph4->vertexCount());
+
+    delete multiHypergraph1;
+    delete multiHypergraph2;
+    delete multiHypergraph3;
+    delete multiHypergraph4;
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

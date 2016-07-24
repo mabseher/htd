@@ -4,7 +4,7 @@ aux_source_directory(. SRC_LIST)
 write_compiler_detection_header(
   FILE "${PROJECT_SOURCE_DIR}/include/htd/CompilerDetection.hpp"
   PREFIX HTD
-  COMPILERS GNU Clang AppleClang
+  COMPILERS GNU Clang AppleClang MSVC
   FEATURES cxx_noexcept cxx_override cxx_lambdas
 )
 
@@ -37,7 +37,9 @@ set_target_properties(htd
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
+if (UNIX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
+endif (UNIX)
 
 install(TARGETS htd DESTINATION lib)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd" DESTINATION include)

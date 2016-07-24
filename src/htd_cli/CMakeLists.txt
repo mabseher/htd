@@ -67,7 +67,7 @@ if (UNIX)
 
     configure_file("${CMAKE_SOURCE_DIR}/scripts/pace16_build_test.sh"
                    "${CMAKE_BINARY_DIR}/bin/pace16_build_test.sh" COPYONLY)
-endif(UNIX)
+endif (UNIX)
 
 target_link_libraries(htd_main htd htd_cli)
 

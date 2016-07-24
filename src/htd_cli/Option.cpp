@@ -30,6 +30,7 @@
 #include <iomanip>
 #include <ostream>
 #include <sstream>
+#include <cctype>
 
 htd_cli::Option::Option(const std::string & name, const std::string & description) : used_(false), shortName_(0), name_(name), description_(description)
 {

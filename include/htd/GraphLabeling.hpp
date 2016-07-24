@@ -72,7 +72,13 @@ namespace htd
 
             void removeEdgeLabel(htd::id_t edgeId) HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             GraphLabeling * clone(void) const HTD_OVERRIDE;
+#else
+            GraphLabeling * clone(void) const;
+
+            GraphLabeling * cloneGraphLabeling(void) const HTD_OVERRIDE;
+#endif
 
             void clear(void) HTD_OVERRIDE;
 

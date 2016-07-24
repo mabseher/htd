@@ -317,4 +317,16 @@ htd::BidirectionalGraphLabeling * htd::BidirectionalGraphLabeling::clone(void) c
     return ret;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IGraphLabeling * htd::BidirectionalGraphLabeling::cloneGraphLabeling(void) const
+{
+    return clone();
+}
+
+htd::BidirectionalGraphLabeling * htd::BidirectionalGraphLabeling::cloneBidirectionalGraphLabeling(void) const
+{
+    return clone();
+}
+#endif
+
 #endif /* HTD_HTD_BIDIRECTIONALGRAPHLABELING_CPP */

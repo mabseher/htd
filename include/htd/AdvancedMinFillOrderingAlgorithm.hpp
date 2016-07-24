@@ -42,8 +42,6 @@ namespace htd
     class AdvancedMinFillOrderingAlgorithm : public htd::IOrderingAlgorithm
     {
         public:
-            using htd::IOrderingAlgorithm::clone;
-
             AdvancedMinFillOrderingAlgorithm(void);
             
             ~AdvancedMinFillOrderingAlgorithm();

@@ -36,8 +36,6 @@ namespace htd
     class DepthFirstConnectedComponentAlgorithm : public htd::IConnectedComponentAlgorithm
     {
         public:
-            using htd::IConnectedComponentAlgorithm::clone;
-
             DepthFirstConnectedComponentAlgorithm(void);
 
             ~DepthFirstConnectedComponentAlgorithm();

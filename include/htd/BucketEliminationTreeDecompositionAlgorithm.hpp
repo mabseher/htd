@@ -43,8 +43,6 @@ namespace htd
     class BucketEliminationTreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
     {
         public:
-            using htd::ITreeDecompositionAlgorithm::clone;
-
             /**
              *  Constructor for a tree decomposition algorithm based on bucket elimination.
              */

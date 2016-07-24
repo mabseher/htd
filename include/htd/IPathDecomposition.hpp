@@ -37,9 +37,6 @@ namespace htd
     class IPathDecomposition : public virtual htd::ILabeledPath, public virtual htd::ITreeDecomposition
     {
         public:
-            using htd::ILabeledPath::clone;
-            using htd::ITreeDecomposition::clone;
-
             virtual ~IPathDecomposition() = 0;
 
             /**

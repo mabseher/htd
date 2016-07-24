@@ -41,8 +41,6 @@ namespace htd
     class ILabeledMultiHypergraph : public virtual htd::IMultiHypergraph
     {
         public:
-            using htd::IMultiHypergraph::clone;
-
             virtual ~ILabeledMultiHypergraph() = 0;
 
             /**

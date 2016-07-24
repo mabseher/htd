@@ -38,9 +38,6 @@ namespace htd
     class IMutableLabeledGraph : public virtual htd::ILabeledGraph, public virtual htd::IMutableGraph
     {
         public:
-            using htd::ILabeledGraph::clone;
-            using htd::IMutableGraph::clone;
-
             /**
              *  Destructor for an IMutableLabeledGraph object.
              */

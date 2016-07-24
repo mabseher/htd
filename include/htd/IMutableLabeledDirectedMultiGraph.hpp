@@ -37,9 +37,6 @@ namespace htd
     class IMutableLabeledDirectedMultiGraph : public virtual htd::ILabeledDirectedMultiGraph, public virtual htd::IMutableDirectedMultiGraph
     {
         public:
-            using htd::ILabeledDirectedMultiGraph::clone;
-            using htd::IMutableDirectedMultiGraph::clone;
-
             /**
              *  Destructor for an IMutableLabeledDirectedMultiGraph object.
              */

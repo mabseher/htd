@@ -36,8 +36,6 @@ namespace htd
     class IMutableDirectedGraph : public virtual htd::IDirectedGraph
     {
         public:
-            using htd::IDirectedGraph::clone;
-
             /**
              *  Destructor for an IMutableDirectedGraph object.
              */

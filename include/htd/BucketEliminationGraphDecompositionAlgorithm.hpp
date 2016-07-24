@@ -45,8 +45,6 @@ namespace htd
     class BucketEliminationGraphDecompositionAlgorithm : public htd::IGraphDecompositionAlgorithm
     {
         public:
-            using htd::IGraphDecompositionAlgorithm::clone;
-
             /**
              *  Constructor for a graph decomposition algorithm based on bucket elimination.
              */

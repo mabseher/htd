@@ -39,8 +39,6 @@ namespace htd
     class IHypergraph : public virtual htd::IMultiHypergraph
     {
         public:
-            using htd::IMultiHypergraph::clone;
-
             virtual ~IHypergraph() = 0;
 
             /**

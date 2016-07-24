@@ -36,8 +36,6 @@ namespace htd
     class IDirectedMultiGraph : public virtual htd::IMultiGraph
     {
         public:
-            using htd::IMultiGraph::clone;
-
             virtual ~IDirectedMultiGraph() = 0;
 
             /**
@@ -131,7 +129,7 @@ namespace htd
              *
              *  @return A new IDirectedMultiGraph object identical to the current directed multi-graph.
              */
-            virtual IDirectedMultiGraph * clone(void) const = 0;
+            virtual IDirectedMultiGraph * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::IDirectedMultiGraph::~IDirectedMultiGraph() { }

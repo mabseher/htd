@@ -39,9 +39,6 @@ namespace htd
     class ILabeledDirectedGraph : public virtual htd::IDirectedGraph, public virtual htd::ILabeledGraph
     {
         public:
-            using htd::IDirectedGraph::clone;
-            using htd::ILabeledGraph::clone;
-
             virtual ~ILabeledDirectedGraph() = 0;
 
             /**

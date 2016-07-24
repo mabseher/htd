@@ -37,9 +37,6 @@ namespace htd
     class IMutableLabeledTree : public virtual htd::ILabeledTree, public virtual htd::IMutableTree
     {
         public:
-            using htd::ILabeledTree::clone;
-            using htd::IMutableTree::clone;
-
             /**
              *  Destructor for an IMutableLabeledTree object.
              */
@@ -160,7 +157,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledTree object identical to the current mutable labeled tree.
              */
-            virtual IMutableLabeledTree * clone(void) const = 0;
+            virtual IMutableLabeledTree * clone(void) const HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable labeled tree.

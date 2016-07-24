@@ -36,8 +36,6 @@ namespace htd
     class IMutableTree : public virtual htd::ITree
     {
         public:
-            using htd::ITree::clone;
-
             /**
              *  Destructor for an IMutableTree object.
              */

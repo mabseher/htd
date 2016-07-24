@@ -41,9 +41,6 @@ namespace htd
     class LimitMaximumIntroducedVertexCountOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
-            using htd::IPathDecompositionManipulationOperation::clone;
-            using htd::ITreeDecompositionManipulationOperation::clone;
-
             /**
              *  Constructor for a new manipulation operation of type LimitMaximumIntroducedVertexCountOperation.
              *

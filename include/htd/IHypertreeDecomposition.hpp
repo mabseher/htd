@@ -41,8 +41,6 @@ namespace htd
              */
             static constexpr const char * EDGE_LABEL_IDENTIFIER = "Edges";
 
-            using htd::ITreeDecomposition::clone;
-
             virtual ~IHypertreeDecomposition() = 0;
 
             /**
@@ -73,7 +71,7 @@ namespace htd
              *
              *  @return A new IHypertreeDecomposition object identical to the current hypertree decomposition.
              */
-            virtual IHypertreeDecomposition * clone(void) const = 0;
+            virtual IHypertreeDecomposition * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::IHypertreeDecomposition::~IHypertreeDecomposition() { }

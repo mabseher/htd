@@ -52,8 +52,6 @@ namespace htd
     class IterativeImprovementTreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
     {
         public:
-            using htd::ITreeDecompositionAlgorithm::clone;
-
             /**
              *  Constructor for a new iterative improvement tree decomposition algorithm.
              *

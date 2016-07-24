@@ -37,8 +37,6 @@ namespace htd
     class IStronglyConnectedComponentAlgorithm : public htd::IConnectedComponentAlgorithm
     {
         public:
-            using htd::IConnectedComponentAlgorithm::clone;
-
             using htd::IConnectedComponentAlgorithm::determineComponents;
             using htd::IConnectedComponentAlgorithm::determineComponent;
 

@@ -37,9 +37,6 @@ namespace htd
     class IMutableLabeledMultiHypergraph : public virtual htd::ILabeledMultiHypergraph, public virtual htd::IMutableMultiHypergraph
     {
         public:
-            using htd::ILabeledMultiHypergraph::clone;
-            using htd::IMutableMultiHypergraph::clone;
-
             /**
              *  Destructor for an IMutableLabeledMultiHypergraph object.
              */

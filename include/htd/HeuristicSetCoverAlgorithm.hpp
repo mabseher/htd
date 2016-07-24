@@ -39,8 +39,6 @@ namespace htd
     class HeuristicSetCoverAlgorithm : public virtual htd::ISetCoverAlgorithm
     {
         public:
-            using htd::ISetCoverAlgorithm::clone;
-
             HeuristicSetCoverAlgorithm(void);
             
             ~HeuristicSetCoverAlgorithm();

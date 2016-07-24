@@ -39,8 +39,6 @@ namespace htd
     class BidirectionalGraphLabeling : public htd::IBidirectionalGraphLabeling
     {
         public:
-            using htd::IBidirectionalGraphLabeling::clone;
-
             BidirectionalGraphLabeling(void);
 
             ~BidirectionalGraphLabeling();

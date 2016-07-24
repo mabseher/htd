@@ -38,8 +38,6 @@ namespace htd
     class IGraph : public virtual htd::IHypergraph
     {
         public:
-            using htd::IHypergraph::clone;
-
             virtual ~IGraph() = 0;
 
             /**

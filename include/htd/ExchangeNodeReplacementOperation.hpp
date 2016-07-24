@@ -39,9 +39,6 @@ namespace htd
     class ExchangeNodeReplacementOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
-            using htd::IPathDecompositionManipulationOperation::clone;
-            using htd::ITreeDecompositionManipulationOperation::clone;
-
             ExchangeNodeReplacementOperation(void);
 
             ~ExchangeNodeReplacementOperation();

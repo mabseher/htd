@@ -36,8 +36,6 @@ namespace htd
     class IDirectedGraph : public virtual htd::IGraph
     {
         public:
-            using htd::IGraph::clone;
-
             virtual ~IDirectedGraph() = 0;
 
             /**

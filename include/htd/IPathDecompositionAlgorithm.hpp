@@ -40,8 +40,6 @@ namespace htd
     class IPathDecompositionAlgorithm : public virtual htd::ITreeDecompositionAlgorithm
     {
         public:
-            using htd::ITreeDecompositionAlgorithm::clone;
-
             virtual ~IPathDecompositionAlgorithm() = 0;
 
             /**

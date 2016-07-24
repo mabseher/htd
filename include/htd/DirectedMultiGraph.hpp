@@ -39,8 +39,6 @@ namespace htd
     class DirectedMultiGraph : public virtual htd::IMutableDirectedMultiGraph
     {
         public:
-            using htd::IMutableDirectedMultiGraph::clone;
-
             /**
              *  Constructor for a directed multi-graph.
              */

@@ -39,8 +39,6 @@ namespace htd
     class IBidirectionalGraphLabeling : public htd::IGraphLabeling
     {
         public:
-            using htd::IGraphLabeling::clone;
-
             virtual ~IBidirectionalGraphLabeling() = 0;
 
             /**
@@ -98,7 +96,7 @@ namespace htd
              *
              *  @return A new IBidirectionalGraphLabeling object identical to the current bi-directional graph labeling.
              */
-            virtual IBidirectionalGraphLabeling * clone(void) const = 0;
+            virtual IBidirectionalGraphLabeling * clone(void) const HTD_OVERRIDE = 0;
     };
     
     inline htd::IBidirectionalGraphLabeling::~IBidirectionalGraphLabeling() { }

@@ -42,8 +42,6 @@ namespace htd
     class HypertreeDecompositionAlgorithm : public htd::IHypertreeDecompositionAlgorithm
     {
         public:
-            using htd::IHypertreeDecompositionAlgorithm::clone;
-
             /**
              *  Constructor for a hypertree decomposition algorithm.
              */

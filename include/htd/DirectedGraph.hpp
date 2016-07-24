@@ -38,8 +38,6 @@ namespace htd
     class DirectedGraph : public virtual htd::IMutableDirectedGraph
     {
         public:
-            using htd::IMutableDirectedGraph::clone;
-
             /**
              *  Constructor for a directed graph.
              */

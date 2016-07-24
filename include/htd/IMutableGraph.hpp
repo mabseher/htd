@@ -37,8 +37,6 @@ namespace htd
     class IMutableGraph : public virtual htd::IGraph
     {
         public:
-            using htd::IGraph::clone;
-
             /**
              *  Destructor for an IMutableGraph object.
              */

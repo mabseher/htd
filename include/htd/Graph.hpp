@@ -36,8 +36,6 @@ namespace htd
     class Graph : public virtual htd::IMutableGraph
     {
         public:
-            using htd::IMutableGraph::clone;
-
             /**
              *  Constructor for a graph.
              */

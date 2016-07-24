@@ -37,9 +37,6 @@ namespace htd
     class ILabeledPath : public virtual htd::ILabeledTree, public virtual htd::IPath
     {
         public:
-            using htd::ILabeledTree::clone;
-            using htd::IPath::clone;
-
             virtual ~ILabeledPath() = 0;
 
             /**

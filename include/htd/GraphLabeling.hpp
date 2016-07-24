@@ -40,8 +40,6 @@ namespace htd
     class GraphLabeling : public htd::IGraphLabeling
     {
         public:
-            using htd::IGraphLabeling::clone;
-
             GraphLabeling(void);
 
             ~GraphLabeling();

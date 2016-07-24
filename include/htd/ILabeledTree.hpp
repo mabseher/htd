@@ -37,9 +37,6 @@ namespace htd
     class ILabeledTree : public virtual htd::ILabeledGraph, public virtual htd::ITree
     {
         public:
-            using htd::ILabeledGraph::clone;
-            using htd::ITree::clone;
-
             virtual ~ILabeledTree() = 0;
 
             /**

@@ -39,8 +39,6 @@ namespace htd
     class LimitChildCountOperation : public htd::ITreeDecompositionManipulationOperation
     {
         public:
-            using htd::ITreeDecompositionManipulationOperation::clone;
-
             /**
              *  Constructor for a new manipulation operation of type LimitChildCountOperation.
              *

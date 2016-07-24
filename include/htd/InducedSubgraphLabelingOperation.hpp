@@ -46,9 +46,6 @@ namespace htd
              */
             static constexpr const char * INDUCED_SUBGRAPH_LABEL_IDENTIFIER = "Induced Subgraph";
 
-            using htd::IPathDecompositionManipulationOperation::clone;
-            using htd::ITreeDecompositionManipulationOperation::clone;
-
             /**
              *  Constructor for a new manipulation operation of type InducedSubgraphLabelingOperation.
              *

@@ -36,8 +36,6 @@ namespace htd
     class IMutablePath : public virtual htd::IPath
     {
         public:
-            using htd::IPath::clone;
-
             /**
              *  Destructor for an IMutablePath object.
              */

@@ -36,8 +36,6 @@ namespace htd
     class IPath : public virtual htd::ITree
     {
         public:
-            using htd::ITree::clone;
-
             virtual ~IPath() = 0;
 
             /**

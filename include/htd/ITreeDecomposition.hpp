@@ -39,9 +39,6 @@ namespace htd
     class ITreeDecomposition : public virtual htd::ILabeledTree, public virtual htd::IGraphDecomposition
     {
         public:
-            using htd::ILabeledTree::clone;
-            using htd::IGraphDecomposition::clone;
-
             virtual ~ITreeDecomposition() = 0;
 
             /**

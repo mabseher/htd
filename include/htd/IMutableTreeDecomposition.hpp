@@ -38,9 +38,6 @@ namespace htd
     class IMutableTreeDecomposition : public virtual htd::IMutableLabeledTree, public virtual htd::ITreeDecomposition
     {
         public:
-            using htd::IMutableLabeledTree::clone;
-            using htd::ITreeDecomposition::clone;
-
             using htd::IMutableTree::insertRoot;
             using htd::IMutableTree::addChild;
             using htd::IMutableTree::addParent;
@@ -151,14 +148,14 @@ namespace htd
              *
              *  @param[in] original  The original tree.
              */
-            virtual IMutableTreeDecomposition & operator=(const htd::ITree & original) = 0;
+            virtual IMutableTreeDecomposition & operator=(const htd::ITree & original) HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable tree decomposition.
              *
              *  @param[in] original  The original labeled tree.
              */
-            virtual IMutableTreeDecomposition & operator=(const htd::ILabeledTree & original) = 0;
+            virtual IMutableTreeDecomposition & operator=(const htd::ILabeledTree & original) HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable tree decomposition.

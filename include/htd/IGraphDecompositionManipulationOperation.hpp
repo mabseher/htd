@@ -38,8 +38,6 @@ namespace htd
     class IGraphDecompositionManipulationOperation : public virtual htd::IDecompositionManipulationOperation
     {
         public:
-            using htd::IDecompositionManipulationOperation::clone;
-
             virtual ~IGraphDecompositionManipulationOperation() = 0;
 
             /**

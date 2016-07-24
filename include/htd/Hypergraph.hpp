@@ -39,8 +39,6 @@ namespace htd
     class Hypergraph : public virtual htd::IMutableHypergraph
     {
         public:
-            using htd::IMutableHypergraph::clone;
-
             /**
              *  Constructor for a hypergraph.
              */

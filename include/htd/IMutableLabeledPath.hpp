@@ -37,9 +37,6 @@ namespace htd
     class IMutableLabeledPath : public virtual htd::ILabeledPath, public virtual htd::IMutablePath
     {
         public:
-            using htd::ILabeledPath::clone;
-            using htd::IMutablePath::clone;
-
             /**
              *  Destructor for an IMutableLabeledPath object.
              */

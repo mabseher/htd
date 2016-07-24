@@ -37,7 +37,6 @@ namespace htd
     class ITree : public virtual htd::IGraph
     {
         public:
-            using htd::IGraph::clone;
             using htd::IGraph::vertexCount;
 
             virtual ~ITree() = 0;

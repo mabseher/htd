@@ -37,9 +37,6 @@ namespace htd
     class IMutableGraphDecomposition : public virtual htd::IMutableLabeledMultiHypergraph, public virtual htd::IGraphDecomposition
     {
         public:
-            using htd::IMutableLabeledMultiHypergraph::clone;
-            using htd::IGraphDecomposition::clone;
-
             using htd::IMutableLabeledMultiHypergraph::addVertex;
 
             using htd::IGraphDecomposition::bagContent;
@@ -100,14 +97,14 @@ namespace htd
              *
              *  @param[in] original  The original multi-hypergraph.
              */
-            virtual IMutableGraphDecomposition & operator=(const htd::IMultiHypergraph & original) = 0;
+            virtual IMutableGraphDecomposition & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable graph decomposition.
              *
              *  @param[in] original  The original labeled multi-hypergraph.
              */
-            virtual IMutableGraphDecomposition & operator=(const htd::ILabeledMultiHypergraph & original) = 0;
+            virtual IMutableGraphDecomposition & operator=(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE = 0;
 
             /**
              *  Copy assignment operator for a mutable graph decomposition.

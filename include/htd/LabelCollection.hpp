@@ -41,8 +41,6 @@ namespace htd
     class LabelCollection : public htd::ILabelCollection
     {
         public:
-            using htd::ILabelCollection::clone;
-
             LabelCollection(void);
 	    
             ~LabelCollection();

@@ -39,8 +39,6 @@ namespace htd
     class IGraphDecomposition : public virtual htd::ILabeledMultiHypergraph
     {
         public:
-            using htd::ILabeledMultiHypergraph::clone;
-
             virtual ~IGraphDecomposition() = 0;
 
             /**

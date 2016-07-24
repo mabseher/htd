@@ -38,8 +38,6 @@ namespace htd
     class GreedySetCoverAlgorithm : public htd::ISetCoverAlgorithm
     {
         public:
-            using htd::ISetCoverAlgorithm::clone;
-
             GreedySetCoverAlgorithm(void);
             
             ~GreedySetCoverAlgorithm();

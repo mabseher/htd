@@ -39,9 +39,6 @@ namespace htd
     class ILabeledMultiGraph : public virtual htd::IMultiGraph, public virtual htd::ILabeledMultiHypergraph
     {
         public:
-            using htd::IMultiGraph::clone;
-            using htd::ILabeledMultiHypergraph::clone;
-
             virtual ~ILabeledMultiGraph() = 0;
 
             /**

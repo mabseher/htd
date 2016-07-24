@@ -650,7 +650,7 @@ htd::Hyperedge::Hyperedge(htd::Hyperedge && original) HTD_NOEXCEPT : id_(origina
 
 }
 
-htd::Hyperedge::~Hyperedge()
+htd::Hyperedge::~Hyperedge() HTD_NOEXCEPT
 {
 
 }

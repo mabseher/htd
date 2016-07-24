@@ -39,6 +39,9 @@ namespace htd
     class ILabeledHypergraph : public virtual htd::IHypergraph, public virtual htd::ILabeledMultiHypergraph
     {
         public:
+            using htd::IHypergraph::clone;
+            using htd::ILabeledMultiHypergraph::clone;
+
             virtual ~ILabeledHypergraph() = 0;
 
             /**
@@ -46,7 +49,7 @@ namespace htd
              *
              *  @return A new ILabeledHypergraph object identical to the current labeled hypergraph.
              */
-            virtual ILabeledHypergraph * clone(void) const = 0;
+            virtual ILabeledHypergraph * clone(void) const HTD_OVERRIDE = 0;
     };
 
     inline htd::ILabeledHypergraph::~ILabeledHypergraph() { }

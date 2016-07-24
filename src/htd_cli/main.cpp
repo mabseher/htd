@@ -650,7 +650,6 @@ int main(int argc, const char * const * const argv)
 {
     int ret = 0;
 
-    std::signal(SIGUSR1, handleSignal);
     std::signal(SIGINT, handleSignal);
     std::signal(SIGTERM, handleSignal);
 

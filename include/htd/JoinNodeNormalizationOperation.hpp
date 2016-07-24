@@ -35,9 +35,11 @@ namespace htd
      *  given tree decompositions in such a way that there is no join node where the children
      *  have a different bag content than the join node.
      */
-    class JoinNodeNormalizationOperation : public virtual htd::ITreeDecompositionManipulationOperation
+    class JoinNodeNormalizationOperation : public htd::ITreeDecompositionManipulationOperation
     {
         public:
+            using htd::ITreeDecompositionManipulationOperation::clone;
+
             /**
              *  Constructor for a new manipulation operation of type JoinNodeNormalizationOperation.
              */

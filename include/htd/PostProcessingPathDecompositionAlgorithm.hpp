@@ -44,6 +44,8 @@ namespace htd
     class PostProcessingPathDecompositionAlgorithm : public virtual htd::IPathDecompositionAlgorithm
     {
         public:
+            using htd::IPathDecompositionAlgorithm::clone;
+
             /**
              *  Constructor for a path decomposition algorithm based on the post-processing of a tree decomposition.
              */

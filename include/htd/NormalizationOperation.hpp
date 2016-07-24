@@ -39,6 +39,8 @@ namespace htd
     class NormalizationOperation : public htd::SemiNormalizationOperation
     {
         public:
+            using htd::SemiNormalizationOperation::clone;
+
             /**
              *  Constructor for a new manipulation operation of type NormalizationOperation.
              */

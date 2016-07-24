@@ -40,6 +40,8 @@ namespace htd
     class SemiNormalizationOperation : public htd::WeakNormalizationOperation
     {
         public:
+            using htd::WeakNormalizationOperation::clone;
+
             /**
              *  Constructor for a new manipulation operation of type SemiNormalizationOperation.
              */

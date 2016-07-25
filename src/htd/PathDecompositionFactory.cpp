@@ -67,11 +67,13 @@ htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposi
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutablePathDecomposition * ret = constructionTemplate_->clone();
-#else
-    htd::IMutablePathDecomposition * ret = constructionTemplate_->cloneMutablePathDecomposition();
-#endif
 
     *ret = original;
+#else
+    htd::IMutablePathDecomposition * ret = constructionTemplate_->cloneMutablePathDecomposition();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

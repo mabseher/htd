@@ -37,6 +37,10 @@ namespace htd
     class IMutableHypertreeDecomposition : public virtual htd::IMutableTreeDecomposition, public virtual htd::IHypertreeDecomposition
     {
         public:
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            using htd::IMutableTreeDecomposition::assign;
+#endif
+
             /**
              *  Destructor for an IMutableHypertreeDecomposition object.
              */
@@ -74,6 +78,7 @@ namespace htd
             virtual IMutableHypertreeDecomposition * cloneMutableHypertreeDecomposition(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable hypertree decomposition.
              *
@@ -87,6 +92,14 @@ namespace htd
              *  @param[in] original  The original hypertree decomposition.
              */
             virtual IMutableHypertreeDecomposition & operator=(const htd::IHypertreeDecomposition & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable hypertree decomposition.
+             *
+             *  @param[in] original  The original hypertree decomposition.
+             */
+            virtual void assign(const htd::IHypertreeDecomposition & original) = 0;
+#endif
     };
 
     inline htd::IMutableHypertreeDecomposition::~IMutableHypertreeDecomposition() { }

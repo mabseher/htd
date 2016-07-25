@@ -67,11 +67,13 @@ htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomp
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraphDecomposition * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableGraphDecomposition * ret = constructionTemplate_->cloneMutableGraphDecomposition();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableGraphDecomposition * ret = constructionTemplate_->cloneMutableGraphDecomposition();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

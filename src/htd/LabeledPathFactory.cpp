@@ -67,11 +67,13 @@ htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(const htd::IL
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledPath * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledPath * ret = constructionTemplate_->cloneMutableLabeledPath();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableLabeledPath * ret = constructionTemplate_->cloneMutableLabeledPath();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

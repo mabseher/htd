@@ -318,4 +318,11 @@ htd::MultiGraph & htd::MultiGraph::operator=(const htd::IMultiGraph & original)
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::MultiGraph::assign(const htd::IMultiGraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_MULTIGRAPH_CPP */

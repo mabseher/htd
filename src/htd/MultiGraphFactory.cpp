@@ -80,11 +80,13 @@ htd::IMutableMultiGraph * htd::MultiGraphFactory::getMultiGraph(const htd::IMult
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableMultiGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableMultiGraph * ret = constructionTemplate_->cloneMutableMultiGraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableMultiGraph * ret = constructionTemplate_->cloneMutableMultiGraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

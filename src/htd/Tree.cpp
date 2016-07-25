@@ -1398,6 +1398,13 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::Tree::assign(const htd::ITree & original)
+{
+    *this = original;
+}
+#endif
+
 void htd::Tree::handleSignal(int signal)
 {
     HTD_UNUSED(signal)

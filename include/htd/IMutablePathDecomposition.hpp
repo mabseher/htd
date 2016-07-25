@@ -42,6 +42,10 @@ namespace htd
             using htd::IMutablePath::addChild;
             using htd::IMutablePath::addParent;
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            using htd::IMutableLabeledPath::assign;
+#endif
+
             using htd::IPathDecomposition::bagContent;
             using htd::IPathDecomposition::inducedHyperedges;
 
@@ -156,6 +160,7 @@ namespace htd
             virtual IMutablePathDecomposition * cloneMutablePathDecomposition(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable path decomposition.
              *
@@ -176,6 +181,14 @@ namespace htd
              *  @param[in] original  The original path decomposition.
              */
             virtual IMutablePathDecomposition & operator=(const htd::IPathDecomposition & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable path decomposition.
+             *
+             *  @param[in] original  The original path decomposition.
+             */
+            virtual void assign(const htd::IPathDecomposition & original) = 0;
+#endif
     };
 
     inline htd::IMutablePathDecomposition::~IMutablePathDecomposition() { }

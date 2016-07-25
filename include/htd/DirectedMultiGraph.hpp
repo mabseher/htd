@@ -187,7 +187,13 @@ namespace htd
              */
             DirectedMultiGraph & operator=(const DirectedMultiGraph & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             DirectedMultiGraph & operator=(const htd::IDirectedMultiGraph & original) HTD_OVERRIDE;
+#else
+            DirectedMultiGraph & operator=(const htd::IDirectedMultiGraph & original);
+
+            void assign(const htd::IDirectedMultiGraph & original) HTD_OVERRIDE;
+#endif
 
         private:
             htd::IMutableMultiHypergraph * base_;

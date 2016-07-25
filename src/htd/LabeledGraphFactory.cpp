@@ -80,11 +80,13 @@ htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd:
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledGraph * ret = constructionTemplate_->cloneMutableLabeledGraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableLabeledGraph * ret = constructionTemplate_->cloneMutableLabeledGraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }
@@ -93,11 +95,13 @@ htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd:
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledGraph * ret = constructionTemplate_->cloneMutableLabeledGraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableLabeledGraph * ret = constructionTemplate_->cloneMutableLabeledGraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

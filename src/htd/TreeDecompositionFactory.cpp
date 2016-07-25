@@ -68,11 +68,13 @@ htd::IMutableTreeDecomposition * htd::TreeDecompositionFactory::getTreeDecomposi
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableTreeDecomposition * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableTreeDecomposition * ret = constructionTemplate_->cloneMutableTreeDecomposition();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableTreeDecomposition * ret = constructionTemplate_->cloneMutableTreeDecomposition();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

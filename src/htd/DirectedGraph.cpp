@@ -581,4 +581,16 @@ htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::IDirectedMultiGrap
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::DirectedGraph::assign(const htd::IDirectedGraph & original)
+{
+    *this = original;
+}
+
+void htd::DirectedGraph::assign(const htd::IDirectedMultiGraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_DIRECTEDGRAPH_CPP */

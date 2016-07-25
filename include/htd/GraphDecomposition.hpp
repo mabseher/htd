@@ -124,11 +124,25 @@ namespace htd
              */
             GraphDecomposition & operator=(const GraphDecomposition & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             GraphDecomposition & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
 
             GraphDecomposition & operator=(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
 
             GraphDecomposition & operator=(const htd::IGraphDecomposition & original) HTD_OVERRIDE;
+#else
+            GraphDecomposition & operator=(const htd::IMultiHypergraph & original);
+
+            GraphDecomposition & operator=(const htd::ILabeledMultiHypergraph & original);
+
+            GraphDecomposition & operator=(const htd::IGraphDecomposition & original);
+
+            void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::IGraphDecomposition & original) HTD_OVERRIDE;
+#endif
 
         private:
             std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> bagContent_;

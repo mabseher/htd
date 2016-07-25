@@ -144,12 +144,21 @@ namespace htd
             virtual IMutableTree * cloneMutableTree(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable tree.
              *
              *  @param[in] original  The original tree.
              */
             virtual IMutableTree & operator=(const htd::ITree & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable tree.
+             *
+             *  @param[in] original  The original tree.
+             */
+            virtual void assign(const htd::ITree & original) = 0;
+#endif
     };
 
     inline htd::IMutableTree::~IMutableTree() { }

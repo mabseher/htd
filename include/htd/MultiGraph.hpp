@@ -166,8 +166,13 @@ namespace htd
              */
             MultiGraph & operator=(const MultiGraph & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             MultiGraph & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;
+#else
+            MultiGraph & operator=(const htd::IMultiGraph & original);
 
+            void assign(const htd::IMultiGraph & original) HTD_OVERRIDE;
+#endif
         private:
             htd::IMutableMultiHypergraph * base_;
     };

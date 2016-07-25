@@ -302,4 +302,16 @@ htd::LabeledPath & htd::LabeledPath::operator=(const htd::ILabeledPath & origina
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::LabeledPath::assign(const htd::IPath & original)
+{
+    *this = original;
+}
+
+void htd::LabeledPath::assign(const htd::ILabeledPath & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_LABELEDPATH_CPP */

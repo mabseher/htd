@@ -1088,4 +1088,11 @@ htd::MultiHypergraph & htd::MultiHypergraph::operator=(const htd::IMultiHypergra
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::MultiHypergraph::assign(const htd::IMultiHypergraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_MULTIHYPERGRAPH_CPP */

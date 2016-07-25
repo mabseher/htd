@@ -80,11 +80,13 @@ htd::IMutableDirectedMultiGraph * htd::DirectedMultiGraphFactory::getDirectedMul
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableDirectedMultiGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableDirectedMultiGraph * ret = constructionTemplate_->cloneMutableDirectedMultiGraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableDirectedMultiGraph * ret = constructionTemplate_->cloneMutableDirectedMultiGraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

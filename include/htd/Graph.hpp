@@ -170,9 +170,19 @@ namespace htd
              */
             Graph & operator=(const Graph & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Graph & operator=(const htd::IGraph & original) HTD_OVERRIDE;
 
             Graph & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;
+#else
+            Graph & operator=(const htd::IGraph & original);
+
+            Graph & operator=(const htd::IMultiGraph & original);
+
+            void assign(const htd::IGraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::IMultiGraph & original) HTD_OVERRIDE;
+#endif
 
         private:
             htd::IMutableHypergraph * base_;

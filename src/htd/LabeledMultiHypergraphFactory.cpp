@@ -80,11 +80,13 @@ htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLab
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->cloneMutableLabeledMultiHypergraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->cloneMutableLabeledMultiHypergraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

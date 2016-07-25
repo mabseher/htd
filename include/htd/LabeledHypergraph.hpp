@@ -142,6 +142,7 @@ namespace htd
              */
             LabeledHypergraph & operator=(const LabeledHypergraph & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledHypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
 
             LabeledHypergraph & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
@@ -149,6 +150,23 @@ namespace htd
             LabeledHypergraph & operator=(const htd::ILabeledHypergraph & original) HTD_OVERRIDE;
 
             LabeledHypergraph & operator=(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
+#else
+            LabeledHypergraph & operator=(const htd::IHypergraph & original);
+
+            LabeledHypergraph & operator=(const htd::IMultiHypergraph & original);
+
+            LabeledHypergraph & operator=(const htd::ILabeledHypergraph & original);
+
+            LabeledHypergraph & operator=(const htd::ILabeledMultiHypergraph & original);
+
+            void assign(const htd::IHypergraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledHypergraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
+#endif
 
         private:
             htd::ILabelingCollection * labelings_;

@@ -38,6 +38,10 @@ namespace htd
     class IMutableLabeledGraph : public virtual htd::ILabeledGraph, public virtual htd::IMutableGraph
     {
         public:
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            using htd::IMutableGraph::assign;
+#endif
+
             /**
              *  Destructor for an IMutableLabeledGraph object.
              */
@@ -169,6 +173,7 @@ namespace htd
             virtual IMutableLabeledGraph * cloneMutableLabeledGraph(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable labeled graph.
              *
@@ -182,6 +187,21 @@ namespace htd
              *  @param[in] original  The original labeled multi-graph.
              */
             virtual IMutableLabeledGraph & operator=(const htd::ILabeledMultiGraph & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable labeled graph.
+             *
+             *  @param[in] original  The original labeled graph.
+             */
+            virtual void assign(const htd::ILabeledGraph & original) = 0;
+
+            /**
+             *  Copy assignment operator for a mutable labeled graph.
+             *
+             *  @param[in] original  The original labeled multi-graph.
+             */
+            virtual void assign(const htd::ILabeledMultiGraph & original) = 0;
+#endif
     };
 
     inline htd::IMutableLabeledGraph::~IMutableLabeledGraph() { }

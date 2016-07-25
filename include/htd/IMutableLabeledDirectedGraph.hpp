@@ -38,6 +38,10 @@ namespace htd
     class IMutableLabeledDirectedGraph : public virtual htd::ILabeledDirectedGraph, public virtual htd::IMutableDirectedGraph
     {
         public:
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            using htd::IMutableDirectedGraph::assign;
+#endif
+
             /**
              *  Destructor for an IMutableLabeledDirectedGraph object.
              */
@@ -169,6 +173,7 @@ namespace htd
             virtual IMutableLabeledDirectedGraph * cloneMutableLabeledDirectedGraph(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable labeled directed graph.
              *
@@ -182,6 +187,21 @@ namespace htd
              *  @param[in] original  The original labeled directed multi-graph.
              */
             virtual IMutableLabeledDirectedGraph & operator=(const htd::ILabeledDirectedMultiGraph & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable labeled directed graph.
+             *
+             *  @param[in] original  The original labeled directed graph.
+             */
+            virtual void assign(const htd::ILabeledDirectedGraph & original) = 0;
+
+            /**
+             *  Copy assignment operator for a mutable labeled directed graph.
+             *
+             *  @param[in] original  The original labeled directed multi-graph.
+             */
+            virtual void assign(const htd::ILabeledDirectedMultiGraph & original) = 0;
+#endif
     };
 
     inline htd::IMutableLabeledDirectedGraph::~IMutableLabeledDirectedGraph() { }

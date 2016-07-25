@@ -80,11 +80,13 @@ htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IHype
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableHypergraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableHypergraph * ret = constructionTemplate_->cloneMutableHypergraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableHypergraph * ret = constructionTemplate_->cloneMutableHypergraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }
@@ -93,11 +95,13 @@ htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IMult
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableHypergraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableHypergraph * ret = constructionTemplate_->cloneMutableHypergraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableHypergraph * ret = constructionTemplate_->cloneMutableHypergraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

@@ -112,12 +112,21 @@ namespace htd
             virtual IMutableDirectedMultiGraph * cloneMutableDirectedMultiGraph(void) const  = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable directed multi-graph.
              *
              *  @param[in] original  The original directed multi-graph.
              */
             virtual IMutableDirectedMultiGraph & operator=(const htd::IDirectedMultiGraph & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable directed multi-graph.
+             *
+             *  @param[in] original  The original directed multi-graph.
+             */
+            virtual void assign(const htd::IDirectedMultiGraph & original) = 0;
+#endif
     };
 
     inline htd::IMutableDirectedMultiGraph::~IMutableDirectedMultiGraph() { }

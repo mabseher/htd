@@ -150,6 +150,7 @@ namespace htd
              */
             LabeledGraph & operator=(const LabeledGraph & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledGraph & operator=(const htd::IGraph & original) HTD_OVERRIDE;
 
             LabeledGraph & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;
@@ -157,6 +158,23 @@ namespace htd
             LabeledGraph & operator=(const htd::ILabeledGraph & original) HTD_OVERRIDE;
 
             LabeledGraph & operator=(const htd::ILabeledMultiGraph & original) HTD_OVERRIDE;
+#else
+            LabeledGraph & operator=(const htd::IGraph & original);
+
+            LabeledGraph & operator=(const htd::IMultiGraph & original);
+
+            LabeledGraph & operator=(const htd::ILabeledGraph & original);
+
+            LabeledGraph & operator=(const htd::ILabeledMultiGraph & original);
+
+            void assign(const htd::IGraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::IMultiGraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledGraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledMultiGraph & original) HTD_OVERRIDE;
+#endif
 
         private:
             htd::ILabelingCollection * labelings_;

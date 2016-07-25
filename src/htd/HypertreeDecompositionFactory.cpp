@@ -70,11 +70,13 @@ htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHyp
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableHypertreeDecomposition * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableHypertreeDecomposition * ret = constructionTemplate_->cloneMutableHypertreeDecomposition();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableHypertreeDecomposition * ret = constructionTemplate_->cloneMutableHypertreeDecomposition();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

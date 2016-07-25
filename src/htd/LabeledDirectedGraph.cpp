@@ -336,4 +336,26 @@ htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::ILab
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::LabeledDirectedGraph::assign(const htd::IDirectedGraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledDirectedGraph::assign(const htd::IDirectedMultiGraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledDirectedGraph::assign(const htd::ILabeledDirectedGraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledDirectedGraph::assign(const htd::ILabeledDirectedMultiGraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_LABELEDDIRECTEDGRAPH_CPP */

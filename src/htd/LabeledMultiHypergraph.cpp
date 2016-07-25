@@ -259,4 +259,16 @@ htd::LabeledMultiHypergraph & htd::LabeledMultiHypergraph::operator=(const htd::
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::LabeledMultiHypergraph::assign(const htd::IMultiHypergraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledMultiHypergraph::assign(const htd::ILabeledMultiHypergraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_LABELEDMULTIHYPERGRAPH_CPP */

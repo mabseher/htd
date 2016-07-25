@@ -146,9 +146,19 @@ namespace htd
              */
             LabeledDirectedMultiGraph & operator=(const LabeledDirectedMultiGraph & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledDirectedMultiGraph & operator=(const htd::IDirectedMultiGraph & original) HTD_OVERRIDE;
 
             LabeledDirectedMultiGraph & operator=(const htd::ILabeledDirectedMultiGraph & original) HTD_OVERRIDE;
+#else
+            LabeledDirectedMultiGraph & operator=(const htd::IDirectedMultiGraph & original);
+
+            LabeledDirectedMultiGraph & operator=(const htd::ILabeledDirectedMultiGraph & original);
+
+            void assign(const htd::IDirectedMultiGraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledDirectedMultiGraph & original) HTD_OVERRIDE;
+#endif
 
         private:
             htd::ILabelingCollection * labelings_;

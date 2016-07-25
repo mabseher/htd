@@ -149,9 +149,19 @@ namespace htd
              */
             LabeledPath & operator=(const LabeledPath & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledPath & operator=(const htd::IPath & original) HTD_OVERRIDE;
 
             LabeledPath & operator=(const htd::ILabeledPath & original) HTD_OVERRIDE;
+#else
+            LabeledPath & operator=(const htd::IPath & original);
+
+            LabeledPath & operator=(const htd::ILabeledPath & original);
+
+            void assign(const htd::IPath & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledPath & original) HTD_OVERRIDE;
+#endif
 
         private:
             htd::ILabelingCollection * labelings_;

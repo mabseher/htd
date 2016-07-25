@@ -451,4 +451,16 @@ htd::Hypergraph & htd::Hypergraph::operator=(const htd::IMultiHypergraph & origi
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::Hypergraph::assign(const htd::IHypergraph & original)
+{
+    *this = original;
+}
+
+void htd::Hypergraph::assign(const htd::IMultiHypergraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_HYPERGRAPH_CPP */

@@ -271,4 +271,26 @@ htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::HypertreeDecomposition::assign(const htd::ITree & original)
+{
+    *this = original;
+}
+
+void htd::HypertreeDecomposition::assign(const htd::ILabeledTree & original)
+{
+    *this = original;
+}
+
+void htd::HypertreeDecomposition::assign(const htd::ITreeDecomposition & original)
+{
+    *this = original;
+}
+
+void htd::HypertreeDecomposition::assign(const htd::IHypertreeDecomposition & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITION_CPP */

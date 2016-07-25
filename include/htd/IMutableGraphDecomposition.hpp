@@ -38,6 +38,9 @@ namespace htd
     {
         public:
             using htd::IMutableLabeledMultiHypergraph::addVertex;
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            using htd::IMutableLabeledMultiHypergraph::assign;
+#endif
 
             using htd::IGraphDecomposition::bagContent;
             using htd::IGraphDecomposition::inducedHyperedges;
@@ -101,6 +104,7 @@ namespace htd
             virtual IMutableGraphDecomposition * cloneMutableGraphDecomposition(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable graph decomposition.
              *
@@ -121,6 +125,14 @@ namespace htd
              *  @param[in] original  The original graph decomposition.
              */
             virtual IMutableGraphDecomposition & operator=(const htd::IGraphDecomposition & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable graph decomposition.
+             *
+             *  @param[in] original  The original graph decomposition.
+             */
+            virtual void assign(const htd::IGraphDecomposition & original) = 0;
+#endif
     };
 
     inline htd::IMutableGraphDecomposition::~IMutableGraphDecomposition() { }

@@ -299,4 +299,26 @@ htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::ILabeledMu
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::LabeledHypergraph::assign(const htd::IHypergraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledHypergraph::assign(const htd::IMultiHypergraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledHypergraph::assign(const htd::ILabeledHypergraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledHypergraph::assign(const htd::ILabeledMultiHypergraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_LABELEDHYPERGRAPH_CPP */

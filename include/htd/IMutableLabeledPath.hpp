@@ -37,6 +37,10 @@ namespace htd
     class IMutableLabeledPath : public virtual htd::ILabeledPath, public virtual htd::IMutablePath
     {
         public:
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            using htd::IMutablePath::assign;
+#endif
+
             /**
              *  Destructor for an IMutableLabeledPath object.
              */
@@ -168,12 +172,21 @@ namespace htd
             virtual IMutableLabeledPath * cloneMutableLabeledPath(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable labeled path.
              *
              *  @param[in] original  The original labeled path.
              */
             virtual IMutableLabeledPath & operator=(const htd::ILabeledPath & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable labeled path.
+             *
+             *  @param[in] original  The original labeled path.
+             */
+            virtual void assign(const htd::ILabeledPath & original) = 0;
+#endif
     };
 
     inline htd::IMutableLabeledPath::~IMutableLabeledPath() { }

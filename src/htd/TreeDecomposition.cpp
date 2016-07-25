@@ -1151,4 +1151,21 @@ htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::ITreeDecom
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::TreeDecomposition::assign(const htd::ITree & original)
+{
+    *this = original;
+}
+
+void htd::TreeDecomposition::assign(const htd::ILabeledTree & original)
+{
+    *this = original;
+}
+
+void htd::TreeDecomposition::assign(const htd::ITreeDecomposition & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_TREEDECOMPOSITION_CPP */

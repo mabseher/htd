@@ -183,9 +183,19 @@ namespace htd
              */
             Hypergraph & operator=(const Hypergraph & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Hypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
 
             Hypergraph & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+#else
+            Hypergraph & operator=(const htd::IHypergraph & original);
+
+            Hypergraph & operator=(const htd::IMultiHypergraph & original);
+
+            void assign(const htd::IHypergraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+#endif
 
         private:
             htd::IMutableMultiHypergraph * base_;

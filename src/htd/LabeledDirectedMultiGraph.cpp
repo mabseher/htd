@@ -284,4 +284,16 @@ htd::LabeledDirectedMultiGraph & htd::LabeledDirectedMultiGraph::operator=(const
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::LabeledDirectedMultiGraph::assign(const htd::IDirectedMultiGraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledDirectedMultiGraph::assign(const htd::ILabeledDirectedMultiGraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_LABELEDDIRECTEDMULTIGRAPH_CPP */

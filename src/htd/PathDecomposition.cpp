@@ -1063,4 +1063,21 @@ htd::PathDecomposition & htd::PathDecomposition::operator=(const htd::IPathDecom
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::PathDecomposition::assign(const htd::IPath & original)
+{
+    *this = original;
+}
+
+void htd::PathDecomposition::assign(const htd::ILabeledPath & original)
+{
+    *this = original;
+}
+
+void htd::PathDecomposition::assign(const htd::IPathDecomposition & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_PATHDECOMPOSITION_CPP */

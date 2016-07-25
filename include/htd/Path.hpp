@@ -216,7 +216,13 @@ namespace htd
              */
             Path & operator=(const Path & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Path & operator=(const htd::IPath & original) HTD_OVERRIDE;
+#else
+            Path & operator=(const htd::IPath & original);
+
+            void assign(const htd::IPath & original) HTD_OVERRIDE;
+#endif
 
         protected:
             /**

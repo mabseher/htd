@@ -80,11 +80,13 @@ htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiG
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledMultiGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledMultiGraph * ret = constructionTemplate_->cloneMutableLabeledMultiGraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableLabeledMultiGraph * ret = constructionTemplate_->cloneMutableLabeledMultiGraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

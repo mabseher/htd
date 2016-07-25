@@ -145,9 +145,19 @@ namespace htd
              */
             LabeledTree & operator=(const LabeledTree & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledTree & operator=(const htd::ITree & original) HTD_OVERRIDE;
 
             LabeledTree & operator=(const htd::ILabeledTree & original) HTD_OVERRIDE;
+#else
+            LabeledTree & operator=(const htd::ITree & original);
+
+            LabeledTree & operator=(const htd::ILabeledTree & original);
+
+            void assign(const htd::ITree & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledTree & original) HTD_OVERRIDE;
+#endif
 
         private:
             htd::ILabelingCollection * labelings_;

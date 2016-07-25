@@ -180,6 +180,7 @@ namespace htd
             virtual IMutableHypergraph * cloneMutableHypergraph(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable hypergraph.
              *
@@ -193,6 +194,21 @@ namespace htd
              *  @param[in] original  The original multi-hypergraph.
              */
             virtual IMutableHypergraph & operator=(const htd::IMultiHypergraph & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable hypergraph.
+             *
+             *  @param[in] original  The original hypergraph.
+             */
+            virtual void assign(const htd::IHypergraph & original) = 0;
+
+            /**
+             *  Copy assignment operator for a mutable hypergraph.
+             *
+             *  @param[in] original  The original multi-hypergraph.
+             */
+            virtual void assign(const htd::IMultiHypergraph & original) = 0;
+#endif
     };
 
     inline htd::IMutableHypergraph::~IMutableHypergraph() { }

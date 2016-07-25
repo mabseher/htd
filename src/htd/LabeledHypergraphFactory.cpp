@@ -80,11 +80,13 @@ htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHyperg
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledHypergraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledHypergraph * ret = constructionTemplate_->cloneMutableLabeledHypergraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableLabeledHypergraph * ret = constructionTemplate_->cloneMutableLabeledHypergraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }
@@ -93,11 +95,13 @@ htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHyperg
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledHypergraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledHypergraph * ret = constructionTemplate_->cloneMutableLabeledHypergraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableLabeledHypergraph * ret = constructionTemplate_->cloneMutableLabeledHypergraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

@@ -122,6 +122,7 @@ namespace htd
             virtual IMutableGraph * cloneMutableGraph(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable graph.
              *
@@ -135,6 +136,21 @@ namespace htd
              *  @param[in] original  The original multi-graph.
              */
             virtual IMutableGraph & operator=(const htd::IMultiGraph & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable graph.
+             *
+             *  @param[in] original  The original graph.
+             */
+            virtual void assign(const htd::IGraph & original) = 0;
+
+            /**
+             *  Copy assignment operator for a mutable graph.
+             *
+             *  @param[in] original  The original multi-graph.
+             */
+            virtual void assign(const htd::IMultiGraph & original) = 0;
+#endif
     };
 
     inline htd::IMutableGraph::~IMutableGraph() { }

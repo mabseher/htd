@@ -37,6 +37,10 @@ namespace htd
     class IMutableLabeledTree : public virtual htd::ILabeledTree, public virtual htd::IMutableTree
     {
         public:
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            using htd::IMutableTree::assign;
+#endif
+
             /**
              *  Destructor for an IMutableLabeledTree object.
              */
@@ -168,12 +172,21 @@ namespace htd
             virtual IMutableLabeledTree * cloneMutableLabeledTree(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable labeled tree.
              *
              *  @param[in] original  The original labeled tree.
              */
             virtual IMutableLabeledTree & operator=(const htd::ILabeledTree & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable labeled tree.
+             *
+             *  @param[in] original  The original labeled tree.
+             */
+            virtual void assign(const htd::ILabeledTree & original) = 0;
+#endif
     };
 
     inline htd::IMutableLabeledTree::~IMutableLabeledTree() { }

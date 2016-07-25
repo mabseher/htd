@@ -213,7 +213,13 @@ namespace htd
              */
             Tree & operator=(const Tree & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Tree & operator=(const htd::ITree & original) HTD_OVERRIDE;
+#else
+            Tree & operator=(const htd::ITree & original);
+
+            void assign(const htd::ITree & original) HTD_OVERRIDE;
+#endif
 
         protected:
             /**

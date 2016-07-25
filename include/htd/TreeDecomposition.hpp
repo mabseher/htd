@@ -261,11 +261,25 @@ namespace htd
              */
             TreeDecomposition & operator=(const TreeDecomposition & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             TreeDecomposition & operator=(const htd::ITree & original) HTD_OVERRIDE;
 
             TreeDecomposition & operator=(const htd::ILabeledTree & original) HTD_OVERRIDE;
 
             TreeDecomposition & operator=(const htd::ITreeDecomposition & original) HTD_OVERRIDE;
+#else
+            TreeDecomposition & operator=(const htd::ITree & original);
+
+            TreeDecomposition & operator=(const htd::ILabeledTree & original);
+
+            TreeDecomposition & operator=(const htd::ITreeDecomposition & original);
+
+            void assign(const htd::ITree & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledTree & original) HTD_OVERRIDE;
+
+            void assign(const htd::ITreeDecomposition & original) HTD_OVERRIDE;
+#endif
 
         protected:
             /**

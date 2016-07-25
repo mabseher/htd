@@ -138,9 +138,19 @@ namespace htd
              */
             LabeledMultiHypergraph & operator=(const LabeledMultiHypergraph & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledMultiHypergraph & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
 
             LabeledMultiHypergraph & operator=(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
+#else
+            LabeledMultiHypergraph & operator=(const htd::IMultiHypergraph & original);
+
+            LabeledMultiHypergraph & operator=(const htd::ILabeledMultiHypergraph & original);
+
+            void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
+#endif
 
         private:
             htd::ILabelingCollection * labelings_;

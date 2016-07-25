@@ -81,11 +81,13 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IGraph & original)
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableGraph * ret = constructionTemplate_->cloneMutableGraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableGraph * ret = constructionTemplate_->cloneMutableGraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }
@@ -94,11 +96,13 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IMultiGraph & origin
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableGraph * ret = constructionTemplate_->cloneMutableGraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableGraph * ret = constructionTemplate_->cloneMutableGraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

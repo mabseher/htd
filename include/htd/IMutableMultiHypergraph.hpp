@@ -158,12 +158,21 @@ namespace htd
             virtual IMutableMultiHypergraph * cloneMutableMultiHypergraph(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable multi-hypergraph.
              *
              *  @param[in] original  The original multi-hypergraph.
              */
             virtual IMutableMultiHypergraph & operator=(const htd::IMultiHypergraph & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable multi-hypergraph.
+             *
+             *  @param[in] original  The original multi-hypergraph.
+             */
+            virtual void assign(const htd::IMultiHypergraph & original) = 0;
+#endif
     };
 
     inline htd::IMutableMultiHypergraph::~IMutableMultiHypergraph() { }

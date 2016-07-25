@@ -316,4 +316,26 @@ htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::ILabeledMultiGraph &
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::LabeledGraph::assign(const htd::IGraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledGraph::assign(const htd::IMultiGraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledGraph::assign(const htd::ILabeledGraph & original)
+{
+    *this = original;
+}
+
+void htd::LabeledGraph::assign(const htd::ILabeledMultiGraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_LABELEDGRAPH_CPP */

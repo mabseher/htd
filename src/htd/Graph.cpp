@@ -347,4 +347,16 @@ htd::Graph & htd::Graph::operator=(const htd::IMultiGraph & original)
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::Graph::assign(const htd::IGraph & original)
+{
+    *this = original;
+}
+
+void htd::Graph::assign(const htd::IMultiGraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_GRAPH_CPP */

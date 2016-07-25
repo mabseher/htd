@@ -140,12 +140,21 @@ namespace htd
             virtual IMutablePath * cloneMutablePath(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable path.
              *
              *  @param[in] original  The original path.
              */
             virtual IMutablePath & operator=(const htd::IPath & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable path.
+             *
+             *  @param[in] original  The original path.
+             */
+            virtual void assign(const htd::IPath & original) = 0;
+#endif
     };
 
     inline htd::IMutablePath::~IMutablePath() { }

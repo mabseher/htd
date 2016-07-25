@@ -109,6 +109,7 @@ namespace htd
             htd::IMutableHypertreeDecomposition * cloneMutableHypertreeDecomposition(void) const HTD_OVERRIDE;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             HypertreeDecomposition & operator=(const htd::ITree & original) HTD_OVERRIDE;
 
             HypertreeDecomposition & operator=(const htd::ILabeledTree & original) HTD_OVERRIDE;
@@ -116,7 +117,23 @@ namespace htd
             HypertreeDecomposition & operator=(const htd::ITreeDecomposition & original) HTD_OVERRIDE;
 
             HypertreeDecomposition & operator=(const htd::IHypertreeDecomposition & original) HTD_OVERRIDE;
+#else
+            HypertreeDecomposition & operator=(const htd::ITree & original);
 
+            HypertreeDecomposition & operator=(const htd::ILabeledTree & original);
+
+            HypertreeDecomposition & operator=(const htd::ITreeDecomposition & original);
+
+            HypertreeDecomposition & operator=(const htd::IHypertreeDecomposition & original);
+
+            void assign(const htd::ITree & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledTree & original) HTD_OVERRIDE;
+
+            void assign(const htd::ITreeDecomposition & original) HTD_OVERRIDE;
+
+            void assign(const htd::IHypertreeDecomposition & original) HTD_OVERRIDE;
+#endif
         private:
             std::unordered_map<htd::vertex_t, std::vector<htd::Hyperedge>> coveringEdges_;
     };

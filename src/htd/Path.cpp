@@ -1181,4 +1181,11 @@ htd::Path & htd::Path::operator=(const htd::IPath & original)
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::Path::assign(const htd::IPath & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_PATH_CPP */

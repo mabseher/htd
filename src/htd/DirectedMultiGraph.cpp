@@ -519,4 +519,11 @@ htd::DirectedMultiGraph & htd::DirectedMultiGraph::operator=(const htd::IDirecte
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::DirectedMultiGraph::assign(const htd::IDirectedMultiGraph & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_DIRECTEDMULTIGRAPH_CPP */

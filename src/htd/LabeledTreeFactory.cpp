@@ -67,7 +67,11 @@ htd::IMutableLabeledTree * htd::LabeledTreeFactory::getLabeledTree(const htd::IL
 {
     htd::IMutableLabeledTree * ret = htd::LabeledTreeFactory::getLabeledTree();
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     *ret = original;
+#else
+    ret->assign(original);
+#endif
 
     return ret;
 }

@@ -80,11 +80,13 @@ htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledDirectedMultiGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledDirectedMultiGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedMultiGraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableLabeledDirectedMultiGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedMultiGraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

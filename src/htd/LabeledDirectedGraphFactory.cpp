@@ -80,11 +80,13 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedGraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedGraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }
@@ -93,11 +95,13 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedGraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedGraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

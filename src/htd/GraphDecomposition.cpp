@@ -356,4 +356,21 @@ htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::IGraphDe
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::GraphDecomposition::assign(const htd::IMultiHypergraph & original)
+{
+    *this = original;
+}
+
+void htd::GraphDecomposition::assign(const htd::ILabeledMultiHypergraph & original)
+{
+    *this = original;
+}
+
+void htd::GraphDecomposition::assign(const htd::IGraphDecomposition & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_GRAPHDECOMPOSITION_CPP */

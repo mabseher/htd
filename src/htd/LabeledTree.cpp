@@ -292,4 +292,16 @@ htd::LabeledTree & htd::LabeledTree::operator=(const htd::ILabeledTree & origina
     return *this;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+void htd::LabeledTree::assign(const htd::ITree & original)
+{
+    *this = original;
+}
+
+void htd::LabeledTree::assign(const htd::ILabeledTree & original)
+{
+    *this = original;
+}
+#endif
+
 #endif /* HTD_HTD_LABELEDTREE_CPP */

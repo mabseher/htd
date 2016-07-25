@@ -269,11 +269,25 @@ namespace htd
              */
             PathDecomposition & operator=(const PathDecomposition & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             PathDecomposition & operator=(const htd::IPath & original) HTD_OVERRIDE;
 
             PathDecomposition & operator=(const htd::ILabeledPath & original) HTD_OVERRIDE;
 
             PathDecomposition & operator=(const htd::IPathDecomposition & original) HTD_OVERRIDE;
+#else
+            PathDecomposition & operator=(const htd::IPath & original);
+
+            PathDecomposition & operator=(const htd::ILabeledPath & original);
+
+            PathDecomposition & operator=(const htd::IPathDecomposition & original);
+
+            void assign(const htd::IPath & original) HTD_OVERRIDE;
+
+            void assign(const htd::ILabeledPath & original) HTD_OVERRIDE;
+
+            void assign(const htd::IPathDecomposition & original) HTD_OVERRIDE;
+#endif
 
         private:
             std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> bagContent_;

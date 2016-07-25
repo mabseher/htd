@@ -42,6 +42,10 @@ namespace htd
             using htd::IMutableTree::addChild;
             using htd::IMutableTree::addParent;
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            using htd::IMutableLabeledTree::assign;
+#endif
+
             using htd::ITreeDecomposition::bagContent;
             using htd::ITreeDecomposition::inducedHyperedges;
 
@@ -152,6 +156,7 @@ namespace htd
             virtual IMutableTreeDecomposition * cloneMutableTreeDecomposition(void) const = 0;
 #endif
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Copy assignment operator for a mutable tree decomposition.
              *
@@ -172,6 +177,14 @@ namespace htd
              *  @param[in] original  The original tree decomposition.
              */
             virtual IMutableTreeDecomposition & operator=(const htd::ITreeDecomposition & original) = 0;
+#else
+            /**
+             *  Copy assignment operator for a mutable tree decomposition.
+             *
+             *  @param[in] original  The original tree decomposition.
+             */
+            virtual void assign(const htd::ITreeDecomposition & original) = 0;
+#endif
     };
 
     inline htd::IMutableTreeDecomposition::~IMutableTreeDecomposition() { }

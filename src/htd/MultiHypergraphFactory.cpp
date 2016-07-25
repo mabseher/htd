@@ -80,11 +80,13 @@ htd::IMutableMultiHypergraph * htd::MultiHypergraphFactory::getMultiHypergraph(c
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableMultiHypergraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableMultiHypergraph * ret = constructionTemplate_->cloneMutableMultiHypergraph();
-#endif
 
     *ret = original;
+#else
+    htd::IMutableMultiHypergraph * ret = constructionTemplate_->cloneMutableMultiHypergraph();
+
+    ret->assign(original);
+#endif
 
     return ret;
 }

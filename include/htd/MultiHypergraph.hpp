@@ -174,7 +174,13 @@ namespace htd
              */
             MultiHypergraph & operator=(const MultiHypergraph & original);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             MultiHypergraph & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+#else
+            MultiHypergraph & operator=(const htd::IMultiHypergraph & original);
+
+            void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+#endif
 
         private:
             std::size_t size_;

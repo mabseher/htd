@@ -145,6 +145,11 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             MultiGraph * clone(void) const HTD_OVERRIDE;
 #else
+            /**
+             *  Create a deep copy of the current mutable multi-graph.
+             *
+             *  @return A new MultiGraph object identical to the current mutable multi-graph.
+             */
             MultiGraph * clone(void) const;
 
             htd::IMultiGraph * cloneMultiGraph(void) const HTD_OVERRIDE;

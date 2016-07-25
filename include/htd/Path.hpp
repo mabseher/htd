@@ -187,6 +187,11 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Path * clone(void) const HTD_OVERRIDE;
 #else
+            /**
+             *  Create a deep copy of the current mutable path.
+             *
+             *  @return A new Path object identical to the current mutable path.
+             */
             Path * clone(void) const;
 
             htd::IPath * clonePath(void) const HTD_OVERRIDE;

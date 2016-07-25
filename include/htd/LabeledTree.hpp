@@ -106,6 +106,11 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledTree * clone(void) const HTD_OVERRIDE;
 #else
+            /**
+             *  Create a deep copy of the current mutable labeled tree.
+             *
+             *  @return A new LabeledTree object identical to the current mutable labeled tree.
+             */
             LabeledTree * clone(void) const;
 
             htd::ITree * cloneTree(void) const HTD_OVERRIDE;

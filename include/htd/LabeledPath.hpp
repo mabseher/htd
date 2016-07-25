@@ -106,6 +106,11 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledPath * clone(void) const HTD_OVERRIDE;
 #else
+            /**
+             *  Create a deep copy of the current mutable labeled path.
+             *
+             *  @return A new LabeledPath object identical to the current mutable labeled path.
+             */
             LabeledPath * clone(void) const;
 
             htd::IPath * clonePath(void) const HTD_OVERRIDE;

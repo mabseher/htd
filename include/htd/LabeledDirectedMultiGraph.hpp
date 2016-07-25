@@ -115,6 +115,11 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledDirectedMultiGraph * clone(void) const HTD_OVERRIDE;
 #else
+            /**
+             *  Create a deep copy of the current mutable labeled directed multi-graph.
+             *
+             *  @return A new LabeledDirectedMultiGraph object identical to the current mutable labeled directed multi-graph.
+             */
             LabeledDirectedMultiGraph * clone(void) const;
 
             htd::IMultiGraph * cloneMultiGraph(void) const HTD_OVERRIDE;

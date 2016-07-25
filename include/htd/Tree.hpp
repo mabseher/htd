@@ -186,6 +186,11 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Tree * clone(void) const HTD_OVERRIDE;
 #else
+            /**
+             *  Create a deep copy of the current mutable tree.
+             *
+             *  @return A new Tree object identical to the current mutable tree.
+             */
             Tree * clone(void) const;
 
             htd::ITree * cloneTree(void) const HTD_OVERRIDE;

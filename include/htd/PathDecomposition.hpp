@@ -218,6 +218,11 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             PathDecomposition * clone(void) const HTD_OVERRIDE;
 #else
+            /**
+             *  Create a deep copy of the current mutable path decomposition.
+             *
+             *  @return A new PathDecomposition object identical to the current mutable path decomposition.
+             */
             PathDecomposition * clone(void) const;
 
             htd::IPath * clonePath(void) const HTD_OVERRIDE;

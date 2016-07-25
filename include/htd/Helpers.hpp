@@ -80,7 +80,7 @@
     #endif
 #endif
 
-//#define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+#define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 
 namespace htd
 {

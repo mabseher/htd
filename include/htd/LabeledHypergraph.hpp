@@ -115,6 +115,11 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledHypergraph * clone(void) const HTD_OVERRIDE;
 #else
+            /**
+             *  Create a deep copy of the current mutable labeled hypergraph.
+             *
+             *  @return A new LabeledHypergraph object identical to the current mutable labeled hypergraph.
+             */
             LabeledHypergraph * clone(void) const;
 
             htd::IHypergraph * cloneHypergraph(void) const HTD_OVERRIDE;

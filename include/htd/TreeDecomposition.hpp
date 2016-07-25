@@ -216,6 +216,11 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             TreeDecomposition * clone(void) const HTD_OVERRIDE;
 #else
+            /**
+             *  Create a deep copy of the current mutable tree decomposition.
+             *
+             *  @return A new TreeDecomposition object identical to the current mutable tree decomposition.
+             */
             TreeDecomposition * clone(void) const;
 
             htd::ITree * cloneTree(void) const HTD_OVERRIDE;

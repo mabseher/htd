@@ -115,6 +115,11 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledGraph * clone(void) const HTD_OVERRIDE;
 #else
+            /**
+             *  Create a deep copy of the current mutable labeled graph.
+             *
+             *  @return A new LabeledGraph object identical to the current mutable labeled graph.
+             */
             LabeledGraph * clone(void) const;
 
             htd::IGraph * cloneGraph(void) const HTD_OVERRIDE;

@@ -57,12 +57,21 @@ namespace htd
              */
             virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutableGraphDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current graph decomposition manipulation operation.
              *
              *  @return A new IGraphDecompositionManipulationOperation object identical to the current graph decomposition manipulation operation.
              */
             virtual IGraphDecompositionManipulationOperation * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current graph decomposition manipulation operation.
+             *
+             *  @return A new IGraphDecompositionManipulationOperation object identical to the current graph decomposition manipulation operation.
+             */
+            virtual IGraphDecompositionManipulationOperation * cloneGraphDecompositionManipulationOperation(void) const = 0;
+#endif
     };
     
     inline htd::IGraphDecompositionManipulationOperation::~IGraphDecompositionManipulationOperation() { }

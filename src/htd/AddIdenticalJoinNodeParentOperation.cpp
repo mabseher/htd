@@ -169,4 +169,16 @@ htd::AddIdenticalJoinNodeParentOperation * htd::AddIdenticalJoinNodeParentOperat
     return ret;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::AddIdenticalJoinNodeParentOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::AddIdenticalJoinNodeParentOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
+
 #endif /* HTD_HTD_ADDIDENTICALJOINNODEPARENTOPERATION_CPP */

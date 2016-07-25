@@ -84,12 +84,21 @@ namespace htd
              */
             virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current path decomposition manipulation operation.
              *
              *  @return A new IPathDecompositionManipulationOperation object identical to the current path decomposition manipulation operation.
              */
             virtual IPathDecompositionManipulationOperation * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current path decomposition manipulation operation.
+             *
+             *  @return A new IPathDecompositionManipulationOperation object identical to the current path decomposition manipulation operation.
+             */
+            virtual IPathDecompositionManipulationOperation * clonePathDecompositionManipulationOperation(void) const = 0;
+#endif
     };
     
     inline htd::IPathDecompositionManipulationOperation::~IPathDecompositionManipulationOperation() { }

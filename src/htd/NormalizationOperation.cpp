@@ -238,4 +238,21 @@ htd::NormalizationOperation * htd::NormalizationOperation::clone(void) const
     return ret;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::NormalizationOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::IPathDecompositionManipulationOperation * htd::NormalizationOperation::clonePathDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::NormalizationOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
+
 #endif /* HTD_HTD_NORMALIZATIONOPERATION_CPP */

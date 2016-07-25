@@ -72,8 +72,20 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             JoinNodeNormalizationOperation * clone(void) const HTD_OVERRIDE;
+#else
+            /**
+             *  Create a deep copy of the current decomposition manipulation operation.
+             *
+             *  @return A new JoinNodeNormalizationOperation object identical to the current decomposition manipulation operation.
+             */
+            JoinNodeNormalizationOperation * clone(void) const;
 
+            htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+
+            htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+#endif
         private:
             bool identicalParent_;
     };

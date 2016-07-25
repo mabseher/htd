@@ -253,4 +253,16 @@ htd::JoinNodeNormalizationOperation * htd::JoinNodeNormalizationOperation::clone
     return ret;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::JoinNodeNormalizationOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::JoinNodeNormalizationOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
+
 #endif /* HTD_HTD_JOINNODENORMALIZATIONOPERATION_CPP */

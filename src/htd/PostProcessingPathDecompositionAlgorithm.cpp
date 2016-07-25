@@ -285,12 +285,20 @@ htd::PostProcessingPathDecompositionAlgorithm * htd::PostProcessingPathDecomposi
 
     for (const auto & labelingFunction : labelingFunctions_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(labelingFunction->clone());
+#else
+        ret->addManipulationOperation(labelingFunction->cloneLabelingFunction());
+#endif
     }
 
     for (const auto & postProcessingOperation : postProcessingOperations_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(postProcessingOperation->clone());
+#else
+        ret->addManipulationOperation(postProcessingOperation->clonePathDecompositionManipulationOperation());
+#endif
     }
 
     ret->setManagementInstance(managementInstance());

@@ -191,4 +191,21 @@ htd::AddEmptyRootOperation * htd::AddEmptyRootOperation::clone(void) const
     return ret;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::AddEmptyRootOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::IPathDecompositionManipulationOperation * htd::AddEmptyRootOperation::clonePathDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::AddEmptyRootOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
+
 #endif /* HTD_HTD_ADDEMPTYROOTOPERATION_CPP */

@@ -240,4 +240,21 @@ htd::WeakNormalizationOperation * htd::WeakNormalizationOperation::clone(void) c
     return ret;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::WeakNormalizationOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::IPathDecompositionManipulationOperation * htd::WeakNormalizationOperation::clonePathDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::WeakNormalizationOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
+
 #endif /* HTD_HTD_WEAKNORMALIZATIONOPERATION_CPP */

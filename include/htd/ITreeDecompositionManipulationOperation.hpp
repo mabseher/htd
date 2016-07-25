@@ -132,12 +132,21 @@ namespace htd
              */
             virtual bool createsLocationDependendLabels(void) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current tree decomposition manipulation operation.
              *
              *  @return A new ITreeDecompositionManipulationOperation object identical to the current tree decomposition manipulation operation.
              */
             virtual ITreeDecompositionManipulationOperation * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current tree decomposition manipulation operation.
+             *
+             *  @return A new ITreeDecompositionManipulationOperation object identical to the current tree decomposition manipulation operation.
+             */
+            virtual ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const = 0;
+#endif
     };
     
     inline htd::ITreeDecompositionManipulationOperation::~ITreeDecompositionManipulationOperation() { }

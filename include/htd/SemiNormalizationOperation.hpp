@@ -84,7 +84,22 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             SemiNormalizationOperation * clone(void) const HTD_OVERRIDE;
+#else
+            /**
+             *  Create a deep copy of the current decomposition manipulation operation.
+             *
+             *  @return A new SemiNormalizationOperation object identical to the current decomposition manipulation operation.
+             */
+            SemiNormalizationOperation * clone(void) const;
+
+            htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+
+            htd::IPathDecompositionManipulationOperation * clonePathDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+
+            htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+#endif
     };
 }
 

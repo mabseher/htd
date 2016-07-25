@@ -266,4 +266,21 @@ htd::CompressionOperation * htd::CompressionOperation::clone(void) const
     return ret;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::CompressionOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::IPathDecompositionManipulationOperation * htd::CompressionOperation::clonePathDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::CompressionOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
+
 #endif /* HTD_HTD_COMPRESSIONOPERATION_CPP */

@@ -75,12 +75,20 @@ htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::get
 
     for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(labelingFunction->clone());
+#else
+        ret->addManipulationOperation(labelingFunction->cloneLabelingFunction());
+#endif
     }
 
     for (htd::IGraphDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(postProcessingOperation->clone());
+#else
+        ret->addManipulationOperation(postProcessingOperation->cloneGraphDecompositionManipulationOperation());
+#endif
     }
 
     return ret;
@@ -94,7 +102,11 @@ htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::get
 
     for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         htd::ILabelingFunction * clone = labelingFunction->clone();
+#else
+        htd::ILabelingFunction * clone = labelingFunction->cloneLabelingFunction();
+#endif
 
         clone->setManagementInstance(instance);
 
@@ -103,7 +115,11 @@ htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::get
 
     for (htd::IGraphDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         htd::IGraphDecompositionManipulationOperation * clone = postProcessingOperation->clone();
+#else
+        htd::IGraphDecompositionManipulationOperation * clone = postProcessingOperation->cloneGraphDecompositionManipulationOperation();
+#endif
 
         clone->setManagementInstance(instance);
 

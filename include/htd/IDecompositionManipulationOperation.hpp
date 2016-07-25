@@ -26,6 +26,7 @@
 #define	HTD_HTD_IDECOMPOSITIONMANIPULATIONOPERATION_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/Helpers.hpp>
 
 #include <htd/LibraryObject.hpp>
 
@@ -39,12 +40,21 @@ namespace htd
         public:
             virtual ~IDecompositionManipulationOperation() = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current decomposition manipulation operation.
              *
              *  @return A new IDecompositionManipulationOperation object identical to the current decomposition manipulation operation.
              */
             virtual IDecompositionManipulationOperation * clone(void) const = 0;
+#else
+            /**
+             *  Create a deep copy of the current decomposition manipulation operation.
+             *
+             *  @return A new IDecompositionManipulationOperation object identical to the current decomposition manipulation operation.
+             */
+            virtual IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const = 0;
+#endif
     };
     
     inline htd::IDecompositionManipulationOperation::~IDecompositionManipulationOperation() { }

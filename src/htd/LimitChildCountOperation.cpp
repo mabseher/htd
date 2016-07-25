@@ -267,4 +267,16 @@ htd::LimitChildCountOperation * htd::LimitChildCountOperation::clone(void) const
     return ret;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::LimitChildCountOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::LimitChildCountOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
+
 #endif /* HTD_HTD_LIMITCHILDCOUNTOPERATION_CPP */

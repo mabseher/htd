@@ -76,12 +76,20 @@ htd::ITreeDecompositionAlgorithm * htd::TreeDecompositionAlgorithmFactory::getTr
 
     for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(labelingFunction->clone());
+#else
+        ret->addManipulationOperation(labelingFunction->cloneLabelingFunction());
+#endif
     }
 
     for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(postProcessingOperation->clone());
+#else
+        ret->addManipulationOperation(postProcessingOperation->cloneTreeDecompositionManipulationOperation());
+#endif
     }
 
     return ret;
@@ -95,7 +103,11 @@ htd::ITreeDecompositionAlgorithm * htd::TreeDecompositionAlgorithmFactory::getTr
 
     for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         htd::ILabelingFunction * clone = labelingFunction->clone();
+#else
+        htd::ILabelingFunction * clone = labelingFunction->cloneLabelingFunction();
+#endif
 
         clone->setManagementInstance(instance);
 
@@ -104,7 +116,11 @@ htd::ITreeDecompositionAlgorithm * htd::TreeDecompositionAlgorithmFactory::getTr
 
     for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         htd::ITreeDecompositionManipulationOperation * clone = postProcessingOperation->clone();
+#else
+        htd::ITreeDecompositionManipulationOperation * clone = postProcessingOperation->cloneTreeDecompositionManipulationOperation();
+#endif
 
         clone->setManagementInstance(instance);
 

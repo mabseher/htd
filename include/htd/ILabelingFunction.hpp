@@ -70,12 +70,21 @@ namespace htd
              */
             virtual htd::ILabel * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current labeling function.
              *
              *  @return A new ILabelingFunction object identical to the current labeling function.
              */
             virtual ILabelingFunction * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current labeling function.
+             *
+             *  @return A new ILabelingFunction object identical to the current labeling function.
+             */
+            virtual ILabelingFunction * cloneLabelingFunction(void) const = 0;
+#endif
     };
 
     inline htd::ILabelingFunction::~ILabelingFunction() { }

@@ -75,12 +75,20 @@ htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPa
 
     for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(labelingFunction->clone());
+#else
+        ret->addManipulationOperation(labelingFunction->cloneLabelingFunction());
+#endif
     }
 
     for (htd::IPathDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(postProcessingOperation->clone());
+#else
+        ret->addManipulationOperation(postProcessingOperation->clonePathDecompositionManipulationOperation());
+#endif
     }
 
     return ret;
@@ -94,7 +102,11 @@ htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPa
 
     for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         htd::ILabelingFunction * clone = labelingFunction->clone();
+#else
+        htd::ILabelingFunction * clone = labelingFunction->cloneLabelingFunction();
+#endif
 
         clone->setManagementInstance(instance);
 
@@ -103,7 +115,11 @@ htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPa
 
     for (htd::IPathDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         htd::IPathDecompositionManipulationOperation * clone = postProcessingOperation->clone();
+#else
+        htd::IPathDecompositionManipulationOperation * clone = postProcessingOperation->clonePathDecompositionManipulationOperation();
+#endif
 
         clone->setManagementInstance(instance);
 

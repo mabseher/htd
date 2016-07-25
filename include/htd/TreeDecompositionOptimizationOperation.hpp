@@ -133,8 +133,20 @@ namespace htd
              */
             void setVertexSelectionStrategy(htd::IVertexSelectionStrategy * strategy);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             TreeDecompositionOptimizationOperation * clone(void) const HTD_OVERRIDE;
+#else
+            /**
+             *  Create a deep copy of the current decomposition manipulation operation.
+             *
+             *  @return A new TreeDecompositionOptimizationOperation object identical to the current decomposition manipulation operation.
+             */
+            TreeDecompositionOptimizationOperation * clone(void) const;
 
+            htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+
+            htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+#endif
         private:
             bool enforceNaiveOptimization_;
 

@@ -269,4 +269,21 @@ htd::ExchangeNodeReplacementOperation * htd::ExchangeNodeReplacementOperation::c
     return ret;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::ExchangeNodeReplacementOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::IPathDecompositionManipulationOperation * htd::ExchangeNodeReplacementOperation::clonePathDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::ExchangeNodeReplacementOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
+
 #endif /* HTD_HTD_EXCHANGENODEREPLACEMENTOPERATION_CPP */

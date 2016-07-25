@@ -396,4 +396,16 @@ htd::JoinNodeReplacementOperation * htd::JoinNodeReplacementOperation::clone(voi
     return ret;
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::JoinNodeReplacementOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::JoinNodeReplacementOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
+
 #endif /* HTD_HTD_JOINNODEREPLACEMENTOPERATION_CPP */

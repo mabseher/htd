@@ -252,10 +252,27 @@ class BagSizeLabelingFunction : public htd::ILabelingFunction
             return new htd::Label<std::size_t>(vertices.size());
         }
 
-        ILabelingFunction * clone(void) const HTD_OVERRIDE
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        BagSizeLabelingFunction * clone(void) const HTD_OVERRIDE
         {
             return new BagSizeLabelingFunction();
         }
+#else
+        BagSizeLabelingFunction * clone(void) const
+        {
+            return new BagSizeLabelingFunction();
+        }
+
+        htd::ILabelingFunction * cloneLabelingFunction(void) const HTD_OVERRIDE
+        {
+            return new BagSizeLabelingFunction();
+        }
+
+        htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE
+        {
+            return new BagSizeLabelingFunction();
+        }
+#endif
 };
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunction)
@@ -323,10 +340,27 @@ class BagSizeLabelingFunction2 : public htd::ILabelingFunction
             return new htd::Label<std::size_t>(vertices.size() + htd::accessLabel<std::size_t>(labels.label("BAG_SIZE")));
         }
 
-        ILabelingFunction * clone(void) const HTD_OVERRIDE
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        BagSizeLabelingFunction2 * clone(void) const HTD_OVERRIDE
         {
-            return new BagSizeLabelingFunction();
+            return new BagSizeLabelingFunction2();
         }
+#else
+        BagSizeLabelingFunction2 * clone(void) const
+        {
+            return new BagSizeLabelingFunction2();
+        }
+
+        htd::ILabelingFunction * cloneLabelingFunction(void) const HTD_OVERRIDE
+        {
+            return new BagSizeLabelingFunction2();
+        }
+
+        htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE
+        {
+            return new BagSizeLabelingFunction2();
+        }
+#endif
 };
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunctionVector)

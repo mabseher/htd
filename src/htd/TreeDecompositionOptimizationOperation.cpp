@@ -116,7 +116,11 @@ void htd::TreeDecompositionOptimizationOperation::apply(const htd::IMultiHypergr
 
         for (const htd::ILabelingFunction * labelingFunction : labelingFunctions)
         {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             htd::ILabelingFunction * clone = labelingFunction->clone();
+#else
+            htd::ILabelingFunction * clone = labelingFunction->cloneLabelingFunction();
+#endif
 
             clone->setManagementInstance(managementInstance());
 
@@ -338,7 +342,11 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(const htd::I
 
     for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         htd::ITreeDecompositionManipulationOperation * clone = operation->clone();
+#else
+        htd::ITreeDecompositionManipulationOperation * clone = operation->cloneTreeDecompositionManipulationOperation();
+#endif
 
         clone->setManagementInstance(managementInstance());
 
@@ -452,7 +460,11 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(const 
 
     for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         htd::ITreeDecompositionManipulationOperation * clone = operation->clone();
+#else
+        htd::ITreeDecompositionManipulationOperation * clone = operation->cloneTreeDecompositionManipulationOperation();
+#endif
 
         clone->setManagementInstance(managementInstance());
 
@@ -697,14 +709,30 @@ htd::TreeDecompositionOptimizationOperation * htd::TreeDecompositionOptimization
 {
     htd::TreeDecompositionOptimizationOperation * ret = new htd::TreeDecompositionOptimizationOperation(*fitnessFunction_);
 
-    for (const auto & manipulationOperation : manipulationOperations_)
+    for (const htd::ITreeDecompositionManipulationOperation * manipulationOperation : manipulationOperations_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(manipulationOperation->clone());
+#else
+        ret->addManipulationOperation(manipulationOperation->cloneTreeDecompositionManipulationOperation());
+#endif
     }
 
     ret->setManagementInstance(managementInstance());
 
     return ret;
 }
+
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::TreeDecompositionOptimizationOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::TreeDecompositionOptimizationOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
 
 #endif /* HTD_HTD_TREEDECOMPOSITIONOPTIMIZATIONOPERATION_CPP */

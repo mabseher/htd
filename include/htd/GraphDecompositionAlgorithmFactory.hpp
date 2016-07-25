@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IGraphDecompositionAlgorithm interface.
      */
-    class GraphDecompositionAlgorithmFactory
+    class HTD_API GraphDecompositionAlgorithmFactory
     {
         public:
             /**

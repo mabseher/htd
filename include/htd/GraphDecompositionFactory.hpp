@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableGraphDecomposition interface.
      */
-    class GraphDecompositionFactory
+    class HTD_API GraphDecompositionFactory
     {
         public:
             /**

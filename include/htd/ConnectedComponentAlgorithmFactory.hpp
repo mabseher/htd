@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IConnectedComponentAlgorithm interface.
      */
-    class ConnectedComponentAlgorithmFactory
+    class HTD_API ConnectedComponentAlgorithmFactory
     {
         public:
             /**

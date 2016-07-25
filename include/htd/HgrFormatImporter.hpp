@@ -38,7 +38,7 @@ namespace htd
      *
      *  (See https://github.com/mabseher/htd/FORMATS.md for information about the available input formats.)
      */
-    class HgrFormatImporter : public htd::LibraryObject
+    class HTD_API HgrFormatImporter : public htd::LibraryObject
     {
         public:
             /**

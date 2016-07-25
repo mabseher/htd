@@ -75,14 +75,6 @@
     #endif
 #endif
 
-#ifdef HTD_COMPILER_IS_MSVC
-    #if HTD_COMPILER_IS_MSVC == 1
-        #define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    #endif
-#endif
-
-//#define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-
 namespace htd
 {
     template < typename T >

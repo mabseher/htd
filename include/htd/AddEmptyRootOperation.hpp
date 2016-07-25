@@ -34,7 +34,7 @@ namespace htd
     /**
      *  Implementation of a manipulation operation which ensures that the root node of a decomposition have an empty bags.
      */
-    class AddEmptyRootOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
+    class HTD_API AddEmptyRootOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             /**

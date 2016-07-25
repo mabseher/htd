@@ -27,6 +27,40 @@
 
 #include <htd/CompilerDetection.hpp>
 
+#ifdef HTD_COMPILER_IS_MSVC
+    #if HTD_COMPILER_IS_MSVC == 1
+        #define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    #endif
+#endif
+
+#if HTD_COMPILER_IS_MSVC == 1
+    #define HTD_SYMBOL_EXPORT __declspec(dllexport)
+    #define HTD_SYMBOL_IMPORT __declspec(dllimport)
+    #define HTD_LOCAL
+#else
+    #if HTD_COMPILER_IS_GNU == 1 || HTD_COMPILER_IS_Clang == 1
+        #define HTD_SYMBOL_EXPORT __attribute__ ((visibility ("default")))
+        #define HTD_SYMBOL_IMPORT __attribute__ ((visibility ("default")))
+        #define HTD_LOCAL  __attribute__ ((visibility ("hidden")))
+    #else
+        #define HTD_SYMBOL_EXPORT
+        #define HTD_SYMBOL_IMPORT
+        #define HTD_LOCAL
+    #endif
+#endif
+
+#ifdef HTD_SHARED_LIB
+  #ifdef htd_EXPORTS
+    #define HTD_API HTD_SYMBOL_EXPORT
+  #else
+    #define HTD_API HTD_SYMBOL_IMPORT
+  #endif
+#else
+  #define HTD_API
+#endif
+
+//#define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+
 #include <htd/Id.hpp>
 #include <htd/State.hpp>
 #include <htd/Vertex.hpp>

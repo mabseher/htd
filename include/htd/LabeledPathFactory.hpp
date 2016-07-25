@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledPath interface.
      */
-    class LabeledPathFactory
+    class HTD_API LabeledPathFactory
     {
         public:
             /**

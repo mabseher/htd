@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IOrderingAlgorithm interface.
      */
-    class OrderingAlgorithmFactory
+    class HTD_API OrderingAlgorithmFactory
     {
         public:
             /**

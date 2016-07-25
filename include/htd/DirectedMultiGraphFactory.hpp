@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableDirectedMultiGraph interface.
      */
-    class DirectedMultiGraphFactory
+    class HTD_API DirectedMultiGraphFactory
     {
         public:
             /**

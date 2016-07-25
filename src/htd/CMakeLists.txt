@@ -38,7 +38,7 @@ set_target_properties(htd
 )
 
 if (UNIX)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Dhtd_EXPORTS")
 endif (UNIX)
 
 install(TARGETS htd DESTINATION lib)

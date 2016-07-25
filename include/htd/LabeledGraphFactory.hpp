@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledGraph interface.
      */
-    class LabeledGraphFactory
+    class HTD_API LabeledGraphFactory
     {
         public:
             /**

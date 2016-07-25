@@ -35,7 +35,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IPathDecompositionAlgorithm interface.
      */
-    class PathDecompositionAlgorithmFactory
+    class HTD_API PathDecompositionAlgorithmFactory
     {
         public:
             /**

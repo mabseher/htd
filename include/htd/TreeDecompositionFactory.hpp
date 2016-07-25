@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableTreeDecomposition interface.
      */
-    class TreeDecompositionFactory
+    class HTD_API TreeDecompositionFactory
     {
         public:
             /**

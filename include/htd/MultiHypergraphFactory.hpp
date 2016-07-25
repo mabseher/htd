@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableMultiHypergraph interface.
      */
-    class MultiHypergraphFactory
+    class HTD_API MultiHypergraphFactory
     {
         public:
             /**

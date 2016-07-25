@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableHypertreeDecomposition interface.
      */
-    class HypertreeDecompositionFactory
+    class HTD_API HypertreeDecompositionFactory
     {
         public:
             /**

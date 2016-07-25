@@ -142,10 +142,16 @@ namespace htd
 
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             MultiGraph * clone(void) const HTD_OVERRIDE;
+#else
+            MultiGraph * clone(void) const;
 
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            htd::IMultiGraph * cloneMultiGraph(void) const HTD_OVERRIDE;
+
             htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IMutableMultiGraph * cloneMutableMultiGraph(void) const HTD_OVERRIDE;
 #endif
 
             /**

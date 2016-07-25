@@ -99,10 +99,22 @@ namespace htd
 
             std::size_t maximumBagSize(void) const HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             GraphDecomposition * clone(void) const HTD_OVERRIDE;
+#else
+            GraphDecomposition * clone(void) const;
 
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::ILabeledMultiHypergraph * cloneLabeledMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IGraphDecomposition * cloneGraphDecomposition(void) const HTD_OVERRIDE;
+
+            htd::IMutableMultiHypergraph * cloneMutableMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IMutableLabeledMultiHypergraph * cloneMutableLabeledMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IMutableGraphDecomposition * cloneMutableGraphDecomposition(void) const HTD_OVERRIDE;
 #endif
 
             /**

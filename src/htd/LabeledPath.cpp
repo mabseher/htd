@@ -189,7 +189,72 @@ htd::LabeledPath * htd::LabeledPath::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IPath * htd::LabeledPath::clonePath(void) const
+{
+    return clone();
+}
+
+htd::ITree * htd::LabeledPath::cloneTree(void) const
+{
+    return clone();
+}
+
+htd::IGraph * htd::LabeledPath::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::LabeledPath::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::LabeledPath::cloneHypergraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::LabeledPath::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledPath * htd::LabeledPath::cloneLabeledPath(void) const
+{
+    return clone();
+}
+
+htd::ILabeledTree * htd::LabeledPath::cloneLabeledTree(void) const
+{
+    return clone();
+}
+
+htd::ILabeledGraph * htd::LabeledPath::cloneLabeledGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiGraph * htd::LabeledPath::cloneLabeledMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledHypergraph * htd::LabeledPath::cloneLabeledHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiHypergraph * htd::LabeledPath::cloneLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutablePath * htd::LabeledPath::cloneMutablePath(void) const
+{
+    return clone();
+}
+
+htd::IMutableLabeledPath * htd::LabeledPath::cloneMutableLabeledPath(void) const
 {
     return clone();
 }

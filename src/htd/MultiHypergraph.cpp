@@ -1006,6 +1006,11 @@ htd::IMultiHypergraph * htd::MultiHypergraph::cloneMultiHypergraph(void) const
 {
     return clone();
 }
+
+htd::IMutableMultiHypergraph * htd::MultiHypergraph::cloneMutableMultiHypergraph(void) const
+{
+    return clone();
+}
 #endif
 
 htd::MultiHypergraph & htd::MultiHypergraph::operator=(const htd::MultiHypergraph & original)

@@ -57,12 +57,20 @@ htd::GraphFactory & htd::GraphFactory::instance(void)
 
 htd::IMutableGraph * htd::GraphFactory::getGraph(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutableGraph();
+#endif
 }
 
 htd::IMutableGraph * htd::GraphFactory::getGraph(std::size_t initialSize)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableGraph * ret = constructionTemplate_->cloneMutableGraph();
+#endif
 
     ret->addVertices(initialSize);
 
@@ -71,7 +79,11 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(std::size_t initialSize)
 
 htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IGraph & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableGraph * ret = constructionTemplate_->cloneMutableGraph();
+#endif
 
     *ret = original;
 
@@ -80,7 +92,11 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IGraph & original)
 
 htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IMultiGraph & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableGraph * ret = constructionTemplate_->cloneMutableGraph();
+#endif
 
     *ret = original;
 

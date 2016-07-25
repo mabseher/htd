@@ -201,7 +201,32 @@ htd::LabeledHypergraph * htd::LabeledHypergraph::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IHypergraph * htd::LabeledHypergraph::cloneHypergraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::LabeledHypergraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledHypergraph * htd::LabeledHypergraph::cloneLabeledHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiHypergraph * htd::LabeledHypergraph::cloneLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableHypergraph * htd::LabeledHypergraph::cloneMutableHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableLabeledHypergraph * htd::LabeledHypergraph::cloneMutableLabeledHypergraph(void) const
 {
     return clone();
 }

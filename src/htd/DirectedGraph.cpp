@@ -46,10 +46,17 @@ htd::DirectedGraph::DirectedGraph(std::size_t initialSize) : base_(htd::Hypergra
 
 }
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 htd::DirectedGraph::DirectedGraph(const htd::DirectedGraph & original) : base_(original.base_->clone()), incomingNeighborhood_(original.incomingNeighborhood_), outgoingNeighborhood_(original.outgoingNeighborhood_)
 {
 
 }
+#else
+htd::DirectedGraph::DirectedGraph(const htd::DirectedGraph & original) : base_(original.base_->cloneMutableHypergraph()), incomingNeighborhood_(original.incomingNeighborhood_), outgoingNeighborhood_(original.outgoingNeighborhood_)
+{
+
+}
+#endif
 
 htd::DirectedGraph::DirectedGraph(const htd::IDirectedGraph & original) : base_(htd::HypergraphFactory::instance().getHypergraph()), incomingNeighborhood_(), outgoingNeighborhood_()
 {
@@ -454,7 +461,37 @@ htd::DirectedGraph * htd::DirectedGraph::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IGraph * htd::DirectedGraph::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::DirectedGraph::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::DirectedGraph::cloneHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IDirectedGraph * htd::DirectedGraph::cloneDirectedGraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::DirectedGraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IDirectedMultiGraph * htd::DirectedGraph::cloneDirectedMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableDirectedGraph * htd::DirectedGraph::cloneMutableDirectedGraph(void) const
 {
     return clone();
 }
@@ -466,7 +503,11 @@ htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::DirectedGraph & or
     {
         delete base_;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         base_ = original.base_->clone();
+#else
+        base_ = original.base_->cloneMutableHypergraph();
+#endif
 
         incomingNeighborhood_ = original.incomingNeighborhood_;
         outgoingNeighborhood_ = original.outgoingNeighborhood_;

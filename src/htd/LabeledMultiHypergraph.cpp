@@ -200,6 +200,21 @@ htd::IMultiHypergraph * htd::LabeledMultiHypergraph::cloneMultiHypergraph(void) 
 {
     return clone();
 }
+
+htd::ILabeledMultiHypergraph * htd::LabeledMultiHypergraph::cloneLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableMultiHypergraph * htd::LabeledMultiHypergraph::cloneMutableMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraph::cloneMutableLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
 #endif
 
 htd::LabeledMultiHypergraph & htd::LabeledMultiHypergraph::operator=(const htd::LabeledMultiHypergraph & original)

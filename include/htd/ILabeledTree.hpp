@@ -39,12 +39,21 @@ namespace htd
         public:
             virtual ~ILabeledTree() = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current labeled tree.
              *
              *  @return A new ILabeledTree object identical to the current labeled tree.
              */
             virtual ILabeledTree * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current labeled tree.
+             *
+             *  @return A new ILabeledTree object identical to the current labeled tree.
+             */
+            virtual ILabeledTree * cloneLabeledTree(void) const = 0;
+#endif
     };
 
     inline htd::ILabeledTree::~ILabeledTree() { }

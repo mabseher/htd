@@ -217,6 +217,31 @@ htd::IMultiHypergraph * htd::GraphDecomposition::cloneMultiHypergraph(void) cons
 {
     return clone();
 }
+
+htd::ILabeledMultiHypergraph * htd::GraphDecomposition::cloneLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IGraphDecomposition * htd::GraphDecomposition::cloneGraphDecomposition(void) const
+{
+    return clone();
+}
+
+htd::IMutableMultiHypergraph * htd::GraphDecomposition::cloneMutableMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableLabeledMultiHypergraph * htd::GraphDecomposition::cloneMutableLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableGraphDecomposition * htd::GraphDecomposition::cloneMutableGraphDecomposition(void) const
+{
+    return clone();
+}
 #endif
 
 htd::GraphDecomposition & htd::GraphDecomposition::operator=(const htd::GraphDecomposition & original)

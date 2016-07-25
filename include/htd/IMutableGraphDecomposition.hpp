@@ -85,12 +85,21 @@ namespace htd
              */
             virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current mutable graph decomposition.
              *
              *  @return A new IMutableGraphDecomposition object identical to the current mutable graph decomposition.
              */
             virtual IMutableGraphDecomposition * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current mutable graph decomposition.
+             *
+             *  @return A new IMutableGraphDecomposition object identical to the current mutable graph decomposition.
+             */
+            virtual IMutableGraphDecomposition * cloneMutableGraphDecomposition(void) const = 0;
+#endif
 
             /**
              *  Copy assignment operator for a mutable graph decomposition.

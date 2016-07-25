@@ -56,12 +56,20 @@ htd::LabeledPathFactory & htd::LabeledPathFactory::instance(void)
 
 htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutableLabeledPath();
+#endif
 }
 
 htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(const htd::ILabeledPath & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledPath * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableLabeledPath * ret = constructionTemplate_->cloneMutableLabeledPath();
+#endif
 
     *ret = original;
 

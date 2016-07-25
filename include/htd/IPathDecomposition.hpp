@@ -39,12 +39,21 @@ namespace htd
         public:
             virtual ~IPathDecomposition() = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current path decomposition.
              *
              *  @return A new IPathDecomposition object identical to the current path decomposition.
              */
             virtual IPathDecomposition * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current path decomposition.
+             *
+             *  @return A new IPathDecomposition object identical to the current path decomposition.
+             */
+            virtual IPathDecomposition * clonePathDecomposition(void) const = 0;
+#endif
     };
 
     inline htd::IPathDecomposition::~IPathDecomposition() { }

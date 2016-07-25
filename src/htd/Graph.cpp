@@ -47,10 +47,17 @@ htd::Graph::Graph(std::size_t initialSize) : base_(htd::HypergraphFactory::insta
 
 }
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 htd::Graph::Graph(const htd::Graph & original) : base_(original.base_->clone())
 {
 
 }
+#else
+htd::Graph::Graph(const htd::Graph & original) : base_(original.base_->cloneMutableHypergraph())
+{
+
+}
+#endif
 
 htd::Graph::Graph(const htd::IGraph & original) : base_(htd::HypergraphFactory::instance().getHypergraph(original))
 {
@@ -277,7 +284,27 @@ htd::Graph * htd::Graph::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IGraph * htd::Graph::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::Graph::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::Graph::cloneHypergraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::Graph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableGraph * htd::Graph::cloneMutableGraph(void) const
 {
     return clone();
 }
@@ -289,7 +316,11 @@ htd::Graph & htd::Graph::operator=(const htd::Graph & original)
     {
         delete base_;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         base_ = original.base_->clone();
+#else
+        base_ = original.base_->cloneMutableHypergraph();
+#endif
     }
 
     return *this;

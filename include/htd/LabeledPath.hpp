@@ -103,10 +103,38 @@ namespace htd
 
             htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId) HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledPath * clone(void) const HTD_OVERRIDE;
+#else
+            LabeledPath * clone(void) const;
 
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            htd::IPath * clonePath(void) const HTD_OVERRIDE;
+
+            htd::ITree * cloneTree(void) const HTD_OVERRIDE;
+
+            htd::IGraph * cloneGraph(void) const HTD_OVERRIDE;
+
+            htd::IMultiGraph * cloneMultiGraph(void) const HTD_OVERRIDE;
+
+            htd::IHypergraph * cloneHypergraph(void) const HTD_OVERRIDE;
+
             htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::ILabeledPath * cloneLabeledPath(void) const HTD_OVERRIDE;
+
+            htd::ILabeledTree * cloneLabeledTree(void) const HTD_OVERRIDE;
+
+            htd::ILabeledGraph * cloneLabeledGraph(void) const HTD_OVERRIDE;
+
+            htd::ILabeledMultiGraph * cloneLabeledMultiGraph(void) const HTD_OVERRIDE;
+
+            htd::ILabeledHypergraph * cloneLabeledHypergraph(void) const HTD_OVERRIDE;
+
+            htd::ILabeledMultiHypergraph * cloneLabeledMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IMutablePath * cloneMutablePath(void) const HTD_OVERRIDE;
+
+            htd::IMutableLabeledPath * cloneMutableLabeledPath(void) const HTD_OVERRIDE;
 #endif
 
             /**

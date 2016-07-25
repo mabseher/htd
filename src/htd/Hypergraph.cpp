@@ -46,10 +46,17 @@ htd::Hypergraph::Hypergraph(std::size_t initialSize) : base_(htd::MultiHypergrap
 
 }
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 htd::Hypergraph::Hypergraph(const htd::Hypergraph & original) : base_(original.base_->clone())
 {
 
 }
+#else
+htd::Hypergraph::Hypergraph(const htd::Hypergraph & original) : base_(original.base_->cloneMutableMultiHypergraph())
+{
+
+}
+#endif
 
 htd::Hypergraph::Hypergraph(const htd::IHypergraph & original) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph(original))
 {
@@ -366,7 +373,17 @@ htd::Hypergraph * htd::Hypergraph::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IHypergraph * htd::Hypergraph::cloneHypergraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::Hypergraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableHypergraph * htd::Hypergraph::cloneMutableHypergraph(void) const
 {
     return clone();
 }
@@ -378,7 +395,11 @@ htd::Hypergraph & htd::Hypergraph::operator=(const htd::Hypergraph & original)
     {
         delete base_;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         base_ = original.base_->clone();
+#else
+        base_ = original.base_->cloneMutableMultiHypergraph();
+#endif
     }
 
     return *this;

@@ -124,12 +124,21 @@ namespace htd
              */
             virtual bool isReachable(htd::vertex_t vertex1, htd::vertex_t vertex2) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current directed multi-graph.
              *
              *  @return A new IDirectedMultiGraph object identical to the current directed multi-graph.
              */
             virtual IDirectedMultiGraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current directed multi-graph.
+             *
+             *  @return A new IDirectedMultiGraph object identical to the current directed multi-graph.
+             */
+            virtual IDirectedMultiGraph * cloneDirectedMultiGraph(void) const = 0;
+#endif
     };
 
     inline htd::IDirectedMultiGraph::~IDirectedMultiGraph() { }

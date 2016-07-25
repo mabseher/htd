@@ -488,12 +488,21 @@ namespace htd
              */
             virtual bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current tree decomposition.
              *
              *  @return A new ITreeDecomposition object identical to the current tree decomposition.
              */
             virtual ITreeDecomposition * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current tree decomposition.
+             *
+             *  @return A new ITreeDecomposition object identical to the current tree decomposition.
+             */
+            virtual ITreeDecomposition * cloneTreeDecomposition(void) const = 0;
+#endif
     };
 
     inline htd::ITreeDecomposition::~ITreeDecomposition() { }

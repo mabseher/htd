@@ -46,10 +46,17 @@ htd::DirectedMultiGraph::DirectedMultiGraph(std::size_t initialSize) : base_(htd
 
 }
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 htd::DirectedMultiGraph::DirectedMultiGraph(const htd::DirectedMultiGraph & original) : base_(original.base_->clone()), incomingNeighborhood_(original.incomingNeighborhood_), outgoingNeighborhood_(original.outgoingNeighborhood_)
 {
 
 }
+#else
+htd::DirectedMultiGraph::DirectedMultiGraph(const htd::DirectedMultiGraph & original) : base_(original.base_->cloneMutableMultiHypergraph()), incomingNeighborhood_(original.incomingNeighborhood_), outgoingNeighborhood_(original.outgoingNeighborhood_)
+{
+
+}
+#endif
 
 htd::DirectedMultiGraph::DirectedMultiGraph(const htd::IDirectedMultiGraph & original) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph()), incomingNeighborhood_(), outgoingNeighborhood_()
 {
@@ -438,7 +445,22 @@ htd::DirectedMultiGraph * htd::DirectedMultiGraph::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IMultiGraph * htd::DirectedMultiGraph::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::DirectedMultiGraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IDirectedMultiGraph * htd::DirectedMultiGraph::cloneDirectedMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableDirectedMultiGraph * htd::DirectedMultiGraph::cloneMutableDirectedMultiGraph(void) const
 {
     return clone();
 }
@@ -450,7 +472,11 @@ htd::DirectedMultiGraph & htd::DirectedMultiGraph::operator=(const htd::Directed
     {
         delete base_;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         base_ = original.base_->clone();
+#else
+        base_ = original.base_->cloneMutableMultiHypergraph();
+#endif
 
         incomingNeighborhood_ = original.incomingNeighborhood_;
         outgoingNeighborhood_ = original.outgoingNeighborhood_;

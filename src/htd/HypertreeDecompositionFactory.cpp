@@ -59,12 +59,20 @@ htd::HypertreeDecompositionFactory & htd::HypertreeDecompositionFactory::instanc
 
 htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHypertreeDecomposition(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutableHypertreeDecomposition();
+#endif
 }
 
 htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHypertreeDecomposition(const htd::ITreeDecomposition & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableHypertreeDecomposition * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableHypertreeDecomposition * ret = constructionTemplate_->cloneMutableHypertreeDecomposition();
+#endif
 
     *ret = original;
 

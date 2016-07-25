@@ -56,12 +56,20 @@ htd::PathDecompositionFactory & htd::PathDecompositionFactory::instance(void)
 
 htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposition(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutablePathDecomposition();
+#endif
 }
 
 htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposition(const htd::IPathDecomposition & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutablePathDecomposition * ret = constructionTemplate_->clone();
+#else
+    htd::IMutablePathDecomposition * ret = constructionTemplate_->cloneMutablePathDecomposition();
+#endif
 
     *ret = original;
 

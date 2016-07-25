@@ -66,12 +66,21 @@ namespace htd
              */
             virtual std::size_t maximumCoveringEdgeAmount(void) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current hypertree decomposition.
              *
              *  @return A new IHypertreeDecomposition object identical to the current hypertree decomposition.
              */
             virtual IHypertreeDecomposition * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current hypertree decomposition.
+             *
+             *  @return A new IHypertreeDecomposition object identical to the current hypertree decomposition.
+             */
+            virtual IHypertreeDecomposition * cloneHypertreeDecomposition(void) const = 0;
+#endif
     };
 
     inline htd::IHypertreeDecomposition::~IHypertreeDecomposition() { }

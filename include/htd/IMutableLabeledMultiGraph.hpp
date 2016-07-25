@@ -152,12 +152,21 @@ namespace htd
              */
             virtual htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId) = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current mutable labeled multi-graph.
              *
              *  @return A new IMutableLabeledMultiGraph object identical to the current mutable labeled multi-graph.
              */
             virtual IMutableLabeledMultiGraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current mutable labeled multi-graph.
+             *
+             *  @return A new IMutableLabeledMultiGraph object identical to the current mutable labeled multi-graph.
+             */
+            virtual IMutableLabeledMultiGraph * cloneMutableLabeledMultiGraph(void) const = 0;
+#endif
 
             /**
              *  Copy assignment operator for a mutable labeled multi-graph.

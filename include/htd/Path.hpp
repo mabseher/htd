@@ -184,10 +184,24 @@ namespace htd
 
             void swapWithParent(htd::vertex_t vertex) HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Path * clone(void) const HTD_OVERRIDE;
+#else
+            Path * clone(void) const;
 
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            htd::IPath * clonePath(void) const HTD_OVERRIDE;
+
+            htd::ITree * cloneTree(void) const HTD_OVERRIDE;
+
+            htd::IGraph * cloneGraph(void) const HTD_OVERRIDE;
+
+            htd::IMultiGraph * cloneMultiGraph(void) const HTD_OVERRIDE;
+
+            htd::IHypergraph * cloneHypergraph(void) const HTD_OVERRIDE;
+
             htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IMutablePath * cloneMutablePath(void) const HTD_OVERRIDE;
 #endif
 
             /**

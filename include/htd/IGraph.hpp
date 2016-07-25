@@ -26,26 +26,34 @@
 #define	HTD_HTD_IGRAPH_HPP
 
 #include <htd/IHypergraph.hpp>
+#include <htd/IMultiGraph.hpp>
 #include <htd/Collection.hpp>
-
-#include <cstdlib>
 
 namespace htd
 {
     /**
      * Interface for classes which represent graphs.
      */
-    class IGraph : public virtual htd::IHypergraph
+    class IGraph : public virtual htd::IHypergraph, public virtual htd::IMultiGraph
     {
         public:
             virtual ~IGraph() = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current graph.
              *
              *  @return A new IGraph object identical to the current graph.
              */
             virtual IGraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current graph.
+             *
+             *  @return A new IGraph object identical to the current graph.
+             */
+            virtual IGraph * cloneGraph(void) const = 0;
+#endif
     };
 
     inline htd::IGraph::~IGraph() { }

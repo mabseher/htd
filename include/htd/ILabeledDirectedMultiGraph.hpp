@@ -41,12 +41,21 @@ namespace htd
         public:
             virtual ~ILabeledDirectedMultiGraph() = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current labeled directed multi-graph.
              *
              *  @return A new ILabeledDirectedMultiGraph object identical to the current labeled directed multi-graph.
              */
             virtual ILabeledDirectedMultiGraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current labeled directed multi-graph.
+             *
+             *  @return A new ILabeledDirectedMultiGraph object identical to the current labeled directed multi-graph.
+             */
+            virtual ILabeledDirectedMultiGraph * cloneLabeledDirectedMultiGraph(void) const = 0;
+#endif
     };
 
     inline htd::ILabeledDirectedMultiGraph::~ILabeledDirectedMultiGraph() { }

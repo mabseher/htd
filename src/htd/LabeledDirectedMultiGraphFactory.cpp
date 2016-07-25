@@ -56,12 +56,20 @@ htd::LabeledDirectedMultiGraphFactory & htd::LabeledDirectedMultiGraphFactory::i
 
 htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::getLabeledDirectedMultiGraph(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutableLabeledDirectedMultiGraph();
+#endif
 }
 
 htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::getLabeledDirectedMultiGraph(std::size_t initialSize)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledDirectedMultiGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableLabeledDirectedMultiGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedMultiGraph();
+#endif
 
     ret->addVertices(initialSize);
 
@@ -70,7 +78,11 @@ htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::
 
 htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::getLabeledDirectedMultiGraph(const htd::ILabeledDirectedMultiGraph & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledDirectedMultiGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableLabeledDirectedMultiGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedMultiGraph();
+#endif
 
     *ret = original;
 

@@ -322,7 +322,11 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(const htd::I
 {
     const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableTreeDecomposition * localDecomposition = decomposition.clone();
+#else
+    htd::IMutableTreeDecomposition * localDecomposition = decomposition.cloneMutableTreeDecomposition();
+#endif
 
     htd::vertex_t initialRoot = localDecomposition->root();
 
@@ -364,7 +368,11 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(const htd::I
         {
             delete localDecomposition;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             localDecomposition = decomposition.clone();
+#else
+            localDecomposition = decomposition.cloneMutableTreeDecomposition();
+#endif
 
             localDecomposition->makeRoot(vertex);
 

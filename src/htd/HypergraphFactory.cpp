@@ -56,12 +56,20 @@ htd::HypergraphFactory & htd::HypergraphFactory::instance(void)
 
 htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutableHypergraph();
+#endif
 }
 
 htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(std::size_t initialSize)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableHypergraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableHypergraph * ret = constructionTemplate_->cloneMutableHypergraph();
+#endif
 
     ret->addVertices(initialSize);
 
@@ -70,7 +78,11 @@ htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(std::size_t init
 
 htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IHypergraph & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableHypergraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableHypergraph * ret = constructionTemplate_->cloneMutableHypergraph();
+#endif
 
     *ret = original;
 
@@ -79,7 +91,11 @@ htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IHype
 
 htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IMultiHypergraph & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableHypergraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableHypergraph * ret = constructionTemplate_->cloneMutableHypergraph();
+#endif
 
     *ret = original;
 

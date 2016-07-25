@@ -201,7 +201,52 @@ htd::LabeledGraph * htd::LabeledGraph::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IGraph * htd::LabeledGraph::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::LabeledGraph::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::LabeledGraph::cloneHypergraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::LabeledGraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledGraph * htd::LabeledGraph::cloneLabeledGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiGraph * htd::LabeledGraph::cloneLabeledMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledHypergraph * htd::LabeledGraph::cloneLabeledHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiHypergraph * htd::LabeledGraph::cloneLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableGraph * htd::LabeledGraph::cloneMutableGraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableLabeledGraph * htd::LabeledGraph::cloneMutableLabeledGraph(void) const
 {
     return clone();
 }

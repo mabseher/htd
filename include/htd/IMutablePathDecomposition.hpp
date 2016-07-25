@@ -140,12 +140,21 @@ namespace htd
              */
             virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current mutable path decomposition.
              *
              *  @return A new IMutablePathDecomposition object identical to the current mutable path decomposition.
              */
             virtual IMutablePathDecomposition * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current mutable path decomposition.
+             *
+             *  @return A new IMutablePathDecomposition object identical to the current mutable path decomposition.
+             */
+            virtual IMutablePathDecomposition * cloneMutablePathDecomposition(void) const = 0;
+#endif
 
             /**
              *  Copy assignment operator for a mutable path decomposition.

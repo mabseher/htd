@@ -1237,7 +1237,32 @@ htd::Tree * htd::Tree::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::ITree * htd::Tree::cloneTree(void) const
+{
+    return clone();
+}
+
+htd::IGraph * htd::Tree::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::Tree::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::Tree::cloneHypergraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::Tree::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableTree * htd::Tree::cloneMutableTree(void) const
 {
     return clone();
 }

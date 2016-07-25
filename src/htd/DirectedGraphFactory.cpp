@@ -57,12 +57,20 @@ htd::DirectedGraphFactory & htd::DirectedGraphFactory::instance(void)
 
 htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutableDirectedGraph();
+#endif
 }
 
 htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(std::size_t initialSize)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableDirectedGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableDirectedGraph * ret = constructionTemplate_->cloneMutableDirectedGraph();
+#endif
 
     ret->addVertices(initialSize);
 
@@ -71,7 +79,11 @@ htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(std::si
 
 htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(const htd::IDirectedGraph & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableDirectedGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableDirectedGraph * ret = constructionTemplate_->cloneMutableDirectedGraph();
+#endif
 
     *ret = original;
 
@@ -80,7 +92,11 @@ htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(const h
 
 htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(const htd::IDirectedMultiGraph & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableDirectedGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableDirectedGraph * ret = constructionTemplate_->cloneMutableDirectedGraph();
+#endif
 
     *ret = original;
 

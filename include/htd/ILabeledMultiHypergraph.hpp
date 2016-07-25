@@ -113,12 +113,21 @@ namespace htd
              */
             virtual const htd::ILabel & edgeLabel(const std::string & labelName, htd::id_t edgeId) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current labeled multi-hypergraph.
              *
              *  @return A new ILabeledMultiHypergraph object identical to the current labeled multi-hypergraph.
              */
             virtual ILabeledMultiHypergraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current labeled multi-hypergraph.
+             *
+             *  @return A new ILabeledMultiHypergraph object identical to the current labeled multi-hypergraph.
+             */
+            virtual ILabeledMultiHypergraph * cloneLabeledMultiHypergraph(void) const = 0;
+#endif
     };
 
     inline htd::ILabeledMultiHypergraph::~ILabeledMultiHypergraph() { }

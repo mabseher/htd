@@ -142,12 +142,21 @@ namespace htd
              */
             virtual void removeEdge(htd::id_t edgeId) = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current mutable multi-hypergraph.
              *
              *  @return A new IMutableMultiHypergraph object identical to the current mutable multi-hypergraph.
              */
             virtual IMutableMultiHypergraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current mutable multi-hypergraph.
+             *
+             *  @return A new IMutableMultiHypergraph object identical to the current mutable multi-hypergraph.
+             */
+            virtual IMutableMultiHypergraph * cloneMutableMultiHypergraph(void) const = 0;
+#endif
 
             /**
              *  Copy assignment operator for a mutable multi-hypergraph.

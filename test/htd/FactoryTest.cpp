@@ -94,7 +94,11 @@ TEST(FactoryTest, CheckHypergraphFactory)
 
     hypergraph1->removeVertex(1);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::HypergraphFactory::instance().setConstructionTemplate(hypergraph1->clone());
+#else
+    htd::HypergraphFactory::instance().setConstructionTemplate(hypergraph1->cloneMutableHypergraph());
+#endif
 
     htd::IMutableHypergraph * hypergraph3 = htd::HypergraphFactory::instance().getHypergraph();
 
@@ -193,7 +197,11 @@ TEST(FactoryTest, CheckMultiHypergraphFactory)
 
     multiHypergraph1->removeVertex(1);
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::MultiHypergraphFactory::instance().setConstructionTemplate(multiHypergraph1->clone());
+#else
+    htd::MultiHypergraphFactory::instance().setConstructionTemplate(multiHypergraph1->cloneMutableMultiHypergraph());
+#endif
 
     htd::IMutableMultiHypergraph * multiHypergraph3 = htd::MultiHypergraphFactory::instance().getMultiHypergraph();
 

@@ -189,7 +189,62 @@ htd::LabeledTree * htd::LabeledTree::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::ITree * htd::LabeledTree::cloneTree(void) const
+{
+    return clone();
+}
+
+htd::IGraph * htd::LabeledTree::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::LabeledTree::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::LabeledTree::cloneHypergraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::LabeledTree::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledTree * htd::LabeledTree::cloneLabeledTree(void) const
+{
+    return clone();
+}
+
+htd::ILabeledGraph * htd::LabeledTree::cloneLabeledGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiGraph * htd::LabeledTree::cloneLabeledMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledHypergraph * htd::LabeledTree::cloneLabeledHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiHypergraph * htd::LabeledTree::cloneLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableTree * htd::LabeledTree::cloneMutableTree(void) const
+{
+    return clone();
+}
+
+htd::IMutableLabeledTree * htd::LabeledTree::cloneMutableLabeledTree(void) const
 {
     return clone();
 }

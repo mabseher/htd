@@ -159,10 +159,16 @@ namespace htd
 
             void removeEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Hypergraph * clone(void) const HTD_OVERRIDE;
+#else
+            Hypergraph * clone(void) const;
 
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            htd::IHypergraph * cloneHypergraph(void) const HTD_OVERRIDE;
+
             htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IMutableHypergraph * cloneMutableHypergraph(void) const HTD_OVERRIDE;
 #endif
 
             /**

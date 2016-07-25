@@ -82,12 +82,21 @@ namespace htd
              */
             virtual std::size_t maximumBagSize(void) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current graph decomposition.
              *
              *  @return A new IGraphDecomposition object identical to the current graph decomposition.
              */
             virtual IGraphDecomposition * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current graph decomposition.
+             *
+             *  @return A new IGraphDecomposition object identical to the current graph decomposition.
+             */
+            virtual IGraphDecomposition * cloneGraphDecomposition(void) const = 0;
+#endif
     };
 
     inline htd::IGraphDecomposition::~IGraphDecomposition() { }

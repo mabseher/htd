@@ -56,12 +56,20 @@ htd::LabeledGraphFactory & htd::LabeledGraphFactory::instance(void)
 
 htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutableLabeledGraph();
+#endif
 }
 
 htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(std::size_t initialSize)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableLabeledGraph * ret = constructionTemplate_->cloneMutableLabeledGraph();
+#endif
 
     ret->addVertices(initialSize);
 
@@ -70,7 +78,11 @@ htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(std::size_
 
 htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd::ILabeledGraph & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableLabeledGraph * ret = constructionTemplate_->cloneMutableLabeledGraph();
+#endif
 
     *ret = original;
 
@@ -79,7 +91,11 @@ htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd:
 
 htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd::ILabeledMultiGraph & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableLabeledGraph * ret = constructionTemplate_->cloneMutableLabeledGraph();
+#endif
 
     *ret = original;
 

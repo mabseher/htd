@@ -1007,7 +1007,77 @@ htd::TreeDecomposition * htd::TreeDecomposition::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::ITree * htd::TreeDecomposition::cloneTree(void) const
+{
+    return clone();
+}
+
+htd::IGraph * htd::TreeDecomposition::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::TreeDecomposition::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::TreeDecomposition::cloneHypergraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::TreeDecomposition::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledTree * htd::TreeDecomposition::cloneLabeledTree(void) const
+{
+    return clone();
+}
+
+htd::ILabeledGraph * htd::TreeDecomposition::cloneLabeledGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiGraph * htd::TreeDecomposition::cloneLabeledMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledHypergraph * htd::TreeDecomposition::cloneLabeledHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiHypergraph * htd::TreeDecomposition::cloneLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecomposition * htd::TreeDecomposition::cloneTreeDecomposition(void) const
+{
+    return clone();
+}
+
+htd::IGraphDecomposition * htd::TreeDecomposition::cloneGraphDecomposition(void) const
+{
+    return clone();
+}
+
+htd::IMutableTree * htd::TreeDecomposition::cloneMutableTree(void) const
+{
+    return clone();
+}
+
+htd::IMutableLabeledTree * htd::TreeDecomposition::cloneMutableLabeledTree(void) const
+{
+    return clone();
+}
+
+htd::IMutableTreeDecomposition * htd::TreeDecomposition::cloneMutableTreeDecomposition(void) const
 {
     return clone();
 }

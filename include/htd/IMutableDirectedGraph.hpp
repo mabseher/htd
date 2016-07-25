@@ -105,12 +105,21 @@ namespace htd
              */
             virtual void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current mutable directed graph.
              *
              *  @return A new IMutableDirectedGraph object identical to the current mutable directed graph.
              */
             virtual IMutableDirectedGraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current mutable directed graph.
+             *
+             *  @return A new IMutableDirectedGraph object identical to the current mutable directed graph.
+             */
+            virtual IMutableDirectedGraph * cloneMutableDirectedGraph(void) const = 0;
+#endif
 
             /**
              *  Copy assignment operator for a mutable directed graph.

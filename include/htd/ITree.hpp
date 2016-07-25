@@ -195,12 +195,21 @@ namespace htd
              */
             virtual std::size_t depth(htd::vertex_t vertex) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current tree.
              *
              *  @return A new ITree object identical to the current tree.
              */
             virtual ITree * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current tree.
+             *
+             *  @return A new ITree object identical to the current tree.
+             */
+            virtual ITree * cloneTree(void) const = 0;
+#endif
     };
 
     inline htd::ITree::~ITree() { }

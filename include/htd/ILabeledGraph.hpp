@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/IGraph.hpp>
 #include <htd/ILabeledHypergraph.hpp>
+#include <htd/ILabeledMultiGraph.hpp>
 
 #include <string>
 
@@ -36,17 +37,26 @@ namespace htd
     /**
      * Interface for classes which represent labeled graphs.
      */
-    class ILabeledGraph : public virtual htd::IGraph, public virtual htd::ILabeledHypergraph
+    class ILabeledGraph : public virtual htd::IGraph, public virtual htd::ILabeledHypergraph, public virtual htd::ILabeledMultiGraph
     {
         public:
             virtual ~ILabeledGraph() = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current labeled graph.
              *
              *  @return A new ILabeledGraph object identical to the current labeled graph.
              */
             virtual ILabeledGraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current labeled graph.
+             *
+             *  @return A new ILabeledGraph object identical to the current labeled graph.
+             */
+            virtual ILabeledGraph * cloneLabeledGraph(void) const = 0;
+#endif
     };
 
     inline htd::ILabeledGraph::~ILabeledGraph() { }

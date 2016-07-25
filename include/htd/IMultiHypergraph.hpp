@@ -314,14 +314,14 @@ namespace htd
              */
             virtual bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current multi-hypergraph.
              *
              *  @return A new IMultiHypergraph object identical to the current multi-hypergraph.
              */
             virtual IMultiHypergraph * clone(void) const = 0;
-
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+#else
             /**
              *  Create a deep copy of the current multi-hypergraph.
              *

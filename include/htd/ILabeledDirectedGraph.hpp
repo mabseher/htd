@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/IDirectedGraph.hpp>
 #include <htd/ILabeledGraph.hpp>
+#include <htd/ILabeledDirectedMultiGraph.hpp>
 
 #include <string>
 
@@ -36,17 +37,26 @@ namespace htd
     /**
      * Interface for classes which represent labeled directed graphss.
      */
-    class ILabeledDirectedGraph : public virtual htd::IDirectedGraph, public virtual htd::ILabeledGraph
+    class ILabeledDirectedGraph : public virtual htd::IDirectedGraph, public virtual htd::ILabeledGraph, public virtual htd::ILabeledDirectedMultiGraph
     {
         public:
             virtual ~ILabeledDirectedGraph() = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current labeled directed graph.
              *
              *  @return A new ILabeledDirectedGraph object identical to the current labeled directed graph.
              */
             virtual ILabeledDirectedGraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current labeled directed graph.
+             *
+             *  @return A new ILabeledDirectedGraph object identical to the current labeled directed graph.
+             */
+            virtual ILabeledDirectedGraph * cloneLabeledDirectedGraph(void) const = 0;
+#endif
     };
 
     inline htd::ILabeledDirectedGraph::~ILabeledDirectedGraph() { }

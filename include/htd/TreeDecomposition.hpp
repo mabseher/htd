@@ -213,10 +213,40 @@ namespace htd
 
             std::size_t maximumBagSize(void) const HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             TreeDecomposition * clone(void) const HTD_OVERRIDE;
+#else
+            TreeDecomposition * clone(void) const;
 
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            htd::ITree * cloneTree(void) const HTD_OVERRIDE;
+
+            htd::IGraph * cloneGraph(void) const HTD_OVERRIDE;
+
+            htd::IMultiGraph * cloneMultiGraph(void) const HTD_OVERRIDE;
+
+            htd::IHypergraph * cloneHypergraph(void) const HTD_OVERRIDE;
+
             htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::ILabeledTree * cloneLabeledTree(void) const HTD_OVERRIDE;
+
+            htd::ILabeledGraph * cloneLabeledGraph(void) const HTD_OVERRIDE;
+
+            htd::ILabeledMultiGraph * cloneLabeledMultiGraph(void) const HTD_OVERRIDE;
+
+            htd::ILabeledHypergraph * cloneLabeledHypergraph(void) const HTD_OVERRIDE;
+
+            htd::ILabeledMultiHypergraph * cloneLabeledMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::ITreeDecomposition * cloneTreeDecomposition(void) const HTD_OVERRIDE;
+
+            htd::IGraphDecomposition * cloneGraphDecomposition(void) const HTD_OVERRIDE;
+
+            htd::IMutableTree * cloneMutableTree(void) const HTD_OVERRIDE;
+
+            htd::IMutableLabeledTree * cloneMutableLabeledTree(void) const HTD_OVERRIDE;
+
+            htd::IMutableTreeDecomposition * cloneMutableTreeDecomposition(void) const HTD_OVERRIDE;
 #endif
 
             /**

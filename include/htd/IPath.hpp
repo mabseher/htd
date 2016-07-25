@@ -54,12 +54,21 @@ namespace htd
              */
             virtual htd::vertex_t child(htd::vertex_t vertex) const = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current path.
              *
              *  @return A new IPath object identical to the current path.
              */
             virtual IPath * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current path.
+             *
+             *  @return A new IPath object identical to the current path.
+             */
+            virtual IPath * clonePath(void) const = 0;
+#endif
     };
 
     inline htd::IPath::~IPath() { }

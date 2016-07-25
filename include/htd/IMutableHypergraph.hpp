@@ -164,12 +164,21 @@ namespace htd
              */
             virtual void removeEdge(const htd::ConstCollection<htd::vertex_t> & elements) = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current mutable hypergraph.
              *
              *  @return A new IMutableHypergraph object identical to the current mutable hypergraph.
              */
             virtual IMutableHypergraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current mutable hypergraph.
+             *
+             *  @return A new IMutableHypergraph object identical to the current mutable hypergraph.
+             */
+            virtual IMutableHypergraph * cloneMutableHypergraph(void) const = 0;
+#endif
 
             /**
              *  Copy assignment operator for a mutable hypergraph.

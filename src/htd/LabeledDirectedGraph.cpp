@@ -201,7 +201,72 @@ htd::LabeledDirectedGraph * htd::LabeledDirectedGraph::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IGraph * htd::LabeledDirectedGraph::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::LabeledDirectedGraph::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::LabeledDirectedGraph::cloneHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IDirectedGraph * htd::LabeledDirectedGraph::cloneDirectedGraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::LabeledDirectedGraph::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IDirectedMultiGraph * htd::LabeledDirectedGraph::cloneDirectedMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledGraph * htd::LabeledDirectedGraph::cloneLabeledGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiGraph * htd::LabeledDirectedGraph::cloneLabeledMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledHypergraph * htd::LabeledDirectedGraph::cloneLabeledHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledDirectedGraph * htd::LabeledDirectedGraph::cloneLabeledDirectedGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiHypergraph * htd::LabeledDirectedGraph::cloneLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledDirectedMultiGraph * htd::LabeledDirectedGraph::cloneLabeledDirectedMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableDirectedGraph * htd::LabeledDirectedGraph::cloneMutableDirectedGraph(void) const
+{
+    return clone();
+}
+
+htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraph::cloneMutableLabeledDirectedGraph(void) const
 {
     return clone();
 }

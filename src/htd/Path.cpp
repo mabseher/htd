@@ -1051,7 +1051,37 @@ htd::Path * htd::Path::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IPath * htd::Path::clonePath(void) const
+{
+    return clone();
+}
+
+htd::ITree * htd::Path::cloneTree(void) const
+{
+    return clone();
+}
+
+htd::IGraph * htd::Path::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::Path::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::Path::cloneHypergraph(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::Path::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMutablePath * htd::Path::cloneMutablePath(void) const
 {
     return clone();
 }

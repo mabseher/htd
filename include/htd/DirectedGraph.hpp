@@ -162,10 +162,24 @@ namespace htd
 
             void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             DirectedGraph * clone(void) const HTD_OVERRIDE;
+#else
+            DirectedGraph * clone(void) const;
 
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            htd::IGraph * cloneGraph(void) const HTD_OVERRIDE;
+
+            htd::IMultiGraph * cloneMultiGraph(void) const HTD_OVERRIDE;
+
+            htd::IHypergraph * cloneHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IDirectedGraph * cloneDirectedGraph(void) const HTD_OVERRIDE;
+
             htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IDirectedMultiGraph * cloneDirectedMultiGraph(void) const HTD_OVERRIDE;
+
+            htd::IMutableDirectedGraph * cloneMutableDirectedGraph(void) const HTD_OVERRIDE;
 #endif
 
             /**

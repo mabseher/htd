@@ -57,12 +57,20 @@ htd::TreeDecompositionFactory & htd::TreeDecompositionFactory::instance(void)
 
 htd::IMutableTreeDecomposition * htd::TreeDecompositionFactory::getTreeDecomposition(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutableTreeDecomposition();
+#endif
 }
 
 htd::IMutableTreeDecomposition * htd::TreeDecompositionFactory::getTreeDecomposition(const htd::ITreeDecomposition & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableTreeDecomposition * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableTreeDecomposition * ret = constructionTemplate_->cloneMutableTreeDecomposition();
+#endif
 
     *ret = original;
 

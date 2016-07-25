@@ -56,12 +56,20 @@ htd::GraphDecompositionFactory & htd::GraphDecompositionFactory::instance(void)
 
 htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomposition(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutableGraphDecomposition();
+#endif
 }
 
 htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomposition(const htd::IGraphDecomposition & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraphDecomposition * ret = constructionTemplate_->clone();
+#else
+    htd::IMutableGraphDecomposition * ret = constructionTemplate_->cloneMutableGraphDecomposition();
+#endif
 
     *ret = original;
 

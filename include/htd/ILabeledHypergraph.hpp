@@ -41,12 +41,21 @@ namespace htd
         public:
             virtual ~ILabeledHypergraph() = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current labeled hypergraph.
              *
              *  @return A new ILabeledHypergraph object identical to the current labeled hypergraph.
              */
             virtual ILabeledHypergraph * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current labeled hypergraph.
+             *
+             *  @return A new ILabeledHypergraph object identical to the current labeled hypergraph.
+             */
+            virtual ILabeledHypergraph * cloneLabeledHypergraph(void) const = 0;
+#endif
     };
 
     inline htd::ILabeledHypergraph::~ILabeledHypergraph() { }

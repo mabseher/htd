@@ -124,6 +124,93 @@ htd::HypertreeDecomposition * htd::HypertreeDecomposition::clone(void) const
     return new htd::HypertreeDecomposition(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::ITree * htd::HypertreeDecomposition::cloneTree(void) const
+{
+    return clone();
+}
+
+htd::IGraph * htd::HypertreeDecomposition::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::HypertreeDecomposition::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::HypertreeDecomposition::cloneHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiHypergraph * htd::HypertreeDecomposition::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledTree * htd::HypertreeDecomposition::cloneLabeledTree(void) const
+{
+    return clone();
+}
+
+htd::ILabeledGraph * htd::HypertreeDecomposition::cloneLabeledGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiGraph * htd::HypertreeDecomposition::cloneLabeledMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledHypergraph * htd::HypertreeDecomposition::cloneLabeledHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiHypergraph * htd::HypertreeDecomposition::cloneLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecomposition * htd::HypertreeDecomposition::cloneTreeDecomposition(void) const
+{
+    return clone();
+}
+
+htd::IGraphDecomposition * htd::HypertreeDecomposition::cloneGraphDecomposition(void) const
+{
+    return clone();
+}
+
+htd::IHypertreeDecomposition * htd::HypertreeDecomposition::cloneHypertreeDecomposition(void) const
+{
+    return clone();
+}
+
+htd::IMutableTree * htd::HypertreeDecomposition::cloneMutableTree(void) const
+{
+    return clone();
+}
+
+htd::IMutableLabeledTree * htd::HypertreeDecomposition::cloneMutableLabeledTree(void) const
+{
+    return clone();
+}
+
+htd::IMutableTreeDecomposition * htd::HypertreeDecomposition::cloneMutableTreeDecomposition(void) const
+{
+    return clone();
+}
+
+htd::IMutableHypertreeDecomposition * htd::HypertreeDecomposition::cloneMutableHypertreeDecomposition(void) const
+{
+    return clone();
+}
+#endif
+
 htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::ITree & original)
 {
     if (this != &original)

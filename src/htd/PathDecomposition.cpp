@@ -931,6 +931,98 @@ htd::PathDecomposition * htd::PathDecomposition::clone(void) const
     return new htd::PathDecomposition(*this);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IPath * htd::PathDecomposition::clonePath(void) const
+{
+    return clone();
+}
+
+htd::ITree * htd::PathDecomposition::cloneTree(void) const
+{
+    return clone();
+}
+
+htd::IGraph * htd::PathDecomposition::cloneGraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiGraph * htd::PathDecomposition::cloneMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::IHypergraph * htd::PathDecomposition::cloneHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IMultiHypergraph * htd::PathDecomposition::cloneMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledPath * htd::PathDecomposition::cloneLabeledPath(void) const
+{
+    return clone();
+}
+
+htd::ILabeledTree * htd::PathDecomposition::cloneLabeledTree(void) const
+{
+    return clone();
+}
+
+htd::ILabeledGraph * htd::PathDecomposition::cloneLabeledGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiGraph * htd::PathDecomposition::cloneLabeledMultiGraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledHypergraph * htd::PathDecomposition::cloneLabeledHypergraph(void) const
+{
+    return clone();
+}
+
+htd::ILabeledMultiHypergraph * htd::PathDecomposition::cloneLabeledMultiHypergraph(void) const
+{
+    return clone();
+}
+
+htd::IPathDecomposition * htd::PathDecomposition::clonePathDecomposition(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecomposition * htd::PathDecomposition::cloneTreeDecomposition(void) const
+{
+    return clone();
+}
+
+htd::IGraphDecomposition * htd::PathDecomposition::cloneGraphDecomposition(void) const
+{
+    return clone();
+}
+
+htd::IMutablePath * htd::PathDecomposition::cloneMutablePath(void) const
+{
+    return clone();
+}
+
+htd::IMutableLabeledPath * htd::PathDecomposition::cloneMutableLabeledPath(void) const
+{
+    return clone();
+}
+
+htd::IMutablePathDecomposition * htd::PathDecomposition::cloneMutablePathDecomposition(void) const
+{
+    return clone();
+}
+#endif
+
 htd::PathDecomposition & htd::PathDecomposition::operator=(const htd::PathDecomposition & original)
 {
     if (this != &original)

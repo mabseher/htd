@@ -56,7 +56,11 @@ htd::LabeledTreeFactory & htd::LabeledTreeFactory::instance(void)
 
 htd::IMutableLabeledTree * htd::LabeledTreeFactory::getLabeledTree(void)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneMutableLabeledTree();
+#endif
 }
 
 htd::IMutableLabeledTree * htd::LabeledTreeFactory::getLabeledTree(const htd::ILabeledTree & original)

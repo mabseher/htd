@@ -136,12 +136,21 @@ namespace htd
              */
             virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current mutable tree decomposition.
              *
              *  @return A new IMutableTreeDecomposition object identical to the current mutable tree decomposition.
              */
             virtual IMutableTreeDecomposition * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current mutable tree decomposition.
+             *
+             *  @return A new IMutableTreeDecomposition object identical to the current mutable tree decomposition.
+             */
+            virtual IMutableTreeDecomposition * cloneMutableTreeDecomposition(void) const = 0;
+#endif
 
             /**
              *  Copy assignment operator for a mutable tree decomposition.

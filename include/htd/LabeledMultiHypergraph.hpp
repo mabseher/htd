@@ -112,10 +112,18 @@ namespace htd
 
             htd::ILabel * transferEdgeLabel(const std::string & labelName, htd::id_t edgeId) HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LabeledMultiHypergraph * clone(void) const HTD_OVERRIDE;
+#else
+            LabeledMultiHypergraph * clone(void) const;
 
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::ILabeledMultiHypergraph * cloneLabeledMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IMutableMultiHypergraph * cloneMutableMultiHypergraph(void) const HTD_OVERRIDE;
+
+            htd::IMutableLabeledMultiHypergraph * cloneMutableLabeledMultiHypergraph(void) const HTD_OVERRIDE;
 #endif
 
             /**

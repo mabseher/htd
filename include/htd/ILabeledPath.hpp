@@ -39,12 +39,21 @@ namespace htd
         public:
             virtual ~ILabeledPath() = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current labeled path.
              *
              *  @return A new ILabeledPath object identical to the current labeled path.
              */
             virtual ILabeledPath * clone(void) const HTD_OVERRIDE = 0;
+#else
+            /**
+             *  Create a deep copy of the current labeled path.
+             *
+             *  @return A new ILabeledPath object identical to the current labeled path.
+             */
+            virtual ILabeledPath * cloneLabeledPath(void) const = 0;
+#endif
     };
 
     inline htd::ILabeledPath::~ILabeledPath() { }

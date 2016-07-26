@@ -39,7 +39,7 @@ namespace htd
     /**
      *  Structure containing default values for special vertices.
      */
-    struct Vertex
+    struct HTD_API Vertex
     {
         public:
             /**

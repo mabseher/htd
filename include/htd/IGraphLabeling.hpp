@@ -33,7 +33,7 @@ namespace htd
     /**
      * Interface for graph labelings providing uni-directional mappings between vertices (and/or edges) and labels.
      */
-    class IGraphLabeling
+    class HTD_API IGraphLabeling
     {
         public:
             virtual ~IGraphLabeling() = 0;

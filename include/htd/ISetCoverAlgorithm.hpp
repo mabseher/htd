@@ -36,7 +36,7 @@ namespace htd
     /**
      * Interface for algorithms which solve the set-cover problem.
      */
-    class ISetCoverAlgorithm : public virtual htd::LibraryObject
+    class HTD_API ISetCoverAlgorithm : public virtual htd::LibraryObject
     {
         public:
             virtual ~ISetCoverAlgorithm() = 0;

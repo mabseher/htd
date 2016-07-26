@@ -25,43 +25,7 @@
 #ifndef HTD_HTD_GLOBALS_HPP
 #define HTD_HTD_GLOBALS_HPP
 
-#include <htd/CompilerDetection.hpp>
-
-#ifdef HTD_COMPILER_IS_MSVC
-    #if HTD_COMPILER_IS_MSVC == 1
-        #define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    #endif
-#endif
-
-#if HTD_COMPILER_IS_MSVC == 1
-    #define HTD_SYMBOL_EXPORT __declspec(dllexport)
-    #define HTD_SYMBOL_IMPORT __declspec(dllimport)
-    #define HTD_LOCAL_SYMBOL
-#else
-    #if HTD_COMPILER_IS_GNU == 1 || HTD_COMPILER_IS_Clang == 1
-        #define HTD_SYMBOL_EXPORT __attribute__ ((visibility ("default")))
-        #define HTD_SYMBOL_IMPORT __attribute__ ((visibility ("default")))
-        #define HTD_LOCAL_SYMBOL  __attribute__ ((visibility ("hidden")))
-    #else
-        #define HTD_SYMBOL_EXPORT
-        #define HTD_SYMBOL_IMPORT
-        #define HTD_LOCAL_SYMBOL
-    #endif
-#endif
-
-#ifdef HTD_SHARED_LIBRARY
-    #ifdef htd_EXPORTS
-        #define HTD_API HTD_SYMBOL_EXPORT
-    #else
-        #define HTD_API HTD_SYMBOL_IMPORT
-    #endif
-    #define HTD_LOCAL HTD_LOCAL_SYMBOL
-#else
-    #define HTD_API
-    #define HTD_LOCAL
-#endif
-
-//#define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+#include <htd/PreprocessorDefinitions.hpp>
 
 #include <htd/Id.hpp>
 #include <htd/State.hpp>

@@ -47,34 +47,6 @@
 #include <utility>
 #include <vector>
 
-#define HTD_UNUSED(x) (void)(x);
-
-#ifdef NDEBUG
-    #define HTD_ASSERT(x)
-#else
-    #define HTD_ASSERT(x) assert(x);
-#endif
-
-#ifdef NDEBUG
-    #define DEBUGGING_CODE(x)
-#else
-    #ifdef HTD_DEBUG_OUTPUT
-        #define DEBUGGING_CODE(x) x
-    #else
-        #define DEBUGGING_CODE(x)
-    #endif
-#endif
-
-#ifdef NDEBUG
-    #define DEBUGGING_CODE_LEVEL2(x) 
-#else
-    #ifndef DEBUG2
-        #define DEBUGGING_CODE_LEVEL2(x) 
-    #else
-        #define DEBUGGING_CODE_LEVEL2(x) x
-    #endif
-#endif
-
 namespace htd
 {
     template < typename T >

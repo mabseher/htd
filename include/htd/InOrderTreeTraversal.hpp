@@ -35,7 +35,7 @@ namespace htd
     /**
      * Implementation of the ITreeTraversal interface traversing the nodes in ascending order.
      */
-    class InOrderTreeTraversal : public virtual htd::ITreeTraversal
+    class HTD_API InOrderTreeTraversal : public virtual htd::ITreeTraversal
     {
         public:
             InOrderTreeTraversal(void);

@@ -39,7 +39,7 @@ namespace htd
      *  lead to the fact that the bag sizes in the resulting path decomposition are larger than those
      *  observed in the input tree decomposition.
      */
-    class JoinNodeReplacementOperation : public virtual htd::ITreeDecompositionManipulationOperation
+    class HTD_API JoinNodeReplacementOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             /**

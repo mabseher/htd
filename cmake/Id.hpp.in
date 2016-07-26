@@ -25,6 +25,8 @@
 #ifndef HTD_HTD_ID_HPP
 #define HTD_HTD_ID_HPP
 
+#include <htd/PreprocessorDefinitions.hpp>
+
 #include <cstdlib>
 #include <cstdint>
 
@@ -38,7 +40,7 @@ namespace htd
     /**
      *  Structure containing default values for special identifiers.
      */
-    struct Id
+    struct HTD_API Id
     {
         public:
             /**

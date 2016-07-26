@@ -36,7 +36,7 @@ namespace htd
     /**
      * Interface for classes which represent graph decompositions.
      */
-    class IGraphDecomposition : public virtual htd::ILabeledMultiHypergraph
+    class HTD_API IGraphDecomposition : public virtual htd::ILabeledMultiHypergraph
     {
         public:
             virtual ~IGraphDecomposition() = 0;

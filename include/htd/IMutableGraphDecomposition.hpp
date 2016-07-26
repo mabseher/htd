@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which represent mutable graph decompositions.
      */
-    class IMutableGraphDecomposition : public virtual htd::IMutableLabeledMultiHypergraph, public virtual htd::IGraphDecomposition
+    class HTD_API IMutableGraphDecomposition : public virtual htd::IMutableLabeledMultiHypergraph, public virtual htd::IGraphDecomposition
     {
         public:
             using htd::IMutableLabeledMultiHypergraph::addVertex;

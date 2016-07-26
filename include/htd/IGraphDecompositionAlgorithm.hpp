@@ -38,7 +38,7 @@ namespace htd
     /**
      * Interface for algorithms which can be used to compute graph decompositions of a given graph.
      */
-    class IGraphDecompositionAlgorithm : public virtual htd::LibraryObject
+    class HTD_API IGraphDecompositionAlgorithm : public virtual htd::LibraryObject
     {
         public:
             virtual ~IGraphDecompositionAlgorithm() = 0;

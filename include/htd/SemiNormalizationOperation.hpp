@@ -37,7 +37,7 @@ namespace htd
      *  bag content as the join node itself and so that each join node has exactly two
      *  children.
      */
-    class SemiNormalizationOperation : public htd::WeakNormalizationOperation
+    class HTD_API SemiNormalizationOperation : public htd::WeakNormalizationOperation
     {
         public:
             /**

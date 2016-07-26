@@ -33,7 +33,7 @@ namespace htd
     /**
      * Interface for classes which represent mutable trees.
      */
-    class IMutableTree : public virtual htd::ITree
+    class HTD_API IMutableTree : public virtual htd::ITree
     {
         public:
             /**

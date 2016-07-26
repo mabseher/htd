@@ -37,7 +37,7 @@ namespace htd
      *  given tree and path decompositions such that each child of a join node has the same
      *  bag content as the join node itself.
      */
-    class WeakNormalizationOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
+    class HTD_API WeakNormalizationOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             /**

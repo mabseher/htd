@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for algorithms which determine the strongly connected components of a given graph.
      */
-    class IStronglyConnectedComponentAlgorithm : public htd::IConnectedComponentAlgorithm
+    class HTD_API IStronglyConnectedComponentAlgorithm : public htd::IConnectedComponentAlgorithm
     {
         public:
             using htd::IConnectedComponentAlgorithm::determineComponents;

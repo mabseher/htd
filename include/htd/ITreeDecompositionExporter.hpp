@@ -37,7 +37,7 @@ namespace htd
     /**
      * Interface for algorithms which can be used to export tree decompositions to streams.
      */
-    class ITreeDecompositionExporter
+    class HTD_API ITreeDecompositionExporter
     {
         public:
             virtual ~ITreeDecompositionExporter() = 0;

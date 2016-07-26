@@ -49,7 +49,7 @@ namespace htd
      *  decomposition algorithm and the given manipulations (or nullptr) also if it was interrupted
      *  by a call to htd::LibraryInstance::terminate().
      */
-    class IterativeImprovementTreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
+    class HTD_API IterativeImprovementTreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
     {
         public:
             /**

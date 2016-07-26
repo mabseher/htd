@@ -38,7 +38,7 @@ namespace htd
     /**
      *  Implementation of the ILabelingFunction interface which returns labels containing the hyperedges induced by the given bag which are not already introduced by a child bag.
      */
-    class IntroducedSubgraphLabelingOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
+    class HTD_API IntroducedSubgraphLabelingOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             /**

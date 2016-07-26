@@ -35,7 +35,7 @@ namespace htd
     /**
      * Interface for classes which represent mutable path decompositions.
      */
-    class IMutablePathDecomposition : public virtual htd::IMutableLabeledPath, public virtual htd::IPathDecomposition
+    class HTD_API IMutablePathDecomposition : public virtual htd::IMutableLabeledPath, public virtual htd::IPathDecomposition
     {
         public:
             using htd::IMutablePath::insertRoot;

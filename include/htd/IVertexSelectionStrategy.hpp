@@ -36,7 +36,7 @@ namespace htd
     /**
      * Interface for algorithms which select certain vertices from a given input graph.
      */
-    class IVertexSelectionStrategy
+    class HTD_API IVertexSelectionStrategy
     {
         public:
             virtual ~IVertexSelectionStrategy() = 0;

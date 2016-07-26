@@ -36,7 +36,7 @@ namespace htd
      *  given tree and path decompositions such that the resulting decomposition is fully
      *  normalized.
      */
-    class NormalizationOperation : public htd::SemiNormalizationOperation
+    class HTD_API NormalizationOperation : public htd::SemiNormalizationOperation
     {
         public:
             /**

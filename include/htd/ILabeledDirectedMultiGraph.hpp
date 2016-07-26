@@ -36,7 +36,7 @@ namespace htd
     /**
      * Interface for classes which represent labeled directed graphs with potentially duplicated edges.
      */
-    class ILabeledDirectedMultiGraph : public virtual htd::IDirectedMultiGraph, public virtual htd::ILabeledMultiGraph
+    class HTD_API ILabeledDirectedMultiGraph : public virtual htd::IDirectedMultiGraph, public virtual htd::ILabeledMultiGraph
     {
         public:
             virtual ~ILabeledDirectedMultiGraph() = 0;

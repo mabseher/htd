@@ -35,7 +35,7 @@ namespace htd
     /**
      * Interface for algorithms traversing a given input graph.
      */
-    class IGraphTraversal
+    class HTD_API IGraphTraversal
     {
         public:
             virtual ~IGraphTraversal() = 0;

@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which represent mutable graphs.
      */
-    class IMutableGraph : public virtual htd::IGraph
+    class HTD_API IMutableGraph : public virtual htd::IGraph
     {
         public:
             /**

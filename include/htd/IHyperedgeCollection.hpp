@@ -34,7 +34,7 @@ namespace htd
     /**
      *  Interface for hyperedge collections.
      */
-    class IHyperedgeCollection
+    class HTD_API IHyperedgeCollection
     {
         public:
             /**

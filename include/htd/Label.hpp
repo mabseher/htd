@@ -38,7 +38,7 @@ namespace htd
      *  Default implementation of the ILabel interface.
      */
     template<typename T>
-    class Label : public htd::ILabel
+    class HTD_API Label : public htd::ILabel
     {
         public:
             /**

@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which represent mutable labeled paths.
      */
-    class IMutableLabeledPath : public virtual htd::ILabeledPath, public virtual htd::IMutablePath
+    class HTD_API IMutableLabeledPath : public virtual htd::ILabeledPath, public virtual htd::IMutablePath
     {
         public:
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

@@ -33,7 +33,7 @@ namespace htd
     /**
      * Interface for classes which represent mutable directed graphs.
      */
-    class IMutableDirectedGraph : public virtual htd::IDirectedGraph
+    class HTD_API IMutableDirectedGraph : public virtual htd::IDirectedGraph
     {
         public:
             /**

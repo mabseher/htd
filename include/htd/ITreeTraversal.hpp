@@ -36,7 +36,7 @@ namespace htd
     /**
      * Interface for algorithms traversing a given input tree.
      */
-    class ITreeTraversal
+    class HTD_API ITreeTraversal
     {
         public:
             virtual ~ITreeTraversal() = 0;

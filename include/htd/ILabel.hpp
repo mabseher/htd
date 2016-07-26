@@ -25,6 +25,8 @@
 #ifndef HTD_HTD_ILABEL_HPP
 #define	HTD_HTD_ILABEL_HPP
 
+#include <htd/PreprocessorDefinitions.hpp>
+
 #include <ostream>
 
 namespace htd
@@ -32,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which can be used as label for vertices and edges of a graph.
      */
-    class ILabel
+    class HTD_API ILabel
     {
         public:
             virtual ~ILabel() = 0;

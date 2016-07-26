@@ -35,7 +35,7 @@ namespace htd
     /**
      * Interface for algorithms which can be used to compute vertex orderings.
      */
-    class IOrderingAlgorithm : public virtual htd::LibraryObject
+    class HTD_API IOrderingAlgorithm : public virtual htd::LibraryObject
     {
         public:
             virtual ~IOrderingAlgorithm() = 0;

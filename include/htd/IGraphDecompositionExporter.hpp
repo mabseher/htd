@@ -36,7 +36,7 @@ namespace htd
     /**
      * Interface for algorithms which can be used to export graph decompositions to streams.
      */
-    class IGraphDecompositionExporter : public htd::ITreeDecompositionExporter
+    class HTD_API IGraphDecompositionExporter : public htd::ITreeDecompositionExporter
     {
         public:
             using htd::ITreeDecompositionExporter::write;

@@ -37,7 +37,7 @@ namespace htd
     /**
      * Interface for algorithms which can be used to export hypertree decompositions to streams.
      */
-    class IHypertreeDecompositionExporter
+    class HTD_API IHypertreeDecompositionExporter
     {
         public:
             virtual ~IHypertreeDecompositionExporter() = 0;

@@ -34,7 +34,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableLabeledHypergraph interface.
      */
-    class LabeledHypergraph : public htd::Hypergraph, public virtual htd::IMutableLabeledHypergraph
+    class HTD_API LabeledHypergraph : public htd::Hypergraph, public virtual htd::IMutableLabeledHypergraph
     {
         public:
             /**

@@ -39,7 +39,7 @@ namespace htd
     /**
      *  Central management class of the library.
      */
-    class Library
+    class HTD_API Library
     {
         public:
             ~Library();

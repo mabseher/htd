@@ -39,7 +39,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableTree interface.
      */
-    class Tree : public virtual htd::IMutableTree
+    class HTD_API Tree : public virtual htd::IMutableTree
     {
         public:
             /**

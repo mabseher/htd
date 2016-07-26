@@ -40,7 +40,7 @@ namespace htd
     /**
      *  Default implementation of the ILabelingCollection interface.
      */
-    class LabelingCollection : public virtual htd::ILabelingCollection
+    class HTD_API LabelingCollection : public virtual htd::ILabelingCollection
     {
         public:
             /**

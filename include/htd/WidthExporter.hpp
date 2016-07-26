@@ -38,7 +38,7 @@ namespace htd
      *  hypertree decomposition, also the maximum amount of covering edges is written to the stream and the two
      *  numbers are separated by the character sequence ", ".
      */
-    class WidthExporter : public htd::IGraphDecompositionExporter, public htd::IHypertreeDecompositionExporter
+    class HTD_API WidthExporter : public htd::IGraphDecompositionExporter, public htd::IHypertreeDecompositionExporter
     {
         public:
             WidthExporter(void);

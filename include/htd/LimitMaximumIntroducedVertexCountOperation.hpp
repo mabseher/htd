@@ -38,7 +38,7 @@ namespace htd
      *  of the set difference between the node's bag and the set union of the node's child bags is
      *  bounded by the given limit.
      */
-    class LimitMaximumIntroducedVertexCountOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
+    class HTD_API LimitMaximumIntroducedVertexCountOperation : public virtual htd::IPathDecompositionManipulationOperation, public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             /**

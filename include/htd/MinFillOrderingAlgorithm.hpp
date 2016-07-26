@@ -37,7 +37,7 @@ namespace htd
     /**
      *  Implementation of the IOrderingAlgorithm interface based on the minimum-fill elimination ordering algorithm.
      */
-    class MinFillOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
+    class HTD_API MinFillOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
             MinFillOrderingAlgorithm(void);

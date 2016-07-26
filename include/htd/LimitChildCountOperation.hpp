@@ -36,7 +36,7 @@ namespace htd
      *  given tree decompositions in such a way that the maximum number of children of each
      *  join node is bounded by the given limit.
      */
-    class LimitChildCountOperation : public htd::ITreeDecompositionManipulationOperation
+    class HTD_API LimitChildCountOperation : public htd::ITreeDecompositionManipulationOperation
     {
         public:
             /**

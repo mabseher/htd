@@ -34,7 +34,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableLabeledTree interface.
      */
-    class LabeledTree : public htd::Tree, public virtual htd::IMutableLabeledTree
+    class HTD_API LabeledTree : public htd::Tree, public virtual htd::IMutableLabeledTree
     {
         public:
             /**

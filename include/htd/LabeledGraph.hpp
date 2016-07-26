@@ -34,7 +34,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableLabeledGraph interface.
      */
-    class LabeledGraph : public htd::Graph, public virtual htd::IMutableLabeledGraph
+    class HTD_API LabeledGraph : public htd::Graph, public virtual htd::IMutableLabeledGraph
     {
         public:
             /**

@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Abstract class for interaction with the management class of a library instance.
      */
-    class LibraryObject
+    class HTD_API LibraryObject
     {
         public:
             /**

@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Implementation of the IOrderingAlgorithm interface returning the vertices of the given graph in ascending order.
      */
-    class NaturalOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
+    class HTD_API NaturalOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
             NaturalOrderingAlgorithm(void);

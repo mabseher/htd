@@ -35,7 +35,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableMultiGraph interface.
      */
-    class MultiGraph : public virtual htd::IMutableMultiGraph
+    class HTD_API MultiGraph : public virtual htd::IMutableMultiGraph
     {
         public:
             /**

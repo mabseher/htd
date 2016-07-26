@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Central management class of a library instance.
      */
-    class LibraryInstance
+    class HTD_API LibraryInstance
     {
         public:
             /**

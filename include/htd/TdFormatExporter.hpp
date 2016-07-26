@@ -37,7 +37,7 @@ namespace htd
      *
      *  (See https://github.com/mabseher/htd/FORMATS.md for information about the available output formats.)
      */
-    class TdFormatExporter : public htd::ITreeDecompositionExporter
+    class HTD_API TdFormatExporter : public htd::ITreeDecompositionExporter
     {
         public:
             TdFormatExporter(void);

@@ -37,7 +37,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableTreeDecomposition interface.
      */
-    class TreeDecomposition : public htd::LabeledTree, public virtual htd::IMutableTreeDecomposition
+    class HTD_API TreeDecomposition : public htd::LabeledTree, public virtual htd::IMutableTreeDecomposition
     {
         public:
             /**

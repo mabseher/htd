@@ -40,7 +40,7 @@ namespace htd
      *  given tree decompositions in such a way that the fitness value of the resulting tree 
      *  decomposition is maximal.
      */
-    class TreeDecompositionOptimizationOperation : public virtual htd::ITreeDecompositionManipulationOperation
+    class HTD_API TreeDecompositionOptimizationOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             /**

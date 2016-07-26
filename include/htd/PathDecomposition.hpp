@@ -37,7 +37,7 @@ namespace htd
     /**
      *  Default implementation of the IMutablePathDecomposition interface.
      */
-    class PathDecomposition : public htd::LabeledPath, public virtual htd::IMutablePathDecomposition
+    class HTD_API PathDecomposition : public htd::LabeledPath, public virtual htd::IMutablePathDecomposition
     {
         public:
             /**

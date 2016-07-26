@@ -34,7 +34,7 @@ namespace htd
     /**
      * Vertex selection strategy selecting a random subset of the vertices of a given input graph.
      */
-    class RandomVertexSelectionStrategy : public htd::IVertexSelectionStrategy
+    class HTD_API RandomVertexSelectionStrategy : public htd::IVertexSelectionStrategy
     {
         public:
             /**

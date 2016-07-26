@@ -34,7 +34,7 @@ namespace htd
     /**
      * Vertex selection strategy selecting each vertex of a given input graph which has exactly one neighbor.
      */
-    class SingleNeighborVertexSelectionStrategy : public htd::IVertexSelectionStrategy
+    class HTD_API SingleNeighborVertexSelectionStrategy : public htd::IVertexSelectionStrategy
     {
         public:
             /**

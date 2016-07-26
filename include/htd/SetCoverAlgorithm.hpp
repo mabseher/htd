@@ -35,7 +35,7 @@ namespace htd
     /**
      * Implementation of the ISetCoverAlgorithm interface based on exhaustive search via a branch-and-bound approach.
      */
-    class SetCoverAlgorithm : public virtual htd::ISetCoverAlgorithm
+    class HTD_API SetCoverAlgorithm : public virtual htd::ISetCoverAlgorithm
     {
         public:
             SetCoverAlgorithm(void);

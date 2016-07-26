@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Default implementation of the ITreeDecompositionVerifier interface.
      */
-    class TreeDecompositionVerifier : public virtual htd::ITreeDecompositionVerifier
+    class HTD_API TreeDecompositionVerifier : public virtual htd::ITreeDecompositionVerifier
     {
         public:
             /**

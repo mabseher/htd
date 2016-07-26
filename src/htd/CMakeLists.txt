@@ -41,5 +41,9 @@ if (UNIX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Dhtd_EXPORTS")
 endif (UNIX)
 
+if (BUILD_SHARED_LIBS)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHTD_SHARED_LIBRARY")
+endif (BUILD_SHARED_LIBS)
+
 install(TARGETS htd DESTINATION lib)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd" DESTINATION include)

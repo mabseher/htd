@@ -37,7 +37,7 @@ namespace htd
     /**
      *  Default implementation of the IGraphLabeling interface.
      */
-    class GraphLabeling : public htd::IGraphLabeling
+    class HTD_API GraphLabeling : public htd::IGraphLabeling
     {
         public:
             GraphLabeling(void);

@@ -37,7 +37,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableGraphDecomposition interface.
      */
-    class GraphDecomposition : public htd::LabeledMultiHypergraph, public virtual htd::IMutableGraphDecomposition
+    class HTD_API GraphDecomposition : public htd::LabeledMultiHypergraph, public virtual htd::IMutableGraphDecomposition
     {
         public:
             /**

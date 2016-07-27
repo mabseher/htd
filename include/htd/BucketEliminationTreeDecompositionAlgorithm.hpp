@@ -40,7 +40,7 @@ namespace htd
     /**
      *  Default implementation of the ITreeDecompositionAlgorithm interface based on bucket elimination.
      */
-    class BucketEliminationTreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
+    class HTD_API BucketEliminationTreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
     {
         public:
             /**

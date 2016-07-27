@@ -33,7 +33,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableGraph interface.
      */
-    class Graph : public virtual htd::IMutableGraph
+    class HTD_API Graph : public virtual htd::IMutableGraph
     {
         public:
             /**

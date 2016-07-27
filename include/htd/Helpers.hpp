@@ -62,10 +62,10 @@ namespace htd
     }
 
     template < >
-    void print<std::string>(const std::string& input);
+    void HTD_API print<std::string>(const std::string& input);
 
     template < >
-    void print<std::string>(const std::string& input, std::ostream & stream);
+    void HTD_API print<std::string>(const std::string& input, std::ostream & stream);
 
     template < typename T >
     void print(const htd::ConstCollection<T> & input, std::ostream & stream, bool sorted = false)
@@ -247,13 +247,13 @@ namespace htd
         print(input, std::cout);
     }
 
-    void print(bool input);
+    void HTD_API print(bool input);
 
-    void print(bool input, std::ostream & stream);
+    void HTD_API print(bool input, std::ostream & stream);
 
-    void print(const htd::Hyperedge & input);
+    void HTD_API print(const htd::Hyperedge & input);
 
-    void print(const htd::Hyperedge & input, std::ostream & stream);
+    void HTD_API print(const htd::Hyperedge & input, std::ostream & stream);
 
     template <typename T>
     void set_union(const std::vector<T> & set1,
@@ -325,22 +325,22 @@ namespace htd
         return *position;
     }
 
-    void set_union(const std::vector<htd::vertex_t> & set1,
-                   const std::vector<htd::vertex_t> & set2,
-                   htd::vertex_t ignoredVertex,
-                   std::vector<htd::vertex_t> & result);
+    void HTD_API set_union(const std::vector<htd::vertex_t> & set1,
+                           const std::vector<htd::vertex_t> & set2,
+                           htd::vertex_t ignoredVertex,
+                           std::vector<htd::vertex_t> & result);
 
-    void set_difference(const std::vector<htd::vertex_t> & set1,
-                        const std::vector<htd::vertex_t> & set2,
-                        std::vector<htd::vertex_t> & result);
+    void HTD_API set_difference(const std::vector<htd::vertex_t> & set1,
+                                const std::vector<htd::vertex_t> & set2,
+                                std::vector<htd::vertex_t> & result);
 
-    void set_intersection(const std::vector<htd::vertex_t> & set1,
-                          const std::vector<htd::vertex_t> & set2,
-                          std::vector<htd::vertex_t> & result);
+    void HTD_API set_intersection(const std::vector<htd::vertex_t> & set1,
+                                  const std::vector<htd::vertex_t> & set2,
+                                  std::vector<htd::vertex_t> & result);
 
-    std::tuple<std::size_t, std::size_t, std::size_t> analyze_sets(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
+    std::tuple<std::size_t, std::size_t, std::size_t> HTD_API analyze_sets(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
 
-    std::pair<std::size_t, std::size_t> symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
+    std::pair<std::size_t, std::size_t> HTD_API symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
 
     template <typename T>
     void set_union(const std::vector<T> & set1,

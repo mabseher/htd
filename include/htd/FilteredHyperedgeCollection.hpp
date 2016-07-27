@@ -51,7 +51,7 @@ namespace htd
             /**
              *  Custom read-only iterator for hyperedge collections.
              */
-            class FilteredHyperedgeCollectionConstIterator
+            class HTD_API FilteredHyperedgeCollectionConstIterator
             {
                 public:
                     /**

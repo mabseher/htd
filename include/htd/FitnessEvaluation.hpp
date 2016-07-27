@@ -45,7 +45,7 @@ namespace htd
      *  1. Evaluation: 1,2,0 (Fitness: 1@@L0, 2@@L1, 0@@L2)
      *  2. Evaluation: 1,1,5 (Fitness: 1@@L0, 1@@L1, 5@@L2)
      */
-    class FitnessEvaluation
+    class HTD_API FitnessEvaluation
     {
         public:
             /**

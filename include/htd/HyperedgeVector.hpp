@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Wrapper for existing vectors of hyperedges.
      */
-    class HyperedgeVector : public htd::IHyperedgeCollection
+    class HTD_API HyperedgeVector : public htd::IHyperedgeCollection
     {
         public:
             /**

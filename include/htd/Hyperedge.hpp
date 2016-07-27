@@ -39,7 +39,7 @@ namespace htd
     /**
      *  Class for the efficient storage of hyperedges.
      */
-    class Hyperedge
+    class HTD_API Hyperedge
     {
         public:
             /**

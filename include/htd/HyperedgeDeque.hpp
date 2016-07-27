@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Wrapper for existing deques of hyperedges.
      */
-    class HyperedgeDeque : public htd::IHyperedgeCollection
+    class HTD_API HyperedgeDeque : public htd::IHyperedgeCollection
     {
         public:
             /**

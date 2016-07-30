@@ -113,6 +113,11 @@ struct htd::Tree::Implementation
 
     virtual ~Implementation()
     {
+        for (auto it = nodes_.begin(); it != nodes_.end(); it++)
+        {
+            delete it->second;
+        }
+
         for (htd::Hyperedge * edge : *edges_)
         {
             delete edge;
@@ -138,7 +143,7 @@ struct htd::Tree::Implementation
 
         for (const auto & node : original.nodes_)
         {
-            nodes_.emplace(node.first, std::unique_ptr<Node>(new Node(*(node.second))));
+            nodes_.emplace(node.first, new Node(*(node.second)));
         }
 
         for (const htd::Hyperedge * edge : *(original.edges_))
@@ -206,7 +211,7 @@ struct htd::Tree::Implementation
     /**
      *  The map of pointers to all tree nodes. It maps vertex IDs to the corresponding node information.
      */
-    std::unordered_map<htd::id_t, std::unique_ptr<Node>> nodes_;
+    std::unordered_map<htd::id_t, Node *> nodes_;
 
     /**
      *  The collection of all hyperedges which exist in the tree.
@@ -218,7 +223,7 @@ struct htd::Tree::Implementation
      *
      *  @param[in] node The node of the tree which shall be removed.
      */
-    void deleteNode(const std::unique_ptr<Node> & node);
+    void deleteNode(Node * node);
 
     /**
      *  Updates the edge information for the nodes affected by a call to swapWithParent(htd::vertex_t).
@@ -983,7 +988,7 @@ htd::vertex_t htd::Tree::insertRoot(void)
         implementation_->next_vertex_ = implementation_->root_ + 1;
 
         implementation_->nodes_.clear();
-        implementation_->nodes_.emplace(implementation_->root_, std::unique_ptr<Implementation::Node>(new Implementation::Node(implementation_->root_, htd::Vertex::UNKNOWN)));
+        implementation_->nodes_.emplace(implementation_->root_, new Implementation::Node(implementation_->root_, htd::Vertex::UNKNOWN));
 
         implementation_->vertices_.emplace_back(implementation_->root_);
 
@@ -1043,7 +1048,7 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
     node.children.emplace_back(ret);
 
-    implementation_->nodes_.emplace(ret, std::unique_ptr<Implementation::Node>(new Implementation::Node(ret, vertex)));
+    implementation_->nodes_.emplace(ret, new Implementation::Node(ret, vertex));
 
     implementation_->vertices_.emplace_back(ret);
 
@@ -1104,11 +1109,11 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
         node->parent = ret;
 
-        std::unique_ptr<Implementation::Node> newRootNode(new Implementation::Node(ret, htd::Vertex::UNKNOWN));
+        Implementation::Node * newRootNode = new Implementation::Node(ret, htd::Vertex::UNKNOWN);
 
         newRootNode->children.emplace_back(vertex);
 
-        implementation_->nodes_.emplace(ret, std::move(newRootNode));
+        implementation_->nodes_.emplace(ret, newRootNode);
 
         implementation_->vertices_.emplace_back(ret);
 
@@ -1392,7 +1397,7 @@ void htd::Tree::swapWithParent(htd::vertex_t vertex)
     }
 }
 
-void htd::Tree::Implementation::deleteNode(const std::unique_ptr<Implementation::Node> & node)
+void htd::Tree::Implementation::deleteNode(Node * node)
 {
     HTD_ASSERT(node != nullptr)
 
@@ -1410,6 +1415,8 @@ void htd::Tree::Implementation::deleteNode(const std::unique_ptr<Implementation:
     vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
 
     nodes_.erase(vertex);
+
+    delete node;
 
     size_--;
 }
@@ -1473,7 +1480,7 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
 
         for (const auto & node : original.implementation_->nodes_)
         {
-            implementation_->nodes_.emplace(node.first, std::unique_ptr<Implementation::Node>(new Implementation::Node(*(node.second))));
+            implementation_->nodes_.emplace(node.first, new Implementation::Node(*(node.second)));
         }
 
         implementation_->root_ = original.implementation_->root_;
@@ -1539,7 +1546,7 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
 
                 std::copy(childCollection.begin(), childCollection.end(), std::back_inserter(newNode->children));
 
-                implementation_->nodes_.insert(std::make_pair(vertex, std::unique_ptr<Implementation::Node>(newNode)));
+                implementation_->nodes_.emplace(vertex, newNode);
 
                 if (vertex > maximumVertex)
                 {

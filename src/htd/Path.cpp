@@ -88,7 +88,10 @@ struct htd::Path::Implementation
 
     virtual ~Implementation()
     {
-
+        for (auto it = nodes_.begin(); it != nodes_.end(); it++)
+        {
+            delete it->second;
+        }
     }
 
     /**

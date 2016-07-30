@@ -30,6 +30,7 @@
 #include <iomanip>
 #include <ostream>
 #include <sstream>
+#include <stdexcept>
 
 htd_cli::Choice::Choice(const std::string & name, const std::string & description, const std::string & valuePlaceholder) : htd_cli::SingleValueOption::SingleValueOption(name, description, valuePlaceholder), defaultValue_(), maxPossibilityNameLength_(0), possibilities_()
 {

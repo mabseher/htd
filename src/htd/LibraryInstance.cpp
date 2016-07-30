@@ -66,7 +66,7 @@ struct htd::LibraryInstance::Implementation
      *
      *  @param[in] id   The identifier of the management instance.
      */
-    Implementation(htd::id_t id) : id_(id), nextHandlerId_(htd::Id::FIRST), terminated_(false), signalHandlers_()
+    Implementation(htd::id_t id) : id_(id), nextHandlerId_(htd::Id::FIRST), terminated_(false)
     {
 
     }
@@ -127,11 +127,6 @@ struct htd::LibraryInstance::Implementation
      *  A boolean flag indicating whether the current management instance was terminated.
      */
     bool terminated_;
-
-    /**
-     *  The signal handler registered in the current management instance.
-     */
-    std::map<htd::id_t, std::function<void(int)>> signalHandlers_;
 
     /**
      *  The factory class for the default implementation of the htd::IConnectedComponentAlgorithm interface.
@@ -292,28 +287,11 @@ bool htd::LibraryInstance::isTerminated(void) const
 void htd::LibraryInstance::terminate(void)
 {
     implementation_->terminated_ = true;
-
-    for (const auto & signalHandler : implementation_->signalHandlers_)
-    {
-        signalHandler.second(SIGTERM);
-    }
 }
 
 void htd::LibraryInstance::reset(void)
 {
     implementation_->terminated_ = false;
-}
-
-htd::id_t htd::LibraryInstance::registerSignalHandler(const std::function<void(int)> & handler)
-{
-    implementation_->signalHandlers_[implementation_->nextHandlerId_] = handler;
-
-    return implementation_->nextHandlerId_++;
-}
-
-void htd::LibraryInstance::unregisterSignalHandler(htd::id_t handlerId)
-{
-    implementation_->signalHandlers_.erase(handlerId);
 }
 
 htd::ConnectedComponentAlgorithmFactory & htd::LibraryInstance::connectedComponentAlgorithmFactory(void)

@@ -222,22 +222,6 @@ namespace htd
             void reset(void);
 
             /**
-             *  Register a new signal handler.
-             *
-             *  @param[in] handler  A callback function which shall be called on arrival of a new signal.
-             *
-             *  @return The ID of the new signal handler.
-             */
-            htd::id_t registerSignalHandler(const std::function<void(int)> & handler);
-
-            /**
-             *  Unregister an existing signal handler.
-             *
-             *  @param[in] handlerId    The ID of the signal handler which shall be removed.
-             */
-            void unregisterSignalHandler(htd::id_t handlerId);
-
-            /**
              *  Access the factory class for the default implementation of the htd::IConnectedComponentAlgorithm interface.
              */
             htd::ConnectedComponentAlgorithmFactory & connectedComponentAlgorithmFactory(void);

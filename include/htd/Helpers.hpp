@@ -58,7 +58,7 @@ namespace htd
      *
      *  @return A pointer to the new management instance.
      */
-    htd::LibraryInstance * createManagementInstance(htd::id_t id);
+    HTD_API htd::LibraryInstance * createManagementInstance(htd::id_t id);
 
     template < typename T >
     void print(const T & input, std::ostream & stream)

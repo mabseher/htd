@@ -29,45 +29,124 @@
 
 #include <cstdarg>
 
-htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction)
-    : iterationCount_(10), nonImprovementLimit_(-1), algorithm_(algorithm.clone()), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
+/**
+ *  Private implementation details of class htd::IterativeImprovementTreeDecompositionAlgorithm.
+ */
+struct htd::IterativeImprovementTreeDecompositionAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager           The management instance to which the current object instance belongs.
+     *  @param[in] algorithm        The decomposition algorithm which will be called repeatedly.
+     *  @param[in] fitnessFunction  The fitness function which will be used to evaluate the constructed tree decompositions.
+     */
+    Implementation(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction)
+        : managementInstance_(manager), iterationCount_(10), nonImprovementLimit_(-1), algorithm_(algorithm.clone()), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
+    {
+
+    }
+
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager           The management instance to which the current object instance belongs.
+     *  @param[in] algorithm        The decomposition algorithm which will be called repeatedly.
+     *  @param[in] fitnessFunction  The fitness function which will be used to evaluate the constructed tree decompositions.
+     */
+    Implementation(const htd::LibraryInstance * const manager, htd::ITreeDecompositionAlgorithm * algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction)
+        : managementInstance_(manager), iterationCount_(10), nonImprovementLimit_(-1), algorithm_(algorithm), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+        delete algorithm_;
+
+        delete fitnessFunction_;
+
+        for (auto & labelingFunction : labelingFunctions_)
+        {
+            delete labelingFunction;
+        }
+
+        for (auto & postProcessingOperation : postProcessingOperations_)
+        {
+            delete postProcessingOperation;
+        }
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The number of iterations which shall be performed.
+     */
+    std::size_t iterationCount_;
+
+    /**
+     *  The maximum number of iterations without improvement after which the algorithm shall terminate.
+     */
+    std::size_t nonImprovementLimit_;
+
+    /**
+     *  The decomposition algorithm which will be called repeatedly.
+     */
+    htd::ITreeDecompositionAlgorithm * algorithm_;
+
+    /**
+     *  The fitness function which will be used to evaluate the constructed tree decompositions.
+     */
+    htd::ITreeDecompositionFitnessFunction * fitnessFunction_;
+
+    /**
+     *  The labeling functions which are applied after a new decomposition was computed.
+     */
+    std::vector<htd::ILabelingFunction *> labelingFunctions_;
+
+    /**
+     *  The manipuation operations which are applied after a new decomposition was computed.
+     */
+    std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
+
+    /**
+     *  Compute a new mutable tree decompostion of the given graph.
+     *
+     *  @param[in] graph    The graph which shall be decomposed.
+     *
+     *  @return A mutable tree decompostion of the given graph.
+     */
+    htd::IMutableTreeDecomposition * computeMutableDecomposition(const htd::IMultiHypergraph & graph) const;
+};
+
+htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : implementation_(new Implementation(manager, algorithm, fitnessFunction))
 {
 
 }
 
-htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(htd::ITreeDecompositionAlgorithm * algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction)
-    : iterationCount_(10), nonImprovementLimit_(-1), algorithm_(algorithm), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
+htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, htd::ITreeDecompositionAlgorithm * algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : implementation_(new Implementation(manager, algorithm, fitnessFunction))
 {
     HTD_ASSERT(algorithm != nullptr)
 }
 
-htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
-    : iterationCount_(10), nonImprovementLimit_(-1), algorithm_(algorithm.clone()), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
+htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : implementation_(new Implementation(manager, algorithm, fitnessFunction))
 {
     setManipulationOperations(manipulationOperations);
 }
 
-htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(htd::ITreeDecompositionAlgorithm * algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
-    : iterationCount_(10), nonImprovementLimit_(-1), algorithm_(algorithm), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
+htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, htd::ITreeDecompositionAlgorithm * algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : implementation_(new Implementation(manager, algorithm, fitnessFunction))
 {
+    HTD_ASSERT(algorithm != nullptr)
+
     setManipulationOperations(manipulationOperations);
 }
 
 htd::IterativeImprovementTreeDecompositionAlgorithm::~IterativeImprovementTreeDecompositionAlgorithm()
 {
-    delete algorithm_;
 
-    delete fitnessFunction_;
-
-    for (auto & labelingFunction : labelingFunctions_)
-    {
-        delete labelingFunction;
-    }
-
-    for (auto & postProcessingOperation : postProcessingOperations_)
-    {
-        delete postProcessingOperation;
-    }
 }
 
 htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph) const
@@ -118,13 +197,15 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
 
     std::size_t nonImprovementCount = 0;
 
-    for (htd::index_t iteration = 0; (iteration == 0 || iterationCount_ == 0 || iteration < iterationCount_) && nonImprovementCount <= nonImprovementLimit_ && !isTerminated(); ++iteration)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (htd::index_t iteration = 0; (iteration == 0 || implementation_->iterationCount_ == 0 || iteration < implementation_->iterationCount_) && nonImprovementCount <= implementation_->nonImprovementLimit_ && !managementInstance.isTerminated(); ++iteration)
     {
-        htd::IMutableTreeDecomposition * currentDecomposition = dynamic_cast<htd::IMutableTreeDecomposition *>(algorithm_->computeDecomposition(graph));
+        htd::IMutableTreeDecomposition * currentDecomposition = dynamic_cast<htd::IMutableTreeDecomposition *>(implementation_->algorithm_->computeDecomposition(graph));
 
         if (currentDecomposition != nullptr)
         {
-            for (auto it = labelingFunctions_.begin(); it != labelingFunctions_.end() && !isTerminated(); ++it)
+            for (auto it = implementation_->labelingFunctions_.begin(); it != implementation_->labelingFunctions_.end() && !managementInstance.isTerminated(); ++it)
             {
                 const auto & labelingFunction = *it;
 
@@ -140,7 +221,7 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
                 }
             }
 
-            for (auto it = labelingFunctions.begin(); it != labelingFunctions.end() && !isTerminated(); ++it)
+            for (auto it = labelingFunctions.begin(); it != labelingFunctions.end() && !managementInstance.isTerminated(); ++it)
             {
                 const auto & labelingFunction = *it;
 
@@ -156,25 +237,25 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
                 }
             }
 
-            for (auto it = postProcessingOperations_.begin(); it != postProcessingOperations_.end() && !isTerminated(); ++it)
+            for (auto it = implementation_->postProcessingOperations_.begin(); it != implementation_->postProcessingOperations_.end() && !managementInstance.isTerminated(); ++it)
             {
                 const auto & operation = *it;
 
                 operation->apply(graph, *currentDecomposition);
             }
 
-            for (auto it = postProcessingOperations.begin(); it != postProcessingOperations.end() && !isTerminated(); ++it)
+            for (auto it = postProcessingOperations.begin(); it != postProcessingOperations.end() && !managementInstance.isTerminated(); ++it)
             {
                 const auto & operation = *it;
 
                 operation->apply(graph, *currentDecomposition);
             }
 
-            if (!isTerminated())
+            if (!managementInstance.isTerminated())
             {
-                htd::FitnessEvaluation * currentEvaluation = fitnessFunction_->fitness(graph, *currentDecomposition);
+                htd::FitnessEvaluation * currentEvaluation = implementation_->fitnessFunction_->fitness(graph, *currentDecomposition);
 
-                if (!isTerminated())
+                if (!managementInstance.isTerminated())
                 {
                     progressCallback(graph, *currentDecomposition, *currentEvaluation);
 
@@ -259,19 +340,19 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
 
 void htd::IterativeImprovementTreeDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
-    for (auto & labelingFunction : labelingFunctions_)
+    for (auto & labelingFunction : implementation_->labelingFunctions_)
     {
         delete labelingFunction;
     }
 
-    for (auto & postProcessingOperation : postProcessingOperations_)
+    for (auto & postProcessingOperation : implementation_->postProcessingOperations_)
     {
         delete postProcessingOperation;
     }
 
-    labelingFunctions_.clear();
+    implementation_->labelingFunctions_.clear();
 
-    postProcessingOperations_.clear();
+    implementation_->postProcessingOperations_.clear();
 
     addManipulationOperations(manipulationOperations);
 }
@@ -282,14 +363,14 @@ void htd::IterativeImprovementTreeDecompositionAlgorithm::addManipulationOperati
 
     if (labelingFunction != nullptr)
     {
-        labelingFunctions_.push_back(labelingFunction);
+        implementation_->labelingFunctions_.emplace_back(labelingFunction);
     }
 
     htd::ITreeDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(manipulationOperation);
 
     if (newManipulationOperation != nullptr)
     {
-        postProcessingOperations_.push_back(newManipulationOperation);
+        implementation_->postProcessingOperations_.emplace_back(newManipulationOperation);
     }
 }
 
@@ -301,14 +382,14 @@ void htd::IterativeImprovementTreeDecompositionAlgorithm::addManipulationOperati
 
         if (labelingFunction != nullptr)
         {
-            labelingFunctions_.push_back(labelingFunction);
+            implementation_->labelingFunctions_.emplace_back(labelingFunction);
         }
 
         htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
 
         if (manipulationOperation != nullptr)
         {
-            postProcessingOperations_.push_back(manipulationOperation);
+            implementation_->postProcessingOperations_.emplace_back(manipulationOperation);
         }
     }
 }
@@ -320,29 +401,41 @@ bool htd::IterativeImprovementTreeDecompositionAlgorithm::isSafelyInterruptible(
 
 std::size_t htd::IterativeImprovementTreeDecompositionAlgorithm::iterationCount(void) const
 {
-    return iterationCount_;
+    return implementation_->iterationCount_;
 }
 
 void htd::IterativeImprovementTreeDecompositionAlgorithm::setIterationCount(std::size_t iterationCount)
 {
-    iterationCount_ = iterationCount;
+    implementation_->iterationCount_ = iterationCount;
 }
 
 std::size_t htd::IterativeImprovementTreeDecompositionAlgorithm::nonImprovementLimit(void) const
 {
-    return nonImprovementLimit_;
+    return implementation_->nonImprovementLimit_;
 }
 
 void htd::IterativeImprovementTreeDecompositionAlgorithm::setNonImprovementLimit(std::size_t nonImprovementLimit)
 {
-    nonImprovementLimit_ = nonImprovementLimit;
+    implementation_->nonImprovementLimit_ = nonImprovementLimit;
+}
+
+const htd::LibraryInstance * htd::IterativeImprovementTreeDecompositionAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::IterativeImprovementTreeDecompositionAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
 }
 
 htd::IterativeImprovementTreeDecompositionAlgorithm * htd::IterativeImprovementTreeDecompositionAlgorithm::clone(void) const
 {
-    htd::IterativeImprovementTreeDecompositionAlgorithm * ret = new htd::IterativeImprovementTreeDecompositionAlgorithm(*algorithm_, *fitnessFunction_);
+    htd::IterativeImprovementTreeDecompositionAlgorithm * ret = new htd::IterativeImprovementTreeDecompositionAlgorithm(managementInstance(), *(implementation_->algorithm_), *(implementation_->fitnessFunction_));
 
-    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    for (htd::ILabelingFunction * labelingFunction : implementation_->labelingFunctions_)
     {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(labelingFunction->clone());
@@ -351,7 +444,7 @@ htd::IterativeImprovementTreeDecompositionAlgorithm * htd::IterativeImprovementT
 #endif
     }
 
-    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : implementation_->postProcessingOperations_)
     {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(postProcessingOperation->clone());
@@ -359,8 +452,6 @@ htd::IterativeImprovementTreeDecompositionAlgorithm * htd::IterativeImprovementT
         ret->addManipulationOperation(postProcessingOperation->cloneTreeDecompositionManipulationOperation());
 #endif
     }
-
-    ret->setManagementInstance(managementInstance());
 
     return ret;
 }

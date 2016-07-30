@@ -38,16 +38,19 @@ namespace htd
     {
         public:
             /**
-             *  Constructor for a labeled multi-graph.
+             *  Constructor for a labeled directed multi-graph.
+             *
+             *  @param[in] manager   The management instance to which the new labeled multi-graph belongs.
              */
-            LabeledDirectedMultiGraph(void);
+            LabeledDirectedMultiGraph(const htd::LibraryInstance * const manager);
 
             /**
-             *  Constructor for a labeled multi-graph.
+             *  Constructor for a labeled directed multi-graph.
              *
+             *  @param[in] manager       The management instance to which the new labeled multi-graph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            LabeledDirectedMultiGraph(std::size_t initialSize);
+            LabeledDirectedMultiGraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a labeled directed multi-graph.

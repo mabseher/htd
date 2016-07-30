@@ -31,12 +31,56 @@
 #include <htd/AddEmptyRootOperation.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 
-htd::WeakNormalizationOperation::WeakNormalizationOperation(void) : htd::LibraryObject(), emptyRoot_(false), emptyLeaves_(false), identicalJoinNodeParent_(false)
+/**
+ *  Private implementation details of class htd::WeakNormalizationOperation.
+ */
+struct htd::WeakNormalizationOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager                   The management instance to which the current object instance belongs.
+     *  @param[in] emptyRoot                A boolean flag whether the decomposition shall have a root node with empty bag.
+     *  @param[in] emptyLeaves              A boolean flag whether the decomposition's leave nodes shall have an empty bag.
+     *  @param[in] identicalJoinNodeParent  A boolean flag whether each join node shall have a parent with equal bag content.
+     */
+    Implementation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent) : managementInstance_(manager), emptyRoot_(emptyRoot), emptyLeaves_(emptyLeaves), identicalJoinNodeParent_(identicalJoinNodeParent)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  A boolean flag whether the decomposition shall have a root node with empty bag.
+     */
+    bool emptyRoot_;
+
+    /**
+     *  A boolean flag whether the decomposition's leave nodes shall have an empty bag.
+     */
+    bool emptyLeaves_;
+
+    /**
+     *  A boolean flag whether each join node shall have a parent with equal bag content.
+     */
+    bool identicalJoinNodeParent_;
+};
+
+htd::WeakNormalizationOperation::WeakNormalizationOperation(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager, false, false, false))
 {
 
 }
 
-htd::WeakNormalizationOperation::WeakNormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent) : htd::LibraryObject(), emptyRoot_(emptyRoot), emptyLeaves_(emptyLeaves), identicalJoinNodeParent_(identicalJoinNodeParent)
+htd::WeakNormalizationOperation::WeakNormalizationOperation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent) : implementation_(new Implementation(manager, emptyRoot, emptyLeaves, identicalJoinNodeParent))
 {
 
 }
@@ -58,20 +102,16 @@ void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
 
 void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    if (emptyRoot_)
+    if (implementation_->emptyRoot_)
     {
-        htd::AddEmptyRootOperation addEmptyRootOperation;
-
-        addEmptyRootOperation.setManagementInstance(managementInstance());
+        htd::AddEmptyRootOperation addEmptyRootOperation(implementation_->managementInstance_);
 
         addEmptyRootOperation.apply(graph, decomposition, labelingFunctions);
     }
 
-    if (emptyLeaves_)
+    if (implementation_->emptyLeaves_)
     {
-        htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
-
-        addEmptyLeavesOperation.setManagementInstance(managementInstance());
+        htd::AddEmptyLeavesOperation addEmptyLeavesOperation(implementation_->managementInstance_);
 
         addEmptyLeavesOperation.apply(graph, decomposition, labelingFunctions);
     }
@@ -79,20 +119,16 @@ void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
 
 void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    if (emptyRoot_)
+    if (implementation_->emptyRoot_)
     {
-        htd::AddEmptyRootOperation addEmptyRootOperation;
-
-        addEmptyRootOperation.setManagementInstance(managementInstance());
+        htd::AddEmptyRootOperation addEmptyRootOperation(implementation_->managementInstance_);
 
         addEmptyRootOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
     }
 
-    if (emptyLeaves_)
+    if (implementation_->emptyLeaves_)
     {
-        htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
-
-        addEmptyLeavesOperation.setManagementInstance(managementInstance());
+        htd::AddEmptyLeavesOperation addEmptyLeavesOperation(implementation_->managementInstance_);
 
         addEmptyLeavesOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
     }
@@ -110,27 +146,21 @@ void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
 
 void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    if (emptyRoot_)
+    if (implementation_->emptyRoot_)
     {
-        htd::AddEmptyRootOperation addEmptyRootOperation;
-
-        addEmptyRootOperation.setManagementInstance(managementInstance());
+        htd::AddEmptyRootOperation addEmptyRootOperation(implementation_->managementInstance_);
 
         addEmptyRootOperation.apply(graph, decomposition, labelingFunctions);
     }
 
-    if (emptyLeaves_)
+    if (implementation_->emptyLeaves_)
     {
-        htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
-
-        addEmptyLeavesOperation.setManagementInstance(managementInstance());
+        htd::AddEmptyLeavesOperation addEmptyLeavesOperation(implementation_->managementInstance_);
 
         addEmptyLeavesOperation.apply(graph, decomposition, labelingFunctions);
     }
 
-    htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(identicalJoinNodeParent_);
-
-    joinNodeNormalizationOperation.setManagementInstance(managementInstance());
+    htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(implementation_->managementInstance_, implementation_->identicalJoinNodeParent_);
 
     joinNodeNormalizationOperation.apply(graph, decomposition, labelingFunctions);
 }
@@ -143,11 +173,9 @@ void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
 
     std::vector<htd::vertex_t> newRelevantVertices(relevantVertices.begin(), relevantVertices.end());
 
-    if (emptyRoot_)
+    if (implementation_->emptyRoot_)
     {
-        htd::AddEmptyRootOperation addEmptyRootOperation;
-
-        addEmptyRootOperation.setManagementInstance(managementInstance());
+        htd::AddEmptyRootOperation addEmptyRootOperation(implementation_->managementInstance_);
 
         addEmptyRootOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
@@ -161,11 +189,9 @@ void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
         }
     }
 
-    if (emptyLeaves_)
+    if (implementation_->emptyLeaves_)
     {
-        htd::AddEmptyLeavesOperation addEmptyLeavesOperation;
-
-        addEmptyLeavesOperation.setManagementInstance(managementInstance());
+        htd::AddEmptyLeavesOperation addEmptyLeavesOperation(implementation_->managementInstance_);
 
         addEmptyLeavesOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
@@ -179,9 +205,7 @@ void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
         }
     }
 
-    htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(identicalJoinNodeParent_);
-
-    joinNodeNormalizationOperation.setManagementInstance(managementInstance());
+    htd::JoinNodeNormalizationOperation joinNodeNormalizationOperation(implementation_->managementInstance_, implementation_->identicalJoinNodeParent_);
 
     joinNodeNormalizationOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
@@ -208,12 +232,12 @@ bool htd::WeakNormalizationOperation::modifiesBagContents(void) const
 
 bool htd::WeakNormalizationOperation::emptyRootRequired(void) const
 {
-    return emptyRoot_;
+    return implementation_->emptyRoot_;
 }
 
 bool htd::WeakNormalizationOperation::emptyLeavesRequired(void) const
 {
-    return emptyLeaves_;
+    return implementation_->emptyLeaves_;
 }
 
 bool htd::WeakNormalizationOperation::createsSubsetMaximalBags(void) const
@@ -228,16 +252,24 @@ bool htd::WeakNormalizationOperation::createsLocationDependendLabels(void) const
 
 bool htd::WeakNormalizationOperation::identicalJoinNodeParentRequired(void) const
 {
-    return identicalJoinNodeParent_;
+    return implementation_->identicalJoinNodeParent_;
+}
+
+const htd::LibraryInstance * htd::WeakNormalizationOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::WeakNormalizationOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
 }
 
 htd::WeakNormalizationOperation * htd::WeakNormalizationOperation::clone(void) const
 {
-    htd::WeakNormalizationOperation * ret = new htd::WeakNormalizationOperation(emptyRoot_, emptyLeaves_, identicalJoinNodeParent_);
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::WeakNormalizationOperation(implementation_->managementInstance_, implementation_->emptyRoot_, implementation_->emptyLeaves_, implementation_->identicalJoinNodeParent_);
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

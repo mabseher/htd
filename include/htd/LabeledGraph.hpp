@@ -39,15 +39,18 @@ namespace htd
         public:
             /**
              *  Constructor for a labeled graph.
+             *
+             *  @param[in] manager   The management instance to which the new labeled graph belongs.
              */
-            LabeledGraph(void);
+            LabeledGraph(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a labeled graph.
              *
+             *  @param[in] manager       The management instance to which the new labeled graph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            LabeledGraph(std::size_t initialSize);
+            LabeledGraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a labeled graph.

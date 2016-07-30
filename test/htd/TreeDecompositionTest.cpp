@@ -36,7 +36,7 @@ class TreeDecompositionTest : public ::testing::Test
 
         }
 
-        ~TreeDecompositionTest()
+        virtual ~TreeDecompositionTest()
         {
 
         }
@@ -54,7 +54,9 @@ class TreeDecompositionTest : public ::testing::Test
 
 TEST(TreeDecompositionTest, CheckEmptyTree)
 {
-    htd::TreeDecomposition decomposition;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition decomposition(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, decomposition.vertexCount());
     ASSERT_EQ((std::size_t)0, decomposition.edgeCount());
@@ -70,11 +72,15 @@ TEST(TreeDecompositionTest, CheckEmptyTree)
     ASSERT_EQ((std::size_t)0, decomposition.leafCount());
 
     ASSERT_EQ((std::size_t)0, decomposition.isolatedVertexCount());
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, CheckSize1Tree)
 {
-    htd::TreeDecomposition decomposition;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition decomposition(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, decomposition.vertexCount());
     ASSERT_EQ((std::size_t)0, decomposition.edgeCount());
@@ -115,11 +121,15 @@ TEST(TreeDecompositionTest, CheckSize1Tree)
     ASSERT_EQ(root, decomposition.isolatedVertices()[0]);
     ASSERT_EQ(root, decomposition.isolatedVertexAtPosition(0));
     ASSERT_TRUE(decomposition.isIsolatedVertex(root));
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, CheckSize3Tree)
 {
-    htd::TreeDecomposition decomposition;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition decomposition(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, decomposition.vertexCount());
     ASSERT_EQ((std::size_t)0, decomposition.edgeCount());
@@ -309,11 +319,15 @@ TEST(TreeDecompositionTest, CheckSize3Tree)
     ASSERT_EQ((std::size_t)2, decomposition.hyperedges(root).size());
     ASSERT_EQ((std::size_t)1, decomposition.hyperedges(child).size());
     ASSERT_EQ((std::size_t)1, decomposition.hyperedges(newRoot).size());
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, CheckTreeManipulations)
 {
-    htd::TreeDecomposition decomposition;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition decomposition(libraryInstance);
 
     htd::vertex_t root = decomposition.insertRoot();
 
@@ -416,11 +430,15 @@ TEST(TreeDecompositionTest, CheckTreeManipulations)
     ASSERT_EQ((std::size_t)3, decomposition.vertexCount(node111));
     ASSERT_EQ((std::size_t)1, decomposition.vertexCount(node121));
     ASSERT_EQ((std::size_t)1, decomposition.vertexCount(node122));
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, CheckCopyConstructors)
 {
-    htd::Tree tree;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Tree tree(libraryInstance);
 
     htd::vertex_t root1 = tree.insertRoot();
     htd::vertex_t treeNode2 = tree.addChild(root1);
@@ -430,7 +448,7 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
 
     tree.removeVertex(treeNode4);
 
-    htd::LabeledTree labeledTree;
+    htd::LabeledTree labeledTree(libraryInstance);
 
     htd::vertex_t root2 = labeledTree.insertRoot();
     htd::vertex_t labeledTreeNode2 = labeledTree.addChild(root2);
@@ -438,7 +456,7 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
 
     labeledTree.removeVertex(labeledTreeNode2);
 
-    htd::TreeDecomposition treeDecomposition;
+    htd::TreeDecomposition treeDecomposition(libraryInstance);
 
     htd::vertex_t root3 = treeDecomposition.insertRoot();
     htd::vertex_t treeDecompositionNode2 = treeDecomposition.addChild(root3);
@@ -607,11 +625,15 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
     ASSERT_FALSE(td2.isForgetNode(treeDecompositionNode2));
     ASSERT_FALSE(td2.isJoinNode(treeDecompositionNode2));
     ASSERT_TRUE(td2.isLeaf(treeDecompositionNode2));
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, CheckBagContentModifications)
 {
-    htd::TreeDecomposition td1;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition td1(libraryInstance);
 
     htd::vertex_t root = td1.insertRoot();
 
@@ -636,13 +658,17 @@ TEST(TreeDecompositionTest, CheckBagContentModifications)
 
     ASSERT_EQ((htd::vertex_t)4, td1.bagContent(root)[0]);
     ASSERT_EQ((htd::vertex_t)5, td1.bagContent(root)[1]);
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, CheckNodeTypeDetection)
 {
-    htd::TreeDecomposition td1;
-    htd::TreeDecomposition td2;
-    htd::TreeDecomposition td3;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition td1(libraryInstance);
+    htd::TreeDecomposition td2(libraryInstance);
+    htd::TreeDecomposition td3(libraryInstance);
 
     htd::vertex_t root1 = td1.insertRoot();
     htd::vertex_t root2 = td2.insertRoot();
@@ -760,11 +786,15 @@ TEST(TreeDecompositionTest, CheckNodeTypeDetection)
     ASSERT_EQ((htd::vertex_t)2, td3.rememberedVertices(root3, node32)[0]);
     ASSERT_EQ((htd::vertex_t)1, td3.rememberedVertexAtPosition(root3, 0, node31));
     ASSERT_EQ((htd::vertex_t)2, td3.rememberedVertexAtPosition(root3, 0, node32));
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, CheckIntroduceNodeDetection)
 {
-    htd::TreeDecomposition td;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition td(libraryInstance);
 
     htd::vertex_t node1 = td.insertRoot();
 
@@ -822,11 +852,15 @@ TEST(TreeDecompositionTest, CheckIntroduceNodeDetection)
 
     ASSERT_EQ((std::size_t)1, introducedVertices.size());
     ASSERT_EQ((htd::vertex_t)2, introducedVertices[0]);
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, CheckRememberedVertexDetection)
 {
-    htd::TreeDecomposition td;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition td(libraryInstance);
 
     htd::vertex_t node1 = td.insertRoot();
 
@@ -876,11 +910,15 @@ TEST(TreeDecompositionTest, CheckRememberedVertexDetection)
 
     ASSERT_EQ((std::size_t)1, rememberedVertices.size());
     ASSERT_EQ((htd::vertex_t)2, rememberedVertices[0]);
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, CheckForgetNodeDetection)
 {
-    htd::TreeDecomposition td;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition td(libraryInstance);
 
     htd::vertex_t node1 = td.insertRoot();
 
@@ -959,11 +997,15 @@ TEST(TreeDecompositionTest, CheckForgetNodeDetection)
     ASSERT_EQ((std::size_t)2, forgottenVertices.size());
     ASSERT_EQ((htd::vertex_t)3, forgottenVertices[0]);
     ASSERT_EQ((htd::vertex_t)4, forgottenVertices[1]);
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, CheckInducedHyperedges1)
 {
-    htd::TreeDecomposition td;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition td(libraryInstance);
 
     htd::vertex_t node1 = td.insertRoot();
 
@@ -1011,11 +1053,15 @@ TEST(TreeDecompositionTest, CheckInducedHyperedges1)
     ASSERT_EQ((htd::id_t)2, it->id());
     ++it;
     ASSERT_EQ((htd::id_t)1, it->id());
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, TestVertexLabelModifications)
 {
-    htd::TreeDecomposition td;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition td(libraryInstance);
 
     td.insertRoot();
     td.addChild(1);
@@ -1112,11 +1158,15 @@ TEST(TreeDecompositionTest, TestVertexLabelModifications)
     ASSERT_EQ(1, htd::accessLabel<int>(td.vertexLabel("Label2", 2)));
 
     delete exportedLabel;
+
+    delete libraryInstance;
 }
 
 TEST(TreeDecompositionTest, TestEdgeLabelModifications)
 {
-    htd::TreeDecomposition td;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition td(libraryInstance);
 
     td.insertRoot();
     td.addChild(1);
@@ -1213,6 +1263,8 @@ TEST(TreeDecompositionTest, TestEdgeLabelModifications)
     ASSERT_EQ(1, htd::accessLabel<int>(td.edgeLabel("Label2", 2)));
 
     delete exportedLabel;
+
+    delete libraryInstance;
 }
 
 int main(int argc, char **argv)

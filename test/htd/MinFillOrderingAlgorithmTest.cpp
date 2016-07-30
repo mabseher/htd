@@ -36,7 +36,7 @@ class MinFillOrderingAlgorithmTest : public ::testing::Test
 
         }
 
-        ~MinFillOrderingAlgorithmTest()
+        virtual ~MinFillOrderingAlgorithmTest()
         {
 
         }
@@ -130,32 +130,42 @@ bool isValidOrdering(htd::MultiHypergraph & graph, const htd::ConstCollection<ht
 
 TEST(MinFillOrderingAlgorithmTest, CheckEmptyGraph)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::MinFillOrderingAlgorithm algorithm;
+    htd::MultiHypergraph graph(libraryInstance);
+
+    htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
     const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
 
     ASSERT_TRUE(ordering.empty());
+
+    delete libraryInstance;
 }
 
 TEST(MinFillOrderingAlgorithmTest, CheckSize1Graph)
 {
-    htd::MultiHypergraph graph(1);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::MinFillOrderingAlgorithm algorithm;
+    htd::MultiHypergraph graph(libraryInstance, 1);
+
+    htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
     const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ((std::size_t)1, ordering.size());
     ASSERT_EQ((htd::vertex_t)1, ordering[0]);
+
+    delete libraryInstance;
 }
 
 TEST(MinFillOrderingAlgorithmTest, CheckSize2Graph)
 {
-    htd::MultiHypergraph graph(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::MinFillOrderingAlgorithm algorithm;
+    htd::MultiHypergraph graph(libraryInstance, 2);
+
+    htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
     const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
 
@@ -165,28 +175,36 @@ TEST(MinFillOrderingAlgorithmTest, CheckSize2Graph)
     {
         FAIL();
     }
+
+    delete libraryInstance;
 }
 
 TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph1)
 {
-    htd::MultiHypergraph graph(5);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance, 5);
 
     graph.addEdge(1,5);
     graph.addEdge(2,1);
     graph.addEdge(4,3);
 
-    htd::MinFillOrderingAlgorithm algorithm;
+    htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
     const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering.size());
 
     ASSERT_TRUE(isValidOrdering(graph, ordering));
+
+    delete libraryInstance;
 }
 
 TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph2)
 {
-    htd::MultiHypergraph graph(7);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance, 7);
 
     graph.addEdge(1, 2);
     graph.addEdge(1, 3);
@@ -197,18 +215,22 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph2)
     graph.addEdge(3, 4);
     graph.addEdge(3, 7);
 
-    htd::MinFillOrderingAlgorithm algorithm;
+    htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
     const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering.size());
 
     ASSERT_TRUE(isValidOrdering(graph, ordering));
+
+    delete libraryInstance;
 }
 
 TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph3)
 {
-    htd::MultiHypergraph graph(10);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance, 10);
 
     graph.addEdge(1,10);
     graph.addEdge(2,8);
@@ -225,18 +247,22 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph3)
     graph.addEdge(9,5);
     graph.addEdge(10,1);
 
-    htd::MinFillOrderingAlgorithm algorithm;
+    htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
     const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering.size());
 
     ASSERT_TRUE(isValidOrdering(graph, ordering));
+
+    delete libraryInstance;
 }
 
 TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph4)
 {
-    htd::MultiHypergraph graph(10);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance, 10);
 
     graph.addEdge(1,9);
     graph.addEdge(1,10);
@@ -253,18 +279,22 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph4)
     graph.addEdge(10,3);
     graph.addEdge(10,7);
 
-    htd::MinFillOrderingAlgorithm algorithm;
+    htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
     const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering.size());
 
     ASSERT_TRUE(isValidOrdering(graph, ordering));
+
+    delete libraryInstance;
 }
 
 TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph5)
 {
-    htd::MultiHypergraph graph(10);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance, 10);
 
     graph.addEdge(1,4);
     graph.addEdge(2,3);
@@ -281,18 +311,22 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph5)
     graph.addEdge(7,9);
     graph.addEdge(8,7);
 
-    htd::MinFillOrderingAlgorithm algorithm;
+    htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
     const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering.size());
 
     ASSERT_TRUE(isValidOrdering(graph, ordering));
+
+    delete libraryInstance;
 }
 
 TEST(MinFillOrderingAlgorithmTest, CheckSize50Graph)
 {
-    htd::MultiHypergraph graph(50);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance, 50);
 
     graph.addEdge(1,35);
     graph.addEdge(1,50);
@@ -754,13 +788,15 @@ TEST(MinFillOrderingAlgorithmTest, CheckSize50Graph)
     graph.addEdge(50,14);
     graph.addEdge(50,26);
 
-    htd::MinFillOrderingAlgorithm algorithm;
+    htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
     const htd::ConstCollection<htd::vertex_t> & ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering.size());
 
     ASSERT_TRUE(isValidOrdering(graph, ordering));
+
+    delete libraryInstance;
 }
 
 int main(int argc, char **argv)

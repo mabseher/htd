@@ -39,16 +39,24 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~TreeDecompositionAlgorithmFactory();
+            TreeDecompositionAlgorithmFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static TreeDecompositionAlgorithmFactory & instance(void);
+            TreeDecompositionAlgorithmFactory(const TreeDecompositionAlgorithmFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            TreeDecompositionAlgorithmFactory & operator=(const TreeDecompositionAlgorithmFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~TreeDecompositionAlgorithmFactory();
 
             /**
              *  Create a new ITreeDecompositionAlgorithm object.
@@ -60,11 +68,11 @@ namespace htd
             /**
              *  Create a new ITreeDecompositionAlgorithm object.
              *
-             *  @param[in] instance The management instance which shall be assigned to the new ITreeDecompositionAlgorithm object.
+             *  @param[in] manager   The management instance which shall be assigned to the new ITreeDecompositionAlgorithm object.
              *
              *  @return A new ITreeDecompositionAlgorithm object.
              */
-            htd::ITreeDecompositionAlgorithm * getTreeDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
+            htd::ITreeDecompositionAlgorithm * getTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager) const;
 
             /**
              *  Set the default implementation of the ITreeDecompositionAlgorithm interface.
@@ -119,27 +127,6 @@ namespace htd
             std::vector<htd::ILabelingFunction *> labelingFunctions_;
 
             std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            TreeDecompositionAlgorithmFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            TreeDecompositionAlgorithmFactory(const TreeDecompositionAlgorithmFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            TreeDecompositionAlgorithmFactory & operator=(const TreeDecompositionAlgorithmFactory & original);
     };
 }
 

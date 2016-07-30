@@ -32,9 +32,34 @@
 
 #include <stdexcept>
 
-htd::LabeledMultiHypergraphFactory::LabeledMultiHypergraphFactory(void)
+htd::LabeledMultiHypergraphFactory::LabeledMultiHypergraphFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::LabeledMultiHypergraph();
+    constructionTemplate_ = new htd::LabeledMultiHypergraph(manager);
+}
+
+htd::LabeledMultiHypergraphFactory::LabeledMultiHypergraphFactory(const htd::LabeledMultiHypergraphFactory & original)
+{
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledMultiHypergraph();
+#endif
+}
+
+htd::LabeledMultiHypergraphFactory & htd::LabeledMultiHypergraphFactory::operator=(const htd::LabeledMultiHypergraphFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    #else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledMultiHypergraph();
+    #endif
+    }
+
+    return *this;
 }
 
 htd::LabeledMultiHypergraphFactory::~LabeledMultiHypergraphFactory()
@@ -47,14 +72,7 @@ htd::LabeledMultiHypergraphFactory::~LabeledMultiHypergraphFactory()
     }
 }
 
-htd::LabeledMultiHypergraphFactory & htd::LabeledMultiHypergraphFactory::instance(void)
-{
-    static htd::LabeledMultiHypergraphFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(void)
+htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -63,7 +81,7 @@ htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLab
 #endif
 }
 
-htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(std::size_t initialSize)
+htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(std::size_t initialSize) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->clone();
@@ -76,7 +94,7 @@ htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLab
     return ret;
 }
 
-htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original)
+htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->clone();
@@ -106,12 +124,12 @@ void htd::LabeledMultiHypergraphFactory::setConstructionTemplate(htd::IMutableLa
     constructionTemplate_ = original;
 }
 
-htd::IMutableLabeledMultiHypergraph & htd::LabeledMultiHypergraphFactory::accessMutableLabeledMultiHypergraph(htd::ILabeledMultiHypergraph & original)
+htd::IMutableLabeledMultiHypergraph & htd::LabeledMultiHypergraphFactory::accessMutableLabeledMultiHypergraph(htd::ILabeledMultiHypergraph & original) const
 {
     return *(dynamic_cast<htd::IMutableLabeledMultiHypergraph *>(&original));
 }
 
-const htd::IMutableLabeledMultiHypergraph & htd::LabeledMultiHypergraphFactory::accessMutableLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original)
+const htd::IMutableLabeledMultiHypergraph & htd::LabeledMultiHypergraphFactory::accessMutableLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) const
 {
     return *(dynamic_cast<const htd::IMutableLabeledMultiHypergraph *>(&original));
 }

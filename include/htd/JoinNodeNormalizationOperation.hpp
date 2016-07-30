@@ -40,17 +40,13 @@ namespace htd
         public:
             /**
              *  Constructor for a new manipulation operation of type JoinNodeNormalizationOperation.
-             */
-            JoinNodeNormalizationOperation(void);
-
-            /**
-             *  Constructor for a new manipulation operation of type JoinNodeNormalizationOperation.
              *
+             *  @param[in] manager           The management instance to which the new manipulation operation belongs.
              *  @param[in] identicalParent  A boolean flag whether each join node shall have a parent with equal bag content.
              */
-            JoinNodeNormalizationOperation(bool identicalParent);
+            JoinNodeNormalizationOperation(const htd::LibraryInstance * const manager, bool identicalParent = false);
 
-            ~JoinNodeNormalizationOperation();
+            virtual ~JoinNodeNormalizationOperation();
 
             void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -72,6 +68,10 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             JoinNodeNormalizationOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -86,8 +86,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
         private:
-            bool identicalParent_;
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

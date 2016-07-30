@@ -38,23 +38,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~PathDecompositionFactory();
+            PathDecompositionFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static PathDecompositionFactory & instance(void);
+            PathDecompositionFactory(const PathDecompositionFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            PathDecompositionFactory & operator=(const PathDecompositionFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~PathDecompositionFactory();
 
             /**
              *  Create a new IMutablePathDecomposition object.
              *
              *  @return A new IMutablePathDecomposition object.
              */
-            htd::IMutablePathDecomposition * getPathDecomposition(void);
+            htd::IMutablePathDecomposition * getPathDecomposition(void) const;
 
             /**
              *  Create a new IMutablePathDecomposition object.
@@ -63,7 +71,7 @@ namespace htd
              *
              *  @return A new IMutablePathDecomposition object identical to the given original graph.
              */
-            htd::IMutablePathDecomposition * getPathDecomposition(const htd::IPathDecomposition & original);
+            htd::IMutablePathDecomposition * getPathDecomposition(const htd::IPathDecomposition & original) const;
 
             /**
              *  Set the default implementation of the IMutablePathDecomposition interface.
@@ -81,41 +89,20 @@ namespace htd
              *
              *  @return The mutable interface of the given path decomposition.
              */
-            htd::IMutablePathDecomposition & accessMutablePathDecomposition(htd::IPathDecomposition & original);
+            htd::IMutablePathDecomposition & accessMutablePathDecomposition(htd::IPathDecomposition & original) const;
 
             /**
              *  Access the mutable interface of a given path decomposition.
              *
              *  @return The mutable interface of the given path decomposition.
              */
-            const htd::IMutablePathDecomposition & accessMutablePathDecomposition(const htd::IPathDecomposition & original);
+            const htd::IMutablePathDecomposition & accessMutablePathDecomposition(const htd::IPathDecomposition & original) const;
 
         private:
             /**
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IMutablePathDecomposition * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            PathDecompositionFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            PathDecompositionFactory(const PathDecompositionFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            PathDecompositionFactory & operator=(const PathDecompositionFactory & original);
     };
 }
 

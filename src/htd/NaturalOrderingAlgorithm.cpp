@@ -31,7 +31,33 @@
 
 #include <algorithm>
 
-htd::NaturalOrderingAlgorithm::NaturalOrderingAlgorithm(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::NaturalOrderingAlgorithm.
+ */
+struct htd::NaturalOrderingAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::NaturalOrderingAlgorithm::NaturalOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
     
 }
@@ -55,13 +81,21 @@ void htd::NaturalOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
     std::copy(vertexCollection.begin(), vertexCollection.end(), std::back_inserter(target));
 }
 
+const htd::LibraryInstance * htd::NaturalOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::NaturalOrderingAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::NaturalOrderingAlgorithm * htd::NaturalOrderingAlgorithm::clone(void) const
 {
-    htd::NaturalOrderingAlgorithm * ret = new htd::NaturalOrderingAlgorithm();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::NaturalOrderingAlgorithm(implementation_->managementInstance_);
 }
 
 #endif /* HTD_HTD_NATURALORDERINGALGORITHM_CPP */

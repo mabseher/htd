@@ -34,7 +34,33 @@
 #include <stdexcept>
 #include <unordered_set>
 
-htd::BreadthFirstGraphTraversal::BreadthFirstGraphTraversal(void)
+/**
+ *  Private implementation details of class htd::BreadthFirstGraphTraversal.
+ */
+struct htd::BreadthFirstGraphTraversal::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::BreadthFirstGraphTraversal::BreadthFirstGraphTraversal(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }

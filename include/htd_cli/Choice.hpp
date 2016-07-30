@@ -56,7 +56,7 @@ namespace htd_cli
              */
             Choice(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName);
 
-            ~Choice();
+            virtual ~Choice();
 
             /**
              *  Add a new possibility one can choose from.

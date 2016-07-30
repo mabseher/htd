@@ -35,37 +35,141 @@
 #include <stack>
 #include <unordered_set>
 
-htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(void) : htd::LibraryObject(), enforceNaiveOptimization_(false), strategy_(), fitnessFunction_(), manipulationOperations_()
+/**
+ *  Private implementation details of class htd::TreeDecompositionOptimizationOperation.
+ */
+struct htd::TreeDecompositionOptimizationOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager)
+        : managementInstance_(manager), enforceNaiveOptimization_(false), strategy_(nullptr), fitnessFunction_(nullptr), manipulationOperations_()
+    {
+
+    }
+
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager                   The management instance to which the current object instance belongs.
+     *  @param[in] fitnessFunction          The fitness function which is used to determine the quality of tree decompositions.
+     *  @param[in] enforceNaiveOptimization A boolean flag to enforce that each iteration of the optimization algorithm starts from scratch with a copy of the given decomposition.
+     */
+    Implementation(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, bool enforceNaiveOptimization)
+        : managementInstance_(manager), enforceNaiveOptimization_(enforceNaiveOptimization), strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+        if (strategy_ != nullptr)
+        {
+            delete strategy_;
+        }
+
+        if (fitnessFunction_ != nullptr)
+        {
+            delete fitnessFunction_;
+        }
+
+        for (htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
+        {
+            delete operation;
+        }
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  A boolean flag to enforce that each iteration of the optimization
+     *  algorithm starts from scratch with a copy of the given decomposition.
+     */
+    bool enforceNaiveOptimization_;
+
+    /**
+     *  The strategy defining which vertices shall be considered as root of the tree decomposition.
+     */
+    htd::IVertexSelectionStrategy * strategy_;
+
+    /**
+     *  The fitness function which is used to determine the quality of tree decompositions.
+     */
+    htd::ITreeDecompositionFitnessFunction * fitnessFunction_;
+
+    /**
+     *  The manipuation operations which are applied after the decomposition was computed.
+     */
+    std::vector<htd::ITreeDecompositionManipulationOperation *> manipulationOperations_;
+
+    /**
+     *  Check whether a manipulation operation does not involve any operations which make it impossible
+     *  to undo the operation for the path between the new and the old root by just deleting the added
+     *  vertices adjacent to the path between the new and the old root.
+     *
+     *  @param[in] manipulationOperation    The manipulation operation which shall be checked.
+     *
+     *  @return True if the operation allows for efficient undoing, false otherwise.
+     */
+    bool isSafeOperation(const htd::ITreeDecompositionManipulationOperation & manipulationOperation) const;
+
+    /**
+     *  Select the optimal root of the given decomposition when no manipulation operations are involved.
+     *
+     *  @param[in] graph            The graph which was decomposed.
+     *  @param[in] decomposition    The tree decomposition which shall be optimized.
+     */
+    void quickOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const;
+
+    /**
+     *  Select the optimal root of the given decomposition when complex manipulation operations are involved.
+     *
+     *  @param[in] graph                The graph which was decomposed.
+     *  @param[in] decomposition        The tree decomposition which shall be optimized.
+     *  @param[in] labelingFunctions    A vector of labeling functions which shall be applied after the modifications.
+     */
+    void naiveOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const;
+
+    /**
+     *  Select the optimal root of the given decomposition when no complex manipulation operations are involved.
+     *
+     *  @param[in] graph                The graph which was decomposed.
+     *  @param[in] decomposition        The tree decomposition which shall be optimized.
+     *  @param[in] labelingFunctions    A vector of labeling functions which shall be applied after the modifications.
+     */
+    void intelligentOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const;
+
+    /**
+     *  Remove all vertices which were created by manipulation operations and which are reachable via a given vertex by only visiting created nodes.
+     *
+     *  @param[in] decomposition        The tree decomposition which shall be cleaned.
+     *  @param[in] start                The vertex from which the removal process shall begin.
+     *  @param[in] lastRegularVertex    The identifier of the last regular vertex which shall remain in the decomposition. All vertices
+     *                                  with higher ID are subject to removal when they are reachable from the starting vertex by only
+     *                                  visiting created nodes.
+     */
+    void removeCreatedNodes(htd::IMutableTreeDecomposition & decomposition, htd::vertex_t start, htd::vertex_t lastRegularVertex) const;
+};
+
+htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
 
-htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : htd::LibraryObject(), enforceNaiveOptimization_(false), strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
-{
-
-}
-
-htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction, bool enforceNaiveOptimization) : htd::LibraryObject(), enforceNaiveOptimization_(enforceNaiveOptimization), strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
+htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, bool enforceNaiveOptimization) : implementation_(new Implementation(manager, fitnessFunction, enforceNaiveOptimization))
 {
 
 }
 
 htd::TreeDecompositionOptimizationOperation::~TreeDecompositionOptimizationOperation()
 {
-    if (strategy_ != nullptr)
-    {
-        delete strategy_;
-    }
 
-    if (fitnessFunction_ != nullptr)
-    {
-        delete fitnessFunction_;
-    }
-
-    for (htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
-    {
-        delete operation;
-    }
 }
 
 void htd::TreeDecompositionOptimizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
@@ -108,9 +212,7 @@ void htd::TreeDecompositionOptimizationOperation::apply(const htd::IMultiHypergr
 {
     if (decomposition.vertexCount() > 0)
     {
-        htd::CompressionOperation compressionOperation;
-
-        compressionOperation.setManagementInstance(managementInstance());
+        htd::CompressionOperation compressionOperation(managementInstance());
 
         compressionOperation.apply(graph, decomposition);
 
@@ -136,34 +238,34 @@ void htd::TreeDecompositionOptimizationOperation::apply(const htd::IMultiHypergr
             }
         }
 
-        if (fitnessFunction_ != nullptr)
+        if (implementation_->fitnessFunction_ != nullptr)
         {
-            if (manipulationOperations_.empty())
+            if (implementation_->manipulationOperations_.empty())
             {
-                quickOptimization(graph, decomposition);
+                implementation_->quickOptimization(graph, decomposition);
             }
             else
             {
-                bool isSafe = !enforceNaiveOptimization_;
+                bool isSafe = !implementation_->enforceNaiveOptimization_;
 
-                for (auto it = manipulationOperations_.begin(); isSafe && it != manipulationOperations_.end(); ++it)
+                for (auto it = implementation_->manipulationOperations_.begin(); isSafe && it != implementation_->manipulationOperations_.end(); ++it)
                 {
-                    isSafe = isSafeOperation(*(*it));
+                    isSafe = implementation_->isSafeOperation(*(*it));
                 }
 
                 if (isSafe)
                 {
-                    intelligentOptimization(graph, decomposition, labelingFunctions);
+                    implementation_->intelligentOptimization(graph, decomposition, labelingFunctions);
                 }
                 else
                 {
-                    naiveOptimization(graph, decomposition, labelingFunctions);
+                    implementation_->naiveOptimization(graph, decomposition, labelingFunctions);
                 }
             }
         }
         else
         {
-            for (const htd::ITreeDecompositionManipulationOperation * operation : manipulationOperations_)
+            for (const htd::ITreeDecompositionManipulationOperation * operation : implementation_->manipulationOperations_)
             {
                 operation->apply(graph, decomposition, labelingFunctions);
             }
@@ -189,7 +291,7 @@ bool htd::TreeDecompositionOptimizationOperation::createsTreeNodes(void) const
 {
     bool ret = false;
 
-    for (auto it = manipulationOperations_.begin(); !ret && it != manipulationOperations_.end(); ++it)
+    for (auto it = implementation_->manipulationOperations_.begin(); !ret && it != implementation_->manipulationOperations_.end(); ++it)
     {
         ret = (*it)->createsTreeNodes();
     }
@@ -201,7 +303,7 @@ bool htd::TreeDecompositionOptimizationOperation::removesTreeNodes(void) const
 {
     bool ret = false;
 
-    for (auto it = manipulationOperations_.begin(); !ret && it != manipulationOperations_.end(); ++it)
+    for (auto it = implementation_->manipulationOperations_.begin(); !ret && it != implementation_->manipulationOperations_.end(); ++it)
     {
         ret = (*it)->removesTreeNodes();
     }
@@ -213,7 +315,7 @@ bool htd::TreeDecompositionOptimizationOperation::modifiesBagContents(void) cons
 {
     bool ret = false;
 
-    for (auto it = manipulationOperations_.begin(); !ret && it != manipulationOperations_.end(); ++it)
+    for (auto it = implementation_->manipulationOperations_.begin(); !ret && it != implementation_->manipulationOperations_.end(); ++it)
     {
         ret = (*it)->modifiesBagContents();
     }
@@ -225,7 +327,7 @@ bool htd::TreeDecompositionOptimizationOperation::createsSubsetMaximalBags(void)
 {
     bool ret = false;
 
-    for (auto it = manipulationOperations_.begin(); !ret && it != manipulationOperations_.end(); ++it)
+    for (auto it = implementation_->manipulationOperations_.begin(); !ret && it != implementation_->manipulationOperations_.end(); ++it)
     {
         ret = (*it)->createsSubsetMaximalBags();
     }
@@ -237,7 +339,7 @@ bool htd::TreeDecompositionOptimizationOperation::createsLocationDependendLabels
 {
     bool ret = false;
 
-    for (auto it = manipulationOperations_.begin(); !ret && it != manipulationOperations_.end(); ++it)
+    for (auto it = implementation_->manipulationOperations_.begin(); !ret && it != implementation_->manipulationOperations_.end(); ++it)
     {
         ret = (*it)->createsLocationDependendLabels();
     }
@@ -247,34 +349,41 @@ bool htd::TreeDecompositionOptimizationOperation::createsLocationDependendLabels
 
 void htd::TreeDecompositionOptimizationOperation::setManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations)
 {
-    manipulationOperations_.clear();
+    for (htd::ITreeDecompositionManipulationOperation * operation : implementation_->manipulationOperations_)
+    {
+        delete operation;
+    }
 
-    std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(manipulationOperations_));
+    implementation_->manipulationOperations_.clear();
+
+    std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(implementation_->manipulationOperations_));
 }
 
 void htd::TreeDecompositionOptimizationOperation::addManipulationOperation(htd::ITreeDecompositionManipulationOperation * manipulationOperation)
 {
-    manipulationOperations_.push_back(manipulationOperation);
+    HTD_ASSERT(manipulationOperation != nullptr)
+
+    implementation_->manipulationOperations_.emplace_back(manipulationOperation);
 }
 
 void htd::TreeDecompositionOptimizationOperation::addManipulationOperations(const std::vector<htd::ITreeDecompositionManipulationOperation *> & manipulationOperations)
 {
-    std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(manipulationOperations_));
+    std::copy(manipulationOperations.begin(), manipulationOperations.end(), std::back_inserter(implementation_->manipulationOperations_));
 }
 
 void htd::TreeDecompositionOptimizationOperation::setVertexSelectionStrategy(htd::IVertexSelectionStrategy * strategy)
 {
     HTD_ASSERT(strategy != nullptr)
 
-    if (strategy_ != nullptr)
+    if (implementation_->strategy_ != nullptr)
     {
-        delete strategy_;
+        delete implementation_->strategy_;
     }
 
-    strategy_ = strategy;
+    implementation_->strategy_ = strategy;
 }
 
-void htd::TreeDecompositionOptimizationOperation::quickOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
+void htd::TreeDecompositionOptimizationOperation::Implementation::quickOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
 {
     const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
 
@@ -290,7 +399,7 @@ void htd::TreeDecompositionOptimizationOperation::quickOptimization(const htd::I
 
     HTD_ASSERT(optimalFitness != nullptr)
 
-    for (auto it = candidates.begin(); it != candidates.end() && !isTerminated(); ++it)
+    for (auto it = candidates.begin(); it != candidates.end() && !managementInstance_->isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
@@ -322,7 +431,7 @@ void htd::TreeDecompositionOptimizationOperation::quickOptimization(const htd::I
     delete optimalFitness;
 }
 
-void htd::TreeDecompositionOptimizationOperation::naiveOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::TreeDecompositionOptimizationOperation::Implementation::naiveOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
 
@@ -348,7 +457,7 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(const htd::I
         htd::ITreeDecompositionManipulationOperation * clone = operation->cloneTreeDecompositionManipulationOperation();
 #endif
 
-        clone->setManagementInstance(managementInstance());
+        clone->setManagementInstance(managementInstance_);
 
         clonedManipulationOperations.push_back(clone);
 
@@ -368,7 +477,7 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(const htd::I
     std::cout << "INITIAL FITNESS:     " << optimalFitness << "   (ROOT: " << optimalRoot << ")" << std::endl << std::endl << std::endl << std::endl;
 #endif
 
-    for (auto it = candidates.begin(); it != candidates.end() && !isTerminated(); ++it)
+    for (auto it = candidates.begin(); it != candidates.end() && !managementInstance_->isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
@@ -444,7 +553,7 @@ void htd::TreeDecompositionOptimizationOperation::naiveOptimization(const htd::I
     delete optimalFitness;
 }
 
-void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::TreeDecompositionOptimizationOperation::Implementation::intelligentOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
     const htd::ITreeDecompositionFitnessFunction & fitnessFunction = *fitnessFunction_;
 
@@ -466,7 +575,7 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(const 
         htd::ITreeDecompositionManipulationOperation * clone = operation->cloneTreeDecompositionManipulationOperation();
 #endif
 
-        clone->setManagementInstance(managementInstance());
+        clone->setManagementInstance(managementInstance_);
 
         clonedManipulationOperations.push_back(clone);
 
@@ -489,7 +598,7 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(const 
     std::vector<htd::vertex_t> createdVertices;
     std::vector<htd::vertex_t> removedVertices;
 
-    for (auto it = candidates.begin(); it != candidates.end() && !isTerminated(); ++it)
+    for (auto it = candidates.begin(); it != candidates.end() && !managementInstance_->isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
@@ -633,7 +742,7 @@ void htd::TreeDecompositionOptimizationOperation::intelligentOptimization(const 
     delete optimalFitness;
 }
 
-bool htd::TreeDecompositionOptimizationOperation::isSafeOperation(const htd::ITreeDecompositionManipulationOperation & manipulationOperation) const
+bool htd::TreeDecompositionOptimizationOperation::Implementation::isSafeOperation(const htd::ITreeDecompositionManipulationOperation & manipulationOperation) const
 {
     return manipulationOperation.isLocalOperation() &&
            !manipulationOperation.removesTreeNodes() &&
@@ -642,7 +751,7 @@ bool htd::TreeDecompositionOptimizationOperation::isSafeOperation(const htd::ITr
            !manipulationOperation.createsLocationDependendLabels();
 }
 
-void htd::TreeDecompositionOptimizationOperation::removeCreatedNodes(htd::IMutableTreeDecomposition & decomposition, htd::vertex_t start, htd::vertex_t lastRegularVertex) const
+void htd::TreeDecompositionOptimizationOperation::Implementation::removeCreatedNodes(htd::IMutableTreeDecomposition & decomposition, htd::vertex_t start, htd::vertex_t lastRegularVertex) const
 {
     std::stack<htd::vertex_t> originStack;
 
@@ -705,11 +814,23 @@ void htd::TreeDecompositionOptimizationOperation::removeCreatedNodes(htd::IMutab
     }
 }
 
+const htd::LibraryInstance * htd::TreeDecompositionOptimizationOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::TreeDecompositionOptimizationOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::TreeDecompositionOptimizationOperation * htd::TreeDecompositionOptimizationOperation::clone(void) const
 {
-    htd::TreeDecompositionOptimizationOperation * ret = new htd::TreeDecompositionOptimizationOperation(*fitnessFunction_);
+    htd::TreeDecompositionOptimizationOperation * ret = new htd::TreeDecompositionOptimizationOperation(managementInstance(), *(implementation_->fitnessFunction_));
 
-    for (const htd::ITreeDecompositionManipulationOperation * manipulationOperation : manipulationOperations_)
+    for (const htd::ITreeDecompositionManipulationOperation * manipulationOperation : implementation_->manipulationOperations_)
     {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(manipulationOperation->clone());
@@ -717,8 +838,6 @@ htd::TreeDecompositionOptimizationOperation * htd::TreeDecompositionOptimization
         ret->addManipulationOperation(manipulationOperation->cloneTreeDecompositionManipulationOperation());
 #endif
     }
-
-    ret->setManagementInstance(managementInstance());
 
     return ret;
 }

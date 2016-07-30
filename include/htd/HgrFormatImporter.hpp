@@ -26,7 +26,6 @@
 #define	HTD_HTD_HGRFORMATIMPORTER_HPP
 
 #include <htd/IMultiHypergraph.hpp>
-#include <htd/LibraryObject.hpp>
 
 #include <string>
 #include <iostream>
@@ -38,18 +37,18 @@ namespace htd
      *
      *  (See https://github.com/mabseher/htd/FORMATS.md for information about the available input formats.)
      */
-    class HTD_API HgrFormatImporter : public htd::LibraryObject
+    class HTD_API HgrFormatImporter
     {
         public:
             /**
              *  Constructor for a new graph importer.
              */
-            HgrFormatImporter(void);
+            HgrFormatImporter(const htd::LibraryInstance * const manager);
 
             /**
              *  Destructor of a graph importer.
              */
-            ~HgrFormatImporter();
+            virtual ~HgrFormatImporter();
 
             /**
              *  Create a new IMultiHypergraph instance based on the information stored in a given file.
@@ -68,6 +67,11 @@ namespace htd
              *  @return A new IMultiHypergraph instance based on the information from the given stream.
              */
             htd::IMultiHypergraph * import(std::istream & stream) const;
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

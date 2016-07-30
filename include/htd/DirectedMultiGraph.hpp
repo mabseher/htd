@@ -41,15 +41,18 @@ namespace htd
         public:
             /**
              *  Constructor for a directed multi-graph.
+             *
+             *  @param[in] manager   The management instance to which the new directed multi-graph belongs.
              */
-            DirectedMultiGraph(void);
+            DirectedMultiGraph(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a directed multi-graph.
              *
+             *  @param[in] manager       The management instance to which the new directed multi-graph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            DirectedMultiGraph(std::size_t initialSize);
+            DirectedMultiGraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a directed multi-graph.
@@ -65,7 +68,7 @@ namespace htd
              */
             DirectedMultiGraph(const htd::IDirectedMultiGraph & original);
 
-            ~DirectedMultiGraph();
+            virtual ~DirectedMultiGraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -161,6 +164,10 @@ namespace htd
 
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             DirectedMultiGraph * clone(void) const HTD_OVERRIDE;
 #else
@@ -196,10 +203,9 @@ namespace htd
 #endif
 
         private:
-            htd::IMutableMultiHypergraph * base_;
+            HTD_IMPLEMENTATION Implementation;
 
-            std::vector<std::unordered_set<htd::vertex_t>> incomingNeighborhood_;
-            std::vector<std::unordered_set<htd::vertex_t>> outgoingNeighborhood_;
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

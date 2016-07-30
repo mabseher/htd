@@ -32,7 +32,7 @@
 
 #include <stdexcept>
 
-htd::LabeledTree::LabeledTree(void) : htd::Tree::Tree(), labelings_(new htd::LabelingCollection())
+htd::LabeledTree::LabeledTree(const htd::LibraryInstance * const manager) : htd::Tree::Tree(manager), labelings_(new htd::LabelingCollection())
 {
 
 }

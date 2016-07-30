@@ -34,7 +34,33 @@
 #include <unordered_map>
 #include <unordered_set>
 
-htd::MaximumCardinalitySearchOrderingAlgorithm::MaximumCardinalitySearchOrderingAlgorithm(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::MaximumCardinalitySearchOrderingAlgorithm.
+ */
+struct htd::MaximumCardinalitySearchOrderingAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::MaximumCardinalitySearchOrderingAlgorithm::MaximumCardinalitySearchOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
     
 }
@@ -69,7 +95,9 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
 
     htd::fillSet(graph.vertices(), vertices);
 
-    for (auto it = vertices.begin(); it != vertices.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = vertices.begin(); it != vertices.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
@@ -94,7 +122,7 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
         }
     }
 
-    while (size > 0 && !isTerminated())
+    while (size > 0 && !managementInstance.isTerminated())
     {
         if (pool.size() == 0)
         {
@@ -150,13 +178,21 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
     }
 }
 
+const htd::LibraryInstance * htd::MaximumCardinalitySearchOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::MaximumCardinalitySearchOrderingAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::MaximumCardinalitySearchOrderingAlgorithm * htd::MaximumCardinalitySearchOrderingAlgorithm::clone(void) const
 {
-    htd::MaximumCardinalitySearchOrderingAlgorithm * ret = new htd::MaximumCardinalitySearchOrderingAlgorithm();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::MaximumCardinalitySearchOrderingAlgorithm(managementInstance());
 }
 
 #endif /* HTD_HTD_MAXIMUMCARDINALITYSEARCHORDERINGALGORITHM_CPP */

@@ -39,15 +39,18 @@ namespace htd
         public:
             /**
              *  Constructor for a labeled directed graph.
+             *
+             *  @param[in] manager   The management instance to which the new labeled directed graph belongs.
              */
-            LabeledDirectedGraph(void);
+            LabeledDirectedGraph(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a labeled directed graph.
              *
+             *  @param[in] manager       The management instance to which the new labeled directed graph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            LabeledDirectedGraph(std::size_t initialSize);
+            LabeledDirectedGraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a labeled directed graph.

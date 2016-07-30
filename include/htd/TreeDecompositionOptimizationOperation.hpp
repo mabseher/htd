@@ -46,28 +46,24 @@ namespace htd
             /**
              *  Constructor for a new manipulation operation of type TreeDecompositionOptimizationOperation.
              *
+             *  @param[in] manager           The management instance to which the new manipulation operation belongs.
+             *
              *  @note This constructor creates an optimization operation which actually does not perform any optimization tasks
              *  due to the lack of a fitness function. That is, applying the constructed operation to a decomposition will only
              *  apply the desired manipulation operations and add requested labels.
              */
-            TreeDecompositionOptimizationOperation(void);
+            TreeDecompositionOptimizationOperation(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a new manipulation operation of type TreeDecompositionOptimizationOperation.
              *
-             *  @param[in] fitnessFunction  The fitness function which is used to determine the quality of tree decompositions.
-             */
-            TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction);
-
-            /**
-             *  Constructor for a new manipulation operation of type TreeDecompositionOptimizationOperation.
-             *
+             *  @param[in] manager                   The management instance to which the new manipulation operation belongs.
              *  @param[in] fitnessFunction          The fitness function which is used to determine the quality of tree decompositions.
-             *  @param[in] enforceNaiveOptimization Enforce that each iteration of the optimization algorithm starts from scratch with a copy of the given decomposition.
+             *  @param[in] enforceNaiveOptimization A boolean flag to enforce that each iteration of the optimization algorithm starts from scratch with a copy of the given decomposition.
              */
-            TreeDecompositionOptimizationOperation(const htd::ITreeDecompositionFitnessFunction & fitnessFunction, bool enforceNaiveOptimization);
+            TreeDecompositionOptimizationOperation(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, bool enforceNaiveOptimization = false);
 
-            ~TreeDecompositionOptimizationOperation();
+            virtual ~TreeDecompositionOptimizationOperation();
 
             void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -133,6 +129,10 @@ namespace htd
              */
             void setVertexSelectionStrategy(htd::IVertexSelectionStrategy * strategy);
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             TreeDecompositionOptimizationOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -147,24 +147,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
         private:
-            bool enforceNaiveOptimization_;
+            HTD_IMPLEMENTATION Implementation;
 
-            htd::IVertexSelectionStrategy * strategy_;
-
-            htd::ITreeDecompositionFitnessFunction * fitnessFunction_;
-
-            std::vector<htd::ITreeDecompositionManipulationOperation *> manipulationOperations_;
-
-            bool isSafeOperation(const htd::ITreeDecompositionManipulationOperation & manipulationOperation) const;
-
-            void quickOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const;
-
-            void naiveOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const;
-
-            void intelligentOptimization(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const;
-
-            void removeCreatedNodes(htd::IMutableTreeDecomposition & decomposition, htd::vertex_t start, htd::vertex_t lastRegularVertex) const;
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

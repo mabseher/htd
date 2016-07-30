@@ -39,8 +39,10 @@ namespace htd
         public:
             /**
              *  Constructor for a labeled tree.
+             *
+             *  @param[in] manager   The management instance to which the new labeled tree belongs.
              */
-            LabeledTree(void);
+            LabeledTree(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for a labeled tree.

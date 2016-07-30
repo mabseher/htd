@@ -28,18 +28,31 @@
 #include <htd/Globals.hpp>
 #include <htd/IMultiHypergraph.hpp>
 #include <htd/ConstCollection.hpp>
-#include <htd/LibraryObject.hpp>
 
 namespace htd
 {
     /**
      * Interface for algorithms which can be used to compute vertex orderings.
      */
-    class HTD_API IOrderingAlgorithm : public virtual htd::LibraryObject
+    class HTD_API IOrderingAlgorithm
     {
         public:
             virtual ~IOrderingAlgorithm() = 0;
-            
+
+            /**
+             *  Getter for the associated management class.
+             *
+             *  @return The associated management class.
+             */
+            virtual const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT = 0;
+
+            /**
+             *  Set a new management class for the library object.
+             *
+             *  @param[in] manager   The new management class for the library object.
+             */
+            virtual void setManagementInstance(const htd::LibraryInstance * const manager) = 0;
+
             /**
              *  Compute the vertex ordering of a given graph.
              *

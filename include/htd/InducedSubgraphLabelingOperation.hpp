@@ -49,11 +49,11 @@ namespace htd
             /**
              *  Constructor for a new manipulation operation of type InducedSubgraphLabelingOperation.
              *
-             *  @param[in] graph    The graph from which the edges induced by each bag shall be computed.
+             *  @param[in] manager   The management instance to which the new manipulation operation belongs.
              */
-            InducedSubgraphLabelingOperation(const htd::IMultiHypergraph & graph);
+            InducedSubgraphLabelingOperation(const htd::LibraryInstance * const manager);
 
-            ~InducedSubgraphLabelingOperation();
+            virtual ~InducedSubgraphLabelingOperation();
 
             void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -83,6 +83,10 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             InducedSubgraphLabelingOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -99,8 +103,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
         private:
-            const htd::IMultiHypergraph & graph_;
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

@@ -54,7 +54,7 @@ namespace htd_cli
              */
             ValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName);
 
-            ~ValueOption();
+            virtual ~ValueOption();
 
             /**
              *  Register the given value representing the option's argument.

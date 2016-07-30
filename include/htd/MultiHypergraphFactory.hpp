@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~MultiHypergraphFactory();
+            MultiHypergraphFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static MultiHypergraphFactory & instance(void);
+            MultiHypergraphFactory(const MultiHypergraphFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            MultiHypergraphFactory & operator=(const MultiHypergraphFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~MultiHypergraphFactory();
 
             /**
              *  Create a new IMutableMultiHypergraph object.
              *
              *  @return A new IMutableMultiHypergraph object.
              */
-            htd::IMutableMultiHypergraph * getMultiHypergraph(void);
+            htd::IMutableMultiHypergraph * getMultiHypergraph(void) const;
 
             /**
              *  Create a new IMutableMultiHypergraph object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableMultiHypergraph object of the given size.
              */
-            htd::IMutableMultiHypergraph * getMultiHypergraph(std::size_t initialSize);
+            htd::IMutableMultiHypergraph * getMultiHypergraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableMultiHypergraph object.
@@ -71,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableMultiHypergraph object identical to the given original graph.
              */
-            htd::IMutableMultiHypergraph * getMultiHypergraph(const htd::IMultiHypergraph & original);
+            htd::IMutableMultiHypergraph * getMultiHypergraph(const htd::IMultiHypergraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableMultiHypergraph interface.
@@ -89,41 +97,19 @@ namespace htd
              *
              *  @return The mutable interface of the given multi-hypergraph.
              */
-            htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(htd::IMultiHypergraph & original);
+            htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(htd::IMultiHypergraph & original) const;
 
             /**
              *  Access the mutable interface of a given multi-hypergraph.
              *
              *  @return The mutable interface of the given multi-hypergraph.
              */
-            const htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(const htd::IMultiHypergraph & original);
+            const htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(const htd::IMultiHypergraph & original) const;
 
         private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableMultiHypergraph * constructionTemplate_;
+            HTD_IMPLEMENTATION Implementation;
 
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            MultiHypergraphFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            MultiHypergraphFactory(const MultiHypergraphFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            MultiHypergraphFactory & operator=(const MultiHypergraphFactory & original);
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

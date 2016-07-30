@@ -43,7 +43,7 @@ namespace htd
         public:
             LabelCollection(void);
 	    
-            ~LabelCollection();
+            virtual ~LabelCollection();
 
             std::size_t labelCount(void) const HTD_OVERRIDE;
 

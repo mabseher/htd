@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~HypergraphFactory();
+            HypergraphFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static HypergraphFactory & instance(void);
+            HypergraphFactory(const HypergraphFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            HypergraphFactory & operator=(const HypergraphFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~HypergraphFactory();
 
             /**
              *  Create a new IMutableHypergraph object.
              *
              *  @return A new IMutableHypergraph object.
              */
-            htd::IMutableHypergraph * getHypergraph(void);
+            htd::IMutableHypergraph * getHypergraph(void) const;
 
             /**
              *  Create a new IMutableHypergraph object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableHypergraph object of the given size.
              */
-            htd::IMutableHypergraph * getHypergraph(std::size_t initialSize);
+            htd::IMutableHypergraph * getHypergraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableHypergraph object.
@@ -71,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableHypergraph object identical to the given original graph.
              */
-            htd::IMutableHypergraph * getHypergraph(const htd::IHypergraph & original);
+            htd::IMutableHypergraph * getHypergraph(const htd::IHypergraph & original) const;
 
             /**
              *  Create a new IMutableHypergraph object.
@@ -80,7 +88,7 @@ namespace htd
              *
              *  @return A new IMutableHypergraph object identical to the given original graph.
              */
-            htd::IMutableHypergraph * getHypergraph(const htd::IMultiHypergraph & original);
+            htd::IMutableHypergraph * getHypergraph(const htd::IMultiHypergraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableHypergraph interface.
@@ -98,41 +106,19 @@ namespace htd
              *
              *  @return The mutable interface of the given hypergraph.
              */
-            htd::IMutableHypergraph & accessMutableHypergraph(htd::IHypergraph & original);
+            htd::IMutableHypergraph & accessMutableHypergraph(htd::IHypergraph & original) const;
 
             /**
              *  Access the mutable interface of a given hypergraph.
              *
              *  @return The mutable interface of the given hypergraph.
              */
-            const htd::IMutableHypergraph & accessMutableHypergraph(const htd::IHypergraph & original);
+            const htd::IMutableHypergraph & accessMutableHypergraph(const htd::IHypergraph & original) const;
 
         private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableHypergraph * constructionTemplate_;
+            HTD_IMPLEMENTATION Implementation;
 
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            HypergraphFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            HypergraphFactory(const HypergraphFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            HypergraphFactory & operator=(const HypergraphFactory & original);
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

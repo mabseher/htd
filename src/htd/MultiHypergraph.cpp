@@ -38,54 +38,138 @@
 #include <unordered_set>
 #include <vector>
 
-htd::MultiHypergraph::MultiHypergraph(void)
-    : size_(0),
-      next_edge_(htd::Id::FIRST),
-      next_vertex_(htd::Vertex::FIRST),
-      vertices_(),
-      selfLoops_(),
-      deletions_(),
-      edges_(std::make_shared<std::vector<htd::Hyperedge>>()),
-      neighborhood_()
+/**
+ *  Private implementation details of class htd::MultiHypergraph.
+ */
+struct htd::MultiHypergraph::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager)
+        : managementInstance_(manager),
+          size_(0),
+          next_edge_(htd::Id::FIRST),
+          next_vertex_(htd::Vertex::FIRST),
+          vertices_(),
+          selfLoops_(),
+          deletions_(),
+          edges_(std::make_shared<std::vector<htd::Hyperedge>>()),
+          neighborhood_()
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  Copy constructor of the implementation details structure.
+     *
+     *  @param[in] original  The original implementation details structure.
+     */
+    Implementation(const Implementation & original)
+        : managementInstance_(original.managementInstance_),
+          size_(original.size_),
+          next_edge_(original.next_edge_),
+          next_vertex_(original.next_vertex_),
+          vertices_(original.vertices_),
+          selfLoops_(original.selfLoops_),
+          deletions_(original.deletions_),
+          edges_(std::make_shared<std::vector<htd::Hyperedge>>(*(original.edges_))),
+          neighborhood_(original.neighborhood_)
+    {
+
+    }
+
+    /**
+     *  Reset the multi-hypergraph to an empty one.
+     */
+    void reset(void)
+    {
+        size_ = 0;
+
+        next_edge_ = htd::Id::FIRST;
+
+        next_vertex_ = htd::Vertex::FIRST;
+
+        vertices_.clear();
+
+        selfLoops_.clear();
+
+        deletions_.clear();
+
+        edges_->clear();
+
+        neighborhood_.clear();
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The number of vertices of the multi-hypergraph.
+     */
+    std::size_t size_;
+
+    /**
+     *  The ID the next edge added to the graph will get.
+     */
+    htd::index_t next_edge_;
+
+    /**
+     *  The ID the next vertex added to the graph will get.
+     */
+    htd::vertex_t next_vertex_;
+
+    /**
+     *  The vector of all vertices in the graph sorted in ascending order.
+     */
+    std::vector<htd::vertex_t> vertices_;
+
+    /**
+     *  The set of vertices which have self-loops.
+     */
+    std::unordered_set<htd::vertex_t> selfLoops_;
+
+    /**
+     *  The set of vertices which were removed from the graph.
+     */
+    std::unordered_set<htd::vertex_t> deletions_;
+
+    /**
+     *  The collection of hyperedges sorted by ID in ascending order.
+     */
+    std::shared_ptr<std::vector<htd::Hyperedge>> edges_;
+
+    /**
+     *  The vector of neighbors for each vertex in the hypergraph. The neighborhood of each vertex is sorted in ascending order.
+     */
+    std::vector<std::vector<htd::vertex_t>> neighborhood_;
+};
+
+htd::MultiHypergraph::MultiHypergraph(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
 
-htd::MultiHypergraph::MultiHypergraph(std::size_t initialSize)
-    : size_(0),
-      next_edge_(htd::Id::FIRST),
-      next_vertex_(htd::Vertex::FIRST),
-      vertices_(),
-      selfLoops_(),
-      deletions_(),
-      edges_(std::make_shared<std::vector<htd::Hyperedge>>()),
-      neighborhood_()
+htd::MultiHypergraph::MultiHypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : implementation_(new Implementation(manager))
 {
     addVertices(initialSize);
 }
 
-htd::MultiHypergraph::MultiHypergraph(const htd::MultiHypergraph & original)
-    : size_(original.size_),
-      next_edge_(original.next_edge_),
-      next_vertex_(original.next_vertex_),
-      vertices_(original.vertices_),
-      selfLoops_(original.selfLoops_),
-      deletions_(original.deletions_),
-      edges_(std::make_shared<std::vector<htd::Hyperedge>>(*(original.edges_))),
-      neighborhood_(original.neighborhood_)
+htd::MultiHypergraph::MultiHypergraph(const htd::MultiHypergraph & original) : implementation_(new Implementation(*(original.implementation_)))
 {
 
 }
 
-htd::MultiHypergraph::MultiHypergraph(const htd::IMultiHypergraph & original)
-    : size_(0),
-      next_edge_(htd::Id::FIRST),
-      next_vertex_(htd::Vertex::FIRST),
-      vertices_(),
-      selfLoops_(),
-      deletions_(),
-      edges_(std::make_shared<std::vector<htd::Hyperedge>>()),
-      neighborhood_()
+htd::MultiHypergraph::MultiHypergraph(const htd::IMultiHypergraph & original) : implementation_(new Implementation(original.managementInstance()))
 {
     *this = original;
 }
@@ -97,12 +181,12 @@ htd::MultiHypergraph::~MultiHypergraph()
 
 std::size_t htd::MultiHypergraph::vertexCount(void) const
 {
-    return size_;
+    return implementation_->size_;
 }
 
 std::size_t htd::MultiHypergraph::edgeCount(void) const
 {
-    return edges_->size();
+    return implementation_->edges_->size();
 }
 
 std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t vertex) const
@@ -111,7 +195,7 @@ std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t vertex) const
 
     HTD_ASSERT(isVertex(vertex))
 
-    for (const htd::Hyperedge & edge : *edges_)
+    for (const htd::Hyperedge & edge : *(implementation_->edges_))
     {
         if (edge.contains(vertex))
         {
@@ -124,14 +208,14 @@ std::size_t htd::MultiHypergraph::edgeCount(htd::vertex_t vertex) const
 
 bool htd::MultiHypergraph::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && deletions_.count(vertex) == 0;
+    return vertex < implementation_->next_vertex_ && vertex != htd::Vertex::UNKNOWN && implementation_->deletions_.count(vertex) == 0;
 }
 
 bool htd::MultiHypergraph::isEdge(htd::id_t edgeId) const
 {
     bool ret = false;
 
-    for (auto it = edges_->begin(); !ret && it != edges_->end(); ++it)
+    for (auto it = implementation_->edges_->begin(); !ret && it != implementation_->edges_->end(); ++it)
     {
         ret = (it->id() == edgeId);
     }
@@ -153,7 +237,7 @@ bool htd::MultiHypergraph::isEdge(const htd::ConstCollection<htd::vertex_t> & el
 {
     bool ret = false;
 
-    for (auto it = edges_->begin(); !ret && it != edges_->end(); ++it)
+    for (auto it = implementation_->edges_->begin(); !ret && it != implementation_->edges_->end(); ++it)
     {
         ret = it->size() == elements.size() && std::equal(it->begin(), it->end(), elements.begin());
     }
@@ -217,9 +301,9 @@ htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(const ht
 
 htd::vertex_t htd::MultiHypergraph::vertexAtPosition(htd::index_t index) const
 {
-    HTD_ASSERT(index < vertices_.size())
+    HTD_ASSERT(index < implementation_->vertices_.size())
 
-    return vertices_[index];
+    return implementation_->vertices_[index];
 }
 
 bool htd::MultiHypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
@@ -230,13 +314,13 @@ bool htd::MultiHypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighb
 
     if (vertex != neighbor)
     {
-        const std::vector<htd::vertex_t> & currentNeighborhood = neighborhood_.at(vertex - htd::Vertex::FIRST);
+        const std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_.at(vertex - htd::Vertex::FIRST);
 
         ret = std::binary_search(currentNeighborhood.begin(), currentNeighborhood.end(), neighbor);
     }
     else
     {
-        for (auto it = edges_->begin(); !ret && it != edges_->end(); ++it)
+        for (auto it = implementation_->edges_->begin(); !ret && it != implementation_->edges_->end(); ++it)
         {
             const htd::Hyperedge & edge = *it;
 
@@ -256,7 +340,7 @@ std::size_t htd::MultiHypergraph::neighborCount(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        ret = neighborhood_[vertex - htd::Vertex::FIRST].size();
+        ret = implementation_->neighborhood_[vertex - htd::Vertex::FIRST].size();
     }
     
     return ret;
@@ -266,13 +350,13 @@ bool htd::MultiHypergraph::isConnected(void) const
 {
     bool ret = true;
     
-    if (size_ > 0)
+    if (implementation_->size_ > 0)
     {
         std::stack<htd::vertex_t> originStack;
 
         std::unordered_set<htd::vertex_t> visitedVertices;
 
-        htd::vertex_t currentVertex = vertices_.at(0);
+        htd::vertex_t currentVertex = implementation_->vertices_.at(0);
 
         originStack.push(currentVertex);
 
@@ -286,7 +370,7 @@ bool htd::MultiHypergraph::isConnected(void) const
 
                 originStack.pop();
 
-                for (htd::vertex_t neighbor : neighborhood_.at(currentVertex - htd::Vertex::FIRST))
+                for (htd::vertex_t neighbor : implementation_->neighborhood_.at(currentVertex - htd::Vertex::FIRST))
                 {
                     if (visitedVertices.count(neighbor) == 0)
                     {
@@ -300,7 +384,7 @@ bool htd::MultiHypergraph::isConnected(void) const
             }
         }
 
-        ret = visitedVertices.size() == vertices_.size();
+        ret = visitedVertices.size() == implementation_->vertices_.size();
     }
     else
     {
@@ -325,7 +409,7 @@ bool htd::MultiHypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vert
             std::vector<htd::vertex_t> newVertices;
             std::vector<htd::vertex_t> tmpVertices;
 
-            std::vector<bool> reachableVertices(size_);
+            std::vector<bool> reachableVertices(implementation_->size_);
 
             reachableVertices[vertex1 - htd::Vertex::FIRST] = true;
 
@@ -339,7 +423,7 @@ bool htd::MultiHypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vert
 
                 for (auto it = tmpVertices.begin(); !ret && it != tmpVertices.end(); it++)
                 {
-                    for (auto it2 = edges_->begin(); !ret && it2 != edges_->end(); it2++)
+                    for (auto it2 = implementation_->edges_->begin(); !ret && it2 != implementation_->edges_->end(); it2++)
                     {
                         if (std::find((*it2).begin(), (*it2).end(), *it) != (*it2).end())
                         {
@@ -371,21 +455,21 @@ htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::neighbors(htd::vertex_
 {
     HTD_ASSERT(isVertex(vertex))
 
-    return htd::ConstCollection<htd::vertex_t>::getInstance(neighborhood_[vertex - htd::Vertex::FIRST]);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(implementation_->neighborhood_[vertex - htd::Vertex::FIRST]);
 }
 
 void htd::MultiHypergraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
     HTD_ASSERT(isVertex(vertex))
 
-    std::copy(neighborhood_[vertex - htd::Vertex::FIRST].begin(), neighborhood_[vertex - htd::Vertex::FIRST].end(), std::back_inserter(target));
+    std::copy(implementation_->neighborhood_[vertex - htd::Vertex::FIRST].begin(), implementation_->neighborhood_[vertex - htd::Vertex::FIRST].end(), std::back_inserter(target));
 }
 
 htd::vertex_t htd::MultiHypergraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
     HTD_ASSERT(isVertex(vertex))
 
-    const std::vector<htd::vertex_t> & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+    const std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
 
     HTD_ASSERT(index < currentNeighborhood.size())
 
@@ -394,16 +478,21 @@ htd::vertex_t htd::MultiHypergraph::neighborAtPosition(htd::vertex_t vertex, htd
 
 htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::vertices(void) const
 {
-    return htd::ConstCollection<htd::vertex_t>::getInstance(vertices_);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(implementation_->vertices_);
+}
+
+const std::vector<htd::vertex_t> & htd::MultiHypergraph::vertexVector(void) const
+{
+    return implementation_->vertices_;
 }
 
 std::size_t htd::MultiHypergraph::isolatedVertexCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t vertex : vertices_)
+    for (htd::vertex_t vertex : implementation_->vertices_)
     {
-        if (neighborhood_[vertex - htd::Vertex::FIRST].empty())
+        if (implementation_->neighborhood_[vertex - htd::Vertex::FIRST].empty())
         {
             ret++;
         }
@@ -418,11 +507,11 @@ htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::isolatedVertices(void)
 
     auto & result = ret.container();
 
-    for (htd::vertex_t vertex : vertices_)
+    for (htd::vertex_t vertex : implementation_->vertices_)
     {
         bool isolated = true;
 
-        for (auto it = edges_->begin(); isolated && it != edges_->end(); it++)
+        for (auto it = implementation_->edges_->begin(); isolated && it != implementation_->edges_->end(); it++)
         {
             isolated = (*it).size() <= 1 || std::find((*it).begin(), (*it).end(), vertex) == (*it).end();
         }
@@ -455,7 +544,7 @@ bool htd::MultiHypergraph::isIsolatedVertex(htd::vertex_t vertex) const
 
     bool ret = true;
 
-    for (auto it = edges_->begin(); ret && it != edges_->end(); it++)
+    for (auto it = implementation_->edges_->begin(); ret && it != implementation_->edges_->end(); it++)
     {
         ret = (*it).size() <= 1 || std::find((*it).begin(), (*it).end(), vertex) == (*it).end();
     }
@@ -465,7 +554,7 @@ bool htd::MultiHypergraph::isIsolatedVertex(htd::vertex_t vertex) const
 
 htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(void) const
 {
-    return htd::ConstCollection<htd::Hyperedge>::getInstance(*edges_);
+    return htd::ConstCollection<htd::Hyperedge>::getInstance(*(implementation_->edges_));
 }
 
 htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(htd::vertex_t vertex) const
@@ -476,7 +565,7 @@ htd::ConstCollection<htd::Hyperedge> htd::MultiHypergraph::hyperedges(htd::verte
 
     auto & result = ret.container();
 
-    for (auto & edge : *edges_)
+    for (auto & edge : *(implementation_->edges_))
     {
         if (edge.contains(vertex))
         {
@@ -491,9 +580,9 @@ const htd::Hyperedge & htd::MultiHypergraph::hyperedge(htd::id_t edgeId) const
 {
     bool found = false;
 
-    auto position = edges_->begin();
+    auto position = implementation_->edges_->begin();
 
-    for (auto it = edges_->begin(); !found && it != edges_->end(); ++it)
+    for (auto it = implementation_->edges_->begin(); !found && it != implementation_->edges_->end(); ++it)
     {
         if (it->id() == edgeId)
         {
@@ -510,14 +599,14 @@ const htd::Hyperedge & htd::MultiHypergraph::hyperedge(htd::id_t edgeId) const
 
 const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t index) const
 {
-    HTD_ASSERT(index < edges_->size())
+    HTD_ASSERT(index < implementation_->edges_->size())
 
-    return edges_->at(index);
+    return implementation_->edges_->at(index);
 }
 
 const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    for (auto it = edges_->begin(); it != edges_->end(); ++it)
+    for (auto it = implementation_->edges_->begin(); it != implementation_->edges_->end(); ++it)
     {
         const htd::Hyperedge & hyperedge = *it;
 
@@ -537,59 +626,59 @@ const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t in
 
 htd::FilteredHyperedgeCollection htd::MultiHypergraph::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
 {
-    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(edges_), indices);
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(implementation_->edges_), indices);
 }
 
 htd::FilteredHyperedgeCollection htd::MultiHypergraph::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
 {
-    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(edges_), std::move(indices));
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(implementation_->edges_), std::move(indices));
 }
 
 htd::vertex_t htd::MultiHypergraph::nextVertex(void) const
 {
-    return next_vertex_;
+    return implementation_->next_vertex_;
 }
 
 htd::id_t htd::MultiHypergraph::nextEdgeId(void) const
 {
-    return next_edge_;
+    return implementation_->next_edge_;
 }
 
 htd::vertex_t htd::MultiHypergraph::addVertex(void)
 {
-    htd::vertex_t ret = next_vertex_;
+    htd::vertex_t ret = implementation_->next_vertex_;
     
-    size_++;
+    implementation_->size_++;
 
-    next_vertex_++;
+    implementation_->next_vertex_++;
 
-    neighborhood_.emplace_back(std::vector<htd::vertex_t>());
+    implementation_->neighborhood_.emplace_back(std::vector<htd::vertex_t>());
 
-    vertices_.push_back(ret);
+    implementation_->vertices_.push_back(ret);
 
     return ret;
 }
 
 htd::vertex_t htd::MultiHypergraph::addVertices(std::size_t count)
 {
-    htd::vertex_t ret = next_vertex_;
+    htd::vertex_t ret = implementation_->next_vertex_;
 
     if (count > 0)
     {
-        std::size_t previousSize = vertices_.size();
+        std::size_t previousSize = implementation_->vertices_.size();
 
-        vertices_.resize(previousSize + count, 0);
+        implementation_->vertices_.resize(previousSize + count, 0);
 
         for (htd::index_t index = 0; index < count; ++index)
         {
-            vertices_[previousSize + index + 1 - htd::Vertex::FIRST] = next_vertex_;
+            implementation_->vertices_[previousSize + index + 1 - htd::Vertex::FIRST] = implementation_->next_vertex_;
 
-            ++next_vertex_;
+            ++(implementation_->next_vertex_);
         }
 
-        neighborhood_.resize(neighborhood_.size() + count, std::vector<htd::vertex_t>());
+        implementation_->neighborhood_.resize(implementation_->neighborhood_.size() + count, std::vector<htd::vertex_t>());
 
-        size_ += count;
+        implementation_->size_ += count;
     }
     else
     {
@@ -607,7 +696,7 @@ void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)
         
         std::vector<htd::id_t> emptyEdges;
         
-        for (auto & edge : *edges_)
+        for (auto & edge : *(implementation_->edges_))
         {
             edge.erase(vertex);
             
@@ -621,18 +710,18 @@ void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)
 
         for (auto it = emptyEdges.rbegin(); it != emptyEdges.rend(); ++it)
         {
-            edges_->erase(edges_->begin() + *it);
+            implementation_->edges_->erase(implementation_->edges_->begin() + *it);
         }
 
-        selfLoops_.erase(vertex);
+        implementation_->selfLoops_.erase(vertex);
 
-        deletions_.insert(vertex);
+        implementation_->deletions_.insert(vertex);
 
-        for (htd::vertex_t neighbor : neighborhood_[vertex - htd::Vertex::FIRST])
+        for (htd::vertex_t neighbor : implementation_->neighborhood_[vertex - htd::Vertex::FIRST])
         {
             if (neighbor != vertex)
             {
-                auto & currentNeighborhood = neighborhood_[neighbor - htd::Vertex::FIRST];
+                auto & currentNeighborhood = implementation_->neighborhood_[neighbor - htd::Vertex::FIRST];
 
                 /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'currentNeighborhood'. */
                 // coverity[use_iterator]
@@ -640,11 +729,11 @@ void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)
             }
         }
 
-        neighborhood_[vertex - htd::Vertex::FIRST].clear();
+        implementation_->neighborhood_[vertex - htd::Vertex::FIRST].clear();
 
-        vertices_.erase(std::lower_bound(vertices_.begin(), vertices_.end(), vertex));
+        implementation_->vertices_.erase(std::lower_bound(implementation_->vertices_.begin(), implementation_->vertices_.end(), vertex));
 
-        --size_;
+        --(implementation_->size_);
     }
 }
 
@@ -652,11 +741,11 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t ver
 {
     HTD_ASSERT(isVertex(vertex1) && isVertex(vertex2))
 
-    edges_->emplace_back(next_edge_, vertex1, vertex2);
+    implementation_->edges_->emplace_back(implementation_->next_edge_, vertex1, vertex2);
 
     if (vertex1 == vertex2)
     {
-        auto & currentNeighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
+        auto & currentNeighborhood1 = implementation_->neighborhood_[vertex1 - htd::Vertex::FIRST];
 
         auto position1 = std::lower_bound(currentNeighborhood1.begin(), currentNeighborhood1.end(), vertex1);
 
@@ -665,12 +754,12 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t ver
             currentNeighborhood1.insert(position1, vertex1);
         }
 
-        selfLoops_.insert(vertex1);
+        implementation_->selfLoops_.insert(vertex1);
     }
     else
     {
-        auto & currentNeighborhood1 = neighborhood_[vertex1 - htd::Vertex::FIRST];
-        auto & currentNeighborhood2 = neighborhood_[vertex2 - htd::Vertex::FIRST];
+        auto & currentNeighborhood1 = implementation_->neighborhood_[vertex1 - htd::Vertex::FIRST];
+        auto & currentNeighborhood2 = implementation_->neighborhood_[vertex2 - htd::Vertex::FIRST];
 
         auto position1 = std::lower_bound(currentNeighborhood1.begin(), currentNeighborhood1.end(), vertex2);
 
@@ -687,7 +776,7 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t ver
         }
     }
 
-    return next_edge_++;
+    return implementation_->next_edge_++;
 }
 
 htd::id_t htd::MultiHypergraph::addEdge(const std::vector<htd::vertex_t> & elements)
@@ -705,9 +794,9 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
         {
             HTD_ASSERT(isVertex(elements[0]))
 
-            edges_->emplace_back(next_edge_, std::move(elements));
+            implementation_->edges_->emplace_back(implementation_->next_edge_, std::move(elements));
 
-            return next_edge_++;
+            return implementation_->next_edge_++;
         }
         case 2:
         {
@@ -734,20 +823,20 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
     for (auto it = position; it != sortedElements.end(); it++)
     {
-        selfLoops_.insert(*it);
+        implementation_->selfLoops_.insert(*it);
     }
 
     sortedElements.erase(position, sortedElements.end());
 
-    edges_->emplace_back(next_edge_, std::move(elements));
+    implementation_->edges_->emplace_back(implementation_->next_edge_, std::move(elements));
 
     std::vector<htd::vertex_t> newNeighborhood;
 
     for (htd::vertex_t vertex : sortedElements)
     {
-        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
 
-        if (selfLoops_.count(vertex) > 0)
+        if (implementation_->selfLoops_.count(vertex) > 0)
         {
             htd::set_union(currentNeighborhood, sortedElements, newNeighborhood);
         }
@@ -761,7 +850,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
         newNeighborhood.clear();
     }
 
-    return next_edge_++;
+    return implementation_->next_edge_++;
 }
 
 htd::id_t htd::MultiHypergraph::addEdge(const htd::ConstCollection<htd::vertex_t> & elements)
@@ -779,9 +868,9 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
         {
             HTD_ASSERT(isVertex(hyperedge[0]))
 
-            edges_->emplace_back(next_edge_, hyperedge.elements());
+            implementation_->edges_->emplace_back(implementation_->next_edge_, hyperedge.elements());
 
-            return next_edge_++;
+            return implementation_->next_edge_++;
         }
         case 2:
         {
@@ -800,7 +889,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
         HTD_ASSERT(isVertex(vertex));
     }
 
-    edges_->emplace_back(next_edge_, hyperedge.elements());
+    implementation_->edges_->emplace_back(implementation_->next_edge_, hyperedge.elements());
 
     std::vector<htd::vertex_t> sortedElements(hyperedge.begin(), hyperedge.end());
 
@@ -810,7 +899,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 
     for (auto it = position; it != sortedElements.end(); it++)
     {
-        selfLoops_.insert(*it);
+        implementation_->selfLoops_.insert(*it);
     }
 
     sortedElements.erase(position, sortedElements.end());
@@ -819,9 +908,9 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
 
     for (htd::vertex_t vertex : sortedElements)
     {
-        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
 
-        if (selfLoops_.count(vertex) > 0)
+        if (implementation_->selfLoops_.count(vertex) > 0)
         {
             htd::set_union(currentNeighborhood, sortedElements, newNeighborhood);
         }
@@ -835,7 +924,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const htd::Hyperedge & hyperedge)
         newNeighborhood.clear();
     }
 
-    return next_edge_++;
+    return implementation_->next_edge_++;
 }
 
 htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
@@ -848,11 +937,11 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
         {
             HTD_ASSERT(isVertex(hyperedge[0]))
 
-            hyperedge.setId(next_edge_);
+            hyperedge.setId(implementation_->next_edge_);
 
-            edges_->emplace_back(std::move(hyperedge));
+            implementation_->edges_->emplace_back(std::move(hyperedge));
 
-            return next_edge_++;
+            return implementation_->next_edge_++;
         }
         case 2:
         {
@@ -873,9 +962,9 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
 
     htd::Hyperedge newHyperedge(std::move(hyperedge));
 
-    newHyperedge.setId(next_edge_);
+    newHyperedge.setId(implementation_->next_edge_);
 
-    edges_->push_back(newHyperedge);
+    implementation_->edges_->emplace_back(newHyperedge);
 
     std::vector<htd::vertex_t> sortedElements(newHyperedge.begin(), newHyperedge.end());
 
@@ -885,7 +974,7 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
 
     for (auto it = position; it != sortedElements.end(); it++)
     {
-        selfLoops_.insert(*it);
+        implementation_->selfLoops_.insert(*it);
     }
 
     sortedElements.erase(position, sortedElements.end());
@@ -894,9 +983,9 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
 
     for (htd::vertex_t vertex : sortedElements)
     {
-        auto & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+        auto & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
 
-        if (selfLoops_.count(vertex) > 0)
+        if (implementation_->selfLoops_.count(vertex) > 0)
         {
             htd::set_union(currentNeighborhood, sortedElements, newNeighborhood);
         }
@@ -910,16 +999,16 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::Hyperedge && hyperedge)
         newNeighborhood.clear();
     }
 
-    return next_edge_++;
+    return implementation_->next_edge_++;
 }
 
 void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
 {
     bool found = false;
 
-    auto position = edges_->begin();
+    auto position = implementation_->edges_->begin();
 
-    for (auto it = edges_->begin(); !found && it != edges_->end(); ++it)
+    for (auto it = implementation_->edges_->begin(); !found && it != implementation_->edges_->end(); ++it)
     {
         if (it->id() == edgeId)
         {
@@ -939,7 +1028,7 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
 
             bool selfLoopExists = false;
 
-            for (auto it = edges_->begin(); !missing.empty() && it != edges_->end(); it++)
+            for (auto it = implementation_->edges_->begin(); !missing.empty() && it != implementation_->edges_->end(); it++)
             {
                 htd::Hyperedge & currentEdge = *it;
 
@@ -963,7 +1052,7 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
 
             if (!missing.empty())
             {
-                std::vector<htd::vertex_t> & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+                std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
 
                 for (auto it = missing.begin(); it != missing.end(); it++)
                 {
@@ -976,9 +1065,9 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
                 }
             }
 
-            if (selfLoops_.count(vertex) > 0 && !selfLoopExists)
+            if (implementation_->selfLoops_.count(vertex) > 0 && !selfLoopExists)
             {
-                std::vector<htd::vertex_t> & currentNeighborhood = neighborhood_[vertex - htd::Vertex::FIRST];
+                std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
 
                 auto position2 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
 
@@ -988,12 +1077,24 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
                     position2 = currentNeighborhood.erase(position2);
                 }
 
-                selfLoops_.erase(vertex);
+                implementation_->selfLoops_.erase(vertex);
             }
         }
 
-        edges_->erase(position);
+        implementation_->edges_->erase(position);
     }
+}
+
+const htd::LibraryInstance * htd::MultiHypergraph::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::MultiHypergraph::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
 }
 
 htd::MultiHypergraph * htd::MultiHypergraph::clone(void) const
@@ -1017,21 +1118,7 @@ htd::MultiHypergraph & htd::MultiHypergraph::operator=(const htd::MultiHypergrap
 {
     if (this != &original)
     {
-        size_ = original.size_;
-
-        next_edge_ = original.next_edge_;
-
-        next_vertex_ = original.next_vertex_;
-
-        vertices_ = original.vertices_;
-
-        selfLoops_ = original.selfLoops_;
-
-        deletions_ = original.deletions_;
-
-        edges_ = original.edges_;
-
-        neighborhood_ = original.neighborhood_;
+        *implementation_ = *(original.implementation_);
     }
 
     return *this;
@@ -1041,45 +1128,31 @@ htd::MultiHypergraph & htd::MultiHypergraph::operator=(const htd::IMultiHypergra
 {
     if (this != &original)
     {
-        size_ = 0;
-
-        next_edge_ = htd::Id::FIRST;
-
-        next_vertex_ = htd::Vertex::FIRST;
-
-        vertices_.clear();
-
-        selfLoops_.clear();
-
-        deletions_.clear();
-
-        edges_->clear();
-
-        neighborhood_.clear();
+        implementation_->reset();
 
         for (htd::vertex_t vertex : original.vertices())
         {
-            while (vertex > next_vertex_)
+            while (vertex > implementation_->next_vertex_)
             {
-                deletions_.insert(next_vertex_);
+                implementation_->deletions_.insert(implementation_->next_vertex_);
 
-                neighborhood_.push_back(std::vector<htd::vertex_t>());
+                implementation_->neighborhood_.emplace_back(std::vector<htd::vertex_t>());
 
-                ++next_vertex_;
+                ++(implementation_->next_vertex_);
             }
 
-            size_++;
+            implementation_->size_++;
 
-            next_vertex_++;
+            implementation_->next_vertex_++;
 
-            neighborhood_.push_back(std::vector<htd::vertex_t>());
+            implementation_->neighborhood_.emplace_back(std::vector<htd::vertex_t>());
 
-            vertices_.push_back(vertex);
+            implementation_->vertices_.push_back(vertex);
         }
 
         for (const htd::Hyperedge & hyperedge : original.hyperedges())
         {
-            next_edge_ = hyperedge.id();
+            implementation_->next_edge_ = hyperedge.id();
 
             addEdge(hyperedge);
         }

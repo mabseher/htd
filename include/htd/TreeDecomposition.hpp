@@ -43,7 +43,7 @@ namespace htd
             /**
              *  Constructor for a tree decomposition.
              */
-            TreeDecomposition(void);
+            TreeDecomposition(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for a tree decomposition.
@@ -73,7 +73,7 @@ namespace htd
              */
             TreeDecomposition(const htd::ITreeDecomposition & original);
             
-            ~TreeDecomposition();
+            virtual ~TreeDecomposition();
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 

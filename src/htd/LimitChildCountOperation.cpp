@@ -33,7 +33,39 @@
 #include <stdexcept>
 #include <iterator>
 
-htd::LimitChildCountOperation::LimitChildCountOperation(std::size_t limit) : htd::LibraryObject(), limit_(limit)
+/**
+ *  Private implementation details of class htd::LimitChildCountOperation.
+ */
+struct htd::LimitChildCountOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     *  @param[in] limit    The maximum number of children for a decomposition node.
+     */
+    Implementation(const htd::LibraryInstance * const manager, std::size_t limit) : managementInstance_(manager), limit_(limit)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The maximum number of children for a decomposition node.
+     */
+    std::size_t limit_;
+};
+
+htd::LimitChildCountOperation::LimitChildCountOperation(const htd::LibraryInstance * const manager, std::size_t limit) : implementation_(new Implementation(manager, limit))
 {
     HTD_ASSERT(limit > 0)
 }
@@ -61,13 +93,15 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
 
     decomposition.copyJoinNodesTo(joinNodes);
 
-    for (auto it = joinNodes.begin(); it != joinNodes.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = joinNodes.begin(); it != joinNodes.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t node = *it;
 
         std::size_t childCount = decomposition.childCount(node);
 
-        if (childCount > limit_)
+        if (childCount > implementation_->limit_)
         {
             const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
@@ -77,11 +111,11 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
 
             decomposition.copyChildrenTo(children, node);
 
-            htd::index_t index = limit_ - 1;
+            htd::index_t index = implementation_->limit_ - 1;
 
             htd::vertex_t attachmentPoint = node;
 
-            while (childCount - index > limit_)
+            while (childCount - index > implementation_->limit_)
             {
                 htd::vertex_t newNode = decomposition.addChild(attachmentPoint);
 
@@ -102,12 +136,12 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
 
                 attachmentPoint = newNode;
 
-                for (htd::index_t childPosition = index; childPosition < index + limit_ - 1; ++childPosition)
+                for (htd::index_t childPosition = index; childPosition < index + implementation_->limit_ - 1; ++childPosition)
                 {
                     decomposition.setParent(children[childPosition], attachmentPoint);
                 }
 
-                index += limit_ - 1;
+                index += implementation_->limit_ - 1;
             }
 
             if (index < childCount)
@@ -145,13 +179,15 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
     HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
-    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
         std::size_t childCount = decomposition.childCount(vertex);
 
-        if (childCount > limit_)
+        if (childCount > implementation_->limit_)
         {
             const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
@@ -161,11 +197,11 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
 
             decomposition.copyChildrenTo(children, vertex);
 
-            htd::index_t index = limit_ - 1;
+            htd::index_t index = implementation_->limit_ - 1;
 
             htd::vertex_t attachmentPoint = vertex;
 
-            while (childCount - index > limit_)
+            while (childCount - index > implementation_->limit_)
             {
                 htd::vertex_t newNode = decomposition.addChild(attachmentPoint);
 
@@ -186,14 +222,14 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
 
                 attachmentPoint = newNode;
 
-                for (htd::index_t childPosition = index; childPosition < index + limit_ - 1; ++childPosition)
+                for (htd::index_t childPosition = index; childPosition < index + implementation_->limit_ - 1; ++childPosition)
                 {
                     decomposition.setParent(children[childPosition], attachmentPoint);
                 }
 
                 createdVertices.push_back(newNode);
 
-                index += limit_ - 1;
+                index += implementation_->limit_ - 1;
             }
 
             if (index < childCount)
@@ -258,13 +294,21 @@ bool htd::LimitChildCountOperation::createsLocationDependendLabels(void) const
     return false;
 }
 
+const htd::LibraryInstance * htd::LimitChildCountOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::LimitChildCountOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::LimitChildCountOperation * htd::LimitChildCountOperation::clone(void) const
 {
-    htd::LimitChildCountOperation * ret = new htd::LimitChildCountOperation(limit_);
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::LimitChildCountOperation(managementInstance(), implementation_->limit_);
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

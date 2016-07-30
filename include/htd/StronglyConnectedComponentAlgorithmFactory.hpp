@@ -37,16 +37,24 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~StronglyConnectedComponentAlgorithmFactory();
+            StronglyConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static StronglyConnectedComponentAlgorithmFactory & instance(void);
+            StronglyConnectedComponentAlgorithmFactory(const StronglyConnectedComponentAlgorithmFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            StronglyConnectedComponentAlgorithmFactory & operator=(const StronglyConnectedComponentAlgorithmFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~StronglyConnectedComponentAlgorithmFactory();
 
             /**
              *  Create a new IStronglyConnectedComponentAlgorithm object.
@@ -58,11 +66,11 @@ namespace htd
             /**
              *  Create a new IStronglyConnectedComponentAlgorithm object.
              *
-             *  @param[in] instance The management instance which shall be assigned to the new IStronglyConnectedComponentAlgorithm object.
+             *  @param[in] manager   The management instance which shall be assigned to the new IStronglyConnectedComponentAlgorithm object.
              *
              *  @return A new IStronglyConnectedComponentAlgorithm object.
              */
-            htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
+            htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const;
 
             /**
              *  Set the default implementation of the IStronglyConnectedComponentAlgorithm interface.
@@ -80,27 +88,6 @@ namespace htd
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IStronglyConnectedComponentAlgorithm * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            StronglyConnectedComponentAlgorithmFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            StronglyConnectedComponentAlgorithmFactory(const StronglyConnectedComponentAlgorithmFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            StronglyConnectedComponentAlgorithmFactory & operator=(const StronglyConnectedComponentAlgorithmFactory & original);
     };
 }
 

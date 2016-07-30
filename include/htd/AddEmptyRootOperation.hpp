@@ -39,10 +39,12 @@ namespace htd
         public:
             /**
              *  Constructor for a new manipulation operation of type AddEmptyRootOperation.
+             *
+             *  @param[in] manager   The management instance to which the new manipulation operation belongs.
              */
-            AddEmptyRootOperation(void);
+            AddEmptyRootOperation(const htd::LibraryInstance * const manager);
 
-            ~AddEmptyRootOperation();
+            virtual ~AddEmptyRootOperation();
 
             void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -72,6 +74,10 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             AddEmptyRootOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -88,6 +94,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

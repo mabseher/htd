@@ -44,7 +44,7 @@ namespace htd
              */
             RandomVertexSelectionStrategy(std::size_t limit);
 
-            ~RandomVertexSelectionStrategy();
+            virtual ~RandomVertexSelectionStrategy();
 
             void selectVertices(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 

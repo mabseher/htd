@@ -34,9 +34,26 @@
 #include <memory>
 #include <stdexcept>
 
-htd::StronglyConnectedComponentAlgorithmFactory::StronglyConnectedComponentAlgorithmFactory(void)
+htd::StronglyConnectedComponentAlgorithmFactory::StronglyConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::TarjanStronglyConnectedComponentAlgorithm();
+    constructionTemplate_ = new htd::TarjanStronglyConnectedComponentAlgorithm(manager);
+}
+
+htd::StronglyConnectedComponentAlgorithmFactory::StronglyConnectedComponentAlgorithmFactory(const htd::StronglyConnectedComponentAlgorithmFactory & original)
+{
+    constructionTemplate_ = original.constructionTemplate_->clone();
+}
+
+htd::StronglyConnectedComponentAlgorithmFactory & htd::StronglyConnectedComponentAlgorithmFactory::operator=(const htd::StronglyConnectedComponentAlgorithmFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    }
+
+    return *this;
 }
 
 htd::StronglyConnectedComponentAlgorithmFactory::~StronglyConnectedComponentAlgorithmFactory()
@@ -49,23 +66,16 @@ htd::StronglyConnectedComponentAlgorithmFactory::~StronglyConnectedComponentAlgo
     }
 }
 
-htd::StronglyConnectedComponentAlgorithmFactory & htd::StronglyConnectedComponentAlgorithmFactory::instance(void)
-{
-    static htd::StronglyConnectedComponentAlgorithmFactory instance_;
-
-    return instance_;
-}
-
 htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgorithmFactory::getStronglyConnectedComponentAlgorithm(void) const
 {
     return constructionTemplate_->clone();
 }
 
-htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgorithmFactory::getStronglyConnectedComponentAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgorithmFactory::getStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const
 {
     htd::IStronglyConnectedComponentAlgorithm * ret = constructionTemplate_->clone();
 
-    ret->setManagementInstance(instance);
+    ret->setManagementInstance(manager);
 
     return ret;
 }

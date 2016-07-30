@@ -40,15 +40,18 @@ namespace htd
         public:
             /**
              *  Constructor for a multi-graph.
+             *
+             *  @param[in] manager   The management instance to which the new multi-graph belongs.
              */
-            MultiGraph(void);
+            MultiGraph(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a multi-graph.
              *
+             *  @param[in] manager       The management instance to which the new multi-graph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            MultiGraph(std::size_t initialSize);
+            MultiGraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a multi-graph.
@@ -64,7 +67,7 @@ namespace htd
              */
             MultiGraph(const htd::IMultiGraph & original);
 
-            ~MultiGraph();
+            virtual ~MultiGraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -142,6 +145,10 @@ namespace htd
 
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             MultiGraph * clone(void) const HTD_OVERRIDE;
 #else
@@ -173,8 +180,11 @@ namespace htd
 
             void assign(const htd::IMultiGraph & original) HTD_OVERRIDE;
 #endif
+
         private:
-            htd::IMutableMultiHypergraph * base_;
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

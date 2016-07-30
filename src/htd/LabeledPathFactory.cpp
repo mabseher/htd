@@ -32,9 +32,34 @@
 
 #include <stdexcept>
 
-htd::LabeledPathFactory::LabeledPathFactory(void)
+htd::LabeledPathFactory::LabeledPathFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::LabeledPath();
+    constructionTemplate_ = new htd::LabeledPath(manager);
+}
+
+htd::LabeledPathFactory::LabeledPathFactory(const htd::LabeledPathFactory & original)
+{
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledPath();
+#endif
+}
+
+htd::LabeledPathFactory & htd::LabeledPathFactory::operator=(const htd::LabeledPathFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    #else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledPath();
+    #endif
+    }
+
+    return *this;
 }
 
 htd::LabeledPathFactory::~LabeledPathFactory()
@@ -47,14 +72,7 @@ htd::LabeledPathFactory::~LabeledPathFactory()
     }
 }
 
-htd::LabeledPathFactory & htd::LabeledPathFactory::instance(void)
-{
-    static htd::LabeledPathFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(void)
+htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -63,7 +81,7 @@ htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(void)
 #endif
 }
 
-htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(const htd::ILabeledPath & original)
+htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(const htd::ILabeledPath & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledPath * ret = constructionTemplate_->clone();
@@ -93,12 +111,12 @@ void htd::LabeledPathFactory::setConstructionTemplate(htd::IMutableLabeledPath *
     constructionTemplate_ = original;
 }
 
-htd::IMutableLabeledPath & htd::LabeledPathFactory::accessMutableLabeledPath(htd::ILabeledPath & original)
+htd::IMutableLabeledPath & htd::LabeledPathFactory::accessMutableLabeledPath(htd::ILabeledPath & original) const
 {
     return *(dynamic_cast<htd::IMutableLabeledPath *>(&original));
 }
 
-const htd::IMutableLabeledPath & htd::LabeledPathFactory::accessMutableLabeledPath(const htd::ILabeledPath & original)
+const htd::IMutableLabeledPath & htd::LabeledPathFactory::accessMutableLabeledPath(const htd::ILabeledPath & original) const
 {
     return *(dynamic_cast<const htd::IMutableLabeledPath *>(&original));
 }

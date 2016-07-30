@@ -39,42 +39,171 @@
 #include <utility>
 #include <vector>
 
-htd::Path::Path(void) : size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_()
+/**
+ *  Private implementation details of class htd::Path.
+ */
+struct htd::Path::Implementation
 {
-
-}
-
-htd::Path::Path(const htd::Path & original) : size_(original.size_), root_(original.root_), next_edge_(original.next_edge_), next_vertex_(htd::Vertex::FIRST), vertices_(original.vertices_), nodes_()
-{
-    nodes_.reserve(original.nodes_.size());
-
-    for (const auto & node : original.nodes_)
+    /**
+     *  Structure representing a node of a path.
+     */
+    struct Node
     {
-        nodes_.insert(std::make_pair(node.first, new htd::Path::Node(*(node.second))));
+        /**
+         *  The ID of the path node.
+         */
+        htd::id_t id;
+
+        /**
+         *  The parent of the path node.
+         */
+        htd::vertex_t parent;
+
+        /**
+         *  The child of the path node.
+         */
+        htd::vertex_t child;
+
+        /**
+         *  Constructor for a path node.
+         *
+         *  @param[in] id       The ID of the constructed path node.
+         *  @param[in] parent   The parent of the constructed path node.
+         */
+        Node(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), child(htd::Vertex::UNKNOWN)
+        {
+
+        }
+    };
+
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_()
+    {
+
     }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  Copy constructor of the implementation details structure.
+     *
+     *  @param[in] original  The original implementation details structure.
+     */
+    Implementation(const Implementation & original)
+        : managementInstance_(original.managementInstance_),
+          size_(original.size_),
+          root_(original.root_),
+          next_edge_(original.next_edge_),
+          next_vertex_(original.next_vertex_),
+          vertices_(original.vertices_)
+    {
+        nodes_.reserve(original.nodes_.size());
+
+        for (const auto & node : original.nodes_)
+        {
+            nodes_.insert(std::make_pair(node.first, new Node(*(node.second))));
+        }
+    }
+
+    /**
+     *  Reset the path to an empty one.
+     */
+    void reset(void)
+    {
+        if (root_ != htd::Vertex::UNKNOWN)
+        {
+            for (auto it = nodes_.begin(); it != nodes_.end(); it++)
+            {
+                delete it->second;
+            }
+
+            nodes_.clear();
+        }
+
+        size_ = 0;
+
+        root_ = htd::Vertex::UNKNOWN;
+
+        next_edge_ = htd::Id::FIRST;
+
+        next_vertex_ = htd::Vertex::FIRST;
+
+        vertices_.clear();
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The size of the path.
+     */
+    std::size_t size_;
+
+    /**
+     *  The root vertex of the path.
+     */
+    htd::vertex_t root_;
+
+    /**
+     *  The ID the next edge added to the tree will get.
+     */
+    htd::id_t next_edge_;
+
+    /**
+     *  The ID the next vertex added to the path will get.
+     */
+    htd::vertex_t next_vertex_;
+
+    /**
+     *  The collection of all vertices of the path in ascending order.
+     */
+    std::vector<htd::vertex_t> vertices_;
+
+    /**
+     *  The map of pointers to all path nodes. It maps vertex IDs to the corresponding node information.
+     */
+    std::unordered_map<htd::id_t, Node *> nodes_;
+
+    /**
+     *  Delete a node of the path and perform an update of the internal state.
+     *
+     *  @param[in] node The node of the path which shall be removed.
+     */
+    void deleteNode(Node * node);
+};
+
+htd::Path::Path(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
+{
+
 }
 
-htd::Path::Path(const htd::IPath & original) : size_(0), root_(original.root()), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_()
+htd::Path::Path(const htd::Path & original) : implementation_(new Implementation(*(original.implementation_)))
+{
+
+}
+
+htd::Path::Path(const htd::IPath & original) : implementation_(new Implementation(original.managementInstance()))
 {
     *this = original;
 }
 
 htd::Path::~Path()
 {
-    if (root_ != htd::Vertex::UNKNOWN)
-    {
-        for (auto it = nodes_.begin(); it != nodes_.end(); it++)
-        {
-            delete it->second;
-        }
 
-        nodes_.clear();
-    }
 }
 
 std::size_t htd::Path::vertexCount(void) const
 {
-    return size_;
+    return implementation_->size_;
 }
 
 std::size_t htd::Path::vertexCount(htd::vertex_t subPathRoot) const
@@ -89,7 +218,7 @@ std::size_t htd::Path::vertexCount(htd::vertex_t subPathRoot) const
     {
         ++ret;
 
-        currentVertex = nodes_.at(currentVertex)->child;
+        currentVertex = implementation_->nodes_.at(currentVertex)->child;
     }
 
     return ret;
@@ -97,7 +226,7 @@ std::size_t htd::Path::vertexCount(htd::vertex_t subPathRoot) const
 
 std::size_t htd::Path::edgeCount(void) const
 {
-    return size_ > 0 ? size_ - 1 : 0;
+    return implementation_->size_ > 0 ? implementation_->size_ - 1 : 0;
 }
 
 std::size_t htd::Path::edgeCount(htd::vertex_t vertex) const
@@ -109,7 +238,7 @@ std::size_t htd::Path::edgeCount(htd::vertex_t vertex) const
 
 bool htd::Path::isVertex(htd::vertex_t vertex) const
 {
-    return vertex < next_vertex_ && vertex != htd::Vertex::UNKNOWN && nodes_.find(vertex) != nodes_.end();
+    return vertex < implementation_->next_vertex_ && vertex != htd::Vertex::UNKNOWN && implementation_->nodes_.count(vertex) == 1;
 }
 
 bool htd::Path::isEdge(htd::id_t edgeId) const
@@ -198,9 +327,9 @@ htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(const htd::ConstCol
 
 htd::vertex_t htd::Path::vertexAtPosition(htd::index_t index) const
 {
-    HTD_ASSERT(index < vertices_.size())
+    HTD_ASSERT(index < implementation_->vertices_.size())
 
-    return vertices_[index];
+    return implementation_->vertices_[index];
 }
 
 bool htd::Path::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
@@ -209,7 +338,7 @@ bool htd::Path::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
     
     if (isVertex(vertex) && isVertex(neighbor))
     {
-        const auto & node = nodes_.at(vertex);
+        const auto & node = implementation_->nodes_.at(vertex);
 
         ret = node->parent == neighbor || node->child == neighbor;
     }
@@ -233,7 +362,7 @@ std::size_t htd::Path::neighborCount(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        const auto & node = nodes_.at(vertex);
+        const auto & node = implementation_->nodes_.at(vertex);
 
         if (node->parent != htd::Vertex::UNKNOWN)
         {
@@ -257,7 +386,7 @@ htd::ConstCollection<htd::vertex_t> htd::Path::neighbors(htd::vertex_t vertex) c
 
     auto & result = ret.container();
 
-    const auto & node = nodes_.at(vertex);
+    const auto & node = implementation_->nodes_.at(vertex);
 
     if (node->parent != htd::Vertex::UNKNOWN)
     {
@@ -280,7 +409,7 @@ void htd::Path::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex
 
     std::size_t size = target.size();
 
-    const auto & node = nodes_.at(vertex);
+    const auto & node = implementation_->nodes_.at(vertex);
 
     if (node->parent != htd::Vertex::UNKNOWN)
     {
@@ -308,7 +437,12 @@ htd::vertex_t htd::Path::neighborAtPosition(htd::vertex_t vertex, htd::index_t i
 
 htd::ConstCollection<htd::vertex_t> htd::Path::vertices(void) const
 {
-    return htd::ConstCollection<htd::vertex_t>::getInstance(vertices_);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(implementation_->vertices_);
+}
+
+const std::vector<htd::vertex_t> & htd::Path::vertexVector(void) const
+{
+    return implementation_->vertices_;
 }
 
 std::size_t htd::Path::isolatedVertexCount(void) const
@@ -325,9 +459,9 @@ htd::vertex_t htd::Path::isolatedVertexAtPosition(htd::index_t index) const
 {
     HTD_UNUSED(index)
 
-    HTD_ASSERT(size_ == 1 && index == 0)
+    HTD_ASSERT(implementation_->size_ == 1 && index == 0)
 
-    return root_;
+    return implementation_->root_;
 }
 
 bool htd::Path::isIsolatedVertex(htd::vertex_t vertex) const
@@ -345,7 +479,7 @@ htd::ConstCollection<htd::Hyperedge> htd::Path::hyperedges(void) const
 
     htd::id_t id = 0;
 
-    for (const auto & currentNode : nodes_)
+    for (const auto & currentNode : implementation_->nodes_)
     {
         htd::vertex_t vertex = currentNode.first;
 
@@ -471,7 +605,7 @@ htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(const std::vec
 
     htd::id_t id = 0;
 
-    for (const auto & currentNode : nodes_)
+    for (const auto & currentNode : implementation_->nodes_)
     {
         htd::vertex_t vertex = currentNode.first;
 
@@ -516,7 +650,7 @@ htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(std::vector<ht
 
     htd::id_t id = 0;
 
-    for (const auto & currentNode : nodes_)
+    for (const auto & currentNode : implementation_->nodes_)
     {
         htd::vertex_t vertex = currentNode.first;
 
@@ -557,14 +691,14 @@ htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(std::vector<ht
 
 htd::vertex_t htd::Path::root(void) const
 {
-    HTD_ASSERT(root_ != htd::Vertex::UNKNOWN)
+    HTD_ASSERT(implementation_->root_ != htd::Vertex::UNKNOWN)
 
-    return root_;
+    return implementation_->root_;
 }
 
 bool htd::Path::isRoot(htd::vertex_t vertex) const
 {
-    return root_ == vertex;
+    return implementation_->root_ == vertex;
 }
 
 htd::vertex_t htd::Path::parent(htd::vertex_t vertex) const
@@ -573,7 +707,7 @@ htd::vertex_t htd::Path::parent(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        ret = nodes_.at(vertex)->parent;
+        ret = implementation_->nodes_.at(vertex)->parent;
     }
     
     return ret;
@@ -584,7 +718,7 @@ bool htd::Path::isParent(htd::vertex_t vertex, htd::vertex_t parent) const
     HTD_ASSERT(isVertex(vertex))
     HTD_ASSERT(isVertex(parent))
 
-    return nodes_.at(vertex)->parent == parent;
+    return implementation_->nodes_.at(vertex)->parent == parent;
 }
 
 std::size_t htd::Path::childCount(htd::vertex_t vertex) const
@@ -593,7 +727,7 @@ std::size_t htd::Path::childCount(htd::vertex_t vertex) const
     
     if (isVertex(vertex))
     {
-        if (nodes_.at(vertex)->child != htd::Vertex::UNKNOWN)
+        if (implementation_->nodes_.at(vertex)->child != htd::Vertex::UNKNOWN)
         {
             ++ret;
         }
@@ -608,9 +742,9 @@ htd::ConstCollection<htd::vertex_t> htd::Path::children(htd::vertex_t vertex) co
 
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    if (nodes_.at(vertex)->child != htd::Vertex::UNKNOWN)
+    if (implementation_->nodes_.at(vertex)->child != htd::Vertex::UNKNOWN)
     {
-        ret.container().push_back(nodes_.at(vertex)->child);
+        ret.container().emplace_back(implementation_->nodes_.at(vertex)->child);
     }
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
@@ -620,9 +754,9 @@ void htd::Path::copyChildrenTo(std::vector<htd::vertex_t> & target, htd::vertex_
 {
     HTD_ASSERT(isVertex(vertex))
 
-    if (nodes_.at(vertex)->child != htd::Vertex::UNKNOWN)
+    if (implementation_->nodes_.at(vertex)->child != htd::Vertex::UNKNOWN)
     {
-        target.push_back(nodes_.at(vertex)->child);
+        target.emplace_back(implementation_->nodes_.at(vertex)->child);
     }
 }
 
@@ -630,7 +764,7 @@ htd::vertex_t htd::Path::child(htd::vertex_t vertex) const
 {
     HTD_ASSERT(isVertex(vertex))
 
-    htd::vertex_t child = nodes_.at(vertex)->child;
+    htd::vertex_t child = implementation_->nodes_.at(vertex)->child;
 
     HTD_ASSERT(child != htd::Vertex::UNKNOWN)
 
@@ -643,7 +777,7 @@ htd::vertex_t htd::Path::childAtPosition(htd::vertex_t vertex, htd::index_t inde
 
     HTD_ASSERT(isVertex(vertex))
 
-    htd::vertex_t child = nodes_.at(vertex)->child;
+    htd::vertex_t child = implementation_->nodes_.at(vertex)->child;
 
     HTD_ASSERT(index == 0 && child != htd::Vertex::UNKNOWN)
     
@@ -655,12 +789,12 @@ bool htd::Path::isChild(htd::vertex_t vertex, htd::vertex_t child) const
     HTD_ASSERT(isVertex(vertex))
     HTD_ASSERT(isVertex(child))
 
-    return nodes_.at(vertex)->child == child;
+    return implementation_->nodes_.at(vertex)->child == child;
 }
 
 std::size_t htd::Path::height(void) const
 {
-    return height(root_);
+    return height(implementation_->root_);
 }
 
 std::size_t htd::Path::height(htd::vertex_t vertex) const
@@ -669,13 +803,13 @@ std::size_t htd::Path::height(htd::vertex_t vertex) const
 
     std::size_t ret = 0;
 
-    htd::vertex_t currentVertex = nodes_.at(vertex)->child;
+    htd::vertex_t currentVertex = implementation_->nodes_.at(vertex)->child;
 
     while (currentVertex != htd::Vertex::UNKNOWN)
     {
         ++ret;
 
-        currentVertex = nodes_.at(currentVertex)->child;
+        currentVertex = implementation_->nodes_.at(currentVertex)->child;
     }
 
     return ret;
@@ -687,13 +821,13 @@ std::size_t htd::Path::depth(htd::vertex_t vertex) const
 
     std::size_t ret = 0;
 
-    htd::vertex_t currentVertex = nodes_.at(vertex)->parent;
+    htd::vertex_t currentVertex = implementation_->nodes_.at(vertex)->parent;
 
     while (currentVertex != htd::Vertex::UNKNOWN)
     {
         ++ret;
 
-        currentVertex = nodes_.at(currentVertex)->parent;
+        currentVertex = implementation_->nodes_.at(currentVertex)->parent;
     }
 
     return ret;
@@ -701,50 +835,50 @@ std::size_t htd::Path::depth(htd::vertex_t vertex) const
 
 htd::vertex_t htd::Path::nextVertex(void) const
 {
-    return next_vertex_;
+    return implementation_->next_vertex_;
 }
 
 htd::id_t htd::Path::nextEdgeId(void) const
 {
-    return next_edge_;
+    return implementation_->next_edge_;
 }
 
 void htd::Path::removeVertex(htd::vertex_t vertex)
 {
     if (isVertex(vertex))
     {
-        auto & node = *(nodes_.at(vertex));
+        auto & node = *(implementation_->nodes_.at(vertex));
 
         if (node.parent != htd::Vertex::UNKNOWN)
         {
-            auto & parent = nodes_.at(node.parent);
+            auto & parent = implementation_->nodes_.at(node.parent);
 
             if (node.child != htd::Vertex::UNKNOWN)
             {
-                auto & child = nodes_.at(node.child);
+                auto & child = implementation_->nodes_.at(node.child);
 
                 child->parent = node.parent;
 
                 parent->child = node.child;
             }
 
-            deleteNode(&node);
+            implementation_->deleteNode(&node);
         }
         else
         {
             if (node.child != htd::Vertex::UNKNOWN)
             {
-                auto & child = *(nodes_.at(node.child));
+                auto & child = *(implementation_->nodes_.at(node.child));
 
                 child.parent = htd::Vertex::UNKNOWN;
 
-                root_ = node.child;
+                implementation_->root_ = node.child;
 
-                deleteNode(&node);
+                implementation_->deleteNode(&node);
             }
             else
             {
-                removeSubpath(root_);
+                removeSubpath(implementation_->root_);
             }
         }
     }
@@ -767,26 +901,26 @@ void htd::Path::removeSubpath(htd::vertex_t subpathRoot)
 
 htd::vertex_t htd::Path::insertRoot(void)
 {
-    if (root_ == htd::Vertex::UNKNOWN)
+    if (implementation_->root_ == htd::Vertex::UNKNOWN)
     {
-        root_ = htd::Vertex::FIRST;
+        implementation_->root_ = htd::Vertex::FIRST;
 
-        next_vertex_ = root_ + 1;
+        implementation_->next_vertex_ = implementation_->root_ + 1;
 
-        for (auto it = nodes_.begin(); it != nodes_.end(); it++)
+        for (auto it = implementation_->nodes_.begin(); it != implementation_->nodes_.end(); it++)
         {
             delete it->second;
         }
 
-        nodes_.clear();
-        nodes_.insert(std::make_pair(root_, new htd::Path::Node(root_, htd::Vertex::UNKNOWN)));
+        implementation_->nodes_.clear();
+        implementation_->nodes_.emplace(implementation_->root_, new Implementation::Node(implementation_->root_, htd::Vertex::UNKNOWN));
 
-        vertices_.push_back(root_);
+        implementation_->vertices_.push_back(implementation_->root_);
 
-        size_ = 1;
+        implementation_->size_ = 1;
     }
 
-    return root_;
+    return implementation_->root_;
 }
 
 htd::vertex_t htd::Path::addChild(htd::vertex_t vertex)
@@ -795,25 +929,25 @@ htd::vertex_t htd::Path::addChild(htd::vertex_t vertex)
     
     if (isVertex(vertex))
     {
-        htd::vertex_t child = nodes_.at(vertex)->child;
+        htd::vertex_t child = implementation_->nodes_.at(vertex)->child;
 
-        ret = next_vertex_;
+        ret = implementation_->next_vertex_;
 
-        nodes_.insert(std::make_pair(ret, new htd::Path::Node(ret, vertex)));
+        implementation_->nodes_.emplace(ret, new Implementation::Node(ret, vertex));
 
         if (child != htd::Vertex::UNKNOWN)
         {
-            nodes_.at(child)->parent = ret;
-            nodes_.at(ret)->child = child;
+            implementation_->nodes_.at(child)->parent = ret;
+            implementation_->nodes_.at(ret)->child = child;
         }
 
-        nodes_.at(vertex)->child = ret;
+        implementation_->nodes_.at(vertex)->child = ret;
 
-        vertices_.push_back(ret);
+        implementation_->vertices_.emplace_back(ret);
 
-        next_vertex_++;
+        implementation_->next_vertex_++;
 
-        size_++;
+        implementation_->size_++;
     }
     
     return ret;
@@ -823,7 +957,7 @@ void htd::Path::removeChild(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 
-    htd::vertex_t child = nodes_.at(vertex)->child;
+    htd::vertex_t child = implementation_->nodes_.at(vertex)->child;
 
     HTD_ASSERT(child != htd::Vertex::UNKNOWN)
 
@@ -835,7 +969,7 @@ void htd::Path::removeChild(htd::vertex_t vertex, htd::vertex_t child)
     HTD_ASSERT(isVertex(vertex))
     HTD_ASSERT(isVertex(child))
 
-    const auto & node = nodes_.at(vertex);
+    const auto & node = implementation_->nodes_.at(vertex);
 
     if (node->child == child)
     {
@@ -851,27 +985,27 @@ htd::vertex_t htd::Path::addParent(htd::vertex_t vertex)
 
     if (isRoot(vertex))
     {
-        auto & node = nodes_.at(vertex);
+        auto & node = implementation_->nodes_.at(vertex);
 
         if (node != nullptr)
         {
-            ret = next_vertex_;
+            ret = implementation_->next_vertex_;
 
-            auto * newRootNode = new htd::Path::Node(ret, htd::Vertex::UNKNOWN);
+            Implementation::Node * newRootNode = new Implementation::Node(ret, htd::Vertex::UNKNOWN);
 
             node->parent = ret;
 
             newRootNode->child = vertex;
 
-            nodes_.insert(std::make_pair(ret, newRootNode));
+            implementation_->nodes_.insert(std::make_pair(ret, newRootNode));
 
-            vertices_.push_back(ret);
+            implementation_->vertices_.push_back(ret);
 
-            next_vertex_++;
+            implementation_->next_vertex_++;
 
-            size_++;
+            implementation_->size_++;
 
-            root_ = ret;
+            implementation_->root_ = ret;
         }
     }
     else
@@ -880,9 +1014,9 @@ htd::vertex_t htd::Path::addParent(htd::vertex_t vertex)
 
         ret = addChild(parentVertex);
 
-        auto & parentNode = nodes_.at(parentVertex);
-        auto & selectedNode = nodes_.at(vertex);
-        auto & intermediateNode = nodes_.at(ret);
+        auto & parentNode = implementation_->nodes_.at(parentVertex);
+        auto & selectedNode = implementation_->nodes_.at(vertex);
+        auto & intermediateNode = implementation_->nodes_.at(ret);
 
         if (parentNode != nullptr && selectedNode != nullptr && intermediateNode != nullptr)
         {
@@ -901,7 +1035,7 @@ std::size_t htd::Path::leafCount(void) const HTD_NOEXCEPT
 {
     std::size_t ret = 0;
 
-    if (size_ > 0)
+    if (implementation_->size_ > 0)
     {
         ++ret;
     }
@@ -920,7 +1054,7 @@ htd::ConstCollection<htd::vertex_t> htd::Path::leaves(void) const
 
 void htd::Path::copyLeavesTo(std::vector<htd::vertex_t> & target) const
 {
-    for (const auto & node : nodes_)
+    for (const auto & node : implementation_->nodes_)
     {
         if (node.second->child == htd::Vertex::UNKNOWN)
         {
@@ -933,9 +1067,9 @@ void htd::Path::copyLeavesTo(std::vector<htd::vertex_t> & target) const
 
 htd::vertex_t htd::Path::leaf(void) const
 {
-    HTD_ASSERT(size_ > 0)
+    HTD_ASSERT(implementation_->size_ > 0)
 
-    for (const auto & node : nodes_)
+    for (const auto & node : implementation_->nodes_)
     {
         if (node.second->child == htd::Vertex::UNKNOWN)
         {
@@ -950,7 +1084,7 @@ htd::vertex_t htd::Path::leafAtPosition(htd::index_t index) const
 {
     HTD_UNUSED(index)
 
-    HTD_ASSERT(size_ > 0 && index == 0)
+    HTD_ASSERT(implementation_->size_ > 0 && index == 0)
 
     return leaf();
 }
@@ -959,10 +1093,10 @@ bool htd::Path::isLeaf(htd::vertex_t vertex) const
 {
     HTD_ASSERT(isVertex(vertex))
 
-    return nodes_.at(vertex)->child == htd::Vertex::UNKNOWN;
+    return implementation_->nodes_.at(vertex)->child == htd::Vertex::UNKNOWN;
 }
 
-void htd::Path::deleteNode(htd::Path::Node * node)
+void htd::Path::Implementation::deleteNode(Node * node)
 {
     if (node != nullptr)
     {
@@ -1009,13 +1143,13 @@ void htd::Path::swapWithParent(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 
-    Node & node = *(nodes_.at(vertex));
+    Implementation::Node & node = *(implementation_->nodes_.at(vertex));
 
     htd::vertex_t parent = node.parent;
 
     HTD_ASSERT(parent != htd::Vertex::UNKNOWN)
 
-    Node & parentNode = *(nodes_.at(parent));
+    Implementation::Node & parentNode = *(implementation_->nodes_.at(parent));
 
     std::swap(node.child, parentNode.child);
 
@@ -1027,22 +1161,34 @@ void htd::Path::swapWithParent(htd::vertex_t vertex)
 
     if (node.parent == htd::Vertex::UNKNOWN)
     {
-        root_ = vertex;
+        implementation_->root_ = vertex;
     }
     else
     {
-        nodes_.at(node.parent)->child = vertex;
+        implementation_->nodes_.at(node.parent)->child = vertex;
     }
 
     if (node.child != htd::Vertex::UNKNOWN)
     {
-        nodes_.at(node.child)->parent = vertex;
+        implementation_->nodes_.at(node.child)->parent = vertex;
     }
 
     if (parentNode.child != htd::Vertex::UNKNOWN)
     {
-        nodes_.at(parentNode.child)->parent = parent;
+        implementation_->nodes_.at(parentNode.child)->parent = parent;
     }
+}
+
+const htd::LibraryInstance * htd::Path::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::Path::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
 }
 
 htd::Path * htd::Path::clone(void) const
@@ -1091,29 +1237,26 @@ htd::Path & htd::Path::operator=(const htd::Path & original)
 {
     if (this != &original)
     {
-        if (this->root_ != htd::Vertex::UNKNOWN)
+        implementation_->reset();
+
+        implementation_->nodes_.reserve(original.implementation_->nodes_.size());
+
+        for (const auto & node : original.implementation_->nodes_)
         {
-            removeSubpath(root_);
+            implementation_->nodes_.emplace(node.first, new Implementation::Node(*(node.second)));
         }
 
-        nodes_.reserve(original.nodes_.size());
+        implementation_->root_ = original.implementation_->root_;
 
-        for (const auto & node : original.nodes_)
+        implementation_->size_ = original.implementation_->size_;
+
+        if (original.implementation_->next_vertex_ >= htd::Vertex::FIRST)
         {
-            nodes_.insert(std::make_pair(node.first, new htd::Path::Node(*(node.second))));
-        }
-
-        this->root_ = original.root_;
-
-        this->size_ = original.size_;
-
-        if (original.next_vertex_ >= htd::Vertex::FIRST)
-        {
-            next_vertex_ = original.next_vertex_;
+            implementation_->next_vertex_ = original.implementation_->next_vertex_;
         }
         else
         {
-            next_vertex_ = htd::Vertex::FIRST;
+            implementation_->next_vertex_ = htd::Vertex::FIRST;
         }
     }
 
@@ -1124,34 +1267,31 @@ htd::Path & htd::Path::operator=(const htd::IPath & original)
 {
     if (this != &original)
     {
-        if (this->root_ != htd::Vertex::UNKNOWN)
+        implementation_->reset();
+
+        implementation_->size_ = original.vertexCount();
+
+        if (implementation_->size_ > 0)
         {
-            removeSubpath(root_);
-        }
+            implementation_->root_ = original.root();
 
-        size_ = original.vertexCount();
-
-        if (size_ > 0)
-        {
-            root_ = original.root();
-
-            htd::vertex_t maximumVertex = root_;
+            htd::vertex_t maximumVertex = implementation_->root_;
 
             const htd::ConstCollection<htd::vertex_t> & vertexCollection = original.vertices();
 
-            std::copy(vertexCollection.begin(), vertexCollection.end(), std::back_inserter(vertices_));
+            std::copy(vertexCollection.begin(), vertexCollection.end(), std::back_inserter(implementation_->vertices_));
 
-            for (htd::vertex_t vertex : vertices_)
+            for (htd::vertex_t vertex : implementation_->vertices_)
             {
-                htd::Path::Node * newNode = nullptr;
+                Implementation::Node * newNode = nullptr;
 
                 if (original.isRoot(vertex))
                 {
-                    newNode = new htd::Path::Node(vertex, htd::Vertex::UNKNOWN);
+                    newNode = new Implementation::Node(vertex, htd::Vertex::UNKNOWN);
                 }
                 else
                 {
-                    newNode = new htd::Path::Node(vertex, original.parent(vertex));
+                    newNode = new Implementation::Node(vertex, original.parent(vertex));
                 }
 
                 if (!original.isLeaf(vertex))
@@ -1159,7 +1299,7 @@ htd::Path & htd::Path::operator=(const htd::IPath & original)
                     newNode->child = original.child(vertex);
                 }
 
-                nodes_.insert(std::make_pair(vertex, newNode));
+                implementation_->nodes_.emplace(vertex, newNode);
 
                 if (vertex > maximumVertex)
                 {
@@ -1169,11 +1309,11 @@ htd::Path & htd::Path::operator=(const htd::IPath & original)
 
             if (maximumVertex >= htd::Vertex::FIRST)
             {
-                next_vertex_ = maximumVertex + 1;
+                implementation_->next_vertex_ = maximumVertex + 1;
             }
             else
             {
-                next_vertex_ = htd::Vertex::FIRST;
+                implementation_->next_vertex_ = htd::Vertex::FIRST;
             }
         }
     }

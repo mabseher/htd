@@ -88,7 +88,7 @@ namespace htd
             /**
              *  Destructor for a Collection object.
              */
-            ~Collection()
+            virtual ~Collection()
             {
 
             }

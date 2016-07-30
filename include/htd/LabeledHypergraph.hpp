@@ -39,15 +39,18 @@ namespace htd
         public:
             /**
              *  Constructor for a labeled hypergraph.
+             *
+             *  @param[in] manager   The management instance to which the new labeled hypergraph belongs.
              */
-            LabeledHypergraph(void);
+            LabeledHypergraph(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a labeled hypergraph.
              *
+             *  @param[in] manager       The management instance to which the new labeled hypergraph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            LabeledHypergraph(std::size_t initialSize);
+            LabeledHypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a labeled hypergraph.

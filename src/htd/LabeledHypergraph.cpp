@@ -32,12 +32,12 @@
 
 #include <stdexcept>
 
-htd::LabeledHypergraph::LabeledHypergraph(void) : htd::Hypergraph::Hypergraph(), labelings_(new htd::LabelingCollection())
+htd::LabeledHypergraph::LabeledHypergraph(const htd::LibraryInstance * const manager) : htd::Hypergraph::Hypergraph(manager), labelings_(new htd::LabelingCollection())
 {
 
 }
 
-htd::LabeledHypergraph::LabeledHypergraph(std::size_t initialSize) : htd::Hypergraph::Hypergraph(initialSize), labelings_(new htd::LabelingCollection())
+htd::LabeledHypergraph::LabeledHypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : htd::Hypergraph::Hypergraph(manager, initialSize), labelings_(new htd::LabelingCollection())
 {
 
 }

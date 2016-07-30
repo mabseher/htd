@@ -49,7 +49,7 @@ namespace htd
              */
             SingleNeighborVertexSelectionStrategy(std::size_t limit);
 
-            ~SingleNeighborVertexSelectionStrategy();
+            virtual ~SingleNeighborVertexSelectionStrategy();
 
             void selectVertices(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 

@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~LabeledTreeFactory();
+            LabeledTreeFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static LabeledTreeFactory & instance(void);
+            LabeledTreeFactory(const LabeledTreeFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            LabeledTreeFactory & operator=(const LabeledTreeFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~LabeledTreeFactory();
 
             /**
              *  Create a new IMutableLabeledTree object.
              *
              *  @return A new IMutableLabeledTree object.
              */
-            htd::IMutableLabeledTree * getLabeledTree(void);
+            htd::IMutableLabeledTree * getLabeledTree(void) const;
 
             /**
              *  Create a new IMutableLabeledTree object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledTree object identical to the given original graph.
              */
-            htd::IMutableLabeledTree * getLabeledTree(const htd::ILabeledTree & original);
+            htd::IMutableLabeledTree * getLabeledTree(const htd::ILabeledTree & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledTree interface.
@@ -80,41 +88,20 @@ namespace htd
              *
              *  @return The mutable interface of the given labeled tree.
              */
-            htd::IMutableLabeledTree & accessMutableLabeledTree(htd::ILabeledTree & original);
+            htd::IMutableLabeledTree & accessMutableLabeledTree(htd::ILabeledTree & original) const;
 
             /**
              *  Access the mutable interface of a given labeled tree.
              *
              *  @return The mutable interface of the given labeled tree.
              */
-            const htd::IMutableLabeledTree & accessMutableLabeledTree(const htd::ILabeledTree & original);
+            const htd::IMutableLabeledTree & accessMutableLabeledTree(const htd::ILabeledTree & original) const;
 
         private:
             /**
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IMutableLabeledTree * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            LabeledTreeFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            LabeledTreeFactory(const LabeledTreeFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            LabeledTreeFactory & operator=(const LabeledTreeFactory & original);
     };
 }
 

@@ -42,7 +42,7 @@ namespace htd
         public:
             TdFormatExporter(void);
 
-            ~TdFormatExporter();
+            virtual ~TdFormatExporter();
 
             void write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
 

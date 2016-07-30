@@ -39,16 +39,24 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~HypertreeDecompositionAlgorithmFactory();
+            HypertreeDecompositionAlgorithmFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static HypertreeDecompositionAlgorithmFactory & instance(void);
+            HypertreeDecompositionAlgorithmFactory(const HypertreeDecompositionAlgorithmFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            HypertreeDecompositionAlgorithmFactory & operator=(const HypertreeDecompositionAlgorithmFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~HypertreeDecompositionAlgorithmFactory();
 
             /**
              *  Create a new IHypertreeDecompositionAlgorithm object.
@@ -60,11 +68,11 @@ namespace htd
             /**
              *  Create a new IHypertreeDecompositionAlgorithm object.
              *
-             *  @param[in] instance The management instance which shall be assigned to the new IHypertreeDecompositionAlgorithm object.
+             *  @param[in] manager   The management instance which shall be assigned to the new IHypertreeDecompositionAlgorithm object.
              *
              *  @return A new IHypertreeDecompositionAlgorithm object.
              */
-            htd::IHypertreeDecompositionAlgorithm * getHypertreeDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
+            htd::IHypertreeDecompositionAlgorithm * getHypertreeDecompositionAlgorithm(const htd::LibraryInstance * const manager) const;
 
             /**
              *  Set the default implementation of the IHypertreeDecompositionAlgorithm interface.
@@ -119,27 +127,6 @@ namespace htd
             std::vector<htd::ILabelingFunction *> labelingFunctions_;
 
             std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            HypertreeDecompositionAlgorithmFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            HypertreeDecompositionAlgorithmFactory(const HypertreeDecompositionAlgorithmFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            HypertreeDecompositionAlgorithmFactory & operator=(const HypertreeDecompositionAlgorithmFactory & original);
     };
 }
 

@@ -37,7 +37,7 @@ class IteratorTest : public ::testing::Test
 
         }
 
-        ~IteratorTest()
+        virtual ~IteratorTest()
         {
 
         }

@@ -33,7 +33,33 @@
 #include <string>
 #include <stdexcept>
 
-htd::HgrFormatImporter::HgrFormatImporter(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::HgrFormatImporter.
+ */
+struct htd::HgrFormatImporter::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::HgrFormatImporter::HgrFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -59,13 +85,15 @@ htd::IMultiHypergraph * htd::HgrFormatImporter::import(std::istream & stream) co
 
     bool error = false;
 
-    htd::IMutableMultiHypergraph * ret = htd::MultiHypergraphFactory::instance().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * ret = implementation_->managementInstance_->multiHypergraphFactory().getMultiHypergraph();
+
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
     if (stream.good())
     {
         std::string line;
 
-        while (!error && std::getline(stream, line) && !isTerminated())
+        while (!error && std::getline(stream, line) && !managementInstance.isTerminated())
         {
             if (line.empty())
             {
@@ -146,7 +174,7 @@ htd::IMultiHypergraph * htd::HgrFormatImporter::import(std::istream & stream) co
             }
         }
 
-        if (edgeCount != 0 && !isTerminated())
+        if (edgeCount != 0 && !managementInstance.isTerminated())
         {
             error = true;
         }

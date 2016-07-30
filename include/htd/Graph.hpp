@@ -38,15 +38,18 @@ namespace htd
         public:
             /**
              *  Constructor for a graph.
+             *
+             *  @param[in] manager   The management instance to which the new graph belongs.
              */
-            Graph(void);
+            Graph(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a graph.
              *
+             *  @param[in] manager       The management instance to which the new graph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            Graph(std::size_t initialSize);
+            Graph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a graph.
@@ -62,7 +65,7 @@ namespace htd
              */
             Graph(const htd::IGraph & original);
 
-            ~Graph();
+            virtual ~Graph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -141,6 +144,10 @@ namespace htd
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
             void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Graph * clone(void) const HTD_OVERRIDE;

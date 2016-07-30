@@ -28,7 +28,45 @@
 #include <htd/Globals.hpp>
 #include <htd/AddIdenticalJoinNodeParentOperation.hpp>
 
-htd::AddIdenticalJoinNodeParentOperation::AddIdenticalJoinNodeParentOperation(bool enforceAdditionalNode) : htd::LibraryObject(), enforceAdditionalNode_(enforceAdditionalNode)
+/**
+ *  Private implementation details of class htd::AddIdenticalJoinNodeParentOperation.
+ */
+struct htd::AddIdenticalJoinNodeParentOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     *
+     *  @param[in] enforceAdditionalNode    Set this option to true to enforce a new parent node for join
+     *  nodes also in those cases where the bag contents of the join node and its old parent did already
+     *  match. If this option is set to false, no action will be triggered for join nodes for which the
+     *  nodes' bag content already matches the parent's bag content.
+     */
+    Implementation(const htd::LibraryInstance * const manager, bool enforceAdditionalNode) : managementInstance_(manager), enforceAdditionalNode_(enforceAdditionalNode)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  If this flag is set to true, a new parent node for join nodes is enforced also in those cases where the bag contents of the join
+     *  node and its old parent did already match. If this flag is set to false, no action will be triggered for join nodes for which
+     *  the nodes' bag content already matches the parent's bag content.
+     */
+    bool enforceAdditionalNode_;
+};
+
+htd::AddIdenticalJoinNodeParentOperation::AddIdenticalJoinNodeParentOperation(const htd::LibraryInstance * const manager, bool enforceAdditionalNode) : implementation_(new Implementation(manager, enforceAdditionalNode))
 {
 
 }
@@ -65,7 +103,7 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(const htd::IMultiHypergraph
         std::cout << std::endl << std::endl;
         )
 
-        if (enforceAdditionalNode_ || decomposition.bagContent(decomposition.parent(node)) != bag)
+        if (implementation_->enforceAdditionalNode_ || decomposition.bagContent(decomposition.parent(node)) != bag)
         {
             htd::vertex_t newParent = decomposition.addParent(node);
 
@@ -105,7 +143,7 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(const htd::IMultiHypergraph
             std::cout << std::endl << std::endl;
             )
 
-            if (enforceAdditionalNode_ || decomposition.bagContent(decomposition.parent(vertex)) != bag)
+            if (implementation_->enforceAdditionalNode_ || decomposition.bagContent(decomposition.parent(vertex)) != bag)
             {
                 htd::vertex_t newParent = decomposition.addParent(vertex);
 
@@ -160,13 +198,21 @@ bool htd::AddIdenticalJoinNodeParentOperation::createsLocationDependendLabels(vo
     return false;
 }
 
+const htd::LibraryInstance * htd::AddIdenticalJoinNodeParentOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::AddIdenticalJoinNodeParentOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::AddIdenticalJoinNodeParentOperation * htd::AddIdenticalJoinNodeParentOperation::clone(void) const
 {
-    htd::AddIdenticalJoinNodeParentOperation * ret = new htd::AddIdenticalJoinNodeParentOperation();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::AddIdenticalJoinNodeParentOperation(implementation_->managementInstance_, implementation_->enforceAdditionalNode_);
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

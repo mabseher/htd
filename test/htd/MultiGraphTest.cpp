@@ -36,7 +36,7 @@ class MultiGraphTest : public ::testing::Test
 
         }
 
-        ~MultiGraphTest()
+        virtual ~MultiGraphTest()
         {
 
         }
@@ -54,7 +54,9 @@ class MultiGraphTest : public ::testing::Test
 
 TEST(MultiGraphTest, CheckEmptyGraph)
 {
-    htd::MultiGraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiGraph graph(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -66,11 +68,15 @@ TEST(MultiGraphTest, CheckEmptyGraph)
     ASSERT_EQ((std::size_t)0, graph.isolatedVertices().size());
 
     ASSERT_TRUE(graph.isConnected());
+
+    delete libraryInstance;
 }
 
 TEST(MultiGraphTest, CheckSizeInitializedGraph1)
 {
-    htd::MultiGraph graph(1);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiGraph graph(libraryInstance, 1);
 
     ASSERT_EQ((std::size_t)1, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -101,11 +107,15 @@ TEST(MultiGraphTest, CheckSizeInitializedGraph1)
 
     ASSERT_TRUE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+
+    delete libraryInstance;
 }
 
 TEST(MultiGraphTest, CheckSizeInitializedGraph2)
 {
-    htd::MultiGraph graph(3);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiGraph graph(libraryInstance, 3);
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -237,11 +247,15 @@ TEST(MultiGraphTest, CheckSizeInitializedGraph2)
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)3));
+
+    delete libraryInstance;
 }
 
 TEST(MultiGraphTest, CheckSelfLoop)
 {
-    htd::MultiGraph graph(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiGraph graph(libraryInstance, 2);
 
     ASSERT_EQ((std::size_t)2, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -344,11 +358,15 @@ TEST(MultiGraphTest, CheckSelfLoop)
     ASSERT_EQ((htd::vertex_t)1, graph.neighbors((htd::vertex_t)2)[0]);
     ASSERT_EQ((htd::vertex_t)2, graph.neighborAtPosition((htd::vertex_t)1, 0));
     ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)2, 0));
+
+    delete libraryInstance;
 }
 
 TEST(MultiGraphTest, CheckGraphModifications)
 {
-    htd::MultiGraph graph(3);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiGraph graph(libraryInstance, 3);
 
     std::vector<htd::vertex_t> neighbors1;
     std::vector<htd::vertex_t> neighbors2;
@@ -499,11 +517,15 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_TRUE(graph.isVertex(5));
     ASSERT_TRUE(graph.isVertex(6));
     ASSERT_TRUE(graph.isVertex(7));
+
+    delete libraryInstance;
 }
 
 TEST(MultiGraphTest, CheckCopyConstructors)
 {
-    htd::MultiGraph graph1(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiGraph graph1(libraryInstance, 2);
 
     ASSERT_EQ((std::size_t)2, graph1.vertexCount());
     ASSERT_EQ((std::size_t)0, graph1.edgeCount());
@@ -525,7 +547,7 @@ TEST(MultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)1, graph3.edgeCount());
 
-    htd::MultiGraph graph4;
+    htd::MultiGraph graph4(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph4.vertexCount());
     ASSERT_EQ((std::size_t)0, graph4.edgeCount());
@@ -558,6 +580,8 @@ TEST(MultiGraphTest, CheckCopyConstructors)
     ASSERT_FALSE(clonedGraph->isEdge(edgeId1));
 
     delete clonedGraph;
+
+    delete libraryInstance;
 }
 
 int main(int argc, char **argv)

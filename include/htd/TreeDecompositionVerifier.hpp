@@ -41,7 +41,7 @@ namespace htd
              */
             TreeDecompositionVerifier(void);
                         
-            ~TreeDecompositionVerifier();
+            virtual ~TreeDecompositionVerifier();
                         
             bool verify(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE;
             

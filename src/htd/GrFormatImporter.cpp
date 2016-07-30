@@ -33,7 +33,33 @@
 #include <string>
 #include <stdexcept>
 
-htd::GrFormatImporter::GrFormatImporter(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::GrFormatImporter.
+ */
+struct htd::GrFormatImporter::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::GrFormatImporter::GrFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -59,13 +85,15 @@ htd::IMultiGraph * htd::GrFormatImporter::import(std::istream & stream) const
 
     bool error = false;
 
-    htd::IMutableMultiGraph * ret = htd::MultiGraphFactory::instance().getMultiGraph();
+    htd::IMutableMultiGraph * ret = implementation_->managementInstance_->multiGraphFactory().getMultiGraph();
+
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
     if (stream.good())
     {
         std::string line;
 
-        while (!error && std::getline(stream, line) && !isTerminated())
+        while (!error && std::getline(stream, line) && !managementInstance.isTerminated())
         {
             if (line.empty())
             {
@@ -139,7 +167,7 @@ htd::IMultiGraph * htd::GrFormatImporter::import(std::istream & stream) const
             }
         }
 
-        if (edgeCount != 0 && !isTerminated())
+        if (edgeCount != 0 && !managementInstance.isTerminated())
         {
             error = true;
         }

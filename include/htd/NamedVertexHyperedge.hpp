@@ -107,7 +107,7 @@ namespace htd
             /**
              *  Destructor for a NamedVertexHyperedge object.
              */
-            ~NamedVertexHyperedge()
+            virtual ~NamedVertexHyperedge()
             {
 
             }

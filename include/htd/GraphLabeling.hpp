@@ -42,7 +42,7 @@ namespace htd
         public:
             GraphLabeling(void);
 
-            ~GraphLabeling();
+            virtual ~GraphLabeling();
 
             std::size_t vertexLabelCount(void) const HTD_OVERRIDE;
 

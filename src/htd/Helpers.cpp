@@ -27,6 +27,15 @@
 
 #include <htd/Helpers.hpp>
 
+htd::LibraryInstance * htd::createManagementInstance(htd::id_t id)
+{
+    htd::LibraryInstance * ret = new htd::LibraryInstance(id);
+
+    ret->initializeFactoryClasses(ret);
+
+    return ret;
+}
+
 void htd::print(bool input)
 {
     print(input, std::cout);

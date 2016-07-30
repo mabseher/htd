@@ -32,9 +32,34 @@
 
 #include <stdexcept>
 
-htd::PathDecompositionFactory::PathDecompositionFactory(void)
+htd::PathDecompositionFactory::PathDecompositionFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::PathDecomposition();
+    constructionTemplate_ = new htd::PathDecomposition(manager);
+}
+
+htd::PathDecompositionFactory::PathDecompositionFactory(const htd::PathDecompositionFactory & original)
+{
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneMutablePathDecomposition();
+#endif
+}
+
+htd::PathDecompositionFactory & htd::PathDecompositionFactory::operator=(const htd::PathDecompositionFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    #else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutablePathDecomposition();
+    #endif
+    }
+
+    return *this;
 }
 
 htd::PathDecompositionFactory::~PathDecompositionFactory()
@@ -47,14 +72,7 @@ htd::PathDecompositionFactory::~PathDecompositionFactory()
     }
 }
 
-htd::PathDecompositionFactory & htd::PathDecompositionFactory::instance(void)
-{
-    static htd::PathDecompositionFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposition(void)
+htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposition(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -63,7 +81,7 @@ htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposi
 #endif
 }
 
-htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposition(const htd::IPathDecomposition & original)
+htd::IMutablePathDecomposition * htd::PathDecompositionFactory::getPathDecomposition(const htd::IPathDecomposition & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutablePathDecomposition * ret = constructionTemplate_->clone();
@@ -93,12 +111,12 @@ void htd::PathDecompositionFactory::setConstructionTemplate(htd::IMutablePathDec
     constructionTemplate_ = original;
 }
 
-htd::IMutablePathDecomposition & htd::PathDecompositionFactory::accessMutablePathDecomposition(htd::IPathDecomposition & original)
+htd::IMutablePathDecomposition & htd::PathDecompositionFactory::accessMutablePathDecomposition(htd::IPathDecomposition & original) const
 {
     return *(dynamic_cast<htd::IMutablePathDecomposition *>(&original));
 }
 
-const htd::IMutablePathDecomposition & htd::PathDecompositionFactory::accessMutablePathDecomposition(const htd::IPathDecomposition & original)
+const htd::IMutablePathDecomposition & htd::PathDecompositionFactory::accessMutablePathDecomposition(const htd::IPathDecomposition & original) const
 {
     return *(dynamic_cast<const htd::IMutablePathDecomposition *>(&original));
 }

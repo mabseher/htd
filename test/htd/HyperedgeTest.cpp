@@ -36,7 +36,7 @@ class HyperedgeTest : public ::testing::Test
 
         }
 
-        ~HyperedgeTest()
+        virtual ~HyperedgeTest()
         {
 
         }

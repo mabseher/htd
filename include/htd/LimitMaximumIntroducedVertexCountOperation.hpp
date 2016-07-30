@@ -44,21 +44,13 @@ namespace htd
             /**
              *  Constructor for a new manipulation operation of type LimitMaximumIntroducedVertexCountOperation.
              *
-             *  @param[in] limit    The maximum number of introduced vertices for a decomposition node.
-             *
-             *  @note Leaf nodes are not treated as introduce nodes by default, i.e. the provided limit does not apply to leaf nodes.
-             */
-            LimitMaximumIntroducedVertexCountOperation(std::size_t limit);
-
-            /**
-             *  Constructor for a new manipulation operation of type LimitMaximumIntroducedVertexCountOperation.
-             *
+             *  @param[in] manager                           The management instance to which the new manipulation operation belongs.
              *  @param[in] limit                            The maximum number of introduced vertices for a decomposition node.
              *  @param[in] treatLeafNodesAsIntroduceNodes   A boolean flag whether leaf nodes shall be treated as introduce nodes in the context of this operation.
              */
-            LimitMaximumIntroducedVertexCountOperation(std::size_t limit, bool treatLeafNodesAsIntroduceNodes);
+            LimitMaximumIntroducedVertexCountOperation(const htd::LibraryInstance * const manager, std::size_t limit, bool treatLeafNodesAsIntroduceNodes = false);
 
-            ~LimitMaximumIntroducedVertexCountOperation();
+            virtual ~LimitMaximumIntroducedVertexCountOperation();
 
             void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -88,6 +80,10 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LimitMaximumIntroducedVertexCountOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -104,10 +100,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
-        private:
-            std::size_t limit_;
 
-            bool treatLeafNodesAsIntroduceNodes_;
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

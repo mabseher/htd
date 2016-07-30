@@ -30,7 +30,6 @@
 #include <htd/Id.hpp>
 #include <htd/State.hpp>
 #include <htd/Vertex.hpp>
-#include <htd/Library.hpp>
 
 #include <cstdlib>
 

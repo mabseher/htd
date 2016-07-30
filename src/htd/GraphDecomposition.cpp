@@ -33,7 +33,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-htd::GraphDecomposition::GraphDecomposition(void) : htd::LabeledMultiHypergraph::LabeledMultiHypergraph(), bagContent_(), inducedEdges_()
+htd::GraphDecomposition::GraphDecomposition(const htd::LibraryInstance * const manager) : htd::LabeledMultiHypergraph::LabeledMultiHypergraph(manager), bagContent_(), inducedEdges_()
 {
 
 }

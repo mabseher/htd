@@ -26,6 +26,7 @@
 #define	HTD_HTD_MULTIHYPERGRAPH_HPP
 
 #include <htd/IMutableMultiHypergraph.hpp>
+#include <htd/LibraryInstance.hpp>
 
 #include <vector>
 #include <unordered_set>
@@ -40,15 +41,18 @@ namespace htd
         public:
             /**
              *  Constructor for a multi-hypergraph.
+             *
+             *  @param[in] manager   The management instance to which the new multi-hypergraph belongs.
              */
-            MultiHypergraph(void);
+            MultiHypergraph(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a multi-hypergraph.
              *
+             *  @param[in] manager       The management instance to which the new multi-hypergraph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            MultiHypergraph(std::size_t initialSize);
+            MultiHypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a multi-hypergraph.
@@ -106,6 +110,13 @@ namespace htd
 
             htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
 
+            /**
+             *  Access the vector of all vertices in the tree.
+             *
+             *  @return The vector of all vertices in the tree sorted in ascending order.
+             */
+            const std::vector<htd::vertex_t> & vertexVector(void) const;
+
             std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const HTD_OVERRIDE;
@@ -152,6 +163,10 @@ namespace htd
 
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             MultiHypergraph * clone(void) const HTD_OVERRIDE;
 #else
@@ -183,21 +198,9 @@ namespace htd
 #endif
 
         private:
-            std::size_t size_;
+            HTD_IMPLEMENTATION Implementation;
 
-            htd::index_t next_edge_;
-
-            htd::vertex_t next_vertex_;
-
-            std::vector<htd::vertex_t> vertices_;
-
-            std::unordered_set<htd::vertex_t> selfLoops_;
-
-            std::unordered_set<htd::vertex_t> deletions_;
-
-            std::shared_ptr<std::vector<htd::Hyperedge>> edges_;
-
-            std::vector<std::vector<htd::vertex_t>> neighborhood_;
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

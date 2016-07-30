@@ -35,7 +35,33 @@
 #include <unordered_map>
 #include <vector>
 
-htd::InducedSubgraphLabelingOperation::InducedSubgraphLabelingOperation(const htd::IMultiHypergraph & graph) : htd::LibraryObject(), graph_(graph)
+/**
+ *  Private implementation details of class htd::InducedSubgraphLabelingOperation.
+ */
+struct htd::InducedSubgraphLabelingOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::InducedSubgraphLabelingOperation::InducedSubgraphLabelingOperation(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -59,7 +85,6 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
 
 void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    HTD_UNUSED(graph)
     HTD_UNUSED(labelingFunctions)
 
     htd::index_t index = 0;
@@ -68,7 +93,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
 
     std::vector<htd::Hyperedge> hyperedges;
 
-    for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
+    for (const htd::Hyperedge & hyperedge : graph.hyperedges())
     {
         hyperedgeIndices[hyperedge.id()] = index;
 
@@ -206,7 +231,6 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
 
 void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
 {
-    HTD_UNUSED(graph)
     HTD_UNUSED(labelingFunctions)
 
     htd::index_t index = 0;
@@ -215,7 +239,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
 
     std::vector<htd::Hyperedge> hyperedges;
 
-    for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
+    for (const htd::Hyperedge & hyperedge : graph.hyperedges())
     {
         hyperedgeIndices[hyperedge.id()] = index;
 
@@ -374,13 +398,21 @@ bool htd::InducedSubgraphLabelingOperation::createsLocationDependendLabels(void)
     return true;
 }
 
+const htd::LibraryInstance * htd::InducedSubgraphLabelingOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::InducedSubgraphLabelingOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::InducedSubgraphLabelingOperation * htd::InducedSubgraphLabelingOperation::clone(void) const
 {
-    htd::InducedSubgraphLabelingOperation * ret = new htd::InducedSubgraphLabelingOperation(graph_);
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::InducedSubgraphLabelingOperation(implementation_->managementInstance_);
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

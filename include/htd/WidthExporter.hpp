@@ -43,7 +43,7 @@ namespace htd
         public:
             WidthExporter(void);
 
-            ~WidthExporter();
+            virtual ~WidthExporter();
 
             void write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
 

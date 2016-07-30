@@ -39,7 +39,7 @@ namespace htd
         public:
             ExhaustiveVertexSelectionStrategy(void);
 
-            ~ExhaustiveVertexSelectionStrategy();
+            virtual ~ExhaustiveVertexSelectionStrategy();
 
             void selectVertices(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 

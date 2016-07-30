@@ -36,7 +36,7 @@ class TreeTest : public ::testing::Test
 
         }
 
-        ~TreeTest()
+        virtual ~TreeTest()
         {
 
         }
@@ -54,7 +54,9 @@ class TreeTest : public ::testing::Test
 
 TEST(TreeTest, CheckEmptyTree)
 {
-    htd::Tree tree;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Tree tree(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
     ASSERT_EQ((std::size_t)0, tree.edgeCount());
@@ -74,11 +76,15 @@ TEST(TreeTest, CheckEmptyTree)
     ASSERT_EQ(htd::Vertex::FIRST, tree.nextVertex());
 
     ASSERT_EQ(htd::Id::FIRST, tree.nextEdgeId());
+
+    delete libraryInstance;
 }
 
 TEST(TreeTest, CheckSize1Tree)
 {
-    htd::Tree tree;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Tree tree(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
     ASSERT_EQ((std::size_t)0, tree.edgeCount());
@@ -128,11 +134,15 @@ TEST(TreeTest, CheckSize1Tree)
     ASSERT_EQ((std::size_t)0, tree.height());
     ASSERT_EQ((std::size_t)0, tree.height(1));
     ASSERT_EQ((std::size_t)0, tree.depth(1));
+
+    delete libraryInstance;
 }
 
 TEST(TreeTest, CheckSize3Tree)
 {
-    htd::Tree tree;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Tree tree(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
     ASSERT_EQ((std::size_t)0, tree.edgeCount());
@@ -366,11 +376,15 @@ TEST(TreeTest, CheckSize3Tree)
     ASSERT_EQ((std::size_t)0, tree.depth(newRoot));
     ASSERT_EQ((std::size_t)1, tree.depth(root));
     ASSERT_EQ((std::size_t)2, tree.depth(child));
+
+    delete libraryInstance;
 }
 
 TEST(TreeTest, CheckTreeManipulations1)
 {
-    htd::Tree tree;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Tree tree(libraryInstance);
 
     htd::vertex_t root = tree.insertRoot();
 
@@ -480,11 +494,15 @@ TEST(TreeTest, CheckTreeManipulations1)
     ASSERT_EQ((std::size_t)3, tree.vertexCount(node111));
     ASSERT_EQ((std::size_t)1, tree.vertexCount(node121));
     ASSERT_EQ((std::size_t)1, tree.vertexCount(node122));
+
+    delete libraryInstance;
 }
 
 TEST(TreeTest, CheckTreeManipulations2)
 {
-    htd::Tree tree;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Tree tree(libraryInstance);
 
     htd::vertex_t root = tree.insertRoot();
 
@@ -541,11 +559,15 @@ TEST(TreeTest, CheckTreeManipulations2)
     tree.removeVertex(node2);
 
     ASSERT_EQ((std::size_t)0, tree.vertexCount());
+
+    delete libraryInstance;
 }
 
 TEST(TreeTest, CheckTreeManipulations3)
 {
-    htd::Tree tree;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Tree tree(libraryInstance);
 
     htd::vertex_t root = tree.insertRoot();
 
@@ -600,11 +622,15 @@ TEST(TreeTest, CheckTreeManipulations3)
     ASSERT_EQ((std::size_t)2, tree.depth(intermediateNode));
     ASSERT_EQ((std::size_t)2, tree.depth(intermediateNode2));
     ASSERT_EQ((std::size_t)0, tree.depth(child));
+
+    delete libraryInstance;
 }
 
 TEST(TreeTest, CheckMakeRootFunctionality1)
 {
-    htd::Tree tree;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Tree tree(libraryInstance);
 
     htd::vertex_t node1 = tree.insertRoot();
     htd::vertex_t node2 = tree.addChild(node1);
@@ -660,6 +686,8 @@ TEST(TreeTest, CheckMakeRootFunctionality1)
     ASSERT_TRUE(tree.isChild(node2, node4));
     ASSERT_TRUE(tree.isChild(node2, node5));
     ASSERT_TRUE(tree.isChild(node3, node6));
+
+    delete libraryInstance;
 }
 
 int main(int argc, char **argv)

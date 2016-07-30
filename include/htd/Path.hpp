@@ -44,7 +44,7 @@ namespace htd
             /**
              *  Constructor for a path.
              */
-            Path(void);
+            Path(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for a path.
@@ -60,7 +60,7 @@ namespace htd
              */
             Path(const htd::IPath & original);
             
-            ~Path();
+            virtual ~Path();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -103,6 +103,13 @@ namespace htd
             bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
+
+            /**
+             *  Access the vector of all vertices in the tree.
+             *
+             *  @return The vector of all vertices in the tree sorted in ascending order.
+             */
+            const std::vector<htd::vertex_t> & vertexVector(void) const;
 
             std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
@@ -184,6 +191,10 @@ namespace htd
 
             void swapWithParent(htd::vertex_t vertex) HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Path * clone(void) const HTD_OVERRIDE;
 #else
@@ -224,75 +235,10 @@ namespace htd
             void assign(const htd::IPath & original) HTD_OVERRIDE;
 #endif
 
-        protected:
-            /**
-             *  Structure representing a node of a path.
-             */
-            struct Node
-            {
-                /**
-                 *  The ID of the path node.
-                 */
-                htd::id_t id;
+        private:
+            HTD_IMPLEMENTATION Implementation;
 
-                /**
-                 *  The parent of the path node.
-                 */
-                htd::vertex_t parent;
-
-                /**
-                 *  The child of the path node.
-                 */
-                htd::vertex_t child;
-
-                /**
-                 *  Constructor for a path node.
-                 *
-                 *  @param[in] id       The ID of the constructed path node.
-                 *  @param[in] parent   The parent of the constructed path node.
-                 */
-                Node(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), child(htd::Vertex::UNKNOWN)
-                {
-
-                }
-            };
-
-            /**
-             *  The size of the path.
-             */
-            std::size_t size_;
-
-            /**
-             *  The root vertex of the path.
-             */
-            htd::vertex_t root_;
-
-            /**
-             *  The ID the next edge added to the tree will get.
-             */
-            htd::id_t next_edge_;
-
-            /**
-             *  The ID the next vertex added to the path will get.
-             */
-            htd::vertex_t next_vertex_;
-
-            /**
-             *  The collection of all vertices of the path in ascending order.
-             */
-            std::vector<htd::vertex_t> vertices_;
-
-            /**
-             *  The map of pointers to all path nodes. It maps vertex IDs to the corresponding node information.
-             */
-            std::unordered_map<htd::id_t, Node *> nodes_;
-
-            /**
-             *  Delete a node of the path and perform an update of the internal state.
-             *
-             *  @param[in] node The node of the path which shall be removed.
-             */
-            void deleteNode(htd::Path::Node * node);
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

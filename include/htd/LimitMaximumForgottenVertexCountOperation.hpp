@@ -44,11 +44,12 @@ namespace htd
             /**
              *  Constructor for a new manipulation operation of type LimitMaximumForgottenVertexCountOperation.
              *
+             *  @param[in] manager   The management instance to which the new manipulation operation belongs.
              *  @param[in] limit    The maximum number of forgotten vertices for a decomposition node.
              */
-            LimitMaximumForgottenVertexCountOperation(std::size_t limit);
+            LimitMaximumForgottenVertexCountOperation(const htd::LibraryInstance * const manager, std::size_t limit);
 
-            ~LimitMaximumForgottenVertexCountOperation();
+            virtual ~LimitMaximumForgottenVertexCountOperation();
 
             void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -78,6 +79,10 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             LimitMaximumForgottenVertexCountOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -94,8 +99,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
         private:
-            std::size_t limit_;
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

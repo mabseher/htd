@@ -33,9 +33,26 @@
 
 #include <stdexcept>
 
-htd::SetCoverAlgorithmFactory::SetCoverAlgorithmFactory(void)
+htd::SetCoverAlgorithmFactory::SetCoverAlgorithmFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::GreedySetCoverAlgorithm();
+    constructionTemplate_ = new htd::GreedySetCoverAlgorithm(manager);
+}
+
+htd::SetCoverAlgorithmFactory::SetCoverAlgorithmFactory(const htd::SetCoverAlgorithmFactory & original)
+{
+    constructionTemplate_ = original.constructionTemplate_->clone();
+}
+
+htd::SetCoverAlgorithmFactory & htd::SetCoverAlgorithmFactory::operator=(const htd::SetCoverAlgorithmFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    }
+
+    return *this;
 }
 
 htd::SetCoverAlgorithmFactory::~SetCoverAlgorithmFactory()
@@ -48,23 +65,16 @@ htd::SetCoverAlgorithmFactory::~SetCoverAlgorithmFactory()
     }
 }
 
-htd::SetCoverAlgorithmFactory & htd::SetCoverAlgorithmFactory::instance(void)
-{
-    static htd::SetCoverAlgorithmFactory instance_;
-
-    return instance_;
-}
-
 htd::ISetCoverAlgorithm * htd::SetCoverAlgorithmFactory::getSetCoverAlgorithm(void) const
 {
     return constructionTemplate_->clone();
 }
 
-htd::ISetCoverAlgorithm * htd::SetCoverAlgorithmFactory::getSetCoverAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+htd::ISetCoverAlgorithm * htd::SetCoverAlgorithmFactory::getSetCoverAlgorithm(const htd::LibraryInstance * const manager) const
 {
     htd::ISetCoverAlgorithm * ret = constructionTemplate_->clone();
 
-    ret->setManagementInstance(instance);
+    ret->setManagementInstance(manager);
 
     return ret;
 }

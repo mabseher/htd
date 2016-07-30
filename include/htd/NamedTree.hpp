@@ -49,7 +49,7 @@ namespace htd
             /**
              *  Constructor for a tree.
              */
-            NamedTree(void) : base_(htd::LabeledTreeFactory::instance().getLabeledTree()), names_()
+            NamedTree(const htd::LibraryInstance * const manager) : base_(manager->labeledTreeFactory().getLabeledTree()), names_()
             {
 
             }
@@ -67,7 +67,7 @@ namespace htd
             /**
              *  Destructor for a NamedTree object.
              */
-            ~NamedTree()
+            virtual ~NamedTree()
             {
                 if (base_ != nullptr)
                 {

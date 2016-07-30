@@ -35,7 +35,33 @@
 #include <stack>
 #include <stdexcept>
 
-htd::DepthFirstConnectedComponentAlgorithm::DepthFirstConnectedComponentAlgorithm(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::DepthFirstConnectedComponentAlgorithm.
+ */
+struct htd::DepthFirstConnectedComponentAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::DepthFirstConnectedComponentAlgorithm::DepthFirstConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -75,7 +101,7 @@ void htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::I
 {
     HTD_ASSERT(graph.isVertex(startingVertex))
 
-    htd::DepthFirstGraphTraversal traversal;
+    htd::DepthFirstGraphTraversal traversal(managementInstance());
 
     traversal.traverse(graph, startingVertex, [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
     {
@@ -88,13 +114,21 @@ void htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::I
     std::sort(target.begin(), target.end());
 }
 
+const htd::LibraryInstance * htd::DepthFirstConnectedComponentAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::DepthFirstConnectedComponentAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::DepthFirstConnectedComponentAlgorithm * htd::DepthFirstConnectedComponentAlgorithm::clone(void) const
 {
-    htd::DepthFirstConnectedComponentAlgorithm * ret = new htd::DepthFirstConnectedComponentAlgorithm();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::DepthFirstConnectedComponentAlgorithm(managementInstance());
 }
 
 #endif /* HTD_HTD_DEPTHFIRSTCONNECTEDCOMPONENTALGORITHM_CPP */

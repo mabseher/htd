@@ -45,7 +45,7 @@ namespace htd
             /**
              *  Constructor for a tree.
              */
-            Tree(void);
+            Tree(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for a tree.
@@ -61,7 +61,7 @@ namespace htd
              */
             Tree(const htd::ITree & original);
             
-            ~Tree();
+            virtual ~Tree();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -104,6 +104,13 @@ namespace htd
             bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
 
             htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
+
+            /**
+             *  Access the vector of all vertices in the tree.
+             *
+             *  @return The vector of all vertices in the tree sorted in ascending order.
+             */
+            const std::vector<htd::vertex_t> & vertexVector(void) const;
 
             std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
@@ -183,6 +190,10 @@ namespace htd
 
             void swapWithParent(htd::vertex_t vertex) HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Tree * clone(void) const HTD_OVERRIDE;
 #else
@@ -221,121 +232,10 @@ namespace htd
             void assign(const htd::ITree & original) HTD_OVERRIDE;
 #endif
 
-        protected:
-            /**
-             *  Structure representing a node of a tree.
-             */
-            struct Node
-            {
-                /**
-                 *  The ID of the tree node.
-                 */
-                htd::id_t id;
+        private:
+            HTD_IMPLEMENTATION Implementation;
 
-                /**
-                 *  The parent of the tree node.
-                 */
-                htd::vertex_t parent;
-
-                /**
-                 *  The collection of all edge identifiers containing the tree node.
-                 */
-                std::vector<htd::id_t> edges;
-
-                /**
-                 *  The collection of all children of the tree node.
-                 */
-                std::vector<htd::vertex_t> children;
-
-                /**
-                 *  Constructor for a tree node.
-                 *
-                 *  @param[in] id       The ID of the constructed tree node.
-                 *  @param[in] parent   The parent of the constructed tree node.
-                 */
-                Node(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), edges(), children()
-                {
-
-                }
-
-                /**
-                 *  Copy constructor for a tree node.
-                 *
-                 *  @param[in] original  The original tree node.
-                 */
-                Node(const Node & original) : id(original.id), parent(original.parent), edges(original.edges), children(original.children)
-                {
-
-                }
-
-                /**
-                 *  Move constructor for a tree node.
-                 *
-                 *  @param[in] original  The original tree node.
-                 */
-                Node(Node && original) : id(original.id), parent(original.parent), edges(std::move(original.edges)), children(std::move(original.children))
-                {
-
-                }
-            };
-
-            /**
-             *  The size of the tree.
-             */
-            std::size_t size_;
-
-            /**
-             *  The root vertex of the tree.
-             */
-            htd::vertex_t root_;
-
-            /**
-             *  The ID the next edge added to the tree will get.
-             */
-            htd::id_t next_edge_;
-
-            /**
-             *  The ID the next vertex added to the tree will get.
-             */
-            htd::vertex_t next_vertex_;
-
-            /**
-             *  The collection of all vertices of the tree in ascending order.
-             */
-            std::vector<htd::vertex_t> vertices_;
-
-            /**
-             *  The map of pointers to all tree nodes. It maps vertex IDs to the corresponding node information.
-             */
-            std::unordered_map<htd::id_t, std::unique_ptr<Node>> nodes_;
-
-            /**
-             *  The collection of all hyperedges which exist in the tree.
-             */
-            std::shared_ptr<std::deque<htd::Hyperedge *>> edges_;
-
-            /**
-             *  Delete a node of the tree and perform an update of the internal state.
-             *
-             *  @param[in] node The node of the tree which shall be removed.
-             */
-            void deleteNode(const std::unique_ptr<Node> & node);
-
-            /**
-             *  Handle an incoming signal.
-             *
-             *  @param[in] signal   The signal which was received.
-             */
-            void handleSignal(int signal);
-
-            /**
-             *  Updates the edge information for the nodes affected by a call to swapWithParent(htd::vertex_t).
-             *
-             *  @param[in] node             The node for which swapWithParent(htd::vertex_t) was called.
-             *  @param[in] parentNode       The parent node of the swapped node.
-             *  @param[in] grandParentNode  The grandparent node of the swapped node.
-             */
-            void updateEdgesAfterSwapWithParent(htd::Tree::Node & node, htd::Tree::Node & parentNode, htd::Tree::Node & grandParentNode);
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

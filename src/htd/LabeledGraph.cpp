@@ -32,12 +32,12 @@
 
 #include <stdexcept>
 
-htd::LabeledGraph::LabeledGraph(void) : htd::Graph::Graph(), labelings_(new htd::LabelingCollection())
+htd::LabeledGraph::LabeledGraph(const htd::LibraryInstance * const manager) : htd::Graph::Graph(manager), labelings_(new htd::LabelingCollection())
 {
 
 }
 
-htd::LabeledGraph::LabeledGraph(std::size_t initialSize) : htd::Graph::Graph(initialSize), labelings_(new htd::LabelingCollection())
+htd::LabeledGraph::LabeledGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : htd::Graph::Graph(manager, initialSize), labelings_(new htd::LabelingCollection())
 {
 
 }

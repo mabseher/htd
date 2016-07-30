@@ -38,13 +38,22 @@ namespace htd
     class HTD_API MaximumCardinalitySearchOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
-            MaximumCardinalitySearchOrderingAlgorithm(void);
+            /**
+             *  Constructor for a new ordering algorithm of type MaximumCardinalitySearchOrderingAlgorithm.
+             *
+             *  @param[in] manager   The management instance to which the new algorithm belongs.
+             */
+            MaximumCardinalitySearchOrderingAlgorithm(const htd::LibraryInstance * const manager);
             
-            ~MaximumCardinalitySearchOrderingAlgorithm();
+            virtual ~MaximumCardinalitySearchOrderingAlgorithm();
             
             htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
             MaximumCardinalitySearchOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
@@ -55,6 +64,11 @@ namespace htd
              *  @note This operator is protected to prevent assignments to an already initialized algorithm.
              */
             MaximumCardinalitySearchOrderingAlgorithm & operator=(const MaximumCardinalitySearchOrderingAlgorithm &) { return *this; }
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

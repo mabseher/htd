@@ -37,235 +37,275 @@
 #include <vector>
 #include <set>
 
-htd::MultiGraph::MultiGraph(void) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph())
+/**
+ *  Private implementation details of class htd::MultiGraph.
+ */
+struct htd::MultiGraph::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     *  @param[in] base     The multi-hypergraph instance which will act as base class for the multi-graph.
+     */
+    Implementation(const htd::LibraryInstance * const manager, htd::IMutableMultiHypergraph * base) : managementInstance_(manager), base_(base)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+        delete base_;
+    }
+
+    /**
+     *  Copy constructor of the implementation details structure.
+     *
+     *  @param[in] original  The original implementation details structure.
+     */
+    Implementation(const Implementation & original) : managementInstance_(original.managementInstance_)
+    {
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        base_ = original.base_->clone();
+    #else
+        base_ = original.base_->cloneMutableMultiHypergraph();
+    #endif
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The multi-hypergraph instance which will act as base class for the multi-graph.
+     */
+    htd::IMutableMultiHypergraph * base_;
+};
+
+htd::MultiGraph::MultiGraph(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager, manager->multiHypergraphFactory().getMultiHypergraph()))
 {
 
 }
 
-htd::MultiGraph::MultiGraph(std::size_t initialSize) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph(initialSize))
+htd::MultiGraph::MultiGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : implementation_(new Implementation(manager, manager->multiHypergraphFactory().getMultiHypergraph(initialSize)))
 {
 
 }
 
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-htd::MultiGraph::MultiGraph(const htd::MultiGraph & original) : base_(original.base_->clone())
+htd::MultiGraph::MultiGraph(const htd::MultiGraph & original) : implementation_(new Implementation(*(original.implementation_)))
 {
 
 }
-#else
-htd::MultiGraph::MultiGraph(const htd::MultiGraph & original) : base_(original.base_->cloneMutableMultiHypergraph())
-{
 
-}
-#endif
-
-htd::MultiGraph::MultiGraph(const htd::IMultiGraph & original) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph(original))
+htd::MultiGraph::MultiGraph(const htd::IMultiGraph & original) : implementation_(new Implementation(original.managementInstance(), original.managementInstance()->multiHypergraphFactory().getMultiHypergraph(original)))
 {
 
 }
 
 htd::MultiGraph::~MultiGraph()
 {
-    if (base_ != nullptr)
-    {
-        delete base_;
 
-        base_ = nullptr;
-    }
 }
 
 std::size_t htd::MultiGraph::vertexCount(void) const
 {
-    return base_->vertexCount();
+    return implementation_->base_->vertexCount();
 }
 
 std::size_t htd::MultiGraph::edgeCount(void) const
 {
-    return base_->edgeCount();
+    return implementation_->base_->edgeCount();
 }
 
 std::size_t htd::MultiGraph::edgeCount(htd::vertex_t vertex) const
 {
-    return base_->edgeCount(vertex);
+    return implementation_->base_->edgeCount(vertex);
 }
 
 bool htd::MultiGraph::isVertex(htd::vertex_t vertex) const
 {
-    return base_->isVertex(vertex);
+    return implementation_->base_->isVertex(vertex);
 }
 
 bool htd::MultiGraph::isEdge(htd::id_t edgeId) const
 {
-    return base_->isEdge(edgeId);
+    return implementation_->base_->isEdge(edgeId);
 }
 
 bool htd::MultiGraph::isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    return base_->isEdge(vertex1, vertex2);
+    return implementation_->base_->isEdge(vertex1, vertex2);
 }
 
 bool htd::MultiGraph::isEdge(const std::vector<htd::vertex_t> & elements) const
 {
-    return base_->isEdge(elements);
+    return implementation_->base_->isEdge(elements);
 }
 
 bool htd::MultiGraph::isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
-    return base_->isEdge(elements);
+    return implementation_->base_->isEdge(elements);
 }
 
 htd::ConstCollection<htd::id_t> htd::MultiGraph::associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    return base_->associatedEdgeIds(vertex1, vertex2);
+    return implementation_->base_->associatedEdgeIds(vertex1, vertex2);
 }
 
 htd::ConstCollection<htd::id_t> htd::MultiGraph::associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const
 {
-    return base_->associatedEdgeIds(elements);
+    return implementation_->base_->associatedEdgeIds(elements);
 }
 
 htd::ConstCollection<htd::id_t> htd::MultiGraph::associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const
 {
-    return base_->associatedEdgeIds(elements);
+    return implementation_->base_->associatedEdgeIds(elements);
 }
 
 htd::vertex_t htd::MultiGraph::vertexAtPosition(htd::index_t index) const
 {
-    return base_->vertexAtPosition(index);
+    return implementation_->base_->vertexAtPosition(index);
 }
             
 bool htd::MultiGraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
-    return base_->isNeighbor(vertex, neighbor);
+    return implementation_->base_->isNeighbor(vertex, neighbor);
 }
 
 bool htd::MultiGraph::isConnected(void) const
 {
-    return base_->isConnected();
+    return implementation_->base_->isConnected();
 }
 
 bool htd::MultiGraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
-    return base_->isConnected(vertex1, vertex2);
+    return implementation_->base_->isConnected(vertex1, vertex2);
 }
 
 std::size_t htd::MultiGraph::neighborCount(htd::vertex_t vertex) const
 {
-    return base_->neighborCount(vertex);
+    return implementation_->base_->neighborCount(vertex);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::MultiGraph::neighbors(htd::vertex_t vertex) const
 {
-    HTD_ASSERT(isVertex(vertex))
-
-    return base_->neighbors(vertex);
+    return implementation_->base_->neighbors(vertex);
 }
 
 void htd::MultiGraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
 {
-    HTD_ASSERT(isVertex(vertex))
-
-    base_->copyNeighborsTo(target, vertex);
+    implementation_->base_->copyNeighborsTo(target, vertex);
 }
 
 htd::vertex_t htd::MultiGraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
 {
-    return base_->neighborAtPosition(vertex, index);
+    return implementation_->base_->neighborAtPosition(vertex, index);
 }
 
 htd::ConstCollection<htd::vertex_t> htd::MultiGraph::vertices(void) const
 {
-    return base_->vertices();
+    return implementation_->base_->vertices();
 }
 
 std::size_t htd::MultiGraph::isolatedVertexCount(void) const
 {
-    return base_->isolatedVertexCount();
+    return implementation_->base_->isolatedVertexCount();
 }
 
 htd::ConstCollection<htd::vertex_t> htd::MultiGraph::isolatedVertices(void) const
 {
-    return base_->isolatedVertices();
+    return implementation_->base_->isolatedVertices();
 }
 
 htd::vertex_t htd::MultiGraph::isolatedVertexAtPosition(htd::index_t index) const
 {
-    return base_->isolatedVertexAtPosition(index);
+    return implementation_->base_->isolatedVertexAtPosition(index);
 }
 
 bool htd::MultiGraph::isIsolatedVertex(htd::vertex_t vertex) const
 {
-    return base_->isIsolatedVertex(vertex);
+    return implementation_->base_->isIsolatedVertex(vertex);
 }
 
 htd::ConstCollection<htd::Hyperedge> htd::MultiGraph::hyperedges(void) const
 {
-    return base_->hyperedges();
+    return implementation_->base_->hyperedges();
 }
 
 htd::ConstCollection<htd::Hyperedge> htd::MultiGraph::hyperedges(htd::vertex_t vertex) const
 {
-    return base_->hyperedges(vertex);
+    return implementation_->base_->hyperedges(vertex);
 }
 
 const htd::Hyperedge & htd::MultiGraph::hyperedge(htd::id_t edgeId) const
 {
-    return base_->hyperedge(edgeId);
+    return implementation_->base_->hyperedge(edgeId);
 }
 
 const htd::Hyperedge & htd::MultiGraph::hyperedgeAtPosition(htd::index_t index) const
 {
-    return base_->hyperedgeAtPosition(index);
+    return implementation_->base_->hyperedgeAtPosition(index);
 }
 
 const htd::Hyperedge & htd::MultiGraph::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    return base_->hyperedgeAtPosition(index, vertex);
+    return implementation_->base_->hyperedgeAtPosition(index, vertex);
 }
 
 htd::FilteredHyperedgeCollection htd::MultiGraph::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
 {
-    return base_->hyperedgesAtPositions(indices);
+    return implementation_->base_->hyperedgesAtPositions(indices);
 }
 
 htd::FilteredHyperedgeCollection htd::MultiGraph::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
 {
-    return base_->hyperedgesAtPositions(std::move(indices));
+    return implementation_->base_->hyperedgesAtPositions(std::move(indices));
 }
 
 htd::vertex_t htd::MultiGraph::nextVertex(void) const
 {
-    return base_->nextVertex();
+    return implementation_->base_->nextVertex();
 }
 
 htd::id_t htd::MultiGraph::nextEdgeId(void) const
 {
-    return base_->nextEdgeId();
+    return implementation_->base_->nextEdgeId();
 }
 
 htd::vertex_t htd::MultiGraph::addVertex(void)
 {
-    return base_->addVertex();
+    return implementation_->base_->addVertex();
 }
 
 htd::vertex_t htd::MultiGraph::addVertices(std::size_t count)
 {
-    return base_->addVertices(count);
+    return implementation_->base_->addVertices(count);
 }
 
 void htd::MultiGraph::removeVertex(htd::vertex_t vertex)
 {
-    base_->removeVertex(vertex);
+    implementation_->base_->removeVertex(vertex);
 }
 
 htd::id_t htd::MultiGraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    return base_->addEdge(vertex1, vertex2);
+    return implementation_->base_->addEdge(vertex1, vertex2);
 }
 
 void htd::MultiGraph::removeEdge(htd::id_t edgeId)
 {
-    base_->removeEdge(edgeId);
+    implementation_->base_->removeEdge(edgeId);
+}
+
+const htd::LibraryInstance * htd::MultiGraph::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->base_->managementInstance();
+}
+
+void htd::MultiGraph::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    implementation_->base_->setManagementInstance(manager);
 }
 
 htd::MultiGraph * htd::MultiGraph::clone(void) const
@@ -294,12 +334,12 @@ htd::MultiGraph & htd::MultiGraph::operator=(const htd::MultiGraph & original)
 {
     if (this != &original)
     {
-        delete base_;
+        delete implementation_->base_;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        base_ = original.base_->clone();
+        implementation_->base_ = original.implementation_->base_->clone();
 #else
-        base_ = original.base_->cloneMutableMultiHypergraph();
+        implementation_->base_ = original.implementation_->base_->cloneMutableMultiHypergraph();
 #endif
     }
 
@@ -310,9 +350,9 @@ htd::MultiGraph & htd::MultiGraph::operator=(const htd::IMultiGraph & original)
 {
     if (this != &original)
     {
-        delete base_;
+        delete implementation_->base_;
 
-        base_ = htd::MultiHypergraphFactory::instance().getMultiHypergraph(original);
+        implementation_->base_ = implementation_->managementInstance_->multiHypergraphFactory().getMultiHypergraph(original);
     }
 
     return *this;

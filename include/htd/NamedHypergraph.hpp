@@ -49,7 +49,7 @@ namespace htd
             /**
              *  Constructor for a hypergraph.
              */
-            NamedHypergraph(void) : base_(htd::LabeledHypergraphFactory::instance().getLabeledHypergraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledHypergraph::addVertex, base_))
+            NamedHypergraph(const htd::LibraryInstance * const manager) : base_(manager->labeledHypergraphFactory().getLabeledHypergraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledHypergraph::addVertex, base_))
             {
 
             }
@@ -67,7 +67,7 @@ namespace htd
             /**
              *  Destructor for a NamedHypergraph object.
              */
-            ~NamedHypergraph()
+            virtual ~NamedHypergraph()
             {
                 if (base_ != nullptr)
                 {

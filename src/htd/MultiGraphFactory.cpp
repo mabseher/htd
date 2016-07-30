@@ -32,9 +32,34 @@
 
 #include <stdexcept>
 
-htd::MultiGraphFactory::MultiGraphFactory(void)
+htd::MultiGraphFactory::MultiGraphFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::MultiGraph();
+    constructionTemplate_ = new htd::MultiGraph(manager);
+}
+
+htd::MultiGraphFactory::MultiGraphFactory(const htd::MultiGraphFactory & original)
+{
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneMutableMultiGraph();
+#endif
+}
+
+htd::MultiGraphFactory & htd::MultiGraphFactory::operator=(const htd::MultiGraphFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    #else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutableMultiGraph();
+    #endif
+    }
+
+    return *this;
 }
 
 htd::MultiGraphFactory::~MultiGraphFactory()
@@ -47,14 +72,7 @@ htd::MultiGraphFactory::~MultiGraphFactory()
     }
 }
 
-htd::MultiGraphFactory & htd::MultiGraphFactory::instance(void)
-{
-    static htd::MultiGraphFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutableMultiGraph * htd::MultiGraphFactory::getMultiGraph(void)
+htd::IMutableMultiGraph * htd::MultiGraphFactory::getMultiGraph(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -63,7 +81,7 @@ htd::IMutableMultiGraph * htd::MultiGraphFactory::getMultiGraph(void)
 #endif
 }
 
-htd::IMutableMultiGraph * htd::MultiGraphFactory::getMultiGraph(std::size_t initialSize)
+htd::IMutableMultiGraph * htd::MultiGraphFactory::getMultiGraph(std::size_t initialSize) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableMultiGraph * ret = constructionTemplate_->clone();
@@ -76,7 +94,7 @@ htd::IMutableMultiGraph * htd::MultiGraphFactory::getMultiGraph(std::size_t init
     return ret;
 }
 
-htd::IMutableMultiGraph * htd::MultiGraphFactory::getMultiGraph(const htd::IMultiGraph & original)
+htd::IMutableMultiGraph * htd::MultiGraphFactory::getMultiGraph(const htd::IMultiGraph & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableMultiGraph * ret = constructionTemplate_->clone();
@@ -106,12 +124,12 @@ void htd::MultiGraphFactory::setConstructionTemplate(htd::IMutableMultiGraph * o
     constructionTemplate_ = original;
 }
 
-htd::IMutableMultiGraph & htd::MultiGraphFactory::accessMutableMultiGraph(htd::IMultiGraph & original)
+htd::IMutableMultiGraph & htd::MultiGraphFactory::accessMutableMultiGraph(htd::IMultiGraph & original) const
 {
     return *(dynamic_cast<htd::IMutableMultiGraph *>(&original));
 }
 
-const htd::IMutableMultiGraph & htd::MultiGraphFactory::accessMutableMultiGraph(const htd::IMultiGraph & original)
+const htd::IMutableMultiGraph & htd::MultiGraphFactory::accessMutableMultiGraph(const htd::IMultiGraph & original) const
 {
     return *(dynamic_cast<const htd::IMutableMultiGraph *>(&original));
 }

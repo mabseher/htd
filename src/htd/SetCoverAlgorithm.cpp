@@ -36,7 +36,86 @@
 #include <unordered_map>
 #include <vector>
 
-htd::SetCoverAlgorithm::SetCoverAlgorithm(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::SetCoverAlgorithm.
+ */
+struct htd::SetCoverAlgorithm::Implementation
+{
+    /**
+     *  Structure for historical entries needed for backtracking.
+     */
+    struct HistoryEntry
+    {
+        /**
+         *  The index of the selected container.
+         */
+        htd::index_t selectedIndex;
+
+        /**
+         *  The remaining elements which still need to be covered.
+         */
+        std::vector<htd::id_t> remainder;
+
+        /**
+         *  The containers which have a non-empty set intersection with the remaining elements.
+         */
+        std::vector<htd::id_t> containers;
+
+        /**
+         *  Constructor for a new history entry.
+         *
+         *  @param[in] selectedIndex    The index of the selected container.
+         *  @param[in] remainder        The remaining elements which still need to be covered.
+         *  @param[in] containers       The containers which have a non-empty set intersection with the remaining elements.
+         */
+        HistoryEntry(htd::index_t selectedIndex, const std::vector<htd::id_t> & remainder, const std::vector<htd::id_t> & containers) : selectedIndex(selectedIndex), remainder(remainder), containers(containers)
+        {
+
+        }
+    };
+
+    /**
+     *  The comparison operator used to rank the quality of solutions.
+     */
+    class Compare
+    {
+        public:
+            /**
+             *  Check whether one solution is better than another.
+             *
+             *  @param[in] solution1    The first solution which shall be compared.
+             *  @param[in] solution2    The second solution which shall be compared.
+             *
+             *  @return True if solution1 is better than solution2, false otherwise.
+             */
+            bool operator() (const std::vector<htd::index_t> & solution1, const std::vector<htd::index_t> & solution2)
+            {
+                return solution1.size() < solution2.size();
+            }
+    };
+
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::SetCoverAlgorithm::SetCoverAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
     
 }
@@ -55,7 +134,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
 {
     htd::id_t next = 0;
     
-    std::deque<HistoryEntry> history;
+    std::deque<Implementation::HistoryEntry> history;
 
     std::vector<htd::id_t> relevantContainers;
     
@@ -135,7 +214,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
         {
             htd::id_t selected = next;
 
-            history.push_back(HistoryEntry(selected, remainder, oldRelevantContainers));
+            history.push_back(Implementation::HistoryEntry(selected, remainder, oldRelevantContainers));
 
             DEBUGGING_CODE(
             std::cout << "Selected: " << oldRelevantContainers[selected] << std::endl << "   ";
@@ -234,7 +313,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
 
                 newSolution.reserve(history.size());
 
-                for (const HistoryEntry & entry : history)
+                for (const Implementation::HistoryEntry & entry : history)
                 {
                     newSolution.push_back(entry.containers[entry.selectedIndex]);
                 }
@@ -304,7 +383,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
     
     if (solutions.size() > 0)
     {
-        std::sort(solutions.begin(), solutions.end(), Compare());
+        std::sort(solutions.begin(), solutions.end(), Implementation::Compare());
 
         DEBUGGING_CODE(
         std::size_t count = 0;
@@ -338,13 +417,21 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
     }
 }
 
+const htd::LibraryInstance * htd::SetCoverAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::SetCoverAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::SetCoverAlgorithm * htd::SetCoverAlgorithm::clone(void) const
 {
-    htd::SetCoverAlgorithm * ret = new htd::SetCoverAlgorithm();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::SetCoverAlgorithm(managementInstance());
 }
 
 #endif /* HTD_HTD_SETCOVERALGORITHM_CPP */

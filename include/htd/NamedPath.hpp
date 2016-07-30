@@ -49,7 +49,7 @@ namespace htd
             /**
              *  Constructor for a path.
              */
-            NamedPath(void) : base_(htd::LabeledPathFactory::instance().getLabeledPath()), names_()
+            NamedPath(const htd::LibraryInstance * const manager) : base_(manager->labeledPathFactory().getLabeledPath()), names_()
             {
 
             }
@@ -67,7 +67,7 @@ namespace htd
             /**
              *  Destructor for a NamedPath object.
              */
-            ~NamedPath()
+            virtual ~NamedPath()
             {
                 if (base_ != nullptr)
                 {

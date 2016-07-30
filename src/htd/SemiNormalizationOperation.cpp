@@ -31,14 +31,33 @@
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/LimitChildCountOperation.hpp>
 
-htd::SemiNormalizationOperation::SemiNormalizationOperation(void)
-    : htd::WeakNormalizationOperation()
+/**
+ *  Private implementation details of class htd::SemiNormalizationOperation.
+ */
+struct htd::SemiNormalizationOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     */
+    Implementation()
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+};
+
+htd::SemiNormalizationOperation::SemiNormalizationOperation(const htd::LibraryInstance * const manager)
+    : htd::WeakNormalizationOperation(manager)
 {
 
 }
 
-htd::SemiNormalizationOperation::SemiNormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent)
-    : htd::WeakNormalizationOperation(emptyRoot, emptyLeaves, identicalJoinNodeParent)
+htd::SemiNormalizationOperation::SemiNormalizationOperation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent)
+    : htd::WeakNormalizationOperation(manager, emptyRoot, emptyLeaves, identicalJoinNodeParent)
 {
 
 }
@@ -82,9 +101,7 @@ void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
 {
     htd::WeakNormalizationOperation::apply(graph, decomposition, labelingFunctions);
 
-    htd::LimitChildCountOperation limitChildCountOperation(2);
-
-    limitChildCountOperation.setManagementInstance(managementInstance());
+    htd::LimitChildCountOperation limitChildCountOperation(managementInstance(), 2);
 
     limitChildCountOperation.apply(graph, decomposition, labelingFunctions);
 }
@@ -108,9 +125,7 @@ void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
         oldCreatedVerticesCount = createdVertices.size();
     }
 
-    htd::LimitChildCountOperation limitChildCountOperation(2);
-
-    limitChildCountOperation.setManagementInstance(managementInstance());
+    htd::LimitChildCountOperation limitChildCountOperation(managementInstance(), 2);
 
     limitChildCountOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
@@ -147,11 +162,7 @@ bool htd::SemiNormalizationOperation::createsLocationDependendLabels(void) const
 
 htd::SemiNormalizationOperation * htd::SemiNormalizationOperation::clone(void) const
 {
-    htd::SemiNormalizationOperation * ret = new htd::SemiNormalizationOperation(emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired());
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::SemiNormalizationOperation(managementInstance(), emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired());
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

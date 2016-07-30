@@ -32,43 +32,99 @@
 
 #include <stdexcept>
 
-htd::HypergraphFactory::HypergraphFactory(void)
+/**
+ *  Private implementation details of class htd::MultiHypergraph.
+ */
+struct htd::HypergraphFactory::Implementation
 {
-    constructionTemplate_ = new htd::Hypergraph();
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager)
+        : managementInstance_(manager), constructionTemplate_(new htd::Hypergraph(manager))
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+        delete constructionTemplate_;
+    }
+
+    /**
+     *  Copy constructor of the implementation details structure.
+     *
+     *  @param[in] original  The original implementation details structure.
+     */
+    Implementation(const Implementation & original)
+        : managementInstance_(original.managementInstance_)
+    {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutableHypergraph();
+#endif
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  A pointer to a clean instance of the default implementation.
+     */
+    htd::IMutableHypergraph * constructionTemplate_;
+};
+
+htd::HypergraphFactory::HypergraphFactory(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
+{
+
+}
+
+htd::HypergraphFactory::HypergraphFactory(const htd::HypergraphFactory & original) : implementation_(new Implementation(*(original.implementation_)))
+{
+
+}
+
+htd::HypergraphFactory & htd::HypergraphFactory::operator=(const htd::HypergraphFactory & original)
+{
+    if (this != &original)
+    {
+        delete implementation_->constructionTemplate_;
+
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        implementation_->constructionTemplate_ = original.implementation_->constructionTemplate_->clone();
+#else
+        implementation_->constructionTemplate_ = original.implementation_->constructionTemplate_->cloneMutableHypergraph();
+#endif
+    }
+
+    return *this;
 }
 
 htd::HypergraphFactory::~HypergraphFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::HypergraphFactory & htd::HypergraphFactory::instance(void)
-{
-    static htd::HypergraphFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(void)
+htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    return constructionTemplate_->clone();
+    return implementation_->constructionTemplate_->clone();
 #else
-    return constructionTemplate_->cloneMutableHypergraph();
+    return implementation_->constructionTemplate_->cloneMutableHypergraph();
 #endif
 }
 
-htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(std::size_t initialSize)
+htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(std::size_t initialSize) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableHypergraph * ret = constructionTemplate_->clone();
+    htd::IMutableHypergraph * ret = implementation_->constructionTemplate_->clone();
 #else
-    htd::IMutableHypergraph * ret = constructionTemplate_->cloneMutableHypergraph();
+    htd::IMutableHypergraph * ret = implementation_->constructionTemplate_->cloneMutableHypergraph();
 #endif
 
     ret->addVertices(initialSize);
@@ -76,14 +132,14 @@ htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(std::size_t init
     return ret;
 }
 
-htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IHypergraph & original)
+htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IHypergraph & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableHypergraph * ret = constructionTemplate_->clone();
+    htd::IMutableHypergraph * ret = implementation_->constructionTemplate_->clone();
 
     *ret = original;
 #else
-    htd::IMutableHypergraph * ret = constructionTemplate_->cloneMutableHypergraph();
+    htd::IMutableHypergraph * ret = implementation_->constructionTemplate_->cloneMutableHypergraph();
 
     ret->assign(original);
 #endif
@@ -91,14 +147,14 @@ htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IHype
     return ret;
 }
 
-htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IMultiHypergraph & original)
+htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IMultiHypergraph & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableHypergraph * ret = constructionTemplate_->clone();
+    htd::IMutableHypergraph * ret = implementation_->constructionTemplate_->clone();
 
     *ret = original;
 #else
-    htd::IMutableHypergraph * ret = constructionTemplate_->cloneMutableHypergraph();
+    htd::IMutableHypergraph * ret = implementation_->constructionTemplate_->cloneMutableHypergraph();
 
     ret->assign(original);
 #endif
@@ -111,22 +167,22 @@ void htd::HypergraphFactory::setConstructionTemplate(htd::IMutableHypergraph * o
     HTD_ASSERT(original != nullptr)
     HTD_ASSERT(original->vertexCount() == 0)
 
-    if (constructionTemplate_ != nullptr)
+    if (implementation_->constructionTemplate_ != nullptr)
     {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
+        delete implementation_->constructionTemplate_;
     }
 
-    constructionTemplate_ = original;
+    implementation_->constructionTemplate_ = original;
+
+    implementation_->constructionTemplate_->setManagementInstance(implementation_->managementInstance_);
 }
 
-htd::IMutableHypergraph & htd::HypergraphFactory::accessMutableHypergraph(htd::IHypergraph & original)
+htd::IMutableHypergraph & htd::HypergraphFactory::accessMutableHypergraph(htd::IHypergraph & original) const
 {
     return *(dynamic_cast<htd::IMutableHypergraph *>(&original));
 }
 
-const htd::IMutableHypergraph & htd::HypergraphFactory::accessMutableHypergraph(const htd::IHypergraph & original)
+const htd::IMutableHypergraph & htd::HypergraphFactory::accessMutableHypergraph(const htd::IHypergraph & original) const
 {
     return *(dynamic_cast<const htd::IMutableHypergraph *>(&original));
 }

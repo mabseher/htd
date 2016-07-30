@@ -36,12 +36,12 @@
 #include <iterator>
 #include <vector>
 
-htd::Hypergraph::Hypergraph(void) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph())
+htd::Hypergraph::Hypergraph(const htd::LibraryInstance * const manager) : base_(manager->multiHypergraphFactory().getMultiHypergraph())
 {
 
 }
 
-htd::Hypergraph::Hypergraph(std::size_t initialSize) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph(initialSize))
+htd::Hypergraph::Hypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : base_(manager->multiHypergraphFactory().getMultiHypergraph(initialSize))
 {
 
 }
@@ -58,7 +58,7 @@ htd::Hypergraph::Hypergraph(const htd::Hypergraph & original) : base_(original.b
 }
 #endif
 
-htd::Hypergraph::Hypergraph(const htd::IHypergraph & original) : base_(htd::MultiHypergraphFactory::instance().getMultiHypergraph(original))
+htd::Hypergraph::Hypergraph(const htd::IHypergraph & original) : base_(original.managementInstance()->multiHypergraphFactory().getMultiHypergraph(original))
 {
     *this = original;
 }
@@ -367,6 +367,16 @@ void htd::Hypergraph::removeEdge(const htd::ConstCollection<htd::vertex_t> & ele
     }
 }
 
+const htd::LibraryInstance * htd::Hypergraph::managementInstance(void) const HTD_NOEXCEPT
+{
+    return base_->managementInstance();
+}
+
+void htd::Hypergraph::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    base_->setManagementInstance(manager);
+}
+
 htd::Hypergraph * htd::Hypergraph::clone(void) const
 {
     return new htd::Hypergraph(*this);
@@ -409,9 +419,11 @@ htd::Hypergraph & htd::Hypergraph::operator=(const htd::IHypergraph & original)
 {
     if (this != &original)
     {
+        htd::IMutableMultiHypergraph * newBase = managementInstance()->multiHypergraphFactory().getMultiHypergraph(original);
+
         delete base_;
 
-        base_ = htd::MultiHypergraphFactory::instance().getMultiHypergraph(original);
+        base_ = newBase;
     }
 
     return *this;
@@ -421,9 +433,11 @@ htd::Hypergraph & htd::Hypergraph::operator=(const htd::IMultiHypergraph & origi
 {
     if (this != &original)
     {
+        htd::IMutableMultiHypergraph * newBase = managementInstance()->multiHypergraphFactory().getMultiHypergraph(original);
+
         delete base_;
 
-        base_ = htd::MultiHypergraphFactory::instance().getMultiHypergraph(original);
+        base_ = newBase;
 
         htd::id_t lastId = htd::Id::UNKNOWN;
 

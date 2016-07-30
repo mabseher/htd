@@ -35,7 +35,33 @@
 #include <unordered_map>
 #include <vector>
 
-htd::IntroducedSubgraphLabelingOperation::IntroducedSubgraphLabelingOperation(const htd::IMultiHypergraph & graph) : htd::LibraryObject(), graph_(graph)
+/**
+ *  Private implementation details of class htd::IntroducedSubgraphLabelingOperation.
+ */
+struct htd::IntroducedSubgraphLabelingOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::IntroducedSubgraphLabelingOperation::IntroducedSubgraphLabelingOperation(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -68,7 +94,7 @@ void htd::IntroducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph
 
     std::vector<std::pair<htd::Hyperedge, htd::Hyperedge>> hyperedges;
 
-    for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
+    for (const htd::Hyperedge & hyperedge : graph.hyperedges())
     {
         std::vector<htd::vertex_t> elements(hyperedge.begin(), hyperedge.end());
 
@@ -213,7 +239,7 @@ void htd::IntroducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph
 
     std::vector<std::pair<htd::Hyperedge, htd::Hyperedge>> hyperedges;
 
-    for (const htd::Hyperedge & hyperedge : graph_.hyperedges())
+    for (const htd::Hyperedge & hyperedge : graph.hyperedges())
     {
         std::vector<htd::vertex_t> elements(hyperedge.begin(), hyperedge.end());
 
@@ -370,13 +396,21 @@ bool htd::IntroducedSubgraphLabelingOperation::createsLocationDependendLabels(vo
     return true;
 }
 
+const htd::LibraryInstance * htd::IntroducedSubgraphLabelingOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::IntroducedSubgraphLabelingOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::IntroducedSubgraphLabelingOperation * htd::IntroducedSubgraphLabelingOperation::clone(void) const
 {
-    htd::IntroducedSubgraphLabelingOperation * ret = new htd::IntroducedSubgraphLabelingOperation(graph_);
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::IntroducedSubgraphLabelingOperation(managementInstance());
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

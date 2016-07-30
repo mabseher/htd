@@ -40,7 +40,7 @@ namespace htd
         public:
             PostOrderTreeTraversal(void);
 
-            ~PostOrderTreeTraversal();
+            virtual ~PostOrderTreeTraversal();
 
             void traverse(const htd::IPath & path, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const HTD_OVERRIDE;
 

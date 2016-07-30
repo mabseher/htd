@@ -39,16 +39,24 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~PathDecompositionAlgorithmFactory();
+            PathDecompositionAlgorithmFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static PathDecompositionAlgorithmFactory & instance(void);
+            PathDecompositionAlgorithmFactory(const PathDecompositionAlgorithmFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            PathDecompositionAlgorithmFactory & operator=(const PathDecompositionAlgorithmFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~PathDecompositionAlgorithmFactory();
 
             /**
              *  Create a new IPathDecompositionAlgorithm object.
@@ -60,11 +68,11 @@ namespace htd
             /**
              *  Create a new IPathDecompositionAlgorithm object.
              *
-             *  @param[in] instance The management instance which shall be assigned to the new IPathDecompositionAlgorithm object.
+             *  @param[in] manager   The management instance which shall be assigned to the new IPathDecompositionAlgorithm object.
              *
              *  @return A new IPathDecompositionAlgorithm object.
              */
-            htd::IPathDecompositionAlgorithm * getPathDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
+            htd::IPathDecompositionAlgorithm * getPathDecompositionAlgorithm(const htd::LibraryInstance * const manager) const;
 
             /**
              *  Set the default implementation of the IPathDecompositionAlgorithm interface.
@@ -119,27 +127,6 @@ namespace htd
             std::vector<htd::ILabelingFunction *> labelingFunctions_;
 
             std::vector<htd::IPathDecompositionManipulationOperation *> postProcessingOperations_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            PathDecompositionAlgorithmFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            PathDecompositionAlgorithmFactory(const PathDecompositionAlgorithmFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            PathDecompositionAlgorithmFactory & operator=(const PathDecompositionAlgorithmFactory & original);
     };
 }
 

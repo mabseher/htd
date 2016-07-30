@@ -37,16 +37,24 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~SetCoverAlgorithmFactory();
+            SetCoverAlgorithmFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static SetCoverAlgorithmFactory & instance(void);
+            SetCoverAlgorithmFactory(const SetCoverAlgorithmFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            SetCoverAlgorithmFactory & operator=(const SetCoverAlgorithmFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~SetCoverAlgorithmFactory();
 
             /**
              *  Create a new ISetCoverAlgorithm object.
@@ -58,11 +66,11 @@ namespace htd
             /**
              *  Create a new ISetCoverAlgorithm object.
              *
-             *  @param[in] instance The management instance which shall be assigned to the new ISetCoverAlgorithm object.
+             *  @param[in] manager   The management instance which shall be assigned to the new ISetCoverAlgorithm object.
              *
              *  @return A new ISetCoverAlgorithm object.
              */
-            htd::ISetCoverAlgorithm * getSetCoverAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
+            htd::ISetCoverAlgorithm * getSetCoverAlgorithm(const htd::LibraryInstance * const manager) const;
 
             /**
              *  Set the default implementation of the ISetCoverAlgorithm interface.
@@ -80,27 +88,6 @@ namespace htd
              *  A pointer to a clean instance of the default implementation.
              */
             htd::ISetCoverAlgorithm * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            SetCoverAlgorithmFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            SetCoverAlgorithmFactory(const SetCoverAlgorithmFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            SetCoverAlgorithmFactory & operator=(const SetCoverAlgorithmFactory & original);
     };
 }
 

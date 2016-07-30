@@ -114,7 +114,7 @@ namespace htd
                     /**
                      *  Destructor for a FilteredHyperedgeCollectionConstIterator object.
                      */
-                    ~FilteredHyperedgeCollectionConstIterator();
+                    virtual ~FilteredHyperedgeCollectionConstIterator();
 
                     /**
                      *  Increment the iterator.

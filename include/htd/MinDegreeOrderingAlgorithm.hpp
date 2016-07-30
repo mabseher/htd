@@ -40,13 +40,22 @@ namespace htd
     class HTD_API MinDegreeOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
-            MinDegreeOrderingAlgorithm(void);
+            /**
+             *  Constructor for a new ordering algorithm of type MinDegreeOrderingAlgorithm.
+             *
+             *  @param[in] manager   The management instance to which the new algorithm belongs.
+             */
+            MinDegreeOrderingAlgorithm(const htd::LibraryInstance * const manager);
             
-            ~MinDegreeOrderingAlgorithm();
+            virtual ~MinDegreeOrderingAlgorithm();
             
             htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
             MinDegreeOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
@@ -57,6 +66,11 @@ namespace htd
              *  @note This operator is protected to prevent assignments to an already initialized algorithm.
              */
             MinDegreeOrderingAlgorithm & operator=(const MinDegreeOrderingAlgorithm &) { return *this; }
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

@@ -36,11 +36,21 @@ namespace htd
     class BreadthFirstGraphTraversal : public htd::IGraphTraversal
     {
         public:
-            BreadthFirstGraphTraversal(void);
+            /**
+             *  Constructor for a new graph traversal algorithm of type BreadthFirstGraphTraversal.
+             *
+             *  @param[in] manager   The management instance to which the new algorithm belongs.
+             */
+            BreadthFirstGraphTraversal(const htd::LibraryInstance * const manager);
 
-            ~BreadthFirstGraphTraversal();
+            virtual ~BreadthFirstGraphTraversal();
             
             void traverse(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const HTD_OVERRIDE;
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

@@ -28,17 +28,29 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 
-#include <htd/LibraryObject.hpp>
-
 namespace htd
 {
     /**
      * Interface for algorithms which manipulate a given decomposition.
      */
-    class HTD_API IDecompositionManipulationOperation : public virtual htd::LibraryObject
+    class HTD_API IDecompositionManipulationOperation
     {
         public:
             virtual ~IDecompositionManipulationOperation() = 0;
+
+            /**
+             *  Getter for the associated management class.
+             *
+             *  @return The associated management class.
+             */
+            virtual const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT = 0;
+
+            /**
+             *  Set a new management class for the library object.
+             *
+             *  @param[in] manager   The new management class for the library object.
+             */
+            virtual void setManagementInstance(const htd::LibraryInstance * const manager) = 0;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**

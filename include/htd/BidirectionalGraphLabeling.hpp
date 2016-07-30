@@ -41,7 +41,7 @@ namespace htd
         public:
             BidirectionalGraphLabeling(void);
 
-            ~BidirectionalGraphLabeling();
+            virtual ~BidirectionalGraphLabeling();
 
             std::size_t vertexLabelCount(void) const HTD_OVERRIDE;
 

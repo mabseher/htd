@@ -32,7 +32,7 @@
 
 #include <stdexcept>
 
-htd::LabeledPath::LabeledPath(void) : htd::Path::Path(), labelings_(new htd::LabelingCollection())
+htd::LabeledPath::LabeledPath(const htd::LibraryInstance * const manager) : htd::Path::Path(manager), labelings_(new htd::LabelingCollection())
 {
 
 }

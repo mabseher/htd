@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~HypertreeDecompositionFactory();
+            HypertreeDecompositionFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static HypertreeDecompositionFactory & instance(void);
+            HypertreeDecompositionFactory(const HypertreeDecompositionFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            HypertreeDecompositionFactory & operator=(const HypertreeDecompositionFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~HypertreeDecompositionFactory();
 
             /**
              *  Create a new IMutableHypertreeDecomposition object.
              *
              *  @return A new IMutableHypertreeDecomposition object.
              */
-            htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(void);
+            htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(void) const;
 
             /**
              *  Create a new IMutableHypertreeDecomposition object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableHypertreeDecomposition object identical to the given original graph.
              */
-            htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(const htd::ITreeDecomposition & original);
+            htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(const htd::ITreeDecomposition & original) const;
 
             /**
              *  Set the default implementation of the IMutableHypertreeDecomposition interface.
@@ -80,41 +88,20 @@ namespace htd
              *
              *  @return The mutable interface of the given hypertree decomposition.
              */
-            htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(htd::IHypertreeDecomposition & original);
+            htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(htd::IHypertreeDecomposition & original) const;
 
             /**
              *  Access the mutable interface of a given hypertree decomposition.
              *
              *  @return The mutable interface of the given hypertree decomposition.
              */
-            const htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(const htd::IHypertreeDecomposition & original);
+            const htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(const htd::IHypertreeDecomposition & original) const;
 
         private:
             /**
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IMutableHypertreeDecomposition * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            HypertreeDecompositionFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            HypertreeDecompositionFactory(const HypertreeDecompositionFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            HypertreeDecompositionFactory & operator=(const HypertreeDecompositionFactory & original);
     };
 }
 

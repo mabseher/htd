@@ -38,27 +38,63 @@
 #include <stdexcept>
 #include <vector>
 
-htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(void) : htd::LibraryObject(), labelingFunctions_(), postProcessingOperations_()
+/**
+ *  Private implementation details of class htd::PostProcessingPathDecompositionAlgorithm.
+ */
+struct htd::PostProcessingPathDecompositionAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_()
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+        for (auto & labelingFunction : labelingFunctions_)
+        {
+            delete labelingFunction;
+        }
+
+        for (auto & postProcessingOperation : postProcessingOperations_)
+        {
+            delete postProcessingOperation;
+        }
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The labeling functions which are applied after the decomposition was computed.
+     */
+    std::vector<htd::ILabelingFunction *> labelingFunctions_;
+
+    /**
+     *  The manipuation operations which are applied after the decomposition was computed.
+     */
+    std::vector<htd::IPathDecompositionManipulationOperation *> postProcessingOperations_;
+};
+
+htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
 
-htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : labelingFunctions_(), postProcessingOperations_()
+htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(const htd::LibraryInstance * const manager, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : implementation_(new Implementation(manager))
 {
     setManipulationOperations(manipulationOperations);
 }
 
 htd::PostProcessingPathDecompositionAlgorithm::~PostProcessingPathDecompositionAlgorithm()
 {
-    for (auto & labelingFunction : labelingFunctions_)
-    {
-        delete labelingFunction;
-    }
 
-    for (auto & postProcessingOperation : postProcessingOperations_)
-    {
-        delete postProcessingOperation;
-    }
 }
 
 htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph) const
@@ -88,7 +124,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 {
     htd::IMutablePathDecomposition * ret = nullptr;
 
-    htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm(managementInstance());
+    htd::ITreeDecompositionAlgorithm * algorithm = managementInstance()->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm();
 
     HTD_ASSERT(algorithm != nullptr)
 
@@ -98,13 +134,13 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
     delete algorithm;
 
-    htd::IMutableTreeDecomposition & mutableTreeDecomposition = htd::TreeDecompositionFactory::instance().accessMutableTreeDecomposition(*treeDecomposition);
+    htd::IMutableTreeDecomposition & mutableTreeDecomposition = managementInstance()->treeDecompositionFactory().accessMutableTreeDecomposition(*treeDecomposition);
 
-    htd::CompressionOperation compressionOperation;
+    htd::CompressionOperation compressionOperation(managementInstance());
 
     compressionOperation.apply(graph, mutableTreeDecomposition);
 
-    htd::JoinNodeReplacementOperation joinNodeReplacementOperation;
+    htd::JoinNodeReplacementOperation joinNodeReplacementOperation(managementInstance());
 
     joinNodeReplacementOperation.apply(graph, mutableTreeDecomposition);
 
@@ -133,7 +169,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
         }
     }
 
-    for (const auto & operation : postProcessingOperations_)
+    for (const auto & operation : implementation_->postProcessingOperations_)
     {
         operation->apply(graph, *ret);
     }
@@ -143,7 +179,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
         operation->apply(graph, *ret);
     }
 
-    for (const auto & labelingFunction : labelingFunctions_)
+    for (const auto & labelingFunction : implementation_->labelingFunctions_)
     {
         for (htd::vertex_t vertex : ret->vertices())
         {
@@ -186,7 +222,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
 htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::toPathDecomposition(const htd::ITreeDecomposition & decomposition) const
 {
-    htd::IMutablePathDecomposition * ret = htd::PathDecompositionFactory::instance().getPathDecomposition();
+    htd::IMutablePathDecomposition * ret = managementInstance()->pathDecompositionFactory().getPathDecomposition();
 
     if (decomposition.vertexCount() > 0)
     {
@@ -230,9 +266,19 @@ htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::
 
 void htd::PostProcessingPathDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
-    labelingFunctions_.clear();
+    for (auto & labelingFunction : implementation_->labelingFunctions_)
+    {
+        delete labelingFunction;
+    }
 
-    postProcessingOperations_.clear();
+    for (auto & postProcessingOperation : implementation_->postProcessingOperations_)
+    {
+        delete postProcessingOperation;
+    }
+
+    implementation_->labelingFunctions_.clear();
+
+    implementation_->postProcessingOperations_.clear();
 
     addManipulationOperations(manipulationOperations);
 }
@@ -243,14 +289,14 @@ void htd::PostProcessingPathDecompositionAlgorithm::addManipulationOperation(htd
 
     if (labelingFunction != nullptr)
     {
-        labelingFunctions_.push_back(labelingFunction);
+        implementation_->labelingFunctions_.push_back(labelingFunction);
     }
 
     htd::IPathDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(manipulationOperation);
 
     if (newManipulationOperation != nullptr)
     {
-        postProcessingOperations_.push_back(newManipulationOperation);
+        implementation_->postProcessingOperations_.push_back(newManipulationOperation);
     }
 }
 
@@ -262,14 +308,14 @@ void htd::PostProcessingPathDecompositionAlgorithm::addManipulationOperations(co
 
         if (labelingFunction != nullptr)
         {
-            labelingFunctions_.push_back(labelingFunction);
+            implementation_->labelingFunctions_.push_back(labelingFunction);
         }
 
         htd::IPathDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(operation);
 
         if (manipulationOperation != nullptr)
         {
-            postProcessingOperations_.push_back(manipulationOperation);
+            implementation_->postProcessingOperations_.push_back(manipulationOperation);
         }
     }
 }
@@ -279,11 +325,23 @@ bool htd::PostProcessingPathDecompositionAlgorithm::isSafelyInterruptible(void) 
     return false;
 }
 
+const htd::LibraryInstance * htd::PostProcessingPathDecompositionAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::PostProcessingPathDecompositionAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::PostProcessingPathDecompositionAlgorithm * htd::PostProcessingPathDecompositionAlgorithm::clone(void) const
 {
-    htd::PostProcessingPathDecompositionAlgorithm * ret = new htd::PostProcessingPathDecompositionAlgorithm();
+    htd::PostProcessingPathDecompositionAlgorithm * ret = new htd::PostProcessingPathDecompositionAlgorithm(managementInstance());
 
-    for (const auto & labelingFunction : labelingFunctions_)
+    for (const auto & labelingFunction : implementation_->labelingFunctions_)
     {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(labelingFunction->clone());
@@ -292,7 +350,7 @@ htd::PostProcessingPathDecompositionAlgorithm * htd::PostProcessingPathDecomposi
 #endif
     }
 
-    for (const auto & postProcessingOperation : postProcessingOperations_)
+    for (const auto & postProcessingOperation : implementation_->postProcessingOperations_)
     {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(postProcessingOperation->clone());

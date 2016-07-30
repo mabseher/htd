@@ -33,12 +33,39 @@
 
 #include <algorithm>
 
-htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(void) : htd::LibraryObject(), identicalParent_(false)
+/**
+ *  Private implementation details of class htd::JoinNodeNormalizationOperation.
+ */
+struct htd::JoinNodeNormalizationOperation::Implementation
 {
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager           The management instance to which the current object instance belongs.
+     *  @param[in] identicalParent  A boolean flag whether each join node shall have a parent with equal bag content.
+     */
+    Implementation(const htd::LibraryInstance * const manager, bool identicalParent) : managementInstance_(manager), identicalParent_(identicalParent)
+    {
 
-}
+    }
 
-htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(bool identicalParent) : htd::LibraryObject(), identicalParent_(identicalParent)
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  A boolean flag whether each join node shall have a parent with equal bag content.
+     */
+    bool identicalParent_;
+};
+
+htd::JoinNodeNormalizationOperation::JoinNodeNormalizationOperation(const htd::LibraryInstance * const manager, bool identicalParent) : implementation_(new Implementation(manager, identicalParent))
 {
 
 }
@@ -79,7 +106,7 @@ void htd::JoinNodeNormalizationOperation::apply(const htd::IMultiHypergraph & gr
         std::cout << std::endl << std::endl;
         )
 
-        if (identicalParent_)
+        if (implementation_->identicalParent_)
         {
             if (decomposition.bagContent(decomposition.parent(node)) != bag)
             {
@@ -154,7 +181,7 @@ void htd::JoinNodeNormalizationOperation::apply(const htd::IMultiHypergraph & gr
             std::cout << std::endl << std::endl;
             )
 
-            if (identicalParent_)
+            if (implementation_->identicalParent_)
             {
                 if (decomposition.bagContent(decomposition.parent(vertex)) != bag)
                 {
@@ -244,13 +271,21 @@ bool htd::JoinNodeNormalizationOperation::createsLocationDependendLabels(void) c
     return false;
 }
 
+const htd::LibraryInstance * htd::JoinNodeNormalizationOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::JoinNodeNormalizationOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::JoinNodeNormalizationOperation * htd::JoinNodeNormalizationOperation::clone(void) const
 {
-    htd::JoinNodeNormalizationOperation * ret = new htd::JoinNodeNormalizationOperation(identicalParent_);
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::JoinNodeNormalizationOperation(managementInstance(), implementation_->identicalParent_);
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

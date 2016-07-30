@@ -32,9 +32,26 @@
 
 #include <stdexcept>
 
-htd::OrderingAlgorithmFactory::OrderingAlgorithmFactory(void)
+htd::OrderingAlgorithmFactory::OrderingAlgorithmFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::AdvancedMinFillOrderingAlgorithm();
+    constructionTemplate_ = new htd::AdvancedMinFillOrderingAlgorithm(manager);
+}
+
+htd::OrderingAlgorithmFactory::OrderingAlgorithmFactory(const htd::OrderingAlgorithmFactory & original)
+{
+    constructionTemplate_ = original.constructionTemplate_->clone();
+}
+
+htd::OrderingAlgorithmFactory & htd::OrderingAlgorithmFactory::operator=(const htd::OrderingAlgorithmFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    }
+
+    return *this;
 }
 
 htd::OrderingAlgorithmFactory::~OrderingAlgorithmFactory()
@@ -47,23 +64,16 @@ htd::OrderingAlgorithmFactory::~OrderingAlgorithmFactory()
     }
 }
 
-htd::OrderingAlgorithmFactory & htd::OrderingAlgorithmFactory::instance(void)
-{
-    static htd::OrderingAlgorithmFactory instance_;
-
-    return instance_;
-}
-
 htd::IOrderingAlgorithm * htd::OrderingAlgorithmFactory::getOrderingAlgorithm(void) const
 {
     return constructionTemplate_->clone();
 }
 
-htd::IOrderingAlgorithm * htd::OrderingAlgorithmFactory::getOrderingAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+htd::IOrderingAlgorithm * htd::OrderingAlgorithmFactory::getOrderingAlgorithm(const htd::LibraryInstance * const manager) const
 {
     htd::IOrderingAlgorithm * ret = constructionTemplate_->clone();
 
-    ret->setManagementInstance(instance);
+    ret->setManagementInstance(manager);
 
     return ret;
 }

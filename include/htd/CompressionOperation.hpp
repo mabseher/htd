@@ -41,8 +41,10 @@ namespace htd
         public:
             /**
              *  Constructor for a new manipulation operation of type CompressionOperation.
+             *
+             *  @param[in] manager   The management instance to which the new manipulation operation belongs.
              */
-            CompressionOperation(void);
+            CompressionOperation(const htd::LibraryInstance * const manager);
 
             virtual ~CompressionOperation();
 
@@ -74,6 +76,10 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             CompressionOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -90,6 +96,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

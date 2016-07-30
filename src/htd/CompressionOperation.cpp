@@ -32,7 +32,33 @@
 
 #include <vector>
 
-htd::CompressionOperation::CompressionOperation(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::CompressionOperation.
+ */
+struct htd::CompressionOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::CompressionOperation::CompressionOperation(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -259,11 +285,19 @@ bool htd::CompressionOperation::createsLocationDependendLabels(void) const
 
 htd::CompressionOperation * htd::CompressionOperation::clone(void) const
 {
-    htd::CompressionOperation * ret = new htd::CompressionOperation();
+    return new htd::CompressionOperation(managementInstance());
+}
 
-    ret->setManagementInstance(managementInstance());
+const htd::LibraryInstance * htd::CompressionOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
 
-    return ret;
+void htd::CompressionOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

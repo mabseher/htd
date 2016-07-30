@@ -43,7 +43,7 @@ namespace htd
             /**
              *  Constructor for a path decomposition.
              */
-            PathDecomposition(void);
+            PathDecomposition(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for a path decomposition.
@@ -73,7 +73,7 @@ namespace htd
              */
             PathDecomposition(const htd::IPathDecomposition & original);
             
-            ~PathDecomposition();
+            virtual ~PathDecomposition();
 
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 

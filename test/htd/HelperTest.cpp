@@ -36,7 +36,7 @@ class HelperTest : public ::testing::Test
 
         }
 
-        ~HelperTest()
+        virtual ~HelperTest()
         {
 
         }

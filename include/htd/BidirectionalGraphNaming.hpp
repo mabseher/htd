@@ -47,7 +47,7 @@ namespace htd
 
             }
 
-            ~BidirectionalGraphNaming()
+            virtual ~BidirectionalGraphNaming()
             {
 
             }

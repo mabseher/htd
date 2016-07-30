@@ -36,7 +36,7 @@ class LabeledGraphTest : public ::testing::Test
 
         }
 
-        ~LabeledGraphTest()
+        virtual ~LabeledGraphTest()
         {
 
         }
@@ -54,7 +54,9 @@ class LabeledGraphTest : public ::testing::Test
 
 TEST(LabeledGraphTest, CheckEmptyGraph)
 {
-    htd::LabeledGraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::LabeledGraph graph(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -66,11 +68,15 @@ TEST(LabeledGraphTest, CheckEmptyGraph)
     ASSERT_EQ((std::size_t)0, graph.isolatedVertices().size());
 
     ASSERT_TRUE(graph.isConnected());
+
+    delete libraryInstance;
 }
 
 TEST(LabeledGraphTest, CheckSize1Graph)
 {
-    htd::LabeledGraph graph(1);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::LabeledGraph graph(libraryInstance, 1);
 
     ASSERT_EQ((std::size_t)1, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -101,11 +107,15 @@ TEST(LabeledGraphTest, CheckSize1Graph)
 
     ASSERT_TRUE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+
+    delete libraryInstance;
 }
 
 TEST(LabeledGraphTest, CheckSize3Graph)
 {
-    htd::LabeledGraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::LabeledGraph graph(libraryInstance);
 
     graph.addVertices(3);
 
@@ -239,11 +249,15 @@ TEST(LabeledGraphTest, CheckSize3Graph)
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)3));
+
+    delete libraryInstance;
 }
 
 TEST(LabeledGraphTest, CheckSelfLoop)
 {
-    htd::LabeledGraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::LabeledGraph graph(libraryInstance);
 
     graph.addVertices(2);
 
@@ -364,11 +378,15 @@ TEST(LabeledGraphTest, CheckSelfLoop)
     ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2, 2 }));
 
     ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge122)));
+
+    delete libraryInstance;
 }
 
 TEST(LabeledGraphTest, CheckGraphModifications)
 {
-    htd::LabeledGraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::LabeledGraph graph(libraryInstance);
 
     graph.addVertices(3);
 
@@ -427,15 +445,15 @@ TEST(LabeledGraphTest, CheckGraphModifications)
     graph.addEdge(4, 5);
 
     ASSERT_EQ((std::size_t)1, graph.edgeCount());
+
+    delete libraryInstance;
 }
 
 TEST(LabeledGraphTest, CheckCopyConstructors)
 {
-    htd::Hyperedge h1(1, 1, 2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::FilteredHyperedgeCollection hyperedges1(new htd::HyperedgeVector(std::vector<htd::Hyperedge> { h1 }), std::vector<htd::index_t> { 0 });
-
-    htd::LabeledGraph graph1;
+    htd::LabeledGraph graph1(libraryInstance);
 
     graph1.addVertices(2);
 
@@ -456,7 +474,7 @@ TEST(LabeledGraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph2.vertexCount());
     ASSERT_EQ((std::size_t)1, graph2.edgeCount());
 
-    htd::LabeledGraph graph3;
+    htd::LabeledGraph graph3(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
@@ -555,13 +573,17 @@ TEST(LabeledGraphTest, CheckCopyConstructors)
     ASSERT_FALSE(clonedGraph->isLabeledEdge("Label", edgeId1));
 
     delete clonedGraph;
+
+    delete libraryInstance;
 }
 
 TEST(LabeledGraphTest, CheckConversionFunctions)
 {
-    htd::MultiGraph graph(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::LabeledMultiGraph labeledGraph(2);
+    htd::MultiGraph graph(libraryInstance, 2);
+
+    htd::LabeledMultiGraph labeledGraph(libraryInstance, 2);
 
     graph.addEdge(1, 2);
     graph.addEdge(1, 2);
@@ -571,8 +593,8 @@ TEST(LabeledGraphTest, CheckConversionFunctions)
     labeledGraph.addEdge(2, 1);
     labeledGraph.addEdge(2, 1);
 
-    htd::LabeledGraph gd1;
-    htd::LabeledGraph gd2;
+    htd::LabeledGraph gd1(libraryInstance);
+    htd::LabeledGraph gd2(libraryInstance);
 
     gd1 = graph;
     gd2 = labeledGraph;
@@ -583,11 +605,15 @@ TEST(LabeledGraphTest, CheckConversionFunctions)
     ASSERT_EQ((htd::id_t)1, gd1.hyperedgeAtPosition(0).id());
     ASSERT_EQ((htd::id_t)1, gd2.hyperedgeAtPosition(0).id());
     ASSERT_EQ((htd::id_t)3, gd2.hyperedgeAtPosition(1).id());
+
+    delete libraryInstance;
 }
 
 TEST(LabeledGraphTest, TestVertexLabelModifications)
 {
-    htd::LabeledGraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::LabeledGraph graph(libraryInstance);
 
     graph.addVertices(3);
 
@@ -681,11 +707,15 @@ TEST(LabeledGraphTest, TestVertexLabelModifications)
     ASSERT_EQ(1, htd::accessLabel<int>(graph.vertexLabel("Label2", 2)));
 
     delete exportedLabel;
+
+    delete libraryInstance;
 }
 
 TEST(LabeledGraphTest, TestEdgeLabelModifications)
 {
-    htd::LabeledGraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::LabeledGraph graph(libraryInstance);
 
     graph.addVertices(3);
 
@@ -783,6 +813,8 @@ TEST(LabeledGraphTest, TestEdgeLabelModifications)
     ASSERT_EQ(1, htd::accessLabel<int>(graph.edgeLabel("Label2", 2)));
 
     delete exportedLabel;
+
+    delete libraryInstance;
 }
 
 int main(int argc, char **argv)

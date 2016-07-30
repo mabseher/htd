@@ -32,9 +32,34 @@
 
 #include <stdexcept>
 
-htd::LabeledDirectedGraphFactory::LabeledDirectedGraphFactory(void)
+htd::LabeledDirectedGraphFactory::LabeledDirectedGraphFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::LabeledDirectedGraph();
+    constructionTemplate_ = new htd::LabeledDirectedGraph(manager);
+}
+
+htd::LabeledDirectedGraphFactory::LabeledDirectedGraphFactory(const htd::LabeledDirectedGraphFactory & original)
+{
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledDirectedGraph();
+#endif
+}
+
+htd::LabeledDirectedGraphFactory & htd::LabeledDirectedGraphFactory::operator=(const htd::LabeledDirectedGraphFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    #else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledDirectedGraph();
+    #endif
+    }
+
+    return *this;
 }
 
 htd::LabeledDirectedGraphFactory::~LabeledDirectedGraphFactory()
@@ -47,14 +72,7 @@ htd::LabeledDirectedGraphFactory::~LabeledDirectedGraphFactory()
     }
 }
 
-htd::LabeledDirectedGraphFactory & htd::LabeledDirectedGraphFactory::instance(void)
-{
-    static htd::LabeledDirectedGraphFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(void)
+htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -63,7 +81,7 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
 #endif
 }
 
-htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(std::size_t initialSize)
+htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(std::size_t initialSize) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
@@ -76,7 +94,7 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
     return ret;
 }
 
-htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original)
+htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
@@ -91,7 +109,7 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
     return ret;
 }
 
-htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original)
+htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
@@ -121,12 +139,12 @@ void htd::LabeledDirectedGraphFactory::setConstructionTemplate(htd::IMutableLabe
     constructionTemplate_ = original;
 }
 
-htd::IMutableLabeledDirectedGraph & htd::LabeledDirectedGraphFactory::accessMutableLabeledDirectedGraph(htd::ILabeledDirectedGraph & original)
+htd::IMutableLabeledDirectedGraph & htd::LabeledDirectedGraphFactory::accessMutableLabeledDirectedGraph(htd::ILabeledDirectedGraph & original) const
 {
     return *(dynamic_cast<htd::IMutableLabeledDirectedGraph *>(&original));
 }
 
-const htd::IMutableLabeledDirectedGraph & htd::LabeledDirectedGraphFactory::accessMutableLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original)
+const htd::IMutableLabeledDirectedGraph & htd::LabeledDirectedGraphFactory::accessMutableLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const
 {
     return *(dynamic_cast<const htd::IMutableLabeledDirectedGraph *>(&original));
 }

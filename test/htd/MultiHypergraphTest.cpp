@@ -36,7 +36,7 @@ class MultiHypergraphTest : public ::testing::Test
 
         }
 
-        ~MultiHypergraphTest()
+        virtual ~MultiHypergraphTest()
         {
 
         }
@@ -54,7 +54,9 @@ class MultiHypergraphTest : public ::testing::Test
 
 TEST(MultiHypergraphTest, CheckEmptyGraph)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -66,11 +68,15 @@ TEST(MultiHypergraphTest, CheckEmptyGraph)
     ASSERT_EQ((std::size_t)0, graph.isolatedVertices().size());
 
     ASSERT_TRUE(graph.isConnected());
+
+    delete libraryInstance;
 }
 
 TEST(MultiHypergraphTest, CheckSizeInitializedGraph1)
 {
-    htd::MultiHypergraph graph(1);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance, 1);
 
     ASSERT_EQ((std::size_t)1, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -101,11 +107,15 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph1)
 
     ASSERT_TRUE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+
+    delete libraryInstance;
 }
 
 TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
 {
-    htd::MultiHypergraph graph(3);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance, 3);
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -318,11 +328,15 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)3));
+
+    delete libraryInstance;
 }
 
 TEST(MultiHypergraphTest, CheckSelfLoop)
 {
-    htd::MultiHypergraph graph(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance, 2);
 
     ASSERT_EQ((std::size_t)2, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -422,11 +436,15 @@ TEST(MultiHypergraphTest, CheckSelfLoop)
 
     ASSERT_EQ((htd::vertex_t)2, graph.neighborAtPosition((htd::vertex_t)1, (htd::index_t)0));
     ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)2, (htd::index_t)0));
+
+    delete libraryInstance;
 }
 
 TEST(MultiHypergraphTest, CheckGraphModifications)
 {
-    htd::MultiHypergraph graph(3);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance, 3);
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -694,11 +712,15 @@ TEST(MultiHypergraphTest, CheckGraphModifications)
     ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
     ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    delete libraryInstance;
 }
 
 TEST(MultiHypergraphTest, CheckCopyConstructors)
 {
-    htd::MultiHypergraph graph1(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph1(libraryInstance, 2);
 
     ASSERT_EQ((std::size_t)2, graph1.vertexCount());
     ASSERT_EQ((std::size_t)0, graph1.edgeCount());
@@ -713,7 +735,7 @@ TEST(MultiHypergraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph2.vertexCount());
     ASSERT_EQ((std::size_t)1, graph2.edgeCount());
 
-    htd::MultiHypergraph graph3;
+    htd::MultiHypergraph graph3(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
@@ -749,7 +771,7 @@ TEST(MultiHypergraphTest, CheckCopyConstructors)
 
     const htd::IMultiHypergraph & graphReference2 = graph4;
 
-    htd::MultiHypergraph graph5;
+    htd::MultiHypergraph graph5(libraryInstance);
 
     graph5 = graphReference2;
 
@@ -757,6 +779,8 @@ TEST(MultiHypergraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)0, graph5.edgeCount());
 
     ASSERT_EQ((htd::vertex_t)2, graph5.vertexAtPosition(0));
+
+    delete libraryInstance;
 }
 
 int main(int argc, char **argv)

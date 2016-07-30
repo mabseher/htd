@@ -32,6 +32,7 @@
 #include <htd/ILabel.hpp>
 #include <htd/Label.hpp>
 #include <htd/FilteredHyperedgeCollection.hpp>
+#include <htd/LibraryInstance.hpp>
 
 #include <algorithm>
 #include <cassert>
@@ -40,6 +41,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
 #include <tuple>
@@ -49,6 +51,15 @@
 
 namespace htd
 {
+    /**
+     *  Create a new management instance.
+     *
+     *  @param[in] id   The ID of the new management instance.
+     *
+     *  @return A pointer to the new management instance.
+     */
+    htd::LibraryInstance * createManagementInstance(htd::id_t id);
+
     template < typename T >
     void print(const T & input, std::ostream & stream)
     {

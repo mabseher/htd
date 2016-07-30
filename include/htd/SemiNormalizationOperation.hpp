@@ -42,17 +42,20 @@ namespace htd
         public:
             /**
              *  Constructor for a new manipulation operation of type SemiNormalizationOperation.
+             *
+             *  @param[in] manager           The management instance to which the new manipulation operation belongs.
              */
-            SemiNormalizationOperation(void);
+            SemiNormalizationOperation(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a new manipulation operation of type SemiNormalizationOperation.
              *
+             *  @param[in] manager                   The management instance to which the new manipulation operation belongs.
              *  @param[in] emptyRoot                A boolean flag whether the decomposition shall have a root node with empty bag.
              *  @param[in] emptyLeaves              A boolean flag whether the decomposition's leave nodes shall have an empty bag.
              *  @param[in] identicalJoinNodeParent  A boolean flag whether each join node shall have a parent with equal bag content.
              */
-            SemiNormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent);
+            SemiNormalizationOperation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent);
 
             virtual ~SemiNormalizationOperation();
 
@@ -100,6 +103,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

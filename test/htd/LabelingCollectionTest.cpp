@@ -36,7 +36,7 @@ class LabelingCollectionTest : public ::testing::Test
 
         }
 
-        ~LabelingCollectionTest()
+        virtual ~LabelingCollectionTest()
         {
 
         }

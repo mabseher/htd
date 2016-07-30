@@ -58,7 +58,7 @@ namespace htd_cli
              */
             SingleValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName);
 
-            ~SingleValueOption();
+            virtual ~SingleValueOption();
 
             /**
              *  Getter for the argument value assigned to the option.

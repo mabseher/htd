@@ -32,14 +32,40 @@
 #include <htd/LimitMaximumForgottenVertexCountOperation.hpp>
 #include <htd/LimitMaximumIntroducedVertexCountOperation.hpp>
 
-htd::NormalizationOperation::NormalizationOperation(void)
-    : htd::SemiNormalizationOperation(), treatLeafNodesAsIntroduceNodes_(false)
+/**
+ *  Private implementation details of class htd::NormalizationOperation.
+ */
+struct htd::NormalizationOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] treatLeafNodesAsIntroduceNodes   A boolean flag whether leaf nodes shall be treated as introduce nodes in the context of this operation.
+     */
+    Implementation(bool treatLeafNodesAsIntroduceNodes) : treatLeafNodesAsIntroduceNodes_(treatLeafNodesAsIntroduceNodes)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  A boolean flag whether leaf nodes shall be treated as introduce nodes in the context of this operation.
+     */
+    bool treatLeafNodesAsIntroduceNodes_;
+};
+
+htd::NormalizationOperation::NormalizationOperation(const htd::LibraryInstance * const manager)
+    : htd::SemiNormalizationOperation(manager), implementation_(new Implementation(false))
 {
 
 }
 
-htd::NormalizationOperation::NormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent, bool treatLeafNodesAsIntroduceNodes)
-    : htd::SemiNormalizationOperation(emptyRoot, emptyLeaves, identicalJoinNodeParent), treatLeafNodesAsIntroduceNodes_(treatLeafNodesAsIntroduceNodes)
+htd::NormalizationOperation::NormalizationOperation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent, bool treatLeafNodesAsIntroduceNodes)
+    : htd::SemiNormalizationOperation(manager, emptyRoot, emptyLeaves, identicalJoinNodeParent), implementation_(new Implementation(treatLeafNodesAsIntroduceNodes))
 {
 
 }
@@ -63,21 +89,15 @@ void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd
 {
     htd::SemiNormalizationOperation::apply(graph, decomposition, labelingFunctions);
 
-    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
-
-    exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
+    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation(managementInstance());
 
     exchangeNodeReplacementOperation.apply(graph, decomposition, labelingFunctions);
 
-    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
-
-    limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
+    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(managementInstance(), 1);
 
     limitMaximumForgottenVertexCountOperation.apply(graph, decomposition, labelingFunctions);
 
-    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
-
-    limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
+    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(managementInstance(), 1);
 
     limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, labelingFunctions);
 }
@@ -86,21 +106,15 @@ void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd
 {
     htd::SemiNormalizationOperation::apply(graph, decomposition, relevantVertices, labelingFunctions);
 
-    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
-
-    exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
+    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation(managementInstance());
 
     exchangeNodeReplacementOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
 
-    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
-
-    limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
+    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(managementInstance(), 1);
 
     limitMaximumForgottenVertexCountOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
 
-    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1);
-
-    limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
+    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(managementInstance(), 1);
 
     limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
 }
@@ -119,21 +133,15 @@ void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd
 {
     htd::SemiNormalizationOperation::apply(graph, decomposition, labelingFunctions);
 
-    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
-
-    exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
+    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation(managementInstance());
 
     exchangeNodeReplacementOperation.apply(graph, decomposition, labelingFunctions);
 
-    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
-
-    limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
+    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(managementInstance(), 1);
 
     limitMaximumForgottenVertexCountOperation.apply(graph, decomposition, labelingFunctions);
 
-    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1, treatLeafNodesAsIntroduceNodes_);
-
-    limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
+    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(managementInstance(), 1, implementation_->treatLeafNodesAsIntroduceNodes_);
 
     limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, labelingFunctions);
 }
@@ -157,9 +165,7 @@ void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd
         oldCreatedVerticesCount = createdVertices.size();
     }
 
-    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation;
-
-    exchangeNodeReplacementOperation.setManagementInstance(managementInstance());
+    htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation(managementInstance());
 
     exchangeNodeReplacementOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
@@ -172,9 +178,7 @@ void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd
         oldCreatedVerticesCount = createdVertices.size();
     }
 
-    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(1);
-
-    limitMaximumForgottenVertexCountOperation.setManagementInstance(managementInstance());
+    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(managementInstance(),1);
 
     limitMaximumForgottenVertexCountOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
@@ -187,9 +191,7 @@ void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd
         oldCreatedVerticesCount = createdVertices.size();
     }
 
-    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(1, treatLeafNodesAsIntroduceNodes_);
-
-    limitMaximumIntroducedVertexCountOperation.setManagementInstance(managementInstance());
+    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(managementInstance(), 1, implementation_->treatLeafNodesAsIntroduceNodes_);
 
     limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
@@ -226,16 +228,12 @@ bool htd::NormalizationOperation::createsLocationDependendLabels(void) const
 
 bool htd::NormalizationOperation::leafNodesTreatedAsIntroduceNodes(void) const
 {
-    return treatLeafNodesAsIntroduceNodes_;
+    return implementation_->treatLeafNodesAsIntroduceNodes_;
 }
 
 htd::NormalizationOperation * htd::NormalizationOperation::clone(void) const
 {
-    htd::NormalizationOperation * ret = new htd::NormalizationOperation(emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired(), treatLeafNodesAsIntroduceNodes_);
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::NormalizationOperation(managementInstance(), emptyRootRequired(), emptyLeavesRequired(), identicalJoinNodeParentRequired(), implementation_->treatLeafNodesAsIntroduceNodes_);
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

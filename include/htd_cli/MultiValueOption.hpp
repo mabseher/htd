@@ -58,7 +58,7 @@ namespace htd_cli
              */
             MultiValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName);
 
-            ~MultiValueOption();
+            virtual ~MultiValueOption();
 
             /**
              *  Getter for the argument values assigned to the option.

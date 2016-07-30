@@ -49,7 +49,7 @@ namespace htd
             /**
              *  Constructor for a graph.
              */
-            NamedGraph(void) : base_(htd::LabeledGraphFactory::instance().getLabeledGraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledGraph::addVertex, base_))
+            NamedGraph(const htd::LibraryInstance * const manager) : base_(manager->labeledGraphFactory().getLabeledGraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledGraph::addVertex, base_))
             {
 
             }
@@ -67,7 +67,7 @@ namespace htd
             /**
              *  Destructor for a NamedGraph object.
              */
-            ~NamedGraph()
+            virtual ~NamedGraph()
             {
                 if (base_ != nullptr)
                 {

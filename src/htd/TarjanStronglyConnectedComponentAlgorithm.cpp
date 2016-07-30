@@ -33,6 +33,33 @@
 #include <algorithm>
 #include <stack>
 #include <stdexcept>
+#include <unordered_map>
+
+/**
+ *  Private implementation details of class htd::TarjanStronglyConnectedComponentAlgorithm.
+ */
+struct htd::TarjanStronglyConnectedComponentAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
 
 /**
  *  Internal data structure used to store relevant vertex information needed by Tarjan's algorithm.
@@ -81,7 +108,7 @@ struct Node {
     /**
      *  Destructor of an object of type Node.
      */
-    ~Node()
+    virtual ~Node()
     {
         delete neighbors;
     }
@@ -189,7 +216,7 @@ void determineComponents(Node * node, std::stack<Node *> & stack, std::unordered
    }
 }
 
-htd::TarjanStronglyConnectedComponentAlgorithm::TarjanStronglyConnectedComponentAlgorithm(void) : htd::LibraryObject()
+htd::TarjanStronglyConnectedComponentAlgorithm::TarjanStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -206,7 +233,7 @@ void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const h
      *
      *  For this reason we can use the more efficient algorithm based on simple depth-first search.
      */
-    DepthFirstConnectedComponentAlgorithm algorithm;
+    DepthFirstConnectedComponentAlgorithm algorithm(implementation_->managementInstance_);
 
     algorithm.determineComponents(graph, target);
 }
@@ -292,7 +319,7 @@ void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const ht
      *
      *  For this reason we can use the more efficient algorithm based on simple depth-first search.
      */
-    DepthFirstConnectedComponentAlgorithm algorithm;
+    DepthFirstConnectedComponentAlgorithm algorithm(managementInstance());
 
     algorithm.determineComponent(graph, startingVertex, target);
 }
@@ -375,13 +402,21 @@ void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const ht
     }
 }
 
+const htd::LibraryInstance * htd::TarjanStronglyConnectedComponentAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::TarjanStronglyConnectedComponentAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::TarjanStronglyConnectedComponentAlgorithm * htd::TarjanStronglyConnectedComponentAlgorithm::clone(void) const
 {
-    htd::TarjanStronglyConnectedComponentAlgorithm * ret = new htd::TarjanStronglyConnectedComponentAlgorithm();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::TarjanStronglyConnectedComponentAlgorithm((managementInstance()));
 }
 
 #endif /* HTD_HTD_TARJANSTRONGLYCONNECTEDCOMPONENTALGORITHM_CPP */

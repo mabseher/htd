@@ -30,11 +30,37 @@
 
 #include <algorithm>
 
-htd::ExchangeNodeReplacementOperation::ExchangeNodeReplacementOperation(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::ExchangeNodeReplacementOperation.
+ */
+struct htd::ExchangeNodeReplacementOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::ExchangeNodeReplacementOperation::ExchangeNodeReplacementOperation(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
   
 }
-  
+
 htd::ExchangeNodeReplacementOperation::~ExchangeNodeReplacementOperation()
 {
   
@@ -62,7 +88,9 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
 
     std::vector<htd::vertex_t> rememberedVertices;
 
-    for (auto it = exchangeNodes.begin(); it != exchangeNodes.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = exchangeNodes.begin(); it != exchangeNodes.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t node = *it;
 
@@ -132,7 +160,9 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
 
     std::vector<htd::vertex_t> rememberedVertices;
 
-    for (auto it = exchangeNodes.begin(); it != exchangeNodes.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = exchangeNodes.begin(); it != exchangeNodes.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t node = *it;
 
@@ -182,7 +212,9 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
 
     std::vector<htd::vertex_t> rememberedVertices;
 
-    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
@@ -260,13 +292,21 @@ bool htd::ExchangeNodeReplacementOperation::createsLocationDependendLabels(void)
     return false;
 }
 
+const htd::LibraryInstance * htd::ExchangeNodeReplacementOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::ExchangeNodeReplacementOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::ExchangeNodeReplacementOperation * htd::ExchangeNodeReplacementOperation::clone(void) const
 {
-    htd::ExchangeNodeReplacementOperation * ret = new htd::ExchangeNodeReplacementOperation();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::ExchangeNodeReplacementOperation(managementInstance());
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

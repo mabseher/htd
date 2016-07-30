@@ -33,11 +33,37 @@
 #include <algorithm>
 #include <numeric>
 
-htd::GreedySetCoverAlgorithm::GreedySetCoverAlgorithm(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::GreedySetCoverAlgorithm.
+ */
+struct htd::GreedySetCoverAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::GreedySetCoverAlgorithm::GreedySetCoverAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
     
 }
-            
+
 htd::GreedySetCoverAlgorithm::~GreedySetCoverAlgorithm()
 {
     
@@ -132,13 +158,21 @@ void htd::GreedySetCoverAlgorithm::computeSetCover(const htd::ConstCollection<ht
     }
 }
 
+const htd::LibraryInstance * htd::GreedySetCoverAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::GreedySetCoverAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::GreedySetCoverAlgorithm * htd::GreedySetCoverAlgorithm::clone(void) const
 {
-    htd::GreedySetCoverAlgorithm * ret = new htd::GreedySetCoverAlgorithm();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::GreedySetCoverAlgorithm(managementInstance());
 }
 
 #endif /* HTD_HTD_GREEDYSETCOVERALGORITHM_CPP */

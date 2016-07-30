@@ -87,7 +87,7 @@ namespace htd
             /**
              *  Destructor for a ConstCollection object.
              */
-            ~ConstCollection()
+            virtual ~ConstCollection()
             {
 
             }

@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~LabeledMultiHypergraphFactory();
+            LabeledMultiHypergraphFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static LabeledMultiHypergraphFactory & instance(void);
+            LabeledMultiHypergraphFactory(const LabeledMultiHypergraphFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            LabeledMultiHypergraphFactory & operator=(const LabeledMultiHypergraphFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~LabeledMultiHypergraphFactory();
 
             /**
              *  Create a new IMutableLabeledMultiHypergraph object.
              *
              *  @return A new IMutableLabeledMultiHypergraph object.
              */
-            htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(void);
+            htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(void) const;
 
             /**
              *  Create a new IMutableLabeledMultiHypergraph object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledMultiHypergraph object of the given size.
              */
-            htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(std::size_t initialSize);
+            htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableLabeledMultiHypergraph object.
@@ -71,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledMultiHypergraph object identical to the given original graph.
              */
-            htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original);
+            htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledMultiHypergraph interface.
@@ -89,41 +97,20 @@ namespace htd
              *
              *  @return The mutable interface of the given labeled multi-hypergraph.
              */
-            htd::IMutableLabeledMultiHypergraph & accessMutableLabeledMultiHypergraph(htd::ILabeledMultiHypergraph & original);
+            htd::IMutableLabeledMultiHypergraph & accessMutableLabeledMultiHypergraph(htd::ILabeledMultiHypergraph & original) const;
 
             /**
              *  Access the mutable interface of a given labeled multi-hypergraph.
              *
              *  @return The mutable interface of the given labeled multi-hypergraph.
              */
-            const htd::IMutableLabeledMultiHypergraph & accessMutableLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original);
+            const htd::IMutableLabeledMultiHypergraph & accessMutableLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) const;
 
         private:
             /**
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IMutableLabeledMultiHypergraph * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            LabeledMultiHypergraphFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            LabeledMultiHypergraphFactory(const LabeledMultiHypergraphFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            LabeledMultiHypergraphFactory & operator=(const LabeledMultiHypergraphFactory & original);
     };
 }
 

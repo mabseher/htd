@@ -41,7 +41,7 @@ namespace htd
         public:
             HumanReadableExporter(void);
 
-            ~HumanReadableExporter();
+            virtual ~HumanReadableExporter();
 
             void write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
 

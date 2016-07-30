@@ -34,7 +34,33 @@
 #include <unordered_map>
 #include <unordered_set>
 
-htd::MinDegreeOrderingAlgorithm::MinDegreeOrderingAlgorithm(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::MinDegreeOrderingAlgorithm.
+ */
+struct htd::MinDegreeOrderingAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::MinDegreeOrderingAlgorithm::MinDegreeOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
     
 }
@@ -71,7 +97,9 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
 
     htd::fillSet(graph.vertices(), vertices);
 
-    for (auto it = vertices.begin(); it != vertices.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = vertices.begin(); it != vertices.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
@@ -108,7 +136,7 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
         )
     }
     
-    while (size > 0 && !isTerminated())
+    while (size > 0 && !managementInstance.isTerminated())
     {
         if (pool.size() == 0)
         {
@@ -230,13 +258,21 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
     }
 }
 
+const htd::LibraryInstance * htd::MinDegreeOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::MinDegreeOrderingAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::MinDegreeOrderingAlgorithm * htd::MinDegreeOrderingAlgorithm::clone(void) const
 {
-    htd::MinDegreeOrderingAlgorithm * ret = new htd::MinDegreeOrderingAlgorithm();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::MinDegreeOrderingAlgorithm(implementation_->managementInstance_);
 }
 
 #endif /* HTD_HTD_MINDEGREEORDERINGALGORITHM_CPP */

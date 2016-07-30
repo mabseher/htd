@@ -34,7 +34,60 @@
 #include <unordered_map>
 #include <unordered_set>
 
-htd::AdvancedMinFillOrderingAlgorithm::AdvancedMinFillOrderingAlgorithm(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::AdvancedMinFillOrderingAlgorithm.
+ */
+struct htd::AdvancedMinFillOrderingAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  Compute the number of edges between a set of vertices.
+     *
+     *  @param[in] availableNeighborhoods   The neighborhoods of the provided vertices.
+     *  @param[in] vertices                 The vertices for which the number of edges shall be returned.
+     *
+     *  @return The number of edges between the provided vertices.
+     */
+    std::size_t computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const HTD_NOEXCEPT;
+
+    /**
+     *  Decompose two sets of vertices into vertices only in the first set, vertices only in the second set and vertices in both sets.
+     *
+     *  @param[in] set1                 The first set of vertices, sorted in ascending order.
+     *  @param[in] set2                 The second set of vertices, sorted in ascending order.
+     *  @param[in] ignoredVertex        The vertex which shall be ignored.
+     *  @param[out] resultOnlySet1      The set of vertices which are found only in the first set, sorted in ascending order.
+     *  @param[out] resultOnlySet2      The set of vertices which are found only in the second set, sorted in ascending order.
+     *  @param[out] resultIntersection  The set of vertices which are found in both sets, sorted in ascending order.
+     */
+    void decompose_sets(const std::vector<htd::vertex_t> & set1,
+                        const std::vector<htd::vertex_t> & set2,
+                        htd::vertex_t ignoredVertex,
+                        std::vector<htd::vertex_t> & resultOnlySet1,
+                        std::vector<htd::vertex_t> & resultOnlySet2,
+                        std::vector<htd::vertex_t> & resultIntersection) const HTD_NOEXCEPT;
+};
+
+htd::AdvancedMinFillOrderingAlgorithm::AdvancedMinFillOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
     
 }
@@ -83,7 +136,9 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
 
     std::size_t totalFill = 0;
 
-    for (auto it = vertices.begin(); it != vertices.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = vertices.begin(); it != vertices.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
@@ -101,13 +156,13 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
         updateStatus[vertex] = htd::State::UNKNOWN;
     }
 
-    for (auto it = vertices.begin(); it != vertices.end() && !isTerminated(); ++it)
+    for (auto it = vertices.begin(); it != vertices.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
         auto & currentNeighborhood = neighborhood.at(vertex);
         
-        std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
+        std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - implementation_->computeEdgeCount(neighborhood, currentNeighborhood);
 
         if (currentFillValue <= minFill)
         {
@@ -150,7 +205,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
         totalFill += currentFillValue;
     }
     
-    while (totalFill > 0 && !isTerminated())
+    while (totalFill > 0 && !managementInstance.isTerminated())
     {
         if (pool.size() == 0)
         {
@@ -230,10 +285,10 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                 {
                     if (updateStatus.at(neighbor) == 0)
                     {
-                        decompose_sets(selectedNeighborhood, neighborhood.at(neighbor), selectedVertex,
-                                       additionalNeighbors[neighbor],
-                                       unaffectedNeighbors[neighbor],
-                                       existingNeighbors[neighbor]);
+                        implementation_->decompose_sets(selectedNeighborhood, neighborhood.at(neighbor), selectedVertex,
+                                                        additionalNeighbors[neighbor],
+                                                        unaffectedNeighbors[neighbor],
+                                                        existingNeighbors[neighbor]);
                     }
 
                     updateStatus.at(neighbor) |= 1;
@@ -246,10 +301,10 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                         {
                             if (currentUpdateStatus == 0)
                             {
-                                decompose_sets(selectedNeighborhood, neighborhood.at(affectedVertex), selectedVertex,
-                                               additionalNeighbors[affectedVertex],
-                                               unaffectedNeighbors[affectedVertex],
-                                               existingNeighbors[affectedVertex]);
+                                implementation_->decompose_sets(selectedNeighborhood, neighborhood.at(affectedVertex), selectedVertex,
+                                                                additionalNeighbors[affectedVertex],
+                                                                unaffectedNeighbors[affectedVertex],
+                                                                existingNeighbors[affectedVertex]);
                             }
 
                             affectedVertices.push_back(affectedVertex);
@@ -693,7 +748,7 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
     DEBUGGING_CODE_LEVEL2(std::cout << std::endl;)
 }
 
-std::size_t htd::AdvancedMinFillOrderingAlgorithm::computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const HTD_NOEXCEPT
+std::size_t htd::AdvancedMinFillOrderingAlgorithm::Implementation::computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const HTD_NOEXCEPT
 {
     std::size_t ret = 0;
 
@@ -722,12 +777,12 @@ std::size_t htd::AdvancedMinFillOrderingAlgorithm::computeEdgeCount(const std::u
     return ret;
 }
             
-void htd::AdvancedMinFillOrderingAlgorithm::decompose_sets(const std::vector<htd::vertex_t> & set1,
-                                                           const std::vector<htd::vertex_t> & set2,
-                                                           htd::vertex_t ignoredVertex,
-                                                           std::vector<htd::vertex_t> & resultOnlySet1,
-                                                           std::vector<htd::vertex_t> & resultOnlySet2,
-                                                           std::vector<htd::vertex_t> & resultIntersection) const HTD_NOEXCEPT
+void htd::AdvancedMinFillOrderingAlgorithm::Implementation::decompose_sets(const std::vector<htd::vertex_t> & set1,
+                                                                           const std::vector<htd::vertex_t> & set2,
+                                                                           htd::vertex_t ignoredVertex,
+                                                                           std::vector<htd::vertex_t> & resultOnlySet1,
+                                                                           std::vector<htd::vertex_t> & resultOnlySet2,
+                                                                           std::vector<htd::vertex_t> & resultIntersection) const HTD_NOEXCEPT
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();
@@ -803,13 +858,21 @@ void htd::AdvancedMinFillOrderingAlgorithm::decompose_sets(const std::vector<htd
     }
 }
 
+const htd::LibraryInstance * htd::AdvancedMinFillOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::AdvancedMinFillOrderingAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::AdvancedMinFillOrderingAlgorithm * htd::AdvancedMinFillOrderingAlgorithm::clone(void) const
 {
-    htd::AdvancedMinFillOrderingAlgorithm * ret = new htd::AdvancedMinFillOrderingAlgorithm();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::AdvancedMinFillOrderingAlgorithm(implementation_->managementInstance_);
 }
 
 #endif /* HTD_HTD_ADVANCEDMINFILLORDERINGALGORITHM_CPP */

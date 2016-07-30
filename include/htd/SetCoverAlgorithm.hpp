@@ -38,13 +38,22 @@ namespace htd
     class HTD_API SetCoverAlgorithm : public virtual htd::ISetCoverAlgorithm
     {
         public:
-            SetCoverAlgorithm(void);
+            /**
+             *  Constructor for a new set-cover algorithm of type SetCoverAlgorithm.
+             *
+             *  @param[in] manager   The management instance to which the new algorithm belongs.
+             */
+            SetCoverAlgorithm(const htd::LibraryInstance * const manager);
             
-            ~SetCoverAlgorithm();
+            virtual ~SetCoverAlgorithm();
             
             void computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const HTD_OVERRIDE;
 
             void computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const HTD_OVERRIDE;
+
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
             SetCoverAlgorithm * clone(void) const HTD_OVERRIDE;
 
@@ -57,29 +66,9 @@ namespace htd
             SetCoverAlgorithm & operator=(const SetCoverAlgorithm &) { return *this; }
 
         private:
+            HTD_IMPLEMENTATION Implementation;
 
-            struct HistoryEntry
-            {
-                htd::index_t selectedIndex;
-
-                std::vector<htd::id_t> remainder;
-
-                std::vector<htd::id_t> containers;
-
-                HistoryEntry(htd::index_t selectedIndex, const std::vector<htd::id_t> & remainder, const std::vector<htd::id_t> & containers) : selectedIndex(selectedIndex), remainder(remainder), containers(containers)
-                {
-
-                }
-            };
-
-            class Compare
-            {
-                public:
-                    bool operator() (const std::vector<htd::index_t> & solution1, const std::vector<htd::index_t> & solution2)
-                    {
-                        return solution1.size() < solution2.size();
-                    }
-            };
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

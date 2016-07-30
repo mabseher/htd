@@ -32,9 +32,34 @@
 
 #include <stdexcept>
 
-htd::LabeledMultiGraphFactory::LabeledMultiGraphFactory(void)
+htd::LabeledMultiGraphFactory::LabeledMultiGraphFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::LabeledMultiGraph();
+    constructionTemplate_ = new htd::LabeledMultiGraph(manager);
+}
+
+htd::LabeledMultiGraphFactory::LabeledMultiGraphFactory(const htd::LabeledMultiGraphFactory & original)
+{
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledMultiGraph();
+#endif
+}
+
+htd::LabeledMultiGraphFactory & htd::LabeledMultiGraphFactory::operator=(const htd::LabeledMultiGraphFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    #else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledMultiGraph();
+    #endif
+    }
+
+    return *this;
 }
 
 htd::LabeledMultiGraphFactory::~LabeledMultiGraphFactory()
@@ -47,14 +72,7 @@ htd::LabeledMultiGraphFactory::~LabeledMultiGraphFactory()
     }
 }
 
-htd::LabeledMultiGraphFactory & htd::LabeledMultiGraphFactory::instance(void)
-{
-    static htd::LabeledMultiGraphFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiGraph(void)
+htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiGraph(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -63,7 +81,7 @@ htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiG
 #endif
 }
 
-htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiGraph(std::size_t initialSize)
+htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiGraph(std::size_t initialSize) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledMultiGraph * ret = constructionTemplate_->clone();
@@ -76,7 +94,7 @@ htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiG
     return ret;
 }
 
-htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiGraph(const htd::ILabeledMultiGraph & original)
+htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiGraph(const htd::ILabeledMultiGraph & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledMultiGraph * ret = constructionTemplate_->clone();
@@ -106,12 +124,12 @@ void htd::LabeledMultiGraphFactory::setConstructionTemplate(htd::IMutableLabeled
     constructionTemplate_ = original;
 }
 
-htd::IMutableLabeledMultiGraph & htd::LabeledMultiGraphFactory::accessMutableLabeledMultiGraph(htd::ILabeledMultiGraph & original)
+htd::IMutableLabeledMultiGraph & htd::LabeledMultiGraphFactory::accessMutableLabeledMultiGraph(htd::ILabeledMultiGraph & original) const
 {
     return *(dynamic_cast<htd::IMutableLabeledMultiGraph *>(&original));
 }
 
-const htd::IMutableLabeledMultiGraph & htd::LabeledMultiGraphFactory::accessMutableLabeledMultiGraph(const htd::ILabeledMultiGraph & original)
+const htd::IMutableLabeledMultiGraph & htd::LabeledMultiGraphFactory::accessMutableLabeledMultiGraph(const htd::ILabeledMultiGraph & original) const
 {
     return *(dynamic_cast<const htd::IMutableLabeledMultiGraph *>(&original));
 }

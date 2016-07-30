@@ -36,9 +36,14 @@ namespace htd
     class HTD_API TarjanStronglyConnectedComponentAlgorithm : public virtual htd::IStronglyConnectedComponentAlgorithm
     {
         public:
-            TarjanStronglyConnectedComponentAlgorithm(void);
+            /**
+             *  Constructor for a new strongly connected component algorithm of type TarjanStronglyConnectedComponentAlgorithm.
+             *
+             *  @param[in] manager   The management instance to which the new algorithm belongs.
+             */
+            TarjanStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager);
 
-            ~TarjanStronglyConnectedComponentAlgorithm();
+            virtual ~TarjanStronglyConnectedComponentAlgorithm();
 
             void determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
 
@@ -48,7 +53,16 @@ namespace htd
 
             void determineComponent(const htd::IDirectedMultiGraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
             TarjanStronglyConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

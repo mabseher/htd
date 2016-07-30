@@ -39,14 +39,15 @@ namespace htd
             /**
              *  Constructor for a new manipulation operation of type AddIdenticalJoinNodeParentOperation.
              *
+             *  @param[in] manager                   The management instance to which the new manipulation operation belongs.
              *  @param[in] enforceAdditionalNode    Set this option to true to enforce a new parent node for join
              *  nodes also in those cases where the bag contents of the join node and its old parent did already
              *  match. If this option is set to false, no action will be triggered for join nodes for which the
              *  nodes' bag content already matches the parent's bag content.
              */
-            AddIdenticalJoinNodeParentOperation(bool enforceAdditionalNode = true);
+            AddIdenticalJoinNodeParentOperation(const htd::LibraryInstance * const manager, bool enforceAdditionalNode = true);
 
-            ~AddIdenticalJoinNodeParentOperation();
+            virtual ~AddIdenticalJoinNodeParentOperation();
 
             void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -68,6 +69,10 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             AddIdenticalJoinNodeParentOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -82,8 +87,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
         private:
-            bool enforceAdditionalNode_;
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

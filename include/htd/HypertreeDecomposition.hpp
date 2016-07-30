@@ -40,8 +40,10 @@ namespace htd
         public:
             /**
              *  Constructor for a hypertree decomposition.
+             *
+             *  @param[in] manager   The management instance to which the new hypertree decomposition belongs.
              */
-            HypertreeDecomposition(void);
+            HypertreeDecomposition(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for a hypertree decomposition.
@@ -57,7 +59,7 @@ namespace htd
              */
             HypertreeDecomposition(const htd::IHypertreeDecomposition & original);
 
-            ~HypertreeDecomposition();
+            virtual ~HypertreeDecomposition();
 
             const std::vector<htd::Hyperedge> & coveringEdges(htd::vertex_t vertex) const HTD_OVERRIDE;
 

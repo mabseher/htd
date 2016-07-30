@@ -35,7 +35,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-htd::TreeDecomposition::TreeDecomposition(void) : htd::LabeledTree::LabeledTree(), bagContent_(), inducedEdges_()
+htd::TreeDecomposition::TreeDecomposition(const htd::LibraryInstance * const manager) : htd::LabeledTree::LabeledTree(manager), bagContent_(), inducedEdges_()
 {
 
 }
@@ -235,7 +235,7 @@ std::size_t htd::TreeDecomposition::joinNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         if (childCount(node) > 1)
         {
@@ -257,7 +257,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::joinNodes(void) cons
 
 void htd::TreeDecomposition::copyJoinNodesTo(std::vector<htd::vertex_t> & target) const
 {
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         if (childCount(node) > 1)
         {
@@ -290,7 +290,7 @@ std::size_t htd::TreeDecomposition::forgetNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
@@ -318,7 +318,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgetNodes(void) co
 
 void htd::TreeDecomposition::copyForgetNodesTo(std::vector<htd::vertex_t> & target) const
 {
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
@@ -363,7 +363,7 @@ std::size_t htd::TreeDecomposition::introduceNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
@@ -391,7 +391,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introduceNodes(void)
 
 void htd::TreeDecomposition::copyIntroduceNodesTo(std::vector<htd::vertex_t> & target) const
 {
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
@@ -436,7 +436,7 @@ std::size_t htd::TreeDecomposition::exchangeNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
@@ -466,7 +466,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::exchangeNodes(void) 
 
 void htd::TreeDecomposition::copyExchangeNodesTo(std::vector<htd::vertex_t> & target) const
 {
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         const std::vector<htd::vertex_t> & bag = bagContent(node);
 
@@ -552,7 +552,7 @@ std::size_t htd::TreeDecomposition::minimumBagSize(void) const
 
     std::size_t ret = 0;
 
-    for (htd::vertex_t vertex : vertices_)
+    for (htd::vertex_t vertex : vertexVector())
     {
         std::size_t currentBagSize = bagSize(vertex);
 
@@ -571,7 +571,7 @@ std::size_t htd::TreeDecomposition::maximumBagSize(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t vertex : vertices_)
+    for (htd::vertex_t vertex : vertexVector())
     {
         std::size_t currentBagSize = bagSize(vertex);
 
@@ -960,7 +960,7 @@ void htd::TreeDecomposition::getChildBagSetUnion(htd::vertex_t vertex, std::vect
 {
     HTD_ASSERT(isVertex(vertex))
 
-    switch (nodes_.at(vertex)->children.size())
+    switch (childCount(vertex))
     {
         case 0:
         {
@@ -1089,7 +1089,7 @@ htd::TreeDecomposition & htd::TreeDecomposition::operator=(const htd::TreeDecomp
     {
         htd::LabeledTree::operator=(original);
 
-        for (htd::vertex_t vertex : original.vertices_)
+        for (htd::vertex_t vertex : original.vertexVector())
         {
             bagContent_[vertex] = original.bagContent(vertex);
 

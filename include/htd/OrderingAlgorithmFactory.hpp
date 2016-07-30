@@ -37,16 +37,24 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~OrderingAlgorithmFactory();
+            OrderingAlgorithmFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static OrderingAlgorithmFactory & instance(void);
+            OrderingAlgorithmFactory(const OrderingAlgorithmFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            OrderingAlgorithmFactory & operator=(const OrderingAlgorithmFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~OrderingAlgorithmFactory();
 
             /**
              *  Create a new IOrderingAlgorithm object.
@@ -58,11 +66,11 @@ namespace htd
             /**
              *  Create a new IOrderingAlgorithm object.
              *
-             *  @param[in] instance The management instance which shall be assigned to the new IOrderingAlgorithm object.
+             *  @param[in] manager   The management instance which shall be assigned to the new IOrderingAlgorithm object.
              *
              *  @return A new IOrderingAlgorithm object.
              */
-            htd::IOrderingAlgorithm * getOrderingAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
+            htd::IOrderingAlgorithm * getOrderingAlgorithm(const htd::LibraryInstance * const manager) const;
 
             /**
              *  Set the default implementation of the IOrderingAlgorithm interface.
@@ -80,27 +88,6 @@ namespace htd
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IOrderingAlgorithm * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            OrderingAlgorithmFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            OrderingAlgorithmFactory(const OrderingAlgorithmFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            OrderingAlgorithmFactory & operator=(const OrderingAlgorithmFactory & original);
     };
 }
 

@@ -41,15 +41,18 @@ namespace htd
         public:
             /**
              *  Constructor for a hypergraph.
+             *
+             *  @param[in] manager   The management instance to which the new hypergraph belongs.
              */
-            Hypergraph(void);
+            Hypergraph(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a hypergraph.
              *
+             *  @param[in] manager       The management instance to which the new hypergraph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            Hypergraph(std::size_t initialSize);
+            Hypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a hypergraph.
@@ -158,6 +161,10 @@ namespace htd
             void removeEdge(const std::vector<htd::vertex_t> & elements) HTD_OVERRIDE;
 
             void removeEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
+
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             Hypergraph * clone(void) const HTD_OVERRIDE;

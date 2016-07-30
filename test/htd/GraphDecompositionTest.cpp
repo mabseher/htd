@@ -36,7 +36,7 @@ class GraphDecompositionTest : public ::testing::Test
 
         }
 
-        ~GraphDecompositionTest()
+        virtual ~GraphDecompositionTest()
         {
 
         }
@@ -54,7 +54,9 @@ class GraphDecompositionTest : public ::testing::Test
 
 TEST(GraphDecompositionTest, CheckEmptyGraph)
 {
-    htd::GraphDecomposition graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::GraphDecomposition graph(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -66,11 +68,15 @@ TEST(GraphDecompositionTest, CheckEmptyGraph)
     ASSERT_EQ((std::size_t)0, graph.isolatedVertices().size());
 
     ASSERT_TRUE(graph.isConnected());
+
+    delete libraryInstance;
 }
 
 TEST(GraphDecompositionTest, CheckSize1Graph)
 {
-    htd::GraphDecomposition graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::GraphDecomposition graph(libraryInstance);
 
     graph.addVertex();
 
@@ -128,11 +134,15 @@ TEST(GraphDecompositionTest, CheckSize1Graph)
 
     ASSERT_EQ((std::size_t)1, graph.bagContent(1).size());
     ASSERT_EQ((htd::vertex_t)9, graph.bagContent(1)[0]);
+
+    delete libraryInstance;
 }
 
 TEST(GraphDecompositionTest, CheckSize3Graph)
 {
-    htd::GraphDecomposition graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::GraphDecomposition graph(libraryInstance);
 
     graph.addVertices(3);
 
@@ -266,11 +276,15 @@ TEST(GraphDecompositionTest, CheckSize3Graph)
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)3));
+
+    delete libraryInstance;
 }
 
 TEST(GraphDecompositionTest, CheckSelfLoop)
 {
-    htd::GraphDecomposition graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::GraphDecomposition graph(libraryInstance);
 
     graph.addVertices(2);
 
@@ -393,11 +407,15 @@ TEST(GraphDecompositionTest, CheckSelfLoop)
     ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2, 2 }));
 
     ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge122)));
+
+    delete libraryInstance;
 }
 
 TEST(GraphDecompositionTest, CheckGraphModifications)
 {
-    htd::GraphDecomposition graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::GraphDecomposition graph(libraryInstance);
 
     graph.addVertices(3);
 
@@ -459,15 +477,19 @@ TEST(GraphDecompositionTest, CheckGraphModifications)
     graph.addEdge(4, 5);
 
     ASSERT_EQ((std::size_t)1, graph.edgeCount());
+
+    delete libraryInstance;
 }
 
 TEST(GraphDecompositionTest, CheckCopyConstructors)
 {
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
     htd::Hyperedge h1(1, 1, 2);
 
     htd::FilteredHyperedgeCollection hyperedges1(new htd::HyperedgeVector(std::vector<htd::Hyperedge> { h1 }), std::vector<htd::index_t> { 0 });
 
-    htd::GraphDecomposition graph1;
+    htd::GraphDecomposition graph1(libraryInstance);
 
     graph1.addVertices(2);
 
@@ -491,7 +513,7 @@ TEST(GraphDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph2.vertexCount());
     ASSERT_EQ((std::size_t)1, graph2.edgeCount());
 
-    htd::GraphDecomposition graph3;
+    htd::GraphDecomposition graph3(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
@@ -593,11 +615,15 @@ TEST(GraphDecompositionTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)1, graph6.bagContent(1).size());
     ASSERT_EQ((htd::vertex_t)5, graph6.bagContent(1)[0]);
     ASSERT_EQ((std::size_t)1, graph6.inducedHyperedges(1).size());
+
+    delete libraryInstance;
 }
 
 TEST(GraphDecompositionTest, CheckInducedHyperedges1)
 {
-    htd::GraphDecomposition gd;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::GraphDecomposition gd(libraryInstance);
 
     htd::vertex_t node1 = gd.addVertex();
 
@@ -645,13 +671,17 @@ TEST(GraphDecompositionTest, CheckInducedHyperedges1)
     ASSERT_EQ((htd::id_t)2, it->id());
     ++it;
     ASSERT_EQ((htd::id_t)1, it->id());
+
+    delete libraryInstance;
 }
 
 TEST(GraphDecompositionTest, CheckConversionFunctions)
 {
-    htd::MultiGraph graph(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::LabeledMultiGraph labeledGraph(2);
+    htd::MultiGraph graph(libraryInstance, 2);
+
+    htd::LabeledMultiGraph labeledGraph(libraryInstance, 2);
 
     graph.addEdge(1, 2);
     graph.addEdge(1, 2);
@@ -661,8 +691,8 @@ TEST(GraphDecompositionTest, CheckConversionFunctions)
     labeledGraph.addEdge(2, 1);
     labeledGraph.addEdge(2, 1);
 
-    htd::GraphDecomposition gd1;
-    htd::GraphDecomposition gd2;
+    htd::GraphDecomposition gd1(libraryInstance);
+    htd::GraphDecomposition gd2(libraryInstance);
 
     gd1 = graph;
     gd2 = labeledGraph;
@@ -676,6 +706,8 @@ TEST(GraphDecompositionTest, CheckConversionFunctions)
     ASSERT_EQ((htd::id_t)2, gd2.hyperedgeAtPosition(1).id());
     ASSERT_EQ((htd::id_t)3, gd2.hyperedgeAtPosition(2).id());
     ASSERT_EQ((htd::id_t)4, gd2.hyperedgeAtPosition(3).id());
+
+    delete libraryInstance;
 }
 
 int main(int argc, char **argv)

@@ -33,9 +33,76 @@
 #include <memory>
 #include <stdexcept>
 
-htd::PathDecompositionAlgorithmFactory::PathDecompositionAlgorithmFactory(void) : constructionTemplate_(new htd::PostProcessingPathDecompositionAlgorithm()), labelingFunctions_(), postProcessingOperations_()
+htd::PathDecompositionAlgorithmFactory::PathDecompositionAlgorithmFactory(const htd::LibraryInstance * const manager) : constructionTemplate_(new htd::PostProcessingPathDecompositionAlgorithm(manager)), labelingFunctions_(), postProcessingOperations_()
 {
 
+}
+
+htd::PathDecompositionAlgorithmFactory::PathDecompositionAlgorithmFactory(const htd::PathDecompositionAlgorithmFactory & original)
+{
+    constructionTemplate_ = original.constructionTemplate_->clone();
+
+    for (htd::ILabelingFunction * labelingFunction : original.labelingFunctions_)
+    {
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        labelingFunctions_.emplace_back(labelingFunction->clone());
+    #else
+        labelingFunctions_.emplace_back(labelingFunction->cloneLabelingFunction());
+    #endif
+    }
+
+    for (htd::IPathDecompositionManipulationOperation * postProcessingOperation : original.postProcessingOperations_)
+    {
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        postProcessingOperations_.emplace_back(postProcessingOperation->clone());
+    #else
+        postProcessingOperations_.emplace_back(postProcessingOperation->clonePathDecompositionManipulationOperation());
+    #endif
+    }
+}
+
+htd::PathDecompositionAlgorithmFactory & htd::PathDecompositionAlgorithmFactory::operator=(const htd::PathDecompositionAlgorithmFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+        constructionTemplate_ = original.constructionTemplate_->clone();
+
+        for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+        {
+            delete labelingFunction;
+        }
+
+        labelingFunctions_.clear();
+
+        for (htd::IPathDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+        {
+            delete postProcessingOperation;
+        }
+
+        postProcessingOperations_.clear();
+
+        for (htd::ILabelingFunction * labelingFunction : original.labelingFunctions_)
+        {
+        #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            labelingFunctions_.emplace_back(labelingFunction->clone());
+        #else
+            labelingFunctions_.emplace_back(labelingFunction->cloneLabelingFunction());
+        #endif
+        }
+
+        for (htd::IPathDecompositionManipulationOperation * postProcessingOperation : original.postProcessingOperations_)
+        {
+        #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            postProcessingOperations_.emplace_back(postProcessingOperation->clone());
+        #else
+            postProcessingOperations_.emplace_back(postProcessingOperation->clonePathDecompositionManipulationOperation());
+        #endif
+        }
+    }
+
+    return *this;
 }
 
 htd::PathDecompositionAlgorithmFactory::~PathDecompositionAlgorithmFactory()
@@ -60,13 +127,6 @@ htd::PathDecompositionAlgorithmFactory::~PathDecompositionAlgorithmFactory()
     }
 
     postProcessingOperations_.clear();
-}
-
-htd::PathDecompositionAlgorithmFactory & htd::PathDecompositionAlgorithmFactory::instance(void)
-{
-    static htd::PathDecompositionAlgorithmFactory instance_;
-
-    return instance_;
 }
 
 htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPathDecompositionAlgorithm(void) const
@@ -94,11 +154,11 @@ htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPa
     return ret;
 }
 
-htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPathDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPathDecompositionAlgorithm(const htd::LibraryInstance * const manager) const
 {
     htd::IPathDecompositionAlgorithm * ret = constructionTemplate_->clone();
 
-    ret->setManagementInstance(instance);
+    ret->setManagementInstance(manager);
 
     for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
     {
@@ -108,7 +168,7 @@ htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPa
         htd::ILabelingFunction * clone = labelingFunction->cloneLabelingFunction();
 #endif
 
-        clone->setManagementInstance(instance);
+        clone->setManagementInstance(manager);
 
         ret->addManipulationOperation(clone);
     }
@@ -121,7 +181,7 @@ htd::IPathDecompositionAlgorithm * htd::PathDecompositionAlgorithmFactory::getPa
         htd::IPathDecompositionManipulationOperation * clone = postProcessingOperation->clonePathDecompositionManipulationOperation();
 #endif
 
-        clone->setManagementInstance(instance);
+        clone->setManagementInstance(manager);
 
         ret->addManipulationOperation(clone);
     }

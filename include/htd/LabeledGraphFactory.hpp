@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~LabeledGraphFactory();
+            LabeledGraphFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static LabeledGraphFactory & instance(void);
+            LabeledGraphFactory(const LabeledGraphFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            LabeledGraphFactory & operator=(const LabeledGraphFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~LabeledGraphFactory();
 
             /**
              *  Create a new IMutableLabeledGraph object.
              *
              *  @return A new IMutableLabeledGraph object.
              */
-            htd::IMutableLabeledGraph * getLabeledGraph(void);
+            htd::IMutableLabeledGraph * getLabeledGraph(void) const;
 
             /**
              *  Create a new IMutableLabeledGraph object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledGraph object of the given size.
              */
-            htd::IMutableLabeledGraph * getLabeledGraph(std::size_t initialSize);
+            htd::IMutableLabeledGraph * getLabeledGraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableLabeledGraph object.
@@ -71,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledGraph object identical to the given original graph.
              */
-            htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledGraph & original);
+            htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledGraph & original) const;
 
             /**
              *  Create a new IMutableLabeledGraph object.
@@ -80,7 +88,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledGraph object identical to the given original graph.
              */
-            htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledMultiGraph & original);
+            htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledMultiGraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledGraph interface.
@@ -98,41 +106,20 @@ namespace htd
              *
              *  @return The mutable interface of the given labeled graph.
              */
-            htd::IMutableLabeledGraph & accessMutableLabeledGraph(htd::ILabeledGraph & original);
+            htd::IMutableLabeledGraph & accessMutableLabeledGraph(htd::ILabeledGraph & original) const;
 
             /**
              *  Access the mutable interface of a given labeled graph.
              *
              *  @return The mutable interface of the given labeled graph.
              */
-            const htd::IMutableLabeledGraph & accessMutableLabeledGraph(const htd::ILabeledGraph & original);
+            const htd::IMutableLabeledGraph & accessMutableLabeledGraph(const htd::ILabeledGraph & original) const;
 
         private:
             /**
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IMutableLabeledGraph * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            LabeledGraphFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            LabeledGraphFactory(const LabeledGraphFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            LabeledGraphFactory & operator=(const LabeledGraphFactory & original);
     };
 }
 

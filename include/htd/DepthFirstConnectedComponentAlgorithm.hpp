@@ -36,15 +36,29 @@ namespace htd
     class DepthFirstConnectedComponentAlgorithm : public htd::IConnectedComponentAlgorithm
     {
         public:
-            DepthFirstConnectedComponentAlgorithm(void);
+            /**
+             *  Constructor for a new connected component algorithm of type DepthFirstConnectedComponentAlgorithm.
+             *
+             *  @param[in] manager   The management instance to which the new algorithm belongs.
+             */
+            DepthFirstConnectedComponentAlgorithm(const htd::LibraryInstance * const manager);
 
-            ~DepthFirstConnectedComponentAlgorithm();
+            virtual ~DepthFirstConnectedComponentAlgorithm();
 
             void determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
 
             void determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
             DepthFirstConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

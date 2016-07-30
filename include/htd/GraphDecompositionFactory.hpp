@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~GraphDecompositionFactory();
+            GraphDecompositionFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static GraphDecompositionFactory & instance(void);
+            GraphDecompositionFactory(const GraphDecompositionFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            GraphDecompositionFactory & operator=(const GraphDecompositionFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~GraphDecompositionFactory();
 
             /**
              *  Create a new IMutableGraphDecomposition object.
              *
              *  @return A new IMutableGraphDecomposition object.
              */
-            htd::IMutableGraphDecomposition * getGraphDecomposition(void);
+            htd::IMutableGraphDecomposition * getGraphDecomposition(void) const;
 
             /**
              *  Create a new IMutableGraphDecomposition object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableGraphDecomposition object identical to the given original graph.
              */
-            htd::IMutableGraphDecomposition * getGraphDecomposition(const htd::IGraphDecomposition & original);
+            htd::IMutableGraphDecomposition * getGraphDecomposition(const htd::IGraphDecomposition & original) const;
 
             /**
              *  Set the default implementation of the IMutableGraphDecomposition interface.
@@ -80,41 +88,20 @@ namespace htd
              *
              *  @return The mutable interface of the given graph decomposition.
              */
-            htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(htd::IGraphDecomposition & original);
+            htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(htd::IGraphDecomposition & original) const;
 
             /**
              *  Access the mutable interface of a given graph decomposition.
              *
              *  @return The mutable interface of the given graph decomposition.
              */
-            const htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(const htd::IGraphDecomposition & original);
+            const htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(const htd::IGraphDecomposition & original) const;
 
         private:
             /**
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IMutableGraphDecomposition * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            GraphDecompositionFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            GraphDecompositionFactory(const GraphDecompositionFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            GraphDecompositionFactory & operator=(const GraphDecompositionFactory & original);
     };
 }
 

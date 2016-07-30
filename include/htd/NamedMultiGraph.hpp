@@ -49,7 +49,7 @@ namespace htd
             /**
              *  Constructor for a multi-graph.
              */
-            NamedMultiGraph(void) : base_(htd::LabeledMultiGraphFactory::instance().getLabeledMultiGraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledMultiGraph::addVertex, base_))
+            NamedMultiGraph(const htd::LibraryInstance * const manager) : base_(manager->labeledMultiGraphFactory().getLabeledMultiGraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledMultiGraph::addVertex, base_))
             {
 
             }
@@ -67,7 +67,7 @@ namespace htd
             /**
              *  Destructor for a NamedMultiGraph object.
              */
-            ~NamedMultiGraph()
+            virtual ~NamedMultiGraph()
             {
                 if (base_ != nullptr)
                 {

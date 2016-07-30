@@ -48,27 +48,72 @@
 #include <utility>
 #include <vector>
 
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(void) : htd::LibraryObject(), labelingFunctions_(), postProcessingOperations_()
+/**
+ *  Private implementation details of class htd::BucketEliminationTreeDecompositionAlgorithm.
+ */
+struct htd::BucketEliminationTreeDecompositionAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_()
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+        for (auto & labelingFunction : labelingFunctions_)
+        {
+            delete labelingFunction;
+        }
+
+        for (auto & postProcessingOperation : postProcessingOperations_)
+        {
+            delete postProcessingOperation;
+        }
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The labeling functions which are applied after the decomposition was computed.
+     */
+    std::vector<htd::ILabelingFunction *> labelingFunctions_;
+
+    /**
+     *  The manipuation operations which are applied after the decomposition was computed.
+     */
+    std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
+
+    /**
+     *  Compute a new mutable tree decompostion of the given graph.
+     *
+     *  @param[in] graph    The graph which shall be decomposed.
+     *
+     *  @return A mutable tree decompostion of the given graph.
+     */
+    htd::IMutableTreeDecomposition * computeMutableDecomposition(const htd::IMultiHypergraph & graph) const;
+};
+
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
 
-htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : labelingFunctions_(), postProcessingOperations_()
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)  : implementation_(new Implementation(manager))
 {
     setManipulationOperations(manipulationOperations);
 }
 
 htd::BucketEliminationTreeDecompositionAlgorithm::~BucketEliminationTreeDecompositionAlgorithm()
 {
-    for (auto & labelingFunction : labelingFunctions_)
-    {
-        delete labelingFunction;
-    }
 
-    for (auto & postProcessingOperation : postProcessingOperations_)
-    {
-        delete postProcessingOperation;
-    }
 }
 
 htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph) const
@@ -78,7 +123,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
 htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
-    htd::IMutableTreeDecomposition * ret = computeMutableDecomposition(graph);
+    htd::IMutableTreeDecomposition * ret = implementation_->computeMutableDecomposition(graph);
 
     std::vector<htd::ILabelingFunction *> labelingFunctions;
 
@@ -103,7 +148,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
     if (ret != nullptr)
     {
-        for (const auto & labelingFunction : labelingFunctions_)
+        for (const auto & labelingFunction : implementation_->labelingFunctions_)
         {
             for (htd::vertex_t vertex : ret->vertices())
             {
@@ -131,7 +176,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
             }
         }
 
-        for (const auto & operation : postProcessingOperations_)
+        for (const auto & operation : implementation_->postProcessingOperations_)
         {
             operation->apply(graph, *ret);
         }
@@ -175,19 +220,19 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
 void htd::BucketEliminationTreeDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
-    for (auto & labelingFunction : labelingFunctions_)
+    for (auto & labelingFunction : implementation_->labelingFunctions_)
     {
         delete labelingFunction;
     }
 
-    for (auto & postProcessingOperation : postProcessingOperations_)
+    for (auto & postProcessingOperation : implementation_->postProcessingOperations_)
     {
         delete postProcessingOperation;
     }
 
-    labelingFunctions_.clear();
+    implementation_->labelingFunctions_.clear();
 
-    postProcessingOperations_.clear();
+    implementation_->postProcessingOperations_.clear();
 
     addManipulationOperations(manipulationOperations);
 }
@@ -198,14 +243,14 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::addManipulationOperation(
 
     if (labelingFunction != nullptr)
     {
-        labelingFunctions_.push_back(labelingFunction);
+        implementation_->labelingFunctions_.emplace_back(labelingFunction);
     }
 
     htd::ITreeDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(manipulationOperation);
 
     if (newManipulationOperation != nullptr)
     {
-        postProcessingOperations_.push_back(newManipulationOperation);
+        implementation_->postProcessingOperations_.emplace_back(newManipulationOperation);
     }
 }
 
@@ -217,14 +262,14 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::addManipulationOperations
 
         if (labelingFunction != nullptr)
         {
-            labelingFunctions_.push_back(labelingFunction);
+            implementation_->labelingFunctions_.emplace_back(labelingFunction);
         }
 
         htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
 
         if (manipulationOperation != nullptr)
         {
-            postProcessingOperations_.push_back(manipulationOperation);
+            implementation_->postProcessingOperations_.emplace_back(manipulationOperation);
         }
     }
 }
@@ -234,11 +279,23 @@ bool htd::BucketEliminationTreeDecompositionAlgorithm::isSafelyInterruptible(voi
     return false;
 }
 
+const htd::LibraryInstance * htd::BucketEliminationTreeDecompositionAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::BucketEliminationTreeDecompositionAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDecompositionAlgorithm::clone(void) const
 {
-    htd::BucketEliminationTreeDecompositionAlgorithm * ret = new htd::BucketEliminationTreeDecompositionAlgorithm();
+    htd::BucketEliminationTreeDecompositionAlgorithm * ret = new htd::BucketEliminationTreeDecompositionAlgorithm(managementInstance());
 
-    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    for (htd::ILabelingFunction * labelingFunction : implementation_->labelingFunctions_)
     {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(labelingFunction->clone());
@@ -247,7 +304,7 @@ htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDec
 #endif
     }
 
-    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : implementation_->postProcessingOperations_)
     {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(postProcessingOperation->clone());
@@ -261,27 +318,25 @@ htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDec
     return ret;
 }
 
-htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeMutableDecomposition(const htd::IMultiHypergraph & graph) const
+htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph) const
 {
-    htd::IMutableTreeDecomposition * ret = htd::TreeDecompositionFactory::instance().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * ret = managementInstance_->treeDecompositionFactory().getTreeDecomposition();
 
     if (graph.vertexCount() > 0)
     {
-        htd::BucketEliminationGraphDecompositionAlgorithm graphDecompositionAlgorithm;
-
-        graphDecompositionAlgorithm.setManagementInstance(managementInstance());
+        htd::BucketEliminationGraphDecompositionAlgorithm graphDecompositionAlgorithm(managementInstance_);
 
         htd::IGraphDecomposition * graphDecomposition = graphDecompositionAlgorithm.computeDecomposition(graph);
 
         HTD_ASSERT(graphDecomposition != nullptr)
 
-        htd::IMutableGraphDecomposition & mutableGraphDecomposition = htd::GraphDecompositionFactory::instance().accessMutableGraphDecomposition(*graphDecomposition);
+        htd::IMutableGraphDecomposition & mutableGraphDecomposition = managementInstance_->graphDecompositionFactory().accessMutableGraphDecomposition(*graphDecomposition);
 
-        if (!isTerminated())
+        if (!managementInstance_->isTerminated())
         {
             if (mutableGraphDecomposition.edgeCount() + 1 != mutableGraphDecomposition.vertexCount() || mutableGraphDecomposition.isolatedVertexCount() > 0)
             {
-                htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = htd::ConnectedComponentAlgorithmFactory::instance().getConnectedComponentAlgorithm(managementInstance());
+                htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = managementInstance_->connectedComponentAlgorithmFactory().getConnectedComponentAlgorithm(managementInstance_);
 
                 HTD_ASSERT(connectedComponentAlgorithm != nullptr)
 
@@ -317,7 +372,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
 
             std::unordered_map<htd::vertex_t, htd::vertex_t> vertexMapping;
 
-            htd::BreadthFirstGraphTraversal graphTraversal;
+            htd::BreadthFirstGraphTraversal graphTraversal(managementInstance_);
 
             /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
             // coverity[dont_call]

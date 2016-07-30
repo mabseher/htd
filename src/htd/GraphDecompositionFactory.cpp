@@ -32,9 +32,34 @@
 
 #include <stdexcept>
 
-htd::GraphDecompositionFactory::GraphDecompositionFactory(void)
+htd::GraphDecompositionFactory::GraphDecompositionFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::GraphDecomposition();
+    constructionTemplate_ = new htd::GraphDecomposition(manager);
+}
+
+htd::GraphDecompositionFactory::GraphDecompositionFactory(const htd::GraphDecompositionFactory & original)
+{
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneMutableGraphDecomposition();
+#endif
+}
+
+htd::GraphDecompositionFactory & htd::GraphDecompositionFactory::operator=(const htd::GraphDecompositionFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    #else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutableGraphDecomposition();
+    #endif
+    }
+
+    return *this;
 }
 
 htd::GraphDecompositionFactory::~GraphDecompositionFactory()
@@ -47,14 +72,7 @@ htd::GraphDecompositionFactory::~GraphDecompositionFactory()
     }
 }
 
-htd::GraphDecompositionFactory & htd::GraphDecompositionFactory::instance(void)
-{
-    static htd::GraphDecompositionFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomposition(void)
+htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomposition(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -63,7 +81,7 @@ htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomp
 #endif
 }
 
-htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomposition(const htd::IGraphDecomposition & original)
+htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomposition(const htd::IGraphDecomposition & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraphDecomposition * ret = constructionTemplate_->clone();
@@ -93,12 +111,12 @@ void htd::GraphDecompositionFactory::setConstructionTemplate(htd::IMutableGraphD
     constructionTemplate_ = original;
 }
 
-htd::IMutableGraphDecomposition & htd::GraphDecompositionFactory::accessMutableGraphDecomposition(htd::IGraphDecomposition & original)
+htd::IMutableGraphDecomposition & htd::GraphDecompositionFactory::accessMutableGraphDecomposition(htd::IGraphDecomposition & original) const
 {
     return *(dynamic_cast<htd::IMutableGraphDecomposition *>(&original));
 }
 
-const htd::IMutableGraphDecomposition & htd::GraphDecompositionFactory::accessMutableGraphDecomposition(const htd::IGraphDecomposition & original)
+const htd::IMutableGraphDecomposition & htd::GraphDecompositionFactory::accessMutableGraphDecomposition(const htd::IGraphDecomposition & original) const
 {
     return *(dynamic_cast<const htd::IMutableGraphDecomposition *>(&original));
 }

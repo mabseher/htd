@@ -41,18 +41,21 @@ namespace htd
         public:
             /**
              *  Constructor for a new manipulation operation of type NormalizationOperation.
+             *
+             *  @param[in] manager           The management instance to which the new manipulation operation belongs.
              */
-            NormalizationOperation(void);
+            NormalizationOperation(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a new manipulation operation of type NormalizationOperation.
              *
+             *  @param[in] manager                           The management instance to which the new manipulation operation belongs.
              *  @param[in] emptyRoot                        A boolean flag whether the decomposition shall have a root node with empty bag.
              *  @param[in] emptyLeaves                      A boolean flag whether the decomposition's leave nodes shall have an empty bag.
              *  @param[in] identicalJoinNodeParent          A boolean flag whether each join node shall have a parent with equal bag content.
              *  @param[in] treatLeafNodesAsIntroduceNodes   A boolean flag whether leaf nodes shall be treated as introduce nodes in the context of this operation.
              */
-            NormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent, bool treatLeafNodesAsIntroduceNodes);
+            NormalizationOperation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent, bool treatLeafNodesAsIntroduceNodes);
 
             virtual ~NormalizationOperation();
 
@@ -107,8 +110,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
         private:
-            bool treatLeafNodesAsIntroduceNodes_;
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

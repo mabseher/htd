@@ -33,12 +33,45 @@
 #include <stdexcept>
 #include <iterator>
 
-htd::LimitMaximumIntroducedVertexCountOperation::LimitMaximumIntroducedVertexCountOperation(std::size_t limit) : htd::LibraryObject(), limit_(limit), treatLeafNodesAsIntroduceNodes_(false)
+/**
+ *  Private implementation details of class htd::LimitMaximumIntroducedVertexCountOperation.
+ */
+struct htd::LimitMaximumIntroducedVertexCountOperation::Implementation
 {
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager                           The management instance to which the current object instance belongs.
+     *  @param[in] limit                            The maximum number of introduced vertices for a decomposition node.
+     *  @param[in] treatLeafNodesAsIntroduceNodes   A boolean flag whether leaf nodes shall be treated as introduce nodes in the context of this operation.
+     */
+    Implementation(const htd::LibraryInstance * const manager, std::size_t limit, bool treatLeafNodesAsIntroduceNodes = false) : managementInstance_(manager), limit_(limit), treatLeafNodesAsIntroduceNodes_(treatLeafNodesAsIntroduceNodes)
+    {
 
-}
+    }
 
-htd::LimitMaximumIntroducedVertexCountOperation::LimitMaximumIntroducedVertexCountOperation(std::size_t limit, bool treatLeafNodesAsIntroduceNodes) : htd::LibraryObject(), limit_(limit), treatLeafNodesAsIntroduceNodes_(treatLeafNodesAsIntroduceNodes)
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The maximum number of introduced vertices for a decomposition node.
+     */
+    std::size_t limit_;
+
+    /**
+     *  A boolean flag whether leaf nodes shall be treated as introduce nodes in the context of this operation.
+     */
+    bool treatLeafNodesAsIntroduceNodes_;
+};
+
+htd::LimitMaximumIntroducedVertexCountOperation::LimitMaximumIntroducedVertexCountOperation(const htd::LibraryInstance * const manager, std::size_t limit, bool treatLeafNodesAsIntroduceNodes) : implementation_(new Implementation(manager, limit, treatLeafNodesAsIntroduceNodes))
 {
   
 }
@@ -68,11 +101,13 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
     decomposition.copyIntroduceNodesTo(introduceNodes);
 
-    for (auto it = introduceNodes.begin(); it != introduceNodes.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = introduceNodes.begin(); it != introduceNodes.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t node = *it;
 
-        if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
+        if (implementation_->treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
         {
             std::vector<htd::vertex_t> bagContent;
 
@@ -82,17 +117,17 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
             std::size_t introducedVertexCount = decomposition.introducedVertexCount(node);
 
-            if (introducedVertexCount > limit_)
+            if (introducedVertexCount > implementation_->limit_)
             {
                 std::vector<htd::vertex_t> introducedVertices;
 
                 decomposition.copyIntroducedVerticesTo(introducedVertices, node);
 
-                std::size_t remainder = introducedVertexCount % limit_;
+                std::size_t remainder = introducedVertexCount % implementation_->limit_;
 
                 introducedVertexCount -= remainder;
 
-                std::size_t intermediatedVertexCount = introducedVertexCount / limit_;
+                std::size_t intermediatedVertexCount = introducedVertexCount / implementation_->limit_;
 
                 if (intermediatedVertexCount > 0)
                 {
@@ -111,7 +146,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                 if (children.empty())
                 {
                     auto start = introducedVertices.begin();
-                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : limit_);
+                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
 
                     htd::vertex_t newNode = decomposition.addChild(node);
 
@@ -136,7 +171,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                     if (intermediatedVertexCount > 0)
                     {
-                        std::advance(finish, limit_);
+                        std::advance(finish, implementation_->limit_);
 
                         for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                         {
@@ -161,9 +196,9 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                                 decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
                             }
 
-                            if (index < introducedVertexCount + limit_)
+                            if (index < introducedVertexCount + implementation_->limit_)
                             {
-                                std::advance(finish, limit_);
+                                std::advance(finish, implementation_->limit_);
                             }
                         }
                     }
@@ -173,7 +208,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                     htd::vertex_t child = children[0];
 
                     auto start = introducedVertices.begin();
-                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : limit_);
+                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
 
                     htd::vertex_t newNode = decomposition.addParent(child);
 
@@ -204,8 +239,8 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                     if (intermediatedVertexCount > 0)
                     {
-                        std::advance(start, limit_);
-                        std::advance(finish, limit_);
+                        std::advance(start, implementation_->limit_);
+                        std::advance(finish, implementation_->limit_);
 
                         for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                         {
@@ -235,10 +270,10 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                                 decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
                             }
 
-                            if (index < introducedVertexCount + limit_)
+                            if (index < introducedVertexCount + implementation_->limit_)
                             {
-                                std::advance(start, limit_);
-                                std::advance(finish, limit_);
+                                std::advance(start, implementation_->limit_);
+                                std::advance(finish, implementation_->limit_);
                             }
                         }
                     }
@@ -274,11 +309,13 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
     decomposition.copyIntroduceNodesTo(introduceNodes);
 
-    for (auto it = introduceNodes.begin(); it != introduceNodes.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = introduceNodes.begin(); it != introduceNodes.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t node = *it;
 
-        if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
+        if (implementation_->treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
         {
             std::vector<htd::vertex_t> bagContent;
 
@@ -288,17 +325,17 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
             std::size_t introducedVertexCount = decomposition.introducedVertexCount(node);
 
-            if (introducedVertexCount > limit_)
+            if (introducedVertexCount > implementation_->limit_)
             {
                 std::vector<htd::vertex_t> introducedVertices;
 
                 decomposition.copyIntroducedVerticesTo(introducedVertices, node);
 
-                std::size_t remainder = introducedVertexCount % limit_;
+                std::size_t remainder = introducedVertexCount % implementation_->limit_;
 
                 introducedVertexCount -= remainder;
 
-                std::size_t intermediatedVertexCount = introducedVertexCount / limit_;
+                std::size_t intermediatedVertexCount = introducedVertexCount / implementation_->limit_;
 
                 if (intermediatedVertexCount > 0)
                 {
@@ -317,7 +354,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                 if (children.empty())
                 {
                     auto start = introducedVertices.begin();
-                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : limit_);
+                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
 
                     htd::vertex_t newNode = decomposition.addChild(node);
 
@@ -342,7 +379,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                     if (intermediatedVertexCount > 0)
                     {
-                        std::advance(finish, limit_);
+                        std::advance(finish, implementation_->limit_);
 
                         for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                         {
@@ -367,9 +404,9 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                                 decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
                             }
 
-                            if (index < introducedVertexCount + limit_)
+                            if (index < introducedVertexCount + implementation_->limit_)
                             {
-                                std::advance(finish, limit_);
+                                std::advance(finish, implementation_->limit_);
                             }
                         }
                     }
@@ -379,7 +416,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                     htd::vertex_t child = children[0];
 
                     auto start = introducedVertices.begin();
-                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : limit_);
+                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
 
                     htd::vertex_t newNode = decomposition.addParent(child);
 
@@ -410,8 +447,8 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                     if (intermediatedVertexCount > 0)
                     {
-                        std::advance(start, limit_);
-                        std::advance(finish, limit_);
+                        std::advance(start, implementation_->limit_);
+                        std::advance(finish, implementation_->limit_);
 
                         for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                         {
@@ -439,10 +476,10 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                                 decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
                             }
 
-                            if (index < introducedVertexCount + limit_)
+                            if (index < introducedVertexCount + implementation_->limit_)
                             {
-                                std::advance(start, limit_);
-                                std::advance(finish, limit_);
+                                std::advance(start, implementation_->limit_);
+                                std::advance(finish, implementation_->limit_);
                             }
                         }
                     }
@@ -461,13 +498,15 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
     HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
-    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
         if (decomposition.isIntroduceNode(vertex))
         {
-            if (treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(vertex))
+            if (implementation_->treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(vertex))
             {
                 std::vector<htd::vertex_t> bagContent;
 
@@ -477,17 +516,17 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                 std::size_t introducedVertexCount = decomposition.introducedVertexCount(vertex);
 
-                if (introducedVertexCount > limit_)
+                if (introducedVertexCount > implementation_->limit_)
                 {
                     std::vector<htd::vertex_t> introducedVertices;
 
                     decomposition.copyIntroducedVerticesTo(introducedVertices, vertex);
 
-                    std::size_t remainder = introducedVertexCount % limit_;
+                    std::size_t remainder = introducedVertexCount % implementation_->limit_;
 
                     introducedVertexCount -= remainder;
 
-                    std::size_t intermediatedVertexCount = introducedVertexCount / limit_;
+                    std::size_t intermediatedVertexCount = introducedVertexCount / implementation_->limit_;
 
                     if (intermediatedVertexCount > 0)
                     {
@@ -506,7 +545,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                     if (children.empty())
                     {
                         auto start = introducedVertices.begin();
-                        auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : limit_);
+                        auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
 
                         htd::vertex_t newNode = decomposition.addChild(vertex);
 
@@ -531,7 +570,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                         if (intermediatedVertexCount > 0)
                         {
-                            std::advance(finish, limit_);
+                            std::advance(finish, implementation_->limit_);
 
                             for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                             {
@@ -556,9 +595,9 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                                     decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
                                 }
 
-                                if (index < introducedVertexCount + limit_)
+                                if (index < introducedVertexCount + implementation_->limit_)
                                 {
-                                    std::advance(finish, limit_);
+                                    std::advance(finish, implementation_->limit_);
                                 }
                             }
                         }
@@ -568,7 +607,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
                         htd::vertex_t child = children[0];
 
                         auto start = introducedVertices.begin();
-                        auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : limit_);
+                        auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
 
                         htd::vertex_t newNode = decomposition.addParent(child);
 
@@ -601,8 +640,8 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                         if (intermediatedVertexCount > 0)
                         {
-                            std::advance(start, limit_);
-                            std::advance(finish, limit_);
+                            std::advance(start, implementation_->limit_);
+                            std::advance(finish, implementation_->limit_);
 
                             for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                             {
@@ -632,10 +671,10 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                                 createdVertices.push_back(newNode);
 
-                                if (index < introducedVertexCount + limit_)
+                                if (index < introducedVertexCount + implementation_->limit_)
                                 {
-                                    std::advance(start, limit_);
-                                    std::advance(finish, limit_);
+                                    std::advance(start, implementation_->limit_);
+                                    std::advance(finish, implementation_->limit_);
                                 }
                             }
                         }
@@ -680,13 +719,21 @@ bool htd::LimitMaximumIntroducedVertexCountOperation::createsLocationDependendLa
     return false;
 }
 
+const htd::LibraryInstance * htd::LimitMaximumIntroducedVertexCountOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::LimitMaximumIntroducedVertexCountOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::LimitMaximumIntroducedVertexCountOperation * htd::LimitMaximumIntroducedVertexCountOperation::clone(void) const
 {
-    htd::LimitMaximumIntroducedVertexCountOperation * ret = new htd::LimitMaximumIntroducedVertexCountOperation(limit_);
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::LimitMaximumIntroducedVertexCountOperation(implementation_->managementInstance_, implementation_->limit_, implementation_->treatLeafNodesAsIntroduceNodes_);
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

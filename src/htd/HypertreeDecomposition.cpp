@@ -36,7 +36,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-htd::HypertreeDecomposition::HypertreeDecomposition(void) : htd::TreeDecomposition()
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::LibraryInstance * const manager) : htd::TreeDecomposition(manager)
 {
     
 }

@@ -40,13 +40,22 @@ namespace htd
     class HTD_API MinFillOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
-            MinFillOrderingAlgorithm(void);
+            /**
+             *  Constructor for a new ordering algorithm of type MinFillOrderingAlgorithm.
+             *
+             *  @param[in] manager   The management instance to which the new algorithm belongs.
+             */
+            MinFillOrderingAlgorithm(const htd::LibraryInstance * const manager);
             
-            ~MinFillOrderingAlgorithm();
+            virtual ~MinFillOrderingAlgorithm();
             
             htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
             MinFillOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
@@ -59,14 +68,9 @@ namespace htd
             MinFillOrderingAlgorithm & operator=(const MinFillOrderingAlgorithm &) { return *this; }
 
         private:
-            std::size_t computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const HTD_NOEXCEPT;
+            HTD_IMPLEMENTATION Implementation;
 
-            void decompose_sets(const std::vector<htd::vertex_t> & set1,
-                                const std::vector<htd::vertex_t> & set2,
-                                htd::vertex_t ignoredVertex,
-                                std::vector<htd::vertex_t> & resultOnlySet1,
-                                std::vector<htd::vertex_t> & resultOnlySet2,
-                                std::vector<htd::vertex_t> & resultIntersection) const HTD_NOEXCEPT;
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

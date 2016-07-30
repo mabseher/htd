@@ -36,7 +36,7 @@ class GraphTest : public ::testing::Test
 
         }
 
-        ~GraphTest()
+        virtual ~GraphTest()
         {
 
         }
@@ -54,7 +54,9 @@ class GraphTest : public ::testing::Test
 
 TEST(GraphTest, CheckEmptyGraph)
 {
-    htd::Graph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Graph graph(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -66,11 +68,15 @@ TEST(GraphTest, CheckEmptyGraph)
     ASSERT_EQ((std::size_t)0, graph.isolatedVertices().size());
 
     ASSERT_TRUE(graph.isConnected());
+
+    delete libraryInstance;
 }
 
 TEST(GraphTest, CheckSizeInitializedGraph1)
 {
-    htd::Graph graph(1);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Graph graph(libraryInstance, 1);
 
     ASSERT_EQ((std::size_t)1, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -101,11 +107,15 @@ TEST(GraphTest, CheckSizeInitializedGraph1)
 
     ASSERT_TRUE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+
+    delete libraryInstance;
 }
 
 TEST(GraphTest, CheckSizeInitializedGraph2)
 {
-    htd::Graph graph(3);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Graph graph(libraryInstance, 3);
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -237,11 +247,15 @@ TEST(GraphTest, CheckSizeInitializedGraph2)
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)3));
+
+    delete libraryInstance;
 }
 
 TEST(GraphTest, CheckSelfLoop)
 {
-    htd::Graph graph(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Graph graph(libraryInstance, 2);
 
     std::vector<htd::vertex_t> edge11 { 1, 1 };
     std::vector<htd::vertex_t> edge12 { 1, 2 };
@@ -360,11 +374,15 @@ TEST(GraphTest, CheckSelfLoop)
     ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2, 2 }));
 
     ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge122)));
+
+    delete libraryInstance;
 }
 
 TEST(GraphTest, CheckGraphModifications)
 {
-    htd::Graph graph(3);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Graph graph(libraryInstance, 3);
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -428,11 +446,15 @@ TEST(GraphTest, CheckGraphModifications)
     graph.removeEdge(4, 5);
 
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
+
+    delete libraryInstance;
 }
 
 TEST(GraphTest, CheckCopyConstructors)
 {
-    htd::Graph graph1(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Graph graph1(libraryInstance, 2);
 
     ASSERT_EQ((std::size_t)2, graph1.vertexCount());
     ASSERT_EQ((std::size_t)0, graph1.edgeCount());
@@ -447,7 +469,7 @@ TEST(GraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph2.vertexCount());
     ASSERT_EQ((std::size_t)1, graph2.edgeCount());
 
-    htd::Graph graph3;
+    htd::Graph graph3(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
@@ -478,6 +500,8 @@ TEST(GraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph4.vertexCount());
     ASSERT_EQ((std::size_t)0, graph4.edgeCount());
     ASSERT_FALSE(graph4.isEdge(edgeId1));
+
+    delete libraryInstance;
 }
 
 int main(int argc, char **argv)

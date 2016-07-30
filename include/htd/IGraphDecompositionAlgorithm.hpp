@@ -29,7 +29,6 @@
 #include <htd/IHypergraph.hpp>
 #include <htd/IGraphDecomposition.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
-#include <htd/LibraryObject.hpp>
 
 #include <vector>
 
@@ -38,11 +37,25 @@ namespace htd
     /**
      * Interface for algorithms which can be used to compute graph decompositions of a given graph.
      */
-    class HTD_API IGraphDecompositionAlgorithm : public virtual htd::LibraryObject
+    class HTD_API IGraphDecompositionAlgorithm
     {
         public:
             virtual ~IGraphDecompositionAlgorithm() = 0;
-            
+
+            /**
+             *  Getter for the associated management class.
+             *
+             *  @return The associated management class.
+             */
+            virtual const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT = 0;
+
+            /**
+             *  Set a new management class for the library object.
+             *
+             *  @param[in] manager   The new management class for the library object.
+             */
+            virtual void setManagementInstance(const htd::LibraryInstance * const manager) = 0;
+
             /**
              *  Compute a decomposition of the given graph.
              *

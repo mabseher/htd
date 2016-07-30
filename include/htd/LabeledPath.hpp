@@ -39,8 +39,10 @@ namespace htd
         public:
             /**
              *  Constructor for a labeled path.
+             *
+             *  @param[in] manager   The management instance to which the new labeled path belongs.
              */
-            LabeledPath(void);
+            LabeledPath(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for a labeled path.

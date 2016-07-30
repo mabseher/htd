@@ -35,6 +35,41 @@
 #include <vector>
 
 /**
+ *  Private implementation details of class htd::JoinNodeReplacementOperation.
+ */
+struct htd::JoinNodeReplacementOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  Get the set union of all child bags of a given vertex.
+     *
+     *  @param[in] decomposition    The decomposition.
+     *  @param[in] vertex           The vertex which child bags shall be merged.
+     *  @param[out] output          The target vector to which the result shall be appended.
+     */
+    void getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const;
+};
+
+/**
  *  Internal data structure for the pre-order traversal of the tree decomposition.
  */
 struct HistoryEntry
@@ -71,7 +106,7 @@ struct HistoryEntry
     }
 };
 
-htd::JoinNodeReplacementOperation::JoinNodeReplacementOperation(void) : htd::LibraryObject()
+htd::JoinNodeReplacementOperation::JoinNodeReplacementOperation(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -367,7 +402,36 @@ bool htd::JoinNodeReplacementOperation::createsLocationDependendLabels(void) con
     return false;
 }
 
-void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const
+const htd::LibraryInstance * htd::JoinNodeReplacementOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::JoinNodeReplacementOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
+htd::JoinNodeReplacementOperation * htd::JoinNodeReplacementOperation::clone(void) const
+{
+    return new htd::JoinNodeReplacementOperation(managementInstance());
+}
+
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IDecompositionManipulationOperation * htd::JoinNodeReplacementOperation::cloneDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+
+htd::ITreeDecompositionManipulationOperation * htd::JoinNodeReplacementOperation::cloneTreeDecompositionManipulationOperation(void) const
+{
+    return clone();
+}
+#endif
+
+void htd::JoinNodeReplacementOperation::Implementation::getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const
 {
     std::unordered_set<htd::vertex_t> result;
 
@@ -386,26 +450,5 @@ void htd::JoinNodeReplacementOperation::getChildrenVertexLabelSetUnion(const htd
 
     output.erase(std::unique(output.begin(), output.end()), output.end());
 }
-
-htd::JoinNodeReplacementOperation * htd::JoinNodeReplacementOperation::clone(void) const
-{
-    htd::JoinNodeReplacementOperation * ret = new htd::JoinNodeReplacementOperation();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
-}
-
-#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-htd::IDecompositionManipulationOperation * htd::JoinNodeReplacementOperation::cloneDecompositionManipulationOperation(void) const
-{
-    return clone();
-}
-
-htd::ITreeDecompositionManipulationOperation * htd::JoinNodeReplacementOperation::cloneTreeDecompositionManipulationOperation(void) const
-{
-    return clone();
-}
-#endif
 
 #endif /* HTD_HTD_JOINNODEREPLACEMENTOPERATION_CPP */

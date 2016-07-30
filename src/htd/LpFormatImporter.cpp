@@ -31,7 +31,33 @@
 #include <iostream>
 #include <string>
 
-htd::LpFormatImporter::LpFormatImporter(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::LpFormatImporter.
+ */
+struct htd::LpFormatImporter::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::LpFormatImporter::LpFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -52,7 +78,9 @@ htd::NamedMultiHypergraph<std::string, std::string> * htd::LpFormatImporter::imp
 {
     bool error = false;
 
-    htd::NamedMultiHypergraph<std::string, std::string> * ret = new htd::NamedMultiHypergraph<std::string, std::string>();
+    htd::NamedMultiHypergraph<std::string, std::string> * ret = new htd::NamedMultiHypergraph<std::string, std::string>(implementation_->managementInstance_);
+
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
     if (stream.good())
     {
@@ -64,7 +92,7 @@ htd::NamedMultiHypergraph<std::string, std::string> * htd::LpFormatImporter::imp
         
         std::size_t finishPosition = 0;
         
-        while (!error && std::getline(stream, line) && !isTerminated())
+        while (!error && std::getline(stream, line) && !managementInstance.isTerminated())
         {
             finishPosition = 0;
             

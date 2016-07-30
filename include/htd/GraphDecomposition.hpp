@@ -42,8 +42,10 @@ namespace htd
         public:
             /**
              *  Constructor for a graph decomposition.
+             *
+             *  @param[in] manager   The management instance to which the new graph decomposition belongs.
              */
-            GraphDecomposition(void);
+            GraphDecomposition(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for a graph decomposition.
@@ -73,7 +75,7 @@ namespace htd
              */
             GraphDecomposition(const htd::IGraphDecomposition & original);
             
-            ~GraphDecomposition();
+            virtual ~GraphDecomposition();
 
             htd::vertex_t addVertex(void) HTD_OVERRIDE;
 

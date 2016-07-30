@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~LabeledPathFactory();
+            LabeledPathFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static LabeledPathFactory & instance(void);
+            LabeledPathFactory(const LabeledPathFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            LabeledPathFactory & operator=(const LabeledPathFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~LabeledPathFactory();
 
             /**
              *  Create a new IMutableLabeledPath object.
              *
              *  @return A new IMutableLabeledPath object.
              */
-            htd::IMutableLabeledPath * getLabeledPath(void);
+            htd::IMutableLabeledPath * getLabeledPath(void) const;
 
             /**
              *  Create a new IMutableLabeledPath object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledPath object identical to the given original graph.
              */
-            htd::IMutableLabeledPath * getLabeledPath(const htd::ILabeledPath & original);
+            htd::IMutableLabeledPath * getLabeledPath(const htd::ILabeledPath & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledPath interface.
@@ -80,41 +88,20 @@ namespace htd
              *
              *  @return The mutable interface of the given labeled path.
              */
-            htd::IMutableLabeledPath & accessMutableLabeledPath(htd::ILabeledPath & original);
+            htd::IMutableLabeledPath & accessMutableLabeledPath(htd::ILabeledPath & original) const;
 
             /**
              *  Access the mutable interface of a given labeled path.
              *
              *  @return The mutable interface of the given labeled path.
              */
-            const htd::IMutableLabeledPath & accessMutableLabeledPath(const htd::ILabeledPath & original);
+            const htd::IMutableLabeledPath & accessMutableLabeledPath(const htd::ILabeledPath & original) const;
 
         private:
             /**
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IMutableLabeledPath * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            LabeledPathFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            LabeledPathFactory(const LabeledPathFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            LabeledPathFactory & operator=(const LabeledPathFactory & original);
     };
 }
 

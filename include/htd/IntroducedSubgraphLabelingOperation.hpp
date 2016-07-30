@@ -47,13 +47,13 @@ namespace htd
             static constexpr const char * INTRODUCED_SUBGRAPH_LABEL_IDENTIFIER = "Introduced Subgraph";
 
             /**
-             *  Constructor for a new manipulation operation of type InducedSubgraphLabelingOperation.
+             *  Constructor for a new manipulation operation of type IntroducedSubgraphLabelingOperation.
              *
-             *  @param[in] graph    The graph from which the introduced edges for the induced subgraph of each bag shall be computed.
+             *  @param[in] manager   The management instance to which the new manipulation operation belongs.
              */
-            IntroducedSubgraphLabelingOperation(const htd::IMultiHypergraph & graph);
+            IntroducedSubgraphLabelingOperation(const htd::LibraryInstance * const manager);
 
-            ~IntroducedSubgraphLabelingOperation();
+            virtual ~IntroducedSubgraphLabelingOperation();
 
             void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -83,6 +83,10 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             IntroducedSubgraphLabelingOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -99,8 +103,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
         private:
-            const htd::IMultiHypergraph & graph_;
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

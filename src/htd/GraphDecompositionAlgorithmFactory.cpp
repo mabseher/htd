@@ -33,9 +33,76 @@
 #include <memory>
 #include <stdexcept>
 
-htd::GraphDecompositionAlgorithmFactory::GraphDecompositionAlgorithmFactory(void) : constructionTemplate_(new htd::BucketEliminationGraphDecompositionAlgorithm()), labelingFunctions_(), postProcessingOperations_()
+htd::GraphDecompositionAlgorithmFactory::GraphDecompositionAlgorithmFactory(const htd::LibraryInstance * const manager) : constructionTemplate_(new htd::BucketEliminationGraphDecompositionAlgorithm(manager)), labelingFunctions_(), postProcessingOperations_()
 {
 
+}
+
+htd::GraphDecompositionAlgorithmFactory::GraphDecompositionAlgorithmFactory(const htd::GraphDecompositionAlgorithmFactory & original)
+{
+    constructionTemplate_ = original.constructionTemplate_->clone();
+
+    for (htd::ILabelingFunction * labelingFunction : original.labelingFunctions_)
+    {
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        labelingFunctions_.emplace_back(labelingFunction->clone());
+    #else
+        labelingFunctions_.emplace_back(labelingFunction->cloneLabelingFunction());
+    #endif
+    }
+
+    for (htd::IGraphDecompositionManipulationOperation * postProcessingOperation : original.postProcessingOperations_)
+    {
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        postProcessingOperations_.emplace_back(postProcessingOperation->clone());
+    #else
+        postProcessingOperations_.emplace_back(postProcessingOperation->cloneGraphDecompositionManipulationOperation());
+    #endif
+    }
+}
+
+htd::GraphDecompositionAlgorithmFactory & htd::GraphDecompositionAlgorithmFactory::operator=(const htd::GraphDecompositionAlgorithmFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+        constructionTemplate_ = original.constructionTemplate_->clone();
+
+        for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+        {
+            delete labelingFunction;
+        }
+
+        labelingFunctions_.clear();
+
+        for (htd::IGraphDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+        {
+            delete postProcessingOperation;
+        }
+
+        postProcessingOperations_.clear();
+
+        for (htd::ILabelingFunction * labelingFunction : original.labelingFunctions_)
+        {
+        #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            labelingFunctions_.emplace_back(labelingFunction->clone());
+        #else
+            labelingFunctions_.emplace_back(labelingFunction->cloneLabelingFunction());
+        #endif
+        }
+
+        for (htd::IGraphDecompositionManipulationOperation * postProcessingOperation : original.postProcessingOperations_)
+        {
+        #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            postProcessingOperations_.emplace_back(postProcessingOperation->clone());
+        #else
+            postProcessingOperations_.emplace_back(postProcessingOperation->cloneGraphDecompositionManipulationOperation());
+        #endif
+        }
+    }
+
+    return *this;
 }
 
 htd::GraphDecompositionAlgorithmFactory::~GraphDecompositionAlgorithmFactory()
@@ -60,13 +127,6 @@ htd::GraphDecompositionAlgorithmFactory::~GraphDecompositionAlgorithmFactory()
     }
 
     postProcessingOperations_.clear();
-}
-
-htd::GraphDecompositionAlgorithmFactory & htd::GraphDecompositionAlgorithmFactory::instance(void)
-{
-    static htd::GraphDecompositionAlgorithmFactory instance_;
-
-    return instance_;
 }
 
 htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::getGraphDecompositionAlgorithm(void) const
@@ -94,11 +154,11 @@ htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::get
     return ret;
 }
 
-htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::getGraphDecompositionAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::getGraphDecompositionAlgorithm(const htd::LibraryInstance * const manager) const
 {
     htd::IGraphDecompositionAlgorithm * ret = constructionTemplate_->clone();
 
-    ret->setManagementInstance(instance);
+    ret->setManagementInstance(manager);
 
     for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
     {
@@ -108,7 +168,7 @@ htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::get
         htd::ILabelingFunction * clone = labelingFunction->cloneLabelingFunction();
 #endif
 
-        clone->setManagementInstance(instance);
+        clone->setManagementInstance(manager);
 
         ret->addManipulationOperation(clone);
     }
@@ -121,7 +181,7 @@ htd::IGraphDecompositionAlgorithm * htd::GraphDecompositionAlgorithmFactory::get
         htd::IGraphDecompositionManipulationOperation * clone = postProcessingOperation->cloneGraphDecompositionManipulationOperation();
 #endif
 
-        clone->setManagementInstance(instance);
+        clone->setManagementInstance(manager);
 
         ret->addManipulationOperation(clone);
     }

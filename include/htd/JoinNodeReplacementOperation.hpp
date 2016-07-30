@@ -44,10 +44,12 @@ namespace htd
         public:
             /**
              *  Constructor for a new manipulation operation of type JoinNodeReplacementOperation.
+             *
+             *  @param[in] manager           The management instance to which the new manipulation operation belongs.
              */
-            JoinNodeReplacementOperation(void);
+            JoinNodeReplacementOperation(const htd::LibraryInstance * const manager);
 
-            ~JoinNodeReplacementOperation();
+            virtual ~JoinNodeReplacementOperation();
 
             void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
@@ -69,6 +71,10 @@ namespace htd
 
             bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             JoinNodeReplacementOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -83,8 +89,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
         private:
-            void getChildrenVertexLabelSetUnion(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex, std::vector<htd::vertex_t> & output) const;
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

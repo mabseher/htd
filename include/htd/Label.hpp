@@ -74,7 +74,7 @@ namespace htd
             /**
              *  Destructor for a Label object.
              */
-            ~Label()
+            virtual ~Label()
             {
 
             }

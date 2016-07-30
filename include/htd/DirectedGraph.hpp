@@ -40,15 +40,18 @@ namespace htd
         public:
             /**
              *  Constructor for a directed graph.
+             *
+             *  @param[in] manager   The management instance to which the new directed graph belongs.
              */
-            DirectedGraph(void);
+            DirectedGraph(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a directed graph.
              *
+             *  @param[in] manager       The management instance to which the new directed graph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            DirectedGraph(std::size_t initialSize);
+            DirectedGraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a directed graph.
@@ -64,7 +67,7 @@ namespace htd
              */
             DirectedGraph(const htd::IDirectedGraph & original);
 
-            ~DirectedGraph();
+            virtual ~DirectedGraph();
             
             std::size_t vertexCount(void) const HTD_OVERRIDE;
 
@@ -161,6 +164,10 @@ namespace htd
             void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
             void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             DirectedGraph * clone(void) const HTD_OVERRIDE;

@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~LabeledDirectedGraphFactory();
+            LabeledDirectedGraphFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static LabeledDirectedGraphFactory & instance(void);
+            LabeledDirectedGraphFactory(const LabeledDirectedGraphFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            LabeledDirectedGraphFactory & operator=(const LabeledDirectedGraphFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~LabeledDirectedGraphFactory();
 
             /**
              *  Create a new IMutableLabeledDirectedGraph object.
              *
              *  @return A new IMutableLabeledDirectedGraph object.
              */
-            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(void);
+            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(void) const;
 
             /**
              *  Create a new IMutableLabeledDirectedGraph object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledDirectedGraph object of the given size.
              */
-            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(std::size_t initialSize);
+            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableLabeledDirectedGraph object.
@@ -71,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledDirectedGraph object identical to the given original graph.
              */
-            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original);
+            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const;
 
             /**
              *  Create a new IMutableLabeledDirectedGraph object.
@@ -80,7 +88,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledDirectedGraph object identical to the given original graph.
              */
-            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original);
+            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledDirectedGraph interface.
@@ -98,41 +106,20 @@ namespace htd
              *
              *  @return The mutable interface of the given labeled directed graph.
              */
-            htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(htd::ILabeledDirectedGraph & original);
+            htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(htd::ILabeledDirectedGraph & original) const;
 
             /**
              *  Access the mutable interface of a given labeled directed graph.
              *
              *  @return The mutable interface of the given labeled directed graph.
              */
-            const htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original);
+            const htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const;
 
         private:
             /**
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IMutableLabeledDirectedGraph * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            LabeledDirectedGraphFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            LabeledDirectedGraphFactory(const LabeledDirectedGraphFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            LabeledDirectedGraphFactory & operator=(const LabeledDirectedGraphFactory & original);
     };
 }
 

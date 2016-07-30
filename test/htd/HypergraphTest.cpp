@@ -36,7 +36,7 @@ class HypergraphTest : public ::testing::Test
 
         }
 
-        ~HypergraphTest()
+        virtual ~HypergraphTest()
         {
 
         }
@@ -54,7 +54,9 @@ class HypergraphTest : public ::testing::Test
 
 TEST(HypergraphTest, CheckEmptyGraph)
 {
-    htd::Hypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Hypergraph graph(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -66,11 +68,15 @@ TEST(HypergraphTest, CheckEmptyGraph)
     ASSERT_EQ((std::size_t)0, graph.isolatedVertices().size());
 
     ASSERT_TRUE(graph.isConnected());
+
+    delete libraryInstance;
 }
 
 TEST(HypergraphTest, CheckSizeInitializedGraph1)
 {
-    htd::Hypergraph graph(1);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Hypergraph graph(libraryInstance, 1);
 
     ASSERT_EQ((std::size_t)1, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -101,11 +107,15 @@ TEST(HypergraphTest, CheckSizeInitializedGraph1)
 
     ASSERT_TRUE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
+
+    delete libraryInstance;
 }
 
 TEST(HypergraphTest, CheckSizeInitializedGraph2)
 {
-    htd::Hypergraph graph(3);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Hypergraph graph(libraryInstance, 3);
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -307,11 +317,15 @@ TEST(HypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)1));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)2));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)3, (htd::vertex_t)3));
+
+    delete libraryInstance;
 }
 
 TEST(HypergraphTest, CheckSelfLoop)
 {
-    htd::Hypergraph graph(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Hypergraph graph(libraryInstance, 2);
 
     ASSERT_EQ((std::size_t)2, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -403,11 +417,15 @@ TEST(HypergraphTest, CheckSelfLoop)
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)2));
     ASSERT_FALSE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)2, (htd::vertex_t)2));
+
+    delete libraryInstance;
 }
 
 TEST(HypergraphTest, CheckGraphModifications)
 {
-    htd::Hypergraph graph(3);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Hypergraph graph(libraryInstance, 3);
 
     ASSERT_EQ((std::size_t)3, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -681,11 +699,15 @@ TEST(HypergraphTest, CheckGraphModifications)
     ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)2));
     ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)1));
     ASSERT_TRUE(graph.isNeighbor((htd::vertex_t)2, (htd::vertex_t)2));
+
+    delete libraryInstance;
 }
 
 TEST(HypergraphTest, CheckCopyConstructors)
 {
-    htd::Hypergraph graph1(2);
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Hypergraph graph1(libraryInstance, 2);
 
     ASSERT_EQ((std::size_t)2, graph1.vertexCount());
     ASSERT_EQ((std::size_t)0, graph1.edgeCount());
@@ -700,7 +722,7 @@ TEST(HypergraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph2.vertexCount());
     ASSERT_EQ((std::size_t)1, graph2.edgeCount());
 
-    htd::Hypergraph graph3;
+    htd::Hypergraph graph3(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
@@ -725,6 +747,8 @@ TEST(HypergraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
     ASSERT_FALSE(graph3.isEdge(edgeId1));
+
+    delete libraryInstance;
 }
 
 int main(int argc, char **argv)

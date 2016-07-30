@@ -33,9 +33,26 @@
 #include <memory>
 #include <stdexcept>
 
-htd::ConnectedComponentAlgorithmFactory::ConnectedComponentAlgorithmFactory(void)
+htd::ConnectedComponentAlgorithmFactory::ConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::DepthFirstConnectedComponentAlgorithm();
+    constructionTemplate_ = new htd::DepthFirstConnectedComponentAlgorithm(manager);
+}
+
+htd::ConnectedComponentAlgorithmFactory::ConnectedComponentAlgorithmFactory(const htd::ConnectedComponentAlgorithmFactory & original)
+{
+    constructionTemplate_ = original.constructionTemplate_->clone();
+}
+
+htd::ConnectedComponentAlgorithmFactory & htd::ConnectedComponentAlgorithmFactory::operator=(const htd::ConnectedComponentAlgorithmFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    }
+
+    return *this;
 }
 
 htd::ConnectedComponentAlgorithmFactory::~ConnectedComponentAlgorithmFactory()
@@ -48,23 +65,16 @@ htd::ConnectedComponentAlgorithmFactory::~ConnectedComponentAlgorithmFactory()
     }
 }
 
-htd::ConnectedComponentAlgorithmFactory & htd::ConnectedComponentAlgorithmFactory::instance(void)
-{
-    static htd::ConnectedComponentAlgorithmFactory instance_;
-
-    return instance_;
-}
-
 htd::IConnectedComponentAlgorithm * htd::ConnectedComponentAlgorithmFactory::getConnectedComponentAlgorithm(void) const
 {
     return constructionTemplate_->clone();
 }
 
-htd::IConnectedComponentAlgorithm * htd::ConnectedComponentAlgorithmFactory::getConnectedComponentAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const
+htd::IConnectedComponentAlgorithm * htd::ConnectedComponentAlgorithmFactory::getConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const
 {
     htd::IConnectedComponentAlgorithm * ret = constructionTemplate_->clone();
 
-    ret->setManagementInstance(instance);
+    ret->setManagementInstance(manager);
 
     return ret;
 }

@@ -36,7 +36,7 @@ class GraphLabelingTest : public ::testing::Test
 
         }
 
-        ~GraphLabelingTest()
+        virtual ~GraphLabelingTest()
         {
 
         }
@@ -263,6 +263,8 @@ TEST(GraphLabelingTest, TestCloneMethod)
 
     ASSERT_EQ(123, htd::accessLabel<int>(labeling2->vertexLabel(123)));
     ASSERT_EQ(456, htd::accessLabel<int>(labeling2->edgeLabel(456)));
+
+    delete labeling2;
 }
 
 int main(int argc, char **argv)

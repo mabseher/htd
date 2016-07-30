@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~TreeDecompositionFactory();
+            TreeDecompositionFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static TreeDecompositionFactory & instance(void);
+            TreeDecompositionFactory(const TreeDecompositionFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            TreeDecompositionFactory & operator=(const TreeDecompositionFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~TreeDecompositionFactory();
 
             /**
              *  Create a new IMutableTreeDecomposition object.
              *
              *  @return A new IMutableTreeDecomposition object.
              */
-            htd::IMutableTreeDecomposition * getTreeDecomposition(void);
+            htd::IMutableTreeDecomposition * getTreeDecomposition(void) const;
 
             /**
              *  Create a new IMutableTreeDecomposition object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableTreeDecomposition object identical to the given original graph.
              */
-            htd::IMutableTreeDecomposition * getTreeDecomposition(const htd::ITreeDecomposition & original);
+            htd::IMutableTreeDecomposition * getTreeDecomposition(const htd::ITreeDecomposition & original) const;
 
             /**
              *  Set the default implementation of the IMutableTreeDecomposition interface.
@@ -80,41 +88,20 @@ namespace htd
              *
              *  @return The mutable interface of the given tree decomposition.
              */
-            htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(htd::ITreeDecomposition & original);
+            htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(htd::ITreeDecomposition & original) const;
 
             /**
              *  Access the mutable interface of a given tree decomposition.
              *
              *  @return The mutable interface of the given tree decomposition.
              */
-            const htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(const htd::ITreeDecomposition & original);
+            const htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(const htd::ITreeDecomposition & original) const;
 
         private:
             /**
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IMutableTreeDecomposition * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            TreeDecompositionFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            TreeDecompositionFactory(const TreeDecompositionFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            TreeDecompositionFactory & operator=(const TreeDecompositionFactory & original);
     };
 }
 

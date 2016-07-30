@@ -36,12 +36,12 @@
 #include <utility>
 #include <vector>
 
-htd::DirectedGraph::DirectedGraph(void) : base_(htd::HypergraphFactory::instance().getHypergraph()), incomingNeighborhood_(), outgoingNeighborhood_()
+htd::DirectedGraph::DirectedGraph(const htd::LibraryInstance * const manager) : base_(manager->hypergraphFactory().getHypergraph()), incomingNeighborhood_(), outgoingNeighborhood_()
 {
 
 }
 
-htd::DirectedGraph::DirectedGraph(std::size_t initialSize) : base_(htd::HypergraphFactory::instance().getHypergraph(initialSize)), incomingNeighborhood_(), outgoingNeighborhood_()
+htd::DirectedGraph::DirectedGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : base_(manager->hypergraphFactory().getHypergraph(initialSize)), incomingNeighborhood_(), outgoingNeighborhood_()
 {
 
 }
@@ -58,7 +58,7 @@ htd::DirectedGraph::DirectedGraph(const htd::DirectedGraph & original) : base_(o
 }
 #endif
 
-htd::DirectedGraph::DirectedGraph(const htd::IDirectedGraph & original) : base_(htd::HypergraphFactory::instance().getHypergraph()), incomingNeighborhood_(), outgoingNeighborhood_()
+htd::DirectedGraph::DirectedGraph(const htd::IDirectedGraph & original) : base_(original.managementInstance()->hypergraphFactory().getHypergraph()), incomingNeighborhood_(), outgoingNeighborhood_()
 {
     *this = original;
 }
@@ -455,6 +455,16 @@ void htd::DirectedGraph::removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2
     }
 }
 
+const htd::LibraryInstance * htd::DirectedGraph::managementInstance(void) const HTD_NOEXCEPT
+{
+    return base_->managementInstance();
+}
+
+void htd::DirectedGraph::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    base_->setManagementInstance(manager);
+}
+
 htd::DirectedGraph * htd::DirectedGraph::clone(void) const
 {
     return new htd::DirectedGraph(*this);
@@ -522,7 +532,7 @@ htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::IDirectedGraph & o
     {
         delete base_;
 
-        base_ = htd::HypergraphFactory::instance().getHypergraph(original);
+        base_ = managementInstance()->hypergraphFactory().getHypergraph(original);
 
         incomingNeighborhood_.clear();
         outgoingNeighborhood_.clear();
@@ -554,7 +564,7 @@ htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::IDirectedMultiGrap
 {
     delete base_;
 
-    base_ = htd::HypergraphFactory::instance().getHypergraph(original);
+    base_ = managementInstance()->hypergraphFactory().getHypergraph(original);
 
     incomingNeighborhood_.clear();
     outgoingNeighborhood_.clear();

@@ -40,27 +40,71 @@
 #include <unordered_set>
 #include <vector>
 
-htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(void) : htd::LibraryObject(), labelingFunctions_(), postProcessingOperations_()
+/**
+ *  Private implementation details of class htd::HypertreeDecompositionAlgorithm.
+ */
+struct htd::HypertreeDecompositionAlgorithm::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_()
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+        for (auto & labelingFunction : labelingFunctions_)
+        {
+            delete labelingFunction;
+        }
+
+        for (auto & postProcessingOperation : postProcessingOperations_)
+        {
+            delete postProcessingOperation;
+        }
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The labeling functions which are applied after the decomposition was computed.
+     */
+    std::vector<htd::ILabelingFunction *> labelingFunctions_;
+
+    /**
+     *  The manipuation operations which are applied after the decomposition was computed.
+     */
+    std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
+
+    /**
+     *  Set the hyperedges covering the bags of the hypertree decomposition.
+     *
+     *  @param[in] graph            The graph which was decomposed.
+     *  @param[in] decomposition    The hypertree decomposition which shall be updated.
+     */
+    void setCoveringEdges(const htd::IMultiHypergraph & graph, htd::IMutableHypertreeDecomposition & decomposition) const;
+};
+
+htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
 
-htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : labelingFunctions_(), postProcessingOperations_()
+htd::HypertreeDecompositionAlgorithm::HypertreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : implementation_(new Implementation(manager))
 {
     setManipulationOperations(manipulationOperations);
 }
 
 htd::HypertreeDecompositionAlgorithm::~HypertreeDecompositionAlgorithm()
 {
-    for (auto & labelingFunction : labelingFunctions_)
-    {
-        delete labelingFunction;
-    }
 
-    for (auto & postProcessingOperation : postProcessingOperations_)
-    {
-        delete postProcessingOperation;
-    }
 }
 
 htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph) const
@@ -90,7 +134,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 {
     htd::IMutableHypertreeDecomposition * ret = nullptr;
 
-    htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm(managementInstance());
+    htd::ITreeDecompositionAlgorithm * algorithm = managementInstance()->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm();
 
     HTD_ASSERT(algorithm != nullptr)
 
@@ -98,11 +142,11 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
     delete algorithm;
 
-    ret = htd::HypertreeDecompositionFactory::instance().getHypertreeDecomposition(*treeDecomposition);
+    ret = managementInstance()->hypertreeDecompositionFactory().getHypertreeDecomposition(*treeDecomposition);
 
     HTD_ASSERT(ret != nullptr)
 
-    setCoveringEdges(graph, *ret);
+    implementation_->setCoveringEdges(graph, *ret);
 
     std::vector<htd::ILabelingFunction *> labelingFunctions;
 
@@ -125,7 +169,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
         }
     }
 
-    for (const auto & operation : postProcessingOperations_)
+    for (const auto & operation : implementation_->postProcessingOperations_)
     {
         operation->apply(graph, *ret);
     }
@@ -135,7 +179,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
         operation->apply(graph, *ret);
     }
 
-    for (const auto & labelingFunction : labelingFunctions_)
+    for (const auto & labelingFunction : implementation_->labelingFunctions_)
     {
         for (htd::vertex_t vertex : ret->vertices())
         {
@@ -180,9 +224,19 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
 void htd::HypertreeDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
-    labelingFunctions_.clear();
+    for (auto & labelingFunction : implementation_->labelingFunctions_)
+    {
+        delete labelingFunction;
+    }
 
-    postProcessingOperations_.clear();
+    for (auto & postProcessingOperation : implementation_->postProcessingOperations_)
+    {
+        delete postProcessingOperation;
+    }
+
+    implementation_->labelingFunctions_.clear();
+
+    implementation_->postProcessingOperations_.clear();
 
     addManipulationOperations(manipulationOperations);
 }
@@ -193,14 +247,14 @@ void htd::HypertreeDecompositionAlgorithm::addManipulationOperation(htd::IDecomp
 
     if (labelingFunction != nullptr)
     {
-        labelingFunctions_.push_back(labelingFunction);
+        implementation_->labelingFunctions_.emplace_back(labelingFunction);
     }
 
     htd::ITreeDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(manipulationOperation);
 
     if (newManipulationOperation != nullptr)
     {
-        postProcessingOperations_.push_back(newManipulationOperation);
+        implementation_->postProcessingOperations_.emplace_back(newManipulationOperation);
     }
 }
 
@@ -212,14 +266,14 @@ void htd::HypertreeDecompositionAlgorithm::addManipulationOperations(const std::
 
         if (labelingFunction != nullptr)
         {
-            labelingFunctions_.push_back(labelingFunction);
+            implementation_->labelingFunctions_.emplace_back(labelingFunction);
         }
 
         htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
 
         if (manipulationOperation != nullptr)
         {
-            postProcessingOperations_.push_back(manipulationOperation);
+            implementation_->postProcessingOperations_.emplace_back(manipulationOperation);
         }
     }
 }
@@ -229,11 +283,23 @@ bool htd::HypertreeDecompositionAlgorithm::isSafelyInterruptible(void) const
     return false;
 }
 
+const htd::LibraryInstance * htd::HypertreeDecompositionAlgorithm::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::HypertreeDecompositionAlgorithm::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::HypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithm::clone(void) const
 {
-    htd::HypertreeDecompositionAlgorithm * ret = new htd::HypertreeDecompositionAlgorithm();
+    htd::HypertreeDecompositionAlgorithm * ret = new htd::HypertreeDecompositionAlgorithm(managementInstance());
 
-    for (htd::ILabelingFunction * labelingFunction : labelingFunctions_)
+    for (htd::ILabelingFunction * labelingFunction : implementation_->labelingFunctions_)
     {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(labelingFunction->clone());
@@ -242,7 +308,7 @@ htd::HypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithm::clo
 #endif
     }
 
-    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : postProcessingOperations_)
+    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : implementation_->postProcessingOperations_)
     {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         ret->addManipulationOperation(postProcessingOperation->clone());
@@ -256,7 +322,7 @@ htd::HypertreeDecompositionAlgorithm * htd::HypertreeDecompositionAlgorithm::clo
     return ret;
 }
 
-void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHypergraph & graph, htd::IMutableHypertreeDecomposition & decomposition) const
+void htd::HypertreeDecompositionAlgorithm::Implementation::setCoveringEdges(const htd::IMultiHypergraph & graph, htd::IMutableHypertreeDecomposition & decomposition) const
 {
     std::vector<htd::Hyperedge> relevantHyperedges;
 
@@ -304,7 +370,7 @@ void htd::HypertreeDecompositionAlgorithm::setCoveringEdges(const htd::IMultiHyp
         ++it1;
     }
 
-    htd::ISetCoverAlgorithm * setCoverAlgorithm = htd::SetCoverAlgorithmFactory::instance().getSetCoverAlgorithm(managementInstance());
+    htd::ISetCoverAlgorithm * setCoverAlgorithm = managementInstance_->setCoverAlgorithmFactory().getSetCoverAlgorithm();
 
     htd::PostOrderTreeTraversal traversal;
 

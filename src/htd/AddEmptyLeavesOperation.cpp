@@ -31,7 +31,33 @@
 #include <algorithm>
 #include <vector>
 
-htd::AddEmptyLeavesOperation::AddEmptyLeavesOperation(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::AddEmptyLeavesOperation.
+ */
+struct htd::AddEmptyLeavesOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::AddEmptyLeavesOperation::AddEmptyLeavesOperation(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -61,7 +87,9 @@ void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, ht
 
     decomposition.copyLeavesTo(leafNodes);
 
-    for (auto it = leafNodes.begin(); it != leafNodes.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = leafNodes.begin(); it != leafNodes.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t leaf = *it;
 
@@ -108,7 +136,9 @@ void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, ht
 
     decomposition.copyLeavesTo(leafNodes);
 
-    for (auto it = leafNodes.begin(); it != leafNodes.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = leafNodes.begin(); it != leafNodes.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t leaf = *it;
 
@@ -135,7 +165,9 @@ void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, ht
     HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
-    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
@@ -189,13 +221,21 @@ bool htd::AddEmptyLeavesOperation::createsLocationDependendLabels(void) const
     return false;
 }
 
+const htd::LibraryInstance * htd::AddEmptyLeavesOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::AddEmptyLeavesOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::AddEmptyLeavesOperation * htd::AddEmptyLeavesOperation::clone(void) const
 {
-    htd::AddEmptyLeavesOperation * ret = new htd::AddEmptyLeavesOperation();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::AddEmptyLeavesOperation(implementation_->managementInstance_);
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

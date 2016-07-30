@@ -62,7 +62,7 @@ namespace htd
              */
             LabelingCollection(const htd::ILabelingCollection & original);
             
-            ~LabelingCollection();
+            virtual ~LabelingCollection();
 
             std::size_t labelCount(void) const HTD_OVERRIDE;
 

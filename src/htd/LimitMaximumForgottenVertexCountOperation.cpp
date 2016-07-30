@@ -31,11 +31,43 @@
 #include <algorithm>
 #include <stdexcept>
 
-htd::LimitMaximumForgottenVertexCountOperation::LimitMaximumForgottenVertexCountOperation(std::size_t limit) : htd::LibraryObject(), limit_(limit)
+/**
+ *  Private implementation details of class htd::LimitMaximumForgottenVertexCountOperation.
+ */
+struct htd::LimitMaximumForgottenVertexCountOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     *  @param[in] limit    The maximum number of forgotten vertices for a decomposition node.
+     */
+    Implementation(const htd::LibraryInstance * const manager, std::size_t limit) : managementInstance_(manager), limit_(limit)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The maximum number of forgotten vertices for a decomposition node.
+     */
+    std::size_t limit_;
+};
+
+htd::LimitMaximumForgottenVertexCountOperation::LimitMaximumForgottenVertexCountOperation(const htd::LibraryInstance * const manager, std::size_t limit) : implementation_(new Implementation(manager, limit))
 {
   
 }
-  
+
 htd::LimitMaximumForgottenVertexCountOperation::~LimitMaximumForgottenVertexCountOperation()
 {
   
@@ -61,7 +93,9 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
     decomposition.copyForgetNodesTo(forgetNodes);
 
-    for (auto it = forgetNodes.begin(); it != forgetNodes.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = forgetNodes.begin(); it != forgetNodes.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t node = *it;
 
@@ -73,17 +107,17 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
         std::size_t forgottenVertexCount = decomposition.forgottenVertexCount(node);
 
-        if (forgottenVertexCount > limit_)
+        if (forgottenVertexCount > implementation_->limit_)
         {
             std::vector<htd::vertex_t> forgottenVertices;
 
             decomposition.copyForgottenVerticesTo(forgottenVertices, node);
 
-            std::size_t remainder = forgottenVertexCount % limit_;
+            std::size_t remainder = forgottenVertexCount % implementation_->limit_;
 
             forgottenVertexCount -= remainder;
 
-            std::size_t intermediatedVertexCount = forgottenVertexCount / limit_;
+            std::size_t intermediatedVertexCount = forgottenVertexCount / implementation_->limit_;
 
             if (intermediatedVertexCount > 0)
             {
@@ -103,7 +137,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
             {
                 htd::vertex_t child = children[0];
 
-                auto start = forgottenVertices.end() - limit_;
+                auto start = forgottenVertices.end() - implementation_->limit_;
                 auto finish = forgottenVertices.end();
 
                 htd::vertex_t newNode = decomposition.addParent(child);
@@ -135,8 +169,8 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                 if (intermediatedVertexCount > 0)
                 {
-                    start = start - limit_;
-                    finish = finish - limit_;
+                    start = start - implementation_->limit_;
+                    finish = finish - implementation_->limit_;
 
                     for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                     {
@@ -165,10 +199,10 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
                             decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
                         }
 
-                        if (index < forgottenVertexCount + limit_)
+                        if (index < forgottenVertexCount + implementation_->limit_)
                         {
-                            start = start - limit_;
-                            finish = finish - limit_;
+                            start = start - implementation_->limit_;
+                            finish = finish - implementation_->limit_;
                         }
                     }
                 }
@@ -202,7 +236,9 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
     decomposition.copyForgetNodesTo(forgetNodes);
 
-    for (auto it = forgetNodes.begin(); it != forgetNodes.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = forgetNodes.begin(); it != forgetNodes.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t node = *it;
 
@@ -214,17 +250,17 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
         std::size_t forgottenVertexCount = decomposition.forgottenVertexCount(node);
 
-        if (forgottenVertexCount > limit_)
+        if (forgottenVertexCount > implementation_->limit_)
         {
             std::vector<htd::vertex_t> forgottenVertices;
 
             decomposition.copyForgottenVerticesTo(forgottenVertices, node);
 
-            std::size_t remainder = forgottenVertexCount % limit_;
+            std::size_t remainder = forgottenVertexCount % implementation_->limit_;
 
             forgottenVertexCount -= remainder;
 
-            std::size_t intermediatedVertexCount = forgottenVertexCount / limit_;
+            std::size_t intermediatedVertexCount = forgottenVertexCount / implementation_->limit_;
 
             if (intermediatedVertexCount > 0)
             {
@@ -244,7 +280,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
             {
                 htd::vertex_t child = children[0];
 
-                auto start = forgottenVertices.end() - limit_;
+                auto start = forgottenVertices.end() - implementation_->limit_;
                 auto finish = forgottenVertices.end();
 
                 htd::vertex_t newNode = decomposition.addParent(child);
@@ -276,8 +312,8 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                 if (intermediatedVertexCount > 0)
                 {
-                    start = start - limit_;
-                    finish = finish - limit_;
+                    start = start - implementation_->limit_;
+                    finish = finish - implementation_->limit_;
 
                     for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                     {
@@ -306,10 +342,10 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
                             decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
                         }
 
-                        if (index < forgottenVertexCount + limit_)
+                        if (index < forgottenVertexCount + implementation_->limit_)
                         {
-                            start = start - limit_;
-                            finish = finish - limit_;
+                            start = start - implementation_->limit_;
+                            finish = finish - implementation_->limit_;
                         }
                     }
                 }
@@ -327,7 +363,9 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
     HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
-    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !isTerminated(); ++it)
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !managementInstance.isTerminated(); ++it)
     {
         htd::vertex_t vertex = *it;
 
@@ -341,17 +379,17 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
             std::size_t forgottenVertexCount = decomposition.forgottenVertexCount(vertex);
 
-            if (forgottenVertexCount > limit_)
+            if (forgottenVertexCount > implementation_->limit_)
             {
                 std::vector<htd::vertex_t> forgottenVertices;
 
                 decomposition.copyForgottenVerticesTo(forgottenVertices, vertex);
 
-                std::size_t remainder = forgottenVertexCount % limit_;
+                std::size_t remainder = forgottenVertexCount % implementation_->limit_;
 
                 forgottenVertexCount -= remainder;
 
-                std::size_t intermediatedVertexCount = forgottenVertexCount / limit_;
+                std::size_t intermediatedVertexCount = forgottenVertexCount / implementation_->limit_;
 
                 if (intermediatedVertexCount > 0)
                 {
@@ -371,7 +409,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
                 {
                     htd::vertex_t child = children[0];
 
-                    auto start = forgottenVertices.end() - limit_;
+                    auto start = forgottenVertices.end() - implementation_->limit_;
                     auto finish = forgottenVertices.end();
 
                     htd::vertex_t newNode = decomposition.addParent(child);
@@ -405,8 +443,8 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                     if (intermediatedVertexCount > 0)
                     {
-                        start = start - limit_;
-                        finish = finish - limit_;
+                        start = start - implementation_->limit_;
+                        finish = finish - implementation_->limit_;
 
                         for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
                         {
@@ -437,10 +475,10 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                             createdVertices.push_back(newNode);
 
-                            if (index < forgottenVertexCount + limit_)
+                            if (index < forgottenVertexCount + implementation_->limit_)
                             {
-                                start = start - limit_;
-                                finish = finish - limit_;
+                                start = start - implementation_->limit_;
+                                finish = finish - implementation_->limit_;
                             }
                         }
                     }
@@ -484,13 +522,21 @@ bool htd::LimitMaximumForgottenVertexCountOperation::createsLocationDependendLab
     return false;
 }
 
+const htd::LibraryInstance * htd::LimitMaximumForgottenVertexCountOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::LimitMaximumForgottenVertexCountOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::LimitMaximumForgottenVertexCountOperation * htd::LimitMaximumForgottenVertexCountOperation::clone(void) const
 {
-    htd::LimitMaximumForgottenVertexCountOperation * ret = new htd::LimitMaximumForgottenVertexCountOperation(limit_);
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::LimitMaximumForgottenVertexCountOperation(implementation_->managementInstance_, implementation_->limit_);
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

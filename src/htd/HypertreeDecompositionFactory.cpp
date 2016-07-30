@@ -35,9 +35,34 @@
 
 #include <stdexcept>
 
-htd::HypertreeDecompositionFactory::HypertreeDecompositionFactory(void)
+htd::HypertreeDecompositionFactory::HypertreeDecompositionFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::HypertreeDecomposition();
+    constructionTemplate_ = new htd::HypertreeDecomposition(manager);
+}
+
+htd::HypertreeDecompositionFactory::HypertreeDecompositionFactory(const htd::HypertreeDecompositionFactory & original)
+{
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneMutableHypertreeDecomposition();
+#endif
+}
+
+htd::HypertreeDecompositionFactory & htd::HypertreeDecompositionFactory::operator=(const htd::HypertreeDecompositionFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    #else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutableHypertreeDecomposition();
+    #endif
+    }
+
+    return *this;
 }
 
 htd::HypertreeDecompositionFactory::~HypertreeDecompositionFactory()
@@ -50,14 +75,7 @@ htd::HypertreeDecompositionFactory::~HypertreeDecompositionFactory()
     }
 }
 
-htd::HypertreeDecompositionFactory & htd::HypertreeDecompositionFactory::instance(void)
-{
-    static htd::HypertreeDecompositionFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHypertreeDecomposition(void)
+htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHypertreeDecomposition(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -66,7 +84,7 @@ htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHyp
 #endif
 }
 
-htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHypertreeDecomposition(const htd::ITreeDecomposition & original)
+htd::IMutableHypertreeDecomposition * htd::HypertreeDecompositionFactory::getHypertreeDecomposition(const htd::ITreeDecomposition & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableHypertreeDecomposition * ret = constructionTemplate_->clone();
@@ -96,12 +114,12 @@ void htd::HypertreeDecompositionFactory::setConstructionTemplate(htd::IMutableHy
     constructionTemplate_ = original;
 }
 
-htd::IMutableHypertreeDecomposition & htd::HypertreeDecompositionFactory::accessMutableHypertreeDecomposition(htd::IHypertreeDecomposition & original)
+htd::IMutableHypertreeDecomposition & htd::HypertreeDecompositionFactory::accessMutableHypertreeDecomposition(htd::IHypertreeDecomposition & original) const
 {
     return *(dynamic_cast<htd::IMutableHypertreeDecomposition *>(&original));
 }
 
-const htd::IMutableHypertreeDecomposition & htd::HypertreeDecompositionFactory::accessMutableHypertreeDecomposition(const htd::IHypertreeDecomposition & original)
+const htd::IMutableHypertreeDecomposition & htd::HypertreeDecompositionFactory::accessMutableHypertreeDecomposition(const htd::IHypertreeDecomposition & original) const
 {
     return *(dynamic_cast<const htd::IMutableHypertreeDecomposition *>(&original));
 }

@@ -73,7 +73,7 @@ namespace htd
             /**
              *  Destructor for a fitness evaluation.
              */
-            ~FitnessEvaluation();
+            virtual ~FitnessEvaluation();
 
             /**
              *  Getter for the number of levels of the fitness evaluation.

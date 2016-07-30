@@ -36,7 +36,7 @@ class BucketEliminationGraphDecompositionAlgorithmTest : public ::testing::Test
 
         }
 
-        ~BucketEliminationGraphDecompositionAlgorithmTest()
+        virtual ~BucketEliminationGraphDecompositionAlgorithmTest()
         {
 
         }
@@ -54,9 +54,11 @@ class BucketEliminationGraphDecompositionAlgorithmTest : public ::testing::Test
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultEmptyGraph)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+    htd::MultiHypergraph graph(libraryInstance);
+
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance);
 
     htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -71,17 +73,21 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultEmptyGraph)
     EXPECT_EQ(bag.size(), (std::size_t)0);
 
     delete decomposition;
+
+    delete libraryInstance;
 }
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultDisconnectedGraph)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
 
     graph.addVertex();
     graph.addVertex();
     graph.addVertex();
 
-    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance);
 
     htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -94,11 +100,15 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultDisconnectedGr
     ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
 
     delete decomposition;
+
+    delete libraryInstance;
 }
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraph1)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
 
     htd::vertex_t vertex1 = graph.addVertex();
     htd::vertex_t vertex2 = graph.addVertex();
@@ -107,7 +117,7 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraph1)
     graph.addEdge(vertex1, vertex2);
     graph.addEdge(vertex2, vertex3);
 
-    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance);
 
     htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -120,11 +130,15 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraph1)
     ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
 
     delete decomposition;
+
+    delete libraryInstance;
 }
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergraph1)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
 
     htd::vertex_t vertex1 = graph.addVertex();
     htd::vertex_t vertex2 = graph.addVertex();
@@ -135,7 +149,7 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergra
     HTD_UNUSED(vertex2)
     HTD_UNUSED(vertex3)
 
-    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance);
 
     htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -149,11 +163,15 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergra
     ASSERT_EQ((std::size_t)1, decomposition->maximumBagSize());
 
     delete decomposition;
+
+    delete libraryInstance;
 }
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergraph2)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
 
     htd::vertex_t vertex1 = graph.addVertex();
     htd::vertex_t vertex2 = graph.addVertex();
@@ -161,7 +179,7 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergra
 
     graph.addEdge(std::vector<htd::vertex_t> { vertex3, vertex3, vertex2, vertex1, vertex2, vertex3, vertex3 });
 
-    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance);
 
     htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -175,11 +193,15 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergra
     ASSERT_EQ((std::size_t)3, decomposition->maximumBagSize());
 
     delete decomposition;
+
+    delete libraryInstance;
 }
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultClique)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
 
     htd::vertex_t vertex1 = graph.addVertex();
     htd::vertex_t vertex2 = graph.addVertex();
@@ -198,7 +220,7 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultClique)
     graph.addEdge(vertex3, vertex5);
     graph.addEdge(vertex4, vertex5);
 
-    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance);
 
     htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -218,17 +240,19 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultClique)
     ASSERT_EQ(vertex5, decomposition->bagContent(1)[4]);
 
     delete decomposition;
+
+    delete libraryInstance;
 }
 
 class BagSizeLabelingFunction : public htd::ILabelingFunction
 {
     public:
-        BagSizeLabelingFunction(void)
+        BagSizeLabelingFunction(const htd::LibraryInstance * const manager) : managementInstance_(manager)
         {
 
         }
 
-        ~BagSizeLabelingFunction()
+        virtual ~BagSizeLabelingFunction()
         {
 
         }
@@ -252,32 +276,49 @@ class BagSizeLabelingFunction : public htd::ILabelingFunction
             return new htd::Label<std::size_t>(vertices.size());
         }
 
+        const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE
+        {
+            return managementInstance_;
+        }
+
+        void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE
+        {
+            HTD_ASSERT(manager != nullptr)
+
+            managementInstance_ = manager;
+        }
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         BagSizeLabelingFunction * clone(void) const HTD_OVERRIDE
         {
-            return new BagSizeLabelingFunction();
+            return new BagSizeLabelingFunction(managementInstance_);
         }
 #else
         BagSizeLabelingFunction * clone(void) const
         {
-            return new BagSizeLabelingFunction();
+            return new BagSizeLabelingFunction(managementInstance_);
         }
 
         htd::ILabelingFunction * cloneLabelingFunction(void) const HTD_OVERRIDE
         {
-            return new BagSizeLabelingFunction();
+            return new BagSizeLabelingFunction(managementInstance_);
         }
 
         htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE
         {
-            return new BagSizeLabelingFunction();
+            return new BagSizeLabelingFunction(managementInstance_);
         }
 #endif
+
+    private:
+        const htd::LibraryInstance * managementInstance_;
 };
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunction)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
 
     htd::vertex_t vertex1 = graph.addVertex();
     htd::vertex_t vertex2 = graph.addVertex();
@@ -286,11 +327,11 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWit
     graph.addEdge(vertex1, vertex2);
     graph.addEdge(vertex2, vertex3);
 
-    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance);
 
     /* False positive of coverity caused by variadic function. */
     // coverity[leaked_storage]
-    htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph, 1, new BagSizeLabelingFunction());
+    htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph, 1, new BagSizeLabelingFunction(libraryInstance));
 
     ASSERT_NE(decomposition, nullptr);
 
@@ -306,17 +347,19 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWit
     }
 
     delete decomposition;
+
+    delete libraryInstance;
 }
 
 class BagSizeLabelingFunction2 : public htd::ILabelingFunction
 {
     public:
-        BagSizeLabelingFunction2(void)
+        BagSizeLabelingFunction2(const htd::LibraryInstance * const manager) : managementInstance_(manager)
         {
 
         }
 
-        ~BagSizeLabelingFunction2()
+        virtual ~BagSizeLabelingFunction2()
         {
 
         }
@@ -340,32 +383,49 @@ class BagSizeLabelingFunction2 : public htd::ILabelingFunction
             return new htd::Label<std::size_t>(vertices.size() + htd::accessLabel<std::size_t>(labels.label("BAG_SIZE")));
         }
 
+        const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE
+        {
+            return managementInstance_;
+        }
+
+        void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE
+        {
+            HTD_ASSERT(manager != nullptr)
+
+            managementInstance_ = manager;
+        }
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         BagSizeLabelingFunction2 * clone(void) const HTD_OVERRIDE
         {
-            return new BagSizeLabelingFunction2();
+            return new BagSizeLabelingFunction2(managementInstance_);
         }
 #else
         BagSizeLabelingFunction2 * clone(void) const
         {
-            return new BagSizeLabelingFunction2();
+            return new BagSizeLabelingFunction2(managementInstance_);
         }
 
         htd::ILabelingFunction * cloneLabelingFunction(void) const HTD_OVERRIDE
         {
-            return new BagSizeLabelingFunction2();
+            return new BagSizeLabelingFunction2(managementInstance_);
         }
 
         htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE
         {
-            return new BagSizeLabelingFunction2();
+            return new BagSizeLabelingFunction2(managementInstance_);
         }
 #endif
+
+    private:
+        const htd::LibraryInstance * managementInstance_;
 };
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunctionVector)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
 
     htd::vertex_t vertex1 = graph.addVertex();
     htd::vertex_t vertex2 = graph.addVertex();
@@ -374,9 +434,10 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWit
     graph.addEdge(vertex1, vertex2);
     graph.addEdge(vertex2, vertex3);
 
-    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance);
 
-    htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph, { new BagSizeLabelingFunction(), new BagSizeLabelingFunction2() });
+    htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph, { new BagSizeLabelingFunction(libraryInstance),
+                                                                                       new BagSizeLabelingFunction2(libraryInstance) });
 
     ASSERT_NE(decomposition, nullptr);
 
@@ -393,11 +454,15 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWit
     }
 
     delete decomposition;
+
+    delete libraryInstance;
 }
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunctionVectorAndManipulationOperation1)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
 
     htd::vertex_t vertex1 = graph.addVertex();
     htd::vertex_t vertex2 = graph.addVertex();
@@ -406,9 +471,9 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWit
     graph.addEdge(vertex1, vertex2);
     graph.addEdge(vertex2, vertex3);
 
-    htd::BucketEliminationGraphDecompositionAlgorithm algorithm({ new BagSizeLabelingFunction(), new htd::JoinNodeReplacementOperation() });
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance, { new BagSizeLabelingFunction(libraryInstance) });
 
-    htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph, { new BagSizeLabelingFunction2() });
+    htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph, { new BagSizeLabelingFunction2(libraryInstance) });
 
     ASSERT_NE(decomposition, nullptr);
 
@@ -425,11 +490,15 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWit
     }
 
     delete decomposition;
+
+    delete libraryInstance;
 }
 
 TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWithLabelingFunctionVectorAndManipulationOperation2)
 {
-    htd::MultiHypergraph graph;
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
 
     htd::vertex_t vertex1 = graph.addVertex();
     htd::vertex_t vertex2 = graph.addVertex();
@@ -438,11 +507,10 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWit
     graph.addEdge(vertex1, vertex2);
     graph.addEdge(vertex2, vertex3);
 
-    htd::BucketEliminationGraphDecompositionAlgorithm algorithm;
+    htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance);
 
-    algorithm.addManipulationOperation(new BagSizeLabelingFunction());
-    algorithm.addManipulationOperation(new htd::JoinNodeReplacementOperation());
-    algorithm.addManipulationOperation(new BagSizeLabelingFunction2());
+    algorithm.addManipulationOperation(new BagSizeLabelingFunction(libraryInstance));
+    algorithm.addManipulationOperation(new BagSizeLabelingFunction2(libraryInstance));
 
     htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -461,6 +529,8 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleGraphWit
     }
 
     delete decomposition;
+
+    delete libraryInstance;
 }
 
 int main(int argc, char **argv)

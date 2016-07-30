@@ -27,6 +27,8 @@
 
 #include <csignal>
 
+htd::LibraryInstance * const libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
 htd_cli::OptionManager * createOptionManager(void)
 {
     htd_cli::OptionManager * manager = new htd_cli::OptionManager();
@@ -105,7 +107,7 @@ htd_cli::OptionManager * createOptionManager(void)
     return manager;
 }
 
-bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionManager & optionManager)
+bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionManager & optionManager, htd::LibraryInstance * const manager)
 {
     bool ret = true;
 
@@ -190,19 +192,19 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
         if (value == "min-fill+")
         {
-            htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::AdvancedMinFillOrderingAlgorithm());
+            manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::AdvancedMinFillOrderingAlgorithm(manager));
         }
         else if (value == "min-fill")
         {
-            htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::MinFillOrderingAlgorithm());
+            manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::MinFillOrderingAlgorithm(manager));
         }
         else if (value == "min-degree")
         {
-            htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::MinDegreeOrderingAlgorithm());
+            manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::MinDegreeOrderingAlgorithm(manager));
         }
         else if (value == "max-cardinality")
         {
-            htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::MaximumCardinalitySearchOrderingAlgorithm());
+            manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::MaximumCardinalitySearchOrderingAlgorithm(manager));
         }
         else
         {
@@ -319,17 +321,17 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 }
 
 template <typename DecompositionAlgorithm, typename Importer, typename Exporter>
-void decompose(const DecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter)
+void decompose(const htd::LibraryInstance & instance, const DecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter)
 {
     auto * graph = importer.import(std::cin);
 
-    if (graph != nullptr && !importer.isTerminated())
+    if (graph != nullptr && !instance.isTerminated())
     {
         auto * decomposition = algorithm.computeDecomposition(*graph);
 
         if (decomposition != nullptr)
         {
-            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
+            if (!instance.isTerminated() || algorithm.isSafelyInterruptible())
             {
                 exporter.write(*decomposition, *graph, std::cout);
             }
@@ -342,7 +344,7 @@ void decompose(const DecompositionAlgorithm & algorithm, const Importer & import
         }
         else
         {
-            if (algorithm.isTerminated())
+            if (instance.isTerminated())
             {
                 std::cerr << "Program was terminated successfully!" << std::endl;
             }
@@ -356,7 +358,7 @@ void decompose(const DecompositionAlgorithm & algorithm, const Importer & import
     }
     else
     {
-        if (importer.isTerminated())
+        if (instance.isTerminated())
         {
             std::cerr << "Program was terminated successfully!" << std::endl;
         }
@@ -368,17 +370,17 @@ void decompose(const DecompositionAlgorithm & algorithm, const Importer & import
 }
 
 template <typename DecompositionAlgorithm, typename Importer, typename Exporter>
-void decomposeNamed(const DecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter)
+void decomposeNamed(const htd::LibraryInstance & instance, const DecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter)
 {
     auto * graph = importer.import(std::cin);
 
-    if (graph != nullptr && !importer.isTerminated())
+    if (graph != nullptr && !instance.isTerminated())
     {
         auto * decomposition = algorithm.computeDecomposition(graph->internalGraph());
 
         if (decomposition != nullptr)
         {
-            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
+            if (!instance.isTerminated() || algorithm.isSafelyInterruptible())
             {
                 exporter.write(*decomposition, *graph, std::cout);
             }
@@ -391,7 +393,7 @@ void decomposeNamed(const DecompositionAlgorithm & algorithm, const Importer & i
         }
         else
         {
-            if (algorithm.isTerminated())
+            if (instance.isTerminated())
             {
                 std::cerr << "Program was terminated successfully!" << std::endl;
             }
@@ -405,7 +407,7 @@ void decomposeNamed(const DecompositionAlgorithm & algorithm, const Importer & i
     }
     else
     {
-        if (importer.isTerminated())
+        if (instance.isTerminated())
         {
             std::cerr << "Program was terminated successfully!" << std::endl;
         }
@@ -417,13 +419,13 @@ void decomposeNamed(const DecompositionAlgorithm & algorithm, const Importer & i
 }
 
 template <typename Importer, typename Exporter>
-void optimize(const htd::IterativeImprovementTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
+void optimize(const htd::LibraryInstance & instance, const htd::IterativeImprovementTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
 {
     auto * graph = importer.import(std::cin);
 
     if (graph != nullptr)
     {
-        if (!importer.isTerminated())
+        if (!instance.isTerminated())
         {
             std::size_t optimalBagSize = (std::size_t)-1;
 
@@ -459,7 +461,7 @@ void optimize(const htd::IterativeImprovementTreeDecompositionAlgorithm & algori
 
             if (decomposition != nullptr)
             {
-                if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
+                if (!instance.isTerminated() || algorithm.isSafelyInterruptible())
                 {
                     exporter.write(*decomposition, *graph, std::cout);
                 }
@@ -472,7 +474,7 @@ void optimize(const htd::IterativeImprovementTreeDecompositionAlgorithm & algori
             }
             else
             {
-                if (algorithm.isTerminated())
+                if (instance.isTerminated())
                 {
                     std::cerr << "Program was terminated successfully!" << std::endl;
                 }
@@ -492,11 +494,11 @@ void optimize(const htd::IterativeImprovementTreeDecompositionAlgorithm & algori
 }
 
 template <typename Importer, typename Exporter>
-void optimizeNamed(const htd::IterativeImprovementTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
+void optimizeNamed(const htd::LibraryInstance & instance, const htd::IterativeImprovementTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
 {
     auto * graph = importer.import(std::cin);
 
-    if (graph != nullptr && !importer.isTerminated())
+    if (graph != nullptr && !instance.isTerminated())
     {
         std::size_t optimalBagSize = (std::size_t)-1;
 
@@ -532,7 +534,7 @@ void optimizeNamed(const htd::IterativeImprovementTreeDecompositionAlgorithm & a
 
         if (decomposition != nullptr)
         {
-            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
+            if (!instance.isTerminated() || algorithm.isSafelyInterruptible())
             {
                 exporter.write(*decomposition, *graph, std::cout);
             }
@@ -545,7 +547,7 @@ void optimizeNamed(const htd::IterativeImprovementTreeDecompositionAlgorithm & a
         }
         else
         {
-            if (algorithm.isTerminated())
+            if (instance.isTerminated())
             {
                 std::cerr << "Program was terminated successfully!" << std::endl;
             }
@@ -560,31 +562,25 @@ void optimizeNamed(const htd::IterativeImprovementTreeDecompositionAlgorithm & a
 }
 
 template <typename DecompositionAlgorithm, typename Exporter>
-void run(const DecompositionAlgorithm & algorithm, const Exporter & exporter, const std::string & inputFormat)
+void run(const DecompositionAlgorithm & algorithm, const Exporter & exporter, const std::string & inputFormat, const htd::LibraryInstance * const manager)
 {
     if (inputFormat == "gr")
     {
-        htd::GrFormatImporter importer;
+        htd::GrFormatImporter importer(manager);
 
-        importer.setManagementInstance(algorithm.managementInstance());
-
-        decompose(algorithm, importer, exporter);
+        decompose(*manager, algorithm, importer, exporter);
     }
     else if (inputFormat == "lp")
     {
-        htd::LpFormatImporter importer;
+        htd::LpFormatImporter importer(manager);
 
-        importer.setManagementInstance(algorithm.managementInstance());
-
-        decomposeNamed(algorithm, importer, exporter);
+        decomposeNamed(*manager, algorithm, importer, exporter);
     }
     else if (inputFormat == "hgr")
     {
-        htd::HgrFormatImporter importer;
+        htd::HgrFormatImporter importer(manager);
 
-        importer.setManagementInstance(algorithm.managementInstance());
-
-        decompose(algorithm, importer, exporter);
+        decompose(*manager, algorithm, importer, exporter);
     }
 }
 
@@ -594,13 +590,13 @@ void handleSignal(int signal)
     {
         case SIGINT:
         {
-            htd::Library::instance().terminate();
+            libraryInstance->terminate();
 
             break;
         }
         case SIGTERM:
         {
-            htd::Library::instance().terminate();
+            libraryInstance->terminate();
 
             break;
         }
@@ -628,7 +624,7 @@ class WidthMinimizingFitnessFunction : public htd::ITreeDecompositionFitnessFunc
         /**
          *  Destructor of class WidthMinimizingFitnessFunction.
          */
-        ~WidthMinimizingFitnessFunction()
+        virtual ~WidthMinimizingFitnessFunction()
         {
 
         }
@@ -655,9 +651,7 @@ int main(int argc, const char * const * const argv)
 
     htd_cli::OptionManager * optionManager = createOptionManager();
 
-    std::shared_ptr<htd::LibraryInstance> libraryInstance = htd::Library::instance().createManagementInstance();
-
-    if (handleOptions(argc, argv, *optionManager))
+    if (handleOptions(argc, argv, *optionManager, libraryInstance))
     {
         const htd_cli::Choice & inputFormatChoice = optionManager->accessChoice("input");
 
@@ -679,7 +673,7 @@ int main(int argc, const char * const * const argv)
 
         if (hypertreeDecompositionRequested)
         {
-            htd::IHypertreeDecompositionAlgorithm * algorithm = htd::HypertreeDecompositionAlgorithmFactory::instance().getHypertreeDecompositionAlgorithm(libraryInstance);
+            htd::IHypertreeDecompositionAlgorithm * algorithm = libraryInstance->hypertreeDecompositionAlgorithmFactory().getHypertreeDecompositionAlgorithm(libraryInstance);
 
             htd::IHypertreeDecompositionExporter * exporter = nullptr;
 
@@ -692,7 +686,7 @@ int main(int argc, const char * const * const argv)
                 exporter = new htd::WidthExporter();
             }
 
-            run(*algorithm, *exporter, inputFormatChoice.value());
+            run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
 
             delete algorithm;
             delete exporter;
@@ -716,9 +710,7 @@ int main(int argc, const char * const * const argv)
 
             if (optimizationChoice.used() && optimizationChoice.value() == "width")
             {
-                htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm(libraryInstance), WidthMinimizingFitnessFunction());
-
-                algorithm.setManagementInstance(libraryInstance);
+                htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm(libraryInstance), WidthMinimizingFitnessFunction());
 
                 if (iterationOption.used())
                 {
@@ -739,34 +731,28 @@ int main(int argc, const char * const * const argv)
 
                 if (inputFormatChoice.value() == "gr")
                 {
-                    htd::GrFormatImporter importer;
+                    htd::GrFormatImporter importer(libraryInstance);
 
-                    importer.setManagementInstance(algorithm.managementInstance());
-
-                    optimize(algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                    optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
                 }
                 else if (inputFormatChoice.value() == "lp")
                 {
-                    htd::LpFormatImporter importer;
+                    htd::LpFormatImporter importer(libraryInstance);
 
-                    importer.setManagementInstance(algorithm.managementInstance());
-
-                    optimizeNamed(algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                    optimizeNamed(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
                 }
                 else if (inputFormatChoice.value() == "hgr")
                 {
-                    htd::HgrFormatImporter importer;
+                    htd::HgrFormatImporter importer(libraryInstance);
 
-                    importer.setManagementInstance(algorithm.managementInstance());
-
-                    optimize(algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                    optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
                 }
             }
             else
             {
-                htd::ITreeDecompositionAlgorithm * algorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm(libraryInstance);
+                htd::ITreeDecompositionAlgorithm * algorithm = libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm(libraryInstance);
 
-                run(*algorithm, *exporter, inputFormatChoice.value());
+                run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
 
                 delete algorithm;
             }
@@ -774,6 +760,8 @@ int main(int argc, const char * const * const argv)
             delete exporter;
         }
     }
+
+    delete libraryInstance;
 
     delete optionManager;
 

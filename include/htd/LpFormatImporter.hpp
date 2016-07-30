@@ -26,7 +26,6 @@
 #define	HTD_HTD_LPFORMATIMPORTER_HPP
 
 #include <htd/NamedMultiHypergraph.hpp>
-#include <htd/LibraryObject.hpp>
 
 #include <string>
 #include <iostream>
@@ -38,18 +37,18 @@ namespace htd
      *
      *  (See https://github.com/mabseher/htd/FORMATS.md for information about the available input formats.)
      */
-    class HTD_API LpFormatImporter : public htd::LibraryObject
+    class HTD_API LpFormatImporter
     {
         public:
             /**
              *  Constructor for a new graph importer.
              */
-            LpFormatImporter(void);
+            LpFormatImporter(const htd::LibraryInstance * const manager);
 
             /**
              *  Destructor of a graph importer.
              */
-            ~LpFormatImporter();
+            virtual ~LpFormatImporter();
 
             /**
              *  Create a new htd::NamedMultiHypergraph<std::string, std::string> instance based on the information stored in a given file.
@@ -68,6 +67,11 @@ namespace htd
              *  @return A new htd::NamedMultiHypergraph<std::string, std::string> instance based on the information from the given stream.
              */
             htd::NamedMultiHypergraph<std::string, std::string> * import(std::istream & stream) const;
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

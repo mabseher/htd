@@ -37,23 +37,31 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~GraphFactory();
+            GraphFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static GraphFactory & instance(void);
+            GraphFactory(const GraphFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            GraphFactory & operator=(const GraphFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~GraphFactory();
 
             /**
              *  Create a new IMutableGraph object.
              *
              *  @return A new IMutableGraph object.
              */
-            htd::IMutableGraph * getGraph(void);
+            htd::IMutableGraph * getGraph(void) const;
 
             /**
              *  Create a new IMutableGraph object.
@@ -62,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableGraph object of the given size.
              */
-            htd::IMutableGraph * getGraph(std::size_t initialSize);
+            htd::IMutableGraph * getGraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableGraph object.
@@ -71,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableGraph object identical to the given original graph.
              */
-            htd::IMutableGraph * getGraph(const htd::IGraph & original);
+            htd::IMutableGraph * getGraph(const htd::IGraph & original) const;
 
             /**
              *  Create a new IMutableGraph object.
@@ -80,7 +88,7 @@ namespace htd
              *
              *  @return A new IMutableGraph object identical to the given original graph.
              */
-            htd::IMutableGraph * getGraph(const htd::IMultiGraph & original);
+            htd::IMutableGraph * getGraph(const htd::IMultiGraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableGraph interface.
@@ -98,41 +106,20 @@ namespace htd
              *
              *  @return The mutable interface of the given graph.
              */
-            htd::IMutableGraph & accessMutableGraph(htd::IGraph & original);
+            htd::IMutableGraph & accessMutableGraph(htd::IGraph & original) const;
 
             /**
              *  Access the mutable interface of a given graph.
              *
              *  @return The mutable interface of the given graph.
              */
-            const htd::IMutableGraph & accessMutableGraph(const htd::IGraph & original);
+            const htd::IMutableGraph & accessMutableGraph(const htd::IGraph & original) const;
 
         private:
             /**
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IMutableGraph * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            GraphFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            GraphFactory(const GraphFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            GraphFactory & operator=(const GraphFactory & original);
     };
 }
 

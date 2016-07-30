@@ -32,12 +32,12 @@
 
 #include <stdexcept>
 
-htd::LabeledMultiGraph::LabeledMultiGraph(void) : htd::MultiGraph::MultiGraph(), labelings_(new htd::LabelingCollection())
+htd::LabeledMultiGraph::LabeledMultiGraph(const htd::LibraryInstance * const manager) : htd::MultiGraph::MultiGraph(manager), labelings_(new htd::LabelingCollection())
 {
 
 }
 
-htd::LabeledMultiGraph::LabeledMultiGraph(std::size_t initialSize) : htd::MultiGraph::MultiGraph(initialSize), labelings_(new htd::LabelingCollection())
+htd::LabeledMultiGraph::LabeledMultiGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : htd::MultiGraph::MultiGraph(manager, initialSize), labelings_(new htd::LabelingCollection())
 {
 
 }

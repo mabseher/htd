@@ -32,9 +32,34 @@
 
 #include <stdexcept>
 
-htd::LabeledDirectedMultiGraphFactory::LabeledDirectedMultiGraphFactory(void)
+htd::LabeledDirectedMultiGraphFactory::LabeledDirectedMultiGraphFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::LabeledDirectedMultiGraph();
+    constructionTemplate_ = new htd::LabeledDirectedMultiGraph(manager);
+}
+
+htd::LabeledDirectedMultiGraphFactory::LabeledDirectedMultiGraphFactory(const htd::LabeledDirectedMultiGraphFactory & original)
+{
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledDirectedMultiGraph();
+#endif
+}
+
+htd::LabeledDirectedMultiGraphFactory & htd::LabeledDirectedMultiGraphFactory::operator=(const htd::LabeledDirectedMultiGraphFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    #else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledDirectedMultiGraph();
+    #endif
+    }
+
+    return *this;
 }
 
 htd::LabeledDirectedMultiGraphFactory::~LabeledDirectedMultiGraphFactory()
@@ -47,14 +72,7 @@ htd::LabeledDirectedMultiGraphFactory::~LabeledDirectedMultiGraphFactory()
     }
 }
 
-htd::LabeledDirectedMultiGraphFactory & htd::LabeledDirectedMultiGraphFactory::instance(void)
-{
-    static htd::LabeledDirectedMultiGraphFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::getLabeledDirectedMultiGraph(void)
+htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::getLabeledDirectedMultiGraph(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -63,7 +81,7 @@ htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::
 #endif
 }
 
-htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::getLabeledDirectedMultiGraph(std::size_t initialSize)
+htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::getLabeledDirectedMultiGraph(std::size_t initialSize) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledDirectedMultiGraph * ret = constructionTemplate_->clone();
@@ -76,7 +94,7 @@ htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::
     return ret;
 }
 
-htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::getLabeledDirectedMultiGraph(const htd::ILabeledDirectedMultiGraph & original)
+htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::getLabeledDirectedMultiGraph(const htd::ILabeledDirectedMultiGraph & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableLabeledDirectedMultiGraph * ret = constructionTemplate_->clone();
@@ -106,12 +124,12 @@ void htd::LabeledDirectedMultiGraphFactory::setConstructionTemplate(htd::IMutabl
     constructionTemplate_ = original;
 }
 
-htd::IMutableLabeledDirectedMultiGraph & htd::LabeledDirectedMultiGraphFactory::accessMutableLabeledDirectedMultiGraph(htd::ILabeledDirectedMultiGraph & original)
+htd::IMutableLabeledDirectedMultiGraph & htd::LabeledDirectedMultiGraphFactory::accessMutableLabeledDirectedMultiGraph(htd::ILabeledDirectedMultiGraph & original) const
 {
     return *(dynamic_cast<htd::IMutableLabeledDirectedMultiGraph *>(&original));
 }
 
-const htd::IMutableLabeledDirectedMultiGraph & htd::LabeledDirectedMultiGraphFactory::accessMutableLabeledDirectedMultiGraph(const htd::ILabeledDirectedMultiGraph & original)
+const htd::IMutableLabeledDirectedMultiGraph & htd::LabeledDirectedMultiGraphFactory::accessMutableLabeledDirectedMultiGraph(const htd::ILabeledDirectedMultiGraph & original) const
 {
     return *(dynamic_cast<const htd::IMutableLabeledDirectedMultiGraph *>(&original));
 }

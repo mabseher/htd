@@ -51,7 +51,7 @@ namespace htd_cli
 
             OptionManager(void);
 
-            ~OptionManager();
+            virtual ~OptionManager();
 
             /**
              *  Parse options from the command line.

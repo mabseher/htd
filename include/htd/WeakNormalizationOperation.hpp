@@ -42,17 +42,20 @@ namespace htd
         public:
             /**
              *  Constructor for a new manipulation operation of type WeakNormalizationOperation.
+             *
+             *  @param[in] manager   The management instance to which the new manipulation operation belongs.
              */
-            WeakNormalizationOperation(void);
+            WeakNormalizationOperation(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a new manipulation operation of type WeakNormalizationOperation.
              *
+             *  @param[in] manager                   The management instance to which the new manipulation operation belongs.
              *  @param[in] emptyRoot                A boolean flag whether the decomposition shall have a root node with empty bag.
              *  @param[in] emptyLeaves              A boolean flag whether the decomposition's leave nodes shall have an empty bag.
              *  @param[in] identicalJoinNodeParent  A boolean flag whether each join node shall have a parent with equal bag content.
              */
-            WeakNormalizationOperation(bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent);
+            WeakNormalizationOperation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent);
 
             virtual ~WeakNormalizationOperation();
 
@@ -105,6 +108,10 @@ namespace htd
              */
             bool identicalJoinNodeParentRequired(void) const;
 
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             WeakNormalizationOperation * clone(void) const HTD_OVERRIDE;
 #else
@@ -121,12 +128,11 @@ namespace htd
 
             htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
+
         private:
-            bool emptyRoot_;
+            HTD_IMPLEMENTATION Implementation;
 
-            bool emptyLeaves_;
-
-            bool identicalJoinNodeParent_;
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

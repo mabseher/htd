@@ -33,9 +33,34 @@
 
 #include <stdexcept>
 
-htd::GraphFactory::GraphFactory(void)
+htd::GraphFactory::GraphFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::Graph();
+    constructionTemplate_ = new htd::Graph(manager);
+}
+
+htd::GraphFactory::GraphFactory(const htd::GraphFactory & original)
+{
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneMutableGraph();
+#endif
+}
+
+htd::GraphFactory & htd::GraphFactory::operator=(const htd::GraphFactory & original)
+{
+    if (this != &original)
+    {
+        delete constructionTemplate_;
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        constructionTemplate_ = original.constructionTemplate_->clone();
+    #else
+        constructionTemplate_ = original.constructionTemplate_->cloneMutableGraph();
+    #endif
+    }
+
+    return *this;
 }
 
 htd::GraphFactory::~GraphFactory()
@@ -48,14 +73,7 @@ htd::GraphFactory::~GraphFactory()
     }
 }
 
-htd::GraphFactory & htd::GraphFactory::instance(void)
-{
-    static htd::GraphFactory instance_;
-
-    return instance_;
-}
-
-htd::IMutableGraph * htd::GraphFactory::getGraph(void)
+htd::IMutableGraph * htd::GraphFactory::getGraph(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -64,7 +82,7 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(void)
 #endif
 }
 
-htd::IMutableGraph * htd::GraphFactory::getGraph(std::size_t initialSize)
+htd::IMutableGraph * htd::GraphFactory::getGraph(std::size_t initialSize) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraph * ret = constructionTemplate_->clone();
@@ -77,7 +95,7 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(std::size_t initialSize)
     return ret;
 }
 
-htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IGraph & original)
+htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IGraph & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraph * ret = constructionTemplate_->clone();
@@ -92,7 +110,7 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IGraph & original)
     return ret;
 }
 
-htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IMultiGraph & original)
+htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IMultiGraph & original) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableGraph * ret = constructionTemplate_->clone();
@@ -122,12 +140,12 @@ void htd::GraphFactory::setConstructionTemplate(htd::IMutableGraph * original)
     constructionTemplate_ = original;
 }
 
-htd::IMutableGraph & htd::GraphFactory::accessMutableGraph(htd::IGraph & original)
+htd::IMutableGraph & htd::GraphFactory::accessMutableGraph(htd::IGraph & original) const
 {
     return *(dynamic_cast<htd::IMutableGraph *>(&original));
 }
 
-const htd::IMutableGraph & htd::GraphFactory::accessMutableGraph(const htd::IGraph & original)
+const htd::IMutableGraph & htd::GraphFactory::accessMutableGraph(const htd::IGraph & original) const
 {
     return *(dynamic_cast<const htd::IMutableGraph *>(&original));
 }

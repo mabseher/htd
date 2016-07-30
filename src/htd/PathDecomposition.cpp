@@ -35,7 +35,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-htd::PathDecomposition::PathDecomposition(void) : htd::LabeledPath::LabeledPath(), bagContent_(), inducedEdges_()
+htd::PathDecomposition::PathDecomposition(const htd::LibraryInstance * const manager) : htd::LabeledPath::LabeledPath(manager), bagContent_(), inducedEdges_()
 {
 
 }
@@ -269,7 +269,7 @@ std::size_t htd::PathDecomposition::forgetNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         if (childCount(node) > 0)
         {
@@ -297,7 +297,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgetNodes(void) co
 
 void htd::PathDecomposition::copyForgetNodesTo(std::vector<htd::vertex_t> & target) const
 {
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         if (childCount(node) > 0)
         {
@@ -346,7 +346,7 @@ std::size_t htd::PathDecomposition::introduceNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         if (childCount(node) > 0)
         {
@@ -374,7 +374,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introduceNodes(void)
 
 void htd::PathDecomposition::copyIntroduceNodesTo(std::vector<htd::vertex_t> & target) const
 {
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
         if (childCount(node) > 0)
         {
@@ -423,14 +423,12 @@ std::size_t htd::PathDecomposition::exchangeNodeCount(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
-        htd::vertex_t child = nodes_.at(node)->child;
-
-        if (child != htd::Vertex::UNKNOWN)
+        if (!isLeaf(node))
         {
             const std::vector<htd::vertex_t> & bag = bagContent(node);
-            const std::vector<htd::vertex_t> & childBag = bagContent(child);
+            const std::vector<htd::vertex_t> & childBag = bagContent(child(node));
 
             std::pair<std::size_t, std::size_t> symmetricDifference = htd::symmetric_difference_sizes(bag, childBag);
 
@@ -455,14 +453,12 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::exchangeNodes(void) 
 
 void htd::PathDecomposition::copyExchangeNodesTo(std::vector<htd::vertex_t> & target) const
 {
-    for (htd::vertex_t node : vertices_)
+    for (htd::vertex_t node : vertexVector())
     {
-        htd::vertex_t child = nodes_.at(node)->child;
-
-        if (child != htd::Vertex::UNKNOWN)
+        if (!isLeaf(node))
         {
             const std::vector<htd::vertex_t> & bag = bagContent(node);
-            const std::vector<htd::vertex_t> & childBag = bagContent(child);
+            const std::vector<htd::vertex_t> & childBag = bagContent(child(node));
 
             std::pair<std::size_t, std::size_t> symmetricDifference = htd::symmetric_difference_sizes(bag, childBag);
 
@@ -493,12 +489,10 @@ bool htd::PathDecomposition::isExchangeNode(htd::vertex_t vertex) const
 
     bool ret = false;
 
-    htd::vertex_t child = nodes_.at(vertex)->child;
-
-    if (child != htd::Vertex::UNKNOWN)
+    if (!isLeaf(vertex))
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
-        const std::vector<htd::vertex_t> & childBag = bagContent(child);
+        const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
 
         std::pair<std::size_t, std::size_t> symmetricDifference = htd::symmetric_difference_sizes(bag, childBag);
 
@@ -549,7 +543,7 @@ std::size_t htd::PathDecomposition::minimumBagSize(void) const
 
     std::size_t ret = 0;
 
-    for (htd::vertex_t vertex : vertices_)
+    for (htd::vertex_t vertex : vertexVector())
     {
         std::size_t currentBagSize = bagSize(vertex);
 
@@ -568,7 +562,7 @@ std::size_t htd::PathDecomposition::maximumBagSize(void) const
 {
     std::size_t ret = 0;
 
-    for (htd::vertex_t vertex : vertices_)
+    for (htd::vertex_t vertex : vertexVector())
     {
         std::size_t currentBagSize = bagSize(vertex);
 

@@ -36,7 +36,7 @@ class FilteredHyperedgeCollectionTest : public ::testing::Test
 
         }
 
-        ~FilteredHyperedgeCollectionTest()
+        virtual ~FilteredHyperedgeCollectionTest()
         {
 
         }

@@ -38,13 +38,22 @@ namespace htd
     class GreedySetCoverAlgorithm : public htd::ISetCoverAlgorithm
     {
         public:
-            GreedySetCoverAlgorithm(void);
+            /**
+             *  Constructor for a new set-cover algorithm of type GreedySetCoverAlgorithm.
+             *
+             *  @param[in] manager   The management instance to which the new algorithm belongs.
+             */
+            GreedySetCoverAlgorithm(const htd::LibraryInstance * const manager);
             
-            ~GreedySetCoverAlgorithm();
+            virtual ~GreedySetCoverAlgorithm();
             
             void computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const HTD_OVERRIDE;
 
             void computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const HTD_OVERRIDE;
+
+            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
             GreedySetCoverAlgorithm * clone(void) const HTD_OVERRIDE;
 
@@ -55,6 +64,11 @@ namespace htd
              *  @note This operator is protected to prevent assignments to an already initialized algorithm.
              */
             GreedySetCoverAlgorithm & operator=(const GreedySetCoverAlgorithm &) { return *this; }
+
+        private:
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

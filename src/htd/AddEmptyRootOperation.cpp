@@ -28,7 +28,33 @@
 #include <htd/Globals.hpp>
 #include <htd/AddEmptyRootOperation.hpp>
 
-htd::AddEmptyRootOperation::AddEmptyRootOperation(void) : htd::LibraryObject()
+/**
+ *  Private implementation details of class htd::AddEmptyRootOperation.
+ */
+struct htd::AddEmptyRootOperation::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+};
+
+htd::AddEmptyRootOperation::AddEmptyRootOperation(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
@@ -182,13 +208,21 @@ bool htd::AddEmptyRootOperation::createsLocationDependendLabels(void) const
     return false;
 }
 
+const htd::LibraryInstance * htd::AddEmptyRootOperation::managementInstance(void) const HTD_NOEXCEPT
+{
+    return implementation_->managementInstance_;
+}
+
+void htd::AddEmptyRootOperation::setManagementInstance(const htd::LibraryInstance * const manager)
+{
+    HTD_ASSERT(manager != nullptr)
+
+    implementation_->managementInstance_ = manager;
+}
+
 htd::AddEmptyRootOperation * htd::AddEmptyRootOperation::clone(void) const
 {
-    htd::AddEmptyRootOperation * ret = new htd::AddEmptyRootOperation();
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::AddEmptyRootOperation(managementInstance());
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

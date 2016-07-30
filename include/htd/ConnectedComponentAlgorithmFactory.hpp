@@ -37,16 +37,24 @@ namespace htd
     {
         public:
             /**
-             *  Destructor of the factory class.
+             *  Constructor for the factory class.
              */
-            ~ConnectedComponentAlgorithmFactory();
+            ConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager);
 
             /**
-             *  Access the singleton instance of the factory class.
-             *
-             *  @return The singleton instance of the factory class.
+             *  Copy constructor for the factory class.
              */
-            static ConnectedComponentAlgorithmFactory & instance(void);
+            ConnectedComponentAlgorithmFactory(const ConnectedComponentAlgorithmFactory & original);
+
+            /**
+             *  Copy assignment operator for the factory class.
+             */
+            ConnectedComponentAlgorithmFactory & operator=(const ConnectedComponentAlgorithmFactory & original);
+
+            /**
+             *  Destructor of the factory class.
+             */
+            virtual ~ConnectedComponentAlgorithmFactory();
 
             /**
              *  Create a new IConnectedComponentAlgorithm object.
@@ -58,11 +66,11 @@ namespace htd
             /**
              *  Create a new IConnectedComponentAlgorithm object.
              *
-             *  @param[in] instance The management instance which shall be assigned to the new IConnectedComponentAlgorithm object.
+             *  @param[in] manager   The management instance which shall be assigned to the new IConnectedComponentAlgorithm object.
              *
              *  @return A new IConnectedComponentAlgorithm object.
              */
-            htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(const std::shared_ptr<htd::LibraryInstance> & instance) const;
+            htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const;
 
             /**
              *  Set the default implementation of the IConnectedComponentAlgorithm interface.
@@ -80,27 +88,6 @@ namespace htd
              *  A pointer to a clean instance of the default implementation.
              */
             htd::IConnectedComponentAlgorithm * constructionTemplate_;
-
-            /**
-             *  Constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            ConnectedComponentAlgorithmFactory(void);
-
-            /**
-             *  Copy constructor for the factory class.
-             *
-             *  @note This constructor is private to prevent creating multiple instances of the factory.
-             */
-            ConnectedComponentAlgorithmFactory(const ConnectedComponentAlgorithmFactory & original);
-
-            /**
-             *  Copy assignment operator for the factory class.
-             *
-             *  @note This operator is private to prevent assignments to the factory class.
-             */
-            ConnectedComponentAlgorithmFactory & operator=(const ConnectedComponentAlgorithmFactory & original);
     };
 }
 

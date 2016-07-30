@@ -28,6 +28,7 @@
 #include <htd/Hyperedge.hpp>
 
 #include <algorithm>
+#include <functional>
 
 /**
  *  Interface for the element information of a hyperedge.

@@ -27,8 +27,6 @@
 
 #include <htd/Id.hpp>
 
-#include <functional>
-#include <map>
 #include <memory>
 
 namespace htd

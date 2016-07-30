@@ -29,8 +29,6 @@
 #include <htd/IOrderingAlgorithm.hpp>
 
 #include <vector>
-#include <algorithm>
-#include <unordered_map>
 
 namespace htd
 {

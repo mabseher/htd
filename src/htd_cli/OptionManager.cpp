@@ -30,6 +30,7 @@
 #include <iomanip>
 #include <ostream>
 #include <sstream>
+#include <stdexcept>
 
 const std::string htd_cli::OptionManager::GENERAL_SECTION = "General Options";
 

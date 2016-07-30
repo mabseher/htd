@@ -30,6 +30,7 @@
 #include <iomanip>
 #include <ostream>
 #include <sstream>
+#include <stdexcept>
 
 htd_cli::SingleValueOption::SingleValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder) : htd_cli::ValueOption(name, description, valuePlaceholder)
 {

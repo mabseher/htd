@@ -71,7 +71,7 @@ namespace htd_cli
             const char * valuePlaceholder(void) const;
 
         private:
-            char * valuePlaceholder_;
+            std::string valuePlaceholder_;
     };
 }
 

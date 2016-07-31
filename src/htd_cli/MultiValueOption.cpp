@@ -48,13 +48,10 @@ struct htd_cli::MultiValueOption::Implementation
 
     virtual ~Implementation()
     {
-        for (char * value : values_)
-        {
-            delete[] value;
-        }
+
     }
 
-    std::vector<char *> values_;
+    std::vector<std::string> values_;
 };
 
 htd_cli::MultiValueOption::MultiValueOption(const char * const name, const char * const description, const char * const valuePlaceholder) : htd_cli::ValueOption(name, description, valuePlaceholder), implementation_(new Implementation())
@@ -81,18 +78,12 @@ const char * htd_cli::MultiValueOption::value(htd::index_t index) const
 {
     HTD_ASSERT(index < implementation_->values_.size())
 
-    return implementation_->values_.at(index);
+    return implementation_->values_.at(index).c_str();
 }
 
 void htd_cli::MultiValueOption::registerValue(const char * const value)
 {
-    std::size_t size = std::strlen(value);
-
-    char * newValue = new char[size + 1];
-
-    std::strncpy(newValue, value, size + 1);
-
-    implementation_->values_.push_back(newValue);
+    implementation_->values_.emplace_back(value);
 
     setUsed();
 }

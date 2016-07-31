@@ -45,17 +45,14 @@ struct htd_cli::Option::Implementation
      *  @param[in] description  The description of the command line option.
      *  @param[in] shortName    The abbreviated name of the option which acts as an alias for the option name.
      */
-    Implementation(const char * const name, const char * const description, char shortName = '\0') : used_(false), shortName_(shortName), name_(new char[std::strlen(name) + 1]), description_(new char[std::strlen(description) + 1])
+    Implementation(const std::string & name, const std::string & description, char shortName = '\0') : used_(false), shortName_(shortName), name_(name), description_(description)
     {
-        std::strncpy(name_, name, std::strlen(name) + 1);
 
-        std::strncpy(description_, description, std::strlen(description) + 1);
     }
 
     virtual ~Implementation()
     {
-        delete[] name_;
-        delete[] description_;
+
     }
 
     /**
@@ -71,12 +68,12 @@ struct htd_cli::Option::Implementation
     /**
      *  The name of the command line option.
      */
-    char * name_;
+    std::string name_;
 
     /**
      *  The description of the command line option.
      */
-    char * description_;
+    std::string description_;
 };
 
 htd_cli::Option::Option(const char * const name, const char * const description, char shortName) : implementation_(new Implementation(name, description, shortName))
@@ -91,12 +88,12 @@ htd_cli::Option::~Option()
 
 const char * htd_cli::Option::name(void) const
 {
-    return implementation_->name_;
+    return implementation_->name_.c_str();
 }
 
 const char * htd_cli::Option::description(void) const
 {
-    return implementation_->description_;
+    return implementation_->description_.c_str();
 }
 
 bool htd_cli::Option::hasShortName(void) const

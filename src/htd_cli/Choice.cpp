@@ -30,6 +30,7 @@
 #include <cstring>
 #include <iomanip>
 #include <ostream>
+#include <string>
 #include <sstream>
 #include <stdexcept>
 #include <vector>
@@ -42,15 +43,13 @@ struct htd_cli::Choice::Implementation
     /**
      *  Constructor for the implementation details structure.
      */
-    Implementation(void) : defaultValue_(new char[1] { '\0' }), maxPossibilityNameLength_(0), possibilities_()
+    Implementation(void) : defaultValue_(""), maxPossibilityNameLength_(0), possibilities_()
     {
 
     }
 
     virtual ~Implementation()
     {
-        delete[] defaultValue_;
-
         for (Possibility * possibility : possibilities_)
         {
             delete possibility;
@@ -68,34 +67,31 @@ struct htd_cli::Choice::Implementation
          *  @param[in] value        The value which can be selected.
          *  @param[in] description  The description of the choice possibility.
          */
-        Possibility(const char * const value, const char * const description) : value_(new char[std::strlen(value) + 1]), description_(new char[std::strlen(description) + 1])
+        Possibility(const std::string & value, const std::string & description) : value_(value), description_(description)
         {
-            std::strncpy(value_, value, std::strlen(value) + 1);
 
-            std::strncpy(description_, description, std::strlen(description) + 1);
         }
 
         ~Possibility()
         {
-            delete[] value_;
-            delete[] description_;
+
         }
 
         /**
          *  The value which can be selected.
          */
-        char * value_;
+        std::string value_;
 
         /**
          *  The description of the choice possibility.
          */
-        char * description_;
+        std::string description_;
     };
 
     /**
      *  The default value of the choice option.
      */
-    char * defaultValue_;
+    std::string defaultValue_;
 
     /**
      *  The maximum length of the name of a possibility. This value is used for aligning the help texts properly.
@@ -129,7 +125,7 @@ void htd_cli::Choice::addPossibility(const char * const value, const char * cons
 
     for (const Implementation::Possibility * const possibility : implementation_->possibilities_)
     {
-        if (size == std::strlen(possibility->value_) && std::strncmp(value, possibility->value_, size) == 0)
+        if (value == possibility->value_)
         {
             std::ostringstream message;
 
@@ -149,20 +145,18 @@ void htd_cli::Choice::addPossibility(const char * const value, const char * cons
 
 bool htd_cli::Choice::hasDefaultValue(void)
 {
-    return std::strlen(implementation_->defaultValue_) > 0;
+    return !(implementation_->defaultValue_.empty());
 }
 
 void htd_cli::Choice::setDefaultValue(const char * const value)
 {
     bool valid = false;
 
-    std::size_t size = std::strlen(value);
-
     for (auto it = implementation_->possibilities_.begin(); !valid && it != implementation_->possibilities_.end(); ++it)
     {
         const Implementation::Possibility & possibility = **it;
 
-        if (size == std::strlen(possibility.value_) && std::strncmp(value, possibility.value_, size) == 0)
+        if (value == possibility.value_)
         {
             valid = true;
         }
@@ -170,11 +164,7 @@ void htd_cli::Choice::setDefaultValue(const char * const value)
 
     if (valid)
     {
-        delete[] implementation_->defaultValue_;
-
-        implementation_->defaultValue_ = new char[size + 1];
-
-        std::strncpy(implementation_->defaultValue_, value, size + 1);
+        implementation_->defaultValue_ = value;
     }
     else
     {
@@ -193,20 +183,18 @@ const char * htd_cli::Choice::value(void) const
         return htd_cli::SingleValueOption::value();
     }
 
-    return implementation_->defaultValue_;
+    return implementation_->defaultValue_.c_str();
 }
 
 void htd_cli::Choice::registerValue(const char * const value)
 {
     bool valid = false;
 
-    std::size_t size = std::strlen(value);
-
     for (auto it = implementation_->possibilities_.begin(); !valid && it != implementation_->possibilities_.end(); ++it)
     {
         const Implementation::Possibility & possibility = **it;
 
-        if (size == std::strlen(possibility.value_) && std::strncmp(value, possibility.value_, size) == 0)
+        if (value == possibility.value_)
         {
             valid = true;
         }
@@ -247,7 +235,7 @@ void htd_cli::Choice::printHelp(std::ostream & stream, std::size_t maxNameLength
     {
         stream << "      .) " << std::left << std::setw(implementation_->maxPossibilityNameLength_) << possibility->value_ << "   " << possibility->description_;
 
-        if (std::strlen(possibility->value_) == std::strlen(implementation_->defaultValue_) && std::strncmp(possibility->value_, implementation_->defaultValue_, std::strlen(possibility->value_)) == 0)
+        if (possibility->value_ == implementation_->defaultValue_)
         {
             stream << " (default)";
         }

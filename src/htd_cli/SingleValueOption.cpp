@@ -41,17 +41,17 @@ struct htd_cli::SingleValueOption::Implementation
     /**
      *  Constructor for the implementation details structure.
      */
-    Implementation(void) : value_(new char[1] { '\0' })
+    Implementation(void) : value_("")
     {
 
     }
 
     virtual ~Implementation()
     {
-        delete[] value_;
+
     }
 
-    char * value_;
+    std::string value_;
 };
 
 htd_cli::SingleValueOption::SingleValueOption(const char * const name, const char * const description, const char * const valuePlaceholder) : htd_cli::ValueOption(name, description, valuePlaceholder), implementation_(new Implementation())
@@ -71,12 +71,12 @@ htd_cli::SingleValueOption::~SingleValueOption()
 
 const char * htd_cli::SingleValueOption::value(void) const
 {
-    return implementation_->value_;
+    return implementation_->value_.c_str();
 }
 
 void htd_cli::SingleValueOption::registerValue(const char * const value)
 {
-    if (used() && (std::strlen(value) != std::strlen(implementation_->value_) || std::strncmp(value, implementation_->value_, std::strlen(value)) != 0))
+    if (used() && value != implementation_->value_)
     {
         std::ostringstream message;
 
@@ -85,13 +85,7 @@ void htd_cli::SingleValueOption::registerValue(const char * const value)
         throw std::runtime_error(message.str());
     }
 
-    delete[] implementation_->value_;
-
-    std::size_t size = std::strlen(value);
-
-    implementation_->value_ = new char[size + 1];
-
-    std::strncpy(implementation_->value_, value, size + 1);
+    implementation_->value_ = value;
 
     setUsed();
 }

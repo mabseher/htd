@@ -22,22 +22,21 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_TDFORMATEXPORTER_HPP
-#define	HTD_HTD_TDFORMATEXPORTER_HPP
+#ifndef HTD_MAIN_TDFORMATEXPORTER_HPP
+#define	HTD_MAIN_TDFORMATEXPORTER_HPP
 
-#include <htd/ITreeDecompositionExporter.hpp>
+#include <htd_main/ITreeDecompositionExporter.hpp>
 
-#include <fstream>
 #include <iostream>
 
-namespace htd
+namespace htd_main
 {
     /**
      *  Exporter which allows to export tree decompositions in the tree decomposition format 'td'.
      *
      *  (See https://github.com/mabseher/htd/FORMATS.md for information about the available output formats.)
      */
-    class HTD_API TdFormatExporter : public htd::ITreeDecompositionExporter
+    class TdFormatExporter : public htd_main::ITreeDecompositionExporter
     {
         public:
             TdFormatExporter(void);
@@ -50,4 +49,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_TDFORMATEXPORTER_HPP */
+#endif /* HTD_MAIN_TDFORMATEXPORTER_HPP */

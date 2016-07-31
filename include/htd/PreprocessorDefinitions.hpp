@@ -37,21 +37,21 @@
     #define HTD_SYMBOL_EXPORT __declspec(dllexport)
     #define HTD_SYMBOL_IMPORT __declspec(dllimport)
     #define HTD_LOCAL_SYMBOL
-    #define HTD_IMPLEMENTATION_EXPORT class __declspec(dllexport)
-    #define HTD_IMPLEMENTATION_IMPORT extern class __declspec(dllimport)
+    #define HTD_IMPLEMENTATION_EXPORT struct __declspec(dllexport)
+    #define HTD_IMPLEMENTATION_IMPORT extern struct __declspec(dllimport)
 #else
     #if HTD_COMPILER_IS_GNU == 1 || HTD_COMPILER_IS_Clang == 1
         #define HTD_SYMBOL_EXPORT __attribute__ ((visibility ("default")))
         #define HTD_SYMBOL_IMPORT __attribute__ ((visibility ("default")))
         #define HTD_LOCAL_SYMBOL  __attribute__ ((visibility ("hidden")))
-        #define HTD_IMPLEMENTATION_EXPORT class __attribute__ ((visibility ("default")))
-        #define HTD_IMPLEMENTATION_IMPORT extern class __attribute__ ((visibility ("default")))
+        #define HTD_IMPLEMENTATION_EXPORT struct __attribute__ ((visibility ("default")))
+        #define HTD_IMPLEMENTATION_IMPORT extern struct __attribute__ ((visibility ("default")))
     #else
         #define HTD_SYMBOL_EXPORT
         #define HTD_SYMBOL_IMPORT
         #define HTD_LOCAL_SYMBOL
-        #define HTD_IMPLEMENTATION_EXPORT class
-        #define HTD_IMPLEMENTATION_IMPORT class
+        #define HTD_IMPLEMENTATION_EXPORT struct
+        #define HTD_IMPLEMENTATION_IMPORT struct
     #endif
 #endif
 
@@ -67,7 +67,7 @@
 #else
     #define HTD_API
     #define HTD_LOCAL
-    #define HTD_IMPLEMENTATION class
+    #define HTD_IMPLEMENTATION struct
 #endif
 
 //#define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

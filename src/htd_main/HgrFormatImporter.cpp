@@ -22,10 +22,10 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_HGRFORMATIMPORTER_CPP
-#define	HTD_HTD_HGRFORMATIMPORTER_CPP
+#ifndef HTD_MAIN_HGRFORMATIMPORTER_CPP
+#define	HTD_MAIN_HGRFORMATIMPORTER_CPP
 
-#include <htd/HgrFormatImporter.hpp>
+#include <htd_main/HgrFormatImporter.hpp>
 
 #include <htd/MultiHypergraphFactory.hpp>
 
@@ -36,7 +36,7 @@
 /**
  *  Private implementation details of class htd::HgrFormatImporter.
  */
-struct htd::HgrFormatImporter::Implementation
+struct htd_main::HgrFormatImporter::Implementation
 {
     /**
      *  Constructor for the implementation details structure.
@@ -59,24 +59,24 @@ struct htd::HgrFormatImporter::Implementation
     const htd::LibraryInstance * managementInstance_;
 };
 
-htd::HgrFormatImporter::HgrFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
+htd_main::HgrFormatImporter::HgrFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
 
-htd::HgrFormatImporter::~HgrFormatImporter(void)
+htd_main::HgrFormatImporter::~HgrFormatImporter(void)
 {
 
 }
 
-htd::IMultiHypergraph * htd::HgrFormatImporter::import(const std::string & path) const
+htd::IMultiHypergraph * htd_main::HgrFormatImporter::import(const std::string & path) const
 {
     std::ifstream stream(path);
 
     return import(stream);
 }
 
-htd::IMultiHypergraph * htd::HgrFormatImporter::import(std::istream & stream) const
+htd::IMultiHypergraph * htd_main::HgrFormatImporter::import(std::istream & stream) const
 {
     std::size_t vertexCount = 0;
     std::size_t edgeCount = 0;
@@ -194,4 +194,4 @@ htd::IMultiHypergraph * htd::HgrFormatImporter::import(std::istream & stream) co
     return ret;
 }
 
-#endif /* HTD_HTD_HGRFORMATIMPORTER_CPP */
+#endif /* HTD_MAIN_HGRFORMATIMPORTER_CPP */

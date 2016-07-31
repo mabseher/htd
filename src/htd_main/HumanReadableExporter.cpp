@@ -22,24 +22,19 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_HUMANREADABLEEXPORTER_CPP
-#define	HTD_HTD_HUMANREADABLEEXPORTER_CPP
+#ifndef HTD_MAIN_HUMANREADABLEEXPORTER_CPP
+#define	HTD_MAIN_HUMANREADABLEEXPORTER_CPP
 
-#include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
-#include <htd/HumanReadableExporter.hpp>
+#include <htd_main/HumanReadableExporter.hpp>
 
 #include <htd/PreOrderTreeTraversal.hpp>
 
-#include <iostream>
-#include <unordered_map>
-
-htd::HumanReadableExporter::HumanReadableExporter(void)
+htd_main::HumanReadableExporter::HumanReadableExporter(void)
 {
 
 }
 
-htd::HumanReadableExporter::~HumanReadableExporter()
+htd_main::HumanReadableExporter::~HumanReadableExporter()
 {
 
 }
@@ -144,7 +139,7 @@ void printHyperedge(const htd::Hyperedge & hyperedge, std::ostream & outputStrea
     }
 }
 
-void htd::HumanReadableExporter::write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const
+void htd_main::HumanReadableExporter::write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const
 {
     htd::PreOrderTreeTraversal traversal;
 
@@ -167,7 +162,7 @@ void htd::HumanReadableExporter::write(const htd::ITreeDecomposition & decomposi
     });
 }
 
-void htd::HumanReadableExporter::write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const
+void htd_main::HumanReadableExporter::write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const
 {
     htd::PreOrderTreeTraversal traversal;
 
@@ -188,7 +183,7 @@ void htd::HumanReadableExporter::write(const htd::ITreeDecomposition & decomposi
     });
 }
 
-void htd::HumanReadableExporter::write(const htd::IHypertreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const
+void htd_main::HumanReadableExporter::write(const htd::IHypertreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const
 {
     htd::PreOrderTreeTraversal traversal;
 
@@ -228,7 +223,7 @@ void htd::HumanReadableExporter::write(const htd::IHypertreeDecomposition & deco
     });
 }
 
-void htd::HumanReadableExporter::write(const htd::IHypertreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const
+void htd_main::HumanReadableExporter::write(const htd::IHypertreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const
 {
     htd::PreOrderTreeTraversal traversal;
 
@@ -266,4 +261,4 @@ void htd::HumanReadableExporter::write(const htd::IHypertreeDecomposition & deco
     });
 }
 
-#endif /* HTD_HTD_HUMANREADABLEEXPORTER_CPP */
+#endif /* HTD_MAIN_HUMANREADABLEEXPORTER_CPP */

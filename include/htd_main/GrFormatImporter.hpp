@@ -1,5 +1,5 @@
 /*
- * File:   LpFormatImporter.hpp
+ * File:   GrFormatImporter.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,51 +22,51 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_LPFORMATIMPORTER_HPP
-#define	HTD_HTD_LPFORMATIMPORTER_HPP
+#ifndef HTD_MAIN_GRFORMATIMPORTER_HPP
+#define	HTD_MAIN_GRFORMATIMPORTER_HPP
 
-#include <htd/NamedMultiHypergraph.hpp>
+#include <htd/IMultiGraph.hpp>
 
 #include <string>
 #include <iostream>
 
-namespace htd
+namespace htd_main
 {
     /**
-     *  Importer which allows to read instances in the graph format 'lp'.
+     *  Importer which allows to read instances in the graph format 'gr'.
      *
      *  (See https://github.com/mabseher/htd/FORMATS.md for information about the available input formats.)
      */
-    class HTD_API LpFormatImporter
+    class GrFormatImporter
     {
         public:
             /**
              *  Constructor for a new graph importer.
              */
-            LpFormatImporter(const htd::LibraryInstance * const manager);
+            GrFormatImporter(const htd::LibraryInstance * const manager);
 
             /**
              *  Destructor of a graph importer.
              */
-            virtual ~LpFormatImporter();
+            virtual ~GrFormatImporter();
 
             /**
-             *  Create a new htd::NamedMultiHypergraph<std::string, std::string> instance based on the information stored in a given file.
+             *  Create a new IMultiGraph instance based on the information stored in a given file.
              *
              *  @param[in] path The path to the file from which the information can be read.
              *
-             *  @return A new htd::NamedMultiHypergraph<std::string, std::string> instance based on the information stored in the given file.
+             *  @return A new IMultiGraph instance based on the information stored in the given file.
              */
-            htd::NamedMultiHypergraph<std::string, std::string> * import(const std::string & path) const;
+            htd::IMultiGraph * import(const std::string & path) const;
 
             /**
-             *  Create a new htd::NamedMultiHypergraph<std::string, std::string> instance based on the information from a given stream.
+             *  Create a new IMultiGraph instance based on the information from a given stream.
              *
              *  @param[in] stream   The input stream from which the information can be read.
              *
-             *  @return A new htd::NamedMultiHypergraph<std::string, std::string> instance based on the information from the given stream.
+             *  @return A new IMultiGraph instance based on the information from the given stream.
              */
-            htd::NamedMultiHypergraph<std::string, std::string> * import(std::istream & stream) const;
+            htd::IMultiGraph * import(std::istream & stream) const;
 
         private:
             HTD_IMPLEMENTATION Implementation;
@@ -75,4 +75,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_LPFORMATIMPORTER_HPP */
+#endif /* HTD_MAIN_GRFORMATIMPORTER_HPP */

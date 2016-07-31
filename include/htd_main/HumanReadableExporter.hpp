@@ -1,5 +1,5 @@
 /*
- * File:   WidthExporter.hpp
+ * File:   HumanReadableExporter.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,41 +22,34 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_WIDTHEXPORTER_HPP
-#define	HTD_HTD_WIDTHEXPORTER_HPP
+#ifndef HTD_MAIN_HUMANREADABLEEXPORTER_HPP
+#define	HTD_MAIN_HUMANREADABLEEXPORTER_HPP
 
-#include <htd/IGraphDecompositionExporter.hpp>
-#include <htd/IHypertreeDecompositionExporter.hpp>
+#include <htd_main/ITreeDecompositionExporter.hpp>
+#include <htd_main/IHypertreeDecompositionExporter.hpp>
 
-#include <fstream>
 #include <iostream>
 
-namespace htd
+namespace htd_main
 {
     /**
-     *  Exporter which just writes the maximum bag size of the decomposition to the give stream. In the case of a
-     *  hypertree decomposition, also the maximum amount of covering edges is written to the stream and the two
-     *  numbers are separated by the character sequence ", ".
+     *  Exporter which allows to export tree decompositions in a human-readable format.
      */
-    class HTD_API WidthExporter : public htd::IGraphDecompositionExporter, public htd::IHypertreeDecompositionExporter
+    class HumanReadableExporter : public htd_main::ITreeDecompositionExporter, public htd_main::IHypertreeDecompositionExporter
     {
         public:
-            WidthExporter(void);
+            HumanReadableExporter(void);
 
-            virtual ~WidthExporter();
+            virtual ~HumanReadableExporter();
 
             void write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
 
-            void write(const htd::IGraphDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
-
-            void write(const htd::IHypertreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
-
             void write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const HTD_OVERRIDE;
 
-            void write(const htd::IGraphDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const HTD_OVERRIDE;
+            void write(const htd::IHypertreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
 
             void write(const htd::IHypertreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const HTD_OVERRIDE;
     };
 }
 
-#endif /* HTD_HTD_WIDTHEXPORTER_HPP */
+#endif /* HTD_MAIN_HUMANREADABLEEXPORTER_HPP */

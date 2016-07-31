@@ -22,10 +22,10 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_LPFORMATIMPORTER_CPP
-#define	HTD_HTD_LPFORMATIMPORTER_CPP
+#ifndef HTD_MAIN_LPFORMATIMPORTER_CPP
+#define	HTD_MAIN_LPFORMATIMPORTER_CPP
 
-#include <htd/LpFormatImporter.hpp>
+#include <htd_main/LpFormatImporter.hpp>
 
 #include <fstream>
 #include <iostream>
@@ -34,7 +34,7 @@
 /**
  *  Private implementation details of class htd::LpFormatImporter.
  */
-struct htd::LpFormatImporter::Implementation
+struct htd_main::LpFormatImporter::Implementation
 {
     /**
      *  Constructor for the implementation details structure.
@@ -57,24 +57,24 @@ struct htd::LpFormatImporter::Implementation
     const htd::LibraryInstance * managementInstance_;
 };
 
-htd::LpFormatImporter::LpFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
+htd_main::LpFormatImporter::LpFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
 
-htd::LpFormatImporter::~LpFormatImporter(void)
+htd_main::LpFormatImporter::~LpFormatImporter(void)
 {
 
 }
 
-htd::NamedMultiHypergraph<std::string, std::string> * htd::LpFormatImporter::import(const std::string & path) const
+htd::NamedMultiHypergraph<std::string, std::string> * htd_main::LpFormatImporter::import(const std::string & path) const
 {
     std::ifstream stream(path);
 
     return import(stream);
 }
 
-htd::NamedMultiHypergraph<std::string, std::string> * htd::LpFormatImporter::import(std::istream & stream) const
+htd::NamedMultiHypergraph<std::string, std::string> * htd_main::LpFormatImporter::import(std::istream & stream) const
 {
     bool error = false;
 
@@ -169,4 +169,4 @@ htd::NamedMultiHypergraph<std::string, std::string> * htd::LpFormatImporter::imp
     return ret;
 }
 
-#endif /* HTD_HTD_LPFORMATIMPORTER_CPP */
+#endif /* HTD_MAIN_LPFORMATIMPORTER_CPP */

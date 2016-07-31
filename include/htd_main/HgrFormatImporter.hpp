@@ -22,22 +22,22 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_HGRFORMATIMPORTER_HPP
-#define	HTD_HTD_HGRFORMATIMPORTER_HPP
+#ifndef HTD_MAIN_HGRFORMATIMPORTER_HPP
+#define	HTD_MAIN_HGRFORMATIMPORTER_HPP
 
 #include <htd/IMultiHypergraph.hpp>
 
 #include <string>
 #include <iostream>
 
-namespace htd
+namespace htd_main
 {
     /**
      *  Importer which allows to read instances in the graph format 'hgr'.
      *
      *  (See https://github.com/mabseher/htd/FORMATS.md for information about the available input formats.)
      */
-    class HTD_API HgrFormatImporter
+    class HgrFormatImporter
     {
         public:
             /**
@@ -75,4 +75,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_HGRFORMATIMPORTER_HPP */
+#endif /* HTD_MAIN_HGRFORMATIMPORTER_HPP */

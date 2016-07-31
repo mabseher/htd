@@ -25,6 +25,15 @@
 #include <htd/main.hpp>
 #include <htd_cli/main.hpp>
 
+#include <htd_main/GrFormatImporter.hpp>
+#include <htd_main/LpFormatImporter.hpp>
+#include <htd_main/HgrFormatImporter.hpp>
+#include <htd_main/ITreeDecompositionExporter.hpp>
+#include <htd_main/IHypertreeDecompositionExporter.hpp>
+#include <htd_main/WidthExporter.hpp>
+#include <htd_main/TdFormatExporter.hpp>
+#include <htd_main/HumanReadableExporter.hpp>
+
 #include <csignal>
 
 htd::LibraryInstance * const libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
@@ -566,19 +575,19 @@ void run(const DecompositionAlgorithm & algorithm, const Exporter & exporter, co
 {
     if (inputFormat == "gr")
     {
-        htd::GrFormatImporter importer(manager);
+        htd_main::GrFormatImporter importer(manager);
 
         decompose(*manager, algorithm, importer, exporter);
     }
     else if (inputFormat == "lp")
     {
-        htd::LpFormatImporter importer(manager);
+        htd_main::LpFormatImporter importer(manager);
 
         decomposeNamed(*manager, algorithm, importer, exporter);
     }
     else if (inputFormat == "hgr")
     {
-        htd::HgrFormatImporter importer(manager);
+        htd_main::HgrFormatImporter importer(manager);
 
         decompose(*manager, algorithm, importer, exporter);
     }
@@ -675,15 +684,15 @@ int main(int argc, const char * const * const argv)
         {
             htd::IHypertreeDecompositionAlgorithm * algorithm = libraryInstance->hypertreeDecompositionAlgorithmFactory().getHypertreeDecompositionAlgorithm(libraryInstance);
 
-            htd::IHypertreeDecompositionExporter * exporter = nullptr;
+            htd_main::IHypertreeDecompositionExporter * exporter = nullptr;
 
             if (outputFormat == "human")
             {
-                exporter = new htd::HumanReadableExporter();
+                exporter = new htd_main::HumanReadableExporter();
             }
             else if (outputFormat == "width")
             {
-                exporter = new htd::WidthExporter();
+                exporter = new htd_main::WidthExporter();
             }
 
             run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
@@ -693,19 +702,19 @@ int main(int argc, const char * const * const argv)
         }
         else
         {
-            htd::ITreeDecompositionExporter * exporter = nullptr;
+            htd_main::ITreeDecompositionExporter * exporter = nullptr;
 
             if (outputFormat == "td")
             {
-                exporter = new htd::TdFormatExporter();
+                exporter = new htd_main::TdFormatExporter();
             }
             else if (outputFormat == "human")
             {
-                exporter = new htd::HumanReadableExporter();
+                exporter = new htd_main::HumanReadableExporter();
             }
             else if (outputFormat == "width")
             {
-                exporter = new htd::WidthExporter();
+                exporter = new htd_main::WidthExporter();
             }
 
             if (optimizationChoice.used() && optimizationChoice.value() == "width")
@@ -731,19 +740,19 @@ int main(int argc, const char * const * const argv)
 
                 if (inputFormatChoice.value() == "gr")
                 {
-                    htd::GrFormatImporter importer(libraryInstance);
+                    htd_main::GrFormatImporter importer(libraryInstance);
 
                     optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
                 }
                 else if (inputFormatChoice.value() == "lp")
                 {
-                    htd::LpFormatImporter importer(libraryInstance);
+                    htd_main::LpFormatImporter importer(libraryInstance);
 
                     optimizeNamed(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
                 }
                 else if (inputFormatChoice.value() == "hgr")
                 {
-                    htd::HgrFormatImporter importer(libraryInstance);
+                    htd_main::HgrFormatImporter importer(libraryInstance);
 
                     optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
                 }

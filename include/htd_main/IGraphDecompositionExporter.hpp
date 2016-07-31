@@ -1,5 +1,5 @@
 /*
- * File:   IHypertreeDecompositionExporter.hpp
+ * File:   IGraphDecompositionExporter.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,46 +22,45 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_IHYPERTREEDECOMPOSITIONEXPORTER_HPP
-#define	HTD_HTD_IHYPERTREEDECOMPOSITIONEXPORTER_HPP
+#ifndef HTD_MAIN_IGRAPHDECOMPOSITIONEXPORTER_HPP
+#define	HTD_MAIN_IGRAPHDECOMPOSITIONEXPORTER_HPP
 
-#include <htd/IMultiHypergraph.hpp>
-#include <htd/NamedMultiHypergraph.hpp>
-#include <htd/IHypertreeDecomposition.hpp>
+#include <htd_main/ITreeDecompositionExporter.hpp>
 
-#include <fstream>
 #include <iostream>
 
-namespace htd
+namespace htd_main
 {
     /**
-     * Interface for algorithms which can be used to export hypertree decompositions to streams.
+     * Interface for algorithms which can be used to export graph decompositions to streams.
      */
-    class HTD_API IHypertreeDecompositionExporter
+    class IGraphDecompositionExporter : public htd_main::ITreeDecompositionExporter
     {
         public:
-            virtual ~IHypertreeDecompositionExporter() = 0;
+            using htd_main::ITreeDecompositionExporter::write;
+
+            virtual ~IGraphDecompositionExporter() = 0;
 
             /**
-             *  Write a hypertree decomposition to a given stream.
+             *  Write a graph decomposition to a given stream.
              *
-             *  @param[in] decomposition    The hypertree decomposition which shall be exported.
+             *  @param[in] decomposition    The graph decomposition which shall be exported.
              *  @param[in] graph            The graph instance from which the given decomposition was constructed.
              *  @param[out] outputStream    The output stream to which the information shall be written.
              */
-            virtual void write(const htd::IHypertreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const = 0;
+            virtual void write(const htd::IGraphDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const = 0;
 
             /**
-             *  Write a hypertree decomposition to a given stream.
+             *  Write a graph decomposition to a given stream.
              *
-             *  @param[in] decomposition    The hypertree decomposition which shall be exported.
+             *  @param[in] decomposition    The graph decomposition which shall be exported.
              *  @param[in] graph            The graph instance from which the given decomposition was constructed.
              *  @param[out] outputStream    The output stream to which the information shall be written.
              */
-            virtual void write(const htd::IHypertreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const = 0;
+            virtual void write(const htd::IGraphDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const = 0;
     };
 
-    inline htd::IHypertreeDecompositionExporter::~IHypertreeDecompositionExporter() { }
+    inline htd_main::IGraphDecompositionExporter::~IGraphDecompositionExporter() { }
 }
 
-#endif /* HTD_HTD_IHYPERTREEDECOMPOSITIONEXPORTER_HPP */
+#endif /* HTD_MAIN_IGRAPHDECOMPOSITIONEXPORTER_HPP */

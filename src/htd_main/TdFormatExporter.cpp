@@ -22,27 +22,24 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_TDFORMATEXPORTER_CPP
-#define	HTD_HTD_TDFORMATEXPORTER_CPP
+#ifndef HTD_MAIN_TDFORMATEXPORTER_CPP
+#define	HTD_MAIN_TDFORMATEXPORTER_CPP
 
-#include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
-#include <htd/TdFormatExporter.hpp>
+#include <htd_main/TdFormatExporter.hpp>
 
-#include <iostream>
 #include <unordered_map>
 
-htd::TdFormatExporter::TdFormatExporter(void)
+htd_main::TdFormatExporter::TdFormatExporter(void)
 {
 
 }
 
-htd::TdFormatExporter::~TdFormatExporter()
+htd_main::TdFormatExporter::~TdFormatExporter()
 {
 
 }
 
-void htd::TdFormatExporter::write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const
+void htd_main::TdFormatExporter::write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const
 {
     std::unordered_map<htd::vertex_t, std::size_t> indices;
 
@@ -88,7 +85,7 @@ void htd::TdFormatExporter::write(const htd::ITreeDecomposition & decomposition,
     }
 }
 
-void htd::TdFormatExporter::write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const
+void htd_main::TdFormatExporter::write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const
 {
     std::unordered_map<htd::vertex_t, std::size_t> indices;
 
@@ -132,4 +129,4 @@ void htd::TdFormatExporter::write(const htd::ITreeDecomposition & decomposition,
     }
 }
 
-#endif /* HTD_HTD_TDFORMATEXPORTER_CPP */
+#endif /* HTD_MAIN_TDFORMATEXPORTER_CPP */

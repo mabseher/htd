@@ -39,7 +39,7 @@ namespace htd
      *  Wrapper for iterators of immutable collections.
      */
     template <typename T>
-    class HTD_API Iterator : public htd::IteratorBase<T>
+    class Iterator : public htd::IteratorBase<T>
     {
         public:
             /**

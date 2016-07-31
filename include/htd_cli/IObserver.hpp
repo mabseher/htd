@@ -32,7 +32,7 @@ namespace htd_cli
     /**
      *  Interface for observers which can be used in the context of the class htd::OptionManager.
      */
-    class HTD_API IObserver
+    class IObserver
     {
         public:
             virtual ~IObserver() = 0;

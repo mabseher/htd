@@ -26,9 +26,6 @@
 #define	HTD_HTD_HYPEREDGE_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Iterator.hpp>
-#include <htd/ConstIterator.hpp>
-#include <htd/Collection.hpp>
 #include <htd/ConstCollection.hpp>
 
 #include <vector>

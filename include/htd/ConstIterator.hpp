@@ -28,7 +28,6 @@
 #include <htd/Globals.hpp>
 #include <htd/ConstIteratorBase.hpp>
 #include <htd/ConstIteratorWrapper.hpp>
-#include <htd/Iterator.hpp>
 #include <htd/VectorAdapterConstIteratorWrapper.hpp>
 
 #include <memory>
@@ -173,28 +172,6 @@ namespace htd
                 operator++();
 
                 return ret;
-            }
-
-            /**
-             *  Copy assignment operator for an iterator.
-             *
-             *  @param[in] original  The original iterator.
-             */
-            ConstIterator & operator=(htd::Iterator<T> & original) HTD_NOEXCEPT
-            {
-                if (baseIterator_ != nullptr)
-                {
-                    delete baseIterator_;
-
-                    baseIterator_ = nullptr;
-                }
-
-                if (original.baseIterator_ != nullptr)
-                {
-                    baseIterator_ = original;
-                }
-
-                return *this;
             }
 
             /**

@@ -29,7 +29,7 @@
 
 #include <cstring>
 #include <iomanip>
-#include <ostream>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <unordered_map>
@@ -254,6 +254,11 @@ void htd_cli::OptionManager::registerOption(htd_cli::Option * option, const char
 void htd_cli::OptionManager::registerObserver(htd_cli::IObserver * observer)
 {
     implementation_->observers_.push_back(observer);
+}
+
+void htd_cli::OptionManager::printHelp(void) const
+{
+    printHelp(std::cout);
 }
 
 void htd_cli::OptionManager::printHelp(std::ostream & stream) const

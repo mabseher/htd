@@ -154,7 +154,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
     {
         std::cout << "USAGE: " << argv[0] << " [options...] < input" << std::endl << std::endl;
 
-        optionManager.printHelp(std::cout);
+        optionManager.printHelp();
 
         ret = false;
     }

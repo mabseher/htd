@@ -25,7 +25,7 @@
 #ifndef HTD_CLI_IOBSERVER_HPP
 #define	HTD_CLI_IOBSERVER_HPP
 
-#include <htd/PreprocessorDefinitions.hpp>
+#include <htd_cli/PreprocessorDefinitions.hpp>
 
 namespace htd_cli
 {

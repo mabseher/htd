@@ -42,7 +42,7 @@ namespace htd_cli
              *  @param[in] description      The description of the command line option.
              *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
              */
-            HTD_API MultiValueOption(const char * const name, const char * const description, const char * const valuePlaceholder);
+            HTD_CLI_API MultiValueOption(const char * const name, const char * const description, const char * const valuePlaceholder);
 
             /**
              *  Constructor for a command line option.
@@ -52,16 +52,16 @@ namespace htd_cli
              *  @param[in] shortName        The abbreviated name of the option which acts as an alias for the option name.
              *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
              */
-            HTD_API MultiValueOption(const char * const name, const char * const description, const char * const valuePlaceholder, char shortName);
+            HTD_CLI_API MultiValueOption(const char * const name, const char * const description, const char * const valuePlaceholder, char shortName);
 
-            HTD_API virtual ~MultiValueOption();
+            HTD_CLI_API virtual ~MultiValueOption();
 
             /**
              *  Getter for the number of values assigned to the option.
              *
              *  @return The number of values assigned to the option.
              */
-            HTD_API std::size_t valueCount(void) const;
+            HTD_CLI_API std::size_t valueCount(void) const;
 
             /**
              *  Getter for the argument value assigned to the option at the given index.
@@ -70,7 +70,7 @@ namespace htd_cli
              *
              *  @return The argument value assigned to the option at the given index.
              */
-            HTD_API const char * value(htd::index_t index) const;
+            HTD_CLI_API const char * value(htd::index_t index) const;
 
             /**
              *  Register the given value representing the option's argument.
@@ -79,12 +79,12 @@ namespace htd_cli
              *
              *  @param[in] value    The value which shall be registered.
              */
-            HTD_API void registerValue(const char * const value) HTD_OVERRIDE;
+            HTD_CLI_API void registerValue(const char * const value) HTD_OVERRIDE;
 
             void printHelp(std::ostream & stream, std::size_t maxNameLength) const HTD_OVERRIDE;
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            HTD_CLI_IMPLEMENTATION Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

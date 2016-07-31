@@ -25,8 +25,7 @@
 #ifndef HTD_CLI_OPTIONMANAGER_HPP
 #define	HTD_CLI_OPTIONMANAGER_HPP
 
-#include <htd/PreprocessorDefinitions.hpp>
-
+#include <htd_cli/PreprocessorDefinitions.hpp>
 #include <htd_cli/Choice.hpp>
 #include <htd_cli/Option.hpp>
 #include <htd_cli/MultiValueOption.hpp>
@@ -43,9 +42,9 @@ namespace htd_cli
     class OptionManager
     {
         public:
-            HTD_API OptionManager(void);
+            HTD_CLI_API OptionManager(void);
 
-            HTD_API virtual ~OptionManager();
+            HTD_CLI_API virtual ~OptionManager();
 
             /**
              *  Parse options from the command line.
@@ -53,7 +52,7 @@ namespace htd_cli
              *  @param[in] argc The number of argumens in argv.
              *  @param[in] argv The argument vector.
              */
-            HTD_API void parse(int argc, const char * const * const argv);
+            HTD_CLI_API void parse(int argc, const char * const * const argv);
 
             /**
              *  Register a new option.
@@ -65,7 +64,7 @@ namespace htd_cli
              *  manager. Deleting the option outside the option manager or inserting the same option object multiple times will
              *  lead to undefined behavior.
              */
-            HTD_API void registerOption(htd_cli::Option * option, const char * const section);
+            HTD_CLI_API void registerOption(htd_cli::Option * option, const char * const section);
 
             /**
              *  Register a new observer.
@@ -76,7 +75,12 @@ namespace htd_cli
              *  manager. Deleting the observer outside the option manager or inserting the same observer object multiple times will
              *  lead to undefined behavior.
              */
-            HTD_API void registerObserver(htd_cli::IObserver * observer);
+            HTD_CLI_API void registerObserver(htd_cli::IObserver * observer);
+
+            /**
+             *  Print the help text of all options to stdout.
+             */
+            HTD_CLI_API void printHelp(void) const;
 
             /**
              *  Print the help text of all options.
@@ -92,7 +96,7 @@ namespace htd_cli
              *
              *  @return A reference to the htd_cli::Option object which the given name.
              */
-            HTD_API const htd_cli::Option & accessOption(const char * const name) const;
+            HTD_CLI_API const htd_cli::Option & accessOption(const char * const name) const;
 
             /**
              *  Access the htd_cli::Choice object which the given name.
@@ -101,7 +105,7 @@ namespace htd_cli
              *
              *  @return A reference to the htd_cli::Choice object which the given name.
              */
-            HTD_API const htd_cli::Choice & accessChoice(const char * const name) const;
+            HTD_CLI_API const htd_cli::Choice & accessChoice(const char * const name) const;
 
             /**
              *  Access the htd_cli::SingleValueOption object which the given name.
@@ -110,7 +114,7 @@ namespace htd_cli
              *
              *  @return A reference to the htd_cli::SingleValueOption object which the given name.
              */
-            HTD_API const htd_cli::SingleValueOption & accessSingleValueOption(const char * const name) const;
+            HTD_CLI_API const htd_cli::SingleValueOption & accessSingleValueOption(const char * const name) const;
 
             /**
              *  Access the htd_cli::MultiValueOption object which the given name.
@@ -119,10 +123,10 @@ namespace htd_cli
              *
              *  @return A reference to the htd_cli::MultiValueOption object which the given name.
              */
-            HTD_API const htd_cli::MultiValueOption & accessMultiValueOption(const char * const name) const;
+            HTD_CLI_API const htd_cli::MultiValueOption & accessMultiValueOption(const char * const name) const;
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            HTD_CLI_IMPLEMENTATION Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

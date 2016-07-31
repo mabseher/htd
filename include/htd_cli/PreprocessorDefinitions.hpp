@@ -1,0 +1,69 @@
+/* 
+ * File:   PreprocessorDefinitions.hpp
+ * 
+ * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
+ * 
+ * Copyright 2015-2016, Michael Abseher
+ *    E-Mail: <abseher@dbai.tuwien.ac.at>
+ * 
+ * This file is part of htd.
+ * 
+ * htd is free software: you can redistribute it and/or modify it under 
+ * the terms of the GNU General Public License as published by the Free 
+ * Software Foundation, either version 3 of the License, or (at your 
+ * option) any later version.
+ * 
+ * htd is distributed in the hope that it will be useful, but WITHOUT 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public 
+ * License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with htd.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef HTD_CLI_PREPROCESSORDEFINITIONS_HPP
+#define HTD_CLI_PREPROCESSORDEFINITIONS_HPP
+
+#include <htd/CompilerDetection.hpp>
+
+#include <cassert>
+
+#if HTD_COMPILER_IS_MSVC == 1
+    #define HTD_CLI_SYMBOL_EXPORT __declspec(dllexport)
+    #define HTD_CLI_SYMBOL_IMPORT __declspec(dllimport)
+    #define HTD_CLI_LOCAL_SYMBOL
+    #define HTD_CLI_IMPLEMENTATION_EXPORT struct __declspec(dllexport)
+    #define HTD_CLI_IMPLEMENTATION_IMPORT extern struct __declspec(dllimport)
+#else
+    #if HTD_COMPILER_IS_GNU == 1 || HTD_COMPILER_IS_Clang == 1
+        #define HTD_CLI_SYMBOL_EXPORT __attribute__ ((visibility ("default")))
+        #define HTD_CLI_SYMBOL_IMPORT __attribute__ ((visibility ("default")))
+        #define HTD_CLI_LOCAL_SYMBOL  __attribute__ ((visibility ("hidden")))
+        #define HTD_CLI_IMPLEMENTATION_EXPORT struct __attribute__ ((visibility ("default")))
+        #define HTD_CLI_IMPLEMENTATION_IMPORT extern struct __attribute__ ((visibility ("default")))
+    #else
+        #define HTD_CLI_SYMBOL_EXPORT
+        #define HTD_CLI_SYMBOL_IMPORT
+        #define HTD_CLI_LOCAL_SYMBOL
+        #define HTD_CLI_IMPLEMENTATION_EXPORT struct
+        #define HTD_CLI_IMPLEMENTATION_IMPORT struct
+    #endif
+#endif
+
+#ifdef HTD_CLI_SHARED_LIBRARY
+    #ifdef htd_cli_EXPORTS
+        #define HTD_CLI_API HTD_SYMBOL_EXPORT
+        #define HTD_CLI_IMPLEMENTATION HTD_IMPLEMENTATION_EXPORT
+    #else
+        #define HTD_CLI_API HTD_SYMBOL_IMPORT
+        #define HTD_CLI_IMPLEMENTATION HTD_IMPLEMENTATION_IMPORT
+    #endif
+    #define HTD_CLI_LOCAL HTD_LOCAL_SYMBOL
+#else
+    #define HTD_CLI_API
+    #define HTD_CLI_LOCAL
+    #define HTD_CLI_IMPLEMENTATION struct
+#endif
+
+#endif /* HTD_CLI_PREPROCESSORDEFINITIONS_HPP */

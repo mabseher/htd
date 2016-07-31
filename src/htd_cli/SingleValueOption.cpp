@@ -27,17 +27,39 @@
 
 #include <htd_cli/SingleValueOption.hpp>
 
+#include <cstring>
 #include <iomanip>
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
 
-htd_cli::SingleValueOption::SingleValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder) : htd_cli::ValueOption(name, description, valuePlaceholder)
+/**
+ *  Private implementation details of class htd_cli::SingleValueOption.
+ */
+struct htd_cli::SingleValueOption::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     */
+    Implementation(void) : value_(new char[1] { '\0' })
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+        delete[] value_;
+    }
+
+    char * value_;
+};
+
+htd_cli::SingleValueOption::SingleValueOption(const char * const name, const char * const description, const char * const valuePlaceholder) : htd_cli::ValueOption(name, description, valuePlaceholder), implementation_(new Implementation())
 {
 
 }
 
-htd_cli::SingleValueOption::SingleValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName) : htd_cli::ValueOption(name, description, valuePlaceholder, shortName)
+htd_cli::SingleValueOption::SingleValueOption(const char * const name, const char * const description, const char * const valuePlaceholder, char shortName) : htd_cli::ValueOption(name, description, valuePlaceholder, shortName), implementation_(new Implementation())
 {
 
 }
@@ -47,14 +69,14 @@ htd_cli::SingleValueOption::~SingleValueOption()
 
 }
 
-const std::string & htd_cli::SingleValueOption::value(void) const
+const char * htd_cli::SingleValueOption::value(void) const
 {
-    return value_;
+    return implementation_->value_;
 }
 
-void htd_cli::SingleValueOption::registerValue(const std::string & value)
+void htd_cli::SingleValueOption::registerValue(const char * const value)
 {
-    if (used() && value != value_)
+    if (used() && (std::strlen(value) != std::strlen(implementation_->value_) || std::strncmp(value, implementation_->value_, std::strlen(value)) != 0))
     {
         std::ostringstream message;
 
@@ -63,7 +85,13 @@ void htd_cli::SingleValueOption::registerValue(const std::string & value)
         throw std::runtime_error(message.str());
     }
 
-    value_ = value;
+    delete[] implementation_->value_;
+
+    std::size_t size = std::strlen(value);
+
+    implementation_->value_ = new char[size + 1];
+
+    std::strncpy(implementation_->value_, value, size + 1);
 
     setUsed();
 }

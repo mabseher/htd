@@ -27,10 +27,6 @@
 
 #include <htd_cli/ValueOption.hpp>
 
-#include <htd/Globals.hpp>
-
-#include <string>
-
 namespace htd_cli
 {
     /**
@@ -46,7 +42,7 @@ namespace htd_cli
              *  @param[in] description      The description of the command line option.
              *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
              */
-            SingleValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder);
+            HTD_API SingleValueOption(const char * const name, const char * const description, const char * const valuePlaceholder);
 
             /**
              *  Constructor for a command line option.
@@ -56,16 +52,16 @@ namespace htd_cli
              *  @param[in] shortName        The abbreviated name of the option which acts as an alias for the option name.
              *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
              */
-            SingleValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName);
+            HTD_API SingleValueOption(const char * const name, const char * const description, const char * const valuePlaceholder, char shortName);
 
-            virtual ~SingleValueOption();
+            HTD_API virtual ~SingleValueOption();
 
             /**
              *  Getter for the argument value assigned to the option.
              *
              *  @return The argument value assigned to the option.
              */
-            virtual const std::string & value(void) const;
+            HTD_API virtual const char * value(void) const;
 
             /**
              *  Register the given value representing the option's argument.
@@ -74,12 +70,14 @@ namespace htd_cli
              *
              *  @param[in] value    The value which shall be registered.
              */
-            void registerValue(const std::string & value) HTD_OVERRIDE;
+            HTD_API void registerValue(const char * const value) HTD_OVERRIDE;
 
             void printHelp(std::ostream & stream, std::size_t maxNameLength) const HTD_OVERRIDE;
 
         private:
-            std::string value_;
+            HTD_IMPLEMENTATION Implementation;
+
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

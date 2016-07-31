@@ -35,6 +35,7 @@
 #include <htd_main/HumanReadableExporter.hpp>
 
 #include <csignal>
+#include <cstring>
 
 htd::LibraryInstance * const libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
@@ -44,11 +45,11 @@ htd_cli::OptionManager * createOptionManager(void)
 
     htd_cli::Option * helpOption = new htd_cli::Option("help", "Print usage information and exit.", 'h');
 
-    manager->registerOption(helpOption);
+    manager->registerOption(helpOption, "General Options");
 
     htd_cli::SingleValueOption * seedOption = new htd_cli::SingleValueOption("seed", "Set the seed for the random number generator to <seed>.", "seed", 's');
 
-    manager->registerOption(seedOption);
+    manager->registerOption(seedOption, "General Options");
 
     htd_cli::Choice * decompositionTypeChoice = new htd_cli::Choice("type", "Compute a graph decomposition of type <type>.", "type");
 
@@ -175,11 +176,11 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
             if (ret)
             {
-                unsigned long seed = std::stoul(seedOption.value(), &index, 10);
+                unsigned long seed = std::stoul(value, &index, 10);
 
-                if (index != seedOption.value().length())
+                if (index != value.length())
                 {
-                    std::cerr << "INVALID SEED: " << seedOption.value() << std::endl;
+                    std::cerr << "INVALID SEED: " << value << std::endl;
 
                     ret = false;
                 }
@@ -259,11 +260,11 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
                 if (ret)
                 {
-                    std::stoul(iterationOption.value(), &index, 10);
+                    std::stoul(value, &index, 10);
 
-                    if (index != iterationOption.value().length())
+                    if (index != value.length())
                     {
-                        std::cerr << "INVALID NUMBER OF ITERATIONS: " << iterationOption.value() << std::endl;
+                        std::cerr << "INVALID NUMBER OF ITERATIONS: " << value << std::endl;
 
                         ret = false;
                     }
@@ -297,11 +298,11 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
                 if (ret && value != "-1")
                 {
-                    std::stoul(nonImprovementLimitOption.value(), &index, 10);
+                    std::stoul(value, &index, 10);
 
-                    if (index != nonImprovementLimitOption.value().length())
+                    if (index != value.length())
                     {
-                        std::cerr << "INVALID MAXIMUM NUMBER OF NON-IMPROVED DECOMPOSITIONS: " << nonImprovementLimitOption.value() << std::endl;
+                        std::cerr << "INVALID MAXIMUM NUMBER OF NON-IMPROVED DECOMPOSITIONS: " << value << std::endl;
 
                         ret = false;
                     }

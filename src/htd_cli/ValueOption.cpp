@@ -27,22 +27,24 @@
 
 #include <htd_cli/ValueOption.hpp>
 
-htd_cli::ValueOption::ValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder) : htd_cli::Option(name, description), valuePlaceholder_(valuePlaceholder)
-{
+#include <cstring>
 
+htd_cli::ValueOption::ValueOption(const char * const name, const char * const description, const char * const valuePlaceholder) : htd_cli::Option(name, description), valuePlaceholder_(new char[std::strlen(valuePlaceholder) + 1])
+{
+    std::strncpy(valuePlaceholder_, valuePlaceholder, std::strlen(valuePlaceholder) + 1);
 }
 
-htd_cli::ValueOption::ValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName) : htd_cli::Option(name, description, shortName), valuePlaceholder_(valuePlaceholder)
+htd_cli::ValueOption::ValueOption(const char * const name, const char * const description, const char * const valuePlaceholder, char shortName) : htd_cli::Option(name, description, shortName), valuePlaceholder_(new char[std::strlen(valuePlaceholder) + 1])
 {
-
+    std::strncpy(valuePlaceholder_, valuePlaceholder, std::strlen(valuePlaceholder) + 1);
 }
 
 htd_cli::ValueOption::~ValueOption()
 {
-
+    delete[] valuePlaceholder_;
 }
 
-const std::string & htd_cli::ValueOption::valuePlaceholder(void) const
+const char * htd_cli::ValueOption::valuePlaceholder(void) const
 {
     return valuePlaceholder_;
 }

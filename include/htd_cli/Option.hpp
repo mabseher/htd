@@ -25,7 +25,9 @@
 #ifndef HTD_CLI_OPTION_HPP
 #define	HTD_CLI_OPTION_HPP
 
-#include <string>
+#include <htd/Globals.hpp>
+
+#include <memory>
 
 namespace htd_cli
 {
@@ -40,59 +42,51 @@ namespace htd_cli
              *
              *  @param[in] name         The name of the command line option.
              *  @param[in] description  The description of the command line option.
-             */
-            Option(const std::string & name, const std::string & description);
-
-            /**
-             *  Constructor for a command line option.
-             *
-             *  @param[in] name         The name of the command line option.
-             *  @param[in] description  The description of the command line option.
              *  @param[in] shortName    The abbreviated name of the option which acts as an alias for the option name.
              */
-            Option(const std::string & name, const std::string & description, char shortName);
+            HTD_API Option(const char * const name, const char * const description, char shortName = '\0');
 
-            virtual ~Option();
+            HTD_API virtual ~Option();
 
             /**
              *  Getter for the name of the command line option.
              *
              *  @return The name of the command line option.
              */
-            const std::string & name(void) const;
+            HTD_API const char * name(void) const;
 
             /**
              *  Getter for the description of the command line option.
              *
              *  @return The description of the command line option.
              */
-            const std::string & description(void) const;
+            HTD_API const char * description(void) const;
 
             /**
              *  Check whether the option has a short name.
              *
              *  @return True if the option has a short name, false otherwise.
              */
-            bool hasShortName(void) const;
+            HTD_API bool hasShortName(void) const;
 
             /**
              *  Getter for the abbreviated name of the option which acts as an alias for the option name.
              *
              *  @return The abbreviated name of the option which acts as an alias for the option name.
              */
-            char shortName(void) const;
+            HTD_API char shortName(void) const;
 
             /**
              *  Check whether the option was provided via a command line argument.
              *
              *  @return True if the option was provided via a command line argument, false otherwise.
              */
-            bool used(void) const;
+            HTD_API bool used(void) const;
 
             /**
              *  Set a flag indicating that the option was provided via a command line argument.
              */
-            void setUsed(void);
+            HTD_API void setUsed(void);
 
             /**
              *  Print the help text for the option.
@@ -123,13 +117,9 @@ namespace htd_cli
             static std::string getCommandLineRepresentation(const std::string & name);
 
         private:
-            bool used_;
+            HTD_IMPLEMENTATION Implementation;
 
-            char shortName_;
-
-            std::string name_;
-
-            std::string description_;
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

@@ -27,8 +27,6 @@
 
 #include <htd_cli/SingleValueOption.hpp>
 
-#include <vector>
-
 namespace htd_cli
 {
     /**
@@ -44,7 +42,7 @@ namespace htd_cli
              *  @param[in] description      The description of the command line option.
              *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
              */
-            Choice(const std::string & name, const std::string & description, const std::string & valuePlaceholder);
+            HTD_API Choice(const char * const name, const char * const description, const char * const valuePlaceholder);
 
             /**
              *  Constructor for a command line option.
@@ -54,9 +52,9 @@ namespace htd_cli
              *  @param[in] shortName        The abbreviated name of the option which acts as an alias for the option name.
              *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
              */
-            Choice(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName);
+            HTD_API Choice(const char * const name, const char * const description, const char * const valuePlaceholder, char shortName);
 
-            virtual ~Choice();
+            HTD_API virtual ~Choice();
 
             /**
              *  Add a new possibility one can choose from.
@@ -64,46 +62,32 @@ namespace htd_cli
              *  @param[in] value        The value which shall be added as new possibility.
              *  @param[in] description  The description of the new possibility.
              */
-            void addPossibility(const std::string & value, const std::string & description);
+            HTD_API void addPossibility(const char * const value, const char * const description);
 
             /**
              *  Check whether the htd_cli::Choice object has a default value.
              *
              *  @return True if the htd_cli::Choice object has a default value, false otherwise.
              */
-            bool hasDefaultValue(void);
+            HTD_API bool hasDefaultValue(void);
 
             /**
              *  Set the default value of the htd_cli::Choice object.
              *
              *  @param[in] value    The value of one of the added possibilities which shall be used as the new default value.
              */
-            void setDefaultValue(const std::string & value);
+            HTD_API void setDefaultValue(const char * const value);
 
-            const std::string & value(void) const HTD_OVERRIDE;
+            HTD_API const char * value(void) const HTD_OVERRIDE;
 
-            void registerValue(const std::string & value) HTD_OVERRIDE;
+            HTD_API void registerValue(const char * const value) HTD_OVERRIDE;
 
             void printHelp(std::ostream & stream, std::size_t maxNameLength) const HTD_OVERRIDE;
 
         private:
-            struct Possibility
-            {
-                std::string value;
+            HTD_IMPLEMENTATION Implementation;
 
-                std::string description;
-
-                Possibility(const std::string & value, const std::string & description) : value(value), description(description)
-                {
-
-                }
-            };
-
-            std::string defaultValue_;
-
-            std::size_t maxPossibilityNameLength_;
-
-            std::vector<Possibility> possibilities_;
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

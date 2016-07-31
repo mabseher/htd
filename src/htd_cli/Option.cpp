@@ -27,17 +27,59 @@
 
 #include <htd_cli/Option.hpp>
 
+#include <cstring>
 #include <iomanip>
 #include <ostream>
 #include <sstream>
 #include <cctype>
 
-htd_cli::Option::Option(const std::string & name, const std::string & description) : used_(false), shortName_(0), name_(name), description_(description)
+/**
+ *  Private implementation details of class htd_cli::Option.
+ */
+struct htd_cli::Option::Implementation
 {
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] name         The name of the command line option.
+     *  @param[in] description  The description of the command line option.
+     *  @param[in] shortName    The abbreviated name of the option which acts as an alias for the option name.
+     */
+    Implementation(const char * const name, const char * const description, char shortName = '\0') : used_(false), shortName_(shortName), name_(new char[std::strlen(name) + 1]), description_(new char[std::strlen(description) + 1])
+    {
+        std::strncpy(name_, name, std::strlen(name) + 1);
 
-}
+        std::strncpy(description_, description, std::strlen(description) + 1);
+    }
 
-htd_cli::Option::Option(const std::string & name, const std::string & description, char shortName) : used_(false), shortName_(shortName), name_(name), description_(description)
+    virtual ~Implementation()
+    {
+        delete[] name_;
+        delete[] description_;
+    }
+
+    /**
+     *  A boolean flag indicating whether the option was used.
+     */
+    bool used_;
+
+    /**
+     *  The abbreviated name of the option which acts as an alias for the option name.
+     */
+    char shortName_;
+
+    /**
+     *  The name of the command line option.
+     */
+    char * name_;
+
+    /**
+     *  The description of the command line option.
+     */
+    char * description_;
+};
+
+htd_cli::Option::Option(const char * const name, const char * const description, char shortName) : implementation_(new Implementation(name, description, shortName))
 {
 
 }
@@ -47,48 +89,48 @@ htd_cli::Option::~Option()
 
 }
 
-const std::string & htd_cli::Option::name(void) const
+const char * htd_cli::Option::name(void) const
 {
-    return name_;
+    return implementation_->name_;
 }
 
-const std::string & htd_cli::Option::description(void) const
+const char * htd_cli::Option::description(void) const
 {
-    return description_;
+    return implementation_->description_;
 }
 
 bool htd_cli::Option::hasShortName(void) const
 {
-    return std::isprint(shortName_);
+    return std::isprint(implementation_->shortName_);
 }
 
 char htd_cli::Option::shortName(void) const
 {
-    return shortName_;
+    return implementation_->shortName_;
 }
 
 bool htd_cli::Option::used(void) const
 {
-    return used_;
+    return implementation_->used_;
 }
 
 void htd_cli::Option::setUsed(void)
 {
-    used_ = true;
+    implementation_->used_ = true;
 }
 
 void htd_cli::Option::printHelp(std::ostream & stream, std::size_t maxNameLength) const
 {
     std::ostringstream parameterDefinition;
 
-    parameterDefinition << htd_cli::Option::getCommandLineRepresentation(name_);
+    parameterDefinition << htd_cli::Option::getCommandLineRepresentation(implementation_->name_);
 
     if (hasShortName())
     {
-        parameterDefinition << ", " << htd_cli::Option::getCommandLineRepresentation(shortName_);
+        parameterDefinition << ", " << htd_cli::Option::getCommandLineRepresentation(implementation_->shortName_);
     }
 
-    stream << std::left << std::setw(maxNameLength) << parameterDefinition.str() << "   " << description_ << std::endl;
+    stream << std::left << std::setw(maxNameLength) << parameterDefinition.str() << "   " << implementation_->description_ << std::endl;
 }
 
 std::string htd_cli::Option::getCommandLineRepresentation(char name)

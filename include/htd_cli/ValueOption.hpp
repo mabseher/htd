@@ -42,7 +42,7 @@ namespace htd_cli
              *  @param[in] description      The description of the command line option.
              *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
              */
-            ValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder);
+            ValueOption(const char * const name, const char * const description, const char * const valuePlaceholder);
 
             /**
              *  Constructor for a command line option.
@@ -52,7 +52,7 @@ namespace htd_cli
              *  @param[in] shortName        The abbreviated name of the option which acts as an alias for the option name.
              *  @param[in] valuePlaceholder The placeholder for the argument which shall be used in the help text.
              */
-            ValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName);
+            ValueOption(const char * const name, const char * const description, const char * const valuePlaceholder, char shortName);
 
             virtual ~ValueOption();
 
@@ -61,17 +61,17 @@ namespace htd_cli
              *
              *  @param[in] value    The value which shall be registered.
              */
-            virtual void registerValue(const std::string & value) = 0;
+            virtual void registerValue(const char * const value) = 0;
 
             /**
              *  Getter for the argument's placeholder which shall be used in the help text.
              *
              *  @return The argument's placeholder which shall be used in the help text.
              */
-            const std::string & valuePlaceholder(void) const;
+            const char * valuePlaceholder(void) const;
 
         private:
-            std::string valuePlaceholder_;
+            char * valuePlaceholder_;
     };
 }
 

@@ -27,33 +27,89 @@
 
 #include <htd_cli/OptionManager.hpp>
 
+#include <cstring>
 #include <iomanip>
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
+#include <unordered_map>
+#include <vector>
 
-const std::string htd_cli::OptionManager::GENERAL_SECTION = "General Options";
+/**
+ *  Private implementation details of class htd_cli::OptionManager.
+ */
+struct htd_cli::OptionManager::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     */
+    Implementation(void) : maxNameLength_(0), sections_(), options_(), observers_(), optionMap_(), sectionMap_()
+    {
 
-htd_cli::OptionManager::OptionManager(void) : maxNameLength_(0), sections_(), options_(), observers_(), optionMap_(), sectionMap_()
+    }
+
+    virtual ~Implementation()
+    {
+        for (htd_cli::Option * option : options_)
+        {
+            delete option;
+        }
+
+        for (htd_cli::IObserver * observer : observers_)
+        {
+            delete observer;
+        }
+    }
+
+    /**
+     *  The maximum length of an command line argument. This value is used for aligning the help texts properly.
+     */
+    std::size_t maxNameLength_;
+
+    /**
+     *  The available section names.
+     */
+    std::vector<std::string> sections_;
+
+    /**
+     *  The available options.
+     */
+    std::vector<htd_cli::Option *> options_;
+
+    /**
+     *  The registered observers.
+     */
+    std::vector<htd_cli::IObserver *> observers_;
+
+    /**
+     *  A map for looking up the options.
+     */
+    std::unordered_map<std::string, htd_cli::Option *> optionMap_;
+
+    /**
+     *  A map for looking up the sections.
+     */
+    std::unordered_map<std::string, std::vector<htd_cli::Option *>> sectionMap_;
+
+    /**
+     *  Check whether two options have the same name or short name.
+     *
+     *  @param[in] option1  The first option.
+     *  @param[in] option2  The second option.
+     *
+     *  @return True if two options have the same name or short name, false otherwise.
+     */
+    bool hasNameClash(const htd_cli::Option & option1, const htd_cli::Option & option2) const;
+};
+
+htd_cli::OptionManager::OptionManager(void) : implementation_(new Implementation())
 {
 
 }
 
 htd_cli::OptionManager::~OptionManager(void)
 {
-    for (htd_cli::Option * option : options_)
-    {
-        delete option;
-    }
 
-    for (htd_cli::IObserver * observer : observers_)
-    {
-        delete observer;
-    }
-
-    options_.clear();
-
-    observers_.clear();
 }
 
 void htd_cli::OptionManager::parse(int argc, const char * const * const argv)
@@ -62,9 +118,9 @@ void htd_cli::OptionManager::parse(int argc, const char * const * const argv)
     {
         std::string parameter = argv[i];
 
-        if (optionMap_.count(parameter) == 1)
+        if (implementation_->optionMap_.count(parameter) == 1)
         {
-            htd_cli::Option * option = optionMap_.at(parameter);
+            htd_cli::Option * option = implementation_->optionMap_.at(parameter);
 
             if(dynamic_cast<htd_cli::ValueOption *>(option) != nullptr)
             {
@@ -96,13 +152,13 @@ void htd_cli::OptionManager::parse(int argc, const char * const * const argv)
         }
     }
 
-    for(htd_cli::IObserver * observer : observers_)
+    for(htd_cli::IObserver * observer : implementation_->observers_)
     {
         observer->notify();
     }
 }
 
-void htd_cli::OptionManager::registerOption(htd_cli::Option * option, const std::string & section)
+void htd_cli::OptionManager::registerOption(htd_cli::Option * option, const char * const section)
 {
     const std::string & name = option->name();
 
@@ -115,9 +171,9 @@ void htd_cli::OptionManager::registerOption(htd_cli::Option * option, const std:
         throw std::runtime_error(message.str());
     }
 
-    for (htd_cli::Option * existingOption : options_)
+    for (htd_cli::Option * existingOption : implementation_->options_)
     {
-        if (hasNameClash(*option, *existingOption))
+        if (implementation_->hasNameClash(*option, *existingOption))
         {
             std::ostringstream message;
 
@@ -139,25 +195,25 @@ void htd_cli::OptionManager::registerOption(htd_cli::Option * option, const std:
         }
     }
 
-    if (sectionMap_.count(section) == 0)
+    if (implementation_->sectionMap_.count(section) == 0)
     {
-        sections_.push_back(section);
+        implementation_->sections_.push_back(section);
 
-        sectionMap_[section] = std::vector<htd_cli::Option *> { option };
+        implementation_->sectionMap_[section] = std::vector<htd_cli::Option *> { option };
     }
     else
     {
-        sectionMap_[section].push_back(option);
+        implementation_->sectionMap_[section].push_back(option);
     }
 
-    optionMap_[htd_cli::Option::getCommandLineRepresentation(name)] = option;
+    implementation_->optionMap_[htd_cli::Option::getCommandLineRepresentation(name)] = option;
 
     if (option->hasShortName())
     {
-        optionMap_[htd_cli::Option::getCommandLineRepresentation(option->shortName())] = option;
+        implementation_->optionMap_[htd_cli::Option::getCommandLineRepresentation(option->shortName())] = option;
     }
 
-    options_.push_back(option);
+    implementation_->options_.push_back(option);
 
     /// The total name length of an option is given by the length
     /// of the name of the option plus at least one leading dash.
@@ -186,61 +242,61 @@ void htd_cli::OptionManager::registerOption(htd_cli::Option * option, const std:
         /// If the option requires an argument, the parameter definition of its usage information
         /// is assumed to contain a placeholder for the argument encapsulated by the character
         /// sequences " <" and ">".
-        nameLength += 3 + valueOption->valuePlaceholder().length();
+        nameLength += 3 + std::strlen(valueOption->valuePlaceholder());
     }
 
-    if (nameLength > maxNameLength_)
+    if (nameLength > implementation_->maxNameLength_)
     {
-        maxNameLength_ = nameLength;
+        implementation_->maxNameLength_ = nameLength;
     }
 }
 
 void htd_cli::OptionManager::registerObserver(htd_cli::IObserver * observer)
 {
-    observers_.push_back(observer);
+    implementation_->observers_.push_back(observer);
 }
 
 void htd_cli::OptionManager::printHelp(std::ostream & stream) const
 {
     std::size_t sectionIndex = 0;
 
-    for (const std::string & section : sections_)
+    for (const std::string & section : implementation_->sections_)
     {
         stream << section << ":" << std::endl;
 
-        for (htd_cli::Option * option : sectionMap_.at(section))
+        for (htd_cli::Option * option : implementation_->sectionMap_.at(section))
         {
-            option->printHelp(stream, maxNameLength_);
+            option->printHelp(stream, implementation_->maxNameLength_);
         }
 
-        if (sectionIndex < sections_.size())
+        if (sectionIndex < implementation_->sections_.size())
         {
             stream << std::endl;
         }
     }
 }
 
-const htd_cli::Option & htd_cli::OptionManager::accessOption(const std::string & name) const
+const htd_cli::Option & htd_cli::OptionManager::accessOption(const char * const name) const
 {
-    return *(static_cast<htd_cli::Option *>(optionMap_.at(htd_cli::Option::getCommandLineRepresentation(name))));
+    return *(static_cast<htd_cli::Option *>(implementation_->optionMap_.at(htd_cli::Option::getCommandLineRepresentation(name))));
 }
 
-const htd_cli::Choice & htd_cli::OptionManager::accessChoice(const std::string & name) const
+const htd_cli::Choice & htd_cli::OptionManager::accessChoice(const char * const name) const
 {
-    return *(static_cast<htd_cli::Choice *>(optionMap_.at(htd_cli::Option::getCommandLineRepresentation(name))));
+    return *(static_cast<htd_cli::Choice *>(implementation_->optionMap_.at(htd_cli::Option::getCommandLineRepresentation(name))));
 }
 
-const htd_cli::SingleValueOption & htd_cli::OptionManager::accessSingleValueOption(const std::string & name) const
+const htd_cli::SingleValueOption & htd_cli::OptionManager::accessSingleValueOption(const char * const name) const
 {
-    return *(static_cast<htd_cli::SingleValueOption *>(optionMap_.at(htd_cli::Option::getCommandLineRepresentation(name))));
+    return *(static_cast<htd_cli::SingleValueOption *>(implementation_->optionMap_.at(htd_cli::Option::getCommandLineRepresentation(name))));
 }
 
-const htd_cli::MultiValueOption & htd_cli::OptionManager::accessMultiValueOption(const std::string & name) const
+const htd_cli::MultiValueOption & htd_cli::OptionManager::accessMultiValueOption(const char * const name) const
 {
-    return *(static_cast<htd_cli::MultiValueOption *>(optionMap_.at(htd_cli::Option::getCommandLineRepresentation(name))));
+    return *(static_cast<htd_cli::MultiValueOption *>(implementation_->optionMap_.at(htd_cli::Option::getCommandLineRepresentation(name))));
 }
 
-bool htd_cli::OptionManager::hasNameClash(const htd_cli::Option & option1, const htd_cli::Option & option2) const
+bool htd_cli::OptionManager::Implementation::hasNameClash(const htd_cli::Option & option1, const htd_cli::Option & option2) const
 {
     const std::string & name1 = option1.name();
     const std::string & name2 = option2.name();

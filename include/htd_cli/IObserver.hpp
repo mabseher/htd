@@ -25,12 +25,14 @@
 #ifndef HTD_CLI_IOBSERVER_HPP
 #define	HTD_CLI_IOBSERVER_HPP
 
+#include <htd/PreprocessorDefinitions.hpp>
+
 namespace htd_cli
 {
     /**
      *  Interface for observers which can be used in the context of the class htd::OptionManager.
      */
-    class IObserver
+    class HTD_API IObserver
     {
         public:
             virtual ~IObserver() = 0;

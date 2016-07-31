@@ -25,6 +25,8 @@
 #ifndef HTD_CLI_OPTIONMANAGER_HPP
 #define	HTD_CLI_OPTIONMANAGER_HPP
 
+#include <htd/PreprocessorDefinitions.hpp>
+
 #include <htd_cli/Choice.hpp>
 #include <htd_cli/Option.hpp>
 #include <htd_cli/MultiValueOption.hpp>
@@ -32,9 +34,6 @@
 #include <htd_cli/IObserver.hpp>
 
 #include <ostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
 
 namespace htd_cli
 {
@@ -44,14 +43,9 @@ namespace htd_cli
     class OptionManager
     {
         public:
-            /**
-             *  The title of the main section.
-             */
-            static const std::string GENERAL_SECTION;
+            HTD_API OptionManager(void);
 
-            OptionManager(void);
-
-            virtual ~OptionManager();
+            HTD_API virtual ~OptionManager();
 
             /**
              *  Parse options from the command line.
@@ -59,7 +53,7 @@ namespace htd_cli
              *  @param[in] argc The number of argumens in argv.
              *  @param[in] argv The argument vector.
              */
-            void parse(int argc, const char * const * const argv);
+            HTD_API void parse(int argc, const char * const * const argv);
 
             /**
              *  Register a new option.
@@ -71,7 +65,7 @@ namespace htd_cli
              *  manager. Deleting the option outside the option manager or inserting the same option object multiple times will
              *  lead to undefined behavior.
              */
-            void registerOption(htd_cli::Option * option, const std::string & section = GENERAL_SECTION);
+            HTD_API void registerOption(htd_cli::Option * option, const char * const section);
 
             /**
              *  Register a new observer.
@@ -82,7 +76,7 @@ namespace htd_cli
              *  manager. Deleting the observer outside the option manager or inserting the same observer object multiple times will
              *  lead to undefined behavior.
              */
-            void registerObserver(htd_cli::IObserver * observer);
+            HTD_API void registerObserver(htd_cli::IObserver * observer);
 
             /**
              *  Print the help text of all options.
@@ -98,7 +92,7 @@ namespace htd_cli
              *
              *  @return A reference to the htd_cli::Option object which the given name.
              */
-            const htd_cli::Option & accessOption(const std::string & name) const;
+            HTD_API const htd_cli::Option & accessOption(const char * const name) const;
 
             /**
              *  Access the htd_cli::Choice object which the given name.
@@ -107,7 +101,7 @@ namespace htd_cli
              *
              *  @return A reference to the htd_cli::Choice object which the given name.
              */
-            const htd_cli::Choice & accessChoice(const std::string & name) const;
+            HTD_API const htd_cli::Choice & accessChoice(const char * const name) const;
 
             /**
              *  Access the htd_cli::SingleValueOption object which the given name.
@@ -116,7 +110,7 @@ namespace htd_cli
              *
              *  @return A reference to the htd_cli::SingleValueOption object which the given name.
              */
-            const htd_cli::SingleValueOption & accessSingleValueOption(const std::string & name) const;
+            HTD_API const htd_cli::SingleValueOption & accessSingleValueOption(const char * const name) const;
 
             /**
              *  Access the htd_cli::MultiValueOption object which the given name.
@@ -125,22 +119,12 @@ namespace htd_cli
              *
              *  @return A reference to the htd_cli::MultiValueOption object which the given name.
              */
-            const htd_cli::MultiValueOption & accessMultiValueOption(const std::string & name) const;
+            HTD_API const htd_cli::MultiValueOption & accessMultiValueOption(const char * const name) const;
 
         private:
-            std::size_t maxNameLength_;
+            HTD_IMPLEMENTATION Implementation;
 
-            std::vector<std::string> sections_;
-
-            std::vector<htd_cli::Option *> options_;
-
-            std::vector<htd_cli::IObserver *> observers_;
-
-            std::unordered_map<std::string, htd_cli::Option *> optionMap_;
-
-            std::unordered_map<std::string, std::vector<htd_cli::Option *>> sectionMap_;
-
-            bool hasNameClash(const htd_cli::Option & option1, const htd_cli::Option & option2) const;
+            std::unique_ptr<Implementation> implementation_;
     };
 }
 

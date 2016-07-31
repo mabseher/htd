@@ -27,16 +27,42 @@
 
 #include <htd_cli/MultiValueOption.hpp>
 
+#include <cstring>
 #include <iomanip>
 #include <ostream>
 #include <sstream>
+#include <vector>
 
-htd_cli::MultiValueOption::MultiValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder) : htd_cli::ValueOption(name, description, valuePlaceholder)
+/**
+ *  Private implementation details of class htd_cli::MultiValueOption.
+ */
+struct htd_cli::MultiValueOption::Implementation
+{
+    /**
+     *  Constructor for the implementation details structure.
+     */
+    Implementation(void) : values_()
+    {
+
+    }
+
+    virtual ~Implementation()
+    {
+        for (char * value : values_)
+        {
+            delete[] value;
+        }
+    }
+
+    std::vector<char *> values_;
+};
+
+htd_cli::MultiValueOption::MultiValueOption(const char * const name, const char * const description, const char * const valuePlaceholder) : htd_cli::ValueOption(name, description, valuePlaceholder), implementation_(new Implementation())
 {
 
 }
 
-htd_cli::MultiValueOption::MultiValueOption(const std::string & name, const std::string & description, const std::string & valuePlaceholder, char shortName) : htd_cli::ValueOption(name, description, valuePlaceholder, shortName)
+htd_cli::MultiValueOption::MultiValueOption(const char * const name, const char * const description, const char * const valuePlaceholder, char shortName) : htd_cli::ValueOption(name, description, valuePlaceholder, shortName), implementation_(new Implementation())
 {
 
 }
@@ -46,14 +72,27 @@ htd_cli::MultiValueOption::~MultiValueOption()
 
 }
 
-const std::vector<std::string> & htd_cli::MultiValueOption::values(void) const
+std::size_t htd_cli::MultiValueOption::valueCount(void) const
 {
-    return values_;
+    return implementation_->values_.size();
 }
 
-void htd_cli::MultiValueOption::registerValue(const std::string & value)
+const char * htd_cli::MultiValueOption::value(htd::index_t index) const
 {
-    values_.push_back(value);
+    HTD_ASSERT(index < implementation_->values_.size())
+
+    return implementation_->values_.at(index);
+}
+
+void htd_cli::MultiValueOption::registerValue(const char * const value)
+{
+    std::size_t size = std::strlen(value);
+
+    char * newValue = new char[size + 1];
+
+    std::strncpy(newValue, value, size + 1);
+
+    implementation_->values_.push_back(newValue);
 
     setUsed();
 }

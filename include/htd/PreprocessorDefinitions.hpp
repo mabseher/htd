@@ -27,6 +27,8 @@
 
 #include <htd/CompilerDetection.hpp>
 
+#include <cassert>
+
 #ifdef HTD_COMPILER_IS_MSVC
     #if HTD_COMPILER_IS_MSVC == 1
         #define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

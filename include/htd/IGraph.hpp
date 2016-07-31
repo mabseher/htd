@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which represent graphs.
      */
-    class HTD_API IGraph : public virtual htd::IHypergraph, public virtual htd::IMultiGraph
+    class IGraph : public virtual htd::IHypergraph, public virtual htd::IMultiGraph
     {
         public:
             virtual ~IGraph() = 0;

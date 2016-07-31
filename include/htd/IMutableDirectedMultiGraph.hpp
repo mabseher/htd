@@ -32,7 +32,7 @@ namespace htd
     /**
      * Interface for classes which represent mutable directed graphs with potentially duplicated edges.
      */
-    class HTD_API IMutableDirectedMultiGraph : public virtual htd::IDirectedMultiGraph
+    class IMutableDirectedMultiGraph : public virtual htd::IDirectedMultiGraph
     {
         public:
             /**

@@ -38,7 +38,7 @@ namespace htd
     /**
      * Interface for classes which represent labeled hypergraphs with potentially duplicated edges.
      */
-    class HTD_API ILabeledMultiHypergraph : public virtual htd::IMultiHypergraph
+    class ILabeledMultiHypergraph : public virtual htd::IMultiHypergraph
     {
         public:
             virtual ~ILabeledMultiHypergraph() = 0;

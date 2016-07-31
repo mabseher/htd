@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which can be used as label for vertices and edges of a graph.
      */
-    class HTD_API ILabel
+    class ILabel
     {
         public:
             virtual ~ILabel() = 0;

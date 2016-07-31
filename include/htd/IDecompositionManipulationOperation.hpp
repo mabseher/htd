@@ -33,7 +33,7 @@ namespace htd
     /**
      * Interface for algorithms which manipulate a given decomposition.
      */
-    class HTD_API IDecompositionManipulationOperation
+    class IDecompositionManipulationOperation
     {
         public:
             virtual ~IDecompositionManipulationOperation() = 0;

@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which represent trees.
      */
-    class HTD_API ITree : public virtual htd::IGraph
+    class ITree : public virtual htd::IGraph
     {
         public:
             using htd::IGraph::vertexCount;

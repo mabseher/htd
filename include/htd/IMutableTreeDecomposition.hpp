@@ -35,7 +35,7 @@ namespace htd
     /**
      * Interface for classes which represent mutable tree decompositions.
      */
-    class HTD_API IMutableTreeDecomposition : public virtual htd::IMutableLabeledTree, public virtual htd::ITreeDecomposition
+    class IMutableTreeDecomposition : public virtual htd::IMutableLabeledTree, public virtual htd::ITreeDecomposition
     {
         public:
             using htd::IMutableTree::insertRoot;

@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which represent collections of labels.
      */
-    class HTD_API ILabelCollection
+    class ILabelCollection
     {
         public:
             virtual ~ILabelCollection() = 0;

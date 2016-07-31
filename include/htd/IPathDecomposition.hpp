@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which represent path decompositions.
      */
-    class HTD_API IPathDecomposition : public virtual htd::ILabeledPath, public virtual htd::ITreeDecomposition
+    class IPathDecomposition : public virtual htd::ILabeledPath, public virtual htd::ITreeDecomposition
     {
         public:
             virtual ~IPathDecomposition() = 0;

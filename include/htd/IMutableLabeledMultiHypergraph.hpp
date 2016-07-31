@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which represent mutable labeled hypergraphs with potentially duplicated edges.
      */
-    class HTD_API IMutableLabeledMultiHypergraph : public virtual htd::ILabeledMultiHypergraph, public virtual htd::IMutableMultiHypergraph
+    class IMutableLabeledMultiHypergraph : public virtual htd::ILabeledMultiHypergraph, public virtual htd::IMutableMultiHypergraph
     {
         public:
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

@@ -35,7 +35,7 @@ namespace htd
     /**
      * Interface for algorithms which manipulate a given graph decomposition.
      */
-    class HTD_API IGraphDecompositionManipulationOperation : public virtual htd::IDecompositionManipulationOperation
+    class IGraphDecompositionManipulationOperation : public virtual htd::IDecompositionManipulationOperation
     {
         public:
             virtual ~IGraphDecompositionManipulationOperation() = 0;

@@ -40,7 +40,7 @@ namespace htd
     /**
      * Interface for classes which represent hypergraphs with potentially duplicated edges.
      */
-    class HTD_API IMultiHypergraph
+    class IMultiHypergraph
     {
         public:
             virtual ~IMultiHypergraph() = 0;

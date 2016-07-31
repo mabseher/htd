@@ -36,7 +36,7 @@ namespace htd
     /**
      * Interface for classes which represent labeled hypergraphs.
      */
-    class HTD_API ILabeledHypergraph : public virtual htd::IHypergraph, public virtual htd::ILabeledMultiHypergraph
+    class ILabeledHypergraph : public virtual htd::IHypergraph, public virtual htd::ILabeledMultiHypergraph
     {
         public:
             virtual ~ILabeledHypergraph() = 0;

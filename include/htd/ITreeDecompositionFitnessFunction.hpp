@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for algorithms which compute the fitness value of a given tree decomposition.
      */
-    class HTD_API ITreeDecompositionFitnessFunction
+    class ITreeDecompositionFitnessFunction
     {
         public:
             virtual ~ITreeDecompositionFitnessFunction() = 0;

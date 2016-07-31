@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which represent directed graphs.
      */
-    class HTD_API IDirectedGraph : public virtual htd::IGraph, public virtual htd::IDirectedMultiGraph
+    class IDirectedGraph : public virtual htd::IGraph, public virtual htd::IDirectedMultiGraph
     {
         public:
             virtual ~IDirectedGraph() = 0;

@@ -34,7 +34,7 @@ namespace htd
     /**
      * Interface for classes which represent mutable labeled trees.
      */
-    class HTD_API IMutableLabeledTree : public virtual htd::ILabeledTree, public virtual htd::IMutableTree
+    class IMutableLabeledTree : public virtual htd::ILabeledTree, public virtual htd::IMutableTree
     {
         public:
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

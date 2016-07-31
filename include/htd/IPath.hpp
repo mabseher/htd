@@ -33,7 +33,7 @@ namespace htd
     /**
      * Interface for classes which represent paths.
      */
-    class HTD_API IPath : public virtual htd::ITree
+    class IPath : public virtual htd::ITree
     {
         public:
             virtual ~IPath() = 0;

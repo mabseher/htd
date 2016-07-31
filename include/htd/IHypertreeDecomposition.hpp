@@ -33,7 +33,7 @@ namespace htd
     /**
      * Interface for classes which represent hypertree decompositions.
      */
-    class HTD_API IHypertreeDecomposition : public virtual htd::ITreeDecomposition
+    class IHypertreeDecomposition : public virtual htd::ITreeDecomposition
     {
         public:
             /**

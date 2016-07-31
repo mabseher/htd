@@ -51,6 +51,9 @@ struct htd_cli::SingleValueOption::Implementation
 
     }
 
+    /**
+     *  The value assigned to the option.
+     */
     std::string value_;
 };
 

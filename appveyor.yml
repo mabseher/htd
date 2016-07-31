@@ -61,3 +61,7 @@ test_script:
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
     }
+
+on_failure:
+- ps: |
+    if exists "$APPVEYOR_BUILD_FOLDER/_build/Testing/Temporary/LastTest.log" type "$APPVEYOR_BUILD_FOLDER/_build/Testing/Temporary/LastTest.log"

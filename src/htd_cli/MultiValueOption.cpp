@@ -51,6 +51,9 @@ struct htd_cli::MultiValueOption::Implementation
 
     }
 
+    /**
+     *  The values assigned to the option.
+     */
     std::vector<std::string> values_;
 };
 

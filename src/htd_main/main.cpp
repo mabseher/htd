@@ -224,16 +224,16 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
         }
     }
 
-    if (ret && decompositionTypeChoice.used())
+    if (ret && decompositionTypeChoice.used() && std::string(decompositionTypeChoice.value()) == "hypertree")
     {
-        if (outputFormatChoice.used() && outputFormatChoice.value() == "td")
+        if (outputFormatChoice.used() && std::string(outputFormatChoice.value()) == "td")
         {
             std::cerr << "INVALID OUTPUT FORMAT: Format 'td' only supports tree decompositions!" << std::endl;
 
             ret = false;
         }
 
-        if (optimizationChoice.used() && optimizationChoice.value() == "width")
+        if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
         {
             std::cerr << "INVALID PROGRAM CALL: Currently, optimization is supported only for tree decompositions!" << std::endl;
 
@@ -245,7 +245,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
     {
         if (iterationOption.used())
         {
-            if (optimizationChoice.used() && optimizationChoice.value() == "width")
+            if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
             {
                 std::size_t index = 0;
 
@@ -283,7 +283,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
     {
         if (nonImprovementLimitOption.used())
         {
-            if (optimizationChoice.used() && optimizationChoice.value() == "width")
+            if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
             {
                 std::size_t index = 0;
 
@@ -679,7 +679,7 @@ int main(int argc, const char * const * const argv)
 
         const std::string & outputFormat = outputFormatChoice.value();
 
-        bool hypertreeDecompositionRequested = decompositionTypeChoice.used() && decompositionTypeChoice.value() == "hypertree";
+        bool hypertreeDecompositionRequested = decompositionTypeChoice.used() && std::string(decompositionTypeChoice.value()) == "hypertree";
 
         if (hypertreeDecompositionRequested)
         {
@@ -718,7 +718,7 @@ int main(int argc, const char * const * const argv)
                 exporter = new htd_main::WidthExporter();
             }
 
-            if (optimizationChoice.used() && optimizationChoice.value() == "width")
+            if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
             {
                 htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm(libraryInstance), WidthMinimizingFitnessFunction());
 
@@ -729,7 +729,7 @@ int main(int argc, const char * const * const argv)
 
                 if (nonImprovementLimitOption.used())
                 {
-                    if (nonImprovementLimitOption.value() == "-1")
+                    if (std::string(nonImprovementLimitOption.value()) == "-1")
                     {
                         algorithm.setNonImprovementLimit((std::size_t)-1);
                     }
@@ -739,19 +739,21 @@ int main(int argc, const char * const * const argv)
                     }
                 }
 
-                if (inputFormatChoice.value() == "gr")
+                const std::string & inputFormat = inputFormatChoice.value();
+
+                if (inputFormat == "gr")
                 {
                     htd_main::GrFormatImporter importer(libraryInstance);
 
                     optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
                 }
-                else if (inputFormatChoice.value() == "lp")
+                else if (inputFormat == "lp")
                 {
                     htd_main::LpFormatImporter importer(libraryInstance);
 
                     optimizeNamed(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
                 }
-                else if (inputFormatChoice.value() == "hgr")
+                else if (inputFormat == "hgr")
                 {
                     htd_main::HgrFormatImporter importer(libraryInstance);
 

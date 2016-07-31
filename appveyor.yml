@@ -64,4 +64,4 @@ test_script:
 
 on_failure:
 - ps: |
-    if exists "$APPVEYOR_BUILD_FOLDER/_build/Testing/Temporary/LastTest.log" type "$APPVEYOR_BUILD_FOLDER/_build/Testing/Temporary/LastTest.log"
+    if exist "$APPVEYOR_BUILD_FOLDER/_build/Testing/Temporary/LastTest.log" type "$APPVEYOR_BUILD_FOLDER/_build/Testing/Temporary/LastTest.log"

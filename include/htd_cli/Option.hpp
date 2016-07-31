@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 
 #include <memory>
+#include <string>
 
 namespace htd_cli
 {

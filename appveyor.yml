@@ -58,10 +58,8 @@ build_script:
 test_script:
 - ps: |
     & ctest -VV -C $env:CONFIGURATION --output-on-failure
+    Push-Ctest-Results "$APPVEYOR_BUILD_FOLDER/_build/"
+    Push-AppveyorArtifact "$APPVEYOR_BUILD_FOLDER/_build/Testing/Temporary/LastTest.log"
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
     }
-
-on_failure:
-- ps: |
-    if exist "$APPVEYOR_BUILD_FOLDER/_build/Testing/Temporary/LastTest.log" type "$APPVEYOR_BUILD_FOLDER/_build/Testing/Temporary/LastTest.log"

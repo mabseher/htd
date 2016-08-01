@@ -46,7 +46,7 @@ endif (UNIX)
 target_link_libraries(htd_main htd htd_cli)
 
 if (MSVC)
-    add_custom_command(TARGET ${TEST_NAME} POST_BUILD
+    add_custom_command(TARGET htd_main POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd.dll" "$<TARGET_FILE_DIR:htd_main>"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd_cli.dll" "$<TARGET_FILE_DIR:htd_main>")
 endif (MSVC)

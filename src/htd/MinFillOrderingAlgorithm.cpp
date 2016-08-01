@@ -315,6 +315,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                                     htd::index_t position2 = std::distance(first, std::lower_bound(first + position1, last, selectedVertex));
                                     
                                     currentNeighborhood.erase(first + position2);
+
                                     currentNeighborhood.insert(currentNeighborhood.begin() + position1, newVertex);
                                 }
                             }
@@ -327,10 +328,10 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                                 else
                                 {
                                     htd::index_t position1 = std::distance(first, std::lower_bound(first, last, selectedVertex));
-                                    htd::index_t position2 = std::distance(first, std::lower_bound(first + position1, last, newVertex));
                                     
-                                    currentNeighborhood.erase(first + position1);
-                                    currentNeighborhood.insert(currentNeighborhood.begin() + position2 - 1, newVertex);
+                                    first = currentNeighborhood.erase(first + position1);
+
+                                    currentNeighborhood.insert(std::lower_bound(first, currentNeighborhood.end(), newVertex), newVertex);
                                 }
                             }
                         }

@@ -336,6 +336,30 @@ namespace htd
         return *position;
     }
 
+    /**
+     *  Check whether a collection is sorted in ascending order and free of duplicates.
+     *
+     *  @param[in] first    An iterator to the begin of the collection.
+     *  @param[in] last     An iterator to the end of the collection.
+     *
+     *  @return True if the collection is sorted in ascending order and free of duplicates, false otherwise.
+     */
+    template <class InputIterator>
+    bool is_sorted_and_duplicate_free(InputIterator first, InputIterator last)
+    {
+        bool ret = true;
+
+        if (first != last)
+        {
+            for (InputIterator next = first; ret && ++next != last; ++first)
+            {
+                ret = *first < *next;
+            }
+        }
+
+        return ret;
+    }
+
     void HTD_API set_union(const std::vector<htd::vertex_t> & set1,
                            const std::vector<htd::vertex_t> & set2,
                            htd::vertex_t ignoredVertex,

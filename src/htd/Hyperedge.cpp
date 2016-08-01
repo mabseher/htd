@@ -27,6 +27,8 @@
 
 #include <htd/Hyperedge.hpp>
 
+#include <htd/Helpers.hpp>
+
 #include <algorithm>
 #include <functional>
 
@@ -614,7 +616,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t ver
 
 htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT : id_(id)
 {
-    if (std::is_sorted(elements.begin(), elements.end(), std::less_equal<htd::vertex_t>()))
+    if (htd::is_sorted_and_duplicate_free(elements.begin(), elements.end()))
     {
         content_.reset(new SortedElementInformation(elements));
     }
@@ -626,7 +628,7 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & eleme
 
 htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : id_(id)
 {
-    if (std::is_sorted(elements.begin(), elements.end(), std::less_equal<htd::vertex_t>()))
+    if (htd::is_sorted_and_duplicate_free(elements.begin(), elements.end()))
     {
         content_.reset(new SortedElementInformation(std::move(elements)));
     }
@@ -694,7 +696,7 @@ void htd::Hyperedge::setElements(htd::vertex_t vertex1, htd::vertex_t vertex2) H
 
 void htd::Hyperedge::setElements(const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT
 {
-    bool sorted = std::is_sorted(elements.begin(), elements.end(), std::less_equal<htd::vertex_t>());
+    bool sorted = htd::is_sorted_and_duplicate_free(elements.begin(), elements.end());
 
     if (content_->isSortedElementInformation())
     {
@@ -722,7 +724,7 @@ void htd::Hyperedge::setElements(const std::vector<htd::vertex_t> & elements) HT
 
 void htd::Hyperedge::setElements(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT
 {
-    bool sorted = std::is_sorted(elements.begin(), elements.end(), std::less_equal<htd::vertex_t>());
+    bool sorted = htd::is_sorted_and_duplicate_free(elements.begin(), elements.end());
 
     if (content_->isSortedElementInformation())
     {

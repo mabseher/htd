@@ -25,4 +25,12 @@ foreach(TEST_PROGRAM ${TEST_PROGRAMS})
     target_link_libraries(${TEST_NAME} htd gtest gtest_main)
 
     add_test("${TEST_NAME}" ${TEST_NAME})
+
+    if (MSVC)
+        add_custom_command(TARGET ${TEST_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd.dll" "$<TARGET_FILE_DIR:${TEST_NAME}>")
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd_cli.dll" "$<TARGET_FILE_DIR:${TEST_NAME}>")
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/test/googletest/googletest-release-1.7.0/$<CONFIGURATION>/gtest.dll" "$<TARGET_FILE_DIR:${TEST_NAME}>")
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/test/googletest/googletest-release-1.7.0/$<CONFIGURATION>/gtest_main.dll" "$<TARGET_FILE_DIR:${TEST_NAME}>")
+    endif (MSVC)
 endforeach()

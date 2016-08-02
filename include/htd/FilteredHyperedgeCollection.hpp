@@ -40,7 +40,7 @@ namespace htd
     /**
      *  Class for the efficient storage of hyperedge collections based on existing vectors of hyperedges.
      */
-    class HTD_API FilteredHyperedgeCollection
+    class FilteredHyperedgeCollection
     {
         public:
             /**
@@ -51,7 +51,7 @@ namespace htd
             /**
              *  Custom read-only iterator for hyperedge collections.
              */
-            class HTD_API FilteredHyperedgeCollectionConstIterator
+            class FilteredHyperedgeCollectionConstIterator
             {
                 public:
                     /**
@@ -95,40 +95,40 @@ namespace htd
                      *  @param[in] collection   The underlying collection.
                      *  @param[in] position     The position of the new iterator within the collection.
                      */
-                    FilteredHyperedgeCollectionConstIterator(const FilteredHyperedgeCollection & collection, htd::index_t position);
+                    HTD_API FilteredHyperedgeCollectionConstIterator(const FilteredHyperedgeCollection & collection, htd::index_t position);
 
                     /**
                      *  Copy constructor for a FilteredHyperedgeCollectionConstIterator object.
                      *
                      *  @param[in] original  The original FilteredHyperedgeCollectionConstIterator object.
                      */
-                    FilteredHyperedgeCollectionConstIterator(const FilteredHyperedgeCollectionConstIterator & original);
+                    HTD_API FilteredHyperedgeCollectionConstIterator(const FilteredHyperedgeCollectionConstIterator & original);
 
                     /**
                      *  Move constructor for a FilteredHyperedgeCollectionConstIterator object.
                      *
                      *  @param[in] original  The original FilteredHyperedgeCollectionConstIterator object.
                      */
-                    FilteredHyperedgeCollectionConstIterator(FilteredHyperedgeCollectionConstIterator && original);
+                    HTD_API FilteredHyperedgeCollectionConstIterator(FilteredHyperedgeCollectionConstIterator && original);
 
                     /**
                      *  Destructor for a FilteredHyperedgeCollectionConstIterator object.
                      */
-                    virtual ~FilteredHyperedgeCollectionConstIterator();
+                    HTD_API virtual ~FilteredHyperedgeCollectionConstIterator();
 
                     /**
                      *  Increment the iterator.
                      *
                      *  @return A reference to the incremented iterator.
                      */
-                    FilteredHyperedgeCollectionConstIterator & operator++(void);
+                    HTD_API FilteredHyperedgeCollectionConstIterator & operator++(void);
 
                     /**
                      *  Increment the iterator.
                      *
                      *  @return A copy of the iterator reflecting the state before the increment operation took place.
                      */
-                    FilteredHyperedgeCollectionConstIterator operator++(int);
+                    HTD_API FilteredHyperedgeCollectionConstIterator operator++(int);
 
                     /**
                      *  Increment the iterator.
@@ -137,21 +137,21 @@ namespace htd
                      *
                      *  @return A reference to the incremented iterator.
                      */
-                    FilteredHyperedgeCollectionConstIterator & operator+=(std::size_t positions);
+                    HTD_API FilteredHyperedgeCollectionConstIterator & operator+=(std::size_t positions);
 
                     /**
                      *  Decrement the iterator.
                      *
                      *  @return A reference to the decremented iterator.
                      */
-                    FilteredHyperedgeCollectionConstIterator & operator--(void);
+                    HTD_API FilteredHyperedgeCollectionConstIterator & operator--(void);
 
                     /**
                      *  Decrement the iterator.
                      *
                      *  @return A copy of the iterator reflecting the state before the decrement operation took place.
                      */
-                    FilteredHyperedgeCollectionConstIterator operator--(int);
+                    HTD_API FilteredHyperedgeCollectionConstIterator operator--(int);
 
                     /**
                      *  Decrement the iterator.
@@ -160,7 +160,7 @@ namespace htd
                      *
                      *  @return A reference to the decremented iterator.
                      */
-                    FilteredHyperedgeCollectionConstIterator & operator-=(std::size_t positions);
+                    HTD_API FilteredHyperedgeCollectionConstIterator & operator-=(std::size_t positions);
 
                     /**
                      *  Compute the distance between two iterators.
@@ -173,21 +173,21 @@ namespace htd
                      *
                      *  @return The distance between two iterators.
                      */
-                    long operator-(const FilteredHyperedgeCollectionConstIterator & rhs);
+                    HTD_API long operator-(const FilteredHyperedgeCollectionConstIterator & rhs);
 
                     /**
                      *  Copy assignment operator for an iterator.
                      *
                      *  @param[in] original  The original iterator.
                      */
-                    FilteredHyperedgeCollectionConstIterator & operator=(const FilteredHyperedgeCollectionConstIterator & original);
+                    HTD_API FilteredHyperedgeCollectionConstIterator & operator=(const FilteredHyperedgeCollectionConstIterator & original);
 
                     /**
                      *  Move assignment operator for an iterator.
                      *
                      *  @param[in] original  The original iterator.
                      */
-                    FilteredHyperedgeCollectionConstIterator & operator=(FilteredHyperedgeCollectionConstIterator && original);
+                    HTD_API FilteredHyperedgeCollectionConstIterator & operator=(FilteredHyperedgeCollectionConstIterator && original);
 
                     /**
                      *  Equality operator for an iterator.
@@ -196,7 +196,7 @@ namespace htd
                      *
                      *  @return True if the iterator points to the same element as the iterator at the right-hand side of the operator, false otherwise.
                      */
-                    bool operator==(const FilteredHyperedgeCollectionConstIterator & rhs) const;
+                    HTD_API bool operator==(const FilteredHyperedgeCollectionConstIterator & rhs) const;
 
                     /**
                      *  Inequality operator for an iterator.
@@ -205,21 +205,21 @@ namespace htd
                      *
                      *  @return True if the iterator does not point to the same element as the iterator at the right-hand side of the operator, false otherwise.
                      */
-                    bool operator!=(const FilteredHyperedgeCollectionConstIterator & rhs) const;
+                    HTD_API bool operator!=(const FilteredHyperedgeCollectionConstIterator & rhs) const;
 
                     /**
                      *  Dereference the iterator.
                      *
                      *  @return A pointer to the element at the current iterator position.
                      */
-                    const htd::Hyperedge * operator->(void) const;
+                    HTD_API const htd::Hyperedge * operator->(void) const;
 
                     /**
                      *  Dereference the iterator.
                      *
                      *  @return A reference to the element at the current iterator position.
                      */
-                    const htd::Hyperedge & operator*(void) const;
+                    HTD_API const htd::Hyperedge & operator*(void) const;
 
                 private:
                     std::shared_ptr<htd::IHyperedgeCollection> baseCollection_;
@@ -232,7 +232,7 @@ namespace htd
             /**
              *  Constructor for a FilteredHyperedgeCollection object representing an empty collection.
              */
-            FilteredHyperedgeCollection(void) HTD_NOEXCEPT;
+            HTD_API FilteredHyperedgeCollection(void) HTD_NOEXCEPT;
 
             /**
              *  Constructor for a FilteredHyperedgeCollection.
@@ -244,7 +244,7 @@ namespace htd
              *  is taken over by the hyperedge collection. The pointer of the provided wrapper of the base collection
              *  must not be freed outside the context of the hyperedge collection.
              */
-            FilteredHyperedgeCollection(htd::IHyperedgeCollection * baseCollection, const std::vector<htd::index_t> & relevantIndices);
+            HTD_API FilteredHyperedgeCollection(htd::IHyperedgeCollection * baseCollection, const std::vector<htd::index_t> & relevantIndices);
 
             /**
              *  Constructor for a FilteredHyperedgeCollection.
@@ -256,61 +256,61 @@ namespace htd
              *  is taken over by the hyperedge collection. The pointer of the provided wrapper of the base collection
              *  must not be freed outside the context of the hyperedge collection.
              */
-            FilteredHyperedgeCollection(htd::IHyperedgeCollection * baseCollection, std::vector<htd::index_t> && relevantIndices);
+            HTD_API FilteredHyperedgeCollection(htd::IHyperedgeCollection * baseCollection, std::vector<htd::index_t> && relevantIndices);
 
             /**
              *  Copy constructor for a FilteredHyperedgeCollection object.
              *
              *  @param[in] original  The original FilteredHyperedgeCollection object.
              */
-            FilteredHyperedgeCollection(const FilteredHyperedgeCollection & original) HTD_NOEXCEPT;
+            HTD_API FilteredHyperedgeCollection(const FilteredHyperedgeCollection & original) HTD_NOEXCEPT;
 
             /**
              *  Move constructor for a FilteredHyperedgeCollection object.
              *
              *  @param[in] original  The original FilteredHyperedgeCollection object.
              */
-            FilteredHyperedgeCollection(FilteredHyperedgeCollection && original) HTD_NOEXCEPT;
+            HTD_API FilteredHyperedgeCollection(FilteredHyperedgeCollection && original) HTD_NOEXCEPT;
 
             /**
              *  Destructor for a FilteredHyperedgeCollection object.
              */
-            virtual ~FilteredHyperedgeCollection();
+            HTD_API virtual ~FilteredHyperedgeCollection();
 
             /**
              *  Getter for the size of the collection.
              *
              *  @return The size of the collection.
              */
-            std::size_t size(void) const HTD_NOEXCEPT;
+            HTD_API std::size_t size(void) const HTD_NOEXCEPT;
 
             /**
              *  Getter for the iterator to the first element in the collection.
              *
              *  @return An iterator to the first element in the collection.
              */
-            FilteredHyperedgeCollectionConstIterator begin(void) const HTD_NOEXCEPT;
+            HTD_API FilteredHyperedgeCollectionConstIterator begin(void) const HTD_NOEXCEPT;
 
             /**
              *  Getter for the iterator to the end of the collection.
              *
              *  @return An iterator to the end of the collection.
              */
-            FilteredHyperedgeCollectionConstIterator end(void) const HTD_NOEXCEPT;
+            HTD_API FilteredHyperedgeCollectionConstIterator end(void) const HTD_NOEXCEPT;
 
             /**
              *  Copy assignment operator for a FilteredHyperedgeCollection object.
              *
              *  @param[in] original  The original FilteredHyperedgeCollection object.
              */
-            FilteredHyperedgeCollection & operator=(const FilteredHyperedgeCollection & original) HTD_NOEXCEPT;
+            HTD_API FilteredHyperedgeCollection & operator=(const FilteredHyperedgeCollection & original) HTD_NOEXCEPT;
 
             /**
              *  Move assignment operator for a FilteredHyperedgeCollection object.
              *
              *  @param[in] original  The original FilteredHyperedgeCollection object.
              */
-            FilteredHyperedgeCollection & operator=(FilteredHyperedgeCollection && original) HTD_NOEXCEPT;
+            HTD_API FilteredHyperedgeCollection & operator=(FilteredHyperedgeCollection && original) HTD_NOEXCEPT;
 
             /**
              *  Equality operator for a hyperedge collection.
@@ -319,7 +319,7 @@ namespace htd
              *
              *  @return True if the hyperedge collection is equal to the hyperedge collection at the right-hand side of the operator, false otherwise.
              */
-            bool operator==(const FilteredHyperedgeCollection & rhs) const HTD_NOEXCEPT;
+            HTD_API bool operator==(const FilteredHyperedgeCollection & rhs) const HTD_NOEXCEPT;
 
             /**
              *  Inequality operator for a hyperedge collection.
@@ -328,21 +328,21 @@ namespace htd
              *
              *  @return True if the hyperedge collection is not equal to the hyperedge collection at the right-hand side of the operator, false otherwise.
              */
-            bool operator!=(const FilteredHyperedgeCollection & rhs) const HTD_NOEXCEPT;
+            HTD_API bool operator!=(const FilteredHyperedgeCollection & rhs) const HTD_NOEXCEPT;
 
             /**
              *  Remove all hyperedges from the collection which contain also other vertices than those provided to this method.
              *
              *  @param[in] vertices The vertices which act as a filter for the hyperedges in the collection.
              */
-            void restrictTo(const std::vector<htd::vertex_t> & vertices);
+            HTD_API void restrictTo(const std::vector<htd::vertex_t> & vertices);
 
             /**
              *  Swap the contents of a FilteredHyperedgeCollection object and another.
              *
              *  @param[in] other    The FilteredHyperedgeCollection object which shall be swapped with this object.
              */
-            void swap(FilteredHyperedgeCollection & other);
+            HTD_API void swap(FilteredHyperedgeCollection & other);
 
         private:
             std::shared_ptr<htd::IHyperedgeCollection> baseCollection_;

@@ -34,3 +34,10 @@ set_target_properties(htd_cli
 
 install(TARGETS htd_cli DESTINATION lib)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd_cli" DESTINATION include)
+
+if (BUILD_TESTING)
+    if (MSVC)
+        add_custom_command(TARGET htd_cli POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd_cli.dll" "${CMAKE_BINARY_DIR}/tests")
+    endif (MSVC)
+endif (BUILD_TESTING)

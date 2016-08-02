@@ -24,10 +24,10 @@ foreach(TEST_PROGRAM ${TEST_PROGRAMS})
 
     target_link_libraries(${TEST_NAME} htd gtest gtest_main)
 
-    add_test("${TEST_NAME}" ${TEST_NAME})
-
     set_target_properties(${TEST_NAME}
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
     )
+
+    add_test(NAME "${TEST_NAME}" COMMAND $<TARGET_FILE:${TEST_NAME}>)
 endforeach()

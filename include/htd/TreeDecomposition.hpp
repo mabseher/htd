@@ -32,6 +32,9 @@
 
 #include <unordered_map>
 
+MSVC_PRAGMA_WARNING_PUSH
+MSVC_PRAGMA_DISABLE_WARNING_C4250
+
 namespace htd
 {
     /**
@@ -296,5 +299,7 @@ namespace htd
             std::unordered_map<htd::vertex_t, htd::FilteredHyperedgeCollection> inducedEdges_;
     };
 }
+
+MSVC_PRAGMA_WARNING_POP
 
 #endif /* HTD_HTD_TREEDECOMPOSITION_HPP */

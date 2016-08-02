@@ -29,10 +29,16 @@
 
 #include <cassert>
 
-#ifdef HTD_COMPILER_IS_MSVC
-    #if HTD_COMPILER_IS_MSVC == 1
-        #define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    #endif
+#if HTD_COMPILER_IS_MSVC == 1
+    #define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+
+    #define MSVC_PRAGMA_WARNING_PUSH __pragma(warning(push))
+    #define MSVC_PRAGMA_DISABLE_WARNING_C4250 __pragma(warning(disable:4250))
+    #define MSVC_PRAGMA_WARNING_POP __pragma(warning(pop))
+#else
+    #define MSVC_PRAGMA_WARNING_PUSH
+    #define MSVC_PRAGMA_DISABLE_WARNING_C4250
+    #define MSVC_PRAGMA_WARNING_POP
 #endif
 
 #if HTD_COMPILER_IS_MSVC == 1

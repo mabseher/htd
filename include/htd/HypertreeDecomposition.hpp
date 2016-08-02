@@ -30,6 +30,9 @@
 #include <htd/TreeDecomposition.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
 
+MSVC_PRAGMA_WARNING_PUSH
+MSVC_PRAGMA_DISABLE_WARNING_C4250
+
 namespace htd
 {
     /**
@@ -140,5 +143,7 @@ namespace htd
             std::unordered_map<htd::vertex_t, std::vector<htd::Hyperedge>> coveringEdges_;
     };
 }
+
+MSVC_PRAGMA_WARNING_POP
 
 #endif /* HTD_HTD_HYPERTREEDECOMPOSITION_HPP */

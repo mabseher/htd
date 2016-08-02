@@ -29,6 +29,9 @@
 #include <htd/IMutableLabeledMultiGraph.hpp>
 #include <htd/MultiGraph.hpp>
 
+MSVC_PRAGMA_WARNING_PUSH
+MSVC_PRAGMA_DISABLE_WARNING_C4250
+
 namespace htd
 {
     /**
@@ -163,5 +166,7 @@ namespace htd
             htd::ILabelingCollection * labelings_;
     };
 }
+
+MSVC_PRAGMA_WARNING_POP
 
 #endif /* HTD_HTD_LABELEDMULTIGRAPH_HPP */

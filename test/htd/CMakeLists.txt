@@ -26,17 +26,8 @@ foreach(TEST_PROGRAM ${TEST_PROGRAMS})
 
     add_test("${TEST_NAME}" ${TEST_NAME})
 
-    if (MSVC)
-        add_custom_command(TARGET ${TEST_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} --debug-output -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>" "${CMAKE_BINARY_DIR}")
-
-        add_custom_command(TARGET ${TEST_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} --debug-output -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd_cli.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>" "${CMAKE_BINARY_DIR}")
-
-        add_custom_command(TARGET ${TEST_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} --debug-output -E copy_if_different "${CMAKE_BINARY_DIR}/test/googletest/googletest-release-1.7.0/$<CONFIGURATION>/gtest.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>" "${CMAKE_BINARY_DIR}")
-
-        add_custom_command(TARGET ${TEST_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} --debug-output -E copy_if_different "${CMAKE_BINARY_DIR}/test/googletest/googletest-release-1.7.0/$<CONFIGURATION>/gtest_main.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>" "${CMAKE_BINARY_DIR}")
-    endif (MSVC)
+    set_target_properties(${TEST_NAME}
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
+    )
 endforeach()

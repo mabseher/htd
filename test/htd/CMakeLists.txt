@@ -28,19 +28,15 @@ foreach(TEST_PROGRAM ${TEST_PROGRAMS})
 
     if (MSVC)
         add_custom_command(TARGET ${TEST_NAME} POST_BUILD
-            DEPENDS "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd.dll"
-            COMMAND ${CMAKE_COMMAND} --trace-expand -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>")
+            COMMAND ${CMAKE_COMMAND} --debug-output -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>")
 
         add_custom_command(TARGET ${TEST_NAME} POST_BUILD
-            DEPENDS "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd_cli.dll"
-            COMMAND ${CMAKE_COMMAND} --trace-expand -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd_cli.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>")
+            COMMAND ${CMAKE_COMMAND} --debug-output -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd_cli.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>")
 
         add_custom_command(TARGET ${TEST_NAME} POST_BUILD
-            DEPENDS "${CMAKE_BINARY_DIR}/test/googletest/googletest-release-1.7.0/$<CONFIGURATION>/gtest.dll"
-            COMMAND ${CMAKE_COMMAND} --trace-expand -E copy_if_different "${CMAKE_BINARY_DIR}/test/googletest/googletest-release-1.7.0/$<CONFIGURATION>/gtest.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>")
+            COMMAND ${CMAKE_COMMAND} --debug-output -E copy_if_different "${CMAKE_BINARY_DIR}/test/googletest/googletest-release-1.7.0/$<CONFIGURATION>/gtest.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>")
 
         add_custom_command(TARGET ${TEST_NAME} POST_BUILD
-            DEPENDS "${CMAKE_BINARY_DIR}/test/googletest/googletest-release-1.7.0/$<CONFIGURATION>/gtest_main.dll"
-            COMMAND ${CMAKE_COMMAND} --trace-expand -E copy_if_different "${CMAKE_BINARY_DIR}/test/googletest/googletest-release-1.7.0/$<CONFIGURATION>/gtest_main.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>")
+            COMMAND ${CMAKE_COMMAND} --debug-output -E copy_if_different "${CMAKE_BINARY_DIR}/test/googletest/googletest-release-1.7.0/$<CONFIGURATION>/gtest_main.dll" "${CMAKE_BINARY_DIR}/test/htd/$<CONFIGURATION>")
     endif (MSVC)
 endforeach()

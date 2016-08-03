@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledPath interface.
      */
-    class HTD_API LabeledPathFactory
+    class LabeledPathFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            LabeledPathFactory(const htd::LibraryInstance * const manager);
+            HTD_API LabeledPathFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            LabeledPathFactory(const LabeledPathFactory & original);
+            HTD_API LabeledPathFactory(const LabeledPathFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            LabeledPathFactory & operator=(const LabeledPathFactory & original);
+            HTD_API LabeledPathFactory & operator=(const LabeledPathFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~LabeledPathFactory();
+            HTD_API virtual ~LabeledPathFactory();
 
             /**
              *  Create a new IMutableLabeledPath object.
              *
              *  @return A new IMutableLabeledPath object.
              */
-            htd::IMutableLabeledPath * getLabeledPath(void) const;
+            HTD_API htd::IMutableLabeledPath * getLabeledPath(void) const;
 
             /**
              *  Create a new IMutableLabeledPath object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledPath object identical to the given original graph.
              */
-            htd::IMutableLabeledPath * getLabeledPath(const htd::ILabeledPath & original) const;
+            HTD_API htd::IMutableLabeledPath * getLabeledPath(const htd::ILabeledPath & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledPath interface.
@@ -81,21 +81,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableLabeledPath interface.
              */
-            void setConstructionTemplate(htd::IMutableLabeledPath * original);
+            HTD_API void setConstructionTemplate(htd::IMutableLabeledPath * original);
 
             /**
              *  Access the mutable interface of a given labeled path.
              *
              *  @return The mutable interface of the given labeled path.
              */
-            htd::IMutableLabeledPath & accessMutableLabeledPath(htd::ILabeledPath & original) const;
+            HTD_API htd::IMutableLabeledPath & accessMutableLabeledPath(htd::ILabeledPath & original) const;
 
             /**
              *  Access the mutable interface of a given labeled path.
              *
              *  @return The mutable interface of the given labeled path.
              */
-            const htd::IMutableLabeledPath & accessMutableLabeledPath(const htd::ILabeledPath & original) const;
+            HTD_API const htd::IMutableLabeledPath & accessMutableLabeledPath(const htd::ILabeledPath & original) const;
 
         private:
             /**

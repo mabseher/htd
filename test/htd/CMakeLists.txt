@@ -5,7 +5,7 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${GTEST_INCLUDE_DIR}")
 
 if (UNIX)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
 endif (UNIX)
 
 file(GLOB_RECURSE HEADER_LIST ${PROJECT_SOURCE_DIR}/include/*.hpp)
@@ -24,10 +24,10 @@ foreach(TEST_PROGRAM ${TEST_PROGRAMS})
 
     target_link_libraries(${TEST_NAME} htd gtest gtest_main)
 
-    set_target_properties(${TEST_NAME}
-        PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
-    )
+    add_test(NAME "${TEST_NAME}" COMMAND "$<TARGET_FILE:${TEST_NAME}>")
 
-    add_test(NAME "${TEST_NAME}" COMMAND $<TARGET_FILE:${TEST_NAME}>)
+    if (MSVC)
+        add_custom_command(TARGET ${TEST_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${TEST_NAME}>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>")
+    endif (MSVC)
 endforeach()

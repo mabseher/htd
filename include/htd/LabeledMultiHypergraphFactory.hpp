@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledMultiHypergraph interface.
      */
-    class HTD_API LabeledMultiHypergraphFactory
+    class LabeledMultiHypergraphFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            LabeledMultiHypergraphFactory(const htd::LibraryInstance * const manager);
+            HTD_API LabeledMultiHypergraphFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            LabeledMultiHypergraphFactory(const LabeledMultiHypergraphFactory & original);
+            HTD_API LabeledMultiHypergraphFactory(const LabeledMultiHypergraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            LabeledMultiHypergraphFactory & operator=(const LabeledMultiHypergraphFactory & original);
+            HTD_API LabeledMultiHypergraphFactory & operator=(const LabeledMultiHypergraphFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~LabeledMultiHypergraphFactory();
+            HTD_API virtual ~LabeledMultiHypergraphFactory();
 
             /**
              *  Create a new IMutableLabeledMultiHypergraph object.
              *
              *  @return A new IMutableLabeledMultiHypergraph object.
              */
-            htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(void) const;
+            HTD_API htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(void) const;
 
             /**
              *  Create a new IMutableLabeledMultiHypergraph object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledMultiHypergraph object of the given size.
              */
-            htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(std::size_t initialSize) const;
+            HTD_API htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableLabeledMultiHypergraph object.
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledMultiHypergraph object identical to the given original graph.
              */
-            htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) const;
+            HTD_API htd::IMutableLabeledMultiHypergraph * getLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledMultiHypergraph interface.
@@ -90,21 +90,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableLabeledMultiHypergraph interface.
              */
-            void setConstructionTemplate(htd::IMutableLabeledMultiHypergraph * original);
+            HTD_API void setConstructionTemplate(htd::IMutableLabeledMultiHypergraph * original);
 
             /**
              *  Access the mutable interface of a given labeled multi-hypergraph.
              *
              *  @return The mutable interface of the given labeled multi-hypergraph.
              */
-            htd::IMutableLabeledMultiHypergraph & accessMutableLabeledMultiHypergraph(htd::ILabeledMultiHypergraph & original) const;
+            HTD_API htd::IMutableLabeledMultiHypergraph & accessMutableLabeledMultiHypergraph(htd::ILabeledMultiHypergraph & original) const;
 
             /**
              *  Access the mutable interface of a given labeled multi-hypergraph.
              *
              *  @return The mutable interface of the given labeled multi-hypergraph.
              */
-            const htd::IMutableLabeledMultiHypergraph & accessMutableLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) const;
+            HTD_API const htd::IMutableLabeledMultiHypergraph & accessMutableLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) const;
 
         private:
             /**

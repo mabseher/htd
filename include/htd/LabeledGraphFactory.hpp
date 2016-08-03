@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledGraph interface.
      */
-    class HTD_API LabeledGraphFactory
+    class LabeledGraphFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            LabeledGraphFactory(const htd::LibraryInstance * const manager);
+            HTD_API LabeledGraphFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            LabeledGraphFactory(const LabeledGraphFactory & original);
+            HTD_API LabeledGraphFactory(const LabeledGraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            LabeledGraphFactory & operator=(const LabeledGraphFactory & original);
+            HTD_API LabeledGraphFactory & operator=(const LabeledGraphFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~LabeledGraphFactory();
+            HTD_API virtual ~LabeledGraphFactory();
 
             /**
              *  Create a new IMutableLabeledGraph object.
              *
              *  @return A new IMutableLabeledGraph object.
              */
-            htd::IMutableLabeledGraph * getLabeledGraph(void) const;
+            HTD_API htd::IMutableLabeledGraph * getLabeledGraph(void) const;
 
             /**
              *  Create a new IMutableLabeledGraph object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledGraph object of the given size.
              */
-            htd::IMutableLabeledGraph * getLabeledGraph(std::size_t initialSize) const;
+            HTD_API htd::IMutableLabeledGraph * getLabeledGraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableLabeledGraph object.
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledGraph object identical to the given original graph.
              */
-            htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledGraph & original) const;
+            HTD_API htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledGraph & original) const;
 
             /**
              *  Create a new IMutableLabeledGraph object.
@@ -88,7 +88,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledGraph object identical to the given original graph.
              */
-            htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledMultiGraph & original) const;
+            HTD_API htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledMultiGraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledGraph interface.
@@ -99,21 +99,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableLabeledGraph interface.
              */
-            void setConstructionTemplate(htd::IMutableLabeledGraph * original);
+            HTD_API void setConstructionTemplate(htd::IMutableLabeledGraph * original);
 
             /**
              *  Access the mutable interface of a given labeled graph.
              *
              *  @return The mutable interface of the given labeled graph.
              */
-            htd::IMutableLabeledGraph & accessMutableLabeledGraph(htd::ILabeledGraph & original) const;
+            HTD_API htd::IMutableLabeledGraph & accessMutableLabeledGraph(htd::ILabeledGraph & original) const;
 
             /**
              *  Access the mutable interface of a given labeled graph.
              *
              *  @return The mutable interface of the given labeled graph.
              */
-            const htd::IMutableLabeledGraph & accessMutableLabeledGraph(const htd::ILabeledGraph & original) const;
+            HTD_API const htd::IMutableLabeledGraph & accessMutableLabeledGraph(const htd::ILabeledGraph & original) const;
 
         private:
             /**

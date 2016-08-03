@@ -33,7 +33,7 @@ namespace htd
     /**
      * Implementation of the IConnectedComponentAlgorithm interface based on Robert Tarjan's algorithm.
      */
-    class HTD_API TarjanStronglyConnectedComponentAlgorithm : public virtual htd::IStronglyConnectedComponentAlgorithm
+    class TarjanStronglyConnectedComponentAlgorithm : public virtual htd::IStronglyConnectedComponentAlgorithm
     {
         public:
             /**
@@ -41,23 +41,23 @@ namespace htd
              *
              *  @param[in] manager   The management instance to which the new algorithm belongs.
              */
-            TarjanStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager);
+            HTD_API TarjanStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager);
 
-            virtual ~TarjanStronglyConnectedComponentAlgorithm();
+            HTD_API virtual ~TarjanStronglyConnectedComponentAlgorithm();
 
-            void determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
+            HTD_API void determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
 
-            void determineComponents(const htd::IDirectedMultiGraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
+            HTD_API void determineComponents(const htd::IDirectedMultiGraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
 
-            void determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+            HTD_API void determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
-            void determineComponent(const htd::IDirectedMultiGraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+            HTD_API void determineComponent(const htd::IDirectedMultiGraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
-            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
-            TarjanStronglyConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
+            HTD_API TarjanStronglyConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
 
         private:
             HTD_IMPLEMENTATION Implementation;

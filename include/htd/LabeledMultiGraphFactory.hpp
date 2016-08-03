@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledMultiGraph interface.
      */
-    class HTD_API LabeledMultiGraphFactory
+    class LabeledMultiGraphFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            LabeledMultiGraphFactory(const htd::LibraryInstance * const manager);
+            HTD_API LabeledMultiGraphFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            LabeledMultiGraphFactory(const LabeledMultiGraphFactory & original);
+            HTD_API LabeledMultiGraphFactory(const LabeledMultiGraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            LabeledMultiGraphFactory & operator=(const LabeledMultiGraphFactory & original);
+            HTD_API LabeledMultiGraphFactory & operator=(const LabeledMultiGraphFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~LabeledMultiGraphFactory();
+            HTD_API virtual ~LabeledMultiGraphFactory();
 
             /**
              *  Create a new IMutableLabeledMultiGraph object.
              *
              *  @return A new IMutableLabeledMultiGraph object.
              */
-            htd::IMutableLabeledMultiGraph * getLabeledMultiGraph(void) const;
+            HTD_API htd::IMutableLabeledMultiGraph * getLabeledMultiGraph(void) const;
 
             /**
              *  Create a new IMutableLabeledMultiGraph object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledMultiGraph object of the given size.
              */
-            htd::IMutableLabeledMultiGraph * getLabeledMultiGraph(std::size_t initialSize) const;
+            HTD_API htd::IMutableLabeledMultiGraph * getLabeledMultiGraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableLabeledMultiGraph object.
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledMultiGraph object identical to the given original graph.
              */
-            htd::IMutableLabeledMultiGraph * getLabeledMultiGraph(const htd::ILabeledMultiGraph & original) const;
+            HTD_API htd::IMutableLabeledMultiGraph * getLabeledMultiGraph(const htd::ILabeledMultiGraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledMultiGraph interface.
@@ -90,21 +90,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableLabeledMultiGraph interface.
              */
-            void setConstructionTemplate(htd::IMutableLabeledMultiGraph * original);
+            HTD_API void setConstructionTemplate(htd::IMutableLabeledMultiGraph * original);
 
             /**
              *  Access the mutable interface of a given labeled multi-graph.
              *
              *  @return The mutable interface of the given labeled multi-graph.
              */
-            htd::IMutableLabeledMultiGraph & accessMutableLabeledMultiGraph(htd::ILabeledMultiGraph & original) const;
+            HTD_API htd::IMutableLabeledMultiGraph & accessMutableLabeledMultiGraph(htd::ILabeledMultiGraph & original) const;
 
             /**
              *  Access the mutable interface of a given labeled multi-graph.
              *
              *  @return The mutable interface of the given labeled multi-graph.
              */
-            const htd::IMutableLabeledMultiGraph & accessMutableLabeledMultiGraph(const htd::ILabeledMultiGraph & original) const;
+            HTD_API const htd::IMutableLabeledMultiGraph & accessMutableLabeledMultiGraph(const htd::ILabeledMultiGraph & original) const;
 
         private:
             /**

@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledDirectedGraph interface.
      */
-    class HTD_API LabeledDirectedGraphFactory
+    class LabeledDirectedGraphFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            LabeledDirectedGraphFactory(const htd::LibraryInstance * const manager);
+            HTD_API LabeledDirectedGraphFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            LabeledDirectedGraphFactory(const LabeledDirectedGraphFactory & original);
+            HTD_API LabeledDirectedGraphFactory(const LabeledDirectedGraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            LabeledDirectedGraphFactory & operator=(const LabeledDirectedGraphFactory & original);
+            HTD_API LabeledDirectedGraphFactory & operator=(const LabeledDirectedGraphFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~LabeledDirectedGraphFactory();
+            HTD_API virtual ~LabeledDirectedGraphFactory();
 
             /**
              *  Create a new IMutableLabeledDirectedGraph object.
              *
              *  @return A new IMutableLabeledDirectedGraph object.
              */
-            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(void) const;
+            HTD_API htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(void) const;
 
             /**
              *  Create a new IMutableLabeledDirectedGraph object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledDirectedGraph object of the given size.
              */
-            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(std::size_t initialSize) const;
+            HTD_API htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableLabeledDirectedGraph object.
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledDirectedGraph object identical to the given original graph.
              */
-            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const;
+            HTD_API htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const;
 
             /**
              *  Create a new IMutableLabeledDirectedGraph object.
@@ -88,7 +88,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledDirectedGraph object identical to the given original graph.
              */
-            htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original) const;
+            HTD_API htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledDirectedGraph interface.
@@ -99,21 +99,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableLabeledDirectedGraph interface.
              */
-            void setConstructionTemplate(htd::IMutableLabeledDirectedGraph * original);
+            HTD_API void setConstructionTemplate(htd::IMutableLabeledDirectedGraph * original);
 
             /**
              *  Access the mutable interface of a given labeled directed graph.
              *
              *  @return The mutable interface of the given labeled directed graph.
              */
-            htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(htd::ILabeledDirectedGraph & original) const;
+            HTD_API htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(htd::ILabeledDirectedGraph & original) const;
 
             /**
              *  Access the mutable interface of a given labeled directed graph.
              *
              *  @return The mutable interface of the given labeled directed graph.
              */
-            const htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const;
+            HTD_API const htd::IMutableLabeledDirectedGraph & accessMutableLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const;
 
         private:
             /**

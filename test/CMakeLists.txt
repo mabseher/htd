@@ -8,14 +8,4 @@ if (BUILD_TESTING)
     add_subdirectory("${GTEST_ROOT}")
 
     add_subdirectory("${PROJECT_SOURCE_DIR}/test/htd")
-
-    set_target_properties(gtest
-        PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
-    )
-
-    set_target_properties(gtest_main
-        PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/tests"
-    )
 endif()

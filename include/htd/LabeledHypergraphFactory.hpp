@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledHypergraph interface.
      */
-    class HTD_API LabeledHypergraphFactory
+    class LabeledHypergraphFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            LabeledHypergraphFactory(const htd::LibraryInstance * const manager);
+            HTD_API LabeledHypergraphFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            LabeledHypergraphFactory(const LabeledHypergraphFactory & original);
+            HTD_API LabeledHypergraphFactory(const LabeledHypergraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            LabeledHypergraphFactory & operator=(const LabeledHypergraphFactory & original);
+            HTD_API LabeledHypergraphFactory & operator=(const LabeledHypergraphFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~LabeledHypergraphFactory();
+            HTD_API virtual ~LabeledHypergraphFactory();
 
             /**
              *  Create a new IMutableLabeledHypergraph object.
              *
              *  @return A new IMutableLabeledHypergraph object.
              */
-            htd::IMutableLabeledHypergraph * getLabeledHypergraph(void) const;
+            HTD_API htd::IMutableLabeledHypergraph * getLabeledHypergraph(void) const;
 
             /**
              *  Create a new IMutableLabeledHypergraph object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledHypergraph object of the given size.
              */
-            htd::IMutableLabeledHypergraph * getLabeledHypergraph(std::size_t initialSize) const;
+            HTD_API htd::IMutableLabeledHypergraph * getLabeledHypergraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableLabeledHypergraph object.
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledHypergraph object identical to the given original graph.
              */
-            htd::IMutableLabeledHypergraph * getLabeledHypergraph(const htd::ILabeledHypergraph & original) const;
+            HTD_API htd::IMutableLabeledHypergraph * getLabeledHypergraph(const htd::ILabeledHypergraph & original) const;
 
             /**
              *  Create a new IMutableLabeledHypergraph object.
@@ -88,7 +88,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledHypergraph object identical to the given original graph.
              */
-            htd::IMutableLabeledHypergraph * getLabeledHypergraph(const htd::ILabeledMultiHypergraph & original) const;
+            HTD_API htd::IMutableLabeledHypergraph * getLabeledHypergraph(const htd::ILabeledMultiHypergraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledHypergraph interface.
@@ -99,21 +99,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableLabeledHypergraph interface.
              */
-            void setConstructionTemplate(htd::IMutableLabeledHypergraph * original);
+            HTD_API void setConstructionTemplate(htd::IMutableLabeledHypergraph * original);
 
             /**
              *  Access the mutable interface of a given labeled hypergraph.
              *
              *  @return The mutable interface of the given labeled hypergraph.
              */
-            htd::IMutableLabeledHypergraph & accessMutableLabeledHypergraph(htd::ILabeledHypergraph & original) const;
+            HTD_API htd::IMutableLabeledHypergraph & accessMutableLabeledHypergraph(htd::ILabeledHypergraph & original) const;
 
             /**
              *  Access the mutable interface of a given labeled hypergraph.
              *
              *  @return The mutable interface of the given labeled hypergraph.
              */
-            const htd::IMutableLabeledHypergraph & accessMutableLabeledHypergraph(const htd::ILabeledHypergraph & original) const;
+            HTD_API const htd::IMutableLabeledHypergraph & accessMutableLabeledHypergraph(const htd::ILabeledHypergraph & original) const;
 
         private:
             /**

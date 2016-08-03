@@ -35,20 +35,20 @@ namespace htd
     /**
      * Implementation of the ITreeTraversal interface traversing the nodes in ascending order.
      */
-    class HTD_API InOrderTreeTraversal : public virtual htd::ITreeTraversal
+    class InOrderTreeTraversal : public virtual htd::ITreeTraversal
     {
         public:
-            InOrderTreeTraversal(void);
+            HTD_API InOrderTreeTraversal(void);
 
-            virtual ~InOrderTreeTraversal();
+            HTD_API virtual ~InOrderTreeTraversal();
 
-            void traverse(const htd::IPath & path, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const HTD_OVERRIDE;
+            HTD_API void traverse(const htd::IPath & path, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const HTD_OVERRIDE;
 
-            void traverse(const htd::IPath & path, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction, htd::vertex_t startingVertex) const HTD_OVERRIDE;
+            HTD_API void traverse(const htd::IPath & path, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction, htd::vertex_t startingVertex) const HTD_OVERRIDE;
 
-            void traverse(const htd::ITree & tree, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const HTD_OVERRIDE;
+            HTD_API void traverse(const htd::ITree & tree, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const HTD_OVERRIDE;
 
-            void traverse(const htd::ITree & tree, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction, htd::vertex_t startingVertex) const HTD_OVERRIDE;
+            HTD_API void traverse(const htd::ITree & tree, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction, htd::vertex_t startingVertex) const HTD_OVERRIDE;
     };
 }
 

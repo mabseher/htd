@@ -39,7 +39,7 @@ namespace htd
      *  lead to the fact that the bag sizes in the resulting path decomposition are larger than those
      *  observed in the input tree decomposition.
      */
-    class HTD_API JoinNodeReplacementOperation : public virtual htd::ITreeDecompositionManipulationOperation
+    class JoinNodeReplacementOperation : public virtual htd::ITreeDecompositionManipulationOperation
     {
         public:
             /**
@@ -47,47 +47,47 @@ namespace htd
              *
              *  @param[in] manager           The management instance to which the new manipulation operation belongs.
              */
-            JoinNodeReplacementOperation(const htd::LibraryInstance * const manager);
+            HTD_API JoinNodeReplacementOperation(const htd::LibraryInstance * const manager);
 
-            virtual ~JoinNodeReplacementOperation();
+            HTD_API virtual ~JoinNodeReplacementOperation();
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
 
-            bool isLocalOperation(void) const HTD_OVERRIDE;
+            HTD_API bool isLocalOperation(void) const HTD_OVERRIDE;
 
-            bool createsTreeNodes(void) const HTD_OVERRIDE;
+            HTD_API bool createsTreeNodes(void) const HTD_OVERRIDE;
 
-            bool removesTreeNodes(void) const HTD_OVERRIDE;
+            HTD_API bool removesTreeNodes(void) const HTD_OVERRIDE;
 
-            bool modifiesBagContents(void) const HTD_OVERRIDE;
+            HTD_API bool modifiesBagContents(void) const HTD_OVERRIDE;
 
-            bool createsSubsetMaximalBags(void) const HTD_OVERRIDE;
+            HTD_API bool createsSubsetMaximalBags(void) const HTD_OVERRIDE;
 
-            bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
+            HTD_API bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
-            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-            JoinNodeReplacementOperation * clone(void) const HTD_OVERRIDE;
+            HTD_API JoinNodeReplacementOperation * clone(void) const HTD_OVERRIDE;
 #else
             /**
              *  Create a deep copy of the current decomposition manipulation operation.
              *
              *  @return A new JoinNodeReplacementOperation object identical to the current decomposition manipulation operation.
              */
-            JoinNodeReplacementOperation * clone(void) const;
+            HTD_API JoinNodeReplacementOperation * clone(void) const;
 
-            htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+            HTD_API htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 
-            htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+            HTD_API htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
 
         private:

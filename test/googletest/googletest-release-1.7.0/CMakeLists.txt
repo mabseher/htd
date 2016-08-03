@@ -7,7 +7,7 @@
 
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
 # make it prominent in the GUI.
-option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." ON)
+# option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." ON)
 
 # When other libraries are using a shared version of runtime libraries,
 # Google Test also has to use one.
@@ -70,6 +70,14 @@ link_directories(${gtest_BINARY_DIR}/src)
 cxx_library(gtest "${cxx_strict}" src/gtest-all.cc)
 cxx_library(gtest_main "${cxx_strict}" src/gtest_main.cc)
 target_link_libraries(gtest_main gtest)
+
+if (MSVC)
+    add_custom_command(TARGET gtest POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:gtest>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>")
+
+    add_custom_command(TARGET gtest_main POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:gtest_main>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>")
+endif (MSVC)
 
 ########################################################################
 #

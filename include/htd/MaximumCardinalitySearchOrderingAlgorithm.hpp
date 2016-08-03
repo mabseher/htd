@@ -35,7 +35,7 @@ namespace htd
     /**
      *  Implementation of the IOrderingAlgorithm interface based on the maximum-cardinality search elimination ordering algorithm.
      */
-    class HTD_API MaximumCardinalitySearchOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
+    class MaximumCardinalitySearchOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
             /**
@@ -43,19 +43,19 @@ namespace htd
              *
              *  @param[in] manager   The management instance to which the new algorithm belongs.
              */
-            MaximumCardinalitySearchOrderingAlgorithm(const htd::LibraryInstance * const manager);
+            HTD_API MaximumCardinalitySearchOrderingAlgorithm(const htd::LibraryInstance * const manager);
             
-            virtual ~MaximumCardinalitySearchOrderingAlgorithm();
+            HTD_API virtual ~MaximumCardinalitySearchOrderingAlgorithm();
             
-            htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
-            MaximumCardinalitySearchOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
+            HTD_API MaximumCardinalitySearchOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:
             /**

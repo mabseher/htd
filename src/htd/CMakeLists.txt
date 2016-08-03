@@ -49,10 +49,9 @@ install(TARGETS htd DESTINATION lib)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd" DESTINATION include)
 
 if(BUILD_TESTING)
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
-
     if(MSVC)
         add_custom_command(TARGET htd POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"
             COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE_DIR:htd>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
     endif(MSVC)
 endif(BUILD_TESTING)

@@ -53,26 +53,6 @@ if(NOT DEFINED BUILD_TESTING)
     set(BUILD_TESTING OFF)
 endif()
 
-if(BUILD_TESTING)
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
-
-    message("CREATED: ${CMAKE_BINARY_DIR}/tests/")
-
-    if(MSVC)
-        message("BUILD TYPE: XXX${CMAKE_BUILD_TYPE}XXX")
-
-        if(CMAKE_BUILD_TYPE MATCHES Debug)
-            file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests/Debug/")
-
-            message("CREATED: ${CMAKE_BINARY_DIR}/tests/Debug/")
-        elseif(CMAKE_BUILD_TYPE MATCHES Release)
-            file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests/Release/")
-
-            message("CREATED: ${CMAKE_BINARY_DIR}/tests/Release/")
-        endif(CMAKE_BUILD_TYPE MATCHES Debug)
-    endif(MSVC)
-endif(BUILD_TESTING)
-
 subdirs(src/htd)
 subdirs(src/htd_cli)
 subdirs(src/htd_main)

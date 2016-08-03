@@ -56,11 +56,17 @@ endif()
 if (BUILD_TESTING)
     file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
 
+    message("CREATED: ${CMAKE_BINARY_DIR}/tests/")
+
     if (MSVC)
         if(CMAKE_BUILD_TYPE MATCHES Debug)
-            file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests/Debug")
+            file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests/Debug/")
+
+            message("CREATED: ${CMAKE_BINARY_DIR}/tests/Debug/")
         elseif(CMAKE_BUILD_TYPE MATCHES Release)
-            file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests/Release")
+            file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests/Release/")
+
+            message("CREATED: ${CMAKE_BINARY_DIR}/tests/Release/")
         endif(CMAKE_BUILD_TYPE MATCHES Debug)
     endif (MSVC)
 endif (BUILD_TESTING)

@@ -52,7 +52,9 @@ if (BUILD_TESTING)
     file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
 
     if (MSVC)
+        file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>")
+
         add_custom_command(TARGET htd POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd.dll" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>")
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd.dll" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
     endif (MSVC)
 endif (BUILD_TESTING)

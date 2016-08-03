@@ -38,6 +38,6 @@ install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd_cli" DESTINATION include)
 if (BUILD_TESTING)
     if (MSVC)
         add_custom_command(TARGET htd_cli POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd_cli.dll" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>")
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_BINARY_DIR}/bin/$<CONFIGURATION>/htd_cli.dll" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
     endif (MSVC)
 endif (BUILD_TESTING)

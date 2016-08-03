@@ -37,22 +37,22 @@ set_target_properties(htd
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
-if (UNIX)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden -Dhtd_EXPORTS")
-endif (UNIX)
+if(UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden -Dhtd_EXPORTS")
+endif(UNIX)
 
-if (BUILD_SHARED_LIBS)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHTD_SHARED_LIBRARY")
-endif (BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHTD_SHARED_LIBRARY")
+endif(BUILD_SHARED_LIBS)
 
 install(TARGETS htd DESTINATION lib)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd" DESTINATION include)
 
-if (BUILD_TESTING)
+if(BUILD_TESTING)
     file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
 
-    if (MSVC)
+    if(MSVC)
         add_custom_command(TARGET htd POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE_DIR:htd>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
-    endif (MSVC)
-endif (BUILD_TESTING)
+    endif(MSVC)
+endif(BUILD_TESTING)

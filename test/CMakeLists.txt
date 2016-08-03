@@ -1,4 +1,4 @@
-if (BUILD_TESTING)
+if(BUILD_TESTING)
     enable_testing()
 
     set(GTEST_ROOT "${PROJECT_SOURCE_DIR}/test/googletest/googletest-release-1.7.0")

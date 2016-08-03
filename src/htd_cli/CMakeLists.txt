@@ -8,13 +8,13 @@ set(HTD_CLI_SOVERSION_REVISION 0)
 set(HTD_CLI_SOVERSION_AGE 0)
 set(HTD_CLI_SOVERSION ${HTD_CLI_SOVERSION_INTERFACE}.${HTD_CLI_SOVERSION_REVISION}.${HTD_CLI_SOVERSION_AGE})
 
-if (UNIX)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden -Dhtd_cli_EXPORTS")
-endif (UNIX)
+if(UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden -Dhtd_cli_EXPORTS")
+endif(UNIX)
 
-if (BUILD_SHARED_LIBS)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHTD_CLI_SHARED_LIBRARY")
-endif (BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHTD_CLI_SHARED_LIBRARY")
+endif(BUILD_SHARED_LIBS)
 
 add_library(htd_cli ${HTD_CLI_SRC_LIST} ${HEADER_LIST})
 
@@ -35,9 +35,9 @@ set_target_properties(htd_cli
 install(TARGETS htd_cli DESTINATION lib)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd_cli" DESTINATION include)
 
-if (BUILD_TESTING)
-    if (MSVC)
+if(BUILD_TESTING)
+    if(MSVC)
         add_custom_command(TARGET htd_cli POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE_DIR:htd_cli>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
-    endif (MSVC)
-endif (BUILD_TESTING)
+    endif(MSVC)
+endif(BUILD_TESTING)

@@ -17,26 +17,26 @@ include(CTest)
 include(CheckIncludeFileCXX)
 include(WriteCompilerDetectionHeader)
 
-if (NOT CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING
         "Please choose the type of build. Options are: None Debug Release RelWithDebInfo MinSizeRel."
         FORCE )
 endif()
 
-if (NOT DEFINED BUILD_SHARED_LIBS)
+if(NOT DEFINED BUILD_SHARED_LIBS)
     set(BUILD_SHARED_LIBS ON)
 endif()
 
-if (DEFINED HTD_DEBUG_OUTPUT)
-    if (HTD_DEBUG_OUTPUT)
+if(DEFINED HTD_DEBUG_OUTPUT)
+    if(HTD_DEBUG_OUTPUT)
         message("Debugging output is enabled!")
 
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHTD_DEBUG_OUTPUT" )
     endif()
 endif()
 
-if (DEFINED HTD_USE_EXTENDED_IDENTIFIERS)
-    if (HTD_USE_EXTENDED_IDENTIFIERS)
+if(DEFINED HTD_USE_EXTENDED_IDENTIFIERS)
+    if(HTD_USE_EXTENDED_IDENTIFIERS)
         message("Extended identifiers will be used!")
 
         set(HTD_ID_TYPE "std::size_t" )
@@ -47,18 +47,18 @@ else()
     set(HTD_ID_TYPE "std::uint_least32_t" )
 endif()
 
-if (NOT DEFINED BUILD_TESTING)
+if(NOT DEFINED BUILD_TESTING)
     message("Tests are disabled!")
 
     set(BUILD_TESTING OFF)
 endif()
 
-if (BUILD_TESTING)
+if(BUILD_TESTING)
     file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests")
 
     message("CREATED: ${CMAKE_BINARY_DIR}/tests/")
 
-    if (MSVC)
+    if(MSVC)
         if(CMAKE_BUILD_TYPE MATCHES Debug)
             file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests/Debug/")
 
@@ -68,8 +68,8 @@ if (BUILD_TESTING)
 
             message("CREATED: ${CMAKE_BINARY_DIR}/tests/Release/")
         endif(CMAKE_BUILD_TYPE MATCHES Debug)
-    endif (MSVC)
-endif (BUILD_TESTING)
+    endif(MSVC)
+endif(BUILD_TESTING)
 
 subdirs(src/htd)
 subdirs(src/htd_cli)

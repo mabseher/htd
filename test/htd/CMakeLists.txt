@@ -4,9 +4,9 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 
 include_directories("${GTEST_INCLUDE_DIR}")
 
-if (UNIX)
+if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
-endif (UNIX)
+endif(UNIX)
 
 file(GLOB_RECURSE HEADER_LIST ${PROJECT_SOURCE_DIR}/include/*.hpp)
 
@@ -26,8 +26,8 @@ foreach(TEST_PROGRAM ${TEST_PROGRAMS})
 
     add_test(NAME "${TEST_NAME}" COMMAND "$<TARGET_FILE:${TEST_NAME}>")
 
-    if (MSVC)
+    if(MSVC)
         add_custom_command(TARGET ${TEST_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${TEST_NAME}>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
-    endif (MSVC)
+    endif(MSVC)
 endforeach()

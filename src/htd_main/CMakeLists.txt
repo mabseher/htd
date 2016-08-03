@@ -20,7 +20,7 @@ set_target_properties(htd_main
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
-if (UNIX)
+if(UNIX)
     configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_exhaustive.sh"
                    "${CMAKE_BINARY_DIR}/bin/htd_gr2td_minfill_exhaustive.sh" COPYONLY)
 
@@ -41,14 +41,14 @@ if (UNIX)
 
     configure_file("${CMAKE_SOURCE_DIR}/scripts/pace16_build_test.sh"
                    "${CMAKE_BINARY_DIR}/bin/pace16_build_test.sh" COPYONLY)
-endif (UNIX)
+endif(UNIX)
 
 target_link_libraries(htd_main htd htd_cli)
 
-if (MSVC)
+if(MSVC)
     add_custom_command(TARGET htd_main POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE_DIR:htd>" "$<TARGET_FILE_DIR:htd_main>"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE_DIR:htd_cli>" "$<TARGET_FILE_DIR:htd_main>")
-endif (MSVC)
+endif(MSVC)
 
 install(TARGETS htd_main DESTINATION bin)

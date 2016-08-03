@@ -71,13 +71,13 @@ cxx_library(gtest "${cxx_strict}" src/gtest-all.cc)
 cxx_library(gtest_main "${cxx_strict}" src/gtest_main.cc)
 target_link_libraries(gtest_main gtest)
 
-if (MSVC)
+if(MSVC)
     add_custom_command(TARGET gtest POST_BUILD
         COMMAND ${CMAKE_COMMAND} -Wdev --debug-output --trace-expand -E copy_if_different "$<TARGET_FILE:gtest>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
 
     add_custom_command(TARGET gtest_main POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:gtest_main>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
-endif (MSVC)
+endif(MSVC)
 
 ########################################################################
 #

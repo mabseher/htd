@@ -59,6 +59,8 @@ if(BUILD_TESTING)
     message("CREATED: ${CMAKE_BINARY_DIR}/tests/")
 
     if(MSVC)
+        message("BUILD TYPE: XXX${CMAKE_BUILD_TYPE}XXX")
+
         if(CMAKE_BUILD_TYPE MATCHES Debug)
             file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/tests/Debug/")
 

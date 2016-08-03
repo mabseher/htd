@@ -40,7 +40,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableGraphDecomposition interface.
      */
-    class HTD_API GraphDecomposition : public htd::LabeledMultiHypergraph, public virtual htd::IMutableGraphDecomposition
+    class GraphDecomposition : public htd::LabeledMultiHypergraph, public virtual htd::IMutableGraphDecomposition
     {
         public:
             /**
@@ -48,78 +48,78 @@ namespace htd
              *
              *  @param[in] manager   The management instance to which the new graph decomposition belongs.
              */
-            GraphDecomposition(const htd::LibraryInstance * const manager);
+            HTD_API GraphDecomposition(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for a graph decomposition.
              *
              *  @param[in] original  The original graph decomposition.
              */
-            GraphDecomposition(const GraphDecomposition & original);
+            HTD_API GraphDecomposition(const GraphDecomposition & original);
 
             /**
              *  Copy constructor for a graph decomposition.
              *
              *  @param[in] original  The original multi-hypergraph.
              */
-            GraphDecomposition(const htd::IMultiHypergraph & original);
+            HTD_API GraphDecomposition(const htd::IMultiHypergraph & original);
 
             /**
              *  Copy constructor for a graph decomposition.
              *
              *  @param[in] original  The original labeled multi-hypergraph.
              */
-            GraphDecomposition(const htd::ILabeledMultiHypergraph & original);
+            HTD_API GraphDecomposition(const htd::ILabeledMultiHypergraph & original);
 
             /**
              *  Copy constructor for a graph decomposition.
              *
              *  @param[in] original  The original graph decomposition.
              */
-            GraphDecomposition(const htd::IGraphDecomposition & original);
+            HTD_API GraphDecomposition(const htd::IGraphDecomposition & original);
             
-            virtual ~GraphDecomposition();
+            HTD_API virtual ~GraphDecomposition();
 
-            htd::vertex_t addVertex(void) HTD_OVERRIDE;
+            HTD_API htd::vertex_t addVertex(void) HTD_OVERRIDE;
 
-            htd::vertex_t addVertex(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;
+            HTD_API htd::vertex_t addVertex(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;
 
-            htd::vertex_t addVertex(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) HTD_OVERRIDE;
+            HTD_API htd::vertex_t addVertex(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) HTD_OVERRIDE;
 
-            htd::vertex_t addVertices(std::size_t count) HTD_OVERRIDE;
+            HTD_API htd::vertex_t addVertices(std::size_t count) HTD_OVERRIDE;
 
-            void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
+            HTD_API void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 
-            std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) HTD_OVERRIDE;
+            HTD_API std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) HTD_OVERRIDE;
 
-            const std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API const std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) HTD_OVERRIDE;
+            HTD_API htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) HTD_OVERRIDE;
 
-            const htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API const htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            std::size_t minimumBagSize(void) const HTD_OVERRIDE;
+            HTD_API std::size_t minimumBagSize(void) const HTD_OVERRIDE;
 
-            std::size_t maximumBagSize(void) const HTD_OVERRIDE;
+            HTD_API std::size_t maximumBagSize(void) const HTD_OVERRIDE;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-            GraphDecomposition * clone(void) const HTD_OVERRIDE;
+            HTD_API GraphDecomposition * clone(void) const HTD_OVERRIDE;
 #else
-            GraphDecomposition * clone(void) const;
+            HTD_API GraphDecomposition * clone(void) const;
 
-            htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+            HTD_API htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
 
-            htd::ILabeledMultiHypergraph * cloneLabeledMultiHypergraph(void) const HTD_OVERRIDE;
+            HTD_API htd::ILabeledMultiHypergraph * cloneLabeledMultiHypergraph(void) const HTD_OVERRIDE;
 
-            htd::IGraphDecomposition * cloneGraphDecomposition(void) const HTD_OVERRIDE;
+            HTD_API htd::IGraphDecomposition * cloneGraphDecomposition(void) const HTD_OVERRIDE;
 
-            htd::IMutableMultiHypergraph * cloneMutableMultiHypergraph(void) const HTD_OVERRIDE;
+            HTD_API htd::IMutableMultiHypergraph * cloneMutableMultiHypergraph(void) const HTD_OVERRIDE;
 
-            htd::IMutableLabeledMultiHypergraph * cloneMutableLabeledMultiHypergraph(void) const HTD_OVERRIDE;
+            HTD_API htd::IMutableLabeledMultiHypergraph * cloneMutableLabeledMultiHypergraph(void) const HTD_OVERRIDE;
 
-            htd::IMutableGraphDecomposition * cloneMutableGraphDecomposition(void) const HTD_OVERRIDE;
+            HTD_API htd::IMutableGraphDecomposition * cloneMutableGraphDecomposition(void) const HTD_OVERRIDE;
 #endif
 
             /**
@@ -127,26 +127,26 @@ namespace htd
              *
              *  @param[in] original  The original graph decomposition.
              */
-            GraphDecomposition & operator=(const GraphDecomposition & original);
+            HTD_API GraphDecomposition & operator=(const GraphDecomposition & original);
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-            GraphDecomposition & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+            HTD_API GraphDecomposition & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
 
-            GraphDecomposition & operator=(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
+            HTD_API GraphDecomposition & operator=(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
 
-            GraphDecomposition & operator=(const htd::IGraphDecomposition & original) HTD_OVERRIDE;
+            HTD_API GraphDecomposition & operator=(const htd::IGraphDecomposition & original) HTD_OVERRIDE;
 #else
-            GraphDecomposition & operator=(const htd::IMultiHypergraph & original);
+            HTD_API GraphDecomposition & operator=(const htd::IMultiHypergraph & original);
 
-            GraphDecomposition & operator=(const htd::ILabeledMultiHypergraph & original);
+            HTD_API GraphDecomposition & operator=(const htd::ILabeledMultiHypergraph & original);
 
-            GraphDecomposition & operator=(const htd::IGraphDecomposition & original);
+            HTD_API GraphDecomposition & operator=(const htd::IGraphDecomposition & original);
 
-            void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+            HTD_API void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
 
-            void assign(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
+            HTD_API void assign(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
 
-            void assign(const htd::IGraphDecomposition & original) HTD_OVERRIDE;
+            HTD_API void assign(const htd::IGraphDecomposition & original) HTD_OVERRIDE;
 #endif
 
         private:

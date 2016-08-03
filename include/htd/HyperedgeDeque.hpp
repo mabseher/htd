@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Wrapper for existing deques of hyperedges.
      */
-    class HTD_API HyperedgeDeque : public htd::IHyperedgeCollection
+    class HyperedgeDeque : public htd::IHyperedgeCollection
     {
         public:
             /**
@@ -44,58 +44,58 @@ namespace htd
              *
              *  @param[in] baseCollection   The underlying hyperedge collection.
              */
-            HyperedgeDeque(const std::deque<htd::Hyperedge> & baseCollection);
+            HTD_API HyperedgeDeque(const std::deque<htd::Hyperedge> & baseCollection);
 
             /**
              *  Constructor for a HyperedgeDeque.
              *
              *  @param[in] baseCollection   The underlying hyperedge collection.
              */
-            HyperedgeDeque(std::deque<htd::Hyperedge> && baseCollection);
+            HTD_API HyperedgeDeque(std::deque<htd::Hyperedge> && baseCollection);
 
             /**
              *  Constructor for a HyperedgeDeque.
              *
              *  @param[in] baseCollection   The underlying hyperedge collection.
              */
-            HyperedgeDeque(const std::shared_ptr<std::deque<htd::Hyperedge>> & baseCollection);
+            HTD_API HyperedgeDeque(const std::shared_ptr<std::deque<htd::Hyperedge>> & baseCollection);
 
             /**
              *  Copy constructor for a HyperedgeDeque object.
              *
              *  @param[in] original  The original HyperedgeDeque object.
              */
-            HyperedgeDeque(const HyperedgeDeque & original);
+            HTD_API HyperedgeDeque(const HyperedgeDeque & original);
 
             /**
              *  Move constructor for a HyperedgeDeque object.
              *
              *  @param[in] original  The original HyperedgeDeque object.
              */
-            HyperedgeDeque(HyperedgeDeque && original);
+            HTD_API HyperedgeDeque(HyperedgeDeque && original);
 
             /**
              *  Destructor for a HyperedgeDeque object.
              */
-            virtual ~HyperedgeDeque();
+            HTD_API virtual ~HyperedgeDeque();
 
-            bool empty(void) const HTD_OVERRIDE;
+            HTD_API bool empty(void) const HTD_OVERRIDE;
 
-            std::size_t size(void) const HTD_OVERRIDE;
+            HTD_API std::size_t size(void) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & at(htd::index_t index) const HTD_OVERRIDE;
+            HTD_API const htd::Hyperedge & at(htd::index_t index) const HTD_OVERRIDE;
 
-            htd::ConstIterator<htd::Hyperedge> begin(void) const HTD_OVERRIDE;
+            HTD_API htd::ConstIterator<htd::Hyperedge> begin(void) const HTD_OVERRIDE;
 
-            htd::ConstIterator<htd::Hyperedge> end(void) const HTD_OVERRIDE;
+            HTD_API htd::ConstIterator<htd::Hyperedge> end(void) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & operator[](htd::index_t index) const HTD_OVERRIDE;
+            HTD_API const htd::Hyperedge & operator[](htd::index_t index) const HTD_OVERRIDE;
 
-            bool operator==(const htd::IHyperedgeCollection & rhs) const HTD_OVERRIDE;
+            HTD_API bool operator==(const htd::IHyperedgeCollection & rhs) const HTD_OVERRIDE;
 
-            bool operator!=(const htd::IHyperedgeCollection & rhs) const HTD_OVERRIDE;
+            HTD_API bool operator!=(const htd::IHyperedgeCollection & rhs) const HTD_OVERRIDE;
 
-            HyperedgeDeque * clone(void) const HTD_OVERRIDE;
+            HTD_API HyperedgeDeque * clone(void) const HTD_OVERRIDE;
 
         private:
             std::shared_ptr<std::deque<htd::Hyperedge>> baseCollection_;

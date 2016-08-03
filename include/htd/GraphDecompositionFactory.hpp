@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableGraphDecomposition interface.
      */
-    class HTD_API GraphDecompositionFactory
+    class GraphDecompositionFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            GraphDecompositionFactory(const htd::LibraryInstance * const manager);
+            HTD_API GraphDecompositionFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            GraphDecompositionFactory(const GraphDecompositionFactory & original);
+            HTD_API GraphDecompositionFactory(const GraphDecompositionFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            GraphDecompositionFactory & operator=(const GraphDecompositionFactory & original);
+            HTD_API GraphDecompositionFactory & operator=(const GraphDecompositionFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~GraphDecompositionFactory();
+            HTD_API virtual ~GraphDecompositionFactory();
 
             /**
              *  Create a new IMutableGraphDecomposition object.
              *
              *  @return A new IMutableGraphDecomposition object.
              */
-            htd::IMutableGraphDecomposition * getGraphDecomposition(void) const;
+            HTD_API htd::IMutableGraphDecomposition * getGraphDecomposition(void) const;
 
             /**
              *  Create a new IMutableGraphDecomposition object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableGraphDecomposition object identical to the given original graph.
              */
-            htd::IMutableGraphDecomposition * getGraphDecomposition(const htd::IGraphDecomposition & original) const;
+            HTD_API htd::IMutableGraphDecomposition * getGraphDecomposition(const htd::IGraphDecomposition & original) const;
 
             /**
              *  Set the default implementation of the IMutableGraphDecomposition interface.
@@ -81,21 +81,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableGraphDecomposition interface.
              */
-            void setConstructionTemplate(htd::IMutableGraphDecomposition * original);
+            HTD_API void setConstructionTemplate(htd::IMutableGraphDecomposition * original);
 
             /**
              *  Access the mutable interface of a given graph decomposition.
              *
              *  @return The mutable interface of the given graph decomposition.
              */
-            htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(htd::IGraphDecomposition & original) const;
+            HTD_API htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(htd::IGraphDecomposition & original) const;
 
             /**
              *  Access the mutable interface of a given graph decomposition.
              *
              *  @return The mutable interface of the given graph decomposition.
              */
-            const htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(const htd::IGraphDecomposition & original) const;
+            HTD_API const htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(const htd::IGraphDecomposition & original) const;
 
         private:
             /**

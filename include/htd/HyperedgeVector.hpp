@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Wrapper for existing vectors of hyperedges.
      */
-    class HTD_API HyperedgeVector : public htd::IHyperedgeCollection
+    class HyperedgeVector : public htd::IHyperedgeCollection
     {
         public:
             /**
@@ -44,58 +44,58 @@ namespace htd
              *
              *  @param[in] baseCollection   The underlying hyperedge collection.
              */
-            HyperedgeVector(const std::vector<htd::Hyperedge> & baseCollection);
+            HTD_API HyperedgeVector(const std::vector<htd::Hyperedge> & baseCollection);
 
             /**
              *  Constructor for a HyperedgeVector.
              *
              *  @param[in] baseCollection   The underlying hyperedge collection.
              */
-            HyperedgeVector(std::vector<htd::Hyperedge> && baseCollection);
+            HTD_API HyperedgeVector(std::vector<htd::Hyperedge> && baseCollection);
 
             /**
              *  Constructor for a HyperedgeVector.
              *
              *  @param[in] baseCollection   The underlying hyperedge collection.
              */
-            HyperedgeVector(const std::shared_ptr<std::vector<htd::Hyperedge>> & baseCollection);
+            HTD_API HyperedgeVector(const std::shared_ptr<std::vector<htd::Hyperedge>> & baseCollection);
 
             /**
              *  Copy constructor for a HyperedgeVector object.
              *
              *  @param[in] original  The original HyperedgeVector object.
              */
-            HyperedgeVector(const HyperedgeVector & original);
+            HTD_API HyperedgeVector(const HyperedgeVector & original);
 
             /**
              *  Move constructor for a HyperedgeVector object.
              *
              *  @param[in] original  The original HyperedgeVector object.
              */
-            HyperedgeVector(HyperedgeVector && original);
+            HTD_API HyperedgeVector(HyperedgeVector && original);
 
             /**
              *  Destructor for a HyperedgeVector object.
              */
-            virtual ~HyperedgeVector();
+            HTD_API virtual ~HyperedgeVector();
 
-            bool empty(void) const HTD_OVERRIDE;
+            HTD_API bool empty(void) const HTD_OVERRIDE;
 
-            std::size_t size(void) const HTD_OVERRIDE;
+            HTD_API std::size_t size(void) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & at(htd::index_t index) const HTD_OVERRIDE;
+            HTD_API const htd::Hyperedge & at(htd::index_t index) const HTD_OVERRIDE;
 
-            htd::ConstIterator<htd::Hyperedge> begin(void) const HTD_OVERRIDE;
+            HTD_API htd::ConstIterator<htd::Hyperedge> begin(void) const HTD_OVERRIDE;
 
-            htd::ConstIterator<htd::Hyperedge> end(void) const HTD_OVERRIDE;
+            HTD_API htd::ConstIterator<htd::Hyperedge> end(void) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & operator[](htd::index_t index) const HTD_OVERRIDE;
+            HTD_API const htd::Hyperedge & operator[](htd::index_t index) const HTD_OVERRIDE;
 
-            bool operator==(const htd::IHyperedgeCollection & rhs) const HTD_OVERRIDE;
+            HTD_API bool operator==(const htd::IHyperedgeCollection & rhs) const HTD_OVERRIDE;
 
-            bool operator!=(const htd::IHyperedgeCollection & rhs) const HTD_OVERRIDE;
+            HTD_API bool operator!=(const htd::IHyperedgeCollection & rhs) const HTD_OVERRIDE;
 
-            HyperedgeVector * clone(void) const HTD_OVERRIDE;
+            HTD_API HyperedgeVector * clone(void) const HTD_OVERRIDE;
 
         private:
             std::shared_ptr<std::vector<htd::Hyperedge>> baseCollection_;

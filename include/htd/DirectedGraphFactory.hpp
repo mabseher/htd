@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableDirectedGraph interface.
      */
-    class HTD_API DirectedGraphFactory
+    class DirectedGraphFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            DirectedGraphFactory(const htd::LibraryInstance * const manager);
+            HTD_API DirectedGraphFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            DirectedGraphFactory(const DirectedGraphFactory & original);
+            HTD_API DirectedGraphFactory(const DirectedGraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            DirectedGraphFactory & operator=(const DirectedGraphFactory & original);
+            HTD_API DirectedGraphFactory & operator=(const DirectedGraphFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~DirectedGraphFactory();
+            HTD_API virtual ~DirectedGraphFactory();
 
             /**
              *  Create a new IMutableDirectedGraph object.
              *
              *  @return A new IMutableDirectedGraph object.
              */
-            htd::IMutableDirectedGraph * getDirectedGraph(void) const;
+            HTD_API htd::IMutableDirectedGraph * getDirectedGraph(void) const;
 
             /**
              *  Create a new IMutableDirectedGraph object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableDirectedGraph object of the given size.
              */
-            htd::IMutableDirectedGraph * getDirectedGraph(std::size_t initialSize) const;
+            HTD_API htd::IMutableDirectedGraph * getDirectedGraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableDirectedGraph object.
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableDirectedGraph object identical to the given original graph.
              */
-            htd::IMutableDirectedGraph * getDirectedGraph(const htd::IDirectedGraph & original) const;
+            HTD_API htd::IMutableDirectedGraph * getDirectedGraph(const htd::IDirectedGraph & original) const;
 
             /**
              *  Create a new IMutableDirectedGraph object.
@@ -88,7 +88,7 @@ namespace htd
              *
              *  @return A new IMutableDirectedGraph object identical to the given original graph.
              */
-            htd::IMutableDirectedGraph * getDirectedGraph(const htd::IDirectedMultiGraph & original) const;
+            HTD_API htd::IMutableDirectedGraph * getDirectedGraph(const htd::IDirectedMultiGraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableDirectedGraph interface.
@@ -99,21 +99,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableDirectedGraph interface.
              */
-            void setConstructionTemplate(htd::IMutableDirectedGraph * original);
+            HTD_API void setConstructionTemplate(htd::IMutableDirectedGraph * original);
 
             /**
              *  Access the mutable interface of a given directed graph.
              *
              *  @return The mutable interface of the given directed graph.
              */
-            htd::IMutableDirectedGraph & accessMutableDirectedGraph(htd::IDirectedGraph & original) const;
+            HTD_API htd::IMutableDirectedGraph & accessMutableDirectedGraph(htd::IDirectedGraph & original) const;
 
             /**
              *  Access the mutable interface of a given directed graph.
              *
              *  @return The mutable interface of the given directed graph.
              */
-            const htd::IMutableDirectedGraph & accessMutableDirectedGraph(const htd::IDirectedGraph & original) const;
+            HTD_API const htd::IMutableDirectedGraph & accessMutableDirectedGraph(const htd::IDirectedGraph & original) const;
 
         private:
             /**

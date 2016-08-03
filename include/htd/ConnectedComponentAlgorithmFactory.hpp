@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IConnectedComponentAlgorithm interface.
      */
-    class HTD_API ConnectedComponentAlgorithmFactory
+    class ConnectedComponentAlgorithmFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            ConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager);
+            HTD_API ConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            ConnectedComponentAlgorithmFactory(const ConnectedComponentAlgorithmFactory & original);
+            HTD_API ConnectedComponentAlgorithmFactory(const ConnectedComponentAlgorithmFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            ConnectedComponentAlgorithmFactory & operator=(const ConnectedComponentAlgorithmFactory & original);
+            HTD_API ConnectedComponentAlgorithmFactory & operator=(const ConnectedComponentAlgorithmFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~ConnectedComponentAlgorithmFactory();
+            HTD_API virtual ~ConnectedComponentAlgorithmFactory();
 
             /**
              *  Create a new IConnectedComponentAlgorithm object.
              *
              *  @return A new IConnectedComponentAlgorithm object.
              */
-            htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(void) const;
+            HTD_API htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(void) const;
 
             /**
              *  Create a new IConnectedComponentAlgorithm object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IConnectedComponentAlgorithm object.
              */
-            htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const;
+            HTD_API htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const;
 
             /**
              *  Set the default implementation of the IConnectedComponentAlgorithm interface.
@@ -81,7 +81,7 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IConnectedComponentAlgorithm interface.
              */
-            void setConstructionTemplate(htd::IConnectedComponentAlgorithm * original);
+            HTD_API void setConstructionTemplate(htd::IConnectedComponentAlgorithm * original);
 
         private:
             /**

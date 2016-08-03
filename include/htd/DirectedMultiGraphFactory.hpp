@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableDirectedMultiGraph interface.
      */
-    class HTD_API DirectedMultiGraphFactory
+    class DirectedMultiGraphFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            DirectedMultiGraphFactory(const htd::LibraryInstance * const manager);
+            HTD_API DirectedMultiGraphFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            DirectedMultiGraphFactory(const DirectedMultiGraphFactory & original);
+            HTD_API DirectedMultiGraphFactory(const DirectedMultiGraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            DirectedMultiGraphFactory & operator=(const DirectedMultiGraphFactory & original);
+            HTD_API DirectedMultiGraphFactory & operator=(const DirectedMultiGraphFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~DirectedMultiGraphFactory();
+            HTD_API virtual ~DirectedMultiGraphFactory();
 
             /**
              *  Create a new IMutableDirectedMultiGraph object.
              *
              *  @return A new IMutableDirectedMultiGraph object.
              */
-            htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(void) const;
+            HTD_API htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(void) const;
 
             /**
              *  Create a new IMutableDirectedMultiGraph object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableDirectedMultiGraph object of the given size.
              */
-            htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(std::size_t initialSize) const;
+            HTD_API htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableDirectedMultiGraph object.
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableDirectedMultiGraph object identical to the given original graph.
              */
-            htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(const htd::IDirectedMultiGraph & original) const;
+            HTD_API htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(const htd::IDirectedMultiGraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableDirectedMultiGraph interface.
@@ -90,21 +90,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableDirectedMultiGraph interface.
              */
-            void setConstructionTemplate(htd::IMutableDirectedMultiGraph * original);
+            HTD_API void setConstructionTemplate(htd::IMutableDirectedMultiGraph * original);
 
             /**
              *  Access the mutable interface of a given directed multi-graph.
              *
              *  @return The mutable interface of the given directed multi-graph.
              */
-            htd::IMutableDirectedMultiGraph & accessMutableDirectedMultiGraph(htd::IDirectedMultiGraph & original) const;
+            HTD_API htd::IMutableDirectedMultiGraph & accessMutableDirectedMultiGraph(htd::IDirectedMultiGraph & original) const;
 
             /**
              *  Access the mutable interface of a given directed multi-graph.
              *
              *  @return The mutable interface of the given directed multi-graph.
              */
-            const htd::IMutableDirectedMultiGraph & accessMutableDirectedMultiGraph(const htd::IDirectedMultiGraph & original) const;
+            HTD_API const htd::IMutableDirectedMultiGraph & accessMutableDirectedMultiGraph(const htd::IDirectedMultiGraph & original) const;
 
         private:
             /**

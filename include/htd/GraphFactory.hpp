@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableGraph interface.
      */
-    class HTD_API GraphFactory
+    class GraphFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            GraphFactory(const htd::LibraryInstance * const manager);
+            HTD_API GraphFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            GraphFactory(const GraphFactory & original);
+            HTD_API GraphFactory(const GraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            GraphFactory & operator=(const GraphFactory & original);
+            HTD_API GraphFactory & operator=(const GraphFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~GraphFactory();
+            HTD_API virtual ~GraphFactory();
 
             /**
              *  Create a new IMutableGraph object.
              *
              *  @return A new IMutableGraph object.
              */
-            htd::IMutableGraph * getGraph(void) const;
+            HTD_API htd::IMutableGraph * getGraph(void) const;
 
             /**
              *  Create a new IMutableGraph object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableGraph object of the given size.
              */
-            htd::IMutableGraph * getGraph(std::size_t initialSize) const;
+            HTD_API htd::IMutableGraph * getGraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableGraph object.
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableGraph object identical to the given original graph.
              */
-            htd::IMutableGraph * getGraph(const htd::IGraph & original) const;
+            HTD_API htd::IMutableGraph * getGraph(const htd::IGraph & original) const;
 
             /**
              *  Create a new IMutableGraph object.
@@ -88,7 +88,7 @@ namespace htd
              *
              *  @return A new IMutableGraph object identical to the given original graph.
              */
-            htd::IMutableGraph * getGraph(const htd::IMultiGraph & original) const;
+            HTD_API htd::IMutableGraph * getGraph(const htd::IMultiGraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableGraph interface.
@@ -99,21 +99,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableGraph interface.
              */
-            void setConstructionTemplate(htd::IMutableGraph * original);
+            HTD_API void setConstructionTemplate(htd::IMutableGraph * original);
 
             /**
              *  Access the mutable interface of a given graph.
              *
              *  @return The mutable interface of the given graph.
              */
-            htd::IMutableGraph & accessMutableGraph(htd::IGraph & original) const;
+            HTD_API htd::IMutableGraph & accessMutableGraph(htd::IGraph & original) const;
 
             /**
              *  Access the mutable interface of a given graph.
              *
              *  @return The mutable interface of the given graph.
              */
-            const htd::IMutableGraph & accessMutableGraph(const htd::IGraph & original) const;
+            HTD_API const htd::IMutableGraph & accessMutableGraph(const htd::IGraph & original) const;
 
         private:
             /**

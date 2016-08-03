@@ -45,7 +45,7 @@ namespace htd
      *  1. Evaluation: 1,2,0 (Fitness: 1@@L0, 2@@L1, 0@@L2)
      *  2. Evaluation: 1,1,5 (Fitness: 1@@L0, 1@@L1, 5@@L2)
      */
-    class HTD_API FitnessEvaluation
+    class FitnessEvaluation
     {
         public:
             /**
@@ -54,40 +54,40 @@ namespace htd
              *  @param[in] levels   The number of levels of the new fitness evaluation.
              *  @param[in] ...      The values (of type double) of the new fitness evaluation sorted by level in ascending order.
              */
-            FitnessEvaluation(int levels, ...);
+            HTD_API FitnessEvaluation(int levels, ...);
 
             /**
              *  Constructor for a fitness evaluation.
              *
              *  @param[in] values   The values of the new fitness evaluation sorted by level in ascending order.
              */
-            FitnessEvaluation(const std::vector<double> & values);
+            HTD_API FitnessEvaluation(const std::vector<double> & values);
 
             /**
              *  Constructor for a fitness evaluation.
              *
              *  @param[in] values   The values of the new fitness evaluation sorted by level in ascending order.
              */
-            FitnessEvaluation(std::vector<double> && values);
+            HTD_API FitnessEvaluation(std::vector<double> && values);
 
             /**
              *  Destructor for a fitness evaluation.
              */
-            virtual ~FitnessEvaluation();
+            HTD_API virtual ~FitnessEvaluation();
 
             /**
              *  Getter for the number of levels of the fitness evaluation.
              *
              *  @return The number of levels of the fitness evaluation.
              */
-            std::size_t levelCount(void) const HTD_NOEXCEPT;
+            HTD_API std::size_t levelCount(void) const HTD_NOEXCEPT;
 
             /**
              *  Getter for the fitness values of the fitness evaluation.
              *
              *  @return The fitness values of the fitness evaluation.
              */
-            const std::vector<double> & values(void) const HTD_NOEXCEPT;
+            HTD_API const std::vector<double> & values(void) const HTD_NOEXCEPT;
 
             /**
              *  Access the fitness value at the specific level of the fitness evaluation.
@@ -96,7 +96,7 @@ namespace htd
              *
              *  @return The fitness value at the specific level of the fitness evaluation.
              */
-            double at(htd::index_t level) const;
+            HTD_API double at(htd::index_t level) const;
 
             /**
              *  Access the fitness value at the specific level of the fitness evaluation.
@@ -105,7 +105,7 @@ namespace htd
              *
              *  @return The fitness value at the specific level of the fitness evaluation.
              */
-            double operator[](htd::index_t level) const;
+            HTD_API double operator[](htd::index_t level) const;
 
             /**
              *  Less-than operator for a fitness evaluation.
@@ -114,7 +114,7 @@ namespace htd
              *
              *  @return True if the vector returned by the values() is lexicographically smaller than rhs.values(), false otherwise.
              */
-            bool operator<(const FitnessEvaluation & rhs) const HTD_NOEXCEPT;
+            HTD_API bool operator<(const FitnessEvaluation & rhs) const HTD_NOEXCEPT;
 
             /**
              *  Greater-than operator for a fitness evaluation.
@@ -123,7 +123,7 @@ namespace htd
              *
              *  @return True if the vector returned by the values() is lexicographically greater than rhs.values(), false otherwise.
              */
-            bool operator>(const FitnessEvaluation & rhs) const HTD_NOEXCEPT;
+            HTD_API bool operator>(const FitnessEvaluation & rhs) const HTD_NOEXCEPT;
 
             /**
              *  Equality operator for a fitness evaluation.
@@ -132,7 +132,7 @@ namespace htd
              *
              *  @return True if the vector returned by the values() is equal to rhs.values(), false otherwise.
              */
-            bool operator==(const FitnessEvaluation & rhs) const HTD_NOEXCEPT;
+            HTD_API bool operator==(const FitnessEvaluation & rhs) const HTD_NOEXCEPT;
 
             /**
              *  Inequality operator for a fitness evaluation.
@@ -141,7 +141,7 @@ namespace htd
              *
              *  @return True if the vector returned by the values() is unequal to rhs.values(), false otherwise.
              */
-            bool operator!=(const FitnessEvaluation & rhs) const HTD_NOEXCEPT;
+            HTD_API bool operator!=(const FitnessEvaluation & rhs) const HTD_NOEXCEPT;
 
         private:
             /**

@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableHypergraph interface.
      */
-    class HTD_API Hypergraph : public virtual htd::IMutableHypergraph
+    class Hypergraph : public virtual htd::IMutableHypergraph
     {
         public:
             /**
@@ -44,7 +44,7 @@ namespace htd
              *
              *  @param[in] manager   The management instance to which the new hypergraph belongs.
              */
-            Hypergraph(const htd::LibraryInstance * const manager);
+            HTD_API Hypergraph(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a hypergraph.
@@ -52,135 +52,135 @@ namespace htd
              *  @param[in] manager       The management instance to which the new hypergraph belongs.
              *  @param[in] initialSize  The initial size of the created graph.
              */
-            Hypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
+            HTD_API Hypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize);
 
             /**
              *  Copy constructor for a hypergraph.
              *
              *  @param[in] original  The original hypergraph.
              */
-            Hypergraph(const Hypergraph & original);
+            HTD_API Hypergraph(const Hypergraph & original);
 
             /**
              *  Copy constructor for a hypergraph.
              *
              *  @param[in] original  The original hypergraph.
              */
-            Hypergraph(const htd::IHypergraph & original);
+            HTD_API Hypergraph(const htd::IHypergraph & original);
 
-            virtual ~Hypergraph();
+            HTD_API virtual ~Hypergraph();
             
-            std::size_t vertexCount(void) const HTD_OVERRIDE;
+            HTD_API std::size_t vertexCount(void) const HTD_OVERRIDE;
 
-            std::size_t edgeCount(void) const HTD_OVERRIDE;
+            HTD_API std::size_t edgeCount(void) const HTD_OVERRIDE;
 
-            std::size_t edgeCount(htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API std::size_t edgeCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            bool isVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API bool isVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            bool isEdge(htd::id_t edgeId) const HTD_OVERRIDE;
+            HTD_API bool isEdge(htd::id_t edgeId) const HTD_OVERRIDE;
 
-            bool isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
+            HTD_API bool isEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
 
-            bool isEdge(const std::vector<htd::vertex_t> & elements) const HTD_OVERRIDE;
+            HTD_API bool isEdge(const std::vector<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
-            bool isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const HTD_OVERRIDE;
+            HTD_API bool isEdge(const htd::ConstCollection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::id_t> associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::id_t> associatedEdgeIds(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::id_t> associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::id_t> associatedEdgeIds(const std::vector<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
-            htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
+            HTD_API htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
             
-            bool isConnected(void) const HTD_OVERRIDE;
+            HTD_API bool isConnected(void) const HTD_OVERRIDE;
             
-            bool isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
+            HTD_API bool isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
 
-            bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
+            HTD_API bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
             
-            std::size_t neighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API std::size_t neighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            void copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API void copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
+            HTD_API htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
 
-            std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
+            HTD_API std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const HTD_OVERRIDE;
 
-            htd::vertex_t isolatedVertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
+            HTD_API htd::vertex_t isolatedVertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
-            bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::Hyperedge> hyperedges(void) const HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::Hyperedge> hyperedges(void) const HTD_OVERRIDE;
 
-            htd::ConstCollection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::Hyperedge> hyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & hyperedge(htd::id_t edgeId) const HTD_OVERRIDE;
+            HTD_API const htd::Hyperedge & hyperedge(htd::id_t edgeId) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index) const HTD_OVERRIDE;
+            HTD_API const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
-            const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
+            HTD_API const htd::Hyperedge & hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            htd::FilteredHyperedgeCollection hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const HTD_OVERRIDE;
+            HTD_API htd::FilteredHyperedgeCollection hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const HTD_OVERRIDE;
 
-            htd::FilteredHyperedgeCollection hyperedgesAtPositions(std::vector<htd::index_t> && indices) const HTD_OVERRIDE;
+            HTD_API htd::FilteredHyperedgeCollection hyperedgesAtPositions(std::vector<htd::index_t> && indices) const HTD_OVERRIDE;
 
-            htd::vertex_t nextVertex(void) const HTD_OVERRIDE;
+            HTD_API htd::vertex_t nextVertex(void) const HTD_OVERRIDE;
 
-            htd::id_t nextEdgeId(void) const HTD_OVERRIDE;
+            HTD_API htd::id_t nextEdgeId(void) const HTD_OVERRIDE;
 
-            htd::vertex_t addVertex(void) HTD_OVERRIDE;
+            HTD_API htd::vertex_t addVertex(void) HTD_OVERRIDE;
 
-            htd::vertex_t addVertices(std::size_t count) HTD_OVERRIDE;
+            HTD_API htd::vertex_t addVertices(std::size_t count) HTD_OVERRIDE;
             
-            void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
+            HTD_API void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
 
-            htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+            HTD_API htd::id_t addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
-            htd::id_t addEdge(const std::vector<htd::vertex_t> & elements) HTD_OVERRIDE;
+            HTD_API htd::id_t addEdge(const std::vector<htd::vertex_t> & elements) HTD_OVERRIDE;
 
-            htd::id_t addEdge(std::vector<htd::vertex_t> && elements) HTD_OVERRIDE;
+            HTD_API htd::id_t addEdge(std::vector<htd::vertex_t> && elements) HTD_OVERRIDE;
 
-            htd::id_t addEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
+            HTD_API htd::id_t addEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
 
-            htd::id_t addEdge(const htd::Hyperedge & hyperedge) HTD_OVERRIDE;
+            HTD_API htd::id_t addEdge(const htd::Hyperedge & hyperedge) HTD_OVERRIDE;
 
-            htd::id_t addEdge(htd::Hyperedge && hyperedge) HTD_OVERRIDE;
+            HTD_API htd::id_t addEdge(htd::Hyperedge && hyperedge) HTD_OVERRIDE;
 
-            void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
+            HTD_API void removeEdge(htd::id_t edgeId) HTD_OVERRIDE;
 
-            void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
+            HTD_API void removeEdge(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_OVERRIDE;
 
-            void removeEdge(const std::vector<htd::vertex_t> & elements) HTD_OVERRIDE;
+            HTD_API void removeEdge(const std::vector<htd::vertex_t> & elements) HTD_OVERRIDE;
 
-            void removeEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
+            HTD_API void removeEdge(const htd::ConstCollection<htd::vertex_t> & elements) HTD_OVERRIDE;
 
-            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-            Hypergraph * clone(void) const HTD_OVERRIDE;
+            HTD_API Hypergraph * clone(void) const HTD_OVERRIDE;
 #else
             /**
              *  Create a deep copy of the current mutable hypergraph.
              *
              *  @return A new Hypergraph object identical to the current mutable hypergraph.
              */
-            Hypergraph * clone(void) const;
+            HTD_API Hypergraph * clone(void) const;
 
-            htd::IHypergraph * cloneHypergraph(void) const HTD_OVERRIDE;
+            HTD_API htd::IHypergraph * cloneHypergraph(void) const HTD_OVERRIDE;
 
-            htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
+            HTD_API htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
 
-            htd::IMutableHypergraph * cloneMutableHypergraph(void) const HTD_OVERRIDE;
+            HTD_API htd::IMutableHypergraph * cloneMutableHypergraph(void) const HTD_OVERRIDE;
 #endif
 
             /**
@@ -188,20 +188,20 @@ namespace htd
              *
              *  @param[in] original  The original hypergraph.
              */
-            Hypergraph & operator=(const Hypergraph & original);
+            HTD_API Hypergraph & operator=(const Hypergraph & original);
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-            Hypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
+            HTD_API Hypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
 
-            Hypergraph & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+            HTD_API Hypergraph & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
 #else
-            Hypergraph & operator=(const htd::IHypergraph & original);
+            HTD_API Hypergraph & operator=(const htd::IHypergraph & original);
 
-            Hypergraph & operator=(const htd::IMultiHypergraph & original);
+            HTD_API Hypergraph & operator=(const htd::IMultiHypergraph & original);
 
-            void assign(const htd::IHypergraph & original) HTD_OVERRIDE;
+            HTD_API void assign(const htd::IHypergraph & original) HTD_OVERRIDE;
 
-            void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
+            HTD_API void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
 #endif
 
         private:

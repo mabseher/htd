@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableTreeDecomposition interface.
      */
-    class HTD_API TreeDecompositionFactory
+    class TreeDecompositionFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            TreeDecompositionFactory(const htd::LibraryInstance * const manager);
+            HTD_API TreeDecompositionFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            TreeDecompositionFactory(const TreeDecompositionFactory & original);
+            HTD_API TreeDecompositionFactory(const TreeDecompositionFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            TreeDecompositionFactory & operator=(const TreeDecompositionFactory & original);
+            HTD_API TreeDecompositionFactory & operator=(const TreeDecompositionFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~TreeDecompositionFactory();
+            HTD_API virtual ~TreeDecompositionFactory();
 
             /**
              *  Create a new IMutableTreeDecomposition object.
              *
              *  @return A new IMutableTreeDecomposition object.
              */
-            htd::IMutableTreeDecomposition * getTreeDecomposition(void) const;
+            HTD_API htd::IMutableTreeDecomposition * getTreeDecomposition(void) const;
 
             /**
              *  Create a new IMutableTreeDecomposition object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableTreeDecomposition object identical to the given original graph.
              */
-            htd::IMutableTreeDecomposition * getTreeDecomposition(const htd::ITreeDecomposition & original) const;
+            HTD_API htd::IMutableTreeDecomposition * getTreeDecomposition(const htd::ITreeDecomposition & original) const;
 
             /**
              *  Set the default implementation of the IMutableTreeDecomposition interface.
@@ -81,21 +81,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableTreeDecomposition interface.
              */
-            void setConstructionTemplate(htd::IMutableTreeDecomposition * original);
+            HTD_API void setConstructionTemplate(htd::IMutableTreeDecomposition * original);
 
             /**
              *  Access the mutable interface of a given tree decomposition.
              *
              *  @return The mutable interface of the given tree decomposition.
              */
-            htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(htd::ITreeDecomposition & original) const;
+            HTD_API htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(htd::ITreeDecomposition & original) const;
 
             /**
              *  Access the mutable interface of a given tree decomposition.
              *
              *  @return The mutable interface of the given tree decomposition.
              */
-            const htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(const htd::ITreeDecomposition & original) const;
+            HTD_API const htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(const htd::ITreeDecomposition & original) const;
 
         private:
             /**

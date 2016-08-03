@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IOrderingAlgorithm interface.
      */
-    class HTD_API OrderingAlgorithmFactory
+    class OrderingAlgorithmFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            OrderingAlgorithmFactory(const htd::LibraryInstance * const manager);
+            HTD_API OrderingAlgorithmFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            OrderingAlgorithmFactory(const OrderingAlgorithmFactory & original);
+            HTD_API OrderingAlgorithmFactory(const OrderingAlgorithmFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            OrderingAlgorithmFactory & operator=(const OrderingAlgorithmFactory & original);
+            HTD_API OrderingAlgorithmFactory & operator=(const OrderingAlgorithmFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~OrderingAlgorithmFactory();
+            HTD_API virtual ~OrderingAlgorithmFactory();
 
             /**
              *  Create a new IOrderingAlgorithm object.
              *
              *  @return A new IOrderingAlgorithm object.
              */
-            htd::IOrderingAlgorithm * getOrderingAlgorithm(void) const;
+            HTD_API htd::IOrderingAlgorithm * getOrderingAlgorithm(void) const;
 
             /**
              *  Create a new IOrderingAlgorithm object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IOrderingAlgorithm object.
              */
-            htd::IOrderingAlgorithm * getOrderingAlgorithm(const htd::LibraryInstance * const manager) const;
+            HTD_API htd::IOrderingAlgorithm * getOrderingAlgorithm(const htd::LibraryInstance * const manager) const;
 
             /**
              *  Set the default implementation of the IOrderingAlgorithm interface.
@@ -81,7 +81,7 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IOrderingAlgorithm interface.
              */
-            void setConstructionTemplate(htd::IOrderingAlgorithm * original);
+            HTD_API void setConstructionTemplate(htd::IOrderingAlgorithm * original);
 
         private:
             /**

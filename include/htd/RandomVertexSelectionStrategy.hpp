@@ -34,7 +34,7 @@ namespace htd
     /**
      * Vertex selection strategy selecting a random subset of the vertices of a given input graph.
      */
-    class HTD_API RandomVertexSelectionStrategy : public htd::IVertexSelectionStrategy
+    class RandomVertexSelectionStrategy : public htd::IVertexSelectionStrategy
     {
         public:
             /**
@@ -42,18 +42,18 @@ namespace htd
              *
              *  @param[in] limit    The maximum number of vertices which shall be selected from a given input graph.
              */
-            RandomVertexSelectionStrategy(std::size_t limit);
+            HTD_API RandomVertexSelectionStrategy(std::size_t limit);
 
-            virtual ~RandomVertexSelectionStrategy();
+            HTD_API virtual ~RandomVertexSelectionStrategy();
 
-            void selectVertices(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+            HTD_API void selectVertices(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
             /**
              *  Create a deep copy of the current vertex selection strategy.
              *
              *  @return A new RandomVertexSelectionStrategy object identical to the current vertex selection strategy.
              */
-            RandomVertexSelectionStrategy * clone(void) const HTD_OVERRIDE;
+            HTD_API RandomVertexSelectionStrategy * clone(void) const HTD_OVERRIDE;
 
         private:
             std::size_t limit_;

@@ -34,35 +34,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutablePathDecomposition interface.
      */
-    class HTD_API PathDecompositionFactory
+    class PathDecompositionFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            PathDecompositionFactory(const htd::LibraryInstance * const manager);
+            HTD_API PathDecompositionFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            PathDecompositionFactory(const PathDecompositionFactory & original);
+            HTD_API PathDecompositionFactory(const PathDecompositionFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            PathDecompositionFactory & operator=(const PathDecompositionFactory & original);
+            HTD_API PathDecompositionFactory & operator=(const PathDecompositionFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~PathDecompositionFactory();
+            HTD_API virtual ~PathDecompositionFactory();
 
             /**
              *  Create a new IMutablePathDecomposition object.
              *
              *  @return A new IMutablePathDecomposition object.
              */
-            htd::IMutablePathDecomposition * getPathDecomposition(void) const;
+            HTD_API htd::IMutablePathDecomposition * getPathDecomposition(void) const;
 
             /**
              *  Create a new IMutablePathDecomposition object.
@@ -71,7 +71,7 @@ namespace htd
              *
              *  @return A new IMutablePathDecomposition object identical to the given original graph.
              */
-            htd::IMutablePathDecomposition * getPathDecomposition(const htd::IPathDecomposition & original) const;
+            HTD_API htd::IMutablePathDecomposition * getPathDecomposition(const htd::IPathDecomposition & original) const;
 
             /**
              *  Set the default implementation of the IMutablePathDecomposition interface.
@@ -82,21 +82,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutablePathDecomposition interface.
              */
-            void setConstructionTemplate(htd::IMutablePathDecomposition * original);
+            HTD_API void setConstructionTemplate(htd::IMutablePathDecomposition * original);
 
             /**
              *  Access the mutable interface of a given path decomposition.
              *
              *  @return The mutable interface of the given path decomposition.
              */
-            htd::IMutablePathDecomposition & accessMutablePathDecomposition(htd::IPathDecomposition & original) const;
+            HTD_API htd::IMutablePathDecomposition & accessMutablePathDecomposition(htd::IPathDecomposition & original) const;
 
             /**
              *  Access the mutable interface of a given path decomposition.
              *
              *  @return The mutable interface of the given path decomposition.
              */
-            const htd::IMutablePathDecomposition & accessMutablePathDecomposition(const htd::IPathDecomposition & original) const;
+            HTD_API const htd::IMutablePathDecomposition & accessMutablePathDecomposition(const htd::IPathDecomposition & original) const;
 
         private:
             /**

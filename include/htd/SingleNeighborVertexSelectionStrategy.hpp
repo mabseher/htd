@@ -34,31 +34,31 @@ namespace htd
     /**
      * Vertex selection strategy selecting each vertex of a given input graph which has exactly one neighbor.
      */
-    class HTD_API SingleNeighborVertexSelectionStrategy : public htd::IVertexSelectionStrategy
+    class SingleNeighborVertexSelectionStrategy : public htd::IVertexSelectionStrategy
     {
         public:
             /**
              *  Constructor for a new selection strategy of type SingleNeighborVertexSelectionStrategy.
              */
-            SingleNeighborVertexSelectionStrategy(void);
+            HTD_API SingleNeighborVertexSelectionStrategy(void);
 
             /**
              *  Constructor for a new selection strategy of type SingleNeighborVertexSelectionStrategy.
              *
              *  @param[in] limit    The maximum number of vertices which shall be selected from a given input graph.
              */
-            SingleNeighborVertexSelectionStrategy(std::size_t limit);
+            HTD_API SingleNeighborVertexSelectionStrategy(std::size_t limit);
 
-            virtual ~SingleNeighborVertexSelectionStrategy();
+            HTD_API virtual ~SingleNeighborVertexSelectionStrategy();
 
-            void selectVertices(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+            HTD_API void selectVertices(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
             /**
              *  Create a deep copy of the current vertex selection strategy.
              *
              *  @return A new SingleNeighborVertexSelectionStrategy object identical to the current vertex selection strategy.
              */
-            SingleNeighborVertexSelectionStrategy * clone(void) const HTD_OVERRIDE;
+            HTD_API SingleNeighborVertexSelectionStrategy * clone(void) const HTD_OVERRIDE;
 
         private:
             std::size_t limit_;

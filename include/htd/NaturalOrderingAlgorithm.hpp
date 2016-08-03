@@ -36,7 +36,7 @@ namespace htd
     /**
      *  Implementation of the IOrderingAlgorithm interface returning the vertices of the given graph in ascending order.
      */
-    class HTD_API NaturalOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
+    class NaturalOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
     {
         public:
             /**
@@ -44,19 +44,19 @@ namespace htd
              *
              *  @param[in] manager   The management instance to which the new algorithm belongs.
              */
-            NaturalOrderingAlgorithm(const htd::LibraryInstance * const manager);
+            HTD_API NaturalOrderingAlgorithm(const htd::LibraryInstance * const manager);
             
-            virtual ~NaturalOrderingAlgorithm();
+            HTD_API virtual ~NaturalOrderingAlgorithm();
             
-            htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
-            NaturalOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
+            HTD_API NaturalOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:
             /**

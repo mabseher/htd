@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledTree interface.
      */
-    class HTD_API LabeledTreeFactory
+    class LabeledTreeFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            LabeledTreeFactory(const htd::LibraryInstance * const manager);
+            HTD_API LabeledTreeFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            LabeledTreeFactory(const LabeledTreeFactory & original);
+            HTD_API LabeledTreeFactory(const LabeledTreeFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            LabeledTreeFactory & operator=(const LabeledTreeFactory & original);
+            HTD_API LabeledTreeFactory & operator=(const LabeledTreeFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~LabeledTreeFactory();
+            HTD_API virtual ~LabeledTreeFactory();
 
             /**
              *  Create a new IMutableLabeledTree object.
              *
              *  @return A new IMutableLabeledTree object.
              */
-            htd::IMutableLabeledTree * getLabeledTree(void) const;
+            HTD_API htd::IMutableLabeledTree * getLabeledTree(void) const;
 
             /**
              *  Create a new IMutableLabeledTree object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledTree object identical to the given original graph.
              */
-            htd::IMutableLabeledTree * getLabeledTree(const htd::ILabeledTree & original) const;
+            HTD_API htd::IMutableLabeledTree * getLabeledTree(const htd::ILabeledTree & original) const;
 
             /**
              *  Set the default implementation of the IMutableLabeledTree interface.
@@ -81,21 +81,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableLabeledTree interface.
              */
-            void setConstructionTemplate(htd::IMutableLabeledTree * original);
+            HTD_API void setConstructionTemplate(htd::IMutableLabeledTree * original);
 
             /**
              *  Access the mutable interface of a given labeled tree.
              *
              *  @return The mutable interface of the given labeled tree.
              */
-            htd::IMutableLabeledTree & accessMutableLabeledTree(htd::ILabeledTree & original) const;
+            HTD_API htd::IMutableLabeledTree & accessMutableLabeledTree(htd::ILabeledTree & original) const;
 
             /**
              *  Access the mutable interface of a given labeled tree.
              *
              *  @return The mutable interface of the given labeled tree.
              */
-            const htd::IMutableLabeledTree & accessMutableLabeledTree(const htd::ILabeledTree & original) const;
+            HTD_API const htd::IMutableLabeledTree & accessMutableLabeledTree(const htd::ILabeledTree & original) const;
 
         private:
             /**

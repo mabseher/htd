@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IStronglyConnectedComponentAlgorithm interface.
      */
-    class HTD_API StronglyConnectedComponentAlgorithmFactory
+    class StronglyConnectedComponentAlgorithmFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            StronglyConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager);
+            HTD_API StronglyConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            StronglyConnectedComponentAlgorithmFactory(const StronglyConnectedComponentAlgorithmFactory & original);
+            HTD_API StronglyConnectedComponentAlgorithmFactory(const StronglyConnectedComponentAlgorithmFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            StronglyConnectedComponentAlgorithmFactory & operator=(const StronglyConnectedComponentAlgorithmFactory & original);
+            HTD_API StronglyConnectedComponentAlgorithmFactory & operator=(const StronglyConnectedComponentAlgorithmFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~StronglyConnectedComponentAlgorithmFactory();
+            HTD_API virtual ~StronglyConnectedComponentAlgorithmFactory();
 
             /**
              *  Create a new IStronglyConnectedComponentAlgorithm object.
              *
              *  @return A new IStronglyConnectedComponentAlgorithm object.
              */
-            htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(void) const;
+            HTD_API htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(void) const;
 
             /**
              *  Create a new IStronglyConnectedComponentAlgorithm object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IStronglyConnectedComponentAlgorithm object.
              */
-            htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const;
+            HTD_API htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const;
 
             /**
              *  Set the default implementation of the IStronglyConnectedComponentAlgorithm interface.
@@ -81,7 +81,7 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IStronglyConnectedComponentAlgorithm interface.
              */
-            void setConstructionTemplate(htd::IStronglyConnectedComponentAlgorithm * original);
+            HTD_API void setConstructionTemplate(htd::IStronglyConnectedComponentAlgorithm * original);
 
         private:
             /**

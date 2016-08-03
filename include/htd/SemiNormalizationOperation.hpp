@@ -37,7 +37,7 @@ namespace htd
      *  bag content as the join node itself and so that each join node has exactly two
      *  children.
      */
-    class HTD_API SemiNormalizationOperation : public htd::WeakNormalizationOperation
+    class SemiNormalizationOperation : public htd::WeakNormalizationOperation
     {
         public:
             /**
@@ -45,7 +45,7 @@ namespace htd
              *
              *  @param[in] manager           The management instance to which the new manipulation operation belongs.
              */
-            SemiNormalizationOperation(const htd::LibraryInstance * const manager);
+            HTD_API SemiNormalizationOperation(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a new manipulation operation of type SemiNormalizationOperation.
@@ -55,53 +55,53 @@ namespace htd
              *  @param[in] emptyLeaves              A boolean flag whether the decomposition's leave nodes shall have an empty bag.
              *  @param[in] identicalJoinNodeParent  A boolean flag whether each join node shall have a parent with equal bag content.
              */
-            SemiNormalizationOperation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent);
+            HTD_API SemiNormalizationOperation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent);
 
-            virtual ~SemiNormalizationOperation();
+            HTD_API virtual ~SemiNormalizationOperation();
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
 
-            bool isLocalOperation(void) const HTD_OVERRIDE;
+            HTD_API bool isLocalOperation(void) const HTD_OVERRIDE;
 
-            bool createsTreeNodes(void) const HTD_OVERRIDE;
+            HTD_API bool createsTreeNodes(void) const HTD_OVERRIDE;
 
-            bool removesTreeNodes(void) const HTD_OVERRIDE;
+            HTD_API bool removesTreeNodes(void) const HTD_OVERRIDE;
 
-            bool modifiesBagContents(void) const HTD_OVERRIDE;
+            HTD_API bool modifiesBagContents(void) const HTD_OVERRIDE;
 
-            bool createsSubsetMaximalBags(void) const HTD_OVERRIDE;
+            HTD_API bool createsSubsetMaximalBags(void) const HTD_OVERRIDE;
 
-            bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
+            HTD_API bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-            SemiNormalizationOperation * clone(void) const HTD_OVERRIDE;
+            HTD_API SemiNormalizationOperation * clone(void) const HTD_OVERRIDE;
 #else
             /**
              *  Create a deep copy of the current decomposition manipulation operation.
              *
              *  @return A new SemiNormalizationOperation object identical to the current decomposition manipulation operation.
              */
-            SemiNormalizationOperation * clone(void) const;
+            HTD_API SemiNormalizationOperation * clone(void) const;
 
-            htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+            HTD_API htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 
-            htd::IPathDecompositionManipulationOperation * clonePathDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+            HTD_API htd::IPathDecompositionManipulationOperation * clonePathDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 
-            htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+            HTD_API htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
 
         private:

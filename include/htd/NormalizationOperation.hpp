@@ -36,7 +36,7 @@ namespace htd
      *  given tree and path decompositions such that the resulting decomposition is fully
      *  normalized.
      */
-    class HTD_API NormalizationOperation : public htd::SemiNormalizationOperation
+    class NormalizationOperation : public htd::SemiNormalizationOperation
     {
         public:
             /**
@@ -44,7 +44,7 @@ namespace htd
              *
              *  @param[in] manager           The management instance to which the new manipulation operation belongs.
              */
-            NormalizationOperation(const htd::LibraryInstance * const manager);
+            HTD_API NormalizationOperation(const htd::LibraryInstance * const manager);
 
             /**
              *  Constructor for a new manipulation operation of type NormalizationOperation.
@@ -55,60 +55,60 @@ namespace htd
              *  @param[in] identicalJoinNodeParent          A boolean flag whether each join node shall have a parent with equal bag content.
              *  @param[in] treatLeafNodesAsIntroduceNodes   A boolean flag whether leaf nodes shall be treated as introduce nodes in the context of this operation.
              */
-            NormalizationOperation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent, bool treatLeafNodesAsIntroduceNodes);
+            HTD_API NormalizationOperation(const htd::LibraryInstance * const manager, bool emptyRoot, bool emptyLeaves, bool identicalJoinNodeParent, bool treatLeafNodesAsIntroduceNodes);
 
-            virtual ~NormalizationOperation();
+            HTD_API virtual ~NormalizationOperation();
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const HTD_OVERRIDE;
 
-            void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
+            HTD_API void apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const HTD_OVERRIDE;
 
-            bool isLocalOperation(void) const HTD_OVERRIDE;
+            HTD_API bool isLocalOperation(void) const HTD_OVERRIDE;
 
-            bool createsTreeNodes(void) const HTD_OVERRIDE;
+            HTD_API bool createsTreeNodes(void) const HTD_OVERRIDE;
 
-            bool removesTreeNodes(void) const HTD_OVERRIDE;
+            HTD_API bool removesTreeNodes(void) const HTD_OVERRIDE;
 
-            bool modifiesBagContents(void) const HTD_OVERRIDE;
+            HTD_API bool modifiesBagContents(void) const HTD_OVERRIDE;
 
-            bool createsSubsetMaximalBags(void) const HTD_OVERRIDE;
+            HTD_API bool createsSubsetMaximalBags(void) const HTD_OVERRIDE;
 
-            bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
+            HTD_API bool createsLocationDependendLabels(void) const HTD_OVERRIDE;
 
             /**
              *  Check whether the flag is set that leaf nodes shall be treated as introduce nodes in the context of this operation.
              *
              *  @return True if leaf nodes shall be treated as introduce nodes in the context of this operation, false otherwise.
              */
-            bool leafNodesTreatedAsIntroduceNodes(void) const;
+            HTD_API bool leafNodesTreatedAsIntroduceNodes(void) const;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-            NormalizationOperation * clone(void) const HTD_OVERRIDE;
+            HTD_API NormalizationOperation * clone(void) const HTD_OVERRIDE;
 #else
             /**
              *  Create a deep copy of the current decomposition manipulation operation.
              *
              *  @return A new NormalizationOperation object identical to the current decomposition manipulation operation.
              */
-            NormalizationOperation * clone(void) const;
+            HTD_API NormalizationOperation * clone(void) const;
 
-            htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+            HTD_API htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 
-            htd::IPathDecompositionManipulationOperation * clonePathDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+            HTD_API htd::IPathDecompositionManipulationOperation * clonePathDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 
-            htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
+            HTD_API htd::ITreeDecompositionManipulationOperation * cloneTreeDecompositionManipulationOperation(void) const HTD_OVERRIDE;
 #endif
 
         private:

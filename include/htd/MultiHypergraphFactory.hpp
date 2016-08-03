@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableMultiHypergraph interface.
      */
-    class HTD_API MultiHypergraphFactory
+    class MultiHypergraphFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            MultiHypergraphFactory(const htd::LibraryInstance * const manager);
+            HTD_API MultiHypergraphFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            MultiHypergraphFactory(const MultiHypergraphFactory & original);
+            HTD_API MultiHypergraphFactory(const MultiHypergraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            MultiHypergraphFactory & operator=(const MultiHypergraphFactory & original);
+            HTD_API MultiHypergraphFactory & operator=(const MultiHypergraphFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~MultiHypergraphFactory();
+            HTD_API virtual ~MultiHypergraphFactory();
 
             /**
              *  Create a new IMutableMultiHypergraph object.
              *
              *  @return A new IMutableMultiHypergraph object.
              */
-            htd::IMutableMultiHypergraph * getMultiHypergraph(void) const;
+            HTD_API htd::IMutableMultiHypergraph * getMultiHypergraph(void) const;
 
             /**
              *  Create a new IMutableMultiHypergraph object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableMultiHypergraph object of the given size.
              */
-            htd::IMutableMultiHypergraph * getMultiHypergraph(std::size_t initialSize) const;
+            HTD_API htd::IMutableMultiHypergraph * getMultiHypergraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableMultiHypergraph object.
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableMultiHypergraph object identical to the given original graph.
              */
-            htd::IMutableMultiHypergraph * getMultiHypergraph(const htd::IMultiHypergraph & original) const;
+            HTD_API htd::IMutableMultiHypergraph * getMultiHypergraph(const htd::IMultiHypergraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableMultiHypergraph interface.
@@ -90,21 +90,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableMultiHypergraph interface.
              */
-            void setConstructionTemplate(htd::IMutableMultiHypergraph * original);
+            HTD_API void setConstructionTemplate(htd::IMutableMultiHypergraph * original);
 
             /**
              *  Access the mutable interface of a given multi-hypergraph.
              *
              *  @return The mutable interface of the given multi-hypergraph.
              */
-            htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(htd::IMultiHypergraph & original) const;
+            HTD_API htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(htd::IMultiHypergraph & original) const;
 
             /**
              *  Access the mutable interface of a given multi-hypergraph.
              *
              *  @return The mutable interface of the given multi-hypergraph.
              */
-            const htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(const htd::IMultiHypergraph & original) const;
+            HTD_API const htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(const htd::IMultiHypergraph & original) const;
 
         private:
             HTD_IMPLEMENTATION Implementation;

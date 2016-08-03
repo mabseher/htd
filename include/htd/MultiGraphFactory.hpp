@@ -33,35 +33,35 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableMultiGraph interface.
      */
-    class HTD_API MultiGraphFactory
+    class MultiGraphFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              */
-            MultiGraphFactory(const htd::LibraryInstance * const manager);
+            HTD_API MultiGraphFactory(const htd::LibraryInstance * const manager);
 
             /**
              *  Copy constructor for the factory class.
              */
-            MultiGraphFactory(const MultiGraphFactory & original);
+            HTD_API MultiGraphFactory(const MultiGraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            MultiGraphFactory & operator=(const MultiGraphFactory & original);
+            HTD_API MultiGraphFactory & operator=(const MultiGraphFactory & original);
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~MultiGraphFactory();
+            HTD_API virtual ~MultiGraphFactory();
 
             /**
              *  Create a new IMutableMultiGraph object.
              *
              *  @return A new IMutableMultiGraph object.
              */
-            htd::IMutableMultiGraph * getMultiGraph(void) const;
+            HTD_API htd::IMutableMultiGraph * getMultiGraph(void) const;
 
             /**
              *  Create a new IMutableMultiGraph object.
@@ -70,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableMultiGraph object of the given size.
              */
-            htd::IMutableMultiGraph * getMultiGraph(std::size_t initialSize) const;
+            HTD_API htd::IMutableMultiGraph * getMultiGraph(std::size_t initialSize) const;
 
             /**
              *  Create a new IMutableMultiGraph object.
@@ -79,7 +79,7 @@ namespace htd
              *
              *  @return A new IMutableMultiGraph object identical to the given original graph.
              */
-            htd::IMutableMultiGraph * getMultiGraph(const htd::IMultiGraph & original) const;
+            HTD_API htd::IMutableMultiGraph * getMultiGraph(const htd::IMultiGraph & original) const;
 
             /**
              *  Set the default implementation of the IMutableMultiGraph interface.
@@ -90,21 +90,21 @@ namespace htd
              *
              *  @param[in] original The new default implementation of the IMutableMultiGraph interface.
              */
-            void setConstructionTemplate(htd::IMutableMultiGraph * original);
+            HTD_API void setConstructionTemplate(htd::IMutableMultiGraph * original);
 
             /**
              *  Access the mutable interface of a given multi-graph.
              *
              *  @return The mutable interface of the given multi-graph.
              */
-            htd::IMutableMultiGraph & accessMutableMultiGraph(htd::IMultiGraph & original) const;
+            HTD_API htd::IMutableMultiGraph & accessMutableMultiGraph(htd::IMultiGraph & original) const;
 
             /**
              *  Access the mutable interface of a given multi-graph.
              *
              *  @return The mutable interface of the given multi-graph.
              */
-            const htd::IMutableMultiGraph & accessMutableMultiGraph(const htd::IMultiGraph & original) const;
+            HTD_API const htd::IMutableMultiGraph & accessMutableMultiGraph(const htd::IMultiGraph & original) const;
 
         private:
             /**

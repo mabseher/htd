@@ -35,7 +35,7 @@ namespace htd
     /**
      * Implementation of the ISetCoverAlgorithm interface based on exhaustive search via a branch-and-bound approach.
      */
-    class HTD_API SetCoverAlgorithm : public virtual htd::ISetCoverAlgorithm
+    class SetCoverAlgorithm : public virtual htd::ISetCoverAlgorithm
     {
         public:
             /**
@@ -43,19 +43,19 @@ namespace htd
              *
              *  @param[in] manager   The management instance to which the new algorithm belongs.
              */
-            SetCoverAlgorithm(const htd::LibraryInstance * const manager);
+            HTD_API SetCoverAlgorithm(const htd::LibraryInstance * const manager);
             
-            virtual ~SetCoverAlgorithm();
+            HTD_API virtual ~SetCoverAlgorithm();
             
-            void computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const HTD_OVERRIDE;
+            HTD_API void computeSetCover(const std::vector<htd::id_t> & elements, const std::vector<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const HTD_OVERRIDE;
 
-            void computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const HTD_OVERRIDE;
+            HTD_API void computeSetCover(const htd::ConstCollection<htd::id_t> & elements, const htd::ConstCollection<std::vector<htd::id_t>> & containers, std::vector<htd::index_t> & target) const HTD_OVERRIDE;
 
-            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
-            SetCoverAlgorithm * clone(void) const HTD_OVERRIDE;
+            HTD_API SetCoverAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:
             /**

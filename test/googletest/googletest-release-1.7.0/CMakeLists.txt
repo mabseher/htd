@@ -76,7 +76,7 @@ if (MSVC)
         COMMAND ${CMAKE_COMMAND} -Wdev --debug-output --trace-expand -E copy_if_different "$<TARGET_FILE:gtest>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
 
     add_custom_command(TARGET gtest_main POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:gtest_main>" "${CMAKE_BINARY_DIR}\\tests\\$<CONFIGURATION>\\")
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:gtest_main>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
 endif (MSVC)
 
 ########################################################################

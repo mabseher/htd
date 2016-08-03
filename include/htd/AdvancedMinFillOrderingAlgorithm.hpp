@@ -37,7 +37,7 @@ namespace htd
      *  If there are multiple vertices with the same, minimal fill value during an elimination step this algorithm
      *  will select a vertex with minimum degree from the pool of vertices with minimum fill value.
      */
-    class HTD_API AdvancedMinFillOrderingAlgorithm : public htd::IOrderingAlgorithm
+    class AdvancedMinFillOrderingAlgorithm : public htd::IOrderingAlgorithm
     {
         public:
             /**
@@ -45,19 +45,19 @@ namespace htd
              *
              *  @param[in] manager   The management instance to which the new algorithm belongs.
              */
-            AdvancedMinFillOrderingAlgorithm(const htd::LibraryInstance * const manager);
+            HTD_API AdvancedMinFillOrderingAlgorithm(const htd::LibraryInstance * const manager);
             
-            virtual ~AdvancedMinFillOrderingAlgorithm();
+            HTD_API virtual ~AdvancedMinFillOrderingAlgorithm();
             
-            htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
-            AdvancedMinFillOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
+            HTD_API AdvancedMinFillOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
 
         protected:
             /**

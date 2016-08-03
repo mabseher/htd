@@ -56,6 +56,7 @@ build_script:
     }
 
 test_script:
+- ps: Get-ChildItem -Path . -Recurse
 - ps: |
     & ctest -VV -C $env:CONFIGURATION --output-on-failure
     Push-AppveyorArtifact "Testing/Temporary/LastTest.log"

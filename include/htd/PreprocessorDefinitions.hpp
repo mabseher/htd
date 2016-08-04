@@ -63,7 +63,7 @@
     #endif
 #endif
 
-#define HTD_API_TEMPLATE_EXPORT template class HTD_SYMBOL_EXPORT
+#define HTD_API_TEMPLATE_EXPORT template class
 #define HTD_API_TEMPLATE_IMPORT extern template class HTD_SYMBOL_IMPORT
 
 #ifdef HTD_SHARED_LIBRARY

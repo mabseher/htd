@@ -10,4 +10,10 @@ if(BUILD_TESTING)
     add_subdirectory("${PROJECT_SOURCE_DIR}/test/htd")
 
     add_dependencies(gtest htd)
+
+    if(MSVC)
+        add_custom_target(CopyLibraries ALL
+           DEPENDS "${CMAKE_BINARY_DIR}/tests/htd"
+        )
+    endif(MSVC)
 endif()

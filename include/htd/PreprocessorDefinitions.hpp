@@ -63,19 +63,25 @@
     #endif
 #endif
 
+#define HTD_API_TEMPLATE_EXPORT template class HTD_SYMBOL_EXPORT
+#define HTD_API_TEMPLATE_IMPORT extern template class HTD_SYMBOL_IMPORT
+
 #ifdef HTD_SHARED_LIBRARY
     #ifdef htd_EXPORTS
         #define HTD_API HTD_SYMBOL_EXPORT
         #define HTD_IMPLEMENTATION HTD_IMPLEMENTATION_EXPORT
+        #define HTD_API_TEMPLATE HTD_API_TEMPLATE_EXPORT
     #else
         #define HTD_API HTD_SYMBOL_IMPORT
         #define HTD_IMPLEMENTATION HTD_IMPLEMENTATION_IMPORT
+        #define HTD_API_TEMPLATE HTD_API_TEMPLATE_IMPORT
     #endif
-    #define HTD_LOCAL HTD_LOCAL_SYMBOL
+    #define HTD_LOCAL HTD_API_TEMPLATE_IMPORT
 #else
     #define HTD_API
     #define HTD_LOCAL
     #define HTD_IMPLEMENTATION struct
+    #define HTD_API_TEMPLATE template class
 #endif
 
 //#define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

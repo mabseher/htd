@@ -73,12 +73,12 @@ target_link_libraries(gtest_main gtest)
 
 if(MSVC)
     add_custom_command(TARGET gtest POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -Wdev --debug-output --trace-expand -E make_directory "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"
-        COMMAND ${CMAKE_COMMAND} -Wdev --debug-output --trace-expand -E copy_if_different "$<TARGET_FILE:gtest>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
+        COMMAND ${CMAKE_COMMAND} -E make_directory to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest> to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"))
 
     add_custom_command(TARGET gtest_main POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:gtest_main>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
+        COMMAND ${CMAKE_COMMAND} -E make_directory to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest_main> to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"))
 endif(MSVC)
 
 ########################################################################

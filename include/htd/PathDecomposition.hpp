@@ -214,6 +214,16 @@ namespace htd
 
             HTD_API bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const HTD_OVERRIDE;
 
+            HTD_API std::size_t joinVertexCount(htd::vertex_t vertex) const;
+
+            HTD_API htd::ConstCollection<htd::vertex_t> joinVertices(htd::vertex_t vertex) const;
+
+            HTD_API void copyJoinVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const;
+
+            HTD_API htd::vertex_t joinVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const;
+
+            HTD_API bool isJoinVertex(htd::vertex_t vertex, htd::vertex_t joinVertex) const;
+
             HTD_API std::size_t minimumBagSize(void) const HTD_OVERRIDE;
 
             HTD_API std::size_t maximumBagSize(void) const HTD_OVERRIDE;

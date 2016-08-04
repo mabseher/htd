@@ -98,7 +98,11 @@ const char * htd_cli::Option::description(void) const
 
 bool htd_cli::Option::hasShortName(void) const
 {
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    return std::isprint(implementation_->shortName_) > 0;
+#else
     return std::isprint(implementation_->shortName_);
+#endif
 }
 
 char htd_cli::Option::shortName(void) const

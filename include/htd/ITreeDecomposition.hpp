@@ -488,6 +488,52 @@ namespace htd
              */
             virtual bool isRememberedVertex(htd::vertex_t vertex, htd::vertex_t rememberedVertex, htd::vertex_t child) const = 0;
 
+            /**
+             *  Getter for the number of vertices which are present in at least two child bags of the given vertex.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The number of vertices which are present in at least two child bags of the given vertex.
+             */
+            virtual std::size_t joinVertexCount(htd::vertex_t vertex) const = 0;
+
+            /**
+             *  Access the collection of all vertices which are present at least two child bags.
+             *
+             *  @param[in] vertex   The vertex.
+             *
+             *  @return The collection of all vertices which are present in at least two child bags. The result is sorted in ascending order.
+             */
+            virtual htd::ConstCollection<htd::vertex_t> joinVertices(htd::vertex_t vertex) const = 0;
+
+            /**
+             *  Compute the collection of all vertices which are present in at least two child bags and write it to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the join vertices shall be appended.
+             *  @param[in] vertex   The vertex.
+             */
+            virtual void copyJoinVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
+
+            /**
+             *  Access the join vertex at the specific position. A join vertex is a vertex which is present in at least two child bags.
+             *
+             *  @param[in] vertex   The vertex for which the join vertex shall be returned.
+             *  @param[in] index    The position of the join vertex.
+             *
+             *  @return The join vertex at the specific position.
+             */
+            virtual htd::vertex_t joinVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const = 0;
+
+            /**
+             *  Check whether a vertex is present in at least two child bags.
+             *
+             *  @param[in] vertex           The vertex which's bag shall be investigated.
+             *  @param[in] forgottenVertex  The potential join vertex.
+             *
+             *  @return True if the given vertex is present in at least two child bags, false otherwise.
+             */
+            virtual bool isJoinVertex(htd::vertex_t vertex, htd::vertex_t joinVertex) const = 0;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current tree decomposition.

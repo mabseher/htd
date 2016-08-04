@@ -28,7 +28,7 @@ foreach(TEST_PROGRAM ${TEST_PROGRAMS})
 
     if(MSVC)
         add_custom_command(TARGET ${TEST_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${TEST_NAME}>" "${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
+            COMMAND ${CMAKE_COMMAND} -E make_directory to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${TEST_NAME}>" to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"))
     endif(MSVC)
 endforeach()

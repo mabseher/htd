@@ -8,4 +8,6 @@ if(BUILD_TESTING)
     add_subdirectory("${GTEST_ROOT}")
 
     add_subdirectory("${PROJECT_SOURCE_DIR}/test/htd")
+
+    add_dependencies(gtest htd)
 endif()

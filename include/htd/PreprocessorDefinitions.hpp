@@ -45,15 +45,15 @@
     #define HTD_SYMBOL_EXPORT __declspec(dllexport)
     #define HTD_SYMBOL_IMPORT __declspec(dllimport)
     #define HTD_LOCAL_SYMBOL
-    #define HTD_IMPLEMENTATION_EXPORT struct __declspec(dllexport)
-    #define HTD_IMPLEMENTATION_IMPORT extern struct __declspec(dllimport)
+    #define HTD_IMPLEMENTATION_EXPORT struct
+    #define HTD_IMPLEMENTATION_IMPORT extern struct
 #else
     #if HTD_COMPILER_IS_GNU == 1 || HTD_COMPILER_IS_Clang == 1
         #define HTD_SYMBOL_EXPORT __attribute__ ((visibility ("default")))
         #define HTD_SYMBOL_IMPORT __attribute__ ((visibility ("default")))
         #define HTD_LOCAL_SYMBOL  __attribute__ ((visibility ("hidden")))
-        #define HTD_IMPLEMENTATION_EXPORT struct __attribute__ ((visibility ("default")))
-        #define HTD_IMPLEMENTATION_IMPORT extern struct __attribute__ ((visibility ("default")))
+        #define HTD_IMPLEMENTATION_EXPORT struct
+        #define HTD_IMPLEMENTATION_IMPORT extern struct
     #else
         #define HTD_SYMBOL_EXPORT
         #define HTD_SYMBOL_IMPORT

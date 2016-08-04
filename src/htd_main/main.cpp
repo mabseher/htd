@@ -192,7 +192,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
         }
         else
         {
-            srand(time(NULL));
+            srand(static_cast<unsigned int>(time(NULL)));
         }
     }
 
@@ -447,7 +447,7 @@ void optimize(const htd::LibraryInstance & instance, const htd::IterativeImprove
 
                     if (printProgress)
                     {
-                        std::size_t bagSize = -fitness.at(0);
+                        std::size_t bagSize = static_cast<std::size_t>(-fitness.at(0));
 
                         if (bagSize < optimalBagSize)
                         {
@@ -520,7 +520,7 @@ void optimizeNamed(const htd::LibraryInstance & instance, const htd::IterativeIm
 
                 if (printProgress)
                 {
-                    std::size_t bagSize = -fitness.at(0);
+                    std::size_t bagSize = static_cast<std::size_t>(-fitness.at(0));
 
                     if (bagSize < optimalBagSize)
                     {

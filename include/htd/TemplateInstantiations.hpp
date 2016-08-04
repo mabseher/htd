@@ -30,10 +30,10 @@
 #include <htd/Vertex.hpp>
 #include <htd/Hyperedge.hpp>
 
-extern template class HTD_API htd::ConstIterator<htd::vertex_t>;
-extern template class HTD_API htd::ConstCollection<htd::vertex_t>;
+HTD_API_TEMPLATE htd::ConstIterator<htd::vertex_t>;
+HTD_API_TEMPLATE htd::ConstCollection<htd::vertex_t>;
 
-extern template class HTD_API htd::ConstIterator<htd::Hyperedge>;
-extern template class HTD_API htd::ConstCollection<htd::Hyperedge>;
+HTD_API_TEMPLATE htd::ConstIterator<htd::Hyperedge>;
+HTD_API_TEMPLATE htd::ConstCollection<htd::Hyperedge>;
 
 #endif /* HTD_HTD_TEMPLATEINSTANTIATIONS_HPP */

@@ -51,9 +51,10 @@ install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd" DESTINATION include)
 if(BUILD_TESTING)
     if(MSVC)
         add_custom_command(
-            OUTPUT to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/$<TARGET_FILE_NAME:htd>")
+            OUTPUT to_native_path("${CMAKE_BINARY_DIR}/tests")
             DEPENDS "$<TARGET_FILE:htd>"
-            COMMAND ${CMAKE_COMMAND} -E make_directory to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:htd>" to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/$<TARGET_FILE_NAME:htd>"))
+            COMMAND ${CMAKE_COMMAND} -E make_directory to_native_path("${CMAKE_BINARY_DIR}/tests/")
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:htd>" to_native_path("${CMAKE_BINARY_DIR}/tests/$<TARGET_FILE_NAME:htd>")
+            COMMENT "Copy htd library to directory 'tests' ...")
     endif(MSVC)
 endif(BUILD_TESTING)

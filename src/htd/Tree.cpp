@@ -34,6 +34,8 @@
 #include <htd/HyperedgePointerDeque.hpp>
 #include <htd/ConstPointerIteratorWrapper.hpp>
 
+#include <htd/Algorithm.hpp>
+
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
@@ -351,7 +353,7 @@ htd::ConstCollection<htd::id_t> htd::Tree::associatedEdgeIds(const std::vector<h
 
         for (const htd::Hyperedge & edge : hyperedges())
         {
-            if (std::equal(edge.begin(), edge.end(), elements.begin()))
+            if (htd::equal(edge.begin(), edge.end(), elements.begin(), elements.end()))
             {
                 result.emplace_back(edge.id());
             }
@@ -371,7 +373,7 @@ htd::ConstCollection<htd::id_t> htd::Tree::associatedEdgeIds(const htd::ConstCol
 
         for (const htd::Hyperedge & edge : hyperedges())
         {
-            if (std::equal(edge.begin(), edge.end(), elements.begin()))
+            if (htd::equal(edge.begin(), edge.end(), elements.begin(), elements.end()))
             {
                 result.emplace_back(edge.id());
             }

@@ -29,7 +29,8 @@
 #include <htd/Iterator.hpp>
 #include <htd/ConstIterator.hpp>
 
-#include <algorithm>
+#include <htd/Algorithm.hpp>
+
 #include <iterator>
 
 namespace htd
@@ -234,7 +235,7 @@ namespace htd
              */
             inline bool operator==(const Collection<T> & rhs) const
             {
-                return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
+                return size() == rhs.size() && htd::equal(begin(), end(), rhs.begin(), rhs.end());
             }
 
             /**

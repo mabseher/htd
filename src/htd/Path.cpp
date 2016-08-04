@@ -32,6 +32,8 @@
 #include <htd/VectorAdapter.hpp>
 #include <htd/HyperedgeVector.hpp>
 
+#include <htd/Algorithm.hpp>
+
 #include <algorithm>
 #include <iterator>
 #include <stack>
@@ -298,7 +300,7 @@ htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(const std::vector<h
 
         for (const htd::Hyperedge & edge : hyperedges())
         {
-            if (std::equal(edge.begin(), edge.end(), elements.begin()))
+            if (htd::equal(edge.begin(), edge.end(), elements.begin(), elements.end()))
             {
                 result.push_back(edge.id());
             }
@@ -318,7 +320,7 @@ htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(const htd::ConstCol
 
         for (const htd::Hyperedge & edge : hyperedges())
         {
-            if (std::equal(edge.begin(), edge.end(), elements.begin()))
+            if (htd::equal(edge.begin(), edge.end(), elements.begin(), elements.end()))
             {
                 result.push_back(edge.id());
             }

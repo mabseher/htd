@@ -28,6 +28,8 @@
 #include <htd/Globals.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 
+#include <htd/Algorithm.hpp>
+
 #include <algorithm>
 
 /**
@@ -104,7 +106,7 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
         {
             decomposition.copyRememberedVerticesTo(rememberedVertices, node, child);
 
-            if (bag.size() != rememberedVertices.size() || !std::equal(bag.begin(), bag.end(), rememberedVertices.begin()))
+            if (bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
@@ -176,7 +178,7 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
         {
             decomposition.copyRememberedVerticesTo(rememberedVertices, node, child);
 
-            if (bag.size() != rememberedVertices.size() || !std::equal(bag.begin(), bag.end(), rememberedVertices.begin()))
+            if (bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
@@ -230,7 +232,7 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
             {
                 decomposition.copyRememberedVerticesTo(rememberedVertices, vertex, child);
 
-                if (bag.size() != rememberedVertices.size() || !std::equal(bag.begin(), bag.end(), rememberedVertices.begin()))
+                if (bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
                 {
                     htd::vertex_t newVertex = decomposition.addParent(child);
 

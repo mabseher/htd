@@ -30,6 +30,8 @@
 
 #include <htd/ConstPointerIteratorWrapper.hpp>
 
+#include <htd/Algorithm.hpp>
+
 htd::HyperedgePointerDeque::HyperedgePointerDeque(const std::deque<htd::Hyperedge *> & baseCollection) : baseCollection_(std::make_shared<std::deque<htd::Hyperedge *>>(baseCollection))
 {
 
@@ -92,12 +94,12 @@ const htd::Hyperedge & htd::HyperedgePointerDeque::operator[](htd::index_t index
 
 bool htd::HyperedgePointerDeque::operator==(const htd::IHyperedgeCollection & rhs) const
 {
-    return rhs.size() == baseCollection_->size() && std::equal(rhs.begin(), rhs.end(), begin());
+    return rhs.size() == baseCollection_->size() && htd::equal(rhs.begin(), rhs.end(), begin(), end());
 }
 
 bool htd::HyperedgePointerDeque::operator!=(const htd::IHyperedgeCollection & rhs) const
 {
-    return rhs.size() != baseCollection_->size() || !std::equal(rhs.begin(), rhs.end(), begin());
+    return rhs.size() != baseCollection_->size() || !htd::equal(rhs.begin(), rhs.end(), begin(), end());
 }
 
 htd::HyperedgePointerDeque * htd::HyperedgePointerDeque::clone(void) const

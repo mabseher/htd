@@ -28,7 +28,8 @@
 #include <htd/Globals.hpp>
 #include <htd/ConstIterator.hpp>
 
-#include <algorithm>
+#include <htd/Algorithm.hpp>
+
 #include <iterator>
 
 namespace htd
@@ -197,7 +198,7 @@ namespace htd
              */
             inline bool operator==(const htd::ConstCollection<T> & rhs) const HTD_NOEXCEPT
             {
-                return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
+                return size() == rhs.size() && htd::equal(begin(), end(), rhs.begin(), rhs.end());
             }
 
             /**
@@ -209,7 +210,7 @@ namespace htd
              */
             inline bool operator!=(const htd::ConstCollection<T> & rhs) const HTD_NOEXCEPT
             {
-                return size() != rhs.size() || !std::equal(begin(), end(), rhs.begin());
+                return size() != rhs.size() || !htd::equal(begin(), end(), rhs.begin(), rhs.end());
             }
 
             /**

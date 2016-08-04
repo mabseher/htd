@@ -34,6 +34,8 @@
 #include <htd/VectorAdapterIteratorWrapper.hpp>
 #include <htd/VectorAdapterConstIteratorWrapper.hpp>
 
+#include <htd/Algorithm.hpp>
+
 #include <memory>
 #include <vector>
 
@@ -322,7 +324,7 @@ namespace htd
              */
             inline bool operator==(const htd::Collection<T> & rhs) const
             {
-                return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
+                return size() == rhs.size() && htd::equal(begin(), end(), rhs.begin(), rhs.end());
             }
 
             /**
@@ -335,7 +337,7 @@ namespace htd
              */
             inline bool operator==(const htd::ConstCollection<T> & rhs) const
             {
-                return size() == rhs.size() && std::equal(begin(), end(), rhs.begin());
+                return size() == rhs.size() && htd::equal(begin(), end(), rhs.begin(), rhs.end());
             }
 
             /**

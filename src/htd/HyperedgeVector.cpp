@@ -28,6 +28,8 @@
 #include <htd/Globals.hpp>
 #include <htd/HyperedgeVector.hpp>
 
+#include <htd/Algorithm.hpp>
+
 htd::HyperedgeVector::HyperedgeVector(const std::vector<htd::Hyperedge> & baseCollection) : baseCollection_(std::make_shared<std::vector<htd::Hyperedge>>(baseCollection))
 {
 
@@ -90,12 +92,12 @@ const htd::Hyperedge & htd::HyperedgeVector::operator[](htd::index_t index) cons
 
 bool htd::HyperedgeVector::operator==(const htd::IHyperedgeCollection & rhs) const
 {
-    return rhs.size() == baseCollection_->size() && std::equal(rhs.begin(), rhs.end(), begin());
+    return rhs.size() == baseCollection_->size() && htd::equal(rhs.begin(), rhs.end(), begin(), end());
 }
 
 bool htd::HyperedgeVector::operator!=(const htd::IHyperedgeCollection & rhs) const
 {
-    return rhs.size() != baseCollection_->size() || !std::equal(rhs.begin(), rhs.end(), begin());
+    return rhs.size() != baseCollection_->size() || !htd::equal(rhs.begin(), rhs.end(), begin(), end());
 }
 
 htd::HyperedgeVector * htd::HyperedgeVector::clone(void) const

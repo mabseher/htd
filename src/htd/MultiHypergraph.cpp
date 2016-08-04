@@ -31,6 +31,8 @@
 #include <htd/VectorAdapter.hpp>
 #include <htd/HyperedgeVector.hpp>
 
+#include <htd/Algorithm.hpp>
+
 #include <algorithm>
 #include <array>
 #include <iterator>
@@ -239,7 +241,7 @@ bool htd::MultiHypergraph::isEdge(const htd::ConstCollection<htd::vertex_t> & el
 
     for (auto it = implementation_->edges_->begin(); !ret && it != implementation_->edges_->end(); ++it)
     {
-        ret = it->size() == elements.size() && std::equal(it->begin(), it->end(), elements.begin());
+        ret = it->size() == elements.size() && htd::equal(it->begin(), it->end(), elements.begin(), elements.end());
     }
 
     return ret;
@@ -273,7 +275,7 @@ htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(const st
 
     for (const htd::Hyperedge & edge : hyperedges())
     {
-        if (edge.size() == elements.size() && std::equal(edge.begin(), edge.end(), elements.begin()))
+        if (edge.size() == elements.size() && htd::equal(edge.begin(), edge.end(), elements.begin(), elements.end()))
         {
             result.push_back(edge.id());
         }
@@ -290,7 +292,7 @@ htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(const ht
 
     for (const htd::Hyperedge & edge : hyperedges())
     {
-        if (edge.size() == elements.size() && std::equal(edge.begin(), edge.end(), elements.begin()))
+        if (edge.size() == elements.size() && htd::equal(edge.begin(), edge.end(), elements.begin(), elements.end()))
         {
             result.push_back(edge.id());
         }

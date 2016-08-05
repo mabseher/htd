@@ -81,7 +81,7 @@
     #define HTD_API
     #define HTD_LOCAL
     #define HTD_IMPLEMENTATION struct
-    #define HTD_API_TEMPLATE template class
+    #define HTD_API_TEMPLATE extern template class
 #endif
 
 //#define HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

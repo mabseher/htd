@@ -1,1 +1,3 @@
 include/htd/CompilerDetection.hpp
+include/htd/Id.hpp
+include/htd/PreprocessorDefinitions.hpp

@@ -8,7 +8,15 @@ write_compiler_detection_header(
   FEATURES cxx_noexcept cxx_override cxx_lambdas
 )
 
+if (BUILD_SHARED_LIBS)
+    set(HTD_SHARED_LIBRARY ON)
+else (BUILD_SHARED_LIBS)
+    set(HTD_SHARED_LIBRARY OFF)
+endif (BUILD_SHARED_LIBS)
+
 configure_file("${PROJECT_SOURCE_DIR}/cmake/Id.hpp.in" "${PROJECT_SOURCE_DIR}/include/htd/Id.hpp")
+
+configure_file("${PROJECT_SOURCE_DIR}/cmake/PreprocessorDefinitions.hpp.in" "${PROJECT_SOURCE_DIR}/include/htd/PreprocessorDefinitions.hpp")
 
 set(CMAKE_REQUIRED_INCLUDES "${PROJECT_SOURCE_DIR}/include")
 
@@ -40,10 +48,6 @@ set_target_properties(htd
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden -Dhtd_EXPORTS")
 endif(UNIX)
-
-if(BUILD_SHARED_LIBS)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHTD_SHARED_LIBRARY")
-endif(BUILD_SHARED_LIBS)
 
 install(TARGETS htd DESTINATION lib)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd" DESTINATION include)

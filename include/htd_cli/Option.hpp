@@ -120,7 +120,7 @@ namespace htd_cli
             static std::string getCommandLineRepresentation(const std::string & name);
 
         private:
-            HTD_CLI_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

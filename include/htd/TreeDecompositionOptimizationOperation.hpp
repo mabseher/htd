@@ -149,7 +149,7 @@ namespace htd
 #endif
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

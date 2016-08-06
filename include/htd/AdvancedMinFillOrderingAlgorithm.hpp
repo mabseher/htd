@@ -68,7 +68,7 @@ namespace htd
             AdvancedMinFillOrderingAlgorithm & operator=(const AdvancedMinFillOrderingAlgorithm &) { return *this; }
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

@@ -126,7 +126,7 @@ namespace htd_cli
             HTD_CLI_API const htd_cli::MultiValueOption & accessMultiValueOption(const char * const name) const;
 
         private:
-            HTD_CLI_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

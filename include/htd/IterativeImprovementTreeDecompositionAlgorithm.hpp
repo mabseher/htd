@@ -211,7 +211,7 @@ namespace htd
             IterativeImprovementTreeDecompositionAlgorithm & operator=(const IterativeImprovementTreeDecompositionAlgorithm &) { return *this; }
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

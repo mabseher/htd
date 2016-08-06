@@ -60,7 +60,7 @@ namespace htd
             HTD_API TarjanStronglyConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

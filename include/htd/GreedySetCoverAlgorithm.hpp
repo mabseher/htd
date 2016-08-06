@@ -66,7 +66,7 @@ namespace htd
             GreedySetCoverAlgorithm & operator=(const GreedySetCoverAlgorithm &) { return *this; }
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

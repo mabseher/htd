@@ -84,7 +84,7 @@ namespace htd_cli
             void printHelp(std::ostream & stream, std::size_t maxNameLength) const HTD_OVERRIDE;
 
         private:
-            HTD_CLI_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

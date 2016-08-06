@@ -482,7 +482,7 @@ namespace htd
             HTD_API const htd::TreeDecompositionFactory & treeDecompositionFactory(void) const;
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

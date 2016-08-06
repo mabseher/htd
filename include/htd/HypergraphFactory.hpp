@@ -116,7 +116,7 @@ namespace htd
             HTD_API const htd::IMutableHypergraph & accessMutableHypergraph(const htd::IHypergraph & original) const;
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

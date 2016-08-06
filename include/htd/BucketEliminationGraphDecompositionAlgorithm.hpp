@@ -109,7 +109,7 @@ namespace htd
             BucketEliminationGraphDecompositionAlgorithm & operator=(const BucketEliminationGraphDecompositionAlgorithm &) { return *this; }
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

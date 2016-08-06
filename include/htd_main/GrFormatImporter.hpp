@@ -69,7 +69,7 @@ namespace htd_main
             htd::IMultiGraph * import(std::istream & stream) const;
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

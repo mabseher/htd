@@ -68,7 +68,7 @@ namespace htd
             MinDegreeOrderingAlgorithm & operator=(const MinDegreeOrderingAlgorithm &) { return *this; }
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

@@ -117,7 +117,7 @@ namespace htd
             htd::IMutablePathDecomposition * toPathDecomposition(const htd::ITreeDecomposition & decomposition) const;
 
         private:
-            HTD_IMPLEMENTATION Implementation;
+            struct Implementation;
 
             std::unique_ptr<Implementation> implementation_;
     };

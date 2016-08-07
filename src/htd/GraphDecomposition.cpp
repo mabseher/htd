@@ -117,9 +117,9 @@ htd::vertex_t htd::GraphDecomposition::addVertices(std::size_t count)
 
     for (htd::index_t index = 0; index < count; ++index)
     {
-        bagContent_.emplace(ret + index, std::vector<htd::vertex_t>());
+        bagContent_.emplace(static_cast<htd::vertex_t>(ret + index), std::vector<htd::vertex_t>());
 
-        inducedEdges_.emplace(ret + index, htd::FilteredHyperedgeCollection());
+        inducedEdges_.emplace(static_cast<htd::vertex_t>(ret + index), htd::FilteredHyperedgeCollection());
     }
 
     return ret;

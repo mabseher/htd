@@ -126,7 +126,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
         identifiers[index] = hyperedge.id();
 
-        missingEdges.insert(static_cast<htd::id_t>(index));
+        missingEdges.insert(hyperedge.id());
 
         index++;
     }
@@ -144,7 +144,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
             index = 0;
 
-            for (index = 0; !ok && index < edgeCount; ++index)
+            while (!ok && index < edgeCount)
             {
                 htd::id_t id = identifiers[index];
 
@@ -156,6 +156,8 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
                 }
 
                 ok = missingEdges.empty();
+
+                ++index;
             }
         }
     });

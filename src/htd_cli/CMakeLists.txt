@@ -3,18 +3,23 @@ aux_source_directory(. HTD_CLI_SRC_LIST)
 
 list(REMOVE_ITEM HTD_CLI_SRC_LIST "main.cpp")
 
+if (BUILD_SHARED_LIBS)
+    set(HTD_CLI_SHARED_LIBRARY ON)
+else (BUILD_SHARED_LIBS)
+    set(HTD_CLI_SHARED_LIBRARY OFF)
+endif (BUILD_SHARED_LIBS)
+
+configure_file("${PROJECT_SOURCE_DIR}/cmake/templates/htd_cli/PreprocessorDefinitions.hpp.in"
+               "${PROJECT_SOURCE_DIR}/include/htd_cli/PreprocessorDefinitions.hpp")
+
 set(HTD_CLI_SOVERSION_INTERFACE 0)
 set(HTD_CLI_SOVERSION_REVISION 0)
 set(HTD_CLI_SOVERSION_AGE 0)
 set(HTD_CLI_SOVERSION ${HTD_CLI_SOVERSION_INTERFACE}.${HTD_CLI_SOVERSION_REVISION}.${HTD_CLI_SOVERSION_AGE})
 
 if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden -Dhtd_cli_EXPORTS")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden")
 endif(UNIX)
-
-if(BUILD_SHARED_LIBS)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHTD_CLI_SHARED_LIBRARY")
-endif(BUILD_SHARED_LIBS)
 
 add_library(htd_cli ${HTD_CLI_SRC_LIST} ${HEADER_LIST})
 

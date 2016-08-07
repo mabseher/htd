@@ -14,9 +14,11 @@ else (BUILD_SHARED_LIBS)
     set(HTD_SHARED_LIBRARY OFF)
 endif (BUILD_SHARED_LIBS)
 
-configure_file("${PROJECT_SOURCE_DIR}/cmake/Id.hpp.in" "${PROJECT_SOURCE_DIR}/include/htd/Id.hpp")
+configure_file("${PROJECT_SOURCE_DIR}/cmake/templates/htd/Id.hpp.in"
+               "${PROJECT_SOURCE_DIR}/include/htd/Id.hpp")
 
-configure_file("${PROJECT_SOURCE_DIR}/cmake/PreprocessorDefinitions.hpp.in" "${PROJECT_SOURCE_DIR}/include/htd/PreprocessorDefinitions.hpp")
+configure_file("${PROJECT_SOURCE_DIR}/cmake/templates/htd/PreprocessorDefinitions.hpp.in"
+               "${PROJECT_SOURCE_DIR}/include/htd/PreprocessorDefinitions.hpp")
 
 set(CMAKE_REQUIRED_INCLUDES "${PROJECT_SOURCE_DIR}/include")
 
@@ -46,7 +48,7 @@ set_target_properties(htd
 )
 
 if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden -Dhtd_EXPORTS")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden")
 endif(UNIX)
 
 install(TARGETS htd DESTINATION lib)

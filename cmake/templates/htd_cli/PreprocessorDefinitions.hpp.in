@@ -45,6 +45,8 @@
     #endif
 #endif
 
+#cmakedefine HTD_CLI_SHARED_LIBRARY
+
 #ifdef HTD_CLI_SHARED_LIBRARY
     #ifdef htd_cli_EXPORTS
         #define HTD_CLI_API HTD_SYMBOL_EXPORT

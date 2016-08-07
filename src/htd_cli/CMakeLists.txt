@@ -30,20 +30,14 @@ set_property(TARGET htd_cli PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 set_target_properties(htd_cli PROPERTIES VERSION ${HTD_CLI_SOVERSION} SOVERSION ${HTD_CLI_SOVERSION_INTERFACE})
 
-set_target_properties(htd_cli
-    PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-)
+if(UNIX)
+    set_target_properties(htd_cli
+        PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    )
+endif(UNIX)
 
 install(TARGETS htd_cli DESTINATION lib)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd_cli" DESTINATION include)
-
-if(BUILD_TESTING)
-    if(MSVC)
-        add_custom_command(TARGET htd_cli POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E make_directory to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE_DIR:htd_cli>" to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"))
-    endif(MSVC)
-endif(BUILD_TESTING)

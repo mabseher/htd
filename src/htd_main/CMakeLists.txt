@@ -13,12 +13,14 @@ set_property(TARGET htd_main PROPERTY CXX_STANDARD_REQUIRED ON)
 
 set_target_properties(htd_main PROPERTIES VERSION ${HTD_MAIN_VERSION})
 
-set_target_properties(htd_main
-    PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-)
+if(UNIX)
+    set_target_properties(htd_main
+        PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    )
+endif(UNIX)
 
 if(UNIX)
     configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_exhaustive.sh"
@@ -44,11 +46,5 @@ if(UNIX)
 endif(UNIX)
 
 target_link_libraries(htd_main htd htd_cli)
-
-if(MSVC)
-    add_custom_command(TARGET htd_main POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE_DIR:htd>" "$<TARGET_FILE_DIR:htd_main>"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE_DIR:htd_cli>" "$<TARGET_FILE_DIR:htd_main>")
-endif(MSVC)
 
 install(TARGETS htd_main DESTINATION bin)

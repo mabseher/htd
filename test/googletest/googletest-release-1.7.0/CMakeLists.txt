@@ -71,16 +71,6 @@ cxx_library(gtest "${cxx_strict}" src/gtest-all.cc)
 cxx_library(gtest_main "${cxx_strict}" src/gtest_main.cc)
 target_link_libraries(gtest_main gtest)
 
-if(MSVC)
-    add_custom_command(TARGET gtest POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest> to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"))
-
-    add_custom_command(TARGET gtest_main POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:gtest_main> to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"))
-endif(MSVC)
-
 ########################################################################
 #
 # Samples on how to link user tests with gtest or gtest_main.

@@ -25,10 +25,4 @@ foreach(TEST_PROGRAM ${TEST_PROGRAMS})
     target_link_libraries(${TEST_NAME} htd gtest gtest_main)
 
     add_test(NAME "${TEST_NAME}" COMMAND "$<TARGET_FILE:${TEST_NAME}>")
-
-    if(MSVC)
-        add_custom_command(TARGET ${TEST_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E make_directory to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/")
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:${TEST_NAME}>" to_native_path("${CMAKE_BINARY_DIR}/tests/$<CONFIGURATION>/"))
-    endif(MSVC)
 endforeach()

@@ -40,12 +40,14 @@ set_property(TARGET htd PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 set_target_properties(htd PROPERTIES VERSION ${HTD_SOVERSION} SOVERSION ${HTD_SOVERSION_INTERFACE})
 
-set_target_properties(htd
-    PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-)
+if(UNIX)
+    set_target_properties(htd
+        PROPERTIES
+        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    )
+endif(UNIX)
 
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden")
@@ -53,14 +55,3 @@ endif(UNIX)
 
 install(TARGETS htd DESTINATION lib)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd" DESTINATION include)
-
-if(BUILD_TESTING)
-    if(MSVC)
-        add_custom_command(
-            OUTPUT "${CMAKE_BINARY_DIR}/tests/htd"
-            DEPENDS "$<TARGET_FILE:htd>"
-            COMMAND ${CMAKE_COMMAND} -E make_directory to_native_path("${CMAKE_BINARY_DIR}/tests/")
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:htd>" to_native_path("${CMAKE_BINARY_DIR}/tests/$<TARGET_FILE_NAME:htd>")
-            COMMENT "Copy htd library to directory 'tests' ...")
-    endif(MSVC)
-endif(BUILD_TESTING)

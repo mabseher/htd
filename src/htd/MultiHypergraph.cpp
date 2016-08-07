@@ -123,7 +123,7 @@ struct htd::MultiHypergraph::Implementation
     /**
      *  The ID the next edge added to the graph will get.
      */
-    htd::index_t next_edge_;
+    htd::id_t next_edge_;
 
     /**
      *  The ID the next vertex added to the graph will get.

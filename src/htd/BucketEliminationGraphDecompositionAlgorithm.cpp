@@ -578,7 +578,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                             if (superset[neighbor1] == neighbor1 && superset[neighbor2] == neighbor2)
                             {
-                                htd::vertex_t nextVertexId = vertexNames.size() + 1;
+                                htd::vertex_t nextVertexId = static_cast<htd::vertex_t>(vertexNames.size()) + 1;
 
                                 std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(neighbor1, nextVertexId);
 
@@ -631,7 +631,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                                     if (superset[replacement] == replacement && superset[neighbor] == neighbor)
                                     {
-                                        htd::vertex_t nextVertexId = vertexNames.size() + 1;
+                                        htd::vertex_t nextVertexId = static_cast<htd::vertex_t>(vertexNames.size()) + 1;
 
                                         std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(replacement, nextVertexId);
 
@@ -668,7 +668,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                     {
                         if (neighbor > vertex && superset[neighbor] == neighbor)
                         {
-                            htd::vertex_t nextVertexId = vertexNames.size() + 1;
+                            htd::vertex_t nextVertexId = static_cast<htd::vertex_t>(vertexNames.size()) + 1;
 
                             std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(vertex, nextVertexId);
 
@@ -832,7 +832,7 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::distribu
 
     htd::vertex_t currentBucket = startBucket;
 
-    lastAssignedEdge[currentBucket] = edgeIndex;
+    lastAssignedEdge[currentBucket] = static_cast<htd::id_t>(edgeIndex);
 
     inducedEdges[currentBucket].push_back(edgeIndex);
 
@@ -854,7 +854,7 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::distribu
 
         originStack.pop();
 
-        lastAssignedEdge[currentBucket] = edgeIndex;
+        lastAssignedEdge[currentBucket] = static_cast<htd::id_t>(edgeIndex);
 
         inducedEdges[currentBucket].push_back(edgeIndex);
 

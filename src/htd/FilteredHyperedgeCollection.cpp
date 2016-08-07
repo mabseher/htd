@@ -202,7 +202,7 @@ long htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator:
 {
     HTD_ASSERT(&(*baseCollection_) == &(*rhs.baseCollection_) && &(*relevantIndices_) == &(*rhs.relevantIndices_))
 
-    return position_ - rhs.position_;
+    return static_cast<long>(position_) - static_cast<long>(rhs.position_);
 }
 
 const htd::Hyperedge * htd::FilteredHyperedgeCollection::FilteredHyperedgeCollectionConstIterator::operator->(void) const

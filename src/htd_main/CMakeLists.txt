@@ -6,6 +6,14 @@ set(HTD_MAIN_VERSION_MINOR 9)
 set(HTD_MAIN_VERSION_PATCH 9)
 set(HTD_MAIN_VERSION ${HTD_MAIN_VERSION_MAJOR}.${HTD_MAIN_VERSION_MINOR}.${HTD_MAIN_VERSION_PATCH} )
 
+if(UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
+endif(UNIX)
+
+if(APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+endif(APPLE)
+
 add_executable(htd_main ${HTD_MAIN_SRC_LIST} ${HEADER_LIST})
 
 set_property(TARGET htd_main PROPERTY CXX_STANDARD 11)

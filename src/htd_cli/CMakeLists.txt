@@ -21,6 +21,10 @@ if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden")
 endif(UNIX)
 
+if(APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+endif(APPLE)
+
 add_library(htd_cli ${HTD_CLI_SRC_LIST} ${HEADER_LIST})
 
 set_property(TARGET htd_cli PROPERTY CXX_STANDARD 11)

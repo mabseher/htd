@@ -694,7 +694,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     if (!connected)
                     {
-                        std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(vertex, vertexNames.size() + 1);
+                        std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(vertex, static_cast<htd::vertex_t>(vertexNames.size()) + 1);
 
                         if (vertex1.second)
                         {

@@ -154,9 +154,9 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
 
         if (coverage > 0)
         {
-            relevantContainers.push_back(index);
+            relevantContainers.push_back(static_cast<htd::id_t>(index));
 
-            additionalCoverage[index] = coverage;
+            additionalCoverage[static_cast<htd::id_t>(index)] = coverage;
         }
     }
 
@@ -284,7 +284,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
 
                     if (!history.empty())
                     {
-                        next = history.back().selectedIndex + 1;
+                        next = static_cast<htd::id_t>(history.back().selectedIndex) + 1;
 
                         remainder = history.back().remainder;
 
@@ -333,7 +333,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
                     minimumCoverSize = history.size();
                 }
 
-                next = history.back().selectedIndex + 1;
+                next = static_cast<htd::id_t>(history.back().selectedIndex) + 1;
 
                 remainder = history.back().remainder;
 
@@ -357,7 +357,7 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
 
             if (!history.empty())
             {
-                next = history.back().selectedIndex + 1;
+                next = static_cast<htd::id_t>(history.back().selectedIndex) + 1;
 
                 remainder = history.back().remainder;
 

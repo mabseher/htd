@@ -696,7 +696,7 @@ void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)
     {
         htd::index_t currentIndex = 0;
         
-        std::vector<htd::id_t> emptyEdges;
+        std::vector<htd::index_t> emptyEdges;
         
         for (auto & edge : *(implementation_->edges_))
         {

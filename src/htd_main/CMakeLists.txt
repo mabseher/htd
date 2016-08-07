@@ -11,7 +11,9 @@ if(UNIX)
 endif(UNIX)
 
 if(APPLE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+    endif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif(APPLE)
 
 add_executable(htd_main ${HTD_MAIN_SRC_LIST} ${HEADER_LIST})

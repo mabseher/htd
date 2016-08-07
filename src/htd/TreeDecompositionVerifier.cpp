@@ -108,7 +108,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
     std::size_t edgeCount = graph.edgeCount();
 
-    std::unordered_set<htd::vertex_t> missingEdges(edgeCount);
+    std::unordered_set<htd::id_t> missingEdges(edgeCount);
 
     std::vector<htd::id_t> identifiers(edgeCount);
 
@@ -126,7 +126,7 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
         identifiers[index] = hyperedge.id();
 
-        missingEdges.insert(index);
+        missingEdges.insert(static_cast<htd::id_t>(index));
 
         index++;
     }
@@ -162,12 +162,16 @@ htd::ConstCollection<htd::Hyperedge> htd::TreeDecompositionVerifier::violationsH
 
     if (!ok)
     {
+        index = 0;
+
         for (const htd::Hyperedge & hyperedge : hyperedges)
         {
-            if (missingEdges.count(index) > 0)
+            if (missingEdges.count(static_cast<htd::id_t>(index)) > 0)
             {
                 result.push_back(hyperedge);
             }
+
+            ++index;
         }
 
         std::sort(result.begin(), result.end());

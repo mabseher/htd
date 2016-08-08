@@ -5,9 +5,17 @@ os: Visual Studio 2015
 environment:
   matrix:
   - Toolset: v140
+    BUILD_SHARED_LIBS: True
+    HTD_USE_EXTENDED_IDENTIFIERS: False
+  - Toolset: v140
+    BUILD_SHARED_LIBS: False
+    HTD_USE_EXTENDED_IDENTIFIERS: False
+  - Toolset: v140
+    BUILD_SHARED_LIBS: True
     HTD_USE_EXTENDED_IDENTIFIERS: True
   - Toolset: v140
-    HTD_USE_EXTENDED_IDENTIFIERS: False
+    BUILD_SHARED_LIBS: False
+    HTD_USE_EXTENDED_IDENTIFIERS: True
 
 platform:
   - Win32
@@ -42,7 +50,7 @@ build_script:
 - ps: |
     md _build -Force | Out-Null
     cd _build
-    & cmake -G "$generator" -DCMAKE_CONFIGURATION_TYPES="Debug;Release" -DHTD_USE_EXTENDED_IDENTIFIERS=$env:HTD_USE_EXTENDED_IDENTIFIERS ..
+    & cmake -G "$generator" -DCMAKE_CONFIGURATION_TYPES="Debug;Release" -DBUILD_SHARED_LIBS=$env:BUILD_SHARED_LIBS -DHTD_USE_EXTENDED_IDENTIFIERS=$env:HTD_USE_EXTENDED_IDENTIFIERS ..
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
     }

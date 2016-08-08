@@ -5,6 +5,9 @@ os: Visual Studio 2015
 environment:
   matrix:
   - Toolset: v140
+    HTD_USE_EXTENDED_IDENTIFIERS=True
+  - Toolset: v140
+    HTD_USE_EXTENDED_IDENTIFIERS=True
 
 platform:
   - Win32
@@ -39,7 +42,7 @@ build_script:
 - ps: |
     md _build -Force | Out-Null
     cd _build
-    & cmake -G "$generator" -DCMAKE_CONFIGURATION_TYPES="Debug;Release" ..
+    & cmake -G "$generator" -DCMAKE_CONFIGURATION_TYPES="Debug;Release" -DHTD_USE_EXTENDED_IDENTIFIERS=$env:HTD_USE_EXTENDED_IDENTIFIERS ..
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
     }

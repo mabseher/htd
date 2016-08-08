@@ -39,8 +39,6 @@ if(APPLE)
     if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
     endif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
-    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -undefined dynamic_lookup")
 endif(APPLE)
 
 add_library(htd ${SRC_LIST} ${HEADER_LIST})

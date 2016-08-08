@@ -5,9 +5,9 @@ os: Visual Studio 2015
 environment:
   matrix:
   - Toolset: v140
-    HTD_USE_EXTENDED_IDENTIFIERS=True
+    HTD_USE_EXTENDED_IDENTIFIERS: True
   - Toolset: v140
-    HTD_USE_EXTENDED_IDENTIFIERS=True
+    HTD_USE_EXTENDED_IDENTIFIERS: False
 
 platform:
   - Win32

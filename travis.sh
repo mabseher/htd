@@ -11,11 +11,20 @@ if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
     CXX_FLAGS="${CXX_FLAGS} --coverage -fno-inline -fno-inline-small-functions -fno-default-inline -fno-elide-constructors -Wno-invalid-offsetof -O0"
 fi
 
-cmake -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
-      -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} \
-      -DHTD_USE_EXTENDED_IDENTIFIERS=${HTD_USE_EXTENDED_IDENTIFIERS} \
-      -DCMAKE_CXX_FLAGS="${CXX_FLAGS}" \
-      ../..
+if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    cmake -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+          -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} \
+          -DHTD_USE_EXTENDED_IDENTIFIERS=${HTD_USE_EXTENDED_IDENTIFIERS} \
+          -DCMAKE_OSX_ARCHITECTURES="i386;x86_64" \
+          -DCMAKE_CXX_FLAGS="${CXX_FLAGS}" \
+          ../..
+else
+    cmake -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+          -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} \
+          -DHTD_USE_EXTENDED_IDENTIFIERS=${HTD_USE_EXTENDED_IDENTIFIERS} \
+          -DCMAKE_CXX_FLAGS="${CXX_FLAGS}" \
+          ../..
+fi
 
 make VERBOSE=1
 

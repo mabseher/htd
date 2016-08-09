@@ -82,7 +82,8 @@ A full API documentation can be generated via `make doc` (requires [Doxygen](www
 #include <memory>
 #include <chrono>
 
-using namespace std;
+//Create a management instance of the 'htd' library in order to allow centralized configuration.
+std::unique_ptr<htd::LibraryInstance> manager(htd::createManagementInstance(htd::Id::FIRST));
 
 /**
  *  Sample fitness function which minimizes width and height of the decomposition.
@@ -103,17 +104,17 @@ class FitnessFunction : public htd::ITreeDecompositionFitnessFunction
 
         }
 
-        htd::FitnessEvaluation * fitness(const htd::IMultiHypergraph & graph, 
+        htd::FitnessEvaluation * fitness(const htd::IMultiHypergraph & graph,
                                          const htd::ITreeDecomposition & decomposition) const
         {
             HTD_UNUSED(graph)
 
             /**
-              * Here we specify the fitness evaluation for a given decomposition. 
+              * Here we specify the fitness evaluation for a given decomposition.
               * In this case, we select the maximum bag size and the height.
               */
-            return new htd::FitnessEvaluation(2, 
-                                              -(double)(decomposition.maximumBagSize()), 
+            return new htd::FitnessEvaluation(2,
+                                              -(double)(decomposition.maximumBagSize()),
                                               -(double)(decomposition.height()));
         }
 
@@ -131,14 +132,9 @@ void handleSignal(int signal)
     switch (signal)
     {
         case SIGINT:
-        {
-            htd::Library::instance().terminate();
-
-            break;
-        }
         case SIGTERM:
         {
-            htd::Library::instance().terminate();
+            manager->terminate();
 
             break;
         }
@@ -151,156 +147,159 @@ void handleSignal(int signal)
     std::signal(signal, handleSignal);
 }
 
-int main(int argc, const char * const * const argv)
+int main(int, const char * const * const)
 {
     std::signal(SIGINT, handleSignal);
     std::signal(SIGTERM, handleSignal);
 
     std::srand(0);
 
-    // Get a new importer for graph format 'gr'.
-    htd::GrFormatImporter importer;
+    // Create a new graph instance which can hande (multi-)hyperedges.
+    htd::IMutableMultiHypergraph * graph =
+        manager->multiHypergraphFactory().getMultiHypergraph();
 
-    // Create a new management instance to support graceful termination of algorithms.
-    std::shared_ptr<htd::LibraryInstance> libraryInstance = 
-        htd::Library::instance().createManagementInstance();
+    /**
+     *  Add five vertices to the sample graph.
+     *  The vertices of a graph are numbered
+     * in ascending order starting from 1.
+     */
+    graph->addVertices(5);
 
-    // Import graph f.
-    htd::IMultiGraph * graph = importer.import(argv[1]);
+    // Add two edges to the graph.
+    graph->addEdge(1, 2);
+    graph->addEdge(2, 3);
 
-    // Check whether the algorithm was terminated.
-    if (!libraryInstance->isTerminated())
+    // Add a hyperedge to the graph.
+    graph->addEdge(std::vector<htd::vertex_t> { 5, 4, 3 });
+
+    // Create an instance of the fitness function.
+    FitnessFunction fitnessFunction;
+
+    /**
+     *  This operation changes the root of a given decomposition so that the provided
+     *  fitness function is maximized. When no fitness function is provided to the
+     *  constructor, the constructed optimization operation does not perform any
+     *  optimization and only applies provided manipulations.
+     */
+    htd::TreeDecompositionOptimizationOperation * operation =
+        new htd::TreeDecompositionOptimizationOperation(manager.get(), fitnessFunction);
+
+    /**
+     *  Set the previously created management instance to support graceful termination.
+     */
+    operation->setManagementInstance(manager.get());
+
+    /**
+     *  Set the vertex selections strategy (default = exhaustive).
+     *
+     *  In this case, we want to select (at most) 10 vertices of the input decomposition randomly.
+     */
+    operation->setVertexSelectionStrategy(new htd::RandomVertexSelectionStrategy(10));
+
+    /**
+     *  Set desired manipulations. In this case we want a nice (= normalized) tree decomposition.
+     */
+    operation->addManipulationOperation(new htd::NormalizationOperation(manager.get()));
+
+    /**
+      * Optionally, we can set the vertex elimination algorithm.
+      * We decide to use the min-degree heuristic in this case.
+      */
+    manager->orderingAlgorithmFactory()
+        .setConstructionTemplate(new htd::MinDegreeOrderingAlgorithm(manager.get()));
+
+    // Get the default tree decomposition algorithm. One can also choose a custom one.
+    htd::ITreeDecompositionAlgorithm * baseAlgorithm =
+        manager->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm();
+
+    /**
+     *  Set the optimization operation as manipulation operation in order
+     *  to choose the optimal root reducing height of the tree decomposition.
+     */
+    baseAlgorithm->addManipulationOperation(operation);
+
+    /**
+     *  Create a new instance of htd::IterativeImprovementTreeDecompositionAlgorithm based
+     *  on the base algorithm and the fitness function. Note that the fitness function can
+     *  be an arbiraty one and can differ from the one used in the optimization operation.
+     */
+    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(manager.get(),
+                                                                  baseAlgorithm,
+                                                                  fitnessFunction);
+
+    /**
+     *  Set the maximum number of iterations after which the best decomposition with
+     *  respect to the fitness function shall be returned. Use value 1 to make the
+     *  iterative algorithm return the first decomposition found.
+     */
+    algorithm.setIterationCount(10);
+
+    /**
+     *  Set the maximum number of iterations without improvement after which the algorithm returns
+     *  best decomposition with respect to the fitness function found so far. A limit of 0 aborts
+     *  the algorithm after the first non-improving solution has been found, i.e. the algorithm
+     *  will perform a simple hill-climbing approach.
+     */
+    algorithm.setNonImprovementLimit(3);
+
+    // Record the optimal maximal bag size of the tree decomposition to allow printing the progress.
+    std::size_t optimalBagSize = (std::size_t)-1;
+
+    /**
+     *  Compute the decomposition. Note that the additional, optional parameter of the function
+     *  computeDecomposition() in case of htd::IterativeImprovementTreeDecompositionAlgorithm
+     *  can be used to intercept every new decomposition. In this case we output some
+     *  intermediate information upon perceiving an improved decompostion.
+     */
+    htd::ITreeDecomposition * decomposition =
+        algorithm.computeDecomposition(*graph, [&](const htd::IMultiHypergraph & graph,
+                                                   const htd::ITreeDecomposition & decomposition,
+                                                   const htd::FitnessEvaluation & fitness)
     {
-        // Create an instance of the fitness function.
-        FitnessFunction fitnessFunction;
+        // Disable warnings concerning unused variables.
+        HTD_UNUSED(graph)
+        HTD_UNUSED(decomposition)
+
+        std::size_t bagSize = -fitness.at(0);
 
         /**
-         *  This operation changes the root of a given decomposition so that the provided 
-         *  fitness function is maximized. When no fitness function is provided to the
-         *  constructor, the constructed optimization operation does not perform any 
-         *  optimization and only applies provided manipulations.
+         *  After each improvement we print the current optimal
+         *  width + 1 and the time when the decomposition was found.
          */
-        htd::TreeDecompositionOptimizationOperation * operation = 
-            new htd::TreeDecompositionOptimizationOperation(fitnessFunction);
-
-        /**
-         *  Set the previously created management instance to support graceful termination.
-         */
-        operation->setManagementInstance(libraryInstance);
-
-        /**
-         *  Set the vertex selections strategy (default = exhaustive).
-         *
-         *  In this case, we want to select (at most) 10 vertices of the input decomposition randomly.
-         */
-        operation->setVertexSelectionStrategy(new htd::RandomVertexSelectionStrategy(10));
-
-        /**
-         *  Set desired manipulations. In this case we want a nice (= normalized) tree decomposition.
-         */
-        operation->addManipulationOperation(new htd::NormalizationOperation(true, true, false, false));
-
-        /**
-          * Optionally, we can set the vertex elimination algorithm. 
-          * We decide to use the min-degree heuristic in this case.
-          */
-        htd::OrderingAlgorithmFactory::instance()
-            .setConstructionTemplate(new htd::MinDegreeOrderingAlgorithm());
-
-        // Get the default tree decomposition algorithm. One can also choose a custom one.
-        htd::ITreeDecompositionAlgorithm * baseAlgorithm = 
-            htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
-
-        /**
-         *  Set the optimization operation as manipulation operation in order 
-         *  to choose the optimal root reducing height of the tree decomposition.
-         */
-        baseAlgorithm->addManipulationOperation(operation);
-
-        /**
-         *  Create a new instance of htd::IterativeImprovementTreeDecompositionAlgorithm based 
-         *  on the base algorithm and the fitness function. Note that the fitness function can 
-         *  be an arbiraty one and can differ from the one used in the optimization operation.
-         */
-        htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(baseAlgorithm, fitnessFunction);
-
-        /**
-         *  Set the previously created management instance to support graceful termination.
-         */
-        algorithm.setManagementInstance(libraryInstance);
-
-        /**
-         *  Set the maximum number of iterations after which the best decomposition with 
-         *  respect to the fitness function shall be returned. Use value 1 to make the 
-         *  iterative algorithm return the first decomposition found.
-         */
-        algorithm.setIterationCount(10);
-
-        /**
-         *  Set the maximum number of iterations without improvement after which the algorithm returns 
-         *  best decomposition with respect to the fitness function found so far. A limit of 0 aborts 
-         *  the algorithm after the first non-improving solution has been found, i.e. the algorithm 
-         *  will perform a simple hill-climbing approach.
-         */
-        algorithm.setNonImprovementLimit(3);
-
-        // Record the optimal maximal bag size of the tree decomposition to allow printing the progress.
-        std::size_t optimalBagSize = (std::size_t)-1;
-
-        /**
-         *  Compute the decomposition. Note that the additional, optional parameter of the function 
-         *  computeDecomposition() in case of htd::IterativeImprovementTreeDecompositionAlgorithm 
-         *  can be used to intercept every new decomposition. In this case we output some 
-         *  intermediate information upon perceiving an improved decompostion.
-         */
-        htd::ITreeDecomposition * decomposition =
-            algorithm.computeDecomposition(*graph, [&](const htd::IMultiHypergraph & graph, 
-                                                       const htd::ITreeDecomposition & decomposition, 
-                                                       const htd::FitnessEvaluation & fitness)
+        if (bagSize < optimalBagSize)
         {
-            // Disable warnings concerning unused variables.
-            HTD_UNUSED(graph)
-            HTD_UNUSED(decomposition)
+            optimalBagSize = bagSize;
 
-            std::size_t bagSize = -fitness.at(0);
+            std::chrono::milliseconds::rep msSinceEpoch =
+                std::chrono::duration_cast<std::chrono::milliseconds>
+                        (std::chrono::system_clock::now().time_since_epoch()).count();
 
-            /**
-             *  After each improvement we print the current optimal 
-             *  width + 1 and the time when the decomposition was found.
-             */
-            if (bagSize < optimalBagSize)
-            {
-                optimalBagSize = bagSize;
-
-                std::chrono::milliseconds::rep msSinceEpoch =
-                    std::chrono::duration_cast<std::chrono::milliseconds>
-                            (std::chrono::system_clock::now().time_since_epoch()).count();
-
-                std::cout << "c status " << optimalBagSize << " " << msSinceEpoch << std::endl;
-            }
-        });
-
-        // If a decomposition was found we want to print it to stdout.
-        if (decomposition != nullptr)
-        {
-            /**
-             *  Check whether the algorithm indeed computed a valid decomposition.
-             *
-             *  algorithm.isSafelyInterruptible() for decomposition algorithms allows
-             *  to find out if the algorithm returned by a factory class is safely
-             *  interruptible. If the getter returns true, the algorithms will
-             *  guarantee that the computed decomposition is indeed a valid one
-             *  and that all manipulations and labelings were applied successfully.
-             */
-            if (!algorithm.isTerminated() || algorithm.isSafelyInterruptible())
-            {
-                htd::TdFormatExporter exporter;
-
-                exporter.write(*decomposition, *graph, std::cout);
-            }
-
-            delete decomposition;
+            std::cout << "c status " << optimalBagSize << " " << msSinceEpoch << std::endl;
         }
+    });
+
+    // If a decomposition was found we want to print it to stdout.
+    if (decomposition != nullptr)
+    {
+        /**
+         *  Check whether the algorithm indeed computed a valid decomposition.
+         *
+         *  algorithm.isSafelyInterruptible() for decomposition algorithms allows to
+         *  find out if the algorithm is safely interruptible. If the getter returns
+         *  true, the algorithm guarantees that the computed decomposition is indeed
+         *  a valid one and that all manipulations and all labelings were applied
+         *  successfully.
+         */
+        if (!manager->isTerminated() || algorithm.isSafelyInterruptible())
+        {
+            // Print the height of the decomposition to stdout.
+            std::cout << decomposition->height() << std::endl;
+            
+            // Print the size of the largest bag of the decomposition to stdout.
+            std::cout << decomposition->maximumBagSize() << std::endl;
+        }
+
+        delete decomposition;
     }
 
     delete graph;

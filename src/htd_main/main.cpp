@@ -729,11 +729,21 @@ int main(int argc, const char * const * const argv)
             {
                 exporter = new htd_main::WidthExporter();
             }
+            else
+            {
+                std::cerr << "INVALID OUTPUT FORMAT: " << outputFormat << std::endl;
 
-            run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
+                error = true;
+            }
+
+            if (!error)
+            {
+                run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
+
+                delete exporter;
+            }
 
             delete algorithm;
-            delete exporter;
         }
         else
         {

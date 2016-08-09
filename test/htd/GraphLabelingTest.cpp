@@ -26,6 +26,7 @@
 
 #include <htd/main.hpp>
 
+#include <memory>
 #include <vector>
 
 class GraphLabelingTest : public ::testing::Test
@@ -256,15 +257,13 @@ TEST(GraphLabelingTest, TestCloneMethod)
     labeling.setVertexLabel(123, new htd::Label<int>(123));
     labeling.setEdgeLabel(456, new htd::Label<int>(456));
 
-    htd::GraphLabeling * labeling2 = labeling.clone();
+    std::unique_ptr<htd::GraphLabeling> labeling2(labeling.clone());
 
     ASSERT_EQ((std::size_t)1, labeling.vertexLabelCount());
     ASSERT_EQ((std::size_t)1, labeling.edgeLabelCount());
 
     ASSERT_EQ(123, htd::accessLabel<int>(labeling2->vertexLabel(123)));
     ASSERT_EQ(456, htd::accessLabel<int>(labeling2->edgeLabel(456)));
-
-    delete labeling2;
 }
 
 int main(int argc, char **argv)

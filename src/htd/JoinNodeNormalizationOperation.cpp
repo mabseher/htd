@@ -112,9 +112,9 @@ void htd::JoinNodeNormalizationOperation::apply(const htd::IMultiHypergraph & gr
             {
                 htd::vertex_t newParent = decomposition.addParent(node);
 
-                decomposition.bagContent(newParent) = bag;
+                decomposition.mutableBagContent(newParent) = bag;
 
-                decomposition.inducedHyperedges(newParent) = inducedHyperedges;
+                decomposition.mutableInducedHyperedges(newParent) = inducedHyperedges;
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -187,9 +187,9 @@ void htd::JoinNodeNormalizationOperation::apply(const htd::IMultiHypergraph & gr
                 {
                     htd::vertex_t newParent = decomposition.addParent(vertex);
 
-                    decomposition.bagContent(newParent) = bag;
+                    decomposition.mutableBagContent(newParent) = bag;
 
-                    decomposition.inducedHyperedges(newParent) = inducedHyperedges;
+                    decomposition.mutableInducedHyperedges(newParent) = inducedHyperedges;
 
                     for (auto & labelingFunction : labelingFunctions)
                     {

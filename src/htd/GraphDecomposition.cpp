@@ -141,7 +141,7 @@ std::size_t htd::GraphDecomposition::bagSize(htd::vertex_t vertex) const
     return bagContent_.at(vertex).size();
 }
 
-std::vector<htd::vertex_t> & htd::GraphDecomposition::bagContent(htd::vertex_t vertex)
+std::vector<htd::vertex_t> & htd::GraphDecomposition::mutableBagContent(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 
@@ -155,7 +155,7 @@ const std::vector<htd::vertex_t> & htd::GraphDecomposition::bagContent(htd::vert
     return bagContent_.at(vertex);
 }
 
-htd::FilteredHyperedgeCollection & htd::GraphDecomposition::inducedHyperedges(htd::vertex_t vertex)
+htd::FilteredHyperedgeCollection & htd::GraphDecomposition::mutableInducedHyperedges(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 

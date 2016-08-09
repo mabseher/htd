@@ -285,11 +285,15 @@ void htd::PostProcessingPathDecompositionAlgorithm::setManipulationOperations(co
 
 void htd::PostProcessingPathDecompositionAlgorithm::addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation)
 {
+    bool assigned = false;
+
     htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(manipulationOperation);
 
     if (labelingFunction != nullptr)
     {
         implementation_->labelingFunctions_.push_back(labelingFunction);
+
+        assigned = true;
     }
 
     htd::IPathDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(manipulationOperation);
@@ -297,6 +301,13 @@ void htd::PostProcessingPathDecompositionAlgorithm::addManipulationOperation(htd
     if (newManipulationOperation != nullptr)
     {
         implementation_->postProcessingOperations_.push_back(newManipulationOperation);
+
+        assigned = true;
+    }
+
+    if (!assigned)
+    {
+        delete manipulationOperation;
     }
 }
 
@@ -304,19 +315,7 @@ void htd::PostProcessingPathDecompositionAlgorithm::addManipulationOperations(co
 {
     for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
-        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
-
-        if (labelingFunction != nullptr)
-        {
-            implementation_->labelingFunctions_.push_back(labelingFunction);
-        }
-
-        htd::IPathDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IPathDecompositionManipulationOperation *>(operation);
-
-        if (manipulationOperation != nullptr)
-        {
-            implementation_->postProcessingOperations_.push_back(manipulationOperation);
-        }
+        addManipulationOperation(operation);
     }
 }
 

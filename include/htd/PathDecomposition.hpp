@@ -146,11 +146,11 @@ namespace htd
 
             HTD_API std::size_t bagSize(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            HTD_API std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) HTD_OVERRIDE;
+            HTD_API std::vector<htd::vertex_t> & mutableBagContent(htd::vertex_t vertex) HTD_OVERRIDE;
 
             HTD_API const std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            HTD_API htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) HTD_OVERRIDE;
+            HTD_API htd::FilteredHyperedgeCollection & mutableInducedHyperedges(htd::vertex_t vertex) HTD_OVERRIDE;
 
             HTD_API const htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) const HTD_OVERRIDE;
 

@@ -29,6 +29,7 @@
 
 #include <cstring>
 #include <iomanip>
+#include <ios>
 #include <ostream>
 #include <sstream>
 #include <cctype>
@@ -122,6 +123,8 @@ void htd_cli::Option::setUsed(void)
 
 void htd_cli::Option::printHelp(std::ostream & stream, std::size_t maxNameLength) const
 {
+    std::ios::fmtflags oldFormat(stream.flags());
+
     std::ostringstream parameterDefinition;
 
     parameterDefinition << htd_cli::Option::getCommandLineRepresentation(implementation_->name_);
@@ -132,6 +135,8 @@ void htd_cli::Option::printHelp(std::ostream & stream, std::size_t maxNameLength
     }
 
     stream << std::left << std::setw(maxNameLength) << parameterDefinition.str() << "   " << implementation_->description_ << std::endl;
+
+    stream.flags(oldFormat);
 }
 
 std::string htd_cli::Option::getCommandLineRepresentation(char name)

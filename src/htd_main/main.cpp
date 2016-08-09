@@ -425,6 +425,11 @@ void decomposeNamed(const htd::LibraryInstance & instance, const DecompositionAl
         {
             std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
         }
+
+        if (graph != nullptr)
+        {
+            delete graph;
+        }
     }
 }
 
@@ -569,6 +574,22 @@ void optimizeNamed(const htd::LibraryInstance & instance, const htd::IterativeIm
 
         delete graph;
     }
+    else
+    {
+        if (instance.isTerminated())
+        {
+            std::cerr << "Program was terminated successfully!" << std::endl;
+        }
+        else
+        {
+            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        }
+
+        if (graph != nullptr)
+        {
+            delete graph;
+        }
+    }
 }
 
 template <typename DecompositionAlgorithm, typename Exporter>
@@ -656,6 +677,8 @@ int main(int argc, const char * const * const argv)
 {
     int ret = 0;
 
+    bool error = false;
+
     std::signal(SIGINT, handleSignal);
     std::signal(SIGTERM, handleSignal);
 
@@ -717,59 +740,68 @@ int main(int argc, const char * const * const argv)
             {
                 exporter = new htd_main::WidthExporter();
             }
-
-            if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
-            {
-                htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm(libraryInstance), WidthMinimizingFitnessFunction());
-
-                if (iterationOption.used())
-                {
-                    algorithm.setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
-                }
-
-                if (nonImprovementLimitOption.used())
-                {
-                    if (std::string(nonImprovementLimitOption.value()) == "-1")
-                    {
-                        algorithm.setNonImprovementLimit((std::size_t)-1);
-                    }
-                    else
-                    {
-                        algorithm.setNonImprovementLimit(std::stoul(nonImprovementLimitOption.value(), nullptr, 10));
-                    }
-                }
-
-                const std::string & inputFormat = inputFormatChoice.value();
-
-                if (inputFormat == "gr")
-                {
-                    htd_main::GrFormatImporter importer(libraryInstance);
-
-                    optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
-                }
-                else if (inputFormat == "lp")
-                {
-                    htd_main::LpFormatImporter importer(libraryInstance);
-
-                    optimizeNamed(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
-                }
-                else if (inputFormat == "hgr")
-                {
-                    htd_main::HgrFormatImporter importer(libraryInstance);
-
-                    optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
-                }
-            }
             else
             {
-                htd::ITreeDecompositionAlgorithm * algorithm = libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm(libraryInstance);
+                std::cerr << "INVALID OUTPUT FORMAT: " << outputFormat << std::endl;
 
-                run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
-
-                delete algorithm;
+                error = true;
             }
 
-            delete exporter;
+            if (!error)
+            {
+                if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
+                {
+                    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm(libraryInstance), WidthMinimizingFitnessFunction());
+
+                    if (iterationOption.used())
+                    {
+                        algorithm.setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
+                    }
+
+                    if (nonImprovementLimitOption.used())
+                    {
+                        if (std::string(nonImprovementLimitOption.value()) == "-1")
+                        {
+                            algorithm.setNonImprovementLimit((std::size_t)-1);
+                        }
+                        else
+                        {
+                            algorithm.setNonImprovementLimit(std::stoul(nonImprovementLimitOption.value(), nullptr, 10));
+                        }
+                    }
+
+                    const std::string & inputFormat = inputFormatChoice.value();
+
+                    if (inputFormat == "gr")
+                    {
+                        htd_main::GrFormatImporter importer(libraryInstance);
+
+                        optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                    }
+                    else if (inputFormat == "lp")
+                    {
+                        htd_main::LpFormatImporter importer(libraryInstance);
+
+                        optimizeNamed(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                    }
+                    else if (inputFormat == "hgr")
+                    {
+                        htd_main::HgrFormatImporter importer(libraryInstance);
+
+                        optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                    }
+                }
+                else
+                {
+                    htd::ITreeDecompositionAlgorithm * algorithm = libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm(libraryInstance);
+
+                    run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
+
+                    delete algorithm;
+                }
+
+                delete exporter;
+            }
         }
     }
 

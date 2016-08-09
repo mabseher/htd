@@ -243,11 +243,15 @@ void htd::HypertreeDecompositionAlgorithm::setManipulationOperations(const std::
 
 void htd::HypertreeDecompositionAlgorithm::addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation)
 {
+    bool assigned = false;
+
     htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(manipulationOperation);
 
     if (labelingFunction != nullptr)
     {
         implementation_->labelingFunctions_.emplace_back(labelingFunction);
+
+        assigned = true;
     }
 
     htd::ITreeDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(manipulationOperation);
@@ -255,6 +259,13 @@ void htd::HypertreeDecompositionAlgorithm::addManipulationOperation(htd::IDecomp
     if (newManipulationOperation != nullptr)
     {
         implementation_->postProcessingOperations_.emplace_back(newManipulationOperation);
+
+        assigned = true;
+    }
+
+    if (!assigned)
+    {
+        delete manipulationOperation;
     }
 }
 
@@ -262,19 +273,7 @@ void htd::HypertreeDecompositionAlgorithm::addManipulationOperations(const std::
 {
     for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
-        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
-
-        if (labelingFunction != nullptr)
-        {
-            implementation_->labelingFunctions_.emplace_back(labelingFunction);
-        }
-
-        htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
-
-        if (manipulationOperation != nullptr)
-        {
-            implementation_->postProcessingOperations_.emplace_back(manipulationOperation);
-        }
+        addManipulationOperation(operation);
     }
 }
 

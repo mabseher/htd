@@ -796,6 +796,10 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
             {
                 std::vector<htd::id_t> & currentEdges = implementation_->nodes_.at(currentVertex)->edges;
 
+                /* Because 'currentVertex' is a neighbor of 'vertex' and 'position' points to the
+                 * edge connecting the two vertices, std::lower_bound will always find the edge
+                 * with ID '*it' in the collection 'currentEdges'. */
+                // coverity[use_iterator]
                 currentEdges.erase(std::lower_bound(currentEdges.begin(), currentEdges.end(), *it));
             }
         }

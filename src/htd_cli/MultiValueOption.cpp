@@ -29,6 +29,7 @@
 
 #include <cstring>
 #include <iomanip>
+#include <ios>
 #include <ostream>
 #include <sstream>
 #include <vector>
@@ -93,6 +94,8 @@ void htd_cli::MultiValueOption::registerValue(const char * const value)
 
 void htd_cli::MultiValueOption::printHelp(std::ostream & stream, std::size_t maxNameLength) const
 {
+    std::ios::fmtflags oldFormat(stream.flags());
+
     std::ostringstream parameterDefinition;
 
     parameterDefinition << htd_cli::Option::getCommandLineRepresentation(name());
@@ -105,6 +108,8 @@ void htd_cli::MultiValueOption::printHelp(std::ostream & stream, std::size_t max
     parameterDefinition << " <" << valuePlaceholder() << ">";
 
     stream << std::left << std::setw(maxNameLength) << parameterDefinition.str() << "   " << description() << std::endl;
+
+    stream.flags(oldFormat);
 }
 
 #endif /* HTD_CLI_MULTIVALUEOPTION_CPP */

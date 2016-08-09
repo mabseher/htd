@@ -279,11 +279,15 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::setManipulationOperation
 
 void htd::BucketEliminationGraphDecompositionAlgorithm::addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation)
 {
+    bool assigned = false;
+
     htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(manipulationOperation);
 
     if (labelingFunction != nullptr)
     {
         implementation_->labelingFunctions_.emplace_back(labelingFunction);
+
+        assigned = true;
     }
 
     htd::IGraphDecompositionManipulationOperation * newManipulationOperation = dynamic_cast<htd::IGraphDecompositionManipulationOperation *>(manipulationOperation);
@@ -291,6 +295,13 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::addManipulationOperation
     if (newManipulationOperation != nullptr)
     {
         implementation_->postProcessingOperations_.emplace_back(newManipulationOperation);
+
+        assigned = true;
+    }
+
+    if (!assigned)
+    {
+        delete manipulationOperation;
     }
 }
 
@@ -298,19 +309,7 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::addManipulationOperation
 {
     for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
-        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
-
-        if (labelingFunction != nullptr)
-        {
-            implementation_->labelingFunctions_.emplace_back(labelingFunction);
-        }
-
-        htd::IGraphDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IGraphDecompositionManipulationOperation *>(operation);
-
-        if (manipulationOperation != nullptr)
-        {
-            implementation_->postProcessingOperations_.emplace_back(manipulationOperation);
-        }
+        addManipulationOperation(operation);
     }
 }
 

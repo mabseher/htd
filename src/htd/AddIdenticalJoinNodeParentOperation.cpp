@@ -107,9 +107,9 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(const htd::IMultiHypergraph
         {
             htd::vertex_t newParent = decomposition.addParent(node);
 
-            decomposition.bagContent(newParent) = bag;
+            decomposition.mutableBagContent(newParent) = bag;
 
-            decomposition.inducedHyperedges(newParent) = decomposition.inducedHyperedges(node);
+            decomposition.mutableInducedHyperedges(newParent) = decomposition.inducedHyperedges(node);
 
             for (auto & labelingFunction : labelingFunctions)
             {
@@ -147,9 +147,9 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(const htd::IMultiHypergraph
             {
                 htd::vertex_t newParent = decomposition.addParent(vertex);
 
-                decomposition.bagContent(newParent) = bag;
+                decomposition.mutableBagContent(newParent) = bag;
 
-                decomposition.inducedHyperedges(newParent) = decomposition.inducedHyperedges(vertex);
+                decomposition.mutableInducedHyperedges(newParent) = decomposition.inducedHyperedges(vertex);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {

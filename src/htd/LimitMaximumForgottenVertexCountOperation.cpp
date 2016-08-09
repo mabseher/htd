@@ -150,11 +150,11 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                 std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                decomposition.bagContent(newNode) = newContent;
+                decomposition.mutableBagContent(newNode) = newContent;
 
                 newInducedHyperedges.restrictTo(newContent);
 
-                decomposition.inducedHyperedges(newNode) = newInducedHyperedges;
+                decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -182,11 +182,11 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
-                        decomposition.bagContent(newNode) = newContent;
+                        decomposition.mutableBagContent(newNode) = newContent;
 
                         newInducedHyperedges.restrictTo(newContent);
 
-                        decomposition.inducedHyperedges(newNode) = newInducedHyperedges;
+                        decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
 
                         for (auto & labelingFunction : labelingFunctions)
                         {
@@ -293,11 +293,11 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                 std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                decomposition.bagContent(newNode) = newContent;
+                decomposition.mutableBagContent(newNode) = newContent;
 
                 newInducedHyperedges.restrictTo(newContent);
 
-                decomposition.inducedHyperedges(newNode) = newInducedHyperedges;
+                decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -325,11 +325,11 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                         std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
-                        decomposition.bagContent(newNode) = newContent;
+                        decomposition.mutableBagContent(newNode) = newContent;
 
                         newInducedHyperedges.restrictTo(newContent);
 
-                        decomposition.inducedHyperedges(newNode) = newInducedHyperedges;
+                        decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
 
                         for (auto & labelingFunction : labelingFunctions)
                         {
@@ -422,11 +422,11 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                     std::set_difference(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
 
-                    decomposition.bagContent(newNode) = newContent;
+                    decomposition.mutableBagContent(newNode) = newContent;
 
                     newInducedHyperedges.restrictTo(newContent);
 
-                    decomposition.inducedHyperedges(newNode) = newInducedHyperedges;
+                    decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
 
                     for (auto & labelingFunction : labelingFunctions)
                     {
@@ -456,11 +456,11 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                             std::set_difference(bagContent2.begin(), bagContent2.end(), start, finish, std::back_inserter(newContent));
 
-                            decomposition.bagContent(newNode) = newContent;
+                            decomposition.mutableBagContent(newNode) = newContent;
 
                             newInducedHyperedges.restrictTo(newContent);
 
-                            decomposition.inducedHyperedges(newNode) = newInducedHyperedges;
+                            decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
 
                             for (auto & labelingFunction : labelingFunctions)
                             {

@@ -254,7 +254,7 @@ void htd::JoinNodeReplacementOperation::apply(const htd::IMultiHypergraph & grap
                         std::cout << std::endl << std::endl;
                         )
 
-                        decomposition.bagContent(currentNode) = newBagContent;
+                        decomposition.mutableBagContent(currentNode) = newBagContent;
 
                         for (auto & labelingFunction : labelingFunctions)
                         {

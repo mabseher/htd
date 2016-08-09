@@ -509,7 +509,7 @@ std::size_t htd::PathDecomposition::bagSize(htd::vertex_t vertex) const
     return bagContent_.at(vertex).size();
 }
 
-std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::vertex_t vertex)
+std::vector<htd::vertex_t> & htd::PathDecomposition::mutableBagContent(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 
@@ -523,7 +523,7 @@ const std::vector<htd::vertex_t> & htd::PathDecomposition::bagContent(htd::verte
     return bagContent_.at(vertex);
 }
 
-htd::FilteredHyperedgeCollection & htd::PathDecomposition::inducedHyperedges(htd::vertex_t vertex)
+htd::FilteredHyperedgeCollection & htd::PathDecomposition::mutableInducedHyperedges(htd::vertex_t vertex)
 {
     HTD_ASSERT(isVertex(vertex))
 

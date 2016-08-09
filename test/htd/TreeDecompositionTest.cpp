@@ -463,7 +463,7 @@ TEST(TreeDecompositionTest, CheckCopyConstructors)
 
     treeDecomposition.removeVertex(root3);
 
-    treeDecomposition.bagContent(treeDecompositionNode2) = std::vector<htd::vertex_t> { 1, 2, 3 };
+    treeDecomposition.mutableBagContent(treeDecompositionNode2) = std::vector<htd::vertex_t> { 1, 2, 3 };
 
     const htd::ITreeDecomposition & treeDecompositionReference = treeDecomposition;
 
@@ -642,7 +642,7 @@ TEST(TreeDecompositionTest, CheckBagContentModifications)
 
     std::vector<htd::vertex_t> bagContent { 1, 2, 3 };
 
-    td1.bagContent(root) = bagContent;
+    td1.mutableBagContent(root) = bagContent;
 
     ASSERT_EQ((std::size_t)3, td1.bagSize(root));
     ASSERT_EQ((std::size_t)3, td1.bagContent(root).size());
@@ -651,7 +651,7 @@ TEST(TreeDecompositionTest, CheckBagContentModifications)
     ASSERT_EQ((htd::vertex_t)2, td1.bagContent(root)[1]);
     ASSERT_EQ((htd::vertex_t)3, td1.bagContent(root)[2]);
 
-    td1.bagContent(root) = std::vector<htd::vertex_t> { 4, 5 };
+    td1.mutableBagContent(root) = std::vector<htd::vertex_t> { 4, 5 };
 
     ASSERT_EQ((std::size_t)2, td1.bagSize(root));
     ASSERT_EQ((std::size_t)2, td1.bagContent(root).size());
@@ -679,11 +679,11 @@ TEST(TreeDecompositionTest, CheckNodeTypeDetection)
     htd::vertex_t node31 = td3.addChild(root3);
     htd::vertex_t node32 = td3.addChild(root3);
 
-    td2.bagContent(node21) = std::vector<htd::vertex_t> { 1, 2 };
+    td2.mutableBagContent(node21) = std::vector<htd::vertex_t> { 1, 2 };
 
-    td3.bagContent(root3) = std::vector<htd::vertex_t> { 1, 2 };
-    td3.bagContent(node31) = std::vector<htd::vertex_t> { 1 };
-    td3.bagContent(node32) = std::vector<htd::vertex_t> { 2 };
+    td3.mutableBagContent(root3) = std::vector<htd::vertex_t> { 1, 2 };
+    td3.mutableBagContent(node31) = std::vector<htd::vertex_t> { 1 };
+    td3.mutableBagContent(node32) = std::vector<htd::vertex_t> { 2 };
 
     ASSERT_EQ((std::size_t)1, td1.leafCount());
     ASSERT_EQ((std::size_t)1, td2.leafCount());
@@ -803,10 +803,10 @@ TEST(TreeDecompositionTest, CheckIntroduceNodeDetection)
 
     htd::vertex_t node121 = td.addChild(node12);
 
-    td.bagContent(node1) = std::vector<htd::vertex_t> { 1, 2 };
-    td.bagContent(node11) = std::vector<htd::vertex_t> { 1 };
-    td.bagContent(node12) = std::vector<htd::vertex_t> { 2 };
-    td.bagContent(node121) = std::vector<htd::vertex_t> { };
+    td.mutableBagContent(node1) = std::vector<htd::vertex_t> { 1, 2 };
+    td.mutableBagContent(node11) = std::vector<htd::vertex_t> { 1 };
+    td.mutableBagContent(node12) = std::vector<htd::vertex_t> { 2 };
+    td.mutableBagContent(node121) = std::vector<htd::vertex_t> { };
 
     ASSERT_EQ((std::size_t)2, td.introduceNodeCount());
     ASSERT_EQ(node11, td.introduceNodes()[0]);
@@ -869,10 +869,10 @@ TEST(TreeDecompositionTest, CheckRememberedVertexDetection)
 
     htd::vertex_t node121 = td.addChild(node12);
 
-    td.bagContent(node1) = std::vector<htd::vertex_t> { 1, 2 };
-    td.bagContent(node11) = std::vector<htd::vertex_t> { 1 };
-    td.bagContent(node12) = std::vector<htd::vertex_t> { 2 };
-    td.bagContent(node121) = std::vector<htd::vertex_t> { };
+    td.mutableBagContent(node1) = std::vector<htd::vertex_t> { 1, 2 };
+    td.mutableBagContent(node11) = std::vector<htd::vertex_t> { 1 };
+    td.mutableBagContent(node12) = std::vector<htd::vertex_t> { 2 };
+    td.mutableBagContent(node121) = std::vector<htd::vertex_t> { };
 
     ASSERT_EQ((std::size_t)2, td.rememberedVertexCount(node1));
     ASSERT_EQ((std::size_t)0, td.rememberedVertexCount(node11));
@@ -929,11 +929,11 @@ TEST(TreeDecompositionTest, CheckForgetNodeDetection)
 
     htd::vertex_t root = td.addParent(node1);
 
-    td.bagContent(root) = std::vector<htd::vertex_t> { 1 };
-    td.bagContent(node1) = std::vector<htd::vertex_t> { 1, 2 };
-    td.bagContent(node11) = std::vector<htd::vertex_t> { 1, 2 };
-    td.bagContent(node12) = std::vector<htd::vertex_t> { 1, 2 };
-    td.bagContent(node121) = std::vector<htd::vertex_t> { 1, 2, 3, 4 };
+    td.mutableBagContent(root) = std::vector<htd::vertex_t> { 1 };
+    td.mutableBagContent(node1) = std::vector<htd::vertex_t> { 1, 2 };
+    td.mutableBagContent(node11) = std::vector<htd::vertex_t> { 1, 2 };
+    td.mutableBagContent(node12) = std::vector<htd::vertex_t> { 1, 2 };
+    td.mutableBagContent(node121) = std::vector<htd::vertex_t> { 1, 2, 3, 4 };
 
     ASSERT_EQ((std::size_t)2, td.forgetNodeCount());
     ASSERT_EQ(node12, td.forgetNodes()[0]);
@@ -1020,7 +1020,7 @@ TEST(TreeDecompositionTest, CheckInducedHyperedges1)
     htd::FilteredHyperedgeCollection hyperedges1(new htd::HyperedgeVector(inputEdges1), std::vector<htd::index_t> { 0, 1, 2 });
     htd::FilteredHyperedgeCollection hyperedges2(new htd::HyperedgeVector(inputEdges1), std::vector<htd::index_t> { 2, 1, 0 });
 
-    td.inducedHyperedges(node1) = hyperedges1;
+    td.mutableInducedHyperedges(node1) = hyperedges1;
 
     ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
 
@@ -1042,7 +1042,7 @@ TEST(TreeDecompositionTest, CheckInducedHyperedges1)
     ++it;
     ASSERT_EQ((htd::id_t)3, it->id());
 
-    td.inducedHyperedges(node1) = std::move(hyperedges2);
+    td.mutableInducedHyperedges(node1) = std::move(hyperedges2);
 
     ASSERT_EQ((std::size_t)3, td.inducedHyperedges(node1).size());
 

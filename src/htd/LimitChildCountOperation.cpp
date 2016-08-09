@@ -119,9 +119,9 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
             {
                 htd::vertex_t newNode = decomposition.addChild(attachmentPoint);
 
-                decomposition.bagContent(newNode) = bag;
+                decomposition.mutableBagContent(newNode) = bag;
 
-                decomposition.inducedHyperedges(newNode) = inducedHyperedges;
+                decomposition.mutableInducedHyperedges(newNode) = inducedHyperedges;
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -148,9 +148,9 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
             {
                 htd::vertex_t newNode = decomposition.addChild(attachmentPoint);
 
-                decomposition.bagContent(newNode) = bag;
+                decomposition.mutableBagContent(newNode) = bag;
 
-                decomposition.inducedHyperedges(newNode) = inducedHyperedges;
+                decomposition.mutableInducedHyperedges(newNode) = inducedHyperedges;
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -205,9 +205,9 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
             {
                 htd::vertex_t newNode = decomposition.addChild(attachmentPoint);
 
-                decomposition.bagContent(newNode) = bag;
+                decomposition.mutableBagContent(newNode) = bag;
 
-                decomposition.inducedHyperedges(newNode) = inducedHyperedges;
+                decomposition.mutableInducedHyperedges(newNode) = inducedHyperedges;
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -236,9 +236,9 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
             {
                 htd::vertex_t newNode = decomposition.addChild(attachmentPoint);
 
-                decomposition.bagContent(newNode) = bag;
+                decomposition.mutableBagContent(newNode) = bag;
 
-                decomposition.inducedHyperedges(newNode) = inducedHyperedges;
+                decomposition.mutableInducedHyperedges(newNode) = inducedHyperedges;
 
                 for (auto & labelingFunction : labelingFunctions)
                 {

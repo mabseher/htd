@@ -110,13 +110,13 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
-                decomposition.bagContent(newVertex) = rememberedVertices;
+                decomposition.mutableBagContent(newVertex) = rememberedVertices;
 
                 htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
                 newInducedHyperedges.restrictTo(rememberedVertices);
 
-                decomposition.inducedHyperedges(newVertex) = std::move(newInducedHyperedges);
+                decomposition.mutableInducedHyperedges(newVertex) = std::move(newInducedHyperedges);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -182,13 +182,13 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
-                decomposition.bagContent(newVertex) = rememberedVertices;
+                decomposition.mutableBagContent(newVertex) = rememberedVertices;
 
                 htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
                 newInducedHyperedges.restrictTo(rememberedVertices);
 
-                decomposition.inducedHyperedges(newVertex) = std::move(newInducedHyperedges);
+                decomposition.mutableInducedHyperedges(newVertex) = std::move(newInducedHyperedges);
 
                 for (auto & labelingFunction : labelingFunctions)
                 {
@@ -236,13 +236,13 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
                 {
                     htd::vertex_t newVertex = decomposition.addParent(child);
 
-                    decomposition.bagContent(newVertex) = rememberedVertices;
+                    decomposition.mutableBagContent(newVertex) = rememberedVertices;
 
                     htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(vertex);
 
                     newInducedHyperedges.restrictTo(rememberedVertices);
 
-                    decomposition.inducedHyperedges(newVertex) = std::move(newInducedHyperedges);
+                    decomposition.mutableInducedHyperedges(newVertex) = std::move(newInducedHyperedges);
 
                     for (auto & labelingFunction : labelingFunctions)
                     {

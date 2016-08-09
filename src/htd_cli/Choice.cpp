@@ -29,6 +29,7 @@
 
 #include <cstring>
 #include <iomanip>
+#include <ios>
 #include <ostream>
 #include <string>
 #include <sstream>
@@ -216,6 +217,8 @@ void htd_cli::Choice::registerValue(const char * const value)
 
 void htd_cli::Choice::printHelp(std::ostream & stream, std::size_t maxNameLength) const
 {
+    std::ios::fmtflags oldFormat(stream.flags());
+
     std::ostringstream parameterDefinition;
 
     parameterDefinition << htd_cli::Option::getCommandLineRepresentation(name());
@@ -242,6 +245,8 @@ void htd_cli::Choice::printHelp(std::ostream & stream, std::size_t maxNameLength
 
         stream << std::endl;
     }
+
+    stream.flags(oldFormat);
 }
 
 #endif /* HTD_CLI_CHOICE_CPP */

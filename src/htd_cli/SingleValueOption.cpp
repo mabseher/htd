@@ -29,6 +29,7 @@
 
 #include <cstring>
 #include <iomanip>
+#include <ios>
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
@@ -95,6 +96,8 @@ void htd_cli::SingleValueOption::registerValue(const char * const value)
 
 void htd_cli::SingleValueOption::printHelp(std::ostream & stream, std::size_t maxNameLength) const
 {
+    std::ios::fmtflags oldFormat(stream.flags());
+
     std::ostringstream parameterDefinition;
 
     parameterDefinition << htd_cli::Option::getCommandLineRepresentation(name());
@@ -107,6 +110,8 @@ void htd_cli::SingleValueOption::printHelp(std::ostream & stream, std::size_t ma
     parameterDefinition << " <" << valuePlaceholder() << ">";
 
     stream << std::left << std::setw(maxNameLength) << parameterDefinition.str() << "   " << description() << std::endl;
+
+    stream.flags(oldFormat);
 }
 
 #endif /* HTD_CLI_SINGLEVALUEOPTION_CPP */

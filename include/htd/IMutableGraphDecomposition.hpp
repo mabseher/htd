@@ -38,12 +38,10 @@ namespace htd
     {
         public:
             using htd::IMutableLabeledMultiHypergraph::addVertex;
+
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             using htd::IMutableLabeledMultiHypergraph::assign;
 #endif
-
-            using htd::IGraphDecomposition::bagContent;
-            using htd::IGraphDecomposition::inducedHyperedges;
 
             /**
              *  Destructor for an IMutableGraphDecomposition object.
@@ -77,7 +75,7 @@ namespace htd
              *
              *  @return The bag content of the specific vertex.
              */
-            virtual std::vector<htd::vertex_t> & bagContent(htd::vertex_t vertex) = 0;
+            virtual std::vector<htd::vertex_t> & mutableBagContent(htd::vertex_t vertex) = 0;
 
             /**
              *  Access the hyperedges induced by the bag content of a specific vertex.
@@ -86,7 +84,7 @@ namespace htd
              *
              *  @return The collection of hyperedges induced by the bag content of the specific vertex.
              */
-            virtual htd::FilteredHyperedgeCollection & inducedHyperedges(htd::vertex_t vertex) = 0;
+            virtual htd::FilteredHyperedgeCollection & mutableInducedHyperedges(htd::vertex_t vertex) = 0;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**

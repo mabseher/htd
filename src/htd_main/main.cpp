@@ -43,76 +43,87 @@ htd_cli::OptionManager * createOptionManager(void)
 {
     htd_cli::OptionManager * manager = new htd_cli::OptionManager();
 
-    htd_cli::Option * helpOption = new htd_cli::Option("help", "Print usage information and exit.", 'h');
+    try
+    {
+        htd_cli::Option * helpOption = new htd_cli::Option("help", "Print usage information and exit.", 'h');
 
-    manager->registerOption(helpOption, "General Options");
+        manager->registerOption(helpOption, "General Options");
 
-    htd_cli::SingleValueOption * seedOption = new htd_cli::SingleValueOption("seed", "Set the seed for the random number generator to <seed>.", "seed", 's');
+        htd_cli::SingleValueOption * seedOption = new htd_cli::SingleValueOption("seed", "Set the seed for the random number generator to <seed>.", "seed", 's');
 
-    manager->registerOption(seedOption, "General Options");
+        manager->registerOption(seedOption, "General Options");
 
-    htd_cli::Choice * decompositionTypeChoice = new htd_cli::Choice("type", "Compute a graph decomposition of type <type>.", "type");
+        htd_cli::Choice * decompositionTypeChoice = new htd_cli::Choice("type", "Compute a graph decomposition of type <type>.", "type");
 
-    decompositionTypeChoice->addPossibility("tree", "Compute a tree decomposition of the input graph.");
-    decompositionTypeChoice->addPossibility("hypertree", "Compute a hypertree decomposition of the input graph.");
+        decompositionTypeChoice->addPossibility("tree", "Compute a tree decomposition of the input graph.");
+        decompositionTypeChoice->addPossibility("hypertree", "Compute a hypertree decomposition of the input graph.");
 
-    decompositionTypeChoice->setDefaultValue("tree");
+        decompositionTypeChoice->setDefaultValue("tree");
 
-    manager->registerOption(decompositionTypeChoice, "Decomposition Options");
+        manager->registerOption(decompositionTypeChoice, "Decomposition Options");
 
-    htd_cli::Choice * inputFormatChoice = new htd_cli::Choice("input", "Assume that the input graph is given in format <format>.\n  (See https://github.com/mabseher/htd/blob/master/FORMATS.md for information about the available input formats.)", "format");
+        htd_cli::Choice * inputFormatChoice = new htd_cli::Choice("input", "Assume that the input graph is given in format <format>.\n  (See https://github.com/mabseher/htd/blob/master/FORMATS.md for information about the available input formats.)", "format");
 
-    inputFormatChoice->addPossibility("gr", "Use the input format 'gr'.");
-    //inputFormatChoice->addPossibility("hg", "Use the input format 'hg'.");
-    inputFormatChoice->addPossibility("lp", "Use the input format 'lp'.");
-    inputFormatChoice->addPossibility("hgr", "Use the input format 'hgr'.");
+        inputFormatChoice->addPossibility("gr", "Use the input format 'gr'.");
+        //inputFormatChoice->addPossibility("hg", "Use the input format 'hg'.");
+        inputFormatChoice->addPossibility("lp", "Use the input format 'lp'.");
+        inputFormatChoice->addPossibility("hgr", "Use the input format 'hgr'.");
 
-    inputFormatChoice->setDefaultValue("gr");
+        inputFormatChoice->setDefaultValue("gr");
 
-    manager->registerOption(inputFormatChoice, "Input-Specific Options");
+        manager->registerOption(inputFormatChoice, "Input-Specific Options");
 
-    htd_cli::Choice * outputFormatChoice = new htd_cli::Choice("output", "Set the output format of the decomposition to <format>.\n  (See https://github.com/mabseher/htd/blob/master/FORMATS.md for information about the available output formats.)", "format");
+        htd_cli::Choice * outputFormatChoice = new htd_cli::Choice("output", "Set the output format of the decomposition to <format>.\n  (See https://github.com/mabseher/htd/blob/master/FORMATS.md for information about the available output formats.)", "format");
 
-    outputFormatChoice->addPossibility("td", "Use the output format 'td'.");
-    //outputFormatChoice->addPossibility("graphml", "Use the output format 'graphml'.");
-    outputFormatChoice->addPossibility("human", "Provide a human-readable output of the decomposition.");
-    outputFormatChoice->addPossibility("width", "Provide only the maximum bag size of the decomposition.");
+        outputFormatChoice->addPossibility("td", "Use the output format 'td'.");
+        //outputFormatChoice->addPossibility("graphml", "Use the output format 'graphml'.");
+        outputFormatChoice->addPossibility("human", "Provide a human-readable output of the decomposition.");
+        outputFormatChoice->addPossibility("width", "Provide only the maximum bag size of the decomposition.");
 
-    outputFormatChoice->setDefaultValue("td");
+        outputFormatChoice->setDefaultValue("td");
 
-    manager->registerOption(outputFormatChoice, "Output-Specific Options");
+        manager->registerOption(outputFormatChoice, "Output-Specific Options");
 
-    htd_cli::Choice * orderingAlgorithmChoice = new htd_cli::Choice("ordering", "Set the ordering algorithm which shall be used to <algorithm>.", "algorithm");
+        htd_cli::Choice * orderingAlgorithmChoice = new htd_cli::Choice("ordering", "Set the ordering algorithm which shall be used to <algorithm>.", "algorithm");
 
-    orderingAlgorithmChoice->addPossibility("min-fill+", "Advanced minimum-fill ordering algorithm");
-    orderingAlgorithmChoice->addPossibility("min-fill", "Standard minimum-fill ordering algorithm");
-    orderingAlgorithmChoice->addPossibility("min-degree", "Minimum-degree ordering algorithm");
-    orderingAlgorithmChoice->addPossibility("max-cardinality", "Maximum cardinality search ordering algorithm");
+        orderingAlgorithmChoice->addPossibility("min-fill+", "Advanced minimum-fill ordering algorithm");
+        orderingAlgorithmChoice->addPossibility("min-fill", "Standard minimum-fill ordering algorithm");
+        orderingAlgorithmChoice->addPossibility("min-degree", "Minimum-degree ordering algorithm");
+        orderingAlgorithmChoice->addPossibility("max-cardinality", "Maximum cardinality search ordering algorithm");
 
-    orderingAlgorithmChoice->setDefaultValue("min-fill+");
+        orderingAlgorithmChoice->setDefaultValue("min-fill+");
 
-    manager->registerOption(orderingAlgorithmChoice, "Algorithm Options");
+        manager->registerOption(orderingAlgorithmChoice, "Algorithm Options");
 
-    htd_cli::Choice * optimizationChoice = new htd_cli::Choice("opt", "Iteratively compute a decomposition which optimizes <criterion>.", "criterion");
+        htd_cli::Choice * optimizationChoice = new htd_cli::Choice("opt", "Iteratively compute a decomposition which optimizes <criterion>.", "criterion");
 
-    optimizationChoice->addPossibility("none", "Do not perform any optimization.");
-    optimizationChoice->addPossibility("width", "Minimize the maximum bag size of the computed decomposition.");
+        optimizationChoice->addPossibility("none", "Do not perform any optimization.");
+        optimizationChoice->addPossibility("width", "Minimize the maximum bag size of the computed decomposition.");
 
-    optimizationChoice->setDefaultValue("none");
+        optimizationChoice->setDefaultValue("none");
 
-    manager->registerOption(optimizationChoice, "Optimization Options");
+        manager->registerOption(optimizationChoice, "Optimization Options");
 
-    htd_cli::SingleValueOption * iterationOption = new htd_cli::SingleValueOption("iterations", "Set the number of iterations to be performed during optimization to <count> (0 = infinite). (Default: 10)", "count");
+        htd_cli::SingleValueOption * iterationOption = new htd_cli::SingleValueOption("iterations", "Set the number of iterations to be performed during optimization to <count> (0 = infinite). (Default: 10)", "count");
 
-    manager->registerOption(iterationOption, "Optimization Options");
+        manager->registerOption(iterationOption, "Optimization Options");
 
-    htd_cli::SingleValueOption * nonImprovementLimitOption = new htd_cli::SingleValueOption("non-improvement-limit", "Terminate the algorithm if more than <count> iterations did not lead to an improvement (-1 = infinite). (Default: -1)", "count");
+        htd_cli::SingleValueOption * nonImprovementLimitOption = new htd_cli::SingleValueOption("non-improvement-limit", "Terminate the algorithm if more than <count> iterations did not lead to an improvement (-1 = infinite). (Default: -1)", "count");
 
-    manager->registerOption(nonImprovementLimitOption, "Optimization Options");
+        manager->registerOption(nonImprovementLimitOption, "Optimization Options");
 
-    htd_cli::Option * printProgressOption = new htd_cli::Option("print-opt-progress", "Print progress whenever a new optimal decomposition is found.");
+        htd_cli::Option * printProgressOption = new htd_cli::Option("print-opt-progress", "Print progress whenever a new optimal decomposition is found.");
 
-    manager->registerOption(printProgressOption, "Optimization Options");
+        manager->registerOption(printProgressOption, "Optimization Options");
+    }
+    catch (const std::runtime_error & exception)
+    {
+        std::cout << "SETUP FOR OPTION-MANAGER FAILED: " << exception.what() << std::endl;
+
+        delete manager;
+
+        manager = nullptr;
+    }
 
     return manager;
 }
@@ -684,7 +695,7 @@ int main(int argc, const char * const * const argv)
 
     htd_cli::OptionManager * optionManager = createOptionManager();
 
-    if (handleOptions(argc, argv, *optionManager, libraryInstance))
+    if (optionManager != nullptr && handleOptions(argc, argv, *optionManager, libraryInstance))
     {
         const htd_cli::Choice & inputFormatChoice = optionManager->accessChoice("input");
 
@@ -807,7 +818,10 @@ int main(int argc, const char * const * const argv)
 
     delete libraryInstance;
 
-    delete optionManager;
+    if (optionManager != nullptr)
+    {
+        delete optionManager;
+    }
 
     return ret;
 }

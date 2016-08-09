@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Hyperedge.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
@@ -313,6 +313,11 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
         }
 
+        /**
+         *  Set the endpoints of the hyperedge.
+         *
+         *  @param[in] elements The new endpoints of the updated hyperedge.
+         */
         void setElements(const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT HTD_OVERRIDE
         {
             elements_.reserve(elements.size());
@@ -346,6 +351,11 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
         }
 
+        /**
+         *  Set the endpoints of the hyperedge.
+         *
+         *  @param[in] elements The new endpoints of the updated hyperedge.
+         */
         void setElements(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT HTD_OVERRIDE
         {
             elements_.swap(elements);
@@ -514,6 +524,11 @@ class SortedElementInformation : public htd::Hyperedge::IElementInformation
             elements_.emplace_back(vertex2);
         }
 
+        /**
+         *  Set the endpoints of the hyperedge.
+         *
+         *  @param[in] elements The new endpoints of the updated hyperedge.
+         */
         void setElements(const std::vector<htd::vertex_t> & elements) HTD_NOEXCEPT HTD_OVERRIDE
         {
             elements_.reserve(elements.size());
@@ -521,6 +536,11 @@ class SortedElementInformation : public htd::Hyperedge::IElementInformation
             elements_ = elements;
         }
 
+        /**
+         *  Set the endpoints of the hyperedge.
+         *
+         *  @param[in] elements The new endpoints of the updated hyperedge.
+         */
         void setElements(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT HTD_OVERRIDE
         {
             elements_.swap(elements);

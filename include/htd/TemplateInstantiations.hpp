@@ -29,6 +29,8 @@
 
 #include <htd/Vertex.hpp>
 #include <htd/Hyperedge.hpp>
+#include <htd/ConstIterator.hpp>
+#include <htd/ConstCollection.hpp>
 
 HTD_API_TEMPLATE htd::ConstIterator<htd::vertex_t>;
 HTD_API_TEMPLATE htd::ConstCollection<htd::vertex_t>;

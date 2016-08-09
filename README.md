@@ -154,14 +154,14 @@ int main(int, const char * const * const)
 
     std::srand(0);
 
-    // Create a new graph instance which can hande (multi-)hyperedges.
+    // Create a new graph instance which can handle (multi-)hyperedges.
     htd::IMutableMultiHypergraph * graph =
         manager->multiHypergraphFactory().getMultiHypergraph();
 
     /**
      *  Add five vertices to the sample graph.
      *  The vertices of a graph are numbered
-     * in ascending order starting from 1.
+     *  in ascending order starting from 1.
      */
     graph->addVertices(5);
 

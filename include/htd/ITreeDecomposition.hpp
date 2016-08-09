@@ -527,8 +527,8 @@ namespace htd
             /**
              *  Check whether a vertex is present in at least two child bags.
              *
-             *  @param[in] vertex           The vertex which's bag shall be investigated.
-             *  @param[in] forgottenVertex  The potential join vertex.
+             *  @param[in] vertex       The vertex which's bag shall be investigated.
+             *  @param[in] joinVertex   The potential join vertex.
              *
              *  @return True if the given vertex is present in at least two child bags, false otherwise.
              */

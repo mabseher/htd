@@ -375,6 +375,23 @@ namespace htd
 
     std::tuple<std::size_t, std::size_t, std::size_t> HTD_API analyze_sets(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
 
+    /**
+     *  Decompose two sets of vertices into vertices only in the first set, vertices only in the second set and vertices in both sets.
+     *
+     *  @param[in] set1                 The first set of vertices, sorted in ascending order.
+     *  @param[in] set2                 The second set of vertices, sorted in ascending order.
+     *  @param[in] ignoredVertex        The vertex which shall be ignored.
+     *  @param[out] resultOnlySet1      The set of vertices which are found only in the first set, sorted in ascending order.
+     *  @param[out] resultOnlySet2      The set of vertices which are found only in the second set, sorted in ascending order.
+     *  @param[out] resultIntersection  The set of vertices which are found in both sets, sorted in ascending order.
+     */
+    void decompose_sets(const std::vector<htd::vertex_t> & set1,
+                        const std::vector<htd::vertex_t> & set2,
+                        htd::vertex_t ignoredVertex,
+                        std::vector<htd::vertex_t> & resultOnlySet1,
+                        std::vector<htd::vertex_t> & resultOnlySet2,
+                        std::vector<htd::vertex_t> & resultIntersection) HTD_NOEXCEPT;
+
     std::pair<std::size_t, std::size_t> HTD_API symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
 
     template <typename T>
@@ -493,13 +510,10 @@ namespace htd
     {
         std::size_t ret = 0;
         
-        std::size_t count1 = std::distance(firstSet1, lastSet1);
-        std::size_t count2 = std::distance(firstSet2, lastSet2);
-        
-        htd::index_t index1 = 0;
-        htd::index_t index2 = 0;
-        
-        while (index1 < count1 && index2 < count2)
+        std::size_t remainder1 = std::distance(firstSet1, lastSet1);
+        std::size_t remainder2 = std::distance(firstSet2, lastSet2);
+
+        while (remainder1 > 0 && remainder2 > 0)
         {
             auto value1 = *firstSet1;
             auto value2 = *firstSet2;
@@ -508,7 +522,7 @@ namespace htd
             {
                 ret++;
 
-                index1++;
+                --remainder1;
                 
                 ++firstSet1;
             } 
@@ -516,18 +530,18 @@ namespace htd
             {
                 if (!(value2 < value1)) 
                 {
-                    index1++;
-                
+                    --remainder1;
+
                     ++firstSet1;
                 }
 
-                index2++;
-                
+                --remainder2;
+
                 ++firstSet2;
             }
         }
         
-        return ret + count1 - index1;
+        return ret + remainder1;
     }
 
     template <class InputIterator1,
@@ -587,36 +601,33 @@ namespace htd
     {
         size_t ret = 0;
         
-        std::size_t count1 = std::distance(firstSet1, lastSet1);
-        std::size_t count2 = std::distance(firstSet2, lastSet2);
-        
-        htd::index_t index1 = 0;
-        htd::index_t index2 = 0;
-        
-        while (index1 < count1 && index2 < count2) 
+        std::size_t remainder1 = std::distance(firstSet1, lastSet1);
+        std::size_t remainder2 = std::distance(firstSet2, lastSet2);
+
+        while (remainder1 > 0 && remainder2 > 0)
         {
             auto value1 = *firstSet1;
             auto value2 = *firstSet2;
 
             if (value1 < value2) 
             {
-                index1++;
+                --remainder1;
                 
                 ++firstSet1;
             } 
             else
             {
-                if (!(value2 < value1)) 
+                if (value1 == value2)
                 {
                     ret++;
 
-                    index1++;
-                
+                    --remainder1;
+
                     ++firstSet1;
                 }
 
-                index2++;
-                
+                --remainder2;
+
                 ++firstSet2;
             }
         }
@@ -842,11 +853,9 @@ namespace htd
     template <typename Set, typename Collection>
     void fillSet(const Collection & collection, Set & set)
     {
-        std::size_t count = collection.size();
-
         auto it = collection.begin();
 
-        for (htd::index_t index = 0; index < count; ++index)
+        for (htd::index_t remainder = collection.size(); remainder > 0; --remainder)
         {
             set.insert(*it);
 

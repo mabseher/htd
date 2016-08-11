@@ -68,23 +68,6 @@ struct htd::AdvancedMinFillOrderingAlgorithm::Implementation
      *  @return The number of edges between the provided vertices.
      */
     std::size_t computeEdgeCount(const std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const HTD_NOEXCEPT;
-
-    /**
-     *  Decompose two sets of vertices into vertices only in the first set, vertices only in the second set and vertices in both sets.
-     *
-     *  @param[in] set1                 The first set of vertices, sorted in ascending order.
-     *  @param[in] set2                 The second set of vertices, sorted in ascending order.
-     *  @param[in] ignoredVertex        The vertex which shall be ignored.
-     *  @param[out] resultOnlySet1      The set of vertices which are found only in the first set, sorted in ascending order.
-     *  @param[out] resultOnlySet2      The set of vertices which are found only in the second set, sorted in ascending order.
-     *  @param[out] resultIntersection  The set of vertices which are found in both sets, sorted in ascending order.
-     */
-    void decompose_sets(const std::vector<htd::vertex_t> & set1,
-                        const std::vector<htd::vertex_t> & set2,
-                        htd::vertex_t ignoredVertex,
-                        std::vector<htd::vertex_t> & resultOnlySet1,
-                        std::vector<htd::vertex_t> & resultOnlySet2,
-                        std::vector<htd::vertex_t> & resultIntersection) const HTD_NOEXCEPT;
 };
 
 htd::AdvancedMinFillOrderingAlgorithm::AdvancedMinFillOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -285,10 +268,10 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                 {
                     if (updateStatus.at(neighbor) == 0)
                     {
-                        implementation_->decompose_sets(selectedNeighborhood, neighborhood.at(neighbor), selectedVertex,
-                                                        additionalNeighbors[neighbor],
-                                                        unaffectedNeighbors[neighbor],
-                                                        existingNeighbors[neighbor]);
+                        htd::decompose_sets(selectedNeighborhood, neighborhood.at(neighbor), selectedVertex,
+                                            additionalNeighbors[neighbor],
+                                            unaffectedNeighbors[neighbor],
+                                            existingNeighbors[neighbor]);
                     }
 
                     updateStatus.at(neighbor) |= 1;
@@ -301,10 +284,10 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
                         {
                             if (currentUpdateStatus == 0)
                             {
-                                implementation_->decompose_sets(selectedNeighborhood, neighborhood.at(affectedVertex), selectedVertex,
-                                                                additionalNeighbors[affectedVertex],
-                                                                unaffectedNeighbors[affectedVertex],
-                                                                existingNeighbors[affectedVertex]);
+                                htd::decompose_sets(selectedNeighborhood, neighborhood.at(affectedVertex), selectedVertex,
+                                                    additionalNeighbors[affectedVertex],
+                                                    unaffectedNeighbors[affectedVertex],
+                                                    existingNeighbors[affectedVertex]);
                             }
 
                             affectedVertices.push_back(affectedVertex);
@@ -760,10 +743,9 @@ std::size_t htd::AdvancedMinFillOrderingAlgorithm::Implementation::computeEdgeCo
 
     auto last = vertices.end();
 
-    std::size_t count = vertices.size();
-    htd::index_t index = 0;
+    std::size_t remainder = vertices.size();
 
-    for (auto it = vertices.begin(); index < count; index++)
+    for (auto it = vertices.begin(); remainder > 0; remainder--)
     {
         htd::vertex_t vertex = *it;
 
@@ -775,87 +757,6 @@ std::size_t htd::AdvancedMinFillOrderingAlgorithm::Implementation::computeEdgeCo
     }
 
     return ret;
-}
-            
-void htd::AdvancedMinFillOrderingAlgorithm::Implementation::decompose_sets(const std::vector<htd::vertex_t> & set1,
-                                                                           const std::vector<htd::vertex_t> & set2,
-                                                                           htd::vertex_t ignoredVertex,
-                                                                           std::vector<htd::vertex_t> & resultOnlySet1,
-                                                                           std::vector<htd::vertex_t> & resultOnlySet2,
-                                                                           std::vector<htd::vertex_t> & resultIntersection) const HTD_NOEXCEPT
-{
-    auto first1 = set1.begin();
-    auto first2 = set2.begin();
-    
-    std::size_t count1 = set1.size();
-    std::size_t count2 = set2.size();
-
-    htd::index_t index1 = 0;
-    htd::index_t index2 = 0;
-    
-    while (index1 < count1 && index2 < count2)
-    {
-        htd::vertex_t value1 = *first1;
-        htd::vertex_t value2 = *first2;
-
-        if (value1 < value2) 
-        {
-            if (value1 != ignoredVertex) 
-            {
-                resultOnlySet1.push_back(value1);
-            }
-
-            index1++;
-            ++first1;
-        }
-        else if (value2 < value1) 
-        {
-            if (value2 != ignoredVertex) 
-            {
-                resultOnlySet2.push_back(value2);
-            }
-
-            index2++;
-            ++first2; 
-        }
-        else 
-        {
-            if (value1 != ignoredVertex) 
-            {
-                resultIntersection.push_back(value1);
-            }
-
-            index1++;
-            ++first1;
-
-            //Skip common value in set 2.
-            index2++;
-            ++first2;
-        }
-    }
-
-    if (index1 < count1)
-    {
-        if (*first1 <= ignoredVertex)
-        {
-            std::copy_if(first1, set1.end(), std::back_inserter(resultOnlySet1), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
-        }
-        else
-        {
-            std::copy(first1, set1.end(), std::back_inserter(resultOnlySet1));
-        }
-    }
-    else if (index2 < count2)
-    {
-        if (*first2 <= ignoredVertex)
-        {
-            std::copy_if(first2, set2.end(), std::back_inserter(resultOnlySet2), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
-        }
-        else
-        {
-            std::copy(first2, set2.end(), std::back_inserter(resultOnlySet2));
-        }
-    }
 }
 
 const htd::LibraryInstance * htd::AdvancedMinFillOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT

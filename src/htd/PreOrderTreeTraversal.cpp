@@ -118,7 +118,7 @@ void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, const std::fu
 
             if (currentIndex < tree.childCount(currentNode))
             {
-                parentStack.push(std::make_pair(currentNode, currentIndex + 1));
+                parentStack.emplace(currentNode, currentIndex + 1);
 
                 currentNode = tree.childAtPosition(currentNode, currentIndex);
 

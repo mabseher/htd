@@ -523,7 +523,7 @@ namespace htd
 
                 for (const htd::Hyperedge & hyperedge : base_->hyperedges())
                 {
-                    container.push_back(NamedVertexHyperedge<VertexNameType>(hyperedge.id()));
+                    container.emplace_back(hyperedge.id());
 
                     NamedVertexHyperedge<VertexNameType> & newHyperedge = container[container.size() - 1];
 
@@ -553,7 +553,7 @@ namespace htd
 
                 for (const htd::Hyperedge & hyperedge : base_->hyperedges(lookupVertex(vertexName)))
                 {
-                    container.push_back(NamedVertexHyperedge<VertexNameType>(hyperedge.id()));
+                    container.emplace_back(hyperedge.id());
 
                     NamedVertexHyperedge<VertexNameType> & newHyperedge = container[container.size() - 1];
 

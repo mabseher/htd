@@ -360,16 +360,21 @@ namespace htd
         return ret;
     }
 
-    void HTD_API set_union(const std::vector<htd::vertex_t> & set1,
+    HTD_API void merge(const std::vector<htd::vertex_t> & set1,
+                       const std::vector<htd::vertex_t> & set2,
+                       htd::vertex_t ignoredVertex,
+                       std::vector<htd::vertex_t> & result);
+
+    HTD_API void set_union(const std::vector<htd::vertex_t> & set1,
                            const std::vector<htd::vertex_t> & set2,
                            htd::vertex_t ignoredVertex,
                            std::vector<htd::vertex_t> & result);
 
-    void HTD_API set_difference(const std::vector<htd::vertex_t> & set1,
+    HTD_API void set_difference(const std::vector<htd::vertex_t> & set1,
                                 const std::vector<htd::vertex_t> & set2,
                                 std::vector<htd::vertex_t> & result);
 
-    void HTD_API set_intersection(const std::vector<htd::vertex_t> & set1,
+    HTD_API void set_intersection(const std::vector<htd::vertex_t> & set1,
                                   const std::vector<htd::vertex_t> & set2,
                                   std::vector<htd::vertex_t> & result);
 

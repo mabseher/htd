@@ -73,8 +73,6 @@ htd::DepthFirstConnectedComponentAlgorithm::~DepthFirstConnectedComponentAlgorit
 
 void htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const
 {
-    htd::VectorAdapter<htd::ConstCollection<htd::vertex_t>> ret;
-
     const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
 
     if (vertexCollection.size() > 0)

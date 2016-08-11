@@ -77,6 +77,68 @@ void htd::print(const htd::Hyperedge & input, std::ostream & stream)
     htd::print(input.elements(), std::cout, false);
 }
 
+void htd::merge(const std::vector<htd::vertex_t> & set1,
+                const std::vector<htd::vertex_t> & set2,
+                htd::vertex_t ignoredVertex,
+                std::vector<htd::vertex_t> & result)
+{
+    auto first1 = set1.begin();
+    auto first2 = set2.begin();
+
+    std::size_t remainder1 = set1.size();
+    std::size_t remainder2 = set2.size();
+
+    while (remainder1 > 0 && remainder2 > 0)
+    {
+        htd::vertex_t value1 = *first1;
+        htd::vertex_t value2 = *first2;
+
+        if (value1 < value2)
+        {
+            if (value1 != ignoredVertex)
+            {
+                result.push_back(value1);
+            }
+
+            remainder1--;
+            ++first1;
+        }
+        else
+        {
+            if (value2 != ignoredVertex)
+            {
+                result.push_back(value2);
+            }
+
+            remainder2--;
+            ++first2;
+        }
+    }
+
+    if (remainder1 > 0)
+    {
+        if (*first1 <= ignoredVertex)
+        {
+            std::copy_if(first1, set1.end(), std::back_inserter(result), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
+        }
+        else
+        {
+            std::copy(first1, set1.end(), std::back_inserter(result));
+        }
+    }
+    else if (remainder2 > 0)
+    {
+        if (*first2 <= ignoredVertex)
+        {
+            std::copy_if(first2, set2.end(), std::back_inserter(result), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
+        }
+        else
+        {
+            std::copy(first2, set2.end(), std::back_inserter(result));
+        }
+    }
+}
+
 void htd::set_union(const std::vector<htd::vertex_t> & set1,
                     const std::vector<htd::vertex_t> & set2,
                     htd::vertex_t ignoredVertex,

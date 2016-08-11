@@ -134,7 +134,7 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, const std::f
         {
             if (currentIndex < tree.childCount(currentNode))
             {
-                parentStack.push(std::make_pair(currentNode, currentIndex));
+                parentStack.emplace(currentNode, currentIndex);
 
                 currentNode = tree.childAtPosition(currentNode, currentIndex);
 

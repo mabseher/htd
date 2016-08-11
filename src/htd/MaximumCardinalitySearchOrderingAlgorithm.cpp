@@ -85,9 +85,9 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
 
     std::size_t minDegree = (std::size_t)-1;
 
-    std::unordered_set<htd::vertex_t> pool(size);
+    std::unordered_set<htd::vertex_t> pool;
 
-    std::unordered_set<htd::vertex_t> vertices;
+    std::unordered_set<htd::vertex_t> vertices(size);
 
     std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> neighborhood(size);
 

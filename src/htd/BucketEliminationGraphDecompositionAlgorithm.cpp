@@ -587,7 +587,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                                 if (vertex1.second)
                                 {
-                                    vertexNames.emplace_back(neighbor1);
+                                    vertexNames.push_back(neighbor1);
 
                                     ++nextVertexId;
                                 }
@@ -596,7 +596,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                                 if (vertex2.second)
                                 {
-                                    vertexNames.emplace_back(neighbor2);
+                                    vertexNames.push_back(neighbor2);
                                 }
 
                                 decompositionEdges.emplace_back(new std::pair<htd::vertex_t, htd::vertex_t>(vertex1.first->second, vertex2.first->second));
@@ -640,7 +640,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                                         if (vertex1.second)
                                         {
-                                            vertexNames.emplace_back(replacement);
+                                            vertexNames.push_back(replacement);
 
                                             ++nextVertexId;
                                         }
@@ -649,7 +649,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                                         if (vertex2.second)
                                         {
-                                            vertexNames.emplace_back(neighbor);
+                                            vertexNames.push_back(neighbor);
                                         }
 
                                         decompositionEdges.emplace_back(new std::pair<htd::vertex_t, htd::vertex_t>(vertex1.first->second, vertex2.first->second));

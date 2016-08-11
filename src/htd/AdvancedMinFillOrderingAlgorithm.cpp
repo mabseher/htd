@@ -376,10 +376,9 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
 
                                 auto last = relevantNeighborhood.end();
 
-                                std::size_t count = relevantNeighborhood.size();
-                                htd::index_t index = 0;
+                                std::size_t remainder = relevantNeighborhood.size();
     
-                                for (auto it = relevantNeighborhood.begin(); index < count && tmp > unaffectedNeighborCount; index++)
+                                for (auto it = relevantNeighborhood.begin(); remainder > 0 && tmp > unaffectedNeighborCount; --remainder)
                                 {
                                     htd::vertex_t vertex2 = *it;
 
@@ -536,17 +535,15 @@ void htd::AdvancedMinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHyp
 
                         auto last = relevantNeighborhood.end();
 
-                        std::size_t count = relevantNeighborhood.size();
-                        htd::index_t index = 0;
+                        std::size_t remainder = relevantNeighborhood.size();
                         
-                        for (auto it = relevantNeighborhood.begin(); index < count && tmp > 0;)
+                        for (auto it = relevantNeighborhood.begin(); remainder > 0 && tmp > 0; --remainder)
                         {
                             htd::vertex_t vertex2 = *it;
 
                             auto & currentAdditionalNeighborhood2 = additionalNeighbors.at(vertex2);
 
-                            it++;
-                            index++;
+                            ++it;
 
                             std::size_t fillReduction = htd::set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
 
@@ -741,19 +738,17 @@ std::size_t htd::AdvancedMinFillOrderingAlgorithm::Implementation::computeEdgeCo
     std::cout << std::endl;
     )
 
-    auto last = vertices.end();
-
     std::size_t remainder = vertices.size();
 
-    for (auto it = vertices.begin(); remainder > 0; remainder--)
+    for (auto it = vertices.begin(); remainder > 0; --remainder)
     {
         htd::vertex_t vertex = *it;
 
         auto & currentNeighborhood = availableNeighborhoods.at(vertex);
 
-        it++;
+        ++it;
 
-        ret += htd::set_intersection_size(it, last, std::upper_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), currentNeighborhood.end());
+        ret += htd::set_intersection_size(it, vertices.end(), std::upper_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), currentNeighborhood.end());
     }
 
     return ret;

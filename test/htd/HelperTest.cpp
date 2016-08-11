@@ -442,34 +442,6 @@ TEST(HelperTest, CheckSetUnion2)
 
 TEST(HelperTest, CheckSetUnion3)
 {
-    std::vector<int> input1 { 1, 3, 5 };
-    std::vector<int> input2 { 0, 2, 4, 6 };
-
-    std::vector<int> actualResult;
-
-    std::vector<int> expectedResult { 1, 3, 5 };
-
-    htd::set_union<int>(input1, input2, [](int value) { return (value % 2) == 1; }, actualResult);
-
-    ASSERT_TRUE(actualResult == expectedResult);
-}
-
-TEST(HelperTest, CheckSetUnion4)
-{
-    std::vector<int> input1 { 0, 2, 4, 5, 6, 7 };
-    std::vector<int> input2 { 1, 3, 5 };
-
-    std::vector<int> actualResult;
-
-    std::vector<int> expectedResult { 1, 3, 5, 7 };
-
-    htd::set_union<int>(input1, input2, [](int value) { return (value % 2) == 1; }, actualResult);
-
-    ASSERT_TRUE(actualResult == expectedResult);
-}
-
-TEST(HelperTest, CheckSetUnion5)
-{
     std::vector<htd::vertex_t> input1 { 1, 3, 5 };
     std::vector<htd::vertex_t> input2 { 1, 2, 4, 6 };
 
@@ -482,7 +454,7 @@ TEST(HelperTest, CheckSetUnion5)
     ASSERT_TRUE(actualResult == expectedResult);
 }
 
-TEST(HelperTest, CheckSetUnion6)
+TEST(HelperTest, CheckSetUnion4)
 {
     std::vector<htd::vertex_t> input1 { 1, 3, 5 };
     std::vector<htd::vertex_t> input2 { 1, 2, 4, 6 };
@@ -496,7 +468,7 @@ TEST(HelperTest, CheckSetUnion6)
     ASSERT_TRUE(actualResult == expectedResult);
 }
 
-TEST(HelperTest, CheckSetUnion7)
+TEST(HelperTest, CheckSetUnion5)
 {
     std::vector<htd::vertex_t> input1 { 1, 3, 5 };
     std::vector<htd::vertex_t> input2 { 1, 2, 4, 5, 6 };
@@ -510,7 +482,7 @@ TEST(HelperTest, CheckSetUnion7)
     ASSERT_TRUE(actualResult == expectedResult);
 }
 
-TEST(HelperTest, CheckSetUnion8)
+TEST(HelperTest, CheckSetUnion6)
 {
     std::vector<htd::vertex_t> input1 { 1, 3, 5 };
     std::vector<htd::vertex_t> input2 { };
@@ -524,7 +496,7 @@ TEST(HelperTest, CheckSetUnion8)
     ASSERT_TRUE(actualResult == expectedResult);
 }
 
-TEST(HelperTest, CheckSetUnion9)
+TEST(HelperTest, CheckSetUnion7)
 {
     std::vector<htd::vertex_t> input1 { 1, 3, 5 };
     std::vector<htd::vertex_t> input2 { 3 };

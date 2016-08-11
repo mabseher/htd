@@ -84,8 +84,6 @@ void htd::set_union(const std::vector<htd::vertex_t> & set1,
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();
-    auto last1 = set1.end();
-    auto last2 = set2.end();
 
     std::size_t remainder1 = set1.size();
     std::size_t remainder2 = set2.size();
@@ -135,22 +133,22 @@ void htd::set_union(const std::vector<htd::vertex_t> & set1,
     {
         if (*first1 <= ignoredVertex)
         {
-            std::copy_if(first1, last1, std::back_inserter(result), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
+            std::copy_if(first1, set1.end(), std::back_inserter(result), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
         }
         else
         {
-            std::copy(first1, last1, std::back_inserter(result));
+            std::copy(first1, set1.end(), std::back_inserter(result));
         }
     }
     else if (remainder2 > 0)
     {
         if (*first2 <= ignoredVertex)
         {
-            std::copy_if(first2, last2, std::back_inserter(result), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
+            std::copy_if(first2, set2.end(), std::back_inserter(result), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
         }
         else
         {
-            std::copy(first2, last2, std::back_inserter(result));
+            std::copy(first2, set2.end(), std::back_inserter(result));
         }
     }
 }
@@ -161,7 +159,6 @@ void htd::set_difference(const std::vector<htd::vertex_t> & set1,
 {
     auto first1 = set1.begin();
     auto first2 = set2.begin();
-    auto last1 = set1.end();
 
     std::size_t remainder1 = set1.size();
     std::size_t remainder2 = set2.size();
@@ -196,7 +193,7 @@ void htd::set_difference(const std::vector<htd::vertex_t> & set1,
 
     if (remainder1 > 0)
     {
-        std::copy(first1, last1, std::back_inserter(result));
+        std::copy(first1, set1.end(), std::back_inserter(result));
     }
 }
 
@@ -207,36 +204,33 @@ void htd::set_intersection(const std::vector<htd::vertex_t> & set1,
     auto first1 = set1.begin();
     auto first2 = set2.begin();
 
-    std::size_t count1 = set1.size();
-    std::size_t count2 = set2.size();
+    std::size_t remainder1 = set1.size();
+    std::size_t remainder2 = set2.size();
 
-    htd::index_t index1 = 0;
-    htd::index_t index2 = 0;
-
-    while (index1 < count1 && index2 < count2)
+    while (remainder1 > 0 && remainder2 > 0)
     {
-        auto value1 = *first1;
-        auto value2 = *first2;
+        htd::vertex_t value1 = *first1;
+        htd::vertex_t value2 = *first2;
 
         if (value1 < value2)
         {
-            index1++;
+            --remainder1;
             ++first1;
         }
         else if (value2 < value1)
         {
-            index2++;
+            --remainder2;
             ++first2;
         }
         else
         {
             result.push_back(value1);
 
-            index1++;
+            --remainder1;
             ++first1;
 
             //Skip common value in set 2.
-            index2++;
+            --remainder2;
             ++first2;
         }
     }
@@ -247,56 +241,47 @@ std::tuple<std::size_t, std::size_t, std::size_t> htd::analyze_sets(const std::v
     auto first1 = set1.begin();
     auto first2 = set2.begin();
 
-    std::size_t count1 = set1.size();
-    std::size_t count2 = set2.size();
-
-    htd::index_t index1 = 0;
-    htd::index_t index2 = 0;
+    std::size_t remainder1 = set1.size();
+    std::size_t remainder2 = set2.size();
 
     std::size_t onlySet1 = 0;
     std::size_t onlySet2 = 0;
     std::size_t overlap = 0;
 
-    while (index1 < count1 && index2 < count2)
+    while (remainder1 > 0 && remainder2 > 0)
     {
-        auto value1 = *first1;
-        auto value2 = *first2;
+        htd::vertex_t value1 = *first1;
+        htd::vertex_t value2 = *first2;
 
         if (value1 < value2)
         {
             onlySet1++;
 
-            index1++;
+            --remainder1;
             ++first1;
         }
         else if (value2 < value1)
         {
             onlySet2++;
 
-            index2++;
+            --remainder2;
             ++first2;
         }
         else
         {
             overlap++;
 
-            index1++;
+            --remainder1;
             ++first1;
 
             //Skip common value in set 2.
-            index2++;
+            --remainder2;
             ++first2;
         }
     }
 
-    if (index1 < count1)
-    {
-        onlySet1 += count1 - index1;
-    }
-    else if (index2 < count2)
-    {
-        onlySet2 += count2 - index2;
-    }
+    onlySet1 += remainder1;
+    onlySet2 += remainder2;
 
     return std::tuple<std::size_t, std::size_t, std::size_t>(onlySet1, overlap, onlySet2);
 }
@@ -326,7 +311,7 @@ void htd::decompose_sets(const std::vector<htd::vertex_t> & set1,
                 resultOnlySet1.push_back(value1);
             }
 
-            remainder1--;
+            --remainder1;
             ++first1;
         }
         else if (value2 < value1)
@@ -336,7 +321,7 @@ void htd::decompose_sets(const std::vector<htd::vertex_t> & set1,
                 resultOnlySet2.push_back(value2);
             }
 
-            remainder2--;
+            --remainder2;
             ++first2;
         }
         else
@@ -346,11 +331,11 @@ void htd::decompose_sets(const std::vector<htd::vertex_t> & set1,
                 resultIntersection.push_back(value1);
             }
 
-            remainder1--;
+            --remainder1;
             ++first1;
 
             //Skip common value in set 2.
-            remainder2--;
+            --remainder2;
             ++first2;
         }
     }
@@ -384,53 +369,44 @@ std::pair<std::size_t, std::size_t> htd::symmetric_difference_sizes(const std::v
     auto first1 = set1.begin();
     auto first2 = set2.begin();
 
-    std::size_t count1 = set1.size();
-    std::size_t count2 = set2.size();
-
-    htd::index_t index1 = 0;
-    htd::index_t index2 = 0;
+    std::size_t remainder1 = set1.size();
+    std::size_t remainder2 = set2.size();
 
     std::size_t onlySet1 = 0;
     std::size_t onlySet2 = 0;
 
-    while (index1 < count1 && index2 < count2)
+    while (remainder1 > 0 && remainder2 > 0)
     {
-        auto value1 = *first1;
-        auto value2 = *first2;
+        htd::vertex_t value1 = *first1;
+        htd::vertex_t value2 = *first2;
 
         if (value1 < value2)
         {
             onlySet1++;
 
-            index1++;
+            --remainder1;
             ++first1;
         }
         else if (value2 < value1)
         {
             onlySet2++;
 
-            index2++;
+            --remainder2;
             ++first2;
         }
         else
         {
-            index1++;
+            --remainder1;
             ++first1;
 
             //Skip common value in set 2.
-            index2++;
+            --remainder2;
             ++first2;
         }
     }
 
-    if (index1 < count1)
-    {
-        onlySet1 += count1 - index1;
-    }
-    else if (index2 < count2)
-    {
-        onlySet2 += count2 - index2;
-    }
+    onlySet1 += remainder1;
+    onlySet2 += remainder2;
 
     return std::pair<std::size_t, std::size_t>(onlySet1, onlySet2);
 }

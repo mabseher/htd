@@ -477,7 +477,9 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 ++it;
             }
 
-            for (auto it = ordering.begin(); it != ordering.end() && !managementInstance.isTerminated(); ++it)
+            index = 0;
+
+            for (auto it = ordering.begin(); index < size && !managementInstance.isTerminated(); ++it, ++index)
             {
                 htd::vertex_t selection = *it;
 
@@ -542,7 +544,9 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             std::vector<htd::vertex_t> vertexNames;
 
-            for (auto it = ordering.begin(); it != ordering.end() && !managementInstance.isTerminated(); ++it)
+            index = 0;
+
+            for (auto it = ordering.begin(); index < size && !managementInstance.isTerminated(); ++it, ++index)
             {
                 htd::vertex_t vertex = *it;
 
@@ -718,7 +722,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 ++it;
             }
 
-            for (htd::vertex_t vertex = 1; vertex <= vertexNames.size() && !managementInstance.isTerminated(); ++vertex)
+            for (htd::vertex_t vertex = htd::Vertex::FIRST; vertex <= vertexNames.size() && !managementInstance.isTerminated(); ++vertex)
             {
                 htd::vertex_t vertexName = vertexNames[vertex - 1];
 

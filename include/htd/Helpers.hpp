@@ -392,76 +392,8 @@ namespace htd
                         std::vector<htd::vertex_t> & resultOnlySet2,
                         std::vector<htd::vertex_t> & resultIntersection) HTD_NOEXCEPT;
 
-    std::pair<std::size_t, std::size_t> HTD_API symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
+    HTD_API std::pair<std::size_t, std::size_t> symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
 
-    template <typename T>
-    void set_union(const std::vector<T> & set1,
-                   const std::vector<T> & set2,
-                   const std::function<bool(T)> & predicate,
-                   std::vector<T> & result)
-    {
-        auto first1 = set1.begin();
-        auto first2 = set2.begin();
-        auto last1 = set1.end();
-        auto last2 = set2.end();
-
-        std::size_t count1 = set1.size();
-        std::size_t count2 = set2.size();
-
-        htd::index_t index1 = 0;
-        htd::index_t index2 = 0;
-
-        while (index1 < count1 && index2 < count2)
-        {
-            auto value1 = *first1;
-            auto value2 = *first2;
-
-            if (value1 < value2)
-            {
-                if (predicate(value1))
-                {
-                    result.push_back(value1);
-                }
-
-                index1++;
-                ++first1;
-            }
-            else if (value2 < value1)
-            {
-                if (predicate(value2))
-                {
-                    result.push_back(value2);
-                }
-
-                index2++;
-                ++first2;
-            }
-            else
-            {
-                if (predicate(value1))
-                {
-                    result.push_back(value1);
-                }
-
-                index1++;
-                ++first1;
-
-                //Skip common value in set 2.
-                index2++;
-                ++first2;
-            }
-        }
-
-        if (index1 < count1)
-        {
-            std::copy_if(first1, last1, std::back_inserter(result), predicate);
-        }
-        else if (index2 < count2)
-        {
-            std::copy_if(first2, last2, std::back_inserter(result), predicate);
-        }
-    }
-    
     template <class InputIterator1, 
               class InputIterator2>
     std::size_t compute_set_union_size(InputIterator1 firstSet1, InputIterator1 lastSet1,
@@ -544,56 +476,6 @@ namespace htd
         return ret + remainder1;
     }
 
-    template <class InputIterator1,
-              class InputIterator2>
-    std::pair<std::size_t, std::size_t> symmetric_difference_sizes(InputIterator1 firstSet1, InputIterator1 lastSet1,
-                                                                   InputIterator2 firstSet2, InputIterator2 lastSet2)
-    {
-        std::pair<std::size_t, std::size_t> ret = std::make_pair(0, 0);
-
-        std::size_t count1 = std::distance(firstSet1, lastSet1);
-        std::size_t count2 = std::distance(firstSet2, lastSet2);
-
-        htd::index_t index1 = 0;
-        htd::index_t index2 = 0;
-
-        while (index1 < count1 && index2 < count2)
-        {
-            auto value1 = *firstSet1;
-            auto value2 = *firstSet2;
-
-            if (value1 < value2)
-            {
-                ++(ret.first);
-
-                index1++;
-
-                ++firstSet1;
-            }
-            else
-            {
-                if (!(value2 < value1))
-                {
-                    index1++;
-
-                    ++firstSet1;
-                }
-                else
-                {
-                    ++(ret.second);
-                }
-
-                index2++;
-
-                ++firstSet2;
-            }
-        }
-
-        ret.first += count1 - index1;
-
-        return ret;
-    }
-    
     template <class InputIterator1, 
               class InputIterator2>
     std::size_t set_intersection_size(InputIterator1 firstSet1, InputIterator1 lastSet1,
@@ -642,13 +524,10 @@ namespace htd
     {
         bool ret = false;
 
-        std::size_t count1 = std::distance(firstSet1, lastSet1);
-        std::size_t count2 = std::distance(firstSet2, lastSet2);
+        std::size_t remainder1 = std::distance(firstSet1, lastSet1);
+        std::size_t remainder2 = std::distance(firstSet2, lastSet2);
 
-        htd::index_t index1 = 0;
-        htd::index_t index2 = 0;
-
-        while (index1 < count1 && index2 < count2 && !ret)
+        while (remainder1 > 0 && remainder2 > 0 && !ret)
         {
             auto value1 = *firstSet1;
             auto value2 = *firstSet2;
@@ -657,26 +536,23 @@ namespace htd
             {
                 ret = true;
 
-                index1++;
-
+                --remainder1;
                 ++firstSet1;
             }
             else
             {
                 if (!(value2 < value1))
                 {
-                    index1++;
-
+                    --remainder1;
                     ++firstSet1;
                 }
 
-                index2++;
-
+                --remainder2;
                 ++firstSet2;
             }
         }
 
-        return ret || index1 < count1;
+        return ret || remainder1 > 0;
     }
     
     template <class InputIterator1, 
@@ -686,21 +562,17 @@ namespace htd
     {
         bool ret = false;
 
-        std::size_t count1 = std::distance(firstSet1, lastSet1);
-        std::size_t count2 = std::distance(firstSet2, lastSet2);
+        std::size_t remainder1 = std::distance(firstSet1, lastSet1);
+        std::size_t remainder2 = std::distance(firstSet2, lastSet2);
 
-        htd::index_t index1 = 0;
-        htd::index_t index2 = 0;
-
-        while (index1 < count1 && index2 < count2 && !ret)
+        while (remainder1 > 0 && remainder2 > 0 && !ret)
         {
             auto value1 = *firstSet1;
             auto value2 = *firstSet2;
 
             if (value1 < value2) 
             {
-                index1++;
-
+                --remainder1;
                 ++firstSet1;
             } 
             else
@@ -709,13 +581,11 @@ namespace htd
                 {
                     ret = true;
 
-                    index1++;
-
+                    --remainder1;
                     ++firstSet1;
                 }
 
-                index2++;
-
+                --remainder2;
                 ++firstSet2;
             }
         }
@@ -765,11 +635,11 @@ namespace htd
             {
                 first = ++it;
 
-                count -= step+1;
+                count -= step + 1;
             }
             else
             {
-                count=step;
+                count = step;
             }
         }
 
@@ -813,11 +683,11 @@ namespace htd
             {
                 first = ++it;
 
-                count -= step+1;
+                count -= step + 1;
             }
             else
             {
-                count=step;
+                count = step;
             }
         }
 

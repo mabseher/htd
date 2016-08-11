@@ -74,42 +74,40 @@ void htd::DepthFirstGraphTraversal::traverse(const htd::IMultiHypergraph & graph
 {
     HTD_ASSERT(graph.isVertex(startingVertex))
 
-    std::stack<std::tuple<htd::vertex_t, htd::vertex_t, std::size_t>> originStack;
+    std::deque<std::tuple<htd::vertex_t, htd::vertex_t, std::size_t>> originDeque;
 
     std::unordered_set<htd::vertex_t> visitedVertices;
 
     std::size_t currentDistance = 0;
     htd::vertex_t currentVertex = startingVertex;
 
-    originStack.push(std::make_tuple(currentVertex, htd::Vertex::UNKNOWN, currentDistance));
+    originDeque.emplace_back(currentVertex, htd::Vertex::UNKNOWN, currentDistance);
 
-    while (!originStack.empty())
+    while (!originDeque.empty())
     {
-        currentVertex = std::get<0>(originStack.top());
+        currentVertex = std::get<0>(originDeque.front());
 
         if (visitedVertices.count(currentVertex) == 0)
         {
-            currentDistance = std::get<2>(originStack.top());
+            currentDistance = std::get<2>(originDeque.front());
 
-            targetFunction(currentVertex, std::get<1>(originStack.top()), currentDistance);
+            targetFunction(currentVertex, std::get<1>(originDeque.front()), currentDistance);
 
             visitedVertices.insert(currentVertex);
 
-            originStack.pop();
+            originDeque.pop_front();
 
             const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(currentVertex);
 
-            std::size_t neighborCount = graph.neighborCount(currentVertex);
-
             auto it = neighborCollection.begin();
 
-            for (htd::index_t index = 0; index < neighborCount; ++index)
+            for (std::size_t remainder = neighborCollection.size(); remainder > 0; --remainder)
             {
                 htd::vertex_t neighbor = *it;
 
                 if (visitedVertices.count(neighbor) == 0)
                 {
-                    originStack.push(std::make_tuple(neighbor, currentVertex, currentDistance + 1));
+                    originDeque.emplace_back(neighbor, currentVertex, currentDistance + 1);
                 }
 
                 ++it;
@@ -117,7 +115,7 @@ void htd::DepthFirstGraphTraversal::traverse(const htd::IMultiHypergraph & graph
         }
         else
         {
-            originStack.pop();
+            originDeque.pop_front();
         }
     }
 }

@@ -110,7 +110,7 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
                 const std::vector<htd::vertex_t> & currentBag = decomposition.bagContent(vertex);
                 const std::vector<htd::vertex_t> & parentBag = decomposition.bagContent(parent);
 
-                const std::pair<std::size_t, std::size_t> & result = htd::symmetric_difference_sizes(currentBag.begin(), currentBag.end(), parentBag.begin(), parentBag.end());
+                const std::pair<std::size_t, std::size_t> & result = htd::symmetric_difference_sizes(currentBag, parentBag);
 
                 if (result.first > 0 && result.second == 0)
                 {

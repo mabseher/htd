@@ -81,7 +81,7 @@ void htd::BreadthFirstGraphTraversal::traverse(const htd::IMultiHypergraph & gra
     std::size_t currentDistance = 0;
     htd::vertex_t currentVertex = startingVertex;
 
-    originDeque.push_back(std::make_tuple(currentVertex, htd::Vertex::UNKNOWN, currentDistance));
+    originDeque.emplace_back(currentVertex, htd::Vertex::UNKNOWN, currentDistance);
 
     while (!originDeque.empty())
     {
@@ -97,17 +97,15 @@ void htd::BreadthFirstGraphTraversal::traverse(const htd::IMultiHypergraph & gra
 
             const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(currentVertex);
 
-            std::size_t neighborCount = graph.neighborCount(currentVertex);
-
             auto it = neighborCollection.begin();
 
-            for (htd::index_t index = 0; index < neighborCount; ++index)
+            for (std::size_t remainder = neighborCollection.size(); remainder > 0; --remainder)
             {
                 htd::vertex_t neighbor = *it;
 
                 if (visitedVertices.count(neighbor) == 0)
                 {
-                    originDeque.push_back(std::make_tuple(neighbor, currentVertex, currentDistance + 1));
+                    originDeque.emplace_back(neighbor, currentVertex, currentDistance + 1);
                 }
 
                 ++it;

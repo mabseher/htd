@@ -28,13 +28,13 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
-#include <htd/AdvancedMinFillOrderingAlgorithm.hpp>
+#include <htd/MinFillOrderingAlgorithm.hpp>
 
 #include <stdexcept>
 
 htd::OrderingAlgorithmFactory::OrderingAlgorithmFactory(const htd::LibraryInstance * const manager)
 {
-    constructionTemplate_ = new htd::AdvancedMinFillOrderingAlgorithm(manager);
+    constructionTemplate_ = new htd::MinFillOrderingAlgorithm(manager);
 }
 
 htd::OrderingAlgorithmFactory::OrderingAlgorithmFactory(const htd::OrderingAlgorithmFactory & original)

@@ -603,9 +603,17 @@ namespace htd
     {
         htd::index_t mid = set1.size();
 
-        std::set_difference(set2.begin(), set2.end(), set1.begin(), set1.end(), std::back_inserter(set1));
+        std::vector<T> tmp;
+        tmp.reserve(set2.size());
 
-        std::inplace_merge(set1.begin(), set1.begin() + mid, set1.end());
+        std::set_difference(set2.begin(), set2.end(), set1.begin(), set1.end(), std::back_inserter(tmp));
+
+        if (tmp.size() > 0)
+        {
+            std::copy(tmp.begin(), tmp.end(), std::back_inserter(set1));
+
+            std::inplace_merge(set1.begin(), set1.begin() + mid, set1.end());
+        }
     }
 
     /**

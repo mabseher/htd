@@ -29,11 +29,7 @@
 #include <htd/ITreeDecompositionAlgorithm.hpp>
 
 #include <htd/ILabelingFunction.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/ITreeDecompositionManipulationOperation.hpp>
-
-#include <vector>
-#include <unordered_set>
 
 namespace htd
 {

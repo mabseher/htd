@@ -86,12 +86,11 @@ htd_cli::OptionManager * createOptionManager(void)
 
         htd_cli::Choice * orderingAlgorithmChoice = new htd_cli::Choice("ordering", "Set the ordering algorithm which shall be used to <algorithm>.", "algorithm");
 
-        orderingAlgorithmChoice->addPossibility("min-fill+", "Advanced minimum-fill ordering algorithm");
         orderingAlgorithmChoice->addPossibility("min-fill", "Standard minimum-fill ordering algorithm");
         orderingAlgorithmChoice->addPossibility("min-degree", "Minimum-degree ordering algorithm");
         orderingAlgorithmChoice->addPossibility("max-cardinality", "Maximum cardinality search ordering algorithm");
 
-        orderingAlgorithmChoice->setDefaultValue("min-fill+");
+        orderingAlgorithmChoice->setDefaultValue("min-fill");
 
         manager->registerOption(orderingAlgorithmChoice, "Algorithm Options");
 
@@ -211,11 +210,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
     {
         const std::string & value = orderingAlgorithmChoice.value();
 
-        if (value == "min-fill+")
-        {
-            manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::AdvancedMinFillOrderingAlgorithm(manager));
-        }
-        else if (value == "min-fill")
+        if (value == "min-fill")
         {
             manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::MinFillOrderingAlgorithm(manager));
         }

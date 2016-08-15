@@ -35,11 +35,11 @@ namespace htd
     /**
      *  Implementation of the IOrderingAlgorithm interface based on the minimum-fill elimination ordering algorithm.
      */
-    class MinFillOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
+    class MinFillOrderingAlgorithm : public htd::IOrderingAlgorithm
     {
         public:
             /**
-             *  Constructor for a new ordering algorithm of type MinFillOrderingAlgorithm.
+             *  Constructor for a new ordering algorithm of type AdvancedMinFillOrderingAlgorithm.
              *
              *  @param[in] manager   The management instance to which the new algorithm belongs.
              */
@@ -72,4 +72,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_MINFILLORDERINGALGORITHM_HPP */
+#endif /* HTD_HTD_MINFILLORDERINGALGORITHM2_HPP */

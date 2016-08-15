@@ -28,7 +28,6 @@
 #include <htd/AddEmptyLeavesOperation.hpp>
 #include <htd/AddEmptyRootOperation.hpp>
 #include <htd/AddIdenticalJoinNodeParentOperation.hpp>
-#include <htd/AdvancedMinFillOrderingAlgorithm.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/BidirectionalGraphNaming.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>

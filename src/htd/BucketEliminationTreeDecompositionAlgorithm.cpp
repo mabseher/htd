@@ -34,6 +34,7 @@
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/ILabelingFunction.hpp>
+#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/CompressionOperation.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>
@@ -41,10 +42,7 @@
 #include <algorithm>
 #include <cstdarg>
 #include <memory>
-#include <stack>
-#include <stdexcept>
-#include <tuple>
-#include <unordered_set>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -391,7 +389,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                                          std::move(mutableGraphDecomposition.inducedHyperedges(vertex)));
                 }
 
-                vertexMapping[vertex] = node;;
+                vertexMapping[vertex] = node;
             });
         }
         else

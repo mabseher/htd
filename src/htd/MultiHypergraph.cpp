@@ -832,24 +832,36 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
     implementation_->edges_->emplace_back(implementation_->next_edge_, std::move(elements));
 
-    std::vector<htd::vertex_t> newNeighborhood;
-
     for (htd::vertex_t vertex : sortedElements)
     {
-        auto & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
+        std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
 
-        if (implementation_->selfLoops_.count(vertex) > 0)
+        std::vector<htd::vertex_t> tmp;
+        tmp.reserve(sortedElements.size());
+
+        std::set_difference(sortedElements.begin(), sortedElements.end(),
+                            currentNeighborhood.begin(), currentNeighborhood.end(), std::back_inserter(tmp));
+
+        if (tmp.size() > 1 && implementation_->selfLoops_.count(vertex) == 0)
         {
-            htd::set_union(currentNeighborhood, sortedElements, newNeighborhood);
+            auto position2 = std::lower_bound(tmp.begin(), tmp.end(), vertex);
+
+            if (position2 != tmp.end() && *position2 == vertex)
+            {
+                tmp.erase(position2);
+            }
         }
-        else
+
+        if (tmp.size() > 0)
         {
-            htd::set_union(currentNeighborhood, sortedElements, vertex, newNeighborhood);
+            htd::index_t middle = currentNeighborhood.size();
+
+            std::copy(tmp.begin(), tmp.end(), std::back_inserter(currentNeighborhood));
+
+            std::inplace_merge(currentNeighborhood.begin(),
+                               currentNeighborhood.begin() + middle,
+                               currentNeighborhood.end());
         }
-
-        currentNeighborhood.swap(newNeighborhood);
-
-        newNeighborhood.clear();
     }
 
     return implementation_->next_edge_++;

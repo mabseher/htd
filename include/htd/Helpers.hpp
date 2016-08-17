@@ -397,125 +397,113 @@ namespace htd
                         std::vector<htd::vertex_t> & resultOnlySet2,
                         std::vector<htd::vertex_t> & resultIntersection) HTD_NOEXCEPT;
 
+    /**
+     *  Decompose two sets of vertices into vertices only in the first set, vertices only in the second set and vertices in both sets.
+     *
+     *  @param[in] set1                 The first set of vertices, sorted in ascending order.
+     *  @param[in] set2                 The second set of vertices, sorted in ascending order.
+     *  @param[out] resultOnlySet1      The set of vertices which are found only in the first set, sorted in ascending order.
+     *  @param[out] resultOnlySet2      The set of vertices which are found only in the second set, sorted in ascending order.
+     *  @param[out] resultIntersection  The set of vertices which are found in both sets, sorted in ascending order.
+     */
+    void decompose_sets(const std::vector<htd::vertex_t> & set1,
+                        const std::vector<htd::vertex_t> & set2,
+                        std::vector<htd::vertex_t> & resultOnlySet1,
+                        std::vector<htd::vertex_t> & resultOnlySet2,
+                        std::vector<htd::vertex_t> & resultIntersection) HTD_NOEXCEPT;
+
     HTD_API std::pair<std::size_t, std::size_t> symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
 
     template <class InputIterator1, 
               class InputIterator2>
-    std::size_t compute_set_union_size(InputIterator1 firstSet1, InputIterator1 lastSet1,
-                                       InputIterator2 firstSet2, InputIterator2 lastSet2)
+    std::size_t set_union_size(InputIterator1 first1, InputIterator1 last1,
+                               InputIterator2 first2, InputIterator2 last2)
     {
         size_t ret = 0;
         
-        while (firstSet1 != lastSet1) 
+        while (first1 != last1)
         {
-            if (firstSet2 == lastSet2)
+            if (first2 == last2)
             {
-                ret += std::distance(firstSet1, lastSet1);
+                ret += std::distance(first1, last1);
                 
-                firstSet1 = lastSet1;
+                first1 = last1;
             }
             else
             {
-                auto value1 = *firstSet1;
-                auto value2 = *firstSet2;
-                
                 ret++;
 
-                if (value2 < value1) 
+                if (*first2 < *first1)
                 {
-                    ++firstSet2;
+                    ++first2;
                 } 
                 else
                 {
-                    if (!(value1 < value2))
+                    if (*first1 == *first2)
                     {
-                        ++firstSet2;
+                        ++first2;
                     }
 
-                    ++firstSet1;
+                    ++first1;
                 }
             }
         }
         
-        return ret + std::distance(firstSet2, lastSet2);
+        return ret + std::distance(first2, last2);
     }
     
     template <class InputIterator1, 
               class InputIterator2>
-    std::size_t set_difference_size(InputIterator1 firstSet1, InputIterator1 lastSet1,
-                                    InputIterator2 firstSet2, InputIterator2 lastSet2)
+    std::size_t set_difference_size(InputIterator1 first1, InputIterator1 last1,
+                                    InputIterator2 first2, InputIterator2 last2)
     {
         std::size_t ret = 0;
-        
-        std::size_t remainder1 = std::distance(firstSet1, lastSet1);
-        std::size_t remainder2 = std::distance(firstSet2, lastSet2);
 
-        while (remainder1 > 0 && remainder2 > 0)
+        while (first1 != last1 && first2 != last2)
         {
-            auto value1 = *firstSet1;
-            auto value2 = *firstSet2;
-
-            if (value1 < value2)
+            if (*first1 < *first2)
             {
                 ret++;
 
-                --remainder1;
-                
-                ++firstSet1;
+                ++first1;
             } 
             else 
             {
-                if (!(value2 < value1)) 
+                if (*first1 == *first2)
                 {
-                    --remainder1;
-
-                    ++firstSet1;
+                    ++first1;
                 }
 
-                --remainder2;
-
-                ++firstSet2;
+                ++first2;
             }
         }
         
-        return ret + remainder1;
+        return ret + std::distance(first1, last1);
     }
 
     template <class InputIterator1, 
               class InputIterator2>
-    std::size_t set_intersection_size(InputIterator1 firstSet1, InputIterator1 lastSet1,
-                                      InputIterator2 firstSet2, InputIterator2 lastSet2)
+    std::size_t set_intersection_size(InputIterator1 first1, InputIterator1 last1,
+                                      InputIterator2 first2, InputIterator2 last2)
     {
         size_t ret = 0;
-        
-        std::size_t remainder1 = std::distance(firstSet1, lastSet1);
-        std::size_t remainder2 = std::distance(firstSet2, lastSet2);
 
-        while (remainder1 > 0 && remainder2 > 0)
+        while (first1 != last1 && first2 != last2)
         {
-            auto value1 = *firstSet1;
-            auto value2 = *firstSet2;
-
-            if (value1 < value2) 
+            if (*first1 < *first2)
             {
-                --remainder1;
-                
-                ++firstSet1;
+                ++first1;
             } 
             else
             {
-                if (value1 == value2)
+                if (*first1 == *first2)
                 {
                     ret++;
 
-                    --remainder1;
-
-                    ++firstSet1;
+                    ++first1;
                 }
 
-                --remainder2;
-
-                ++firstSet2;
+                ++first2;
             }
         }
         

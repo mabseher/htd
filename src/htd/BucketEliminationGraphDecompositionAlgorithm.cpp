@@ -139,6 +139,62 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
                         std::unordered_map<htd::vertex_t, std::vector<htd::index_t>> & inducedEdges,
                         std::vector<htd::id_t> & lastAssignedEdge,
                         std::stack<htd::vertex_t> & originStack) const;
+
+    /**
+     *  Compute the set union of two sets and store the result in the first set.
+     *
+     *  @param[in,out] set1         The first set
+     *  @param[in] set2             The second set.
+     *  @param[in] ignoredVertex    The vertex which shall be ignored if it occurs in the second set.
+     */
+    void set_union(std::vector<htd::vertex_t> & set1,
+                   const std::vector<htd::vertex_t> & set2,
+                   htd::vertex_t ignoredVertex) const
+    {
+        htd::index_t mid = set1.size();
+
+        std::vector<htd::vertex_t> tmp;
+        tmp.reserve(set2.size());
+
+        auto first1 = set1.begin();
+        auto first2 = set2.begin();
+
+        auto last1 = set1.end();
+        auto last2 = set2.end();
+
+        while (first1 != last1 && first2 != last2)
+        {
+            if (*first1 < *first2)
+            {
+                ++first1;
+            }
+            else if (*first2 < *first1)
+            {
+                if (*first2 != ignoredVertex)
+                {
+                    tmp.push_back(*first2);
+                }
+
+                ++first2;
+            }
+            else
+            {
+                ++first1;
+
+                //Skip common value in set 2.
+                ++first2;
+            }
+        }
+
+        std::copy_if(first2, last2, std::back_inserter(tmp), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
+
+        if (tmp.size() > 0)
+        {
+            std::copy(tmp.begin(), tmp.end(), std::back_inserter(set1));
+
+            std::inplace_merge(set1.begin(), set1.begin() + mid, set1.end());
+        }
+    }
 };
 
 htd::BucketEliminationGraphDecompositionAlgorithm::BucketEliminationGraphDecompositionAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -505,12 +561,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     std::vector<htd::vertex_t> & selectedBucket = buckets[minimumVertex];
 
-                    std::vector<htd::vertex_t> newBucketContent;
-                    newBucketContent.reserve(selectedBucket.size() + bucket.size());
-
-                    htd::set_union(selectedBucket, bucket, selection, newBucketContent);
-
-                    std::swap(selectedBucket, newBucketContent);
+                    this->set_union(selectedBucket, bucket, selection);
 
                     neighbors[selection].push_back(minimumVertex);
                     neighbors[minimumVertex].push_back(selection);

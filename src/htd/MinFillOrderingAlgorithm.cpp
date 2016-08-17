@@ -281,7 +281,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
         totalFill += currentFillValue;
     }
-    
+
     while (totalFill > 0 && !managementInstance.isTerminated())
     {
         if (pool.empty())
@@ -386,7 +386,6 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 if (vertex != selectedVertex)
                 {
                     std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
-                    std::vector<htd::vertex_t> & currentUnaffectedNeighborhood = unaffectedNeighbors[vertex];
                     std::vector<htd::vertex_t> & currentAdditionalNeighborhood = additionalNeighbors[vertex];
 
                     std::size_t additionalNeighborCount = currentAdditionalNeighborhood.size();
@@ -415,6 +414,8 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                     if (additionalNeighborCount > 0 || tmp > 0)
                     {
+                        std::vector<htd::vertex_t> & currentUnaffectedNeighborhood = unaffectedNeighbors[vertex];
+
                         std::size_t unaffectedNeighborCount = currentUnaffectedNeighborhood.size();
 
                         if (unaffectedNeighborCount > 0)
@@ -433,11 +434,14 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                                     ++it;
 
-                                    std::size_t fillReduction = htd::set_intersection_size(it, relevantNeighborhood.end(), std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
+                                    if (currentAdditionalNeighborhood2.size() > 0)
+                                    {
+                                        std::size_t fillReduction = htd::set_intersection_size(it, relevantNeighborhood.end(), std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
 
-                                    tmp -= fillReduction;
+                                        tmp -= fillReduction;
 
-                                    totalFill -= fillReduction;
+                                        totalFill -= fillReduction;
+                                    }
                                 }
 
                                 tmp -= unaffectedNeighborCount;
@@ -521,23 +525,24 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                             ++it;
 
-                            std::size_t fillReduction = htd::set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
+                            if (currentAdditionalNeighborhood2.size() > 0)
+                            {
+                                std::size_t fillReduction = htd::set_intersection_size(it, last, std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
 
-                            tmp -= fillReduction;
+                                tmp -= fillReduction;
 
-                            totalFill -= fillReduction;
+                                totalFill -= fillReduction;
+                            }
                         }
-
-                        updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
                     }
                     else
                     {
                         totalFill -= tmp;
 
                         tmp = 0;
-
-                        updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
                     }
+
+                    updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
 
                     fillValue[vertex] = tmp;
                 }

@@ -995,7 +995,7 @@ void htd::TreeDecomposition::copyJoinVerticesTo(std::vector<htd::vertex_t> & tar
         {
             for (htd::vertex_t bagElement : bagContent(children[index]))
             {
-                if (result.count(bagElement) == 1)
+                if (visitedVertices.count(bagElement) == 1)
                 {
                     result.insert(bagElement);
                 }

@@ -128,7 +128,7 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, const std::f
 
     std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
 
-    while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
+    while (!parentStack.empty() || currentNode != htd::Vertex::UNKNOWN)
     {
         if (currentNode != htd::Vertex::UNKNOWN)
         {
@@ -144,7 +144,7 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, const std::f
             }
             else
             {
-                if (parentStack.size() > 0 && parentStack.top().first != htd::Vertex::UNKNOWN)
+                if (!parentStack.empty() && parentStack.top().first != htd::Vertex::UNKNOWN)
                 {
                     targetFunction(currentNode, std::get<0>(parentStack.top()), currentDepth);
 
@@ -182,7 +182,7 @@ void htd::PostOrderTreeTraversal::traverse(const htd::ITree & tree, const std::f
 
                 parentStack.pop();
 
-                if (parentStack.size() > 0 && parentStack.top().first != htd::Vertex::UNKNOWN)
+                if (!parentStack.empty() && parentStack.top().first != htd::Vertex::UNKNOWN)
                 {
                     targetFunction(peekNode, std::get<0>(parentStack.top()), currentDepth);
 

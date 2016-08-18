@@ -75,11 +75,11 @@ void htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::
 {
     const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
 
-    if (vertexCollection.size() > 0)
+    if (!vertexCollection.empty())
     {
         std::unordered_set<htd::vertex_t> unvisitedVertices(vertexCollection.begin(), vertexCollection.end());
 
-        while (unvisitedVertices.size() > 0)
+        while (!unvisitedVertices.empty())
         {
             std::vector<htd::vertex_t> component;
 

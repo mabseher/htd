@@ -100,13 +100,13 @@ void htd::PreOrderTreeTraversal::traverse(const htd::ITree & tree, const std::fu
 
     std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
 
-    while (parentStack.size() > 0 || currentNode != htd::Vertex::UNKNOWN)
+    while (!parentStack.empty() || currentNode != htd::Vertex::UNKNOWN)
     {
         if (currentNode != htd::Vertex::UNKNOWN)
         {
             if (currentIndex == 0)
             {
-                if (parentStack.size() > 0)
+                if (!parentStack.empty())
                 {
                     targetFunction(currentNode, std::get<0>(parentStack.top()), currentDepth);
                 }

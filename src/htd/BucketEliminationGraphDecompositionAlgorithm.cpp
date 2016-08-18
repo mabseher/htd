@@ -188,7 +188,7 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
 
         std::copy_if(first2, last2, std::back_inserter(tmp), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
 
-        if (tmp.size() > 0)
+        if (!tmp.empty())
         {
             set1.insert(set1.end(), tmp.begin(), tmp.end());
 

@@ -1069,7 +1069,7 @@ void htd::Tree::removeChild(htd::vertex_t vertex, htd::vertex_t child)
 
     auto & children = node.children;
 
-    if (children.size() > 0)
+    if (!children.empty())
     {
         auto position = children.end();
 

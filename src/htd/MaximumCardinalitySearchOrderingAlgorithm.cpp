@@ -124,7 +124,7 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
 
     while (size > 0 && !managementInstance.isTerminated())
     {
-        if (pool.size() == 0)
+        if (pool.empty())
         {
             std::size_t maxCardinality = 0;
 

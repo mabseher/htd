@@ -83,7 +83,11 @@ namespace htd
     {
         std::vector<T> tmp(input.begin(), input.end());
 
-        if (tmp.size() > 0)
+        if (tmp.empty())
+        {
+            stream << "<EMPTY>";
+        }
+        else
         {
             if (sorted)
             {
@@ -104,10 +108,6 @@ namespace htd
 
             stream << " ]";
         }
-        else
-        {
-            stream << "<EMPTY>";
-        }
     }
 
     template < typename T >
@@ -121,7 +121,11 @@ namespace htd
     {
         std::vector<T> tmp(input);
 
-        if (tmp.size() > 0)
+        if (tmp.empty())
+        {
+            stream << "<EMPTY>";
+        }
+        else
         {
             if (sorted)
             {
@@ -142,10 +146,6 @@ namespace htd
             
             stream << " ]";
         }
-        else
-        {
-            stream << "<EMPTY>";
-        }
     }
 
     template < typename T >
@@ -157,7 +157,11 @@ namespace htd
     template < typename T >
     void print(const std::set<T> & input, std::ostream & stream)
     {
-        if (input.size() > 0)
+        if (input.empty())
+        {
+            stream << "<EMPTY>";
+        }
+        else
         {
             stream << "[ ";
         
@@ -173,10 +177,6 @@ namespace htd
             
             stream << " ]";
         }
-        else
-        {
-            stream << "<EMPTY>";
-        }
     }
 
     template < typename T >
@@ -190,7 +190,11 @@ namespace htd
     {
         std::vector<T> tmp(input.begin(), input.end());
 
-        if (input.size() > 0)
+        if (input.empty())
+        {
+            stream << "<EMPTY>";
+        }
+        else
         {
             if (sorted)
             {
@@ -211,10 +215,6 @@ namespace htd
             
             stream << " ]";
         }
-        else
-        {
-            stream << "<EMPTY>";
-        }
     }
 
     template < typename T >
@@ -226,7 +226,11 @@ namespace htd
     template < typename Key, typename T >
     void print(const std::map<Key, T> & input, std::ostream & stream)
     {
-        if (input.size() > 0)
+        if (input.empty())
+        {
+            stream << "<EMPTY>";
+        }
+        else
         {
             stream << "[ ";
         
@@ -245,10 +249,6 @@ namespace htd
             }
             
             stream << " ]";
-        }
-        else
-        {
-            stream << "<EMPTY>";
         }
     }
 
@@ -596,7 +596,7 @@ namespace htd
 
         std::set_difference(set2.begin(), set2.end(), set1.begin(), set1.end(), std::back_inserter(tmp));
 
-        if (tmp.size() > 0)
+        if (!tmp.empty())
         {
             set1.insert(set1.end(), tmp.begin(), tmp.end());
 

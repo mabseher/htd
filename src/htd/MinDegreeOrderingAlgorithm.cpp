@@ -138,7 +138,7 @@ void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergrap
     
     while (size > 0 && !managementInstance.isTerminated())
     {
-        if (pool.size() == 0)
+        if (pool.empty())
         {
             minDegree = (std::size_t)-1;
     

@@ -417,7 +417,7 @@ bool htd::MultiHypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vert
 
             newVertices.push_back(vertex1);
 
-            while (!ret && newVertices.size() > 0)
+            while (!ret && !newVertices.empty())
             {
                 std::swap(tmpVertices, newVertices);
 
@@ -704,7 +704,7 @@ void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)
         {
             edge.erase(vertex);
             
-            if (edge.size() == 0)
+            if (edge.empty())
             {
                 emptyEdges.push_back(currentIndex);
             }
@@ -790,7 +790,7 @@ htd::id_t htd::MultiHypergraph::addEdge(const std::vector<htd::vertex_t> & eleme
 
 htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 {
-    HTD_ASSERT(elements.size() > 0)
+    HTD_ASSERT(!elements.empty())
 
     switch (elements.size())
     {
@@ -852,7 +852,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
             }
         }
 
-        if (tmp.size() > 0)
+        if (!tmp.empty())
         {
             htd::index_t middle = currentNeighborhood.size();
 

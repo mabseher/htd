@@ -201,7 +201,7 @@ void htd::JoinNodeReplacementOperation::apply(const htd::IMultiHypergraph & grap
 
                     //TODO Fix!
                     /*
-                    if (availableChildren.size() == 0)
+                    if (availableChildren.empty())
                     {
                         if (attachmentPoint == decomposition.parent(selectedChild))
                         {

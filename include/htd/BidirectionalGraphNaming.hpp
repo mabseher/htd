@@ -81,7 +81,7 @@ namespace htd
              */
             bool isNamedVertex(htd::vertex_t vertex) const
             {
-                return vertexNames_.find(vertex) != vertexNames_.end();
+                return vertexNames_.count(vertex) == 1;
             }
 
             /**
@@ -93,7 +93,7 @@ namespace htd
              */
             bool isNamedEdge(htd::id_t edgeId) const
             {
-                return edgeNames_.find(edgeId) != edgeNames_.end();
+                return edgeNames_.count(edgeId) == 1;
             }
 
             /**
@@ -200,6 +200,8 @@ namespace htd
 
                 auto result = vertexNamesReverseMap_.insert(std::make_pair(name, 0));
 
+                htd::vertex_t & vertexId = result.first->second;
+
                 if (result.second)
                 {
                     htd::vertex_t newVertex = vertexCreationFunction();
@@ -208,13 +210,13 @@ namespace htd
 
                     ret.second = true;
 
-                    result.first->second = newVertex;
+                    vertexId = newVertex;
 
                     vertexNames_[newVertex] = name;
                 }
                 else
                 {
-                    ret.first = result.first->second;
+                    ret.first = vertexId;
                 }
 
                 return ret;
@@ -238,7 +240,9 @@ namespace htd
 
                 for (const VertexNameType & name : names)
                 {
-                    auto result = vertexNamesReverseMap_.insert(std::make_pair(name, 0));
+                    auto result = vertexNamesReverseMap_.emplace(name, htd::Vertex::UNKNOWN);
+
+                    htd::vertex_t & vertexId = result.first->second;
 
                     if (result.second)
                     {
@@ -246,13 +250,13 @@ namespace htd
 
                         ret.push_back(newVertex);
 
-                        result.first->second = newVertex;
+                        vertexId = newVertex;
 
                         vertexNames_[newVertex] = name;
                     }
                     else
                     {
-                        ret.push_back(result.first->second);
+                        ret.push_back(vertexId);
                     }
                 }
 
@@ -277,7 +281,9 @@ namespace htd
 
                 for (const VertexNameType & name : names)
                 {
-                    auto result = vertexNamesReverseMap_.insert(std::make_pair(name, 0));
+                    auto result = vertexNamesReverseMap_.emplace(name, htd::Vertex::UNKNOWN);
+
+                    htd::vertex_t & vertexId = result.first->second;
 
                     if (result.second)
                     {
@@ -285,13 +291,13 @@ namespace htd
 
                         ret.push_back(newVertex);
 
-                        result.first->second = newVertex;
+                        vertexId = newVertex;
 
                         vertexNames_[newVertex] = name;
                     }
                     else
                     {
-                        ret.push_back(result.first->second);
+                        ret.push_back(vertexId);
                     }
                 }
 

@@ -389,7 +389,7 @@ htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorith
                                          std::move(mutableGraphDecomposition.inducedHyperedges(vertex)));
                 }
 
-                vertexMapping[vertex] = node;
+                vertexMapping.emplace(vertex, node);
             });
         }
         else

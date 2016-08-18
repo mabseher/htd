@@ -199,8 +199,8 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
             if (elements_.size() == 2)
             {
-                htd::vertex_t vertex1 = elements_.at(0);
-                htd::vertex_t vertex2 = elements_.at(1);
+                htd::vertex_t vertex1 = elements_[0];
+                htd::vertex_t vertex2 = elements_[1];
 
                 if (vertex1 > vertex2)
                 {
@@ -227,18 +227,16 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
          *
          *  @param[in] elements The endpoints of the constructed hyperedge.
          */
-        ElementInformation(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : elements_(), sortedElements_()
+        ElementInformation(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : elements_(std::move(elements)), sortedElements_()
         {
-            elements_.swap(elements);
-
             elements_.shrink_to_fit();
 
             sortedElements_.reserve(elements_.size());
 
             if (elements_.size() == 2)
             {
-                htd::vertex_t vertex1 = elements_.at(0);
-                htd::vertex_t vertex2 = elements_.at(1);
+                htd::vertex_t vertex1 = elements_[0];
+                htd::vertex_t vertex2 = elements_[1];
 
                 if (vertex1 > vertex2)
                 {
@@ -273,8 +271,8 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
             if (elements.size() == 2)
             {
-                htd::vertex_t vertex1 = elements_.at(0);
-                htd::vertex_t vertex2 = elements_.at(1);
+                htd::vertex_t vertex1 = elements_[0];
+                htd::vertex_t vertex2 = elements_[1];
 
                 if (vertex1 > vertex2)
                 {
@@ -328,8 +326,8 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
             if (elements_.size() == 2)
             {
-                htd::vertex_t vertex1 = elements_.at(0);
-                htd::vertex_t vertex2 = elements_.at(1);
+                htd::vertex_t vertex1 = elements_[0];
+                htd::vertex_t vertex2 = elements_[1];
 
                 if (vertex1 > vertex2)
                 {
@@ -366,8 +364,8 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
             if (elements_.size() == 2)
             {
-                htd::vertex_t vertex1 = elements_.at(0);
-                htd::vertex_t vertex2 = elements_.at(1);
+                htd::vertex_t vertex1 = elements_[0];
+                htd::vertex_t vertex2 = elements_[1];
 
                 if (vertex1 > vertex2)
                 {
@@ -499,10 +497,8 @@ class SortedElementInformation : public htd::Hyperedge::IElementInformation
          *
          *  @param[in] elements The endpoints of the constructed hyperedge.
          */
-        SortedElementInformation(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : elements_()
+        SortedElementInformation(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : elements_(std::move(elements))
         {
-            elements_.swap(elements);
-
             elements_.shrink_to_fit();
         }
 

@@ -589,7 +589,7 @@ namespace htd
     template <typename T>
     void inplace_set_union(std::vector<T> & set1, const std::vector<T> & set2)
     {
-        htd::index_t mid = set1.size();
+        htd::index_t middle = set1.size();
 
         std::vector<T> tmp;
         tmp.reserve(set2.size());
@@ -600,7 +600,7 @@ namespace htd
         {
             std::copy(tmp.begin(), tmp.end(), std::back_inserter(set1));
 
-            std::inplace_merge(set1.begin(), set1.begin() + mid, set1.end());
+            std::inplace_merge(set1.begin(), set1.begin() + middle, set1.end());
         }
     }
 

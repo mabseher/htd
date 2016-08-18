@@ -227,6 +227,28 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
          *
          *  @param[in] elements The endpoints of the constructed hyperedge.
          */
+        ElementInformation(const std::vector<htd::vertex_t> & elements, const std::vector<htd::vertex_t> & sortedElements) HTD_NOEXCEPT : elements_(elements), sortedElements_(sortedElements)
+        {
+            #ifndef NDEBUG
+            std::vector<htd::vertex_t> tmp(elements_.begin(), elements_.end());
+
+            std::sort(tmp.begin(), tmp.end());
+
+            tmp.erase(std::unique(tmp.begin(), tmp.end()), tmp.end());
+
+            HTD_ASSERT(sortedElements_ == tmp)
+            #endif
+
+            elements_.shrink_to_fit();
+
+            sortedElements_.shrink_to_fit();
+        }
+
+        /**
+         *  Constructor for a hyperedge element information.
+         *
+         *  @param[in] elements The endpoints of the constructed hyperedge.
+         */
         ElementInformation(std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : elements_(std::move(elements)), sortedElements_()
         {
             elements_.shrink_to_fit();
@@ -256,6 +278,28 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
                 sortedElements_.erase(std::unique(sortedElements_.begin(), sortedElements_.end()), sortedElements_.end());
             }
+        }
+
+        /**
+         *  Constructor for a hyperedge element information.
+         *
+         *  @param[in] elements The endpoints of the constructed hyperedge.
+         */
+        ElementInformation(std::vector<htd::vertex_t> && elements, std::vector<htd::vertex_t> && sortedElements) HTD_NOEXCEPT : elements_(std::move(elements)), sortedElements_(std::move(sortedElements))
+        {
+            #ifndef NDEBUG
+            std::vector<htd::vertex_t> tmp(elements_.begin(), elements_.end());
+
+            std::sort(tmp.begin(), tmp.end());
+
+            tmp.erase(std::unique(tmp.begin(), tmp.end()), tmp.end());
+
+            HTD_ASSERT(sortedElements_ == tmp)
+            #endif
+
+            elements_.shrink_to_fit();
+
+            sortedElements_.shrink_to_fit();
         }
 
         /**
@@ -642,6 +686,18 @@ htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & eleme
     }
 }
 
+htd::Hyperedge::Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements, const std::vector<htd::vertex_t> & sortedElements) HTD_NOEXCEPT : id_(id)
+{
+    if (htd::is_sorted_and_duplicate_free(elements.begin(), elements.end()))
+    {
+        content_.reset(new SortedElementInformation(elements));
+    }
+    else
+    {
+        content_.reset(new ElementInformation(elements, sortedElements));
+    }
+}
+
 htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT : id_(id)
 {
     if (htd::is_sorted_and_duplicate_free(elements.begin(), elements.end()))
@@ -651,6 +707,18 @@ htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) 
     else
     {
         content_.reset(new ElementInformation(std::move(elements)));
+    }
+}
+
+htd::Hyperedge::Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements, std::vector<htd::vertex_t> && sortedElements) HTD_NOEXCEPT : id_(id)
+{
+    if (htd::is_sorted_and_duplicate_free(elements.begin(), elements.end()))
+    {
+        content_.reset(new SortedElementInformation(std::move(elements)));
+    }
+    else
+    {
+        content_.reset(new ElementInformation(std::move(elements), std::move(sortedElements)));
     }
 }
 

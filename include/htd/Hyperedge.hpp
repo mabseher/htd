@@ -64,10 +64,28 @@ namespace htd
             /**
              *  Constructor for a hyperedge.
              *
+             *  @param[in] id               The ID of the constructed hyperedge.
+             *  @param[in] elements         The endpoints of the constructed hyperedge.
+             *  @param[in] sortedElements   The endpoints of the constructed hyperedge sorted in ascending order without duplicates.
+             */
+            HTD_API Hyperedge(htd::id_t id, const std::vector<htd::vertex_t> & elements, const std::vector<htd::vertex_t> & sortedElements) HTD_NOEXCEPT;
+
+            /**
+             *  Constructor for a hyperedge.
+             *
              *  @param[in] id       The ID of the constructed hyperedge.
              *  @param[in] elements The endpoints of the constructed hyperedge.
              */
             HTD_API Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements) HTD_NOEXCEPT;
+
+            /**
+             *  Constructor for a hyperedge.
+             *
+             *  @param[in] id               The ID of the constructed hyperedge.
+             *  @param[in] elements         The endpoints of the constructed hyperedge.
+             *  @param[in] sortedElements   The endpoints of the constructed hyperedge sorted in ascending order without duplicates.
+             */
+            HTD_API Hyperedge(htd::id_t id, std::vector<htd::vertex_t> && elements, std::vector<htd::vertex_t> && sortedElements) HTD_NOEXCEPT;
 
             /**
              *  Constructor for a hyperedge.

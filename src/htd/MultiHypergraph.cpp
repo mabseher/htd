@@ -830,8 +830,6 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
     sortedElements.erase(position, sortedElements.end());
 
-    implementation_->edges_->emplace_back(implementation_->next_edge_, std::move(elements));
-
     for (htd::vertex_t vertex : sortedElements)
     {
         std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
@@ -863,6 +861,8 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
                                currentNeighborhood.end());
         }
     }
+
+    implementation_->edges_->emplace_back(implementation_->next_edge_, std::move(elements), std::move(sortedElements));
 
     return implementation_->next_edge_++;
 }

@@ -146,7 +146,7 @@ void htd::GreedySetCoverAlgorithm::computeSetCover(const std::vector<htd::id_t> 
 
         std::sort(result.begin(), result.end());
 
-        std::copy(result.begin(), result.end(), std::back_inserter(target));
+        target.insert(target.end(), result.begin(), result.end());
     }
 }
 

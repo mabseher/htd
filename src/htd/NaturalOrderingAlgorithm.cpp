@@ -78,7 +78,7 @@ void htd::NaturalOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 {
     const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
 
-    std::copy(vertexCollection.begin(), vertexCollection.end(), std::back_inserter(target));
+    target.insert(target.end(), vertexCollection.begin(), vertexCollection.end());
 }
 
 const htd::LibraryInstance * htd::NaturalOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT

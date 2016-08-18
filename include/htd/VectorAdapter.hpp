@@ -267,7 +267,7 @@ namespace htd
             {
                 container_->clear();
 
-                std::copy(original.begin(), original.end(), std::back_inserter(*container_));
+                container_->insert(container_->end(), original.begin(), original.end());
 
                 return *this;
             }
@@ -281,7 +281,7 @@ namespace htd
             {
                 container_->clear();
 
-                std::copy(original.begin(), original.end(), std::back_inserter(*container_));
+                container_->insert(container_->end(), original.begin(), original.end());
 
                 return *this;
             }
@@ -296,7 +296,7 @@ namespace htd
             {
                 container_->clear();
 
-                std::copy(original.begin(), original.end(), std::back_inserter(*container_));
+                container_->insert(container_->end(), original.begin(), original.end());
 
                 return *this;
             }

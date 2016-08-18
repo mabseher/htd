@@ -1010,7 +1010,7 @@ void htd::TreeDecomposition::copyJoinVerticesTo(std::vector<htd::vertex_t> & tar
 
         std::sort(sortedResult.begin(), sortedResult.end());
 
-        std::copy(sortedResult.begin(), sortedResult.end(), std::back_inserter(target));
+        target.insert(target.end(), sortedResult.begin(), sortedResult.end());
     }
 }
 
@@ -1048,16 +1048,13 @@ void htd::TreeDecomposition::getChildBagSetUnion(htd::vertex_t vertex, std::vect
         {
             const std::vector<htd::vertex_t> & childBag = bagContent(childAtPosition(vertex, 0));
 
-            std::copy(childBag.begin(), childBag.end(), std::back_inserter(target));
+            target.insert(target.end(), childBag.begin(), childBag.end());
 
             break;
         }
         case 2:
         {
-            const std::vector<htd::vertex_t> & childBag1 = bagContent(childAtPosition(vertex, 0));
-            const std::vector<htd::vertex_t> & childBag2 = bagContent(childAtPosition(vertex, 1));
-
-            htd::set_union(childBag1, childBag2, target);
+            htd::set_union(bagContent(childAtPosition(vertex, 0)), bagContent(childAtPosition(vertex, 1)), target);
 
             break;
         }
@@ -1067,7 +1064,7 @@ void htd::TreeDecomposition::getChildBagSetUnion(htd::vertex_t vertex, std::vect
             {
                 const std::vector<htd::vertex_t> & childBag = bagContent(child);
 
-                std::copy(childBag.begin(), childBag.end(), std::back_inserter(target));
+                target.insert(target.end(), childBag.begin(), childBag.end());
             }
 
             std::sort(target.begin(), target.end());

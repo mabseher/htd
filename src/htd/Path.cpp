@@ -1284,7 +1284,7 @@ htd::Path & htd::Path::operator=(const htd::IPath & original)
 
             const htd::ConstCollection<htd::vertex_t> & vertexCollection = original.vertices();
 
-            std::copy(vertexCollection.begin(), vertexCollection.end(), std::back_inserter(implementation_->vertices_));
+            implementation_->vertices_.insert(implementation_->vertices_.end(), vertexCollection.begin(), vertexCollection.end());
 
             for (htd::vertex_t vertex : implementation_->vertices_)
             {

@@ -461,20 +461,7 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::neighbors(htd::vertex_t vertex) c
 
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
-
-    const auto & node = *(implementation_->nodes_.at(vertex));
-
-    const auto & children = node.children;
-
-    if (node.parent != htd::Vertex::UNKNOWN)
-    {
-        result.emplace_back(node.parent);
-    }
-
-    std::copy(children.begin(), children.end(), std::back_inserter(result));
-
-    std::sort(result.begin(), result.end());
+    copyNeighborsTo(ret.container(), vertex);
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
@@ -494,7 +481,7 @@ void htd::Tree::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex
         target.emplace_back(node.parent);
     }
 
-    std::copy(children.begin(), children.end(), std::back_inserter(target));
+    target.insert(target.end(), children.begin(), children.end());
 
     std::sort(target.begin() + size, target.end());
 }
@@ -699,7 +686,7 @@ void htd::Tree::copyChildrenTo(std::vector<htd::vertex_t> & target, htd::vertex_
 
     const std::vector<htd::vertex_t> & childCollection = implementation_->nodes_.at(vertex)->children;
 
-    std::copy(childCollection.begin(), childCollection.end(), std::back_inserter(target));
+    target.insert(target.end(), childCollection.begin(), childCollection.end());
 }
 
 htd::vertex_t htd::Tree::childAtPosition(htd::vertex_t vertex, htd::index_t index) const

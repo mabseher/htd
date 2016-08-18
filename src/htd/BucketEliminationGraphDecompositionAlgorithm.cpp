@@ -190,7 +190,7 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
 
         if (tmp.size() > 0)
         {
-            std::copy(tmp.begin(), tmp.end(), std::back_inserter(set1));
+            set1.insert(set1.end(), tmp.begin(), tmp.end());
 
             std::inplace_merge(set1.begin(), set1.begin() + middle, set1.end());
         }

@@ -78,7 +78,7 @@ void htd::HypertreeDecomposition::setCoveringEdges(htd::vertex_t vertex, const h
 
     coveringEdges.clear();
 
-    std::copy(content.begin(), content.end(), std::back_inserter(coveringEdges));
+    coveringEdges.insert(coveringEdges.end(), content.begin(), content.end());
 }
 
 std::size_t htd::HypertreeDecomposition::minimumCoveringEdgeAmount(void) const

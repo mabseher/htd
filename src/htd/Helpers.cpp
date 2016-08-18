@@ -118,18 +118,18 @@ void htd::merge(const std::vector<htd::vertex_t> & set1,
         }
         else
         {
-            std::copy(first1, last1, std::back_inserter(result));
+            result.insert(result.end(), first1, last1);
         }
     }
     else if (first2 != last2)
     {
         if (*first2 <= ignoredVertex)
         {
-            std::copy_if(first2, last1, std::back_inserter(result), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
+            std::copy_if(first2, last2, std::back_inserter(result), [&](const htd::vertex_t vertex) { return vertex != ignoredVertex; });
         }
         else
         {
-            std::copy(first2, last1, std::back_inserter(result));
+            result.insert(result.end(), first2, last2);
         }
     }
 }
@@ -187,7 +187,7 @@ void htd::set_union(const std::vector<htd::vertex_t> & set1,
         }
         else
         {
-            std::copy(first1, last1, std::back_inserter(result));
+            result.insert(result.end(), first1, last1);
         }
     }
     else if (first2 != last2)
@@ -198,7 +198,7 @@ void htd::set_union(const std::vector<htd::vertex_t> & set1,
         }
         else
         {
-            std::copy(first2, last2, std::back_inserter(result));
+            result.insert(result.end(), first2, last2);
         }
     }
 }
@@ -234,7 +234,7 @@ void htd::set_difference(const std::vector<htd::vertex_t> & set1,
         }
     }
 
-    std::copy(first1, last1, std::back_inserter(result));
+    result.insert(result.end(), first1, last1);
 }
 
 void htd::set_intersection(const std::vector<htd::vertex_t> & set1,
@@ -367,7 +367,7 @@ void htd::decompose_sets(const std::vector<htd::vertex_t> & set1,
         }
         else
         {
-            std::copy(first1, last1, std::back_inserter(resultOnlySet1));
+            resultOnlySet1.insert(resultOnlySet1.end(), first1, last1);
         }
     }
     else if (first2 != last2)
@@ -378,7 +378,7 @@ void htd::decompose_sets(const std::vector<htd::vertex_t> & set1,
         }
         else
         {
-            std::copy(first2, last2, std::back_inserter(resultOnlySet2));
+            resultOnlySet2.insert(resultOnlySet2.end(), first2, last2);
         }
     }
 }
@@ -422,11 +422,11 @@ void htd::decompose_sets(const std::vector<htd::vertex_t> & set1,
 
     if (first1 != last1)
     {
-        std::copy(first1, last1, std::back_inserter(resultOnlySet1));
+        resultOnlySet1.insert(resultOnlySet1.end(), first1, last1);
     }
     else if (first2 != last2)
     {
-        std::copy(first2, last2, std::back_inserter(resultOnlySet2));
+        resultOnlySet2.insert(resultOnlySet2.end(), first2, last2);
     }
 }
 

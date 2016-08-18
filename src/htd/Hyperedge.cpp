@@ -214,7 +214,7 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
             else
             {
-                std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
+                sortedElements_.insert(sortedElements_.end(), elements_.begin(), elements_.end());
 
                 std::sort(sortedElements_.begin(), sortedElements_.end());
 
@@ -272,7 +272,7 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
             else
             {
-                std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
+                sortedElements_.insert(sortedElements_.end(), elements_.begin(), elements_.end());
 
                 std::sort(sortedElements_.begin(), sortedElements_.end());
 
@@ -330,7 +330,7 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
             else
             {
-                std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
+                sortedElements_.insert(sortedElements_.end(), elements_.begin(), elements_.end());
 
                 std::sort(sortedElements_.begin(), sortedElements_.end());
 
@@ -385,7 +385,7 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
             else
             {
-                std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
+                sortedElements_.insert(sortedElements_.end(), elements_.begin(), elements_.end());
 
                 std::sort(sortedElements_.begin(), sortedElements_.end());
 
@@ -423,7 +423,7 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
             }
             else
             {
-                std::copy(elements_.begin(), elements_.end(), std::back_inserter(sortedElements_));
+                sortedElements_.insert(sortedElements_.end(), elements_.begin(), elements_.end());
 
                 std::sort(sortedElements_.begin(), sortedElements_.end());
 

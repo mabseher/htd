@@ -644,7 +644,7 @@ void htd::TreeDecompositionOptimizationOperation::Implementation::intelligentOpt
 
                 if (newVertexCount > 0)
                 {
-                    std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(affectedVertices));
+                    affectedVertices.insert(affectedVertices.end(), createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end());
 
                     oldCreatedVerticesCount = createdVertices.size();
                 }

@@ -316,11 +316,11 @@ namespace htd
 
         if (index1 < count1)
         {
-            std::copy(first1, last1, std::back_inserter(result));
+            result.insert(result.end(), first1, last1);
         }
         else if (index2 < count2)
         {
-            std::copy(first2, last2, std::back_inserter(result));
+            result.insert(result.end(), first2, last2);
         }
     }
 
@@ -598,7 +598,7 @@ namespace htd
 
         if (tmp.size() > 0)
         {
-            std::copy(tmp.begin(), tmp.end(), std::back_inserter(set1));
+            set1.insert(set1.end(), tmp.begin(), tmp.end());
 
             std::inplace_merge(set1.begin(), set1.begin() + middle, set1.end());
         }

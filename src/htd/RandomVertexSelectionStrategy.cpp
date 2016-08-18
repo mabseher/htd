@@ -52,11 +52,11 @@ void htd::RandomVertexSelectionStrategy::selectVertices(const htd::IMultiHypergr
 
         std::shuffle(vertices.begin(), vertices.end(), std::default_random_engine());
 
-        std::copy(vertices.begin(), vertices.begin() + limit_, std::back_inserter(target));
+        target.insert(target.end(), vertices.begin(), vertices.begin() + limit_);
     }
     else
     {
-        std::copy(vertexCollection.begin(), vertexCollection.end(), std::back_inserter(target));
+        target.insert(target.end(), vertexCollection.begin(), vertexCollection.end());
     }
 }
 

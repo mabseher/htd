@@ -444,7 +444,7 @@ void htd::JoinNodeReplacementOperation::Implementation::getChildrenVertexLabelSe
 
     output.reserve(result.size());
 
-    std::copy(result.begin(), result.end(), std::back_inserter(output));
+    output.insert(output.end(), result.begin(), result.end());
 
     std::sort(output.begin(), output.end());
 

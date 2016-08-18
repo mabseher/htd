@@ -464,7 +464,9 @@ void htd::MultiHypergraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, 
 {
     HTD_ASSERT(isVertex(vertex))
 
-    std::copy(implementation_->neighborhood_[vertex - htd::Vertex::FIRST].begin(), implementation_->neighborhood_[vertex - htd::Vertex::FIRST].end(), std::back_inserter(target));
+    const std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
+
+    target.insert(target.end(), currentNeighborhood.begin(), currentNeighborhood.end());
 }
 
 htd::vertex_t htd::MultiHypergraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const
@@ -854,7 +856,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
         {
             htd::index_t middle = currentNeighborhood.size();
 
-            std::copy(tmp.begin(), tmp.end(), std::back_inserter(currentNeighborhood));
+            currentNeighborhood.insert(currentNeighborhood.end(), tmp.begin(), tmp.end());
 
             std::inplace_merge(currentNeighborhood.begin(),
                                currentNeighborhood.begin() + middle,

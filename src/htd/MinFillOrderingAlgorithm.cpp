@@ -70,13 +70,6 @@ struct htd::MinFillOrderingAlgorithm::Implementation
     std::size_t computeEdgeCount(const std::vector<std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const HTD_NOEXCEPT;
 };
 
-void freeMemory(std::vector<htd::vertex_t> & data)
-{
-    std::vector<htd::vertex_t> tmp;
-
-    data.swap(tmp);
-}
-
 htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
     
@@ -405,7 +398,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                     {
                         std::size_t middle = currentNeighborhood.size();
 
-                        std::copy(currentAdditionalNeighborhood.begin(), currentAdditionalNeighborhood.end(), std::back_inserter(currentNeighborhood));
+                        currentNeighborhood.insert(currentNeighborhood.end(), currentAdditionalNeighborhood.begin(), currentAdditionalNeighborhood.end());
 
                         std::inplace_merge(currentNeighborhood.begin(),
                                            currentNeighborhood.begin() + middle,
@@ -568,10 +561,10 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
             }
         }
 
-        freeMemory(selectedNeighborhood);
-        freeMemory(additionalNeighbors[selectedVertex]);
-        freeMemory(unaffectedNeighbors[selectedVertex]);
-        freeMemory(existingNeighbors[selectedVertex]);
+        std::vector<htd::vertex_t>().swap(selectedNeighborhood);
+        std::vector<htd::vertex_t>().swap(additionalNeighbors[selectedVertex]);
+        std::vector<htd::vertex_t>().swap(unaffectedNeighbors[selectedVertex]);
+        std::vector<htd::vertex_t>().swap(existingNeighbors[selectedVertex]);
 
         vertices.erase(selectedVertex);
 

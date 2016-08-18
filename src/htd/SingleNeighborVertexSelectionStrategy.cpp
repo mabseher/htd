@@ -66,7 +66,7 @@ void htd::SingleNeighborVertexSelectionStrategy::selectVertices(const htd::IMult
         vertices.erase(vertices.begin() + limit_, vertices.end());
     }
 
-    std::copy(vertices.begin(), vertices.end(), std::back_inserter(target));
+    target.insert(target.end(), vertices.begin(), vertices.end());
 }
 
 htd::SingleNeighborVertexSelectionStrategy * htd::SingleNeighborVertexSelectionStrategy::clone(void) const

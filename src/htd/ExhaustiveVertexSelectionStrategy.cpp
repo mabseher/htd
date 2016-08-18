@@ -45,7 +45,7 @@ void htd::ExhaustiveVertexSelectionStrategy::selectVertices(const htd::IMultiHyp
 {
     const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
 
-    std::copy(vertexCollection.begin(), vertexCollection.end(), std::back_inserter(target));
+    target.insert(target.end(), vertexCollection.begin(), vertexCollection.end());
 }
 
 htd::ExhaustiveVertexSelectionStrategy * htd::ExhaustiveVertexSelectionStrategy::clone(void) const

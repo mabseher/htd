@@ -212,7 +212,7 @@ namespace htd
 
                     vertexId = newVertex;
 
-                    vertexNames_[newVertex] = name;
+                    vertexNames_.emplace(newVertex, name);
                 }
                 else
                 {
@@ -252,7 +252,7 @@ namespace htd
 
                         vertexId = newVertex;
 
-                        vertexNames_[newVertex] = name;
+                        vertexNames_.emplace(newVertex, name);
                     }
                     else
                     {
@@ -293,7 +293,7 @@ namespace htd
 
                         vertexId = newVertex;
 
-                        vertexNames_[newVertex] = name;
+                        vertexNames_.emplace(newVertex, name);
                     }
                     else
                     {

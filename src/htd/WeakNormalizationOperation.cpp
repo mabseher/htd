@@ -183,7 +183,7 @@ void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
 
         if (newVertexCount > 0)
         {
-            std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(newRelevantVertices));
+            newRelevantVertices.insert(newRelevantVertices.end(), createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end());
 
             oldCreatedVerticesCount = createdVertices.size();
         }
@@ -199,7 +199,7 @@ void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
 
         if (newVertexCount > 0)
         {
-            std::copy(createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end(), std::back_inserter(newRelevantVertices));
+            newRelevantVertices.insert(newRelevantVertices.end(), createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end());
 
             oldCreatedVerticesCount = createdVertices.size();
         }

@@ -92,7 +92,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsVe
     }
 
     std::copy(missingVertices.begin(), missingVertices.end(), std::back_inserter(result));
-        
+
     std::sort(result.begin(), result.end());
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
@@ -230,6 +230,10 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsCo
             }
         }
     });
+
+    std::sort(result.begin(), result.end());
+
+    result.erase(std::unique(result.begin(), result.end()), result.end());
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }

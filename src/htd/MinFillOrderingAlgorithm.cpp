@@ -459,7 +459,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                                 fillIncrease += htd::set_difference_size(currentAdditionalNeighborhood.begin(),
                                                                          currentAdditionalNeighborhood.end(),
-                                                                         affectedVertices.begin(),
+                                                                         std::lower_bound(affectedVertices.begin(), affectedVertices.end(), currentAdditionalNeighborhood[0]),
                                                                          affectedVertices.end()) - 1;
                             }
 
@@ -520,7 +520,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                             if (!currentAdditionalNeighborhood2.empty())
                             {
-                                std::size_t fillReduction = htd::set_intersection_size(it, last, currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end());
+                                std::size_t fillReduction = htd::set_intersection_size(it, last, std::lower_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), *it), currentAdditionalNeighborhood2.end());
 
                                 tmp -= fillReduction;
 

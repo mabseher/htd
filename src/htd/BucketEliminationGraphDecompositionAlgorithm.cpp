@@ -151,8 +151,6 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
                    const std::vector<htd::vertex_t> & set2,
                    htd::vertex_t ignoredVertex) const
     {
-        htd::index_t middle = set1.size();
-
         std::vector<htd::vertex_t> tmp;
         tmp.reserve(set2.size());
 
@@ -190,6 +188,8 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
 
         if (!tmp.empty())
         {
+            htd::index_t middle = set1.size();
+
             set1.insert(set1.end(), tmp.begin(), tmp.end());
 
             std::inplace_merge(set1.begin(), set1.begin() + middle, set1.end());
@@ -481,34 +481,31 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                         htd::vertex_t vertex1 = elements[0];
                         htd::vertex_t vertex2 = elements[1];
 
-                        if (vertex1 != vertex2)
+                        if (indices.at(vertex1) < indices.at(vertex2))
                         {
-                            if (indices.at(vertex1) < indices.at(vertex2))
+                            std::vector<htd::vertex_t> & selectedBucket = buckets.at(vertex1);
+
+                            auto position = std::lower_bound(selectedBucket.begin(), selectedBucket.end(), vertex2);
+
+                            if (position == selectedBucket.end() || *position != vertex2)
                             {
-                                std::vector<htd::vertex_t> & selectedBucket = buckets.at(vertex1);
-
-                                auto position = std::lower_bound(selectedBucket.begin(), selectedBucket.end(), vertex2);
-
-                                if (position == selectedBucket.end() || *position != vertex2)
-                                {
-                                    selectedBucket.insert(position, vertex2);
-                                }
-
-                                edgeTarget[index] = vertex1;
+                                selectedBucket.insert(position, vertex2);
                             }
-                            else
+
+                            edgeTarget[index] = vertex1;
+                        }
+                        else
+                        {
+                            std::vector<htd::vertex_t> & selectedBucket = buckets.at(vertex2);
+
+                            auto position = std::lower_bound(selectedBucket.begin(), selectedBucket.end(), vertex1);
+
+                            if (position == selectedBucket.end() || *position != vertex1)
                             {
-                                std::vector<htd::vertex_t> & selectedBucket = buckets.at(vertex2);
-
-                                auto position = std::lower_bound(selectedBucket.begin(), selectedBucket.end(), vertex1);
-
-                                if (position == selectedBucket.end() || *position != vertex1)
-                                {
-                                    selectedBucket.insert(position, vertex1);
-                                }
-
-                                edgeTarget[index] = vertex2;
+                                selectedBucket.insert(position, vertex1);
                             }
+
+                            edgeTarget[index] = vertex2;
                         }
 
                         break;
@@ -584,7 +581,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 }
             }
 
-            std::deque<std::pair<htd::vertex_t, htd::vertex_t> *> decompositionEdges;
+            std::deque<std::pair<htd::vertex_t, htd::vertex_t>> decompositionEdges;
 
             std::unordered_map<htd::vertex_t, htd::vertex_t> decompositionVertices;
 
@@ -645,7 +642,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                                     vertexNames.push_back(neighbor2);
                                 }
 
-                                decompositionEdges.push_back(new std::pair<htd::vertex_t, htd::vertex_t>(vertex1.first->second, vertex2.first->second));
+                                decompositionEdges.emplace_back(vertex1.first->second, vertex2.first->second);
                             }
 
                             break;
@@ -700,7 +697,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                                             vertexNames.push_back(neighbor);
                                         }
 
-                                        decompositionEdges.push_back(new std::pair<htd::vertex_t, htd::vertex_t>(vertex1.first->second, vertex2.first->second));
+                                        decompositionEdges.emplace_back(vertex1.first->second, vertex2.first->second);
                                     }
                                 }
                             }
@@ -737,7 +734,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                                 vertexNames.push_back(neighbor);
                             }
 
-                            decompositionEdges.push_back(new std::pair<htd::vertex_t, htd::vertex_t>(vertex1.first->second, vertex2.first->second));
+                            decompositionEdges.emplace_back(vertex1.first->second, vertex2.first->second);
 
                             connected = true;
                         }
@@ -777,21 +774,19 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 ret->addVertex(std::move(buckets.at(vertexName)), graph.hyperedgesAtPositions(std::move(inducedEdges[vertexName])));
             }
 
-            for (std::pair<htd::vertex_t, htd::vertex_t> * edge : decompositionEdges)
+            for (const std::pair<htd::vertex_t, htd::vertex_t> & edge : decompositionEdges)
             {
                 if (!managementInstance.isTerminated())
                 {
-                    if (edge->first < edge->second)
+                    if (edge.first < edge.second)
                     {
-                        ret->addEdge(edge->first, edge->second);
+                        ret->addEdge(edge.first, edge.second);
                     }
                     else
                     {
-                        ret->addEdge(edge->second, edge->first);
+                        ret->addEdge(edge.second, edge.first);
                     }
                 }
-
-                delete edge;
             }
         }
     }

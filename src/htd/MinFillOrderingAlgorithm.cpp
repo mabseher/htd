@@ -522,33 +522,24 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 {
                     std::size_t tmp = fillValue[vertex];
 
-                    if (!unaffectedNeighbors[vertex].empty() && tmp > 0)
+                    std::vector<htd::vertex_t> & relevantNeighborhood = existingNeighbors[vertex];
+
+                    auto last = relevantNeighborhood.end();
+
+                    for (auto it = relevantNeighborhood.begin(); it != last && tmp > 0;)
                     {
-                        std::vector<htd::vertex_t> & relevantNeighborhood = existingNeighbors[vertex];
+                        std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
 
-                        auto last = relevantNeighborhood.end();
+                        ++it;
 
-                        for (auto it = relevantNeighborhood.begin(); it != last && tmp > 0;)
+                        if (!currentAdditionalNeighborhood2.empty() && it != last)
                         {
-                            std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
+                            std::size_t fillReduction = htd::set_intersection_size(it, last, std::lower_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), *it), currentAdditionalNeighborhood2.end());
 
-                            ++it;
+                            tmp -= fillReduction;
 
-                            if (!currentAdditionalNeighborhood2.empty() && it != last)
-                            {
-                                std::size_t fillReduction = htd::set_intersection_size(it, last, std::lower_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), *it), currentAdditionalNeighborhood2.end());
-
-                                tmp -= fillReduction;
-
-                                totalFill -= fillReduction;
-                            }
+                            totalFill -= fillReduction;
                         }
-                    }
-                    else
-                    {
-                        totalFill -= tmp;
-
-                        tmp = 0;
                     }
 
                     updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);

@@ -420,9 +420,9 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                         {
                             std::vector<htd::vertex_t> & relevantNeighborhood = existingNeighbors[vertex];
 
-                            std::size_t remainder = relevantNeighborhood.size();
+                            auto it = relevantNeighborhood.begin();
 
-                            for (auto it = relevantNeighborhood.begin(); remainder > 0 && tmp > unaffectedNeighborCount; --remainder)
+                            while (it != relevantNeighborhood.end() && tmp > unaffectedNeighborCount)
                             {
                                 htd::vertex_t vertex2 = *it;
 
@@ -455,25 +455,27 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                             if (additionalNeighborCount == 1)
                             {
-                                const std::vector<htd::vertex_t> & affectedVertices = unaffectedNeighbors[currentAdditionalNeighborhood[0]];
+                                const std::vector<htd::vertex_t> & affectedVertices2 = unaffectedNeighbors[currentAdditionalNeighborhood[0]];
 
-                                fillUpdate -= htd::set_intersection_size(affectedVertices.begin(),
-                                                                         affectedVertices.end(),
+                                fillUpdate -= htd::set_intersection_size(affectedVertices2.begin(),
+                                                                         affectedVertices2.end(),
                                                                          std::lower_bound(currentUnaffectedNeighborhood.begin(),
                                                                                           currentUnaffectedNeighborhood.end(),
-                                                                                          affectedVertices[0]),
+                                                                                          affectedVertices2[0]),
                                                                          currentUnaffectedNeighborhood.end());
                             }
                             else
                             {
                                 for (htd::vertex_t unaffectedVertex : currentUnaffectedNeighborhood)
                                 {
-                                    const std::vector<htd::vertex_t> & affectedVertices = existingNeighbors[unaffectedVertex];
+                                    const std::vector<htd::vertex_t> & affectedVertices2 = existingNeighbors[unaffectedVertex];
 
                                     fillUpdate += htd::set_difference_size(currentAdditionalNeighborhood.begin(),
                                                                            currentAdditionalNeighborhood.end(),
-                                                                           std::lower_bound(affectedVertices.begin(), affectedVertices.end(), currentAdditionalNeighborhood[0]),
-                                                                           affectedVertices.end()) - 1;
+                                                                           std::lower_bound(affectedVertices2.begin(),
+                                                                                            affectedVertices2.end(),
+                                                                                            currentAdditionalNeighborhood[0]),
+                                                                           affectedVertices2.end()) - 1;
                                 }
                             }
 

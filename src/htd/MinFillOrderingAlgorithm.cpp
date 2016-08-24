@@ -449,6 +449,19 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                             {
                                 const std::vector<htd::vertex_t> & affectedVertices2 = existingNeighbors[unaffectedVertex];
 
+                                /*
+                                std::cout << "VERTEX: " << vertex << "   STATUS: " << (int)(updateStatus[vertex]) << "   DIRECT: " << std::binary_search(selectedNeighborhood.begin(), selectedNeighborhood.end(), vertex) << std::endl;
+                                std::cout << "VERTEX: " << unaffectedVertex << "   STATUS: " << (int)(updateStatus[unaffectedVertex]) << "   DIRECT: " << std::binary_search(selectedNeighborhood.begin(), selectedNeighborhood.end(), unaffectedVertex) << std::endl;
+
+
+                                std::cout << currentAdditionalNeighborhood << " / " << affectedVertices2 << " (SIZE: " << htd::set_difference_size(currentAdditionalNeighborhood.begin(),
+                                                                                                                                                   currentAdditionalNeighborhood.end(),
+                                                                                                                                                   std::lower_bound(affectedVertices2.begin(),
+                                                                                                                                                                    affectedVertices2.end(),
+                                                                                                                                                                    currentAdditionalNeighborhood[0]),
+                                                                                                                                                   affectedVertices2.end()) << ")" << std::endl << std::endl;
+                                */
+
                                 fillUpdate += htd::set_difference_size(currentAdditionalNeighborhood.begin(),
                                                                        currentAdditionalNeighborhood.end(),
                                                                        std::lower_bound(affectedVertices2.begin(),

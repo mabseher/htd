@@ -320,15 +320,19 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                     // coverity[use_iterator]
                     currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
 
-                    std::size_t fillReduction = htd::set_difference_size(currentNeighborhood.begin(), currentNeighborhood.end(), selectedNeighborhood.begin(), selectedNeighborhood.end());
-
-                    if (fillReduction > 0)
+                    if (fillValue[vertex] > 0)
                     {
-                        fillValue[vertex] -= fillReduction;
+                        std::size_t fillReduction = htd::set_difference_size(currentNeighborhood.begin(), currentNeighborhood.end(),
+                                                                             selectedNeighborhood.begin(), selectedNeighborhood.end());
 
-                        totalFill -= fillReduction;
+                        if (fillReduction > 0)
+                        {
+                            fillValue[vertex] -= fillReduction;
 
-                        updatePool(vertex, fillValue[vertex], pool, minFill/*, minDegree, neighborhood*/);
+                            totalFill -= fillReduction;
+
+                            updatePool(vertex, fillValue[vertex], pool, minFill/*, minDegree, neighborhood*/);
+                        }
                     }
                 }
             }
@@ -427,53 +431,25 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 {
                     if (additionalNeighborCount > 0)
                     {
-                        long fillUpdate = 0;
+                        long fillUpdate = -unaffectedNeighborCount;
 
-                        if (additionalNeighborCount == 1)
+                        for (htd::vertex_t additionalVertex : currentAdditionalNeighborhood)
                         {
-                            if (tmp > 0)
-                            {
-                                const std::vector<htd::vertex_t> & affectedVertices2 = unaffectedNeighbors[currentAdditionalNeighborhood[0]];
+                            const std::vector<htd::vertex_t> & affectedVertices2 = unaffectedNeighbors[additionalVertex];
 
-                                fillUpdate -= htd::set_intersection_size(affectedVertices2.begin(),
-                                                                         affectedVertices2.end(),
-                                                                         std::lower_bound(currentUnaffectedNeighborhood.begin(),
-                                                                                          currentUnaffectedNeighborhood.end(),
-                                                                                          affectedVertices2[0]),
-                                                                         currentUnaffectedNeighborhood.end());
-                            }
+                            fillUpdate += unaffectedNeighborCount;
+
+                            fillUpdate -= htd::set_intersection_size(affectedVertices2.begin(),
+                                                                     affectedVertices2.end(),
+                                                                     std::lower_bound(currentUnaffectedNeighborhood.begin(),
+                                                                                      currentUnaffectedNeighborhood.end(),
+                                                                                      affectedVertices2[0]),
+                                                                     currentUnaffectedNeighborhood.end());
                         }
-                        else
+
+                        if (fillUpdate > 0)
                         {
-                            for (htd::vertex_t unaffectedVertex : currentUnaffectedNeighborhood)
-                            {
-                                const std::vector<htd::vertex_t> & affectedVertices2 = existingNeighbors[unaffectedVertex];
-
-                                /*
-                                std::cout << "VERTEX: " << vertex << "   STATUS: " << (int)(updateStatus[vertex]) << "   DIRECT: " << std::binary_search(selectedNeighborhood.begin(), selectedNeighborhood.end(), vertex) << std::endl;
-                                std::cout << "VERTEX: " << unaffectedVertex << "   STATUS: " << (int)(updateStatus[unaffectedVertex]) << "   DIRECT: " << std::binary_search(selectedNeighborhood.begin(), selectedNeighborhood.end(), unaffectedVertex) << std::endl;
-
-
-                                std::cout << currentAdditionalNeighborhood << " / " << affectedVertices2 << " (SIZE: " << htd::set_difference_size(currentAdditionalNeighborhood.begin(),
-                                                                                                                                                   currentAdditionalNeighborhood.end(),
-                                                                                                                                                   std::lower_bound(affectedVertices2.begin(),
-                                                                                                                                                                    affectedVertices2.end(),
-                                                                                                                                                                    currentAdditionalNeighborhood[0]),
-                                                                                                                                                   affectedVertices2.end()) << ")" << std::endl << std::endl;
-                                */
-
-                                fillUpdate += htd::set_difference_size(currentAdditionalNeighborhood.begin(),
-                                                                       currentAdditionalNeighborhood.end(),
-                                                                       std::lower_bound(affectedVertices2.begin(),
-                                                                                        affectedVertices2.end(),
-                                                                                        currentAdditionalNeighborhood[0]),
-                                                                       affectedVertices2.end()) - 1;
-                            }
-
-                            if (fillUpdate > 0)
-                            {
-                                pool.erase(vertex);
-                            }
+                            pool.erase(vertex);
                         }
 
                         tmp += fillUpdate;
@@ -492,38 +468,35 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                         totalFill -= unaffectedNeighborCount;
 
-                        if (tmp > 0)
+                        std::vector<htd::vertex_t> & relevantNeighborhood = existingNeighbors[vertex];
+
+                        for (auto it = relevantNeighborhood.begin(); it != relevantNeighborhood.end() && tmp > 0;)
                         {
-                            std::vector<htd::vertex_t> & relevantNeighborhood = existingNeighbors[vertex];
+                            htd::vertex_t vertex2 = *it;
 
-                            auto it = relevantNeighborhood.begin();
+                            std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[vertex2];
 
-                            while (it != relevantNeighborhood.end() && tmp > 0)
+                            ++it;
+
+                            if (!currentAdditionalNeighborhood2.empty())
                             {
-                                htd::vertex_t vertex2 = *it;
+                                std::size_t fillReduction = htd::set_intersection_size(it, relevantNeighborhood.end(),
+                                                                                        std::upper_bound(currentAdditionalNeighborhood2.begin(),
+                                                                                                         currentAdditionalNeighborhood2.end(),
+                                                                                                         vertex2),
+                                                                                       currentAdditionalNeighborhood2.end());
 
-                                std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[vertex2];
+                                tmp -= fillReduction;
 
-                                ++it;
-
-                                if (!currentAdditionalNeighborhood2.empty())
-                                {
-                                    std::size_t fillReduction = htd::set_intersection_size(it, relevantNeighborhood.end(), std::upper_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), vertex2), currentAdditionalNeighborhood2.end());
-
-                                    tmp -= fillReduction;
-
-                                    totalFill -= fillReduction;
-                                }
+                                totalFill -= fillReduction;
                             }
-
-                            fillValue[vertex] = tmp;
-
-                            updateStatus[vertex] = 0;
-
-                            updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
                         }
 
                         updateStatus[vertex] = 0;
+
+                        fillValue[vertex] = tmp;
+
+                        updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
                     }
                 }
                 else
@@ -548,17 +521,19 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                     {
                         std::size_t tmp = fillValue[vertex];
 
-                        auto last = relevantNeighborhood.end();
-
-                        for (auto it = relevantNeighborhood.begin(); it != last && tmp > 0;)
+                        for (auto it = relevantNeighborhood.begin(); it != relevantNeighborhood.end() && tmp > 0;)
                         {
                             std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
 
                             ++it;
 
-                            if (!currentAdditionalNeighborhood2.empty() && it != last)
+                            if (!currentAdditionalNeighborhood2.empty() && it != relevantNeighborhood.end())
                             {
-                                std::size_t fillReduction = htd::set_intersection_size(it, last, std::lower_bound(currentAdditionalNeighborhood2.begin(), currentAdditionalNeighborhood2.end(), *it), currentAdditionalNeighborhood2.end());
+                                std::size_t fillReduction = htd::set_intersection_size(it, relevantNeighborhood.end(),
+                                                                                       std::lower_bound(currentAdditionalNeighborhood2.begin(),
+                                                                                                        currentAdditionalNeighborhood2.end(),
+                                                                                                        *it),
+                                                                                       currentAdditionalNeighborhood2.end());
 
                                 tmp -= fillReduction;
 
@@ -571,6 +546,10 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                         fillValue[vertex] = tmp;
                     }
                 }
+
+                existingNeighbors[vertex].clear();
+
+                updateStatus[vertex] = 0;
             }
 
             for (htd::vertex_t vertex : selectedNeighborhood)
@@ -578,16 +557,6 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 additionalNeighbors[vertex].clear();
                 unaffectedNeighbors[vertex].clear();
                 existingNeighbors[vertex].clear();
-            }
-
-            for (htd::vertex_t vertex : affectedVertices)
-            {
-                if (updateStatus[vertex] == 2)
-                {
-                    existingNeighbors[vertex].clear();
-
-                    updateStatus[vertex] = 0;
-                }
             }
         }
 

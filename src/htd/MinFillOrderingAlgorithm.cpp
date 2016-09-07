@@ -58,16 +58,6 @@ struct htd::MinFillOrderingAlgorithm::Implementation
      *  The management instance to which the current object instance belongs.
      */
     const htd::LibraryInstance * managementInstance_;
-
-    /**
-     *  Compute the number of edges between a set of vertices.
-     *
-     *  @param[in] availableNeighborhoods   The neighborhoods of the provided vertices.
-     *  @param[in] vertices                 The vertices for which the number of edges shall be returned.
-     *
-     *  @return The number of edges between the provided vertices.
-     */
-    std::size_t computeEdgeCount(const std::vector<std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const HTD_NOEXCEPT;
 };
 
 htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -99,6 +89,34 @@ htd::vertex_t registerVertex(htd::vertex_t vertex, std::unordered_map<htd::verte
     }
 
     return result.first->second;
+}
+
+/**
+ *  Compute the number of edges between a set of vertices.
+ *
+ *  @param[in] availableNeighborhoods   The neighborhoods of the provided vertices.
+ *  @param[in] vertices                 The vertices for which the number of edges shall be returned.
+ *
+ *  @return The number of edges between the provided vertices.
+ */
+std::size_t computeEdgeCount(const std::vector<std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices)
+{
+    std::size_t ret = 0;
+
+    std::size_t remainder = vertices.size();
+
+    for (auto it = vertices.begin(); remainder > 0; --remainder)
+    {
+        htd::vertex_t vertex = *it;
+
+        const std::vector<htd::vertex_t> & currentNeighborhood = availableNeighborhoods[vertex];
+
+        ++it;
+
+        ret += htd::set_intersection_size(it, vertices.end(), std::upper_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), currentNeighborhood.end());
+    }
+
+    return ret;
 }
 
 void initialize(const htd::IMultiHypergraph & graph,
@@ -263,7 +281,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
         std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
         
-        std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - implementation_->computeEdgeCount(neighborhood, currentNeighborhood);
+        std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
 
         updatePool(vertex, currentFillValue, pool, minFill/*, minDegree, neighborhood*/);
 
@@ -296,7 +314,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
             }
         }
 
-        htd::vertex_t selectedVertex = selectRandomElement<htd::vertex_t>(pool);
+        htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(pool);
 
         std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood[selectedVertex];
 
@@ -403,11 +421,14 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 {
                     std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
 
-                    if (additionalNeighborCount == 1)
+                    if (additionalNeighborCount <= 8)
                     {
-                        htd::vertex_t newVertex = currentAdditionalNeighborhood[0];
+                        auto it = currentNeighborhood.begin();
 
-                        currentNeighborhood.insert(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), newVertex), newVertex);
+                        for (htd::vertex_t newNeighbor : currentAdditionalNeighborhood)
+                        {
+                            it = currentNeighborhood.insert(std::lower_bound(it, currentNeighborhood.end(), newNeighbor), newNeighbor) + 1;
+                        }
                     }
                     else
                     {
@@ -447,20 +468,23 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                                                                      currentUnaffectedNeighborhood.end());
                         }
 
-                        if (fillUpdate > 0)
-                        {
-                            pool.erase(vertex);
-                        }
-
-                        tmp += fillUpdate;
-
-                        totalFill += fillUpdate;
-
                         updateStatus[vertex] &= ~1;
 
-                        fillValue[vertex] = tmp;
+                        if (fillUpdate != 0)
+                        {
+                            if (fillUpdate > 0)
+                            {
+                                pool.erase(vertex);
+                            }
 
-                        updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
+                            tmp += fillUpdate;
+
+                            totalFill += fillUpdate;
+
+                            fillValue[vertex] = tmp;
+
+                            updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
+                        }
                     }
                     else
                     {
@@ -663,26 +687,6 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
     }
 
     DEBUGGING_CODE_LEVEL2(std::cout << std::endl;)
-}
-
-std::size_t htd::MinFillOrderingAlgorithm::Implementation::computeEdgeCount(const std::vector<std::vector<htd::vertex_t>> & availableNeighborhoods, const std::vector<htd::vertex_t> & vertices) const HTD_NOEXCEPT
-{
-    std::size_t ret = 0;
-
-    std::size_t remainder = vertices.size();
-
-    for (auto it = vertices.begin(); remainder > 0; --remainder)
-    {
-        htd::vertex_t vertex = *it;
-
-        const std::vector<htd::vertex_t> & currentNeighborhood = availableNeighborhoods[vertex];
-
-        ++it;
-
-        ret += htd::set_intersection_size(it, vertices.end(), std::upper_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), currentNeighborhood.end());
-    }
-
-    return ret;
 }
 
 const htd::LibraryInstance * htd::MinFillOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT

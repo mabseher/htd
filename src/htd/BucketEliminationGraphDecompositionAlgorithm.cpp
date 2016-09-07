@@ -190,11 +190,23 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
 
         if (!tmp.empty())
         {
-            htd::index_t middle = set1.size();
+            if (tmp.size() <= 8)
+            {
+                auto it = set1.begin();
 
-            set1.insert(set1.end(), tmp.begin(), tmp.end());
+                for (htd::vertex_t newVertex : tmp)
+                {
+                    it = set1.insert(std::lower_bound(it, set1.end(), newVertex), newVertex) + 1;
+                }
+            }
+            else
+            {
+                htd::index_t middle = set1.size();
 
-            std::inplace_merge(set1.begin(), set1.begin() + middle, set1.end());
+                set1.insert(set1.end(), tmp.begin(), tmp.end());
+
+                std::inplace_merge(set1.begin(), set1.begin() + middle, set1.end());
+            }
         }
     }
 };

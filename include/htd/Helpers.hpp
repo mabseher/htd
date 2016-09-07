@@ -486,7 +486,7 @@ namespace htd
     std::size_t set_intersection_size(InputIterator1 first1, InputIterator1 last1,
                                       InputIterator2 first2, InputIterator2 last2)
     {
-        size_t ret = 0;
+        std::size_t ret = 0;
 
         while (first1 != last1 && first2 != last2)
         {
@@ -498,7 +498,7 @@ namespace htd
             {
                 if (*first1 == *first2)
                 {
-                    ret++;
+                    ++ret;
 
                     ++first1;
                 }
@@ -596,11 +596,23 @@ namespace htd
 
         if (!tmp.empty())
         {
-            htd::index_t middle = set1.size();
+            if (tmp.size() <= 8)
+            {
+                auto it = set1.begin();
 
-            set1.insert(set1.end(), tmp.begin(), tmp.end());
+                for (htd::vertex_t newVertex : tmp)
+                {
+                    it = set1.insert(std::lower_bound(it, set1.end(), newVertex), newVertex) + 1;
+                }
+            }
+            else
+            {
+                htd::index_t middle = set1.size();
 
-            std::inplace_merge(set1.begin(), set1.begin() + middle, set1.end());
+                set1.insert(set1.end(), tmp.begin(), tmp.end());
+
+                std::inplace_merge(set1.begin(), set1.begin() + middle, set1.end());
+            }
         }
     }
 

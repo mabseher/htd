@@ -842,25 +842,37 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
         std::set_difference(sortedElements.begin(), sortedElements.end(),
                             currentNeighborhood.begin(), currentNeighborhood.end(), std::back_inserter(tmp));
 
-        if (tmp.size() > 1 && implementation_->selfLoops_.count(vertex) == 0)
-        {
-            auto position2 = std::lower_bound(tmp.begin(), tmp.end(), vertex);
-
-            if (position2 != tmp.end() && *position2 == vertex)
-            {
-                tmp.erase(position2);
-            }
-        }
-
         if (!tmp.empty())
         {
-            htd::index_t middle = currentNeighborhood.size();
+            if (tmp.size() > 1 && implementation_->selfLoops_.count(vertex) == 0)
+            {
+                auto position2 = std::lower_bound(tmp.begin(), tmp.end(), vertex);
 
-            currentNeighborhood.insert(currentNeighborhood.end(), tmp.begin(), tmp.end());
+                if (position2 != tmp.end() && *position2 == vertex)
+                {
+                    tmp.erase(position2);
+                }
+            }
 
-            std::inplace_merge(currentNeighborhood.begin(),
-                               currentNeighborhood.begin() + middle,
-                               currentNeighborhood.end());
+            if (tmp.size() <= 8)
+            {
+                auto it = currentNeighborhood.begin();
+
+                for (htd::vertex_t newVertex : tmp)
+                {
+                    it = currentNeighborhood.insert(std::lower_bound(it, currentNeighborhood.end(), newVertex), newVertex) + 1;
+                }
+            }
+            else
+            {
+                htd::index_t middle = currentNeighborhood.size();
+
+                currentNeighborhood.insert(currentNeighborhood.end(), tmp.begin(), tmp.end());
+
+                std::inplace_merge(currentNeighborhood.begin(),
+                                   currentNeighborhood.begin() + middle,
+                                   currentNeighborhood.end());
+            }
         }
     }
 

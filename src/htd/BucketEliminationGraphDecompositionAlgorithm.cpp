@@ -577,11 +577,16 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     if (selectedBucket.size() + 1 > bucket.size())
                     {
-                        const std::vector<htd::vertex_t> & supersetBucket = buckets[superset[minimumVertex]];
+                        htd::vertex_t supersetVertex = superset[minimumVertex];
 
-                        if (!std::includes(supersetBucket.begin(), supersetBucket.end(), selectedBucket.begin(), selectedBucket.end()))
+                        if (supersetVertex != minimumVertex)
                         {
-                            superset[minimumVertex] = minimumVertex;
+                            const std::vector<htd::vertex_t> & supersetBucket = buckets[supersetVertex];
+
+                            if (!std::includes(supersetBucket.begin(), supersetBucket.end(), selectedBucket.begin(), selectedBucket.end()))
+                            {
+                                superset[minimumVertex] = minimumVertex;
+                            }
                         }
                     }
                     else
@@ -601,9 +606,11 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             for (auto it = ordering.begin(); it != ordering.end() && !managementInstance.isTerminated(); ++it)
             {
-                const std::vector<htd::vertex_t> & currentNeighborhood = neighbors[*it];
+                htd::vertex_t vertex = *it;
 
-                if (superset[*it] != *it)
+                const std::vector<htd::vertex_t> & currentNeighborhood = neighbors[vertex];
+
+                if (superset[vertex] != vertex)
                 {
                     switch (currentNeighborhood.size())
                     {
@@ -615,7 +622,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                         {
                             std::vector<htd::vertex_t> & twoHopNeighborhood = neighbors[currentNeighborhood[0]];
 
-                            twoHopNeighborhood.erase(std::find(twoHopNeighborhood.begin(), twoHopNeighborhood.end(), *it));
+                            twoHopNeighborhood.erase(std::find(twoHopNeighborhood.begin(), twoHopNeighborhood.end(), vertex));
 
                             break;
                         }
@@ -627,8 +634,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                             std::vector<htd::vertex_t> & twoHopNeighborhood1 = neighbors[neighbor1];
                             std::vector<htd::vertex_t> & twoHopNeighborhood2 = neighbors[neighbor2];
 
-                            *(std::find(twoHopNeighborhood1.begin(), twoHopNeighborhood1.end(), *it)) = neighbor2;
-                            *(std::find(twoHopNeighborhood2.begin(), twoHopNeighborhood2.end(), *it)) = neighbor1;
+                            *(std::find(twoHopNeighborhood1.begin(), twoHopNeighborhood1.end(), vertex)) = neighbor2;
+                            *(std::find(twoHopNeighborhood2.begin(), twoHopNeighborhood2.end(), vertex)) = neighbor1;
 
                             if (superset[neighbor1] == neighbor1 && superset[neighbor2] == neighbor2)
                             {
@@ -659,7 +666,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                         {
                             htd::vertex_t replacement = htd::Vertex::UNKNOWN;
 
-                            std::vector<htd::vertex_t> & currentBucket = buckets[*it];
+                            std::vector<htd::vertex_t> & currentBucket = buckets[vertex];
 
                             for (auto it2 = currentNeighborhood.begin(); replacement == htd::Vertex::UNKNOWN && it2 != currentNeighborhood.end(); ++it2)
                             {
@@ -673,7 +680,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                             std::vector<htd::vertex_t> & replacementNeighborhood = neighbors[replacement];
 
-                            replacementNeighborhood.erase(std::find(replacementNeighborhood.begin(), replacementNeighborhood.end(), *it));
+                            replacementNeighborhood.erase(std::find(replacementNeighborhood.begin(), replacementNeighborhood.end(), vertex));
 
                             std::copy_if(currentNeighborhood.begin(), currentNeighborhood.end(), std::back_inserter(replacementNeighborhood), [&](htd::vertex_t neighbor) { return neighbor != replacement; });
 
@@ -685,7 +692,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                                     /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'currentNeighborhood2'. */
                                     // coverity[deref_iterator]
-                                    *(std::find(currentNeighborhood2.begin(), currentNeighborhood2.end(), *it)) = replacement;
+                                    *(std::find(currentNeighborhood2.begin(), currentNeighborhood2.end(), vertex)) = replacement;
 
                                     if (superset[replacement] == replacement && superset[neighbor] == neighbor)
                                     {
@@ -716,7 +723,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                         }
                     }
 
-                    std::vector<htd::vertex_t>().swap(neighbors[*it]);
+                    std::vector<htd::vertex_t>().swap(neighbors[vertex]);
                 }
                 else
                 {
@@ -724,13 +731,13 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     for (htd::vertex_t neighbor : currentNeighborhood)
                     {
-                        if (indices[neighbor] > indices[*it] && superset[neighbor] == neighbor)
+                        if (indices[neighbor] > indices[vertex] && superset[neighbor] == neighbor)
                         {
-                            std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(*it, nextVertexId);
+                            std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(vertex, nextVertexId);
 
                             if (vertex1.second)
                             {
-                                vertexNames.push_back(*it);
+                                vertexNames.push_back(vertex);
 
                                 ++nextVertexId;
                             }
@@ -752,11 +759,11 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     if (!connected)
                     {
-                        std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(*it, static_cast<htd::vertex_t>(vertexNames.size()) + 1);
+                        std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(vertex, static_cast<htd::vertex_t>(vertexNames.size()) + 1);
 
                         if (vertex1.second)
                         {
-                            vertexNames.push_back(*it);
+                            vertexNames.push_back(vertex);
 
                             ++nextVertexId;
                         }
@@ -881,13 +888,20 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::distribu
 
     inducedEdges[currentBucket].push_back(edgeIndex);
 
+    htd::vertex_t firstVertex = edge[0];
+
+    auto edgeBegin = edge.begin();
+    auto edgeEnd = edge.end();
+
     for (htd::vertex_t neighbor : neighbors[currentBucket])
     {
         const std::vector<htd::vertex_t> & neighborBucketContent = buckets[neighbor];
 
-        auto position = std::lower_bound(neighborBucketContent.begin(), neighborBucketContent.end(), edge[0]);
+        auto end = neighborBucketContent.end();
 
-        if (neighborBucketContent.end() - position >= size && std::includes(position, neighborBucketContent.end(), edge.begin(), edge.end()))
+        auto position = std::lower_bound(neighborBucketContent.begin(), end, firstVertex);
+
+        if (end - position >= size && std::includes(position, end, edgeBegin, edgeEnd))
         {
             originStack.push(neighbor);
         }
@@ -907,13 +921,15 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::distribu
 
         for (htd::vertex_t neighbor : neighbors[currentBucket])
         {
-            if (neighbor != lastBucket)
+            if (neighbor != lastBucket && lastAssignedEdge[neighbor] != edgeIndex)
             {
                 const std::vector<htd::vertex_t> & neighborBucketContent = buckets[neighbor];
 
-                auto position = std::lower_bound(neighborBucketContent.begin(), neighborBucketContent.end(), edge[0]);
+                auto end = neighborBucketContent.end();
 
-                if (lastAssignedEdge[neighbor] != edgeIndex && neighborBucketContent.end() - position >= size && std::includes(position, neighborBucketContent.end(), edge.begin(), edge.end()))
+                auto position = std::lower_bound(neighborBucketContent.begin(), end, firstVertex);
+
+                if (end - position >= size && std::includes(position, end, edgeBegin, edgeEnd))
                 {
                     originStack.push(neighbor);
                 }

@@ -827,11 +827,11 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                 if (node.parent < child)
                 {
-                    implementation_->edges_->emplace_back(new htd::Hyperedge(implementation_->next_edge_, node.parent, child));
+                    implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, node.parent, child));
                 }
                 else
                 {
-                    implementation_->edges_->emplace_back(new htd::Hyperedge(implementation_->next_edge_, child, node.parent));
+                    implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, child, node.parent));
                 }
 
                 childNode.edges.emplace_back(implementation_->next_edge_);
@@ -859,11 +859,11 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                     if (node.parent < child)
                     {
-                        implementation_->edges_->emplace_back(new htd::Hyperedge(implementation_->next_edge_, node.parent, child));
+                        implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, node.parent, child));
                     }
                     else
                     {
-                        implementation_->edges_->emplace_back(new htd::Hyperedge(implementation_->next_edge_, child, node.parent));
+                        implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, child, node.parent));
                     }
 
                     childNode.edges.emplace_back(implementation_->next_edge_);
@@ -933,11 +933,11 @@ void htd::Tree::removeVertex(htd::vertex_t vertex)
 
                     if (implementation_->root_ < child)
                     {
-                        implementation_->edges_->emplace_back(new htd::Hyperedge(implementation_->next_edge_, implementation_->root_, child));
+                        implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, implementation_->root_, child));
                     }
                     else
                     {
-                        implementation_->edges_->emplace_back(new htd::Hyperedge(implementation_->next_edge_, child, implementation_->root_));
+                        implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, child, implementation_->root_));
                     }
 
                     childNode.edges.emplace_back(implementation_->next_edge_);
@@ -1041,7 +1041,9 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
     node.children.emplace_back(ret);
 
-    implementation_->nodes_.emplace(ret, new Implementation::Node(ret, vertex));
+    Implementation::Node * newNode = new Implementation::Node(ret, vertex);
+
+    implementation_->nodes_.emplace(ret, newNode);
 
     implementation_->vertices_.emplace_back(ret);
 
@@ -1049,11 +1051,11 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
     implementation_->size_++;
 
-    implementation_->edges_->emplace_back(new htd::Hyperedge(implementation_->next_edge_, vertex, ret));
+    implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, vertex, ret));
 
     node.edges.emplace_back(implementation_->next_edge_);
 
-    implementation_->nodes_.at(ret)->edges.emplace_back(implementation_->next_edge_);
+    newNode->edges.emplace_back(implementation_->next_edge_);
 
     implementation_->next_edge_++;
 
@@ -1170,7 +1172,7 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
         selectedNode.parent = ret;
     }
 
-    implementation_->edges_->emplace_back(new htd::Hyperedge(implementation_->next_edge_, vertex, ret));
+    implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, vertex, ret));
 
     implementation_->nodes_.at(vertex)->edges.emplace_back(implementation_->next_edge_);
     implementation_->nodes_.at(ret)->edges.emplace_back(implementation_->next_edge_);
@@ -1245,11 +1247,11 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
 
         if (vertex < newParent)
         {
-            implementation_->edges_->emplace_back(new htd::Hyperedge(implementation_->next_edge_, vertex, newParent));
+            implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, vertex, newParent));
         }
         else
         {
-            implementation_->edges_->emplace_back(new htd::Hyperedge(implementation_->next_edge_, newParent, vertex));
+            implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, newParent, vertex));
         }
 
         implementation_->next_edge_++;
@@ -1495,7 +1497,7 @@ htd::Tree & htd::Tree::operator=(const htd::Tree & original)
 
         for (htd::Hyperedge * edge : *(original.implementation_->edges_))
         {
-            implementation_->edges_->emplace_back(new htd::Hyperedge(*edge));
+            implementation_->edges_->push_back(new htd::Hyperedge(*edge));
         }
 
         implementation_->next_edge_ = original.implementation_->next_edge_;
@@ -1560,7 +1562,7 @@ htd::Tree & htd::Tree::operator=(const htd::ITree & original)
 
             for (auto it = originalEdges.begin(); it != originalEdges.end(); ++it)
             {
-                implementation_->edges_->emplace_back(new htd::Hyperedge(*it));
+                implementation_->edges_->push_back(new htd::Hyperedge(*it));
             }
 
             if (!implementation_->edges_->empty())

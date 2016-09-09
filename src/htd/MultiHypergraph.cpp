@@ -821,16 +821,19 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
     std::vector<htd::vertex_t> sortedElements(elements);
 
-    std::sort(sortedElements.begin(), sortedElements.end());
+    auto elementsBegin = sortedElements.begin();
+    auto elementsEnd = sortedElements.end();
 
-    auto position = std::unique(sortedElements.begin(), sortedElements.end());
+    std::sort(elementsBegin, elementsEnd);
 
-    for (auto it = position; it != sortedElements.end(); it++)
+    auto position = std::unique(elementsBegin, elementsEnd);
+
+    for (auto it = position; it != elementsEnd; ++it)
     {
         implementation_->selfLoops_.insert(*it);
     }
 
-    sortedElements.erase(position, sortedElements.end());
+    elementsEnd = sortedElements.erase(position, elementsEnd);
 
     for (htd::vertex_t vertex : sortedElements)
     {
@@ -839,7 +842,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
         std::vector<htd::vertex_t> tmp;
         tmp.reserve(sortedElements.size());
 
-        std::set_difference(sortedElements.begin(), sortedElements.end(),
+        std::set_difference(elementsBegin, elementsEnd,
                             currentNeighborhood.begin(), currentNeighborhood.end(), std::back_inserter(tmp));
 
         if (!tmp.empty())

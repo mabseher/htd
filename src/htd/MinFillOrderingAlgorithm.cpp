@@ -385,6 +385,8 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                         {
                             std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[affectedVertex];
 
+                            std::vector<htd::vertex_t> & currentExistingNeighborhood = existingNeighbors[affectedVertex];
+
                             auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex);
 
                             if (position != currentNeighborhood.end() && *position == selectedVertex)
@@ -394,19 +396,30 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                                 htd::decompose_sets(selectedNeighborhood, currentNeighborhood,
                                                     additionalNeighbors[affectedVertex],
                                                     unaffectedNeighbors[affectedVertex],
-                                                    existingNeighbors[affectedVertex]);
+                                                    currentExistingNeighborhood);
+
+                                affectedVertices.push_back(affectedVertex);
+
+                                updateStatus[affectedVertex] |= 2;
                             }
                             else
                             {
                                 std::set_intersection(selectedNeighborhood.begin(), selectedNeighborhood.end(),
                                                       currentNeighborhood.begin(), currentNeighborhood.end(),
-                                                      std::back_inserter(existingNeighbors[affectedVertex]));
+                                                      std::back_inserter(currentExistingNeighborhood));
+
+                                if (currentExistingNeighborhood.size() > 1)
+                                {
+                                    affectedVertices.push_back(affectedVertex);
+
+                                    updateStatus[affectedVertex] |= 2;
+                                }
+                                else
+                                {
+                                    currentExistingNeighborhood.clear();
+                                }
                             }
                         }
-
-                        affectedVertices.push_back(affectedVertex);
-
-                        updateStatus[affectedVertex] |= 2;
                     }
                 }
             }
@@ -496,7 +509,7 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                         auto neighborhoodEnd = relevantNeighborhood.end();
 
-                        for (auto it = relevantNeighborhood.begin(); it != neighborhoodEnd && tmp > 0;)
+                        for (auto it = relevantNeighborhood.begin(); it != neighborhoodEnd - 1 && tmp > 0;)
                         {
                             htd::vertex_t vertex2 = *it;
 
@@ -559,52 +572,49 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
                 {
                     std::vector<htd::vertex_t> & relevantNeighborhood = existingNeighbors[vertex];
 
-                    if (relevantNeighborhood.size() > 1)
+                    std::size_t tmp = fillValue[vertex];
+
+                    auto neighborhoodEnd = relevantNeighborhood.end();
+
+                    for (auto it = relevantNeighborhood.begin(); it != neighborhoodEnd - 1 && tmp > 0;)
                     {
-                        std::size_t tmp = fillValue[vertex];
+                        std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
 
-                        auto neighborhoodEnd = relevantNeighborhood.end();
+                        ++it;
 
-                        for (auto it = relevantNeighborhood.begin(); it != neighborhoodEnd && tmp > 0;)
+                        if (!currentAdditionalNeighborhood2.empty())
                         {
-                            std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
-
-                            ++it;
-
-                            if (!currentAdditionalNeighborhood2.empty() && it != neighborhoodEnd)
+                            if (currentAdditionalNeighborhood2.size() == 1)
                             {
-                                if (currentAdditionalNeighborhood2.size() == 1)
+                                htd::vertex_t additionalNeighbor = currentAdditionalNeighborhood2[0];
+
+                                auto position = std::lower_bound(it, neighborhoodEnd, additionalNeighbor);
+
+                                if (position != neighborhoodEnd && *position == additionalNeighbor)
                                 {
-                                    htd::vertex_t additionalNeighbor = currentAdditionalNeighborhood2[0];
+                                    --tmp;
 
-                                    auto position = std::lower_bound(it, neighborhoodEnd, additionalNeighbor);
-
-                                    if (position != neighborhoodEnd && *position == additionalNeighbor)
-                                    {
-                                        --tmp;
-
-                                        --totalFill;
-                                    }
-                                }
-                                else
-                                {
-                                    std::size_t fillReduction = htd::set_intersection_size(it, neighborhoodEnd,
-                                                                                           std::lower_bound(currentAdditionalNeighborhood2.begin(),
-                                                                                                            currentAdditionalNeighborhood2.end(),
-                                                                                                            *it),
-                                                                                           currentAdditionalNeighborhood2.end());
-
-                                    tmp -= fillReduction;
-
-                                    totalFill -= fillReduction;
+                                    --totalFill;
                                 }
                             }
+                            else
+                            {
+                                std::size_t fillReduction = htd::set_intersection_size(it, neighborhoodEnd,
+                                                                                       std::lower_bound(currentAdditionalNeighborhood2.begin(),
+                                                                                                        currentAdditionalNeighborhood2.end(),
+                                                                                                        *it),
+                                                                                       currentAdditionalNeighborhood2.end());
+
+                                tmp -= fillReduction;
+
+                                totalFill -= fillReduction;
+                            }
                         }
-
-                        updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
-
-                        fillValue[vertex] = tmp;
                     }
+
+                    updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
+
+                    fillValue[vertex] = tmp;
                 }
 
                 existingNeighbors[vertex].clear();

@@ -565,13 +565,13 @@ void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph 
 
                         auto neighborhoodEnd = relevantNeighborhood.end();
 
-                        for (auto it = relevantNeighborhood.begin(); it != neighborhoodEnd - 1 && tmp > 0;)
+                        for (auto it = relevantNeighborhood.begin(); it != neighborhoodEnd && tmp > 0;)
                         {
                             std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
 
                             ++it;
 
-                            if (!currentAdditionalNeighborhood2.empty())
+                            if (!currentAdditionalNeighborhood2.empty() && it != neighborhoodEnd)
                             {
                                 if (currentAdditionalNeighborhood2.size() == 1)
                                 {

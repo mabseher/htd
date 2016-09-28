@@ -83,7 +83,9 @@ void htd::BreadthFirstGraphTraversal::traverse(const htd::IMultiHypergraph & gra
 
     originDeque.emplace_back(currentVertex, htd::Vertex::UNKNOWN, currentDistance);
 
-    while (!originDeque.empty())
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    while (!originDeque.empty() && !managementInstance.isTerminated())
     {
         currentVertex = std::get<0>(originDeque.front());
 

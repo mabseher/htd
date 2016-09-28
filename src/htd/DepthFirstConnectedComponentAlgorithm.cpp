@@ -79,7 +79,9 @@ void htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::
     {
         std::unordered_set<htd::vertex_t> unvisitedVertices(vertexCollection.begin(), vertexCollection.end());
 
-        while (!unvisitedVertices.empty())
+        const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+        while (!unvisitedVertices.empty() && !managementInstance.isTerminated())
         {
             std::vector<htd::vertex_t> component;
 

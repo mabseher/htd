@@ -143,6 +143,29 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
                         std::stack<htd::vertex_t> & originStack) const;
 
     /**
+     *  Distribute a given edge, identified by its index, in the decomposition so that the information about induced edges is updated.
+     *
+     *  @param[in] edgeIndex        The index of the edge which shall be distributed.
+     *  @param[in] vertex1          The first vertex (i.e., the one with lower ID) of the edge which shall be distributed.
+     *  @param[in] vertex2          The second vertex (i.e., the one with higher ID) of the edge which shall be distributed.
+     *  @param[in] startBucket      The identifier of the node from which the process shall start.
+     *  @param[in] buckets          The available buckets.
+     *  @param[in] neighbors        The neighbors of the buckets.
+     *  @param[in] inducedEdges     The set of edge indices induced by a bucket.
+     *  @param[in] lastAssignedEdge The identifier of the last edge which was assigned to a bucket.
+     *  @param[in] originStack      The stack instance used for backtracking.
+     */
+    void distributeEdge(htd::index_t edgeIndex,
+                        htd::vertex_t vertex1,
+                        htd::vertex_t vertex2,
+                        htd::vertex_t startBucket,
+                        const std::vector<std::vector<htd::vertex_t>> & buckets,
+                        const std::vector<std::vector<htd::vertex_t>> & neighbors,
+                        std::vector<std::vector<htd::index_t>> & inducedEdges,
+                        std::vector<htd::id_t> & lastAssignedEdge,
+                        std::stack<htd::vertex_t> & originStack) const;
+
+    /**
      *  Compute the set union of two sets and store the result in the first set.
      *
      *  @param[in,out] set1         The first set
@@ -781,7 +804,16 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             for (index = 0; index < edgeCount && !managementInstance.isTerminated(); ++index)
             {
-                distributeEdge(index, hyperedgePosition->sortedElements(), superset[edgeTarget[index]], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
+                const std::vector<htd::vertex_t> edgeElements = hyperedgePosition->sortedElements();
+
+                if (edgeElements.size() == 2)
+                {
+                    distributeEdge(index, edgeElements[0], edgeElements[1], superset[edgeTarget[index]], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
+                }
+                else
+                {
+                    distributeEdge(index, edgeElements, superset[edgeTarget[index]], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
+                }
 
                 ++hyperedgePosition;
             }
@@ -932,6 +964,69 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::distribu
                 if (end - position >= size && std::includes(position, end, edgeBegin, edgeEnd))
                 {
                     originStack.push(neighbor);
+                }
+            }
+        }
+    }
+}
+
+void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::distributeEdge(htd::index_t edgeIndex, htd::vertex_t vertex1, htd::vertex_t vertex2, htd::vertex_t startBucket, const std::vector<std::vector<htd::vertex_t>> & buckets, const std::vector<std::vector<htd::vertex_t>> & neighbors, std::vector<std::vector<htd::index_t>> & inducedEdges, std::vector<htd::id_t> & lastAssignedEdge, std::stack<htd::vertex_t> & originStack) const
+{
+    htd::vertex_t currentBucket = startBucket;
+
+    lastAssignedEdge[currentBucket] = static_cast<htd::id_t>(edgeIndex);
+
+    inducedEdges[currentBucket].push_back(edgeIndex);
+
+    for (htd::vertex_t neighbor : neighbors[currentBucket])
+    {
+        const std::vector<htd::vertex_t> & neighborBucketContent = buckets[neighbor];
+
+        auto end = neighborBucketContent.end();
+
+        auto position1 = std::lower_bound(neighborBucketContent.begin(), end, vertex1);
+
+        if (position1 != end && *position1 == vertex1)
+        {
+            auto position2 = std::lower_bound(position1, end, vertex2);
+
+            if (position2 != end && *position2 == vertex2)
+            {
+                originStack.push(neighbor);
+            }
+        }
+    }
+
+    while (!originStack.empty())
+    {
+        htd::vertex_t lastBucket = currentBucket;
+
+        currentBucket = originStack.top();
+
+        originStack.pop();
+
+        lastAssignedEdge[currentBucket] = static_cast<htd::id_t>(edgeIndex);
+
+        inducedEdges[currentBucket].push_back(edgeIndex);
+
+        for (htd::vertex_t neighbor : neighbors[currentBucket])
+        {
+            if (neighbor != lastBucket && lastAssignedEdge[neighbor] != edgeIndex)
+            {
+                const std::vector<htd::vertex_t> & neighborBucketContent = buckets[neighbor];
+
+                auto end = neighborBucketContent.end();
+
+                auto position1 = std::lower_bound(neighborBucketContent.begin(), end, vertex1);
+
+                if (position1 != end && *position1 == vertex1)
+                {
+                    auto position2 = std::lower_bound(position1, end, vertex2);
+
+                    if (position2 != end && *position2 == vertex2)
+                    {
+                        originStack.push(neighbor);
+                    }
                 }
             }
         }

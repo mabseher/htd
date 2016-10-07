@@ -39,7 +39,11 @@ htd::OrderingAlgorithmFactory::OrderingAlgorithmFactory(const htd::LibraryInstan
 
 htd::OrderingAlgorithmFactory::OrderingAlgorithmFactory(const htd::OrderingAlgorithmFactory & original)
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+    constructionTemplate_ = original.constructionTemplate_->cloneOrderingAlgorithm();
+#endif
 }
 
 htd::OrderingAlgorithmFactory & htd::OrderingAlgorithmFactory::operator=(const htd::OrderingAlgorithmFactory & original)
@@ -48,7 +52,11 @@ htd::OrderingAlgorithmFactory & htd::OrderingAlgorithmFactory::operator=(const h
     {
         delete constructionTemplate_;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         constructionTemplate_ = original.constructionTemplate_->clone();
+#else
+        constructionTemplate_ = original.constructionTemplate_->cloneOrderingAlgorithm();
+#endif
     }
 
     return *this;
@@ -66,12 +74,20 @@ htd::OrderingAlgorithmFactory::~OrderingAlgorithmFactory()
 
 htd::IOrderingAlgorithm * htd::OrderingAlgorithmFactory::getOrderingAlgorithm(void) const
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
+#else
+    return constructionTemplate_->cloneOrderingAlgorithm();
+#endif
 }
 
 htd::IOrderingAlgorithm * htd::OrderingAlgorithmFactory::getOrderingAlgorithm(const htd::LibraryInstance * const manager) const
 {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IOrderingAlgorithm * ret = constructionTemplate_->clone();
+#else
+    htd::IOrderingAlgorithm * ret = constructionTemplate_->cloneOrderingAlgorithm();
+#endif
 
     ret->setManagementInstance(manager);
 

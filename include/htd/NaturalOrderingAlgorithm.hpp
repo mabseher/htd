@@ -56,7 +56,13 @@ namespace htd
 
             HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             HTD_API NaturalOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
+#else
+            HTD_API NaturalOrderingAlgorithm * clone(void) const;
+
+            HTD_API htd::IOrderingAlgorithm * cloneOrderingAlgorithm(void) const HTD_OVERRIDE;
+#endif
 
         protected:
             /**

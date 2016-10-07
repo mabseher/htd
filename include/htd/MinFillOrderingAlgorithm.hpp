@@ -26,16 +26,14 @@
 #define	HTD_HTD_MINFILLORDERINGALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IOrderingAlgorithm.hpp>
-
-#include <vector>
+#include <htd/IWidthLimitableOrderingAlgorithm.hpp>
 
 namespace htd
 {
     /**
      *  Implementation of the IOrderingAlgorithm interface based on the minimum-fill elimination ordering algorithm.
      */
-    class MinFillOrderingAlgorithm : public htd::IOrderingAlgorithm
+    class MinFillOrderingAlgorithm : public htd::IWidthLimitableOrderingAlgorithm
     {
         public:
             /**
@@ -46,16 +44,28 @@ namespace htd
             HTD_API MinFillOrderingAlgorithm(const htd::LibraryInstance * const manager);
             
             HTD_API virtual ~MinFillOrderingAlgorithm();
-            
+
             HTD_API htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
 
+            HTD_API htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize) const HTD_NOEXCEPT HTD_OVERRIDE;
+
             HTD_API void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            HTD_API void writeOrderingTo(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             HTD_API MinFillOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
+#else
+            HTD_API MinFillOrderingAlgorithm * clone(void) const;
+
+            HTD_API htd::IOrderingAlgorithm * cloneOrderingAlgorithm(void) const HTD_OVERRIDE;
+
+            HTD_API htd::IWidthLimitableOrderingAlgorithm * cloneWidthLimitableOrderingAlgorithm(void) const HTD_OVERRIDE;
+#endif
 
         protected:
             /**

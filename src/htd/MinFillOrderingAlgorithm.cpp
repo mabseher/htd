@@ -79,6 +79,15 @@ htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrderi
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
+htd::ConstCollection<htd::vertex_t> htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize) const HTD_NOEXCEPT
+{
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    writeOrderingTo(graph, maxBagSize, ret.container());
+
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
 htd::vertex_t registerVertex(htd::vertex_t vertex, std::unordered_map<htd::vertex_t, htd::vertex_t> & mapping, std::vector<htd::vertex_t> & reverseMapping)
 {
     auto result = mapping.emplace(vertex, reverseMapping.size());
@@ -244,6 +253,13 @@ void updatePool(htd::vertex_t vertex, std::size_t fillValue, std::unordered_set<
 
 void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT
 {
+    writeOrderingTo(graph, (std::size_t)-1, target);
+}
+
+void htd::MinFillOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT
+{
+    HTD_UNUSED(maxBagSize)
+
     std::size_t size = graph.vertexCount();
 
     std::size_t minFill = (std::size_t)-1;
@@ -741,5 +757,17 @@ htd::MinFillOrderingAlgorithm * htd::MinFillOrderingAlgorithm::clone(void) const
 {
     return new htd::MinFillOrderingAlgorithm(implementation_->managementInstance_);
 }
+
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IOrderingAlgorithm * htd::MinFillOrderingAlgorithm::cloneOrderingAlgorithm(void) const
+{
+    return new htd::MinFillOrderingAlgorithm(implementation_->managementInstance_);
+}
+
+htd::IWidthLimitableOrderingAlgorithm * htd::MinFillOrderingAlgorithm::cloneWidthLimitableOrderingAlgorithm(void) const
+{
+    return new htd::MinFillOrderingAlgorithm(implementation_->managementInstance_);
+}
+#endif
 
 #endif /* HTD_HTD_MINFILLORDERINGALGORITHM_CPP */

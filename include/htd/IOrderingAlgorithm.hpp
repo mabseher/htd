@@ -1,5 +1,5 @@
 /* 
- * File:   OrderingAlgorithm.hpp
+ * File:   IOrderingAlgorithm.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -70,12 +70,21 @@ namespace htd
              */
             virtual void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT = 0;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current ordering algorithm.
              *
              *  @return A new IOrderingAlgorithm object identical to the current ordering algorithm.
              */
             virtual IOrderingAlgorithm * clone(void) const = 0;
+#else
+            /**
+             *  Create a deep copy of the current ordering algorithm.
+             *
+             *  @return A new IOrderingAlgorithm object identical to the current ordering algorithm.
+             */
+            virtual IOrderingAlgorithm * cloneOrderingAlgorithm(void) const = 0;
+#endif
     };
 
     inline htd::IOrderingAlgorithm::~IOrderingAlgorithm() { }

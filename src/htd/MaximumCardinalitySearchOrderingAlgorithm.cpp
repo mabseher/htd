@@ -195,4 +195,11 @@ htd::MaximumCardinalitySearchOrderingAlgorithm * htd::MaximumCardinalitySearchOr
     return new htd::MaximumCardinalitySearchOrderingAlgorithm(managementInstance());
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IOrderingAlgorithm * htd::MaximumCardinalitySearchOrderingAlgorithm::cloneOrderingAlgorithm(void) const
+{
+    return new htd::MaximumCardinalitySearchOrderingAlgorithm(implementation_->managementInstance_);
+}
+#endif
+
 #endif /* HTD_HTD_MAXIMUMCARDINALITYSEARCHORDERINGALGORITHM_CPP */

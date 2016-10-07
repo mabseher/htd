@@ -79,8 +79,24 @@ htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrde
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
+htd::ConstCollection<htd::vertex_t> htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize) const HTD_NOEXCEPT
+{
+    htd::VectorAdapter<htd::vertex_t> ret;
+
+    writeOrderingTo(graph, maxBagSize, ret.container());
+
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
+}
+
 void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT
 {
+    writeOrderingTo(graph, (std::size_t)-1, target);
+}
+
+void htd::MinDegreeOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT
+{
+    HTD_UNUSED(maxBagSize)
+
     std::size_t size = graph.vertexCount();
 
     std::size_t minDegree = (std::size_t)-1;
@@ -274,5 +290,17 @@ htd::MinDegreeOrderingAlgorithm * htd::MinDegreeOrderingAlgorithm::clone(void) c
 {
     return new htd::MinDegreeOrderingAlgorithm(implementation_->managementInstance_);
 }
+
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IOrderingAlgorithm * htd::MinDegreeOrderingAlgorithm::cloneOrderingAlgorithm(void) const
+{
+    return new htd::MinDegreeOrderingAlgorithm(implementation_->managementInstance_);
+}
+
+htd::IWidthLimitableOrderingAlgorithm * htd::MinDegreeOrderingAlgorithm::cloneWidthLimitableOrderingAlgorithm(void) const
+{
+    return new htd::MinDegreeOrderingAlgorithm(implementation_->managementInstance_);
+}
+#endif
 
 #endif /* HTD_HTD_MINDEGREEORDERINGALGORITHM_CPP */

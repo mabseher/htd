@@ -98,4 +98,11 @@ htd::NaturalOrderingAlgorithm * htd::NaturalOrderingAlgorithm::clone(void) const
     return new htd::NaturalOrderingAlgorithm(implementation_->managementInstance_);
 }
 
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IOrderingAlgorithm * htd::NaturalOrderingAlgorithm::cloneOrderingAlgorithm(void) const
+{
+    return new htd::NaturalOrderingAlgorithm(implementation_->managementInstance_);
+}
+#endif
+
 #endif /* HTD_HTD_NATURALORDERINGALGORITHM_CPP */

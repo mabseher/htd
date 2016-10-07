@@ -26,18 +26,14 @@
 #define	HTD_HTD_MINDEGREEORDERINGALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IOrderingAlgorithm.hpp>
-
-#include <vector>
-#include <algorithm>
-#include <unordered_set>
+#include <htd/IWidthLimitableOrderingAlgorithm.hpp>
 
 namespace htd
 {
     /**
      *  Implementation of the IOrderingAlgorithm interface based on the minimum-degree elimination ordering algorithm.
      */
-    class MinDegreeOrderingAlgorithm : public virtual htd::IOrderingAlgorithm
+    class MinDegreeOrderingAlgorithm : public virtual htd::IWidthLimitableOrderingAlgorithm
     {
         public:
             /**
@@ -51,13 +47,25 @@ namespace htd
             
             HTD_API htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
 
+            HTD_API htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize) const HTD_NOEXCEPT HTD_OVERRIDE;
+
             HTD_API void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            HTD_API void writeOrderingTo(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             HTD_API MinDegreeOrderingAlgorithm * clone(void) const HTD_OVERRIDE;
+#else
+            HTD_API MinDegreeOrderingAlgorithm * clone(void) const;
+
+            HTD_API htd::IOrderingAlgorithm * cloneOrderingAlgorithm(void) const HTD_OVERRIDE;
+
+            HTD_API htd::IWidthLimitableOrderingAlgorithm * cloneWidthLimitableOrderingAlgorithm(void) const HTD_OVERRIDE;
+#endif
 
         protected:
             /**

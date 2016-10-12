@@ -37,7 +37,9 @@
 #include <htd/Algorithm.hpp>
 
 #include <algorithm>
+#include <deque>
 #include <iterator>
+#include <memory>
 #include <stdexcept>
 #include <utility>
 
@@ -1053,9 +1055,9 @@ htd::vertex_t htd::Tree::addChild(htd::vertex_t vertex)
 
     implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, vertex, ret));
 
-    node.edges.emplace_back(implementation_->next_edge_);
+    node.edges.push_back(implementation_->next_edge_);
 
-    newNode->edges.emplace_back(implementation_->next_edge_);
+    newNode->edges.push_back(implementation_->next_edge_);
 
     implementation_->next_edge_++;
 
@@ -1174,8 +1176,8 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
 
     implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, vertex, ret));
 
-    implementation_->nodes_.at(vertex)->edges.emplace_back(implementation_->next_edge_);
-    implementation_->nodes_.at(ret)->edges.emplace_back(implementation_->next_edge_);
+    implementation_->nodes_.at(vertex)->edges.push_back(implementation_->next_edge_);
+    implementation_->nodes_.at(ret)->edges.push_back(implementation_->next_edge_);
 
     implementation_->next_edge_++;
 
@@ -1362,15 +1364,15 @@ void htd::Tree::swapWithParent(htd::vertex_t vertex)
         {
             Implementation::Node & childNode = *(implementation_->nodes_.at(child));
 
-            htd::vertex_t & parentReference = childNode.parent;
+            htd::vertex_t & parentReference2 = childNode.parent;
 
-            if (parentReference != vertex)
+            if (parentReference2 != vertex)
             {
-                Implementation::Node & oldParentNode = *(implementation_->nodes_.at(parentReference));
+                Implementation::Node & oldParentNode = *(implementation_->nodes_.at(parentReference2));
 
                 implementation_->updateEdgesAfterSwapWithParent(childNode, oldParentNode, parentNode);
 
-                parentReference = vertex;
+                parentReference2 = vertex;
             }
         }
     }

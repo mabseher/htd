@@ -30,16 +30,17 @@
 #include <htd/Path.hpp>
 #include <htd/PostOrderTreeTraversal.hpp>
 #include <htd/VectorAdapter.hpp>
-#include <htd/HyperedgeVector.hpp>
+#include <htd/HyperedgePointerDeque.hpp>
+#include <htd/ConstPointerIteratorWrapper.hpp>
 
 #include <htd/Algorithm.hpp>
 
 #include <algorithm>
+#include <deque>
 #include <iterator>
-#include <stack>
+#include <memory>
 #include <stdexcept>
 #include <utility>
-#include <vector>
 
 /**
  *  Private implementation details of class htd::Path.
@@ -67,12 +68,17 @@ struct htd::Path::Implementation
         htd::vertex_t child;
 
         /**
+         *  The collection of all edge identifiers containing the path node.
+         */
+        std::vector<htd::id_t> edges;
+
+        /**
          *  Constructor for a path node.
          *
          *  @param[in] id       The ID of the constructed path node.
          *  @param[in] parent   The parent of the constructed path node.
          */
-        Node(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), child(htd::Vertex::UNKNOWN)
+        Node(htd::id_t id, htd::vertex_t parent) : id(id), parent(parent), child(htd::Vertex::UNKNOWN), edges()
         {
 
         }
@@ -83,7 +89,7 @@ struct htd::Path::Implementation
      *
      *  @param[in] manager   The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_()
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), size_(0), root_(htd::Vertex::UNKNOWN), next_edge_(htd::Id::FIRST), next_vertex_(htd::Vertex::FIRST), nodes_(), edges_(std::make_shared<std::deque<htd::Hyperedge *>>())
     {
 
     }
@@ -93,6 +99,11 @@ struct htd::Path::Implementation
         for (auto it = nodes_.begin(); it != nodes_.end(); it++)
         {
             delete it->second;
+        }
+
+        for (htd::Hyperedge * edge : *edges_)
+        {
+            delete edge;
         }
     }
 
@@ -107,7 +118,9 @@ struct htd::Path::Implementation
           root_(original.root_),
           next_edge_(original.next_edge_),
           next_vertex_(original.next_vertex_),
-          vertices_(original.vertices_)
+          vertices_(original.vertices_),
+          nodes_(),
+          edges_(std::make_shared<std::deque<htd::Hyperedge *>>())
     {
         nodes_.reserve(original.nodes_.size());
 
@@ -179,11 +192,25 @@ struct htd::Path::Implementation
     std::unordered_map<htd::id_t, Node *> nodes_;
 
     /**
+     *  The collection of all hyperedges which exist in the path.
+     */
+    std::shared_ptr<std::deque<htd::Hyperedge *>> edges_;
+
+    /**
      *  Delete a node of the path and perform an update of the internal state.
      *
      *  @param[in] node The node of the path which shall be removed.
      */
     void deleteNode(Node * node);
+
+    /**
+     *  Updates the edge information for the nodes affected by a call to swapWithParent(htd::vertex_t).
+     *
+     *  @param[in] node             The node for which swapWithParent(htd::vertex_t) was called.
+     *  @param[in] parentNode       The parent node of the swapped node.
+     *  @param[in] grandParentNode  The grandparent node of the swapped node.
+     */
+    void updateEdgesAfterSwapWithParent(Node & node, Node & parentNode, Node & grandParentNode);
 };
 
 htd::Path::Path(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -353,7 +380,7 @@ bool htd::Path::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 
 bool htd::Path::isConnected(void) const
 {
-    return edgeCount() > 0;
+    return true;
 }
 
 bool htd::Path::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
@@ -452,11 +479,27 @@ const std::vector<htd::vertex_t> & htd::Path::vertexVector(void) const
 
 std::size_t htd::Path::isolatedVertexCount(void) const
 {
-    return 0;
+    std::size_t ret = 0;
+
+    if (implementation_->size_ == 1)
+    {
+        ret = 1;
+    }
+
+    return ret;
 }
 
 htd::ConstCollection<htd::vertex_t> htd::Path::isolatedVertices(void) const
 {
+    if (implementation_->size_ == 1)
+    {
+        htd::VectorAdapter<htd::vertex_t> result;
+
+        result.container().emplace_back(implementation_->root_);
+
+        return htd::ConstCollection<htd::vertex_t>(result.begin(), result.end());
+    }
+
     return htd::ConstCollection<htd::vertex_t>();
 }
 
@@ -471,56 +514,13 @@ htd::vertex_t htd::Path::isolatedVertexAtPosition(htd::index_t index) const
 
 bool htd::Path::isIsolatedVertex(htd::vertex_t vertex) const
 {
-    HTD_UNUSED(vertex)
-
-    return false;
+    return implementation_->size_ == 1 && vertex == implementation_->root_;
 }
 
 htd::ConstCollection<htd::Hyperedge> htd::Path::hyperedges(void) const
 {
-    htd::VectorAdapter<htd::Hyperedge> ret;
-
-    std::vector<htd::Hyperedge> & target = ret.container();
-
-    htd::id_t id = 0;
-
-    for (const auto & currentNode : implementation_->nodes_)
-    {
-        htd::vertex_t vertex = currentNode.first;
-
-        htd::vertex_t parent = currentNode.second->parent;
-        htd::vertex_t child = currentNode.second->child;
-
-        if (parent != htd::Vertex::UNKNOWN)
-        {
-            if (parent < vertex)
-            {
-                target.push_back(htd::Hyperedge(id, parent, vertex));
-            }
-            else
-            {
-                target.push_back(htd::Hyperedge(id, vertex, parent));
-            }
-
-            ++id;
-        }
-
-        if (child != htd::Vertex::UNKNOWN)
-        {
-            if (child < vertex)
-            {
-                target.push_back(htd::Hyperedge(id, child, vertex));
-            }
-            else
-            {
-                target.push_back(htd::Hyperedge(id, vertex, child));
-            }
-
-            ++id;
-        }
-    }
-
-    return htd::ConstCollection<htd::Hyperedge>::getInstance(ret);
+    return htd::ConstCollection<htd::Hyperedge>(static_cast<htd::ConstIteratorBase<htd::Hyperedge> *>(new htd::ConstPointerIteratorWrapper<std::deque<htd::Hyperedge *>::const_iterator, htd::Hyperedge>(implementation_->edges_->begin())),
+                                                static_cast<htd::ConstIteratorBase<htd::Hyperedge> *>(new htd::ConstPointerIteratorWrapper<std::deque<htd::Hyperedge *>::const_iterator, htd::Hyperedge>(implementation_->edges_->end())));
 }
 
 htd::ConstCollection<htd::Hyperedge> htd::Path::hyperedges(htd::vertex_t vertex) const
@@ -529,17 +529,13 @@ htd::ConstCollection<htd::Hyperedge> htd::Path::hyperedges(htd::vertex_t vertex)
 
     htd::VectorAdapter<htd::Hyperedge> ret;
 
-    std::vector<htd::Hyperedge> & target = ret.container();
+    auto & result = ret.container();
 
-    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();
-
-    for (auto it = hyperedgeCollection.begin(); it != hyperedgeCollection.end(); ++it)
+    for (auto & edge : *(implementation_->edges_))
     {
-        const htd::Hyperedge & currentHyperedge = *it;
-
-        if (std::find(currentHyperedge.begin(), currentHyperedge.end(), vertex) != currentHyperedge.end())
+        if (edge->contains(vertex))
         {
-            target.push_back(currentHyperedge);
+            result.emplace_back(*edge);
         }
     }
 
@@ -574,124 +570,53 @@ const htd::Hyperedge & htd::Path::hyperedge(htd::id_t edgeId) const
 
 const htd::Hyperedge & htd::Path::hyperedgeAtPosition(htd::index_t index) const
 {
-    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges();
+    HTD_ASSERT(index < implementation_->edges_->size())
 
-    if (index >= hyperedgeCollection.size())
-    {
-        throw std::out_of_range("const htd::Hyperedge & htd::Path::hyperedgeAtPosition(htd::index_t) const");
-    }
-
-    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
-
-    std::advance(it, index);
-
-    return *it;
+    return *(implementation_->edges_->at(index));
 }
 
 const htd::Hyperedge & htd::Path::hyperedgeAtPosition(htd::index_t index, htd::vertex_t vertex) const
 {
-    const htd::ConstCollection<htd::Hyperedge> & hyperedgeCollection = hyperedges(vertex);
-
-    if (index >= hyperedgeCollection.size())
+    for (auto it = implementation_->edges_->begin(); it != implementation_->edges_->end(); ++it)
     {
-        throw std::out_of_range("const htd::Hyperedge & htd::Path::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
+        const htd::Hyperedge & hyperedge = **it;
+
+        if (hyperedge.contains(vertex))
+        {
+            if (index == 0)
+            {
+                return hyperedge;
+            }
+
+            --index;
+        }
     }
 
-    htd::ConstIterator<htd::Hyperedge> it = hyperedgeCollection.begin();
-
-    std::advance(it, index);
-
-    return *it;
+    throw std::out_of_range("const htd::Hyperedge & htd::Path::hyperedgeAtPosition(htd::index_t, htd::vertex_t) const");
 }
 
 htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
 {
-    std::shared_ptr<std::vector<htd::Hyperedge>> hyperedges = std::make_shared<std::vector<htd::Hyperedge>>();
-
-    htd::id_t id = 0;
-
-    for (const auto & currentNode : implementation_->nodes_)
+    #ifndef NDEBUG
+    for (htd::index_t index : indices)
     {
-        htd::vertex_t vertex = currentNode.first;
-
-        htd::vertex_t parent = currentNode.second->parent;
-        htd::vertex_t child = currentNode.second->child;
-
-        if (parent != htd::Vertex::UNKNOWN)
-        {
-            if (parent < vertex)
-            {
-                hyperedges->push_back(htd::Hyperedge(id, parent, vertex));
-            }
-            else
-            {
-                hyperedges->push_back(htd::Hyperedge(id, vertex, parent));
-            }
-
-            ++id;
-        }
-
-        if (child != htd::Vertex::UNKNOWN)
-        {
-            if (child < vertex)
-            {
-                hyperedges->push_back(htd::Hyperedge(id, child, vertex));
-            }
-            else
-            {
-                hyperedges->push_back(htd::Hyperedge(id, vertex, child));
-            }
-
-            ++id;
-        }
+        HTD_ASSERT(index < implementation_->edges_->size())
     }
+    #endif
 
-    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(hyperedges), indices);
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgePointerDeque(implementation_->edges_), indices);
 }
 
 htd::FilteredHyperedgeCollection htd::Path::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
 {
-    std::shared_ptr<std::vector<htd::Hyperedge>> hyperedges = std::make_shared<std::vector<htd::Hyperedge>>();
-
-    htd::id_t id = 0;
-
-    for (const auto & currentNode : implementation_->nodes_)
+    #ifndef NDEBUG
+    for (htd::index_t index : indices)
     {
-        htd::vertex_t vertex = currentNode.first;
-
-        htd::vertex_t parent = currentNode.second->parent;
-        htd::vertex_t child = currentNode.second->child;
-
-        if (parent != htd::Vertex::UNKNOWN)
-        {
-            if (parent < vertex)
-            {
-                hyperedges->push_back(htd::Hyperedge(id, parent, vertex));
-            }
-            else
-            {
-                hyperedges->push_back(htd::Hyperedge(id, vertex, parent));
-            }
-
-            ++id;
-        }
-
-        if (child != htd::Vertex::UNKNOWN)
-        {
-            if (child < vertex)
-            {
-                hyperedges->push_back(htd::Hyperedge(id, child, vertex));
-            }
-            else
-            {
-                hyperedges->push_back(htd::Hyperedge(id, vertex, child));
-            }
-
-            ++id;
-        }
+        HTD_ASSERT(index < implementation_->edges_->size())
     }
+    #endif
 
-    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(hyperedges), std::move(indices));
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgePointerDeque(implementation_->edges_), std::move(indices));
 }
 
 htd::vertex_t htd::Path::root(void) const
@@ -930,31 +855,79 @@ htd::vertex_t htd::Path::insertRoot(void)
 
 htd::vertex_t htd::Path::addChild(htd::vertex_t vertex)
 {
+    HTD_ASSERT(isVertex(vertex))
+
     htd::vertex_t ret = htd::Vertex::UNKNOWN;
-    
-    if (isVertex(vertex))
+
+    Implementation::Node & node = *(implementation_->nodes_.at(vertex));
+
+    ret = implementation_->next_vertex_;
+
+    htd::vertex_t child = node.child;
+
+    Implementation::Node * newNode = new Implementation::Node(ret, vertex);
+
+    implementation_->nodes_.emplace(ret, newNode);
+
+    if (child != htd::Vertex::UNKNOWN)
     {
-        htd::vertex_t child = implementation_->nodes_.at(vertex)->child;
+        Implementation::Node & childNode = *(implementation_->nodes_.at(child));
 
-        ret = implementation_->next_vertex_;
+        htd::id_t oldHyperedge = htd::Id::UNKNOWN;
 
-        implementation_->nodes_.emplace(ret, new Implementation::Node(ret, vertex));
+        auto it = node.edges.begin();
 
-        if (child != htd::Vertex::UNKNOWN)
+        while (it != node.edges.end())
         {
-            implementation_->nodes_.at(child)->parent = ret;
-            implementation_->nodes_.at(ret)->child = child;
+            auto position = htd::hyperedgePointerPosition(implementation_->edges_->begin(), implementation_->edges_->end(), *it);
+
+            HTD_ASSERT(position != implementation_->edges_->end())
+
+            if ((*position)->contains(child))
+            {
+                oldHyperedge = (*position)->id();
+
+                delete *position;
+
+                implementation_->edges_->erase(position);
+
+                it = node.edges.end();
+            }
+            else
+            {
+                ++it;
+            }
         }
 
-        implementation_->nodes_.at(vertex)->child = ret;
+        node.edges.erase(std::lower_bound(node.edges.begin(), node.edges.end(), oldHyperedge));
+        childNode.edges.erase(std::lower_bound(childNode.edges.begin(), childNode.edges.end(), oldHyperedge));
 
-        implementation_->vertices_.emplace_back(ret);
+        childNode.parent = ret;
+        newNode->child = child;
 
-        implementation_->next_vertex_++;
+        implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, child, ret));
 
-        implementation_->size_++;
+        newNode->edges.push_back(implementation_->next_edge_);
+        childNode.edges.push_back(implementation_->next_edge_);
+
+        implementation_->next_edge_++;
     }
-    
+
+    node.child = ret;
+
+    implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, vertex, ret));
+
+    node.edges.push_back(implementation_->next_edge_);
+    newNode->edges.push_back(implementation_->next_edge_);
+
+    implementation_->vertices_.emplace_back(ret);
+
+    implementation_->next_vertex_++;
+
+    implementation_->next_edge_++;
+
+    implementation_->size_++;
+
     return ret;
 }
 
@@ -990,28 +963,32 @@ htd::vertex_t htd::Path::addParent(htd::vertex_t vertex)
 
     if (isRoot(vertex))
     {
-        auto & node = implementation_->nodes_.at(vertex);
+        auto & node = *(implementation_->nodes_.at(vertex));
 
-        if (node != nullptr)
-        {
-            ret = implementation_->next_vertex_;
+        ret = implementation_->next_vertex_;
 
-            Implementation::Node * newRootNode = new Implementation::Node(ret, htd::Vertex::UNKNOWN);
+        Implementation::Node * newRootNode = new Implementation::Node(ret, htd::Vertex::UNKNOWN);
 
-            node->parent = ret;
+        node.parent = ret;
 
-            newRootNode->child = vertex;
+        newRootNode->child = vertex;
 
-            implementation_->nodes_.insert(std::make_pair(ret, newRootNode));
+        implementation_->nodes_.emplace(ret, newRootNode);
 
-            implementation_->vertices_.push_back(ret);
+        implementation_->vertices_.push_back(ret);
 
-            implementation_->next_vertex_++;
+        implementation_->next_vertex_++;
 
-            implementation_->size_++;
+        implementation_->size_++;
 
-            implementation_->root_ = ret;
-        }
+        implementation_->root_ = ret;
+
+        implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, vertex, ret));
+
+        implementation_->nodes_.at(vertex)->edges.push_back(implementation_->next_edge_);
+        newRootNode->edges.push_back(implementation_->next_edge_);
+
+        implementation_->next_edge_++;
     }
     else
     {
@@ -1019,18 +996,14 @@ htd::vertex_t htd::Path::addParent(htd::vertex_t vertex)
 
         ret = addChild(parentVertex);
 
-        auto & parentNode = implementation_->nodes_.at(parentVertex);
-        auto & selectedNode = implementation_->nodes_.at(vertex);
-        auto & intermediateNode = implementation_->nodes_.at(ret);
+        auto & selectedNode = *(implementation_->nodes_.at(vertex));
+        auto & intermediateNode = *(implementation_->nodes_.at(ret));
 
-        if (parentNode != nullptr && selectedNode != nullptr && intermediateNode != nullptr)
-        {
-            intermediateNode->parent = parentVertex;
+        intermediateNode.parent = parentVertex;
 
-            intermediateNode->child = vertex;
+        intermediateNode.child = vertex;
 
-            selectedNode->parent = ret;
-        }
+        selectedNode.parent = ret;
     }
 
     return ret;
@@ -1167,20 +1140,25 @@ void htd::Path::swapWithParent(htd::vertex_t vertex)
     if (node.parent == htd::Vertex::UNKNOWN)
     {
         implementation_->root_ = vertex;
+
+        if (parentNode.child != htd::Vertex::UNKNOWN)
+        {
+            Implementation::Node & childNode = *(implementation_->nodes_.at(parentNode.child));
+
+            implementation_->updateEdgesAfterSwapWithParent(parentNode, node, childNode);
+
+            childNode.parent = parent;
+        }
     }
     else
     {
-        implementation_->nodes_.at(node.parent)->child = vertex;
-    }
+        htd::vertex_t grandParent = node.parent;
 
-    if (node.child != htd::Vertex::UNKNOWN)
-    {
-        implementation_->nodes_.at(node.child)->parent = vertex;
-    }
+        Implementation::Node & grandParentNode = *(implementation_->nodes_.at(grandParent));
 
-    if (parentNode.child != htd::Vertex::UNKNOWN)
-    {
-        implementation_->nodes_.at(parentNode.child)->parent = parent;
+        grandParentNode.child = vertex;
+
+        implementation_->updateEdgesAfterSwapWithParent(node, parentNode, grandParentNode);
     }
 }
 
@@ -1332,5 +1310,49 @@ void htd::Path::assign(const htd::IPath & original)
     *this = original;
 }
 #endif
+
+void htd::Path::Implementation::updateEdgesAfterSwapWithParent(Node & node, Node & parentNode, Node & grandParentNode)
+{
+    htd::vertex_t vertex = node.id;
+    htd::vertex_t parent = parentNode.id;
+    htd::vertex_t grandParent = grandParentNode.id;
+
+    auto relevantEdgePosition = edges_->end();
+
+    for (auto it = grandParentNode.edges.begin(); it != grandParentNode.edges.end() && relevantEdgePosition == edges_->end(); ++it)
+    {
+        auto edgePosition = htd::hyperedgePointerPosition(edges_->begin(), edges_->end(), *it);
+
+        if ((*edgePosition)->contains(parent))
+        {
+            relevantEdgePosition = edgePosition;
+        }
+    }
+
+    htd::id_t oldEdgeId = (*relevantEdgePosition)->id();
+
+    parentNode.edges.erase(std::lower_bound(parentNode.edges.begin(), parentNode.edges.end(), oldEdgeId));
+
+    grandParentNode.edges.erase(std::lower_bound(grandParentNode.edges.begin(), grandParentNode.edges.end(), oldEdgeId));
+
+    node.edges.emplace_back(next_edge_);
+
+    grandParentNode.edges.emplace_back(next_edge_);
+
+    (*relevantEdgePosition)->setId(next_edge_);
+
+    if (vertex < grandParent)
+    {
+        (*relevantEdgePosition)->setElements(vertex, grandParent);
+    }
+    else
+    {
+        (*relevantEdgePosition)->setElements(grandParent, vertex);
+    }
+
+    ++next_edge_;
+
+    std::rotate(relevantEdgePosition, relevantEdgePosition + 1, edges_->end());
+}
 
 #endif /* HTD_HTD_PATH_CPP */

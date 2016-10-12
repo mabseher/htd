@@ -380,7 +380,7 @@ TEST(PathTest, CheckSize3Path)
     delete libraryInstance;
 }
 
-TEST(PathTest, CheckPathManipulations)
+TEST(PathTest, CheckPathManipulations1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
@@ -439,6 +439,111 @@ TEST(PathTest, CheckPathManipulations)
     ASSERT_EQ((std::size_t)3, path.depth(intermediateNode));
     ASSERT_EQ((std::size_t)2, path.depth(intermediateNode2));
     ASSERT_EQ((std::size_t)0, path.depth(child));
+
+    delete libraryInstance;
+}
+
+TEST(PathTest, CheckPathModifications2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Path path(libraryInstance);
+
+    htd::vertex_t vertex1 = path.insertRoot();
+    htd::vertex_t vertex2 = path.addChild(vertex1);
+    htd::vertex_t vertex3 = path.addChild(vertex2);
+    htd::vertex_t vertex4 = path.addChild(vertex3);
+
+    ASSERT_EQ((std::size_t)4, path.vertexCount());
+    ASSERT_EQ((std::size_t)3, path.edgeCount());
+
+    path.removeVertex(vertex2);
+
+    ASSERT_FALSE(path.isVertex(vertex2));
+
+    ASSERT_EQ((std::size_t)3, path.vertexCount());
+    ASSERT_EQ((std::size_t)2, path.edgeCount());
+
+    ASSERT_TRUE(path.isNeighbor(vertex1, vertex3));
+    ASSERT_TRUE(path.isNeighbor(vertex3, vertex4));
+
+    path.removeSubpath(vertex3);
+
+    ASSERT_EQ((std::size_t)1, path.vertexCount());
+    ASSERT_EQ((std::size_t)0, path.edgeCount());
+
+    path.removeVertex(vertex1);
+
+    ASSERT_EQ((std::size_t)0, path.vertexCount());
+
+    htd::vertex_t vertex5 = path.insertRoot();
+    htd::vertex_t vertex6 = path.addChild(vertex5);
+    htd::vertex_t vertex7 = path.addChild(vertex6);
+
+    ASSERT_EQ((std::size_t)2, path.vertexCount());
+    ASSERT_EQ((std::size_t)1, path.edgeCount());
+
+    path.removeChild(vertex5);
+
+    ASSERT_EQ((std::size_t)1, path.vertexCount());
+    ASSERT_EQ((std::size_t)0, path.edgeCount());
+
+    path.removeChild(vertex5, vertex7);
+
+    ASSERT_EQ((std::size_t)0, path.vertexCount());
+    ASSERT_EQ((std::size_t)0, path.edgeCount());
+
+    delete libraryInstance;
+}
+
+TEST(PathTest, CheckCopyConstructors)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::Path path1(libraryInstance);
+
+    htd::vertex_t vertex1 = path1.insertRoot();
+    htd::vertex_t vertex2 = path1.addChild(vertex1);
+    htd::vertex_t vertex3 = path1.addChild(vertex2);
+
+    path1.removeVertex(vertex2);
+
+    ASSERT_EQ((std::size_t)2, path1.vertexCount());
+    ASSERT_EQ((std::size_t)1, path1.edgeCount());
+
+    htd::Path path2(path1);
+
+    path2.addChild(vertex3);
+
+    ASSERT_EQ((std::size_t)3, path2.vertexCount());
+    ASSERT_EQ((std::size_t)2, path2.edgeCount());
+
+    htd::Path path3(libraryInstance);
+
+    ASSERT_EQ((std::size_t)0, path3.vertexCount());
+    ASSERT_EQ((std::size_t)0, path3.edgeCount());
+
+    path3 = path1;
+
+    ASSERT_EQ((std::size_t)2, path3.vertexCount());
+    ASSERT_EQ((std::size_t)1, path3.edgeCount());
+
+    path3 = path2;
+
+    ASSERT_EQ((std::size_t)3, path3.vertexCount());
+    ASSERT_EQ((std::size_t)2, path3.edgeCount());
+
+    const htd::IPath & pathReference1 = path1;
+
+    path3 = pathReference1;
+
+    ASSERT_EQ((std::size_t)2, path3.vertexCount());
+    ASSERT_EQ((std::size_t)1, path3.edgeCount());
+
+    htd::Path path4(pathReference1);
+
+    ASSERT_EQ((std::size_t)2, path4.vertexCount());
+    ASSERT_EQ((std::size_t)1, path4.edgeCount());
 
     delete libraryInstance;
 }

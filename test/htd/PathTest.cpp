@@ -480,17 +480,17 @@ TEST(PathTest, CheckPathModifications2)
     htd::vertex_t vertex6 = path.addChild(vertex5);
     htd::vertex_t vertex7 = path.addChild(vertex6);
 
-    ASSERT_EQ((std::size_t)2, path.vertexCount());
-    ASSERT_EQ((std::size_t)1, path.edgeCount());
+    ASSERT_EQ((std::size_t)3, path.vertexCount());
+    ASSERT_EQ((std::size_t)2, path.edgeCount());
 
     path.removeChild(vertex5);
 
-    ASSERT_EQ((std::size_t)1, path.vertexCount());
-    ASSERT_EQ((std::size_t)0, path.edgeCount());
+    ASSERT_EQ((std::size_t)2, path.vertexCount());
+    ASSERT_EQ((std::size_t)1, path.edgeCount());
 
     path.removeChild(vertex5, vertex7);
 
-    ASSERT_EQ((std::size_t)0, path.vertexCount());
+    ASSERT_EQ((std::size_t)1, path.vertexCount());
     ASSERT_EQ((std::size_t)0, path.edgeCount());
 
     delete libraryInstance;

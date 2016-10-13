@@ -775,41 +775,87 @@ htd::id_t htd::Path::nextEdgeId(void) const
 
 void htd::Path::removeVertex(htd::vertex_t vertex)
 {
-    if (isVertex(vertex))
+    HTD_ASSERT(isVertex(vertex))
+
+    auto & node = *(implementation_->nodes_.at(vertex));
+
+    auto end = implementation_->edges_->end();
+
+    for (auto it = node.edges.rbegin(); it != node.edges.rend(); ++it)
     {
-        auto & node = *(implementation_->nodes_.at(vertex));
+        auto position = htd::hyperedgePointerPosition(implementation_->edges_->begin(), end, *it);
 
-        if (node.parent != htd::Vertex::UNKNOWN)
+        for (htd::vertex_t currentVertex : (*position)->sortedElements())
         {
-            auto & parent = implementation_->nodes_.at(node.parent);
-
-            if (node.child != htd::Vertex::UNKNOWN)
+            if (currentVertex != vertex)
             {
-                auto & child = implementation_->nodes_.at(node.child);
+                std::vector<htd::id_t> & currentEdges = implementation_->nodes_.at(currentVertex)->edges;
 
-                child->parent = node.parent;
-
-                parent->child = node.child;
+                /* Because 'currentVertex' is a neighbor of 'vertex' and 'position' points to the
+                 * edge connecting the two vertices, std::lower_bound will always find the edge
+                 * with ID '*it' in the collection 'currentEdges'. */
+                // coverity[use_iterator]
+                currentEdges.erase(std::lower_bound(currentEdges.begin(), currentEdges.end(), *it));
             }
+        }
+
+        delete *position;
+
+        end = implementation_->edges_->erase(position);
+    }
+
+    if (node.parent != htd::Vertex::UNKNOWN)
+    {
+        auto & parentNode = *(implementation_->nodes_.at(node.parent));
+
+        parentNode.child = node.child;
+
+        if (node.child != htd::Vertex::UNKNOWN)
+        {
+            auto & childNode = *(implementation_->nodes_.at(node.child));
+
+            childNode.parent = node.parent;
+
+            if (node.parent < node.child)
+            {
+                implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, node.parent, node.child));
+            }
+            else
+            {
+                implementation_->edges_->push_back(new htd::Hyperedge(implementation_->next_edge_, node.child, node.parent));
+            }
+
+            childNode.edges.emplace_back(implementation_->next_edge_);
+
+            parentNode.edges.emplace_back(implementation_->next_edge_);
+
+            ++implementation_->next_edge_;
+        }
+
+        implementation_->deleteNode(&node);
+    }
+    else
+    {
+        if (node.child != htd::Vertex::UNKNOWN)
+        {
+            auto & child = *(implementation_->nodes_.at(node.child));
+
+            child.parent = htd::Vertex::UNKNOWN;
+
+            implementation_->root_ = node.child;
 
             implementation_->deleteNode(&node);
         }
         else
         {
-            if (node.child != htd::Vertex::UNKNOWN)
-            {
-                auto & child = *(implementation_->nodes_.at(node.child));
+            implementation_->root_ = htd::Vertex::UNKNOWN;
 
-                child.parent = htd::Vertex::UNKNOWN;
+            implementation_->size_ = 0;
 
-                implementation_->root_ = node.child;
+            implementation_->nodes_.clear();
+            implementation_->edges_->clear();
 
-                implementation_->deleteNode(&node);
-            }
-            else
-            {
-                removeSubpath(implementation_->root_);
-            }
+            implementation_->vertices_.clear();
         }
     }
 }

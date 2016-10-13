@@ -107,7 +107,7 @@ htd::DirectedMultiGraph::DirectedMultiGraph(const htd::DirectedMultiGraph & orig
 
 }
 
-htd::DirectedMultiGraph::DirectedMultiGraph(const htd::IDirectedMultiGraph & original) : implementation_(new Implementation(managementInstance(), managementInstance()->multiHypergraphFactory().getMultiHypergraph()))
+htd::DirectedMultiGraph::DirectedMultiGraph(const htd::IDirectedMultiGraph & original) : implementation_(new Implementation(original.managementInstance(), original.managementInstance()->multiHypergraphFactory().getMultiHypergraph()))
 {
     *this = original;
 }
@@ -427,7 +427,6 @@ htd::vertex_t htd::DirectedMultiGraph::addVertex(void)
     htd::vertex_t ret = implementation_->base_->addVertex();
 
     implementation_->incomingNeighborhood_.emplace_back(std::unordered_set<htd::vertex_t>());
-
     implementation_->outgoingNeighborhood_.emplace_back(std::unordered_set<htd::vertex_t>());
 
     return ret;
@@ -435,7 +434,12 @@ htd::vertex_t htd::DirectedMultiGraph::addVertex(void)
 
 htd::vertex_t htd::DirectedMultiGraph::addVertices(std::size_t count)
 {
-    return implementation_->base_->addVertices(count);
+    htd::vertex_t ret = implementation_->base_->addVertices(count);
+
+    implementation_->incomingNeighborhood_.resize(implementation_->incomingNeighborhood_.size() + count);
+    implementation_->outgoingNeighborhood_.resize(implementation_->incomingNeighborhood_.size() + count);
+
+    return ret;
 }
 
 void htd::DirectedMultiGraph::removeVertex(htd::vertex_t vertex)
@@ -478,8 +482,8 @@ void htd::DirectedMultiGraph::removeEdge(htd::id_t edgeId)
 
     if (!implementation_->base_->isEdge(vertex1, vertex2))
     {
-        implementation_->outgoingNeighborhood_[vertex1].erase(vertex2);
-        implementation_->incomingNeighborhood_[vertex2].erase(vertex1);
+        implementation_->outgoingNeighborhood_[vertex1 - htd::Vertex::FIRST].erase(vertex2);
+        implementation_->incomingNeighborhood_[vertex2 - htd::Vertex::FIRST].erase(vertex1);
     }
 }
 

@@ -93,10 +93,12 @@ struct htd::BucketEliminationTreeDecompositionAlgorithm::Implementation
      *  Compute a new mutable tree decompostion of the given graph.
      *
      *  @param[in] graph    The graph which shall be decomposed.
+     *  @param[in] maxBagSize           The upper bound for the maximum bag size of the decomposition.
+     *  @param[in] maxIterationCount    The maximum number of iterations resulting in a higher maximum bag size than maxBagSize after which a null-pointer is returned.
      *
-     *  @return A mutable tree decompostion of the given graph.
+     *  @return A pair consisting of a mutable tree decompostion of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
      */
-    htd::IMutableTreeDecomposition * computeMutableDecomposition(const htd::IMultiHypergraph & graph) const;
+    std::pair<htd::IMutableTreeDecomposition *, std::size_t> computeMutableDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const;
 };
 
 htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -121,78 +123,97 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
 htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
-    htd::IMutableTreeDecomposition * ret = implementation_->computeMutableDecomposition(graph);
+    return computeDecomposition(graph, manipulationOperations, (std::size_t)-1, 1).first;
+}
 
-    std::vector<htd::ILabelingFunction *> labelingFunctions;
+std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const
+{
+    return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>(), maxBagSize, maxIterationCount);
+}
 
-    std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations;
+std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const
+{
+    std::pair<htd::IMutableTreeDecomposition *, std::size_t> ret = implementation_->computeMutableDecomposition(graph, maxBagSize, maxIterationCount);
 
-    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    htd::IMutableTreeDecomposition * decomposition = ret.first;
+
+    if (decomposition != nullptr)
     {
-        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+        std::vector<htd::ILabelingFunction *> labelingFunctions;
 
-        if (labelingFunction != nullptr)
+        std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations;
+
+        for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
         {
-            labelingFunctions.push_back(labelingFunction);
+            htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+
+            if (labelingFunction != nullptr)
+            {
+                labelingFunctions.push_back(labelingFunction);
+            }
+
+            htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
+
+            if (manipulationOperation != nullptr)
+            {
+                postProcessingOperations.push_back(manipulationOperation);
+            }
         }
 
-        htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
-
-        if (manipulationOperation != nullptr)
-        {
-            postProcessingOperations.push_back(manipulationOperation);
-        }
-    }
-
-    if (ret != nullptr)
-    {
         for (const auto & labelingFunction : implementation_->labelingFunctions_)
         {
-            for (htd::vertex_t vertex : ret->vertices())
+            for (htd::vertex_t vertex : decomposition->vertices())
             {
-                htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
+                htd::ILabelCollection * labelCollection = decomposition->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 
-                ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
+                decomposition->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
         }
 
         for (const auto & labelingFunction : labelingFunctions)
         {
-            for (htd::vertex_t vertex : ret->vertices())
+            for (htd::vertex_t vertex : decomposition->vertices())
             {
-                htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
+                htd::ILabelCollection * labelCollection = decomposition->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 
-                ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
+                decomposition->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
         }
 
         for (const auto & operation : implementation_->postProcessingOperations_)
         {
-            operation->apply(graph, *ret);
+            operation->apply(graph, *decomposition);
         }
 
         for (const auto & operation : postProcessingOperations)
         {
-            operation->apply(graph, *ret);
+            operation->apply(graph, *decomposition);
+        }
+
+        for (auto & labelingFunction : labelingFunctions)
+        {
+            delete labelingFunction;
+        }
+
+        for (auto & postProcessingOperation : postProcessingOperations)
+        {
+            delete postProcessingOperation;
         }
     }
-
-    for (auto & labelingFunction : labelingFunctions)
+    else
     {
-        delete labelingFunction;
-    }
-
-    for (auto & postProcessingOperation : postProcessingOperations)
-    {
-        delete postProcessingOperation;
+        for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+        {
+            delete operation;
+        }
     }
 
     return ret;
@@ -315,96 +336,109 @@ htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDec
     return ret;
 }
 
-htd::IMutableTreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph) const
+std::pair<htd::IMutableTreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const
 {
     htd::IMutableTreeDecomposition * ret = managementInstance_->treeDecompositionFactory().getTreeDecomposition();
+
+    std::size_t iterations = 1;
 
     if (graph.vertexCount() > 0)
     {
         htd::BucketEliminationGraphDecompositionAlgorithm graphDecompositionAlgorithm(managementInstance_);
 
-        htd::IGraphDecomposition * graphDecomposition = graphDecompositionAlgorithm.computeDecomposition(graph);
+        std::pair<htd::IGraphDecomposition *, std::size_t> graphDecomposition = graphDecompositionAlgorithm.computeDecomposition(graph, maxBagSize, maxIterationCount);
 
-        HTD_ASSERT(graphDecomposition != nullptr)
-
-        htd::IMutableGraphDecomposition & mutableGraphDecomposition = managementInstance_->graphDecompositionFactory().accessMutableGraphDecomposition(*graphDecomposition);
-
-        if (!managementInstance_->isTerminated())
+        if (graphDecomposition.first != nullptr)
         {
-            if (mutableGraphDecomposition.edgeCount() + 1 != mutableGraphDecomposition.vertexCount() || mutableGraphDecomposition.isolatedVertexCount() > 0)
+            htd::IMutableGraphDecomposition & mutableGraphDecomposition = managementInstance_->graphDecompositionFactory().accessMutableGraphDecomposition(*(graphDecomposition.first));
+
+            if (!managementInstance_->isTerminated())
             {
-                htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = managementInstance_->connectedComponentAlgorithmFactory().getConnectedComponentAlgorithm(managementInstance_);
-
-                HTD_ASSERT(connectedComponentAlgorithm != nullptr)
-
-                std::vector<std::vector<htd::vertex_t>> components;
-
-                connectedComponentAlgorithm->determineComponents(*graphDecomposition, components);
-
-                delete connectedComponentAlgorithm;
-
-                std::size_t componentCount = components.size();
-
-                if (componentCount > 1)
+                if (mutableGraphDecomposition.edgeCount() + 1 != mutableGraphDecomposition.vertexCount() || mutableGraphDecomposition.isolatedVertexCount() > 0)
                 {
-                    for (htd::index_t index = 0; index < componentCount - 1; ++index)
+                    htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = managementInstance_->connectedComponentAlgorithmFactory().getConnectedComponentAlgorithm(managementInstance_);
+
+                    HTD_ASSERT(connectedComponentAlgorithm != nullptr)
+
+                    std::vector<std::vector<htd::vertex_t>> components;
+
+                    connectedComponentAlgorithm->determineComponents(*(graphDecomposition.first), components);
+
+                    delete connectedComponentAlgorithm;
+
+                    std::size_t componentCount = components.size();
+
+                    if (componentCount > 1)
                     {
-                        const std::vector<htd::vertex_t> & component1 = components[index];
-                        const std::vector<htd::vertex_t> & component2 = components[index + 1];
+                        for (htd::index_t index = 0; index < componentCount - 1; ++index)
+                        {
+                            const std::vector<htd::vertex_t> & component1 = components[index];
+                            const std::vector<htd::vertex_t> & component2 = components[index + 1];
 
-                        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
-                        // coverity[dont_call]
-                        htd::vertex_t vertex1 = component1[std::rand() % component1.size()];
+                            /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+                            // coverity[dont_call]
+                            htd::vertex_t vertex1 = component1[std::rand() % component1.size()];
 
-                        /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
-                        // coverity[dont_call]
-                        htd::vertex_t vertex2 = component2[std::rand() % component2.size()];
+                            /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+                            // coverity[dont_call]
+                            htd::vertex_t vertex2 = component2[std::rand() % component2.size()];
 
-                        mutableGraphDecomposition.addEdge(vertex1, vertex2);
+                            mutableGraphDecomposition.addEdge(vertex1, vertex2);
+                        }
                     }
                 }
+
+                htd::vertex_t node = htd::Vertex::UNKNOWN;
+
+                std::unordered_map<htd::vertex_t, htd::vertex_t> vertexMapping;
+
+                htd::BreadthFirstGraphTraversal graphTraversal(managementInstance_);
+
+                /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+                // coverity[dont_call]
+                graphTraversal.traverse(*(graphDecomposition.first), graphDecomposition.first->vertexAtPosition(std::rand() % graphDecomposition.first->vertexCount()), [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
+                {
+                    HTD_UNUSED(distanceFromStartingVertex)
+
+                    if (predecessor == htd::Vertex::UNKNOWN)
+                    {
+                        node = ret->insertRoot(std::move(mutableGraphDecomposition.bagContent(vertex)),
+                                               std::move(mutableGraphDecomposition.inducedHyperedges(vertex)));
+                    }
+                    else
+                    {
+                        node = ret->addChild(vertexMapping.at(predecessor),
+                                             std::move(mutableGraphDecomposition.bagContent(vertex)),
+                                             std::move(mutableGraphDecomposition.inducedHyperedges(vertex)));
+                    }
+
+                    vertexMapping.emplace(vertex, node);
+                });
+            }
+            else
+            {
+                delete ret;
+
+                ret = nullptr;
             }
 
-            htd::vertex_t node = htd::Vertex::UNKNOWN;
-
-            std::unordered_map<htd::vertex_t, htd::vertex_t> vertexMapping;
-
-            htd::BreadthFirstGraphTraversal graphTraversal(managementInstance_);
-
-            /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
-            // coverity[dont_call]
-            graphTraversal.traverse(*graphDecomposition, graphDecomposition->vertexAtPosition(std::rand() % graphDecomposition->vertexCount()), [&](htd::vertex_t vertex, htd::vertex_t predecessor, std::size_t distanceFromStartingVertex)
-            {
-                HTD_UNUSED(distanceFromStartingVertex)
-
-                if (predecessor == htd::Vertex::UNKNOWN)
-                {
-                    node = ret->insertRoot(std::move(mutableGraphDecomposition.bagContent(vertex)),
-                                           std::move(mutableGraphDecomposition.inducedHyperedges(vertex)));
-                }
-                else
-                {
-                    node = ret->addChild(vertexMapping.at(predecessor),
-                                         std::move(mutableGraphDecomposition.bagContent(vertex)),
-                                         std::move(mutableGraphDecomposition.inducedHyperedges(vertex)));
-                }
-
-                vertexMapping.emplace(vertex, node);
-            });
+            delete graphDecomposition.first;
         }
         else
         {
-            ret->insertRoot();
+            delete ret;
+
+            ret = nullptr;
         }
 
-        delete graphDecomposition;
+        iterations = graphDecomposition.second;
     }
     else
     {
         ret->insertRoot();
     }
 
-    return ret;
+    return std::make_pair(ret, iterations);
 }
 
 #endif /* HTD_HTD_BUCKETELIMINATIONTREEDECOMPOSITIONALGORITHM_CPP */

@@ -41,6 +41,7 @@
 #include <iterator>
 #include <memory>
 #include <stdexcept>
+#include <unordered_map>
 #include <utility>
 
 /**
@@ -185,7 +186,6 @@ struct htd::Tree::Implementation
      *  The management instance to which the current object instance belongs.
      */
     const htd::LibraryInstance * managementInstance_;
-
 
     /**
      *  The size of the tree.

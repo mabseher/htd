@@ -45,13 +45,9 @@ namespace htd
             
             HTD_API virtual ~MinFillOrderingAlgorithm();
 
-            HTD_API htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API htd::VertexOrdering * computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            HTD_API htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize) const HTD_NOEXCEPT HTD_OVERRIDE;
-
-            HTD_API void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
-
-            HTD_API void writeOrderingTo(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API htd::VertexOrdering * computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 

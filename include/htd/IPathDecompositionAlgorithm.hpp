@@ -45,9 +45,9 @@ namespace htd
             /**
              *  Compute a decomposition of the given graph.
              *
-             *  @param[in] graph    The input graph to decompose.
+             *  @param[in] graph                The input graph to decompose.
              *
-             *  @return A new IPathDecomposition object representing the decomposition of the given graph.
+             *  @return A new IPathDecomposition object representing the decomposition of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations.
              */
             virtual htd::IPathDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE = 0;
 
@@ -55,7 +55,7 @@ namespace htd
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it.
              *
              *  @param[in] graph                    The input graph to decompose.
-             *  @param[in] manipulationOperations   The manipulation operations which should be applied.
+             *  @param[in] manipulationOperations   The manipulation operations which shall be applied.
              *
              *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
              *

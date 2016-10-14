@@ -107,9 +107,11 @@ htd_cli::OptionManager * createOptionManager(void)
 
         manager->registerOption(iterationOption, "Optimization Options");
 
+        /*
         htd_cli::SingleValueOption * nonImprovementLimitOption = new htd_cli::SingleValueOption("non-improvement-limit", "Terminate the algorithm if more than <count> iterations did not lead to an improvement (-1 = infinite). (Default: -1)", "count");
 
         manager->registerOption(nonImprovementLimitOption, "Optimization Options");
+        */
 
         htd_cli::Option * printProgressOption = new htd_cli::Option("print-opt-progress", "Print progress whenever a new optimal decomposition is found.");
 
@@ -156,7 +158,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
     const htd_cli::SingleValueOption & iterationOption = optionManager.accessSingleValueOption("iterations");
 
-    const htd_cli::SingleValueOption & nonImprovementLimitOption = optionManager.accessSingleValueOption("non-improvement-limit");
+    //const htd_cli::SingleValueOption & nonImprovementLimitOption = optionManager.accessSingleValueOption("non-improvement-limit");
 
     const htd_cli::Option & printProgressOption = optionManager.accessOption("print-opt-progress");
 
@@ -285,6 +287,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
         }
     }
 
+    /*
     if (ret)
     {
         if (nonImprovementLimitOption.used())
@@ -322,6 +325,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
             }
         }
     }
+    */
 
     if (ret)
     {
@@ -598,6 +602,161 @@ void optimizeNamed(const htd::LibraryInstance & instance, const htd::IterativeIm
     }
 }
 
+template <typename Importer, typename Exporter>
+void minimizeWidth(const htd::LibraryInstance & instance, const htd::WidthMinimizingTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
+{
+    auto * graph = importer.import(std::cin);
+
+    if (graph != nullptr)
+    {
+        if (!instance.isTerminated())
+        {
+            std::size_t optimalMaximumBagSize = (std::size_t)-1;
+
+            htd::ITreeDecomposition * decomposition =
+                algorithm.computeDecomposition(*graph, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, std::size_t maximumBagSize)
+                {
+                    HTD_UNUSED(graph)
+                    HTD_UNUSED(decomposition)
+
+                    if (printProgress)
+                    {
+                        if (maximumBagSize < optimalMaximumBagSize)
+                        {
+                            optimalMaximumBagSize = maximumBagSize;
+
+                            std::chrono::milliseconds::rep msSinceEpoch =
+                                std::chrono::duration_cast<std::chrono::milliseconds>
+                                    (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                            if (outputFormat == "td")
+                            {
+                                std::cout << "c status " << optimalMaximumBagSize << " " << msSinceEpoch << std::endl;
+                            }
+                            else
+                            {
+                                std::cerr << "New optimal bag size: " << optimalMaximumBagSize << std::endl;
+                            }
+                        }
+                    }
+                });
+
+            if (decomposition != nullptr)
+            {
+                if (!instance.isTerminated() || algorithm.isSafelyInterruptible())
+                {
+                    exporter.write(*decomposition, *graph, std::cout);
+                }
+                else
+                {
+                    std::cerr << "Program was terminated successfully!" << std::endl;
+                }
+
+                delete decomposition;
+            }
+            else
+            {
+                if (instance.isTerminated())
+                {
+                    std::cerr << "Program was terminated successfully!" << std::endl;
+                }
+                else
+                {
+                    std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+                }
+            }
+        }
+        else
+        {
+            std::cerr << "Program was terminated successfully!" << std::endl;
+        }
+
+        delete graph;
+    }
+}
+
+template <typename Importer, typename Exporter>
+void minimizeWidthNamed(const htd::LibraryInstance & instance, const htd::WidthMinimizingTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
+{
+    auto * graph = importer.import(std::cin);
+
+    if (graph != nullptr && !instance.isTerminated())
+    {
+        std::size_t optimalMaximumBagSize = (std::size_t)-1;
+
+        htd::ITreeDecomposition * decomposition =
+            algorithm.computeDecomposition(graph->internalGraph(), [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, std::size_t maximumBagSize)
+            {
+                HTD_UNUSED(graph)
+                HTD_UNUSED(decomposition)
+
+                if (printProgress)
+                {
+                    if (maximumBagSize < optimalMaximumBagSize)
+                    {
+                        optimalMaximumBagSize = maximumBagSize;
+
+                        std::chrono::milliseconds::rep msSinceEpoch =
+                            std::chrono::duration_cast<std::chrono::milliseconds>
+                                (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                        if (outputFormat == "td")
+                        {
+                            std::cout << "c status " << optimalMaximumBagSize << " " << msSinceEpoch << std::endl;
+                        }
+                        else
+                        {
+                            std::cerr << "New optimal bag size: " << optimalMaximumBagSize << std::endl;
+                        }
+                    }
+                }
+            });
+
+        if (decomposition != nullptr)
+        {
+            if (!instance.isTerminated() || algorithm.isSafelyInterruptible())
+            {
+                exporter.write(*decomposition, *graph, std::cout);
+            }
+            else
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
+
+            delete decomposition;
+        }
+        else
+        {
+            if (instance.isTerminated())
+            {
+                std::cerr << "Program was terminated successfully!" << std::endl;
+            }
+            else
+            {
+                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+            }
+        }
+
+        delete graph;
+    }
+    else
+    {
+        if (instance.isTerminated())
+        {
+            std::cerr << "Program was terminated successfully!" << std::endl;
+        }
+        else
+        {
+            std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
+        }
+
+        if (graph != nullptr)
+        {
+            delete graph;
+        }
+    }
+}
+
 template <typename DecompositionAlgorithm, typename Exporter>
 void run(const DecompositionAlgorithm & algorithm, const Exporter & exporter, const std::string & inputFormat, const htd::LibraryInstance * const manager)
 {
@@ -644,41 +803,6 @@ void handleSignal(int signal)
     }
 }
 
-/**
- *  Implementation of the htd::ITreeDecompositionFitnessFunction interface which prefers decompositions of minimal width.
- */
-class WidthMinimizingFitnessFunction : public htd::ITreeDecompositionFitnessFunction
-{
-    public:
-        /**
-         *  Constructor of class WidthMinimizingFitnessFunction.
-         */
-        WidthMinimizingFitnessFunction(void)
-        {
-
-        }
-
-        /**
-         *  Destructor of class WidthMinimizingFitnessFunction.
-         */
-        virtual ~WidthMinimizingFitnessFunction()
-        {
-
-        }
-
-        htd::FitnessEvaluation * fitness(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition) const HTD_OVERRIDE
-        {
-            HTD_UNUSED(graph)
-
-            return new htd::FitnessEvaluation(1, -(double)(decomposition.maximumBagSize()));
-        }
-
-        WidthMinimizingFitnessFunction * clone(void) const HTD_OVERRIDE
-        {
-            return new WidthMinimizingFitnessFunction();
-        }
-};
-
 int main(int argc, const char * const * const argv)
 {
     int ret = 0;
@@ -702,7 +826,7 @@ int main(int argc, const char * const * const argv)
 
         const htd_cli::SingleValueOption & iterationOption = optionManager->accessSingleValueOption("iterations");
 
-        const htd_cli::SingleValueOption & nonImprovementLimitOption = optionManager->accessSingleValueOption("non-improvement-limit");
+        //const htd_cli::SingleValueOption & nonImprovementLimitOption = optionManager->accessSingleValueOption("non-improvement-limit");
 
         const htd_cli::Option & printProgressOption = optionManager->accessOption("print-opt-progress");
 
@@ -767,6 +891,49 @@ int main(int argc, const char * const * const argv)
             {
                 if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
                 {
+                    htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
+
+                    if (iterationOption.used())
+                    {
+                        algorithm.setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
+                    }
+
+                    /*
+                    if (nonImprovementLimitOption.used())
+                    {
+                        if (std::string(nonImprovementLimitOption.value()) == "-1")
+                        {
+                            algorithm.setNonImprovementLimit((std::size_t)-1);
+                        }
+                        else
+                        {
+                            algorithm.setNonImprovementLimit(std::stoul(nonImprovementLimitOption.value(), nullptr, 10));
+                        }
+                    }
+                    */
+
+                    const std::string & inputFormat = inputFormatChoice.value();
+
+                    if (inputFormat == "gr")
+                    {
+                        htd_main::GrFormatImporter importer(libraryInstance);
+
+                        minimizeWidth(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                    }
+                    else if (inputFormat == "lp")
+                    {
+                        htd_main::LpFormatImporter importer(libraryInstance);
+
+                        minimizeWidthNamed(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                    }
+                    else if (inputFormat == "hgr")
+                    {
+                        htd_main::HgrFormatImporter importer(libraryInstance);
+
+                        minimizeWidth(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                    }
+
+                    /*
                     htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm(libraryInstance), WidthMinimizingFitnessFunction());
 
                     if (iterationOption.used())
@@ -806,6 +973,7 @@ int main(int argc, const char * const * const argv)
 
                         optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
                     }
+                    */
                 }
                 else
                 {

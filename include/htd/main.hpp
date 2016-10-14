@@ -28,6 +28,7 @@
 #include <htd/AddEmptyLeavesOperation.hpp>
 #include <htd/AddEmptyRootOperation.hpp>
 #include <htd/AddIdenticalJoinNodeParentOperation.hpp>
+#include <htd/Algorithm.hpp>
 #include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/BidirectionalGraphNaming.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>
@@ -143,6 +144,7 @@
 #include <htd/ITree.hpp>
 #include <htd/ITreeTraversal.hpp>
 #include <htd/IVertexSelectionStrategy.hpp>
+#include <htd/IWidthLimitableOrderingAlgorithm.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>
 #include <htd/LabelCollection.hpp>
@@ -194,6 +196,7 @@
 #include <htd/PostOrderTreeTraversal.hpp>
 #include <htd/PostProcessingPathDecompositionAlgorithm.hpp>
 #include <htd/PreOrderTreeTraversal.hpp>
+#include <htd/PreprocessorDefinitions.hpp>
 #include <htd/RandomVertexSelectionStrategy.hpp>
 #include <htd/SemiNormalizationOperation.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
@@ -212,6 +215,8 @@
 #include <htd/VectorAdapter.hpp>
 #include <htd/VectorAdapterIteratorWrapper.hpp>
 #include <htd/Vertex.hpp>
+#include <htd/VertexOrdering.hpp>
 #include <htd/WeakNormalizationOperation.hpp>
+#include <htd/WidthMinimizingTreeDecompositionAlgorithm.hpp>
 
 #endif /* HTD_HTD_MAIN_HPP */

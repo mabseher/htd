@@ -225,7 +225,8 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
         /**
          *  Constructor for a hyperedge element information.
          *
-         *  @param[in] elements The endpoints of the constructed hyperedge.
+         *  @param[in] elements         The endpoints of the constructed hyperedge.
+         *  @param[in] sortedElements   The endpoints of the constructed hyperedge sorted in ascending order without duplicates.
          */
         ElementInformation(const std::vector<htd::vertex_t> & elements, const std::vector<htd::vertex_t> & sortedElements) HTD_NOEXCEPT : elements_(elements), sortedElements_(sortedElements)
         {
@@ -283,7 +284,8 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
         /**
          *  Constructor for a hyperedge element information.
          *
-         *  @param[in] elements The endpoints of the constructed hyperedge.
+         *  @param[in] elements         The endpoints of the constructed hyperedge.
+         *  @param[in] sortedElements   The endpoints of the constructed hyperedge sorted in ascending order without duplicates.
          */
         ElementInformation(std::vector<htd::vertex_t> && elements, std::vector<htd::vertex_t> && sortedElements) HTD_NOEXCEPT : elements_(std::move(elements)), sortedElements_(std::move(sortedElements))
         {

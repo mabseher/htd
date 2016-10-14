@@ -27,7 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/IMultiHypergraph.hpp>
-#include <htd/ConstCollection.hpp>
+#include <htd/VertexOrdering.hpp>
 
 namespace htd
 {
@@ -60,15 +60,7 @@ namespace htd
              *
              *  @return The vertex ordering of the given graph.
              */
-            virtual htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT = 0;
-
-            /**
-             *  Compute the vertex ordering of a given graph and write it to the end of a given vector.
-             *
-             *  @param[in] graph    The input graph for which the vertex ordering shall be computed.
-             *  @param[out] target  The target vector to which the ordering shall be appended.
-             */
-            virtual void writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT = 0;
+            virtual htd::VertexOrdering * computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT = 0;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**

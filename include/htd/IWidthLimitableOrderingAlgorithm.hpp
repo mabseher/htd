@@ -36,26 +36,20 @@ namespace htd
     class IWidthLimitableOrderingAlgorithm : public htd::IOrderingAlgorithm
     {
         public:
+            using htd::IOrderingAlgorithm::computeOrdering;
+
             virtual ~IWidthLimitableOrderingAlgorithm() = 0;
 
             /**
              *  Compute the vertex ordering of a given graph.
              *
-             *  @param[in] graph        The input graph for which the vertex ordering shall be computed.
-             *  @param[in] maxBagSize   The upper bound for the maximum bag size of a decomposition based on the resulting ordering.
+             *  @param[in] graph                The input graph for which the vertex ordering shall be computed.
+             *  @param[in] maxBagSize           The upper bound for the maximum bag size of a decomposition based on the resulting ordering.
+             *  @param[in] maxIterationCount    The maximum number of iterations resulting in a higher maximum bag size than maxBagSize after which an empty ordering is returned.
              *
              *  @return The vertex ordering of the given graph.
              */
-            virtual htd::ConstCollection<htd::vertex_t> computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize) const HTD_NOEXCEPT = 0;
-
-            /**
-             *  Compute the vertex ordering of a given graph and write it to the end of a given vector.
-             *
-             *  @param[in] graph        The input graph for which the vertex ordering shall be computed.
-             *  @param[in] maxBagSize   The upper bound for the maximum bag size of a decomposition based on the resulting ordering.
-             *  @param[out] target      The target vector to which the ordering shall be appended.
-             */
-            virtual void writeOrderingTo(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT = 0;
+            virtual htd::VertexOrdering * computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT = 0;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**

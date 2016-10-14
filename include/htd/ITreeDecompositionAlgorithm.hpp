@@ -55,7 +55,7 @@ namespace htd
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it.
              *
              *  @param[in] graph                    The input graph to decompose.
-             *  @param[in] manipulationOperations   The manipulation operations which should be applied.
+             *  @param[in] manipulationOperations   The manipulation operations which shall be applied.
              *
              *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
              *

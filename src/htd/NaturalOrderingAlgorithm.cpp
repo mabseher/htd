@@ -67,18 +67,9 @@ htd::NaturalOrderingAlgorithm::~NaturalOrderingAlgorithm()
     
 }
 
-htd::ConstCollection<htd::vertex_t> htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
+htd::VertexOrdering * htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
-    htd::VectorAdapter<htd::vertex_t> ret(graph.vertices());
-
-    return htd::ConstCollection<htd::id_t>::getInstance(ret);
-}
-
-void htd::NaturalOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT
-{
-    const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
-
-    target.insert(target.end(), vertexCollection.begin(), vertexCollection.end());
+    return new htd::VertexOrdering(std::vector<htd::vertex_t>(graph.vertices().begin(), graph.vertices().end()));
 }
 
 const htd::LibraryInstance * htd::NaturalOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT

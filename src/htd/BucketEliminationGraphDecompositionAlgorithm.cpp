@@ -32,6 +32,7 @@
 #include <htd/ILabelingFunction.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/GraphDecompositionFactory.hpp>
+#include <htd/IWidthLimitableOrderingAlgorithm.hpp>
 
 #include <algorithm>
 #include <array>
@@ -93,10 +94,22 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
      *  Compute a new mutable graph decompostion of the given graph.
      *
      *  @param[in] graph    The graph which shall be decomposed.
+     *  @param[in] ordering The vertex ordering which shall be used to compute the decomposition.
      *
-     *  @return A mutable graph decompostion of the given graph.
+     *  @return A mutable graph decompostion of the given graph based on the provided vertex ordering.
      */
-    htd::IMutableGraphDecomposition * computeMutableDecomposition(const htd::IMultiHypergraph & graph) const;
+    htd::IMutableGraphDecomposition * computeMutableDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::vertex_t> & ordering) const;
+
+    /**
+     *  Compute a new mutable graph decompostion of the given graph.
+     *
+     *  @param[in] graph                The graph which shall be decomposed.
+     *  @param[in] maxBagSize           The upper bound for the maximum bag size of the decomposition.
+     *  @param[in] maxIterationCount    The maximum number of iterations resulting in a higher maximum bag size than maxBagSize after which a null-pointer is returned.
+     *
+     *  @return A pair consisting of a mutable graph decompostion of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
+     */
+    std::pair<htd::IMutableGraphDecomposition *, std::size_t> computeMutableDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const;
 
     /**
      *  Get the vertex which is ranked first in the vertex elimination ordering.
@@ -256,78 +269,97 @@ htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::co
 
 htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
-    htd::IMutableGraphDecomposition * ret = implementation_->computeMutableDecomposition(graph);
+    return computeDecomposition(graph, manipulationOperations, (std::size_t)-1, 1).first;
+}
 
-    std::vector<htd::ILabelingFunction *> labelingFunctions;
+std::pair<htd::IGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const
+{
+    return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>(), maxBagSize, maxIterationCount);
+}
 
-    std::vector<htd::IGraphDecompositionManipulationOperation *> postProcessingOperations;
+std::pair<htd::IGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const
+{
+    std::pair<htd::IMutableGraphDecomposition *, std::size_t> ret = implementation_->computeMutableDecomposition(graph, maxBagSize, maxIterationCount);
 
-    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    htd::IMutableGraphDecomposition * decomposition = ret.first;
+
+    if (decomposition != nullptr)
     {
-        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+        std::vector<htd::ILabelingFunction *> labelingFunctions;
 
-        if (labelingFunction != nullptr)
+        std::vector<htd::IGraphDecompositionManipulationOperation *> postProcessingOperations;
+
+        for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
         {
-            labelingFunctions.push_back(labelingFunction);
+            htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
+
+            if (labelingFunction != nullptr)
+            {
+                labelingFunctions.push_back(labelingFunction);
+            }
+
+            htd::IGraphDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IGraphDecompositionManipulationOperation *>(operation);
+
+            if (manipulationOperation != nullptr)
+            {
+                postProcessingOperations.push_back(manipulationOperation);
+            }
         }
 
-        htd::IGraphDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::IGraphDecompositionManipulationOperation *>(operation);
-
-        if (manipulationOperation != nullptr)
-        {
-            postProcessingOperations.push_back(manipulationOperation);
-        }
-    }
-
-    if (ret != nullptr)
-    {
         for (const auto & operation : implementation_->postProcessingOperations_)
         {
-            operation->apply(graph, *ret);
+            operation->apply(graph, *decomposition);
         }
 
         for (const auto & operation : postProcessingOperations)
         {
-            operation->apply(graph, *ret);
+            operation->apply(graph, *decomposition);
         }
 
         for (const auto & labelingFunction : implementation_->labelingFunctions_)
         {
-            for (htd::vertex_t vertex : ret->vertices())
+            for (htd::vertex_t vertex : decomposition->vertices())
             {
-                htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
+                htd::ILabelCollection * labelCollection = decomposition->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 
-                ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
+                decomposition->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
         }
 
         for (const auto & labelingFunction : labelingFunctions)
         {
-            for (htd::vertex_t vertex : ret->vertices())
+            for (htd::vertex_t vertex : decomposition->vertices())
             {
-                htd::ILabelCollection * labelCollection = ret->labelings().exportVertexLabelCollection(vertex);
+                htd::ILabelCollection * labelCollection = decomposition->labelings().exportVertexLabelCollection(vertex);
 
-                htd::ILabel * newLabel = labelingFunction->computeLabel(ret->bagContent(vertex), *labelCollection);
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition->bagContent(vertex), *labelCollection);
 
                 delete labelCollection;
 
-                ret->setVertexLabel(labelingFunction->name(), vertex, newLabel);
+                decomposition->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
         }
-    }
 
-    for (auto & labelingFunction : labelingFunctions)
-    {
-        delete labelingFunction;
-    }
+        for (auto & labelingFunction : labelingFunctions)
+        {
+            delete labelingFunction;
+        }
 
-    for (auto & postProcessingOperation : postProcessingOperations)
+        for (auto & postProcessingOperation : postProcessingOperations)
+        {
+            delete postProcessingOperation;
+        }
+    }
+    else
     {
-        delete postProcessingOperation;
+        for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+        {
+            delete operation;
+        }
     }
 
     return ret;
@@ -448,7 +480,72 @@ htd::BucketEliminationGraphDecompositionAlgorithm * htd::BucketEliminationGraphD
     return ret;
 }
 
-htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph) const
+std::pair<htd::IMutableGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const
+{
+    htd::IMutableGraphDecomposition * ret = nullptr;
+
+    htd::IOrderingAlgorithm * algorithm = managementInstance_->orderingAlgorithmFactory().getOrderingAlgorithm();
+
+    HTD_ASSERT(algorithm != nullptr)
+
+    htd::IWidthLimitableOrderingAlgorithm * widthLimitableAlgorithm = dynamic_cast<htd::IWidthLimitableOrderingAlgorithm *>(algorithm);
+
+    std::size_t iterations = 0;
+
+    if (widthLimitableAlgorithm == nullptr)
+    {
+        htd::VertexOrdering * ordering = nullptr;
+
+        do
+        {
+            ordering = algorithm->computeOrdering(graph);
+
+            if (ordering != nullptr)
+            {
+                if (ordering->sequence().size() == graph.vertexCount())
+                {
+                    ret = computeMutableDecomposition(graph, ordering->sequence());
+
+                    HTD_ASSERT(ret != nullptr)
+
+                    if (ret->maximumBagSize() > maxBagSize)
+                    {
+                        delete ret;
+
+                        ret = nullptr;
+                    }
+                }
+
+                delete ordering;
+            }
+
+            ++iterations;
+        }
+        while (ret == nullptr && iterations < maxIterationCount && !managementInstance_->isTerminated());
+    }
+    else
+    {
+        htd::VertexOrdering * ordering = widthLimitableAlgorithm->computeOrdering(graph, maxBagSize, maxIterationCount);
+
+        if (ordering != nullptr)
+        {
+            if (ordering->sequence().size() == graph.vertexCount())
+            {
+                ret = computeMutableDecomposition(graph, ordering->sequence());
+            }
+
+            iterations += ordering->requiredIterations();
+
+            delete ordering;
+        }
+    }
+
+    delete algorithm;
+
+    return std::make_pair(ret, iterations);
+}
+
+htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::vertex_t> & ordering) const
 {
     const htd::LibraryInstance & managementInstance = *managementInstance_;
 
@@ -456,18 +553,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
     std::size_t size = graph.vertexCount();
 
+    HTD_ASSERT(ordering.size() == size)
+
     if (size > 0)
     {
-        htd::IOrderingAlgorithm * algorithm = managementInstance.orderingAlgorithmFactory().getOrderingAlgorithm();
-
-        HTD_ASSERT(algorithm != nullptr)
-
-        std::vector<htd::vertex_t> ordering;
-
-        algorithm->writeOrderingTo(graph, ordering);
-
-        delete algorithm;
-
         if (!managementInstance.isTerminated())
         {
             htd::vertex_t lastVertex = graph.vertexAtPosition(size - 1);

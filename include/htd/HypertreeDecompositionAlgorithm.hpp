@@ -62,7 +62,7 @@ namespace htd
             HTD_API HypertreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
             HTD_API virtual ~HypertreeDecompositionAlgorithm();
-            
+
             HTD_API htd::IHypertreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
             HTD_API htd::IHypertreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;

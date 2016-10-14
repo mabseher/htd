@@ -70,16 +70,7 @@ htd::MaximumCardinalitySearchOrderingAlgorithm::~MaximumCardinalitySearchOrderin
     
 }
 
-htd::ConstCollection<htd::vertex_t> htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
-{
-    htd::VectorAdapter<htd::vertex_t> ret;
-
-    writeOrderingTo(graph, ret.container());
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
-}
-
-void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_NOEXCEPT
+htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
     std::size_t size = graph.vertexCount();
 
@@ -96,6 +87,9 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
     htd::fillSet(graph.vertices(), vertices);
 
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    std::vector<htd::vertex_t> ordering;
+    ordering.reserve(size);
 
     for (auto it = vertices.begin(); it != vertices.end() && !managementInstance.isTerminated(); ++it)
     {
@@ -174,8 +168,10 @@ void htd::MaximumCardinalitySearchOrderingAlgorithm::writeOrderingTo(const htd::
 
         size--;
 
-        target.push_back(selectedVertex);
+        ordering.push_back(selectedVertex);
     }
+
+    return new htd::VertexOrdering(std::move(ordering));
 }
 
 const htd::LibraryInstance * htd::MaximumCardinalitySearchOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT

@@ -1,5 +1,5 @@
 /*
- * File:   LabeledDirectedMultiGraphTest.cpp
+ * File:   LabeledDirectedGraphTest.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -28,15 +28,15 @@
 
 #include <vector>
 
-class LabeledDirectedMultiGraphTest : public ::testing::Test
+class LabeledDirectedGraphTest : public ::testing::Test
 {
     public:
-        LabeledDirectedMultiGraphTest(void)
+        LabeledDirectedGraphTest(void)
         {
 
         }
 
-        virtual ~LabeledDirectedMultiGraphTest()
+        virtual ~LabeledDirectedGraphTest()
         {
 
         }
@@ -52,11 +52,11 @@ class LabeledDirectedMultiGraphTest : public ::testing::Test
         }
 };
 
-TEST(LabeledDirectedMultiGraphTest, CheckEmptyGraph)
+TEST(LabeledDirectedGraphTest, CheckEmptyGraph)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::LabeledDirectedMultiGraph graph(libraryInstance);
+    htd::LabeledDirectedGraph graph(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -69,16 +69,14 @@ TEST(LabeledDirectedMultiGraphTest, CheckEmptyGraph)
 
     ASSERT_TRUE(graph.isConnected());
 
-    ASSERT_EQ((std::size_t)0, graph.labelCount());
-
     delete libraryInstance;
 }
 
-TEST(LabeledDirectedMultiGraphTest, CheckSize1Graph)
+TEST(LabeledDirectedGraphTest, CheckSize1Graph)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::LabeledDirectedMultiGraph graph(libraryInstance, 1);
+    htd::LabeledDirectedGraph graph(libraryInstance, 1);
 
     ASSERT_EQ((std::size_t)1, graph.vertexCount());
     ASSERT_EQ((std::size_t)0, graph.edgeCount());
@@ -113,11 +111,11 @@ TEST(LabeledDirectedMultiGraphTest, CheckSize1Graph)
     delete libraryInstance;
 }
 
-TEST(LabeledDirectedMultiGraphTest, CheckSize3Graph)
+TEST(LabeledDirectedGraphTest, CheckSize3Graph)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::LabeledDirectedMultiGraph graph(libraryInstance);
+    htd::LabeledDirectedGraph graph(libraryInstance);
 
     graph.addVertices(3);
 
@@ -255,11 +253,11 @@ TEST(LabeledDirectedMultiGraphTest, CheckSize3Graph)
     delete libraryInstance;
 }
 
-TEST(LabeledDirectedMultiGraphTest, CheckSelfLoop)
+TEST(LabeledDirectedGraphTest, CheckSelfLoop)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::LabeledDirectedMultiGraph graph(libraryInstance);
+    htd::LabeledDirectedGraph graph(libraryInstance);
 
     graph.addVertices(2);
 
@@ -299,10 +297,10 @@ TEST(LabeledDirectedMultiGraphTest, CheckSelfLoop)
 
     htd::id_t edgeId2 = graph.addEdge(1, 1);
 
-    ASSERT_NE(edgeId1, edgeId2);
+    ASSERT_EQ(edgeId1, edgeId2);
 
-    ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
-    ASSERT_EQ((std::size_t)2, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
 
     ASSERT_EQ((htd::id_t)1, graph.hyperedgeAtPosition((htd::index_t)0).id());
@@ -315,7 +313,7 @@ TEST(LabeledDirectedMultiGraphTest, CheckSelfLoop)
 
     ASSERT_EQ((htd::vertex_t)1, graph.neighborAtPosition((htd::vertex_t)1, (htd::index_t)0));
 
-    ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
 
     ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
 
@@ -323,31 +321,28 @@ TEST(LabeledDirectedMultiGraphTest, CheckSelfLoop)
 
     graph.removeEdge(edgeId1);
 
-    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
-    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)0, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)0, graph.hyperedges((htd::vertex_t)2).size());
 
     htd::id_t edgeId3 = graph.addEdge(1, 2);
 
-    ASSERT_EQ((std::size_t)2, graph.hyperedges().size());
-    ASSERT_EQ((std::size_t)2, graph.hyperedges((htd::vertex_t)1).size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges().size());
+    ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)1, graph.hyperedges((htd::vertex_t)2).size());
 
     ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0).id());
-    ASSERT_EQ((htd::id_t)3, graph.hyperedgeAtPosition((htd::index_t)1).id());
     ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)1).id());
-    ASSERT_EQ((htd::id_t)3, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)2).id());
-    ASSERT_EQ((htd::id_t)3, graph.hyperedgeAtPosition((htd::index_t)1, (htd::vertex_t)1).id());
+    ASSERT_EQ((htd::id_t)2, graph.hyperedgeAtPosition((htd::index_t)0, (htd::vertex_t)2).id());
 
-    ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
+    ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 1, 1 }));
     ASSERT_TRUE(graph.isEdge(std::vector<htd::vertex_t> { 1, 2 }));
     ASSERT_FALSE(graph.isEdge(std::vector<htd::vertex_t> { 2, 1 }));
 
-    ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge11)));
+    ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge11)));
     ASSERT_TRUE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge12)));
     ASSERT_FALSE(graph.isEdge(htd::ConstCollection<htd::vertex_t>::getInstance(edge21)));
 
-    graph.removeEdge(edgeId2);
     graph.removeEdge(edgeId3);
 
     ASSERT_EQ((std::size_t)0, graph.hyperedges().size());
@@ -387,11 +382,11 @@ TEST(LabeledDirectedMultiGraphTest, CheckSelfLoop)
     delete libraryInstance;
 }
 
-TEST(LabeledDirectedMultiGraphTest, CheckGraphModifications)
+TEST(LabeledDirectedGraphTest, CheckGraphModifications)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::LabeledDirectedMultiGraph graph(libraryInstance);
+    htd::LabeledDirectedGraph graph(libraryInstance);
 
     graph.addVertices(3);
 
@@ -430,9 +425,6 @@ TEST(LabeledDirectedMultiGraphTest, CheckGraphModifications)
 
     graph.removeEdge(edgeId1);
 
-    ASSERT_EQ((std::size_t)2, graph.vertexCount());
-    ASSERT_EQ((std::size_t)0, graph.edgeCount());
-
     ASSERT_FALSE(graph.isEdge(edgeId1));
 
     ASSERT_FALSE(graph.isNeighbor((htd::vertex_t)1, (htd::vertex_t)1));
@@ -457,11 +449,11 @@ TEST(LabeledDirectedMultiGraphTest, CheckGraphModifications)
     delete libraryInstance;
 }
 
-TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
+TEST(LabeledDirectedGraphTest, CheckCopyConstructors)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::LabeledDirectedMultiGraph graph1(libraryInstance);
+    htd::LabeledDirectedGraph graph1(libraryInstance);
 
     graph1.addVertices(2);
 
@@ -470,7 +462,7 @@ TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph1.vertexCount());
     ASSERT_EQ((std::size_t)0, graph1.edgeCount());
 
-    htd::LabeledDirectedMultiGraph graph2(graph1);
+    htd::LabeledDirectedGraph graph2(graph1);
 
     ASSERT_EQ((std::size_t)2, graph2.vertexCount());
     ASSERT_EQ((std::size_t)0, graph2.edgeCount());
@@ -482,7 +474,7 @@ TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ((std::size_t)2, graph2.vertexCount());
     ASSERT_EQ((std::size_t)1, graph2.edgeCount());
 
-    htd::LabeledDirectedMultiGraph graph3(libraryInstance);
+    htd::LabeledDirectedGraph graph3(libraryInstance);
 
     ASSERT_EQ((std::size_t)0, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
@@ -509,9 +501,9 @@ TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
     ASSERT_TRUE(graph3.isLabeledEdge("Label", edgeId1));
     ASSERT_EQ(123, htd::accessLabel<int>(graph3.edgeLabel("Label", 1)));
 
-    const htd::IDirectedMultiGraph & graphReference1 = graph1;
+    const htd::IDirectedGraph & directedGraphReference1 = graph1;
 
-    graph3 = graphReference1;
+    graph3 = directedGraphReference1;
 
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
@@ -520,7 +512,7 @@ TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
     ASSERT_FALSE(graph3.isLabeledVertex("Label", 1));
     ASSERT_FALSE(graph3.isLabeledEdge("Label", edgeId1));
 
-    htd::LabeledDirectedMultiGraph graph4(graphReference1);
+    htd::LabeledDirectedGraph graph4(directedGraphReference1);
 
     ASSERT_EQ((std::size_t)2, graph4.vertexCount());
     ASSERT_EQ((std::size_t)0, graph4.edgeCount());
@@ -529,9 +521,9 @@ TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
     ASSERT_FALSE(graph4.isLabeledVertex("Label", 1));
     ASSERT_FALSE(graph4.isLabeledEdge("Label", edgeId1));
 
-    const htd::ILabeledDirectedMultiGraph & labeledMultiGraphReference1 = graph1;
+    const htd::ILabeledDirectedGraph & labeledDirectedGraphReference1 = graph1;
 
-    graph3 = labeledMultiGraphReference1;
+    graph3 = labeledDirectedGraphReference1;
 
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
@@ -541,7 +533,7 @@ TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ(1, htd::accessLabel<int>(graph3.vertexLabel("Label", 1)));
     ASSERT_FALSE(graph3.isLabeledEdge("Label", edgeId1));
 
-    htd::LabeledDirectedMultiGraph graph5(labeledMultiGraphReference1);
+    htd::LabeledDirectedGraph graph5(labeledDirectedGraphReference1);
 
     ASSERT_EQ((std::size_t)2, graph5.vertexCount());
     ASSERT_EQ((std::size_t)0, graph5.edgeCount());
@@ -551,7 +543,7 @@ TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ(1, htd::accessLabel<int>(graph5.vertexLabel("Label", 1)));
     ASSERT_FALSE(graph5.isLabeledEdge("Label", edgeId1));
 
-    graph3 = labeledMultiGraphReference1;
+    graph3 = labeledDirectedGraphReference1;
 
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
     ASSERT_EQ((std::size_t)0, graph3.edgeCount());
@@ -561,7 +553,7 @@ TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ(1, htd::accessLabel<int>(graph3.vertexLabel("Label", 1)));
     ASSERT_FALSE(graph3.isLabeledEdge("Label", edgeId1));
 
-    htd::LabeledDirectedMultiGraph graph6(labeledMultiGraphReference1);
+    htd::LabeledDirectedGraph graph6(labeledDirectedGraphReference1);
 
     ASSERT_EQ((std::size_t)2, graph6.vertexCount());
     ASSERT_EQ((std::size_t)0, graph6.edgeCount());
@@ -571,7 +563,7 @@ TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
     ASSERT_EQ(1, htd::accessLabel<int>(graph6.vertexLabel("Label", 1)));
     ASSERT_FALSE(graph6.isLabeledEdge("Label", edgeId1));
 
-    htd::LabeledDirectedMultiGraph * clonedGraph = graph6.clone();
+    htd::LabeledDirectedGraph * clonedGraph = graph6.clone();
 
     ASSERT_EQ((std::size_t)2, clonedGraph->vertexCount());
     ASSERT_EQ((std::size_t)0, clonedGraph->edgeCount());
@@ -586,11 +578,43 @@ TEST(LabeledDirectedMultiGraphTest, CheckCopyConstructors)
     delete libraryInstance;
 }
 
-TEST(LabeledDirectedMultiGraphTest, TestVertexLabelModifications)
+TEST(LabeledDirectedGraphTest, CheckConversionFunctions)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::LabeledDirectedMultiGraph graph(libraryInstance);
+    htd::MultiGraph graph(libraryInstance, 2);
+
+    htd::LabeledMultiGraph labeledGraph(libraryInstance, 2);
+
+    graph.addEdge(1, 2);
+    graph.addEdge(1, 2);
+
+    labeledGraph.addEdge(1, 2);
+    labeledGraph.addEdge(1, 2);
+    labeledGraph.addEdge(2, 1);
+    labeledGraph.addEdge(2, 1);
+
+    htd::LabeledGraph gd1(libraryInstance);
+    htd::LabeledGraph gd2(libraryInstance);
+
+    gd1 = graph;
+    gd2 = labeledGraph;
+
+    ASSERT_EQ((std::size_t)1, gd1.edgeCount());
+    ASSERT_EQ((std::size_t)2, gd2.edgeCount());
+
+    ASSERT_EQ((htd::id_t)1, gd1.hyperedgeAtPosition(0).id());
+    ASSERT_EQ((htd::id_t)1, gd2.hyperedgeAtPosition(0).id());
+    ASSERT_EQ((htd::id_t)3, gd2.hyperedgeAtPosition(1).id());
+
+    delete libraryInstance;
+}
+
+TEST(LabeledDirectedGraphTest, TestVertexLabelModifications)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::LabeledDirectedGraph graph(libraryInstance);
 
     graph.addVertices(3);
 
@@ -688,11 +712,11 @@ TEST(LabeledDirectedMultiGraphTest, TestVertexLabelModifications)
     delete libraryInstance;
 }
 
-TEST(LabeledDirectedMultiGraphTest, TestEdgeLabelModifications)
+TEST(LabeledDirectedGraphTest, TestEdgeLabelModifications)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::LabeledDirectedMultiGraph graph(libraryInstance);
+    htd::LabeledDirectedGraph graph(libraryInstance);
 
     graph.addVertices(3);
 

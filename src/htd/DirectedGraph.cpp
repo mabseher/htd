@@ -440,8 +440,8 @@ void htd::DirectedGraph::removeEdge(htd::id_t edgeId)
 
     if (!base_->isEdge(vertex1, vertex2))
     {
-        outgoingNeighborhood_[vertex1].erase(vertex2);
-        incomingNeighborhood_[vertex2].erase(vertex1);
+        outgoingNeighborhood_[vertex1 - htd::Vertex::FIRST].erase(vertex2);
+        incomingNeighborhood_[vertex2 - htd::Vertex::FIRST].erase(vertex1);
     }
 }
 
@@ -530,9 +530,11 @@ htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::IDirectedGraph & o
 {
     if (this != &original)
     {
+        htd::IMutableHypergraph * newBase = base_->managementInstance()->hypergraphFactory().getHypergraph(original);
+
         delete base_;
 
-        base_ = managementInstance()->hypergraphFactory().getHypergraph(original);
+        base_ = newBase;
 
         incomingNeighborhood_.clear();
         outgoingNeighborhood_.clear();

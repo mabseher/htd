@@ -18,7 +18,7 @@ unzip -u -d "${TEST_DIRECTORY}/validator" "${TEST_DIRECTORY}/validator.zip"
 
 bash -c "cd \"${TEST_DIRECTORY}/validator/td-validate-master\" && make && make test"
 
-HTD="${STORAGE_DIRECTORY}/htd_gr2td_mindegree_iterative_100_20.sh"
+HTD="${STORAGE_DIRECTORY}/htd_gr2td_mindegree_iterative_100.sh"
 VALIDATOR="${TEST_DIRECTORY}/validator/td-validate-master/td-validate"
 VALIDATION_INSTANCE_FOLDER="${TEST_DIRECTORY}/instances"
 
@@ -62,7 +62,7 @@ done
 
 echo ""
 
-HTD="${STORAGE_DIRECTORY}/htd_gr2td_minfill_iterative_100_20.sh"
+HTD="${STORAGE_DIRECTORY}/htd_gr2td_minfill_iterative_100.sh"
 
 echo "Instance,Vertices,Seed,Width,Nodes,Time,Memory"
 

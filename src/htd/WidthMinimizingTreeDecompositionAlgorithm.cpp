@@ -94,9 +94,9 @@ htd::WidthMinimizingTreeDecompositionAlgorithm::WidthMinimizingTreeDecomposition
 
 }
 
-htd::WidthMinimizingTreeDecompositionAlgorithm::WidthMinimizingTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : implementation_(new Implementation(manager))
+htd::WidthMinimizingTreeDecompositionAlgorithm::WidthMinimizingTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : implementation_(new Implementation(manager, manipulationOperations))
 {
-    setManipulationOperations(manipulationOperations);
+
 }
 
 htd::WidthMinimizingTreeDecompositionAlgorithm::WidthMinimizingTreeDecompositionAlgorithm(const htd::WidthMinimizingTreeDecompositionAlgorithm & original) : implementation_(new Implementation(*(original.implementation_)))
@@ -234,6 +234,16 @@ std::size_t htd::WidthMinimizingTreeDecompositionAlgorithm::iterationCount(void)
 void htd::WidthMinimizingTreeDecompositionAlgorithm::setIterationCount(std::size_t iterationCount)
 {
     implementation_->iterationCount_ = iterationCount;
+}
+
+bool htd::WidthMinimizingTreeDecompositionAlgorithm::isComputeInducedEdgesEnabled(void) const
+{
+    return implementation_->algorithm_->isComputeInducedEdgesEnabled();
+}
+
+void htd::WidthMinimizingTreeDecompositionAlgorithm::setComputeInducedEdges(bool computeInducedEdges)
+{
+    implementation_->algorithm_->setComputeInducedEdges(computeInducedEdges);
 }
 
 const htd::LibraryInstance * htd::WidthMinimizingTreeDecompositionAlgorithm::managementInstance(void) const HTD_NOEXCEPT

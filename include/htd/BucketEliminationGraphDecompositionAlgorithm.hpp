@@ -46,7 +46,7 @@ namespace htd
             /**
              *  Constructor for a graph decomposition algorithm based on bucket elimination.
              *
-             *  @param[in] manager   The management instance to which the new algorithm belongs.
+             *  @param[in] manager  The management instance to which the new algorithm belongs.
              */
             HTD_API BucketEliminationGraphDecompositionAlgorithm(const htd::LibraryInstance * const manager);
 
@@ -130,6 +130,20 @@ namespace htd
             HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
+            /**
+             *  Check whether the edges induced by the bag contents shall be computed.
+             *
+             *  @return A boolean flag indicating whether the edges induced by the bag contents shall be computed.
+             */
+            HTD_API bool isComputeInducedEdgesEnabled(void) const;
+
+            /**
+             *  Set whether the edges induced by the bag contents shall be computed.
+             *
+             *  @param[in] computeInducedEdges  A boolean flag indicating whether the edges induced by the bag contents shall be computed.
+             */
+            HTD_API void setComputeInducedEdges(bool computeInducedEdges);
 
             HTD_API BucketEliminationGraphDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
 

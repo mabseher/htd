@@ -57,7 +57,7 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
      *
      *  @param[in] manager   The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_()
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
     {
 
     }
@@ -89,6 +89,11 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
      *  The manipuation operations which are applied after the decomposition was computed.
      */
     std::vector<htd::IGraphDecompositionManipulationOperation *> postProcessingOperations_;
+
+    /**
+     *  A boolean flag indicating whether the hyperedges induced by a respective bag shall be computed.
+     */
+    bool computeInducedEdges_;
 
     /**
      *  Compute a new mutable graph decompostion of the given graph.
@@ -531,9 +536,21 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::setManagementInstance(co
     implementation_->managementInstance_ = manager;
 }
 
+bool htd::BucketEliminationGraphDecompositionAlgorithm::isComputeInducedEdgesEnabled(void) const
+{
+    return implementation_->computeInducedEdges_;
+}
+
+void htd::BucketEliminationGraphDecompositionAlgorithm::setComputeInducedEdges(bool computeInducedEdges)
+{
+    implementation_->computeInducedEdges_ = computeInducedEdges;
+}
+
 htd::BucketEliminationGraphDecompositionAlgorithm * htd::BucketEliminationGraphDecompositionAlgorithm::clone(void) const
 {
     htd::BucketEliminationGraphDecompositionAlgorithm * ret = new htd::BucketEliminationGraphDecompositionAlgorithm(implementation_->managementInstance_);
+
+    ret->setComputeInducedEdges(implementation_->computeInducedEdges_);
 
     for (const auto & labelingFunction : implementation_->labelingFunctions_)
     {
@@ -791,24 +808,27 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             hyperedgePosition = hyperedges.begin();
 
-            std::vector<htd::id_t> lastAssignedEdge(buckets.size() + 1, (htd::id_t)-1);
-
-            std::stack<htd::vertex_t> originStack;
-
-            for (index = 0; index < edgeCount && !managementInstance.isTerminated(); ++index)
+            if (computeInducedEdges_)
             {
-                const std::vector<htd::vertex_t> edgeElements = hyperedgePosition->sortedElements();
+                std::vector<htd::id_t> lastAssignedEdge(buckets.size() + 1, (htd::id_t)-1);
 
-                if (edgeElements.size() == 2)
-                {
-                    distributeEdge(index, edgeElements[0], edgeElements[1], edgeTarget[index], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
-                }
-                else
-                {
-                    distributeEdge(index, edgeElements, edgeTarget[index], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
-                }
+                std::stack<htd::vertex_t> originStack;
 
-                ++hyperedgePosition;
+                for (index = 0; index < edgeCount && !managementInstance.isTerminated(); ++index)
+                {
+                    const std::vector<htd::vertex_t> edgeElements = hyperedgePosition->sortedElements();
+
+                    if (edgeElements.size() == 2)
+                    {
+                        distributeEdge(index, edgeElements[0], edgeElements[1], edgeTarget[index], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
+                    }
+                    else
+                    {
+                        distributeEdge(index, edgeElements, edgeTarget[index], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
+                    }
+
+                    ++hyperedgePosition;
+                }
             }
 
             unvisitedVertices.insert(relevantVertices.begin(), relevantVertices.end());

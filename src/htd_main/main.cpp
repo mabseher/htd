@@ -834,6 +834,15 @@ int main(int argc, const char * const * const argv)
 
         bool hypertreeDecompositionRequested = decompositionTypeChoice.used() && std::string(decompositionTypeChoice.value()) == "hypertree";
 
+        htd::BucketEliminationGraphDecompositionAlgorithm * graphDecompositionAlgorithm = new htd::BucketEliminationGraphDecompositionAlgorithm(libraryInstance);
+        htd::BucketEliminationTreeDecompositionAlgorithm * treeDecompositionAlgorithm = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
+
+        graphDecompositionAlgorithm->setComputeInducedEdges(false);
+        treeDecompositionAlgorithm->setComputeInducedEdges(false);
+
+        libraryInstance->graphDecompositionAlgorithmFactory().setConstructionTemplate(graphDecompositionAlgorithm);
+        libraryInstance->treeDecompositionAlgorithmFactory().setConstructionTemplate(treeDecompositionAlgorithm);
+
         if (hypertreeDecompositionRequested)
         {
             htd::IHypertreeDecompositionAlgorithm * algorithm = libraryInstance->hypertreeDecompositionAlgorithmFactory().getHypertreeDecompositionAlgorithm(libraryInstance);
@@ -892,6 +901,8 @@ int main(int argc, const char * const * const argv)
                 if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
                 {
                     htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
+
+                    algorithm.setComputeInducedEdges(false);
 
                     if (iterationOption.used())
                     {

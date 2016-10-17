@@ -56,7 +56,7 @@ struct htd::BucketEliminationTreeDecompositionAlgorithm::Implementation
      *
      *  @param[in] manager   The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_()
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
     {
 
     }
@@ -88,6 +88,11 @@ struct htd::BucketEliminationTreeDecompositionAlgorithm::Implementation
      *  The manipuation operations which are applied after the decomposition was computed.
      */
     std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
+
+    /**
+     *  A boolean flag indicating whether the hyperedges induced by a respective bag shall be computed.
+     */
+    bool computeInducedEdges_;
 
     /**
      *  Compute a new mutable tree decompostion of the given graph.
@@ -309,9 +314,21 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::setManagementInstance(con
     implementation_->managementInstance_ = manager;
 }
 
+bool htd::BucketEliminationTreeDecompositionAlgorithm::isComputeInducedEdgesEnabled(void) const
+{
+    return implementation_->computeInducedEdges_;
+}
+
+void htd::BucketEliminationTreeDecompositionAlgorithm::setComputeInducedEdges(bool computeInducedEdges)
+{
+    implementation_->computeInducedEdges_ = computeInducedEdges;
+}
+
 htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDecompositionAlgorithm::clone(void) const
 {
-    htd::BucketEliminationTreeDecompositionAlgorithm * ret = new htd::BucketEliminationTreeDecompositionAlgorithm(managementInstance());
+    htd::BucketEliminationTreeDecompositionAlgorithm * ret = new htd::BucketEliminationTreeDecompositionAlgorithm(implementation_->managementInstance_);
+
+    ret->setComputeInducedEdges(implementation_->computeInducedEdges_);
 
     for (htd::ILabelingFunction * labelingFunction : implementation_->labelingFunctions_)
     {
@@ -345,6 +362,8 @@ std::pair<htd::IMutableTreeDecomposition *, std::size_t> htd::BucketEliminationT
     if (graph.vertexCount() > 0)
     {
         htd::BucketEliminationGraphDecompositionAlgorithm graphDecompositionAlgorithm(managementInstance_);
+
+        graphDecompositionAlgorithm.setComputeInducedEdges(computeInducedEdges_);
 
         std::pair<htd::IGraphDecomposition *, std::size_t> graphDecomposition = graphDecompositionAlgorithm.computeDecomposition(graph, maxBagSize, maxIterationCount);
 

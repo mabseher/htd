@@ -135,6 +135,82 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
     htd::vertex_t getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::vertex_t> & ordering, const std::vector<htd::index_t> & vertexIndices, htd::vertex_t excludedVertex) const;
 
     /**
+     *  Compress the given decomposition by retaining only subset-maximal bags.
+     *
+     *  @param[in] startingVertex       The starting vertex.
+     *  @param[in] neighbors            The neighborhood relation which shall be updated.
+     *  @param[in] bagContent           The bag contents which might be swapped during the traversal.
+     *  @param[in] unvisitedVertices    The set of unvisited vertices which is updated during the traversal.
+     *  @param[in] relevantVertices     The set of relevant vertices which will be updated where relevance refers to subset-maximality.
+     *  @param[in] inducedEdges         A vector holding the indices of the edges which are induced by the bag content associated with a vertex.
+     *  @param[in] edgeTarget           A vector holding the first target node for each edge.
+     */
+    void compressDecomposition(htd::vertex_t startingVertex,
+                               std::vector<std::vector<htd::vertex_t>> & neighbors,
+                               std::vector<std::vector<htd::vertex_t>> & bagContent,
+                               std::unordered_set<htd::vertex_t> & unvisitedVertices,
+                               std::vector<htd::vertex_t> & relevantVertices,
+                               std::vector<std::vector<htd::index_t>> & inducedEdges,
+                               std::vector<htd::index_t> & edgeTarget) const;
+
+    /**
+     *  Compress the given decomposition by retaining only subset-maximal bags.
+     *
+     *  If the bag of the vertex is a subset of the bag of its parent, the vertex is removed. If the bag of
+     *  the vertex is a superset of the bag of its parent, the bag contents are swapped and the vertex is
+     *  removed. Otherwise, the decomposition is left unchanged.
+     *
+     *  @param[in] vertex           The vertex.
+     *  @param[in] parent           The parent of the vertex during the traversal.
+     *  @param[in] neighbors        The neighborhood relation which shall be updated.
+     *  @param[in] bagContent       The bag contents which might be swapped during the traversal.
+     *  @param[in] relevantVertices The set of relevant vertices which will be updated where relevance refers to subset-maximality.
+     *  @param[in] inducedEdges     A vector holding the indices of the edges which are induced by the bag content associated with a vertex.
+     *  @param[in] edgeTarget       A vector holding the first target node for each edge.
+     */
+    void compressDecomposition(htd::vertex_t vertex, htd::vertex_t parent,
+                               std::vector<std::vector<htd::vertex_t>> & neighbors,
+                               std::vector<std::vector<htd::vertex_t>> & bagContent,
+                               std::vector<htd::vertex_t> & relevantVertices,
+                               std::vector<std::vector<htd::index_t>> & inducedEdges,
+                               std::vector<htd::index_t> & edgeTarget) const;
+
+    /**
+     *  Update the given decomposition by performing pre-order traversal.
+     *
+     *  @param[in] graph                    The graph from which the decomposition was computed.
+     *  @param[in] decomposition            The decomposition which shall be updated.
+     *  @param[in] startingVertex           The starting vertex.
+     *  @param[in] neighbors                The neighborhood relation which shall be used.
+     *  @param[in] bagContent               The bag contents.
+     *  @param[in] unvisitedVertices        The set of unvisited vertices which is updated during the traversal.
+     *  @param[in] inducedEdges             A vector holding the indices of the edges which are induced by the bag content associated with a vertex.
+     *  @param[in] decompositionVertices    A mapping between the vertices and their counterparts in the decomposition.
+     *
+     *  @note The bag contents and the induced edges are moved into the decomposition during this operation.
+     */
+    void updateDecomposition(const htd::IMultiHypergraph & graph,
+                             htd::IMutableGraphDecomposition & decomposition,
+                             htd::vertex_t startingVertex,
+                             const std::vector<std::vector<htd::vertex_t>> & neighbors,
+                             std::vector<std::vector<htd::vertex_t>> & bagContent,
+                             std::vector<std::vector<htd::index_t>> & inducedEdges,
+                             std::unordered_set<htd::vertex_t> & unvisitedVertices,
+                             std::unordered_map<htd::vertex_t, htd::vertex_t> & decompositionVertices) const;
+
+    /**
+     *  Check whether two sets are subset-maximal with respect to the other set.
+     *
+     *  @param[in] set1 The first set.
+     *  @param[in] set2 The second set.
+     *
+     *  @return This function returns -1 if the first set is a superset of or identical to the second set.
+     *  If the second set is a proper superset of the first set, the return value is 1. Otherwise, the
+     *  return value is 0.
+     */
+    int is_maximal(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2) const;
+
+    /**
      *  Distribute a given edge, identified by its index, in the decomposition so that the information about induced edges is updated.
      *
      *  @param[in] edgeIndex        The index of the edge which shall be distributed.
@@ -565,19 +641,19 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
             std::vector<std::vector<htd::vertex_t>> buckets(lastVertex + 1);
 
-            std::vector<htd::vertex_t> superset(lastVertex + 1);
-
             std::vector<std::vector<htd::vertex_t>> neighbors(lastVertex + 1);
 
-            std::vector<htd::vertex_t> edgeTarget(graph.edgeCount());
+            std::vector<std::vector<htd::index_t>> inducedEdges(lastVertex + 1);
+
+            std::vector<htd::index_t> edgeTarget(graph.edgeCount());
+
+            std::vector<htd::vertex_t> relevantVertices;
 
             std::size_t index = 0;
 
             for (htd::vertex_t vertex : ordering)
             {
                 indices[vertex] = index++;
-
-                superset[vertex] = vertex;
 
                 buckets[vertex].push_back(vertex);
             }
@@ -596,7 +672,11 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 {
                     case 1:
                     {
-                        edgeTarget[index] = elements[0];
+                        htd::vertex_t vertex = elements[0];
+
+                        edgeTarget[index] = vertex;
+
+                        inducedEdges[vertex].push_back(index);
 
                         break;
                     }
@@ -617,6 +697,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                             }
 
                             edgeTarget[index] = vertex1;
+
+                            inducedEdges[vertex1].push_back(index);
                         }
                         else
                         {
@@ -630,6 +712,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                             }
 
                             edgeTarget[index] = vertex2;
+
+                            inducedEdges[vertex2].push_back(index);
                         }
 
                         break;
@@ -641,6 +725,8 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                         htd::inplace_set_union(buckets[minimumVertex], elements);
 
                         edgeTarget[index] = minimumVertex;
+
+                        inducedEdges[minimumVertex].push_back(index);
 
                         break;
                     }
@@ -686,204 +772,22 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                     neighbors[selection].push_back(minimumVertex);
                     neighbors[minimumVertex].push_back(selection);
-
-                    if (selectedBucket.size() + 1 > bucket.size())
-                    {
-                        htd::vertex_t supersetVertex = superset[minimumVertex];
-
-                        if (supersetVertex != minimumVertex)
-                        {
-                            const std::vector<htd::vertex_t> & supersetBucket = buckets[supersetVertex];
-
-                            if (!std::includes(supersetBucket.begin(), supersetBucket.end(), selectedBucket.begin(), selectedBucket.end()))
-                            {
-                                superset[minimumVertex] = minimumVertex;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        superset[minimumVertex] = superset[selection];
-                    }
                 }
             }
 
-            std::deque<std::pair<htd::vertex_t, htd::vertex_t>> decompositionEdges;
+            std::unordered_set<htd::vertex_t> unvisitedVertices(ordering.begin(), ordering.end());
 
-            std::unordered_map<htd::vertex_t, htd::vertex_t> decompositionVertices;
-
-            std::vector<htd::vertex_t> vertexNames;
-
-            htd::vertex_t nextVertexId = htd::Id::FIRST;
-
-            for (auto it = ordering.begin(); it != ordering.end() && !managementInstance.isTerminated(); ++it)
+            while (!unvisitedVertices.empty())
             {
-                htd::vertex_t vertex = *it;
+                htd::vertex_t currentVertex = *(unvisitedVertices.begin());
 
-                const std::vector<htd::vertex_t> & currentNeighborhood = neighbors[vertex];
-
-                if (superset[vertex] != vertex)
-                {
-                    switch (currentNeighborhood.size())
-                    {
-                        case 0:
-                        {
-                            break;
-                        }
-                        case 1:
-                        {
-                            std::vector<htd::vertex_t> & twoHopNeighborhood = neighbors[currentNeighborhood[0]];
-
-                            twoHopNeighborhood.erase(std::find(twoHopNeighborhood.begin(), twoHopNeighborhood.end(), vertex));
-
-                            break;
-                        }
-                        case 2:
-                        {
-                            htd::vertex_t neighbor1 = currentNeighborhood[0];
-                            htd::vertex_t neighbor2 = currentNeighborhood[1];
-
-                            std::vector<htd::vertex_t> & twoHopNeighborhood1 = neighbors[neighbor1];
-                            std::vector<htd::vertex_t> & twoHopNeighborhood2 = neighbors[neighbor2];
-
-                            *(std::find(twoHopNeighborhood1.begin(), twoHopNeighborhood1.end(), vertex)) = neighbor2;
-                            *(std::find(twoHopNeighborhood2.begin(), twoHopNeighborhood2.end(), vertex)) = neighbor1;
-
-                            if (superset[neighbor1] == neighbor1 && superset[neighbor2] == neighbor2)
-                            {
-                                std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(neighbor1, nextVertexId);
-
-                                if (vertex1.second)
-                                {
-                                    vertexNames.push_back(neighbor1);
-
-                                    ++nextVertexId;
-                                }
-
-                                std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex2 = decompositionVertices.emplace(neighbor2, nextVertexId);
-
-                                if (vertex2.second)
-                                {
-                                    vertexNames.push_back(neighbor2);
-
-                                    ++nextVertexId;
-                                }
-
-                                decompositionEdges.emplace_back(vertex1.first->second, vertex2.first->second);
-                            }
-
-                            break;
-                        }
-                        default:
-                        {
-                            htd::vertex_t replacement = htd::Vertex::UNKNOWN;
-
-                            std::vector<htd::vertex_t> & currentBucket = buckets[vertex];
-
-                            for (auto it2 = currentNeighborhood.begin(); replacement == htd::Vertex::UNKNOWN && it2 != currentNeighborhood.end(); ++it2)
-                            {
-                                const std::vector<htd::vertex_t> & currentBucket2 = buckets[*it2];
-
-                                if (currentBucket2.size() >= currentBucket.size() && std::includes(currentBucket2.begin(), currentBucket2.end(), currentBucket.begin(), currentBucket.end()))
-                                {
-                                    replacement = *it2;
-                                }
-                            }
-
-                            std::vector<htd::vertex_t> & replacementNeighborhood = neighbors[replacement];
-
-                            replacementNeighborhood.erase(std::find(replacementNeighborhood.begin(), replacementNeighborhood.end(), vertex));
-
-                            std::copy_if(currentNeighborhood.begin(), currentNeighborhood.end(), std::back_inserter(replacementNeighborhood), [&](htd::vertex_t neighbor) { return neighbor != replacement; });
-
-                            for (htd::vertex_t neighbor : currentNeighborhood)
-                            {
-                                if (neighbor != replacement)
-                                {
-                                    std::vector<htd::vertex_t> & currentNeighborhood2 = neighbors[neighbor];
-
-                                    /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'currentNeighborhood2'. */
-                                    // coverity[deref_iterator]
-                                    *(std::find(currentNeighborhood2.begin(), currentNeighborhood2.end(), vertex)) = replacement;
-
-                                    if (superset[replacement] == replacement && superset[neighbor] == neighbor)
-                                    {
-                                        std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(replacement, nextVertexId);
-
-                                        if (vertex1.second)
-                                        {
-                                            vertexNames.push_back(replacement);
-
-                                            ++nextVertexId;
-                                        }
-
-                                        std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex2 = decompositionVertices.emplace(neighbor, nextVertexId);
-
-                                        if (vertex2.second)
-                                        {
-                                            vertexNames.push_back(neighbor);
-
-                                            ++nextVertexId;
-                                        }
-
-                                        decompositionEdges.emplace_back(vertex1.first->second, vertex2.first->second);
-                                    }
-                                }
-                            }
-
-                            break;
-                        }
-                    }
-
-                    std::vector<htd::vertex_t>().swap(neighbors[vertex]);
-                }
-                else
-                {
-                    bool connected = false;
-
-                    for (htd::vertex_t neighbor : currentNeighborhood)
-                    {
-                        if (indices[neighbor] > indices[vertex] && superset[neighbor] == neighbor)
-                        {
-                            std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(vertex, nextVertexId);
-
-                            if (vertex1.second)
-                            {
-                                vertexNames.push_back(vertex);
-
-                                ++nextVertexId;
-                            }
-
-                            std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex2 = decompositionVertices.emplace(neighbor, nextVertexId);
-
-                            if (vertex2.second)
-                            {
-                                vertexNames.push_back(neighbor);
-
-                                ++nextVertexId;
-                            }
-
-                            decompositionEdges.emplace_back(vertex1.first->second, vertex2.first->second);
-
-                            connected = true;
-                        }
-                    }
-
-                    if (!connected)
-                    {
-                        std::pair<std::unordered_map<htd::vertex_t, htd::vertex_t>::iterator, bool> vertex1 = decompositionVertices.emplace(vertex, static_cast<htd::vertex_t>(vertexNames.size()) + 1);
-
-                        if (vertex1.second)
-                        {
-                            vertexNames.push_back(vertex);
-
-                            ++nextVertexId;
-                        }
-                    }
-                }
+                compressDecomposition(currentVertex, neighbors, buckets, unvisitedVertices, relevantVertices, inducedEdges, edgeTarget);
             }
 
-            std::vector<std::vector<htd::index_t>> inducedEdges(lastVertex + 1);
+            for (htd::vertex_t vertex : relevantVertices)
+            {
+                inducedEdges[vertex].clear();
+            }
 
             hyperedgePosition = hyperedges.begin();
 
@@ -897,31 +801,25 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                 if (edgeElements.size() == 2)
                 {
-                    distributeEdge(index, edgeElements[0], edgeElements[1], superset[edgeTarget[index]], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
+                    distributeEdge(index, edgeElements[0], edgeElements[1], edgeTarget[index], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
                 }
                 else
                 {
-                    distributeEdge(index, edgeElements, superset[edgeTarget[index]], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
+                    distributeEdge(index, edgeElements, edgeTarget[index], buckets, neighbors, inducedEdges, lastAssignedEdge, originStack);
                 }
 
                 ++hyperedgePosition;
             }
 
-            for (auto it2 = vertexNames.begin(); it2 != vertexNames.end() && !managementInstance.isTerminated(); ++it2)
-            {
-                ret->addVertex(std::move(buckets[*it2]), graph.hyperedgesAtPositions(std::move(inducedEdges[*it2])));
-            }
+            unvisitedVertices.insert(relevantVertices.begin(), relevantVertices.end());
 
-            for (auto it2 = decompositionEdges.begin(); it2 != decompositionEdges.end() && !managementInstance.isTerminated(); ++it2)
+            std::unordered_map<htd::vertex_t, htd::vertex_t> decompositionVertices;
+
+            while (!unvisitedVertices.empty())
             {
-                if (it2->first < it2->second)
-                {
-                    ret->addEdge(it2->first, it2->second);
-                }
-                else
-                {
-                    ret->addEdge(it2->second, it2->first);
-                }
+                htd::vertex_t currentVertex = *(unvisitedVertices.begin());
+
+                updateDecomposition(graph, *ret, currentVertex, neighbors, buckets, inducedEdges, unvisitedVertices, decompositionVertices);
             }
         }
     }
@@ -932,6 +830,30 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
             ret->addVertex();
         }
     }
+
+    /*
+    for (htd::vertex_t vertex1 : ret->vertices())
+    {
+        for (htd::vertex_t vertex2 : ret->vertices())
+        {
+            if (vertex1 < vertex2)
+            {
+                const std::vector<htd::vertex_t> & bagContent1 = ret->bagContent(vertex1);
+                const std::vector<htd::vertex_t> & bagContent2 = ret->bagContent(vertex2);
+
+                if (std::includes(bagContent2.begin(), bagContent2.end(), bagContent1.begin(), bagContent1.end()))
+                {
+                    std::cout << "NOT MINIMAL:" << std::endl;
+                    std::cout << "   VERTEX " << vertex1 << ":" << std::endl;
+                    std::cout << "      " << bagContent1 << std::endl;
+                    std::cout << "   VERTEX " << vertex2 << ":" << std::endl;
+                    std::cout << "      " << bagContent2 << std::endl;
+                    std::cout << std::endl;
+                }
+            }
+        }
+    }
+    */
 
     return ret;
 }
@@ -994,6 +916,223 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::Implementation:
         }
 
         ret = ordering[minimum];
+    }
+
+    return ret;
+}
+
+void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compressDecomposition(htd::vertex_t startingVertex, std::vector<std::vector<htd::vertex_t>> & neighbors,
+                                                                                              std::vector<std::vector<htd::vertex_t>> & bagContent,
+                                                                                              std::unordered_set<htd::vertex_t> & unvisitedVertices,
+                                                                                              std::vector<htd::vertex_t> & relevantVertices,
+                                                                                              std::vector<std::vector<htd::index_t>> & inducedEdges,
+                                                                                              std::vector<htd::index_t> & edgeTarget) const
+{
+    htd::vertex_t lastNode = htd::Vertex::UNKNOWN;
+
+    htd::vertex_t peekNode = htd::Vertex::UNKNOWN;
+
+    htd::vertex_t currentNode = startingVertex;
+
+    htd::index_t lastIndex = 0;
+
+    htd::index_t peekIndex = 0;
+
+    htd::index_t currentIndex = neighbors[currentNode].size() - 1;
+
+    std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
+
+    relevantVertices.push_back(startingVertex);
+
+    while (!parentStack.empty() || currentNode != htd::Vertex::UNKNOWN)
+    {
+        htd::vertex_t parent = htd::Vertex::UNKNOWN;
+
+        if (!parentStack.empty())
+        {
+            parent = std::get<0>(parentStack.top());
+        }
+
+        if (currentNode != htd::Vertex::UNKNOWN)
+        {
+            if (currentIndex < neighbors[currentNode].size())
+            {
+                htd::vertex_t nextNode = neighbors[currentNode][currentIndex];
+
+                if (parent != nextNode)
+                {
+                    if (currentIndex < neighbors[currentNode].size())
+                    {
+                        parentStack.emplace(currentNode, currentIndex);
+
+                        currentNode = neighbors[currentNode][currentIndex];
+
+                        currentIndex = neighbors[currentNode].size() - 1;
+                    }
+                }
+                else
+                {
+                    --currentIndex;
+
+                    if (currentIndex < neighbors[currentNode].size())
+                    {
+                        parentStack.emplace(currentNode, currentIndex);
+
+                        currentNode = neighbors[currentNode][currentIndex];
+
+                        currentIndex = neighbors[currentNode].size() - 1;
+                    }
+                    else
+                    {
+                        unvisitedVertices.erase(currentNode);
+
+                        if (!parentStack.empty() && parentStack.top().first != htd::Vertex::UNKNOWN)
+                        {
+                            compressDecomposition(currentNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
+
+                            parentStack.top().second--;
+                        }
+                        else
+                        {
+                            if (!parentStack.empty())
+                            {
+                                compressDecomposition(currentNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
+                            }
+                        }
+
+                        currentNode = htd::Vertex::UNKNOWN;
+                    }
+                }
+            }
+            else
+            {
+                unvisitedVertices.erase(currentNode);
+
+                if (!parentStack.empty() && parentStack.top().first != htd::Vertex::UNKNOWN)
+                {
+                    compressDecomposition(currentNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
+
+                    parentStack.top().second--;
+                }
+                else
+                {
+                    if (!parentStack.empty())
+                    {
+                        compressDecomposition(currentNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
+                    }
+                }
+
+                currentNode = htd::Vertex::UNKNOWN;
+            }
+        }
+        else
+        {
+            peekNode = parentStack.top().first;
+            peekIndex = parentStack.top().second;
+
+            if (peekIndex < neighbors[peekNode].size() && !(lastNode == peekNode && lastIndex == peekIndex))
+            {
+                currentNode = neighbors[peekNode][peekIndex];
+
+                currentIndex = neighbors[currentNode].size() - 1;
+            }
+            else
+            {
+                lastNode = peekNode;
+                lastIndex = peekIndex;
+
+                currentNode = htd::Vertex::UNKNOWN;
+
+                parentStack.pop();
+
+                unvisitedVertices.erase(peekNode);
+
+                if (!parentStack.empty() && parentStack.top().first != htd::Vertex::UNKNOWN)
+                {
+                    compressDecomposition(peekNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
+
+                    parentStack.top().second--;
+                }
+                else
+                {
+                    if (!parentStack.empty())
+                    {
+                        compressDecomposition(peekNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compressDecomposition(htd::vertex_t vertex, htd::vertex_t parent,
+                                                                                              std::vector<std::vector<htd::vertex_t>> & neighbors,
+                                                                                              std::vector<std::vector<htd::vertex_t>> & bagContent,
+                                                                                              std::vector<htd::vertex_t> & relevantVertices,
+                                                                                              std::vector<std::vector<htd::index_t>> & inducedEdges,
+                                                                                              std::vector<htd::index_t> & edgeTarget) const
+{
+    int result = is_maximal(bagContent[vertex], bagContent[parent]);
+
+    if (result != 0)
+    {
+        if (result < 0)
+        {
+            bagContent[vertex].swap(bagContent[parent]);
+        }
+
+        std::vector<htd::vertex_t> & currentNeighborhood = neighbors[vertex];
+        std::vector<htd::vertex_t> & parentNeighborhood = neighbors[parent];
+
+        currentNeighborhood.erase(std::find(currentNeighborhood.begin(), currentNeighborhood.end(), parent));
+        parentNeighborhood.erase(std::find(parentNeighborhood.begin(), parentNeighborhood.end(), vertex));
+
+        parentNeighborhood.insert(parentNeighborhood.end(), currentNeighborhood.begin(), currentNeighborhood.end());
+
+        for (htd::vertex_t neighbor : currentNeighborhood)
+        {
+            std::vector<htd::vertex_t> & currentNeighborhood2 = neighbors[neighbor];
+
+            *(std::find(currentNeighborhood2.begin(), currentNeighborhood2.end(), vertex)) = parent;
+        }
+
+        std::vector<htd::vertex_t>().swap(currentNeighborhood);
+
+        std::vector<htd::index_t> & currentInducedEdges = inducedEdges[vertex];
+        std::vector<htd::index_t> & parentInducedEdges = inducedEdges[parent];
+
+        parentInducedEdges.insert(parentInducedEdges.end(), currentInducedEdges.begin(), currentInducedEdges.end());
+
+        for (htd::index_t index : currentInducedEdges)
+        {
+            edgeTarget[index] = parent;
+        }
+
+        std::vector<htd::index_t>().swap(currentInducedEdges);
+    }
+    else
+    {
+        relevantVertices.push_back(vertex);
+    }
+}
+
+int htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::is_maximal(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2) const
+{
+    int ret = 0;
+
+    if (set1.size() >= set2.size())
+    {
+        if (std::includes(set1.begin(), set1.end(), set2.begin(), set2.end()))
+        {
+            ret = -1;
+        }
+    }
+    else
+    {
+        if (std::includes(set2.begin(), set2.end(), set1.begin(), set1.end()))
+        {
+            ret = 1;
+        }
     }
 
     return ret;
@@ -1118,6 +1257,95 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::distribu
                     }
                 }
             }
+        }
+    }
+}
+
+void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::updateDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                            htd::IMutableGraphDecomposition & decomposition,
+                                                                                            htd::vertex_t startingVertex,
+                                                                                            const std::vector<std::vector<htd::vertex_t>> & neighbors,
+                                                                                            std::vector<std::vector<htd::vertex_t>> & bagContent,
+                                                                                            std::vector<std::vector<htd::index_t>> & inducedEdges,
+                                                                                            std::unordered_set<htd::vertex_t> & unvisitedVertices,
+                                                                                            std::unordered_map<htd::vertex_t, htd::vertex_t> & decompositionVertices) const
+{
+    htd::vertex_t currentNode = startingVertex;
+
+    htd::index_t currentIndex = 0;
+
+    std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
+
+    while (!parentStack.empty() || currentNode != htd::Vertex::UNKNOWN)
+    {
+        if (currentNode != htd::Vertex::UNKNOWN)
+        {
+            if (currentIndex == 0)
+            {
+                htd::vertex_t decompositionVertex = decomposition.addVertex(bagContent[currentNode], graph.hyperedgesAtPositions(inducedEdges[currentNode]));
+
+                decompositionVertices.emplace(currentNode, decompositionVertex);
+
+                if (!parentStack.empty())
+                {
+                    decomposition.addEdge(decompositionVertices.at(parentStack.top().first), decompositionVertex);
+                }
+
+                unvisitedVertices.erase(currentNode);
+            }
+
+            if (currentIndex < neighbors[currentNode].size())
+            {
+                htd::vertex_t parent = htd::Vertex::UNKNOWN;
+
+                if (!parentStack.empty())
+                {
+                    parent = std::get<0>(parentStack.top());
+                }
+
+                htd::vertex_t nextNode = neighbors[currentNode][currentIndex];
+
+                if (parent != nextNode)
+                {
+                    if (currentIndex < neighbors[currentNode].size())
+                    {
+                        parentStack.emplace(currentNode, currentIndex + 1);
+
+                        currentNode = neighbors[currentNode][currentIndex];
+
+                        currentIndex = 0;
+                    }
+                }
+                else
+                {
+                    ++currentIndex;
+
+                    if (currentIndex < neighbors[currentNode].size())
+                    {
+                        parentStack.emplace(currentNode, currentIndex + 1);
+
+                        currentNode = neighbors[currentNode][currentIndex];
+
+                        currentIndex = 0;
+                    }
+                    else
+                    {
+                        currentNode = htd::Vertex::UNKNOWN;
+                    }
+                }
+            }
+            else
+            {
+                currentNode = htd::Vertex::UNKNOWN;
+            }
+        }
+        else
+        {
+            currentNode = parentStack.top().first;
+
+            currentIndex = parentStack.top().second;
+
+            parentStack.pop();
         }
     }
 }

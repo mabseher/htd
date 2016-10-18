@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IGRAPHDECOMPOSITION_HPP
-#define	HTD_HTD_IGRAPHDECOMPOSITION_HPP
+#define HTD_HTD_IGRAPHDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ILabeledMultiHypergraph.hpp>

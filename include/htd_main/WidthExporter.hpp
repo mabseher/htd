@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_WIDTHEXPORTER_HPP
-#define	HTD_MAIN_WIDTHEXPORTER_HPP
+#define HTD_MAIN_WIDTHEXPORTER_HPP
 
 #include <htd_main/IGraphDecompositionExporter.hpp>
 #include <htd_main/IHypertreeDecompositionExporter.hpp>

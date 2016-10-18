@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_TREEDECOMPOSITION_HPP
-#define	HTD_HTD_TREEDECOMPOSITION_HPP
+#define HTD_HTD_TREEDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

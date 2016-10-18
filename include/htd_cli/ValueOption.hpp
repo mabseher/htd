@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_CLI_VALUEOPTION_HPP
-#define	HTD_CLI_VALUEOPTION_HPP
+#define HTD_CLI_VALUEOPTION_HPP
 
 #include <htd_cli/Option.hpp>
 

@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IGRAPHTRAVERSAL_HPP
-#define	HTD_HTD_IGRAPHTRAVERSAL_HPP
+#define HTD_HTD_IGRAPHTRAVERSAL_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMultiHypergraph.hpp>

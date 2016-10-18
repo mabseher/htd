@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_LABELINGCOLLECTION_HPP
-#define	HTD_HTD_LABELINGCOLLECTION_HPP
+#define HTD_HTD_LABELINGCOLLECTION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ILabelingCollection.hpp>

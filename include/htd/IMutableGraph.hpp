@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IMUTABLEGRAPH_HPP
-#define	HTD_HTD_IMUTABLEGRAPH_HPP
+#define HTD_HTD_IMUTABLEGRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IGraph.hpp>

@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_TDFORMATEXPORTER_CPP
-#define	HTD_MAIN_TDFORMATEXPORTER_CPP
+#define HTD_MAIN_TDFORMATEXPORTER_CPP
 
 #include <htd_main/TdFormatExporter.hpp>
 

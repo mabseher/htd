@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ILABEL_HPP
-#define	HTD_HTD_ILABEL_HPP
+#define HTD_HTD_ILABEL_HPP
 
 #include <htd/PreprocessorDefinitions.hpp>
 

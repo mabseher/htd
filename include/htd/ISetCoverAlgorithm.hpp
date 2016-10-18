@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ISETCOVERALGORITHM_HPP
-#define	HTD_HTD_ISETCOVERALGORITHM_HPP
+#define HTD_HTD_ISETCOVERALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ConstCollection.hpp>

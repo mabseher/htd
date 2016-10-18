@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_WIDTHMINIMIZINGTREEDECOMPOSITIONALGORITHM_CPP
-#define	HTD_HTD_WIDTHMINIMIZINGTREEDECOMPOSITIONALGORITHM_CPP
+#define HTD_HTD_WIDTHMINIMIZINGTREEDECOMPOSITIONALGORITHM_CPP
 
 #include <htd/WidthMinimizingTreeDecompositionAlgorithm.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>

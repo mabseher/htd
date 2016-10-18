@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IMUTABLEPATHDECOMPOSITION_HPP
-#define	HTD_HTD_IMUTABLEPATHDECOMPOSITION_HPP
+#define HTD_HTD_IMUTABLEPATHDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableLabeledPath.hpp>

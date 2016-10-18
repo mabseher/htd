@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_HYPEREDGEPOINTERDEQUE_HPP
-#define	HTD_HTD_HYPEREDGEPOINTERDEQUE_HPP
+#define HTD_HTD_HYPEREDGEPOINTERDEQUE_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IHyperedgeCollection.hpp>

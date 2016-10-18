@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_CLI_OPTIONMANAGER_HPP
-#define	HTD_CLI_OPTIONMANAGER_HPP
+#define HTD_CLI_OPTIONMANAGER_HPP
 
 #include <htd_cli/PreprocessorDefinitions.hpp>
 #include <htd_cli/Choice.hpp>

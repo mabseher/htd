@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_INORDERTREETRAVERSAL_CPP
-#define	HTD_HTD_INORDERTREETRAVERSAL_CPP
+#define HTD_HTD_INORDERTREETRAVERSAL_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

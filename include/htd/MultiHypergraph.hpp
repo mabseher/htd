@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_MULTIHYPERGRAPH_HPP
-#define	HTD_HTD_MULTIHYPERGRAPH_HPP
+#define HTD_HTD_MULTIHYPERGRAPH_HPP
 
 #include <htd/IMutableMultiHypergraph.hpp>
 #include <htd/LibraryInstance.hpp>

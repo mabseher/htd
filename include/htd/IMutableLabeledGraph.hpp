@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IMUTABLELABELEDGRAPH_HPP
-#define	HTD_HTD_IMUTABLELABELEDGRAPH_HPP
+#define HTD_HTD_IMUTABLELABELEDGRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableGraph.hpp>

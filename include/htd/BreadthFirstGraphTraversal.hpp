@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_BREADTHFIRSTGRAPHTRAVERSAL_HPP
-#define	HTD_HTD_BREADTHFIRSTGRAPHTRAVERSAL_HPP
+#define HTD_HTD_BREADTHFIRSTGRAPHTRAVERSAL_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IGraphTraversal.hpp>

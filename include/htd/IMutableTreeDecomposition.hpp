@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IMUTABLETREEDECOMPOSITION_HPP
-#define	HTD_HTD_IMUTABLETREEDECOMPOSITION_HPP
+#define HTD_HTD_IMUTABLETREEDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableLabeledTree.hpp>

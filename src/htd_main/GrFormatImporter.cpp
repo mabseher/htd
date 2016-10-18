@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_GRFORMATIMPORTER_CPP
-#define	HTD_MAIN_GRFORMATIMPORTER_CPP
+#define HTD_MAIN_GRFORMATIMPORTER_CPP
 
 #include <htd_main/GrFormatImporter.hpp>
 

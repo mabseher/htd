@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_CLI_OPTION_CPP
-#define	HTD_CLI_OPTION_CPP
+#define HTD_CLI_OPTION_CPP
 
 #include <htd_cli/Option.hpp>
 

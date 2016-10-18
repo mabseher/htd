@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_WIDTHEXPORTER_CPP
-#define	HTD_MAIN_WIDTHEXPORTER_CPP
+#define HTD_MAIN_WIDTHEXPORTER_CPP
 
 #include <htd_main/WidthExporter.hpp>
 

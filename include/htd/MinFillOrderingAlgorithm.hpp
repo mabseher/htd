@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_MINFILLORDERINGALGORITHM_HPP
-#define	HTD_HTD_MINFILLORDERINGALGORITHM_HPP
+#define HTD_HTD_MINFILLORDERINGALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IWidthLimitableOrderingAlgorithm.hpp>

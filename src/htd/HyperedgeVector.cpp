@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_HYPEREDGEVECTOR_CPP
-#define	HTD_HTD_HYPEREDGEVECTOR_CPP
+#define HTD_HTD_HYPEREDGEVECTOR_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/HyperedgeVector.hpp>

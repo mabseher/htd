@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IPATHDECOMPOSITION_HPP
-#define	HTD_HTD_IPATHDECOMPOSITION_HPP
+#define HTD_HTD_IPATHDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ILabeledPath.hpp>

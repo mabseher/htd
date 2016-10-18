@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_GREEDYSETCOVERALGORITHM_CPP
-#define	HTD_HTD_GREEDYSETCOVERALGORITHM_CPP
+#define HTD_HTD_GREEDYSETCOVERALGORITHM_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

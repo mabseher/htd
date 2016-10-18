@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_DEPTHFIRSTGRAPHTRAVERSAL_CPP
-#define	HTD_HTD_DEPTHFIRSTGRAPHTRAVERSAL_CPP
+#define HTD_HTD_DEPTHFIRSTGRAPHTRAVERSAL_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

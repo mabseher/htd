@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IMUTABLEDIRECTEDGRAPH_HPP
-#define	HTD_HTD_IMUTABLEDIRECTEDGRAPH_HPP
+#define HTD_HTD_IMUTABLEDIRECTEDGRAPH_HPP
 
 #include <htd/IDirectedGraph.hpp>
 #include <htd/IDirectedMultiGraph.hpp>

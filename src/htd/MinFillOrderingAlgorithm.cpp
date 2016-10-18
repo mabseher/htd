@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_MINFILLORDERINGALGORITHM_CPP
-#define	HTD_HTD_MINFILLORDERINGALGORITHM_CPP
+#define HTD_HTD_MINFILLORDERINGALGORITHM_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
@@ -549,7 +549,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                 {
                     if (additionalNeighborCount > 0)
                     {
-                        long fillUpdate = -unaffectedNeighborCount;
+                        long fillUpdate = -(static_cast<long>(unaffectedNeighborCount));
 
                         for (htd::vertex_t additionalVertex : currentAdditionalNeighborhood)
                         {

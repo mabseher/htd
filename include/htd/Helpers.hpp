@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_HELPERS_HPP
-#define	HTD_HTD_HELPERS_HPP
+#define HTD_HTD_HELPERS_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Hyperedge.hpp>

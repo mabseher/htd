@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ITREEDECOMPOSITIONALGORITHM_HPP
-#define	HTD_HTD_ITREEDECOMPOSITIONALGORITHM_HPP
+#define HTD_HTD_ITREEDECOMPOSITIONALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IGraphDecompositionAlgorithm.hpp>

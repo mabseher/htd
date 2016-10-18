@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_LABELEDPATH_CPP
-#define	HTD_HTD_LABELEDPATH_CPP
+#define HTD_HTD_LABELEDPATH_CPP
 
 #include <htd/LabeledPath.hpp>
 #include <htd/ILabelingCollection.hpp>

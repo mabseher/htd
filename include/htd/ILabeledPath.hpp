@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ILABELEDPATH_HPP
-#define	HTD_HTD_ILABELEDPATH_HPP
+#define HTD_HTD_ILABELEDPATH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ILabeledTree.hpp>

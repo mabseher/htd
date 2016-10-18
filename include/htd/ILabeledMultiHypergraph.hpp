@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ILABELEDMULTIHYPERGRAPH_HPP
-#define	HTD_HTD_ILABELEDMULTIHYPERGRAPH_HPP
+#define HTD_HTD_ILABELEDMULTIHYPERGRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMultiHypergraph.hpp>

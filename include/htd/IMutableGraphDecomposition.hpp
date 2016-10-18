@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IMUTABLEGRAPHDECOMPOSITION_HPP
-#define	HTD_HTD_IMUTABLEGRAPHDECOMPOSITION_HPP
+#define HTD_HTD_IMUTABLEGRAPHDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableLabeledMultiHypergraph.hpp>

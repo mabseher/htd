@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_LPFORMATIMPORTER_HPP
-#define	HTD_MAIN_LPFORMATIMPORTER_HPP
+#define HTD_MAIN_LPFORMATIMPORTER_HPP
 
 #include <htd/NamedMultiHypergraph.hpp>
 

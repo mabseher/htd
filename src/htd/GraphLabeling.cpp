@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_GRAPHLABELING_CPP
-#define	HTD_HTD_GRAPHLABELING_CPP
+#define HTD_HTD_GRAPHLABELING_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

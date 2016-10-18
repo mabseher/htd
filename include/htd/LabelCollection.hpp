@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_LABELCOLLECTION_HPP
-#define	HTD_HTD_LABELCOLLECTION_HPP
+#define HTD_HTD_LABELCOLLECTION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ILabelCollection.hpp>

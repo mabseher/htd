@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_TDFORMATEXPORTER_HPP
-#define	HTD_MAIN_TDFORMATEXPORTER_HPP
+#define HTD_MAIN_TDFORMATEXPORTER_HPP
 
 #include <htd_main/ITreeDecompositionExporter.hpp>
 

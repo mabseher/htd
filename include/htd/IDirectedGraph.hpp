@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IDIRECTEDGRAPH_HPP
-#define	HTD_HTD_IDIRECTEDGRAPH_HPP
+#define HTD_HTD_IDIRECTEDGRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IGraph.hpp>

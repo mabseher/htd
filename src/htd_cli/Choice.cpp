@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_CLI_CHOICE_CPP
-#define	HTD_CLI_CHOICE_CPP
+#define HTD_CLI_CHOICE_CPP
 
 #include <htd_cli/Choice.hpp>
 

@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_LABELEDTREE_HPP
-#define	HTD_HTD_LABELEDTREE_HPP
+#define HTD_HTD_LABELEDTREE_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableLabeledTree.hpp>

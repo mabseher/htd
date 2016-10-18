@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_LABELEDHYPERGRAPH_CPP
-#define	HTD_HTD_LABELEDHYPERGRAPH_CPP
+#define HTD_HTD_LABELEDHYPERGRAPH_CPP
 
 #include <htd/LabeledHypergraph.hpp>
 #include <htd/ILabelingCollection.hpp>

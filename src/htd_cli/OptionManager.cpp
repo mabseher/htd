@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_CLI_OPTIONMANAGER_CPP
-#define	HTD_CLI_OPTIONMANAGER_CPP
+#define HTD_CLI_OPTIONMANAGER_CPP
 
 #include <htd_cli/OptionManager.hpp>
 

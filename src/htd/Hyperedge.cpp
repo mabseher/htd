@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_HYPEREDGE_CPP
-#define	HTD_HTD_HYPEREDGE_CPP
+#define HTD_HTD_HYPEREDGE_CPP
 
 #include <htd/Hyperedge.hpp>
 

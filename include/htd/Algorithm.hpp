@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ALGORITHM_HPP
-#define	HTD_HTD_ALGORITHM_HPP
+#define HTD_HTD_ALGORITHM_HPP
 
 namespace htd
 {

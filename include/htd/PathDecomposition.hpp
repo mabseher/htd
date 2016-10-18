@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_PATHDECOMPOSITION_HPP
-#define	HTD_HTD_PATHDECOMPOSITION_HPP
+#define HTD_HTD_PATHDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

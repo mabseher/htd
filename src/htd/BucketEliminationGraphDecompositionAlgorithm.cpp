@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_BUCKETELIMINATIONGRAPHDECOMPOSITIONALGORITHM_CPP
-#define	HTD_HTD_BUCKETELIMINATIONGRAPHDECOMPOSITIONALGORITHM_CPP
+#define HTD_HTD_BUCKETELIMINATIONGRAPHDECOMPOSITIONALGORITHM_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
@@ -941,7 +941,8 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::Implementation:
     return ret;
 }
 
-void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compressDecomposition(htd::vertex_t startingVertex, std::vector<std::vector<htd::vertex_t>> & neighbors,
+void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compressDecomposition(htd::vertex_t startingVertex, 
+                                                                                              std::vector<std::vector<htd::vertex_t>> & neighbors,
                                                                                               std::vector<std::vector<htd::vertex_t>> & bagContent,
                                                                                               std::unordered_set<htd::vertex_t> & unvisitedVertices,
                                                                                               std::vector<htd::vertex_t> & relevantVertices,
@@ -954,41 +955,35 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compress
 
     htd::vertex_t currentNode = startingVertex;
 
+    htd::vertex_t currentParent = htd::Vertex::UNKNOWN;
+
     htd::index_t lastIndex = 0;
 
     htd::index_t peekIndex = 0;
 
     htd::index_t currentIndex = neighbors[currentNode].size() - 1;
 
-    std::stack<std::pair<htd::vertex_t, htd::index_t>> parentStack;
+    std::stack<std::tuple<htd::vertex_t, htd::index_t, htd::vertex_t>> parentStack;
 
     relevantVertices.push_back(startingVertex);
 
     while (!parentStack.empty() || currentNode != htd::Vertex::UNKNOWN)
     {
-        htd::vertex_t parent = htd::Vertex::UNKNOWN;
-
-        if (!parentStack.empty())
-        {
-            parent = std::get<0>(parentStack.top());
-        }
-
         if (currentNode != htd::Vertex::UNKNOWN)
         {
             if (currentIndex < neighbors[currentNode].size())
             {
                 htd::vertex_t nextNode = neighbors[currentNode][currentIndex];
 
-                if (parent != nextNode)
+                if (nextNode != currentParent)
                 {
-                    if (currentIndex < neighbors[currentNode].size())
-                    {
-                        parentStack.emplace(currentNode, currentIndex);
+                    parentStack.emplace(currentNode, currentIndex, currentParent);
 
-                        currentNode = neighbors[currentNode][currentIndex];
+                    currentParent = currentNode;
 
-                        currentIndex = neighbors[currentNode].size() - 1;
-                    }
+                    currentNode = nextNode;
+
+                    currentIndex = neighbors[currentNode].size() - 1;
                 }
                 else
                 {
@@ -996,7 +991,9 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compress
 
                     if (currentIndex < neighbors[currentNode].size())
                     {
-                        parentStack.emplace(currentNode, currentIndex);
+                        parentStack.emplace(currentNode, currentIndex, currentParent);
+
+                        currentParent = currentNode;
 
                         currentNode = neighbors[currentNode][currentIndex];
 
@@ -1006,18 +1003,11 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compress
                     {
                         unvisitedVertices.erase(currentNode);
 
-                        if (!parentStack.empty() && parentStack.top().first != htd::Vertex::UNKNOWN)
+                        if (!parentStack.empty() && std::get<0>(parentStack.top()) != htd::Vertex::UNKNOWN)
                         {
-                            compressDecomposition(currentNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
+                            compressDecomposition(currentNode, std::get<0>(parentStack.top()), neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
 
-                            parentStack.top().second--;
-                        }
-                        else
-                        {
-                            if (!parentStack.empty())
-                            {
-                                compressDecomposition(currentNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
-                            }
+                            std::get<1>(parentStack.top())--;
                         }
 
                         currentNode = htd::Vertex::UNKNOWN;
@@ -1028,18 +1018,11 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compress
             {
                 unvisitedVertices.erase(currentNode);
 
-                if (!parentStack.empty() && parentStack.top().first != htd::Vertex::UNKNOWN)
+                if (!parentStack.empty() && std::get<0>(parentStack.top()) != htd::Vertex::UNKNOWN)
                 {
-                    compressDecomposition(currentNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
+                    compressDecomposition(currentNode, std::get<0>(parentStack.top()), neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
 
-                    parentStack.top().second--;
-                }
-                else
-                {
-                    if (!parentStack.empty())
-                    {
-                        compressDecomposition(currentNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
-                    }
+                    std::get<1>(parentStack.top())--;
                 }
 
                 currentNode = htd::Vertex::UNKNOWN;
@@ -1047,14 +1030,39 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compress
         }
         else
         {
-            peekNode = parentStack.top().first;
-            peekIndex = parentStack.top().second;
+            peekNode = std::get<0>(parentStack.top());
+            peekIndex = std::get<1>(parentStack.top());
 
             if (peekIndex < neighbors[peekNode].size() && !(lastNode == peekNode && lastIndex == peekIndex))
             {
-                currentNode = neighbors[peekNode][peekIndex];
+                htd::vertex_t nextNode = neighbors[peekNode][peekIndex];
 
-                currentIndex = neighbors[currentNode].size() - 1;
+                if (nextNode != std::get<2>(parentStack.top()))
+                {
+                    currentParent = peekNode;
+
+                    currentNode = neighbors[peekNode][peekIndex];
+
+                    currentIndex = neighbors[currentNode].size() - 1;
+                }
+                else
+                {
+                    lastNode = peekNode;
+                    lastIndex = peekIndex;
+
+                    currentNode = htd::Vertex::UNKNOWN;
+
+                    parentStack.pop();
+
+                    unvisitedVertices.erase(peekNode);
+
+                    if (!parentStack.empty() && std::get<0>(parentStack.top()) != htd::Vertex::UNKNOWN)
+                    {
+                        compressDecomposition(peekNode, std::get<0>(parentStack.top()), neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
+
+                        std::get<1>(parentStack.top())--;
+                    }
+                }
             }
             else
             {
@@ -1067,18 +1075,11 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compress
 
                 unvisitedVertices.erase(peekNode);
 
-                if (!parentStack.empty() && parentStack.top().first != htd::Vertex::UNKNOWN)
+                if (!parentStack.empty() && std::get<0>(parentStack.top()) != htd::Vertex::UNKNOWN)
                 {
-                    compressDecomposition(peekNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
+                    compressDecomposition(peekNode, std::get<0>(parentStack.top()), neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
 
-                    parentStack.top().second--;
-                }
-                else
-                {
-                    if (!parentStack.empty())
-                    {
-                        compressDecomposition(peekNode, parentStack.top().first, neighbors, bagContent, relevantVertices, inducedEdges, edgeTarget);
-                    }
+                    std::get<1>(parentStack.top())--;
                 }
             }
         }

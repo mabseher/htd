@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_CLI_SINGLEVALUEOPTION_CPP
-#define	HTD_CLI_SINGLEVALUEOPTION_CPP
+#define HTD_CLI_SINGLEVALUEOPTION_CPP
 
 #include <htd_cli/SingleValueOption.hpp>
 

@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_HYPEREDGEDEQUE_CPP
-#define	HTD_HTD_HYPEREDGEDEQUE_CPP
+#define HTD_HTD_HYPEREDGEDEQUE_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/HyperedgeDeque.hpp>

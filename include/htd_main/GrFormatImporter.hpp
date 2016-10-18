@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_GRFORMATIMPORTER_HPP
-#define	HTD_MAIN_GRFORMATIMPORTER_HPP
+#define HTD_MAIN_GRFORMATIMPORTER_HPP
 
 #include <htd/IMultiGraph.hpp>
 

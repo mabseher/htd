@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_HGRFORMATIMPORTER_CPP
-#define	HTD_MAIN_HGRFORMATIMPORTER_CPP
+#define HTD_MAIN_HGRFORMATIMPORTER_CPP
 
 #include <htd_main/HgrFormatImporter.hpp>
 

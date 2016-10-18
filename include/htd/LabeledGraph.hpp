@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_LABELEDGRAPH_HPP
-#define	HTD_HTD_LABELEDGRAPH_HPP
+#define HTD_HTD_LABELEDGRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableLabeledGraph.hpp>

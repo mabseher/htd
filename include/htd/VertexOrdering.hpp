@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_VERTEXORDERING_HPP
-#define	HTD_HTD_VERTEXORDERING_HPP
+#define HTD_HTD_VERTEXORDERING_HPP
 
 #include <htd/Globals.hpp>
 

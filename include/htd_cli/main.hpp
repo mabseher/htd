@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_CLI_MAIN_HPP
-#define	HTD_CLI_MAIN_HPP
+#define HTD_CLI_MAIN_HPP
 
 #include <htd_cli/Choice.hpp>
 #include <htd_cli/IObserver.hpp>

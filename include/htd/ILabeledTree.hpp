@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ILABELEDTREE_HPP
-#define	HTD_HTD_ILABELEDTREE_HPP
+#define HTD_HTD_ILABELEDTREE_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ILabeledGraph.hpp>

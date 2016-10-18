@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ADDEMPTYLEAVESOPERATION_HPP
-#define	HTD_HTD_ADDEMPTYLEAVESOPERATION_HPP
+#define HTD_HTD_ADDEMPTYLEAVESOPERATION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IPathDecompositionManipulationOperation.hpp>

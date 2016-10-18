@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_TREEDECOMPOSITIONVERIFIER_HPP
-#define	HTD_HTD_TREEDECOMPOSITIONVERIFIER_HPP
+#define HTD_HTD_TREEDECOMPOSITIONVERIFIER_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ITreeDecompositionVerifier.hpp>

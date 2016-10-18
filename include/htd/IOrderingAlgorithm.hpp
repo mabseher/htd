@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IORDERINGALGORITHM_HPP
-#define	HTD_HTD_IORDERINGALGORITHM_HPP
+#define HTD_HTD_IORDERINGALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMultiHypergraph.hpp>

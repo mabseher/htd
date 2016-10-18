@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_HYPEREDGEPOINTERVECTOR_CPP
-#define	HTD_HTD_HYPEREDGEPOINTERVECTOR_CPP
+#define HTD_HTD_HYPEREDGEPOINTERVECTOR_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/HyperedgePointerVector.hpp>

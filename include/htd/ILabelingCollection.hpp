@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ILABELINGCOLLECTION_HPP
-#define	HTD_HTD_ILABELINGCOLLECTION_HPP
+#define HTD_HTD_ILABELINGCOLLECTION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Collection.hpp>

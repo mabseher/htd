@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_GRAPH_CPP
-#define	HTD_HTD_GRAPH_CPP
+#define HTD_HTD_GRAPH_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

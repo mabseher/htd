@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_GRAPH_HPP
-#define	HTD_HTD_GRAPH_HPP
+#define HTD_HTD_GRAPH_HPP
 
 #include <htd/IMutableGraph.hpp>
 #include <htd/IMutableHypergraph.hpp>

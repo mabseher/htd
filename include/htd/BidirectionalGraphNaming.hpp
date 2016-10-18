@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_BIDIRECTIONALGRAPHNAMING_HPP
-#define	HTD_HTD_BIDIRECTIONALGRAPHNAMING_HPP
+#define HTD_HTD_BIDIRECTIONALGRAPHNAMING_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

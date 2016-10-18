@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IMUTABLEPATH_HPP
-#define	HTD_HTD_IMUTABLEPATH_HPP
+#define HTD_HTD_IMUTABLEPATH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IPath.hpp>

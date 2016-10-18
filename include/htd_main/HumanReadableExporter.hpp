@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_HUMANREADABLEEXPORTER_HPP
-#define	HTD_MAIN_HUMANREADABLEEXPORTER_HPP
+#define HTD_MAIN_HUMANREADABLEEXPORTER_HPP
 
 #include <htd_main/ITreeDecompositionExporter.hpp>
 #include <htd_main/IHypertreeDecompositionExporter.hpp>

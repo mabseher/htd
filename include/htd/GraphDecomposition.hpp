@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_GRAPHDECOMPOSITION_HPP
-#define	HTD_HTD_GRAPHDECOMPOSITION_HPP
+#define HTD_HTD_GRAPHDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

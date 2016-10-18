@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_LABELEDDIRECTEDMULTIGRAPH_CPP
-#define	HTD_HTD_LABELEDDIRECTEDMULTIGRAPH_CPP
+#define HTD_HTD_LABELEDDIRECTEDMULTIGRAPH_CPP
 
 #include <htd/LabeledDirectedMultiGraph.hpp>
 #include <htd/ILabelingCollection.hpp>

@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_VERTEXORDERING_CPP
-#define	HTD_HTD_VERTEXORDERING_CPP
+#define HTD_HTD_VERTEXORDERING_CPP
 
 #include <htd/VertexOrdering.hpp>
 

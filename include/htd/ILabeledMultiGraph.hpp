@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ILABELEDMULTIGRAPH_HPP
-#define	HTD_HTD_ILABELEDMULTIGRAPH_HPP
+#define HTD_HTD_ILABELEDMULTIGRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMultiGraph.hpp>

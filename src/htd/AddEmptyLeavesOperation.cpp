@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ADDEMPTYLEAVESOPERATION_CPP
-#define	HTD_HTD_ADDEMPTYLEAVESOPERATION_CPP
+#define HTD_HTD_ADDEMPTYLEAVESOPERATION_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/AddEmptyLeavesOperation.hpp>

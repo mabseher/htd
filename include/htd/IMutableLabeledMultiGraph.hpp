@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IMUTABLELABELEDMULTIGRAPH_HPP
-#define	HTD_HTD_IMUTABLELABELEDMULTIGRAPH_HPP
+#define HTD_HTD_IMUTABLELABELEDMULTIGRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IMutableMultiGraph.hpp>

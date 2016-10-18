@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_IGRAPH_HPP
-#define	HTD_HTD_IGRAPH_HPP
+#define HTD_HTD_IGRAPH_HPP
 
 #include <htd/IHypergraph.hpp>
 #include <htd/IMultiGraph.hpp>

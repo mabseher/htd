@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_NAMEDMULTIGRAPH_HPP
-#define	HTD_HTD_NAMEDMULTIGRAPH_HPP
+#define HTD_HTD_NAMEDMULTIGRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_PATH_HPP
-#define	HTD_HTD_PATH_HPP
+#define HTD_HTD_PATH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

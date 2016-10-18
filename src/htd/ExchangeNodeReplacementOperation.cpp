@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_EXCHANGENODEREPLACEMENTOPERATION_CPP
-#define	HTD_HTD_EXCHANGENODEREPLACEMENTOPERATION_CPP
+#define HTD_HTD_EXCHANGENODEREPLACEMENTOPERATION_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>

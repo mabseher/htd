@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_HGRFORMATIMPORTER_HPP
-#define	HTD_MAIN_HGRFORMATIMPORTER_HPP
+#define HTD_MAIN_HGRFORMATIMPORTER_HPP
 
 #include <htd/IMultiHypergraph.hpp>
 

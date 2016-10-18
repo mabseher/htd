@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_WEAKNORMALIZATIONOPERATION_CPP
-#define	HTD_HTD_WEAKNORMALIZATIONOPERATION_CPP
+#define HTD_HTD_WEAKNORMALIZATIONOPERATION_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/WeakNormalizationOperation.hpp>

@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_HUMANREADABLEEXPORTER_CPP
-#define	HTD_MAIN_HUMANREADABLEEXPORTER_CPP
+#define HTD_MAIN_HUMANREADABLEEXPORTER_CPP
 
 #include <htd_main/HumanReadableExporter.hpp>
 

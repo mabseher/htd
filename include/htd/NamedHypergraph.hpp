@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_NAMEDHYPERGRAPH_HPP
-#define	HTD_HTD_NAMEDHYPERGRAPH_HPP
+#define HTD_HTD_NAMEDHYPERGRAPH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

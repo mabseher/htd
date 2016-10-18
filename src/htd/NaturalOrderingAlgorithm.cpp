@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_NATURALORDERINGALGORITHM_CPP
-#define	HTD_HTD_NATURALORDERINGALGORITHM_CPP
+#define HTD_HTD_NATURALORDERINGALGORITHM_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/NaturalOrderingAlgorithm.hpp>

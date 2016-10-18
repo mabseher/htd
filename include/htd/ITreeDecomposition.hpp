@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_ITREEDECOMPOSITION_HPP
-#define	HTD_HTD_ITREEDECOMPOSITION_HPP
+#define HTD_HTD_ITREEDECOMPOSITION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/ILabeledTree.hpp>

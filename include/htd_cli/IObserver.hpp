@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_CLI_IOBSERVER_HPP
-#define	HTD_CLI_IOBSERVER_HPP
+#define HTD_CLI_IOBSERVER_HPP
 
 #include <htd_cli/PreprocessorDefinitions.hpp>
 

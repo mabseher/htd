@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_HELPERS_CPP
-#define	HTD_HTD_HELPERS_CPP
+#define HTD_HTD_HELPERS_CPP
 
 #include <htd/Helpers.hpp>
 

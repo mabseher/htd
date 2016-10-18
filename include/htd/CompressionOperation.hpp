@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_COMPRESSIONOPERATION_HPP
-#define	HTD_HTD_COMPRESSIONOPERATION_HPP
+#define HTD_HTD_COMPRESSIONOPERATION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IPathDecompositionManipulationOperation.hpp>

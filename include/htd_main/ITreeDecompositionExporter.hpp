@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_ITREEDECOMPOSITIONEXPORTER_HPP
-#define	HTD_MAIN_ITREEDECOMPOSITIONEXPORTER_HPP
+#define HTD_MAIN_ITREEDECOMPOSITIONEXPORTER_HPP
 
 #include <htd/IMultiHypergraph.hpp>
 #include <htd/NamedMultiHypergraph.hpp>

@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_NAMEDPATH_HPP
-#define	HTD_HTD_NAMEDPATH_HPP
+#define HTD_HTD_NAMEDPATH_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

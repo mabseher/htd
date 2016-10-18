@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_MAIN_HPP
-#define	HTD_HTD_MAIN_HPP
+#define HTD_HTD_MAIN_HPP
 
 #include <htd/AddEmptyLeavesOperation.hpp>
 #include <htd/AddEmptyRootOperation.hpp>

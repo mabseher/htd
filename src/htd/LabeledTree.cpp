@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_LABELEDTREE_CPP
-#define	HTD_HTD_LABELEDTREE_CPP
+#define HTD_HTD_LABELEDTREE_CPP
 
 #include <htd/LabeledTree.hpp>
 #include <htd/ILabelingCollection.hpp>

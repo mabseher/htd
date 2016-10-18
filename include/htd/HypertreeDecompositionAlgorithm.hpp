@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_HPP
-#define	HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_HPP
+#define HTD_HTD_HYPERTREEDECOMPOSITIONALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/IHypertreeDecompositionAlgorithm.hpp>

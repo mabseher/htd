@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_MAIN_LPFORMATIMPORTER_CPP
-#define	HTD_MAIN_LPFORMATIMPORTER_CPP
+#define HTD_MAIN_LPFORMATIMPORTER_CPP
 
 #include <htd_main/LpFormatImporter.hpp>
 

@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_CLI_OPTION_HPP
-#define	HTD_CLI_OPTION_HPP
+#define HTD_CLI_OPTION_HPP
 
 #include <htd_cli/PreprocessorDefinitions.hpp>
 

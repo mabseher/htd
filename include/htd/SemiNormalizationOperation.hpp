@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_SEMINORMALIZATIONOPERATION_HPP
-#define	HTD_HTD_SEMINORMALIZATIONOPERATION_HPP
+#define HTD_HTD_SEMINORMALIZATIONOPERATION_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/WeakNormalizationOperation.hpp>

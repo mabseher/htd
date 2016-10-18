@@ -23,7 +23,7 @@
  */
 
 #ifndef HTD_HTD_TREEDECOMPOSITIONVERIFIER_CPP
-#define	HTD_HTD_TREEDECOMPOSITIONVERIFIER_CPP
+#define HTD_HTD_TREEDECOMPOSITIONVERIFIER_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>

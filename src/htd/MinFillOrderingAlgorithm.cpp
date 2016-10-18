@@ -555,14 +555,14 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                         {
                             const std::vector<htd::vertex_t> & affectedVertices2 = unaffectedNeighbors[additionalVertex];
 
-                            fillUpdate += unaffectedNeighborCount;
+                            fillUpdate += static_cast<long>(unaffectedNeighborCount);
 
-                            fillUpdate -= htd::set_intersection_size(affectedVertices2.begin(),
-                                                                     affectedVertices2.end(),
-                                                                     std::lower_bound(currentUnaffectedNeighborhood.begin(),
-                                                                                      currentUnaffectedNeighborhood.end(),
-                                                                                      affectedVertices2[0]),
-                                                                     currentUnaffectedNeighborhood.end());
+                            fillUpdate -= static_cast<long>(htd::set_intersection_size(affectedVertices2.begin(),
+                                                                                       affectedVertices2.end(),
+                                                                                       std::lower_bound(currentUnaffectedNeighborhood.begin(),
+                                                                                                        currentUnaffectedNeighborhood.end(),
+                                                                                                        affectedVertices2[0]),
+                                                                                       currentUnaffectedNeighborhood.end()));
                         }
 
                         updateStatus[vertex] &= ~1;

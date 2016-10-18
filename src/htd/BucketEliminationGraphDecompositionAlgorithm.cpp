@@ -1113,6 +1113,8 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compress
         {
             std::vector<htd::vertex_t> & currentNeighborhood2 = neighbors[neighbor];
 
+            /* Because 'vertex' is a neighbor of 'neighbor', std::find will always find 'vertex' in 'currentNeighborhood2'. */
+            // coverity[deref_iterator]
             *(std::find(currentNeighborhood2.begin(), currentNeighborhood2.end(), vertex)) = parent;
         }
 

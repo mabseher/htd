@@ -853,6 +853,8 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
                 if (position2 != tmp.end() && *position2 == vertex)
                 {
+                    /* The iterator 'position2' is no longer used after this step and it is valid beforehand. */
+                    // coverity[use_iterator]
                     tmp.erase(position2);
                 }
             }

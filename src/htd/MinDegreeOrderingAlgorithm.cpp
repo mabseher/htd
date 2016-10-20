@@ -305,7 +305,7 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
     std::size_t size = input.vertexNames.size();
 
-    std::size_t minDegree = (std::size_t)-1;
+    std::size_t minDegree = input.minDegree;
 
     std::unordered_set<htd::vertex_t> pool(input.pool.begin(), input.pool.end());
 
@@ -424,6 +424,8 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
                     else
                     {
                         currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
+
+                        updatePool(neighbor, currentNeighborhood.size(), pool, minDegree);
                     }
                 }
             }

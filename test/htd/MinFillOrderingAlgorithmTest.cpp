@@ -90,7 +90,6 @@ std::vector<htd::vertex_t> optimalVertices(const htd::IMultiHypergraph & graph)
             }
 
             ret.push_back(vertex);
-
         }
     }
 

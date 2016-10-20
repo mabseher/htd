@@ -548,6 +548,216 @@ TEST(PathDecompositionTest, CheckCopyConstructors)
     delete libraryInstance;
 }
 
+TEST(PathDecompositionTest, TestVertexLabelModifications)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::PathDecomposition pd(libraryInstance);
+
+    pd.insertRoot();
+    pd.addChild(1);
+    pd.addChild(1);
+    pd.addChild(2);
+
+    pd.setVertexLabel("Label", 1, new htd::Label<int>(1));
+    pd.setVertexLabel("Label", 2, new htd::Label<int>(2));
+    pd.setVertexLabel("Label", 3, new htd::Label<int>(3));
+
+    ASSERT_EQ((std::size_t)1, pd.labelCount());
+    ASSERT_EQ((std::size_t)1, pd.labelNames().size());
+    ASSERT_EQ("Label", pd.labelNames()[0]);
+    ASSERT_EQ("Label", pd.labelNameAtPosition(0));
+
+    ASSERT_FALSE(pd.isLabeledVertex("Label", 0));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.vertexLabel("Label", 2)));
+    ASSERT_EQ(3, htd::accessLabel<int>(pd.vertexLabel("Label", 3)));
+
+    htd::ILabel * newLabel = new htd::Label<int>(33);
+
+    pd.setVertexLabel("Label", 3, newLabel);
+
+    ASSERT_FALSE(pd.isLabeledVertex("Label", 0));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.vertexLabel("Label", 3)));
+
+    pd.setVertexLabel("Label", 3, newLabel);
+
+    ASSERT_FALSE(pd.isLabeledVertex("Label", 0));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.vertexLabel("Label", 3)));
+
+    pd.swapVertexLabels(1, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.vertexLabel("Label", 3)));
+
+    pd.swapVertexLabels(1, 3);
+
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.vertexLabel("Label", 2)));
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.vertexLabel("Label", 3)));
+
+    pd.swapVertexLabels(3, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.vertexLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.vertexLabel("Label", 3)));
+
+    htd::ILabel * exportedLabel = pd.transferVertexLabel("Label", 1);
+
+    ASSERT_FALSE(pd.isLabeledVertex("Label", 0));
+    ASSERT_FALSE(pd.isLabeledVertex("Label", 1));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 2));
+    ASSERT_TRUE(pd.isLabeledVertex("Label", 3));
+
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.vertexLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.vertexLabel("Label", 3)));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(*exportedLabel));
+
+    pd.setVertexLabel("Label2", 2, new htd::Label<int>(1));
+    pd.setVertexLabel("Label2", 3, new htd::Label<int>(2));
+
+    pd.swapVertexLabel("Label", 2, 3);
+
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.vertexLabel("Label", 2)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.vertexLabel("Label", 3)));
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.vertexLabel("Label2", 2)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.vertexLabel("Label2", 3)));
+
+    pd.removeVertexLabel("Label", 2);
+    pd.removeVertexLabel("Label", htd::Vertex::UNKNOWN);
+    pd.removeVertexLabel("Label3", 2);
+    pd.removeVertexLabel("Label3", htd::Vertex::UNKNOWN);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.vertexLabel("Label2", 2)));
+
+    delete exportedLabel;
+
+    delete libraryInstance;
+}
+
+TEST(PathDecompositionTest, TestEdgeLabelModifications)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::PathDecomposition pd(libraryInstance);
+
+    pd.insertRoot();
+    pd.addChild(1);
+    pd.addChild(1);
+    pd.addChild(2);
+
+    pd.setEdgeLabel("Label", 1, new htd::Label<int>(1));
+    pd.setEdgeLabel("Label", 2, new htd::Label<int>(2));
+    pd.setEdgeLabel("Label", 3, new htd::Label<int>(3));
+
+    ASSERT_EQ((std::size_t)1, pd.labelCount());
+    ASSERT_EQ((std::size_t)1, pd.labelNames().size());
+    ASSERT_EQ("Label", pd.labelNames()[0]);
+    ASSERT_EQ("Label", pd.labelNameAtPosition(0));
+
+    ASSERT_FALSE(pd.isLabeledEdge("Label", 0));
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.edgeLabel("Label", 2)));
+    ASSERT_EQ(3, htd::accessLabel<int>(pd.edgeLabel("Label", 3)));
+
+    htd::ILabel * newLabel = new htd::Label<int>(33);
+
+    pd.setEdgeLabel("Label", 3, newLabel);
+
+    ASSERT_FALSE(pd.isLabeledEdge("Label", 0));
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 3));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.edgeLabel("Label", 3)));
+
+    pd.setEdgeLabel("Label", 3, newLabel);
+
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 3));
+    ASSERT_FALSE(pd.isLabeledEdge("Label", 0));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.edgeLabel("Label", 3)));
+
+    pd.swapEdgeLabels(1, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.edgeLabel("Label", 3)));
+
+    pd.swapEdgeLabels(1, 3);
+
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.edgeLabel("Label", 2)));
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.edgeLabel("Label", 3)));
+
+    pd.swapEdgeLabels(3, 1);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.edgeLabel("Label", 1)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.edgeLabel("Label", 3)));
+
+    htd::ILabel * exportedLabel = pd.transferEdgeLabel("Label", 1);
+
+    ASSERT_FALSE(pd.isLabeledEdge("Label", 1));
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 2));
+    ASSERT_TRUE(pd.isLabeledEdge("Label", 3));
+    ASSERT_FALSE(pd.isLabeledEdge("Label", 0));
+
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.edgeLabel("Label", 2)));
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.edgeLabel("Label", 3)));
+
+    ASSERT_EQ(1, htd::accessLabel<int>(*exportedLabel));
+
+    pd.setEdgeLabel("Label2", 2, new htd::Label<int>(1));
+    pd.setEdgeLabel("Label2", 3, new htd::Label<int>(2));
+
+    pd.swapEdgeLabel("Label", 2, 3);
+
+    ASSERT_EQ(33, htd::accessLabel<int>(pd.edgeLabel("Label", 2)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.edgeLabel("Label", 3)));
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.edgeLabel("Label2", 2)));
+    ASSERT_EQ(2, htd::accessLabel<int>(pd.edgeLabel("Label2", 3)));
+
+    pd.removeEdgeLabel("Label", 2);
+    pd.removeEdgeLabel("Label", htd::Vertex::UNKNOWN);
+    pd.removeEdgeLabel("Label3", 2);
+    pd.removeEdgeLabel("Label3", htd::Vertex::UNKNOWN);
+
+    ASSERT_EQ(1, htd::accessLabel<int>(pd.edgeLabel("Label2", 2)));
+
+    delete exportedLabel;
+
+    delete libraryInstance;
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

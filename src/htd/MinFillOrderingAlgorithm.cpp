@@ -60,14 +60,14 @@ struct htd::MinFillOrderingAlgorithm::Implementation
     const htd::LibraryInstance * managementInstance_;
 
     /**
-     *  Update the pool of vertices with minimum degree.
+     *  Update the pool of vertices with minimum fill value.
      *
-     *  @param[in] vertex           The vertex whose degree shall be updated.
+     *  @param[in] vertex           The vertex whose fill value shall be updated.
      *  @param[in] fillValue        The new fill value of the given vertex.
      *  @param[in] pool             The pool of vertices with minimum fill value.
      *  @param[in,out] minFill    A reference to a variable representing the minimum fill value. This information is updated if fillValue < minFill.
      */
-    static void updatePool(htd::vertex_t vertex, std::size_t fillValue, std::unordered_set<htd::vertex_t> & pool, std::size_t & minFill /*, std::size_t & minDegree, const std::vector<std::vector<htd::vertex_t>> & neighborhood*/);
+    static void updatePool(htd::vertex_t vertex, std::size_t fillValue, std::unordered_set<htd::vertex_t> & pool, std::size_t & minFill);
 
     /**
      *  Structure representing the pre-processed input for the algorithm.
@@ -364,7 +364,6 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
     std::size_t size = input.vertexNames.size();
 
     std::size_t minFill = input.minFill;
-    //std::size_t minDegree = (std::size_t)-1;
 
     std::unordered_set<htd::vertex_t> pool(input.pool.begin(), input.pool.end());
 
@@ -397,8 +396,6 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
         if (pool.empty())
         {
             minFill = (std::size_t)-1;
-
-            //minDegree = (std::size_t)-1;
 
             for (htd::vertex_t vertex : vertices)
             {
@@ -475,7 +472,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                 for (htd::vertex_t affectedVertex : neighborhood[neighbor])
                 {
-                    htd::state_t currentUpdateStatus = updateStatus[affectedVertex];
+                    htd::state_t & currentUpdateStatus = updateStatus[affectedVertex];
 
                     if (currentUpdateStatus < 2)
                     {
@@ -504,7 +501,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                             }
                         }
 
-                        updateStatus[affectedVertex] |= 2;
+                        currentUpdateStatus |= 2;
                     }
                 }
             }
@@ -557,7 +554,9 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                             fillUpdate += static_cast<long>(unaffectedNeighborCount);
 
-                            fillUpdate -= static_cast<long>(htd::set_intersection_size(affectedVertices2.begin(),
+                            fillUpdate -= static_cast<long>(htd::set_intersection_size(std::lower_bound(affectedVertices2.begin(),
+                                                                                                        affectedVertices2.end(),
+                                                                                                        currentUnaffectedNeighborhood[0]),
                                                                                        affectedVertices2.end(),
                                                                                        std::lower_bound(currentUnaffectedNeighborhood.begin(),
                                                                                                         currentUnaffectedNeighborhood.end(),
@@ -588,7 +587,10 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                                 }
                                 else
                                 {
-                                    std::size_t fillReduction = htd::set_intersection_size(it, neighborhoodEnd,
+                                    std::size_t fillReduction = htd::set_intersection_size(std::lower_bound(it,
+                                                                                                            neighborhoodEnd,
+                                                                                                            currentAdditionalNeighborhood2[0]),
+                                                                                           neighborhoodEnd,
                                                                                            std::lower_bound(currentAdditionalNeighborhood2.begin(),
                                                                                                             currentAdditionalNeighborhood2.end(),
                                                                                                             *it),
@@ -616,8 +618,6 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                                 updatePool(vertex, tmp, pool, minFill);
                             }
                         }
-
-                        //std::cout << "VERTEX " << vertex << ": " << additionalNeighbors[vertex].size() << " / " << existingNeighbors[vertex].size() << " / " << unaffectedNeighbors[vertex].size() << std::endl;
                     }
                     else
                     {
@@ -629,9 +629,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                         for (auto it = currentExistingNeighborhood.begin(); it != neighborhoodEnd && tmp > 0;)
                         {
-                            htd::vertex_t vertex2 = *it;
-
-                            const std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[vertex2];
+                            const std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
 
                             ++it;
 
@@ -652,10 +650,13 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                                 }
                                 else
                                 {
-                                    std::size_t fillReduction = htd::set_intersection_size(it, neighborhoodEnd,
-                                                                                           std::upper_bound(currentAdditionalNeighborhood2.begin(),
+                                    std::size_t fillReduction = htd::set_intersection_size(std::lower_bound(it,
+                                                                                                            neighborhoodEnd,
+                                                                                                            currentAdditionalNeighborhood2[0]),
+                                                                                           neighborhoodEnd,
+                                                                                           std::lower_bound(currentAdditionalNeighborhood2.begin(),
                                                                                                             currentAdditionalNeighborhood2.end(),
-                                                                                                            vertex2),
+                                                                                                            *it),
                                                                                            currentAdditionalNeighborhood2.end());
 
                                     tmp -= fillReduction;
@@ -684,7 +685,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
             for (htd::vertex_t vertex : affectedVertices)
             {
-                std::vector<htd::vertex_t> & relevantNeighborhood = existingNeighbors[vertex];
+                const std::vector<htd::vertex_t> & relevantNeighborhood = existingNeighbors[vertex];
 
                 if (relevantNeighborhood.size() > 1)
                 {
@@ -694,7 +695,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                     for (auto it = relevantNeighborhood.begin(); it != neighborhoodEnd && tmp > 0;)
                     {
-                        std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
+                        const std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
 
                         ++it;
 
@@ -715,7 +716,10 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                             }
                             else
                             {
-                                std::size_t fillReduction = htd::set_intersection_size(it, neighborhoodEnd,
+                                std::size_t fillReduction = htd::set_intersection_size(std::lower_bound(it,
+                                                                                                        neighborhoodEnd,
+                                                                                                        currentAdditionalNeighborhood2[0]),
+                                                                                       neighborhoodEnd,
                                                                                        std::lower_bound(currentAdditionalNeighborhood2.begin(),
                                                                                                         currentAdditionalNeighborhood2.end(),
                                                                                                         *it),
@@ -755,7 +759,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
         target.push_back(vertexNames[selectedVertex]);
 
-        size--;
+        --size;
 
         //std::cout << "ORDERING: " << selectedVertex << std::endl;
 
@@ -904,7 +908,7 @@ htd::IWidthLimitableOrderingAlgorithm * htd::MinFillOrderingAlgorithm::cloneWidt
 }
 #endif
 
-void htd::MinFillOrderingAlgorithm::Implementation::updatePool(htd::vertex_t vertex, std::size_t fillValue, std::unordered_set<htd::vertex_t> & pool, std::size_t & minFill /*, std::size_t & minDegree, const std::vector<std::vector<htd::vertex_t>> & neighborhood*/)
+void htd::MinFillOrderingAlgorithm::Implementation::updatePool(htd::vertex_t vertex, std::size_t fillValue, std::unordered_set<htd::vertex_t> & pool, std::size_t & minFill)
 {
     if (fillValue <= minFill)
     {

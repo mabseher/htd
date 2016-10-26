@@ -245,7 +245,7 @@ struct htd::MinFillOrderingAlgorithm::Implementation
 
                 std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
 
-                updatePool(vertex, currentFillValue, pool, minFill/*, minDegree, neighborhood*/);
+                updatePool(vertex, currentFillValue, pool, minFill);
 
                 fillValue[vertex] = currentFillValue;
 
@@ -402,7 +402,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
             for (htd::vertex_t vertex : vertices)
             {
-                updatePool(vertex, fillValue[vertex], pool, minFill/*, minDegree, neighborhood*/);
+                updatePool(vertex, fillValue[vertex], pool, minFill);
             }
         }
 
@@ -423,39 +423,40 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
         totalFill -= minFill;
 
+        selectedNeighborhood.erase(std::lower_bound(selectedNeighborhood.begin(), selectedNeighborhood.end(), selectedVertex));
+
         if (fillValue[selectedVertex] == 0)
         {
             for (htd::vertex_t vertex : selectedNeighborhood)
             {
-                if (vertex != selectedVertex)
+                std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+
+                /* Because 'vertex' is a neighbor of 'selectedVertex', std::lower_bound will always find 'selectedVertex' in 'currentNeighborhood'. */
+                // coverity[use_iterator]
+                currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
+
+                std::size_t tmp = fillValue[vertex];
+
+                if (tmp > 0)
                 {
-                    std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+                    std::size_t fillReduction = htd::set_difference_size(currentNeighborhood.begin(), currentNeighborhood.end(),
+                                                                         selectedNeighborhood.begin(), selectedNeighborhood.end());
 
-                    /* Because 'vertex' is a neighbor of 'selectedVertex', std::lower_bound will always find 'selectedVertex' in 'currentNeighborhood'. */
-                    // coverity[use_iterator]
-                    currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
-
-                    if (fillValue[vertex] > 0)
+                    if (fillReduction > 0)
                     {
-                        std::size_t fillReduction = htd::set_difference_size(currentNeighborhood.begin(), currentNeighborhood.end(),
-                                                                             selectedNeighborhood.begin(), selectedNeighborhood.end());
+                        tmp -= fillReduction;
 
-                        if (fillReduction > 0)
-                        {
-                            fillValue[vertex] -= fillReduction;
+                        totalFill -= fillReduction;
 
-                            totalFill -= fillReduction;
+                        fillValue[vertex] = tmp;
 
-                            updatePool(vertex, fillValue[vertex], pool, minFill/*, minDegree, neighborhood*/);
-                        }
+                        updatePool(vertex, tmp, pool, minFill);
                     }
                 }
             }
         }
         else
         {
-            selectedNeighborhood.erase(std::lower_bound(selectedNeighborhood.begin(), selectedNeighborhood.end(), selectedVertex));
-
             for (htd::vertex_t neighbor : selectedNeighborhood)
             {
                 if (updateStatus[neighbor] == 0)
@@ -548,8 +549,6 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                 {
                     if (additionalNeighborCount > 0)
                     {
-                        //std::size_t old = tmp;
-
                         long fillUpdate = -(static_cast<long>(unaffectedNeighborCount));
 
                         for (htd::vertex_t additionalVertex : currentAdditionalNeighborhood)
@@ -570,7 +569,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                         for (auto it = currentExistingNeighborhood.begin(); it != neighborhoodEnd;)
                         {
-                            std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
+                            const std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
 
                             ++it;
 
@@ -614,24 +613,11 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                             }
                             else
                             {
-                                updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
+                                updatePool(vertex, tmp, pool, minFill);
                             }
                         }
 
-                        updateStatus[vertex] = 0;
-
-                        /*
-                        if (fillValue[vertex] > old)
-                        {
-                            std::cout << "VERTEX " << vertex << ": +" << (fillValue[vertex] - old) << std::endl;
-                        }
-                        else
-                        {
-                            std::cout << "VERTEX " << vertex << ": -" << (old - fillValue[vertex]) << std::endl;
-                        }
-                        */
-
-                        //std::cout << additionalNeighbors[vertex].size() << " / " << existingNeighbors[vertex].size() << " / " << unaffectedNeighbors[vertex].size() << std::endl;
+                        //std::cout << "VERTEX " << vertex << ": " << additionalNeighbors[vertex].size() << " / " << existingNeighbors[vertex].size() << " / " << unaffectedNeighbors[vertex].size() << std::endl;
                     }
                     else
                     {
@@ -645,7 +631,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                         {
                             htd::vertex_t vertex2 = *it;
 
-                            std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[vertex2];
+                            const std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[vertex2];
 
                             ++it;
 
@@ -679,23 +665,21 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                             }
                         }
 
-                        updateStatus[vertex] = 0;
-
                         fillValue[vertex] = tmp;
 
-                        updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
+                        updatePool(vertex, tmp, pool, minFill);
                     }
                 }
                 else
                 {
                     totalFill -= tmp;
 
-                    updateStatus[vertex] = 0;
-
                     fillValue[vertex] = 0;
 
-                    updatePool(vertex, 0, pool, minFill/*, minDegree, neighborhood*/);
+                    updatePool(vertex, 0, pool, minFill);
                 }
+
+                updateStatus[vertex] = 0;
             }
 
             for (htd::vertex_t vertex : affectedVertices)
@@ -744,7 +728,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                         }
                     }
 
-                    updatePool(vertex, tmp, pool, minFill/*, minDegree, neighborhood*/);
+                    updatePool(vertex, tmp, pool, minFill);
 
                     fillValue[vertex] = tmp;
                 }
@@ -870,7 +854,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
     {
         htd::vertex_t vertex = htd::selectRandomElement<htd::vertex_t>(vertices);
 
-        std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood[vertex];
+        const std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood[vertex];
 
         if (selectedNeighborhood.size() > ret)
         {
@@ -924,30 +908,12 @@ void htd::MinFillOrderingAlgorithm::Implementation::updatePool(htd::vertex_t ver
 {
     if (fillValue <= minFill)
     {
-        //std::size_t currentVertexDegree = neighborhood[vertex].size() - 1;
-
         if (fillValue < minFill)
         {
             minFill = fillValue;
 
-            //minDegree = currentVertexDegree;
-
             pool.clear();
         }
-
-        /*
-        if (currentVertexDegree <= minDegree)
-        {
-            if (currentVertexDegree < minDegree)
-            {
-                minDegree = currentVertexDegree;
-
-                pool.clear();
-            }
-
-            pool.insert(vertex);
-        }
-        */
 
         pool.insert(vertex);
     }

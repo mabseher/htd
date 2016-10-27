@@ -31,7 +31,7 @@
 #include <cstdarg>
 
 /**
- *  Private implementation details of class htd::IterativeImprovementTreeDecompositionAlgorithm.
+ *  Private implementation details of class htd::WidthMinimizingTreeDecompositionAlgorithm.
  */
 struct htd::WidthMinimizingTreeDecompositionAlgorithm::Implementation
 {
@@ -140,7 +140,14 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
 
     while ((iteration == 0 || implementation_->iterationCount_ == 0 || iteration < implementation_->iterationCount_) && !managementInstance.isTerminated())
     {
-        std::pair<htd::ITreeDecomposition *, std::size_t> decompositionResult = implementation_->algorithm_->computeDecomposition(graph, manipulationOperations, bestMaxBagSize - 1, implementation_->iterationCount_ - iteration);
+        std::vector<htd::IDecompositionManipulationOperation *> clonedManipulationOperations;
+
+        for (const htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+        {
+            clonedManipulationOperations.push_back(operation->clone());
+        }
+
+        std::pair<htd::ITreeDecomposition *, std::size_t> decompositionResult = implementation_->algorithm_->computeDecomposition(graph, clonedManipulationOperations, bestMaxBagSize - 1, implementation_->iterationCount_ - iteration);
 
         htd::ITreeDecomposition * currentDecomposition = decompositionResult.first;
 
@@ -182,6 +189,11 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
                 delete currentDecomposition;
             }
         }
+    }
+
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    {
+        delete operation;
     }
 
     return ret;

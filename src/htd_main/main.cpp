@@ -84,15 +84,16 @@ htd_cli::OptionManager * createOptionManager(void)
 
         manager->registerOption(outputFormatChoice, "Output-Specific Options");
 
-        htd_cli::Choice * orderingAlgorithmChoice = new htd_cli::Choice("ordering", "Set the ordering algorithm which shall be used to <algorithm>.", "algorithm");
+        htd_cli::Choice * strategyChoice = new htd_cli::Choice("strategy", "Set the decomposition strategy which shall be used to <algorithm>.", "algorithm");
 
-        orderingAlgorithmChoice->addPossibility("min-fill", "Standard minimum-fill ordering algorithm");
-        orderingAlgorithmChoice->addPossibility("min-degree", "Minimum-degree ordering algorithm");
-        orderingAlgorithmChoice->addPossibility("max-cardinality", "Maximum cardinality search ordering algorithm");
+        strategyChoice->addPossibility("min-fill", "Minimum fill ordering algorithm");
+        strategyChoice->addPossibility("min-degree", "Minimum degree ordering algorithm");
+        strategyChoice->addPossibility("max-cardinality", "Maximum cardinality search ordering algorithm");
+        strategyChoice->addPossibility("challenge", "Use min-degree heuristic for first decomposition and min-fill afterwards.");
 
-        orderingAlgorithmChoice->setDefaultValue("min-fill");
+        strategyChoice->setDefaultValue("min-fill");
 
-        manager->registerOption(orderingAlgorithmChoice, "Algorithm Options");
+        manager->registerOption(strategyChoice, "Algorithm Options");
 
         htd_cli::Choice * optimizationChoice = new htd_cli::Choice("opt", "Iteratively compute a decomposition which optimizes <criterion>.", "criterion");
 
@@ -150,7 +151,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
     const htd_cli::Choice & decompositionTypeChoice = optionManager.accessChoice("type");
 
-    const htd_cli::Choice & orderingAlgorithmChoice = optionManager.accessChoice("ordering");
+    const htd_cli::Choice & strategyChoice = optionManager.accessChoice("strategy");
 
     const htd_cli::SingleValueOption & seedOption = optionManager.accessSingleValueOption("seed");
 
@@ -208,9 +209,9 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
         }
     }
 
-    if (ret && orderingAlgorithmChoice.used())
+    if (ret && strategyChoice.used())
     {
-        const std::string & value = orderingAlgorithmChoice.value();
+        const std::string & value = strategyChoice.value();
 
         if (value == "min-fill")
         {
@@ -224,9 +225,18 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
         {
             manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::MaximumCardinalitySearchOrderingAlgorithm(manager));
         }
+        else if (value == "challenge")
+        {
+            if (!optimizationChoice.used() || std::string(optimizationChoice.value()) != "width")
+            {
+                std::cerr << "INVALID DECOMPOSITION STRATEGY: Strategy \"challenge\" may only be used when option --opt is set to \"width\"!" << std::endl;
+
+                ret = false;
+            }
+        }
         else
         {
-            std::cerr << "INVALID ORDERING ALGORITHM: " << orderingAlgorithmChoice.value() << std::endl;
+            std::cerr << "INVALID DECOMPOSITION STRATEGY: " << strategyChoice.value() << std::endl;
 
             ret = false;
         }
@@ -603,7 +613,7 @@ void optimizeNamed(const htd::LibraryInstance & instance, const htd::IterativeIm
 }
 
 template <typename Importer, typename Exporter>
-void minimizeWidth(const htd::LibraryInstance & instance, const htd::WidthMinimizingTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
+void minimizeWidth(const htd::LibraryInstance & instance, const htd::CombinedWidthMinimizingTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
 {
     auto * graph = importer.import(std::cin);
 
@@ -676,7 +686,7 @@ void minimizeWidth(const htd::LibraryInstance & instance, const htd::WidthMinimi
 }
 
 template <typename Importer, typename Exporter>
-void minimizeWidthNamed(const htd::LibraryInstance & instance, const htd::WidthMinimizingTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
+void minimizeWidthNamed(const htd::LibraryInstance & instance, const htd::CombinedWidthMinimizingTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
 {
     auto * graph = importer.import(std::cin);
 
@@ -822,6 +832,8 @@ int main(int argc, const char * const * const argv)
 
         const htd_cli::Choice & decompositionTypeChoice = optionManager->accessChoice("type");
 
+        const htd_cli::Choice & strategyChoice = optionManager->accessChoice("strategy");
+
         const htd_cli::Choice & optimizationChoice = optionManager->accessChoice("opt");
 
         const htd_cli::SingleValueOption & iterationOption = optionManager->accessSingleValueOption("iterations");
@@ -900,14 +912,29 @@ int main(int argc, const char * const * const argv)
             {
                 if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
                 {
-                    htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
+                    htd::CombinedWidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
 
-                    algorithm.setComputeInducedEdges(false);
+                    if (std::string(strategyChoice.value()) == "challenge")
+                    {
+                        htd::BucketEliminationTreeDecompositionAlgorithm * initialAlgorithm = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
+
+                        initialAlgorithm->setComputeInducedEdges(false);
+
+                        initialAlgorithm->setOrderingAlgorithm(new htd::MinDegreeOrderingAlgorithm(libraryInstance));
+
+                        algorithm.addDecompositionAlgorithm(initialAlgorithm);
+                    }
+
+                    htd::WidthMinimizingTreeDecompositionAlgorithm * baseAlgorithm = new htd::WidthMinimizingTreeDecompositionAlgorithm(libraryInstance);
+
+                    baseAlgorithm->setComputeInducedEdges(false);
 
                     if (iterationOption.used())
                     {
-                        algorithm.setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
+                        baseAlgorithm->setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
                     }
+
+                    algorithm.addDecompositionAlgorithm(baseAlgorithm);
 
                     /*
                     if (nonImprovementLimitOption.used())

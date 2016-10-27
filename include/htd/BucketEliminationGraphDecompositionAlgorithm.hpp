@@ -29,11 +29,10 @@
 #include <htd/IGraphDecompositionAlgorithm.hpp>
 
 #include <htd/ILabelingFunction.hpp>
-#include <htd/IMutableGraphDecomposition.hpp>
 #include <htd/IGraphDecompositionManipulationOperation.hpp>
+#include <htd/IOrderingAlgorithm.hpp>
 
 #include <utility>
-#include <vector>
 
 namespace htd
 {
@@ -118,6 +117,17 @@ namespace htd
              *  @return A pair consisting of the new IGraphDecomposition object representing the decomposition of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
              */
             HTD_API std::pair<htd::IGraphDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const;
+
+            /**
+             *  Set the ordering algorithm which shall be used to compute the vertex elimination ordering.
+             *
+             *  @param[in] algorithm    The ordering algorithm which shall be used to compute the vertex elimination ordering.
+             *
+             *  @note When calling this method the control over the memory region of the ordering algorithm is transferred to the decomposition
+             *  algorithm. Deleting the ordering algorithm provided to this method outside the decomposition algorithm or assigning the same
+             *  ordering algorithm multiple times will lead to undefined behavior.
+             */
+            HTD_API void setOrderingAlgorithm(htd::IOrderingAlgorithm * algorithm);
 
             HTD_API void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) HTD_OVERRIDE;
 

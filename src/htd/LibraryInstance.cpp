@@ -92,9 +92,7 @@ struct htd::LibraryInstance::Implementation
         directedMultiGraphFactory_.reset(new htd::DirectedMultiGraphFactory(manager));
         directedGraphFactory_.reset(new htd::DirectedGraphFactory(manager));
         connectedComponentAlgorithmFactory_.reset(new htd::ConnectedComponentAlgorithmFactory(manager));
-        graphDecompositionAlgorithmFactory_.reset(new htd::GraphDecompositionAlgorithmFactory(manager));
         graphDecompositionFactory_.reset(new htd::GraphDecompositionFactory(manager));
-        hypertreeDecompositionAlgorithmFactory_.reset(new htd::HypertreeDecompositionAlgorithmFactory(manager));
         hypertreeDecompositionFactory_.reset(new htd::HypertreeDecompositionFactory(manager));
         labeledDirectedGraphFactory_.reset(new htd::LabeledDirectedGraphFactory(manager));
         labeledDirectedMultiGraphFactory_.reset(new htd::LabeledDirectedMultiGraphFactory(manager));
@@ -105,11 +103,13 @@ struct htd::LibraryInstance::Implementation
         labeledPathFactory_.reset(new htd::LabeledPathFactory(manager));
         labeledTreeFactory_.reset(new htd::LabeledTreeFactory(manager));
         orderingAlgorithmFactory_.reset(new htd::OrderingAlgorithmFactory(manager));
+        graphDecompositionAlgorithmFactory_.reset(new htd::GraphDecompositionAlgorithmFactory(manager));
+        treeDecompositionAlgorithmFactory_.reset(new htd::TreeDecompositionAlgorithmFactory(manager));
+        hypertreeDecompositionAlgorithmFactory_.reset(new htd::HypertreeDecompositionAlgorithmFactory(manager));
         pathDecompositionAlgorithmFactory_.reset(new htd::PathDecompositionAlgorithmFactory(manager));
         pathDecompositionFactory_.reset(new htd::PathDecompositionFactory(manager));
         setCoverAlgorithmFactory_.reset(new htd::SetCoverAlgorithmFactory(manager));
         stronglyConnectedComponentAlgorithmFactory_.reset(new htd::StronglyConnectedComponentAlgorithmFactory(manager));
-        treeDecompositionAlgorithmFactory_.reset(new htd::TreeDecompositionAlgorithmFactory(manager));
         treeDecompositionFactory_.reset(new htd::TreeDecompositionFactory(manager));
     }
 

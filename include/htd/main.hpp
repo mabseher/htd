@@ -35,6 +35,7 @@
 #include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/Collection.hpp>
+#include <htd/CombinedWidthMinimizingTreeDecompositionAlgorithm.hpp>
 #include <htd/CompressionOperation.hpp>
 #include <htd/ConnectedComponentAlgorithmFactory.hpp>
 #include <htd/ConstCollection.hpp>

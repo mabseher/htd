@@ -57,13 +57,15 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
      *
      *  @param[in] manager   The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), orderingAlgorithm_(manager->orderingAlgorithmFactory().getOrderingAlgorithm()), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
     {
 
     }
 
     virtual ~Implementation()
     {
+        delete orderingAlgorithm_;
+
         for (auto & labelingFunction : labelingFunctions_)
         {
             delete labelingFunction;
@@ -79,6 +81,11 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
      *  The management instance to which the current object instance belongs.
      */
     const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  The ordering algorithm which shall be used to compute the vertex elimination ordering.
+     */
+    htd::IOrderingAlgorithm * orderingAlgorithm_;
 
     /**
      *  The labeling functions which are applied after the decomposition was computed.
@@ -464,6 +471,15 @@ htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::co
     return computeDecomposition(graph, manipulationOperations);
 }
 
+void htd::BucketEliminationGraphDecompositionAlgorithm::setOrderingAlgorithm(htd::IOrderingAlgorithm * algorithm)
+{
+    HTD_ASSERT(algorithm != nullptr)
+
+    delete implementation_->orderingAlgorithm_;
+
+    implementation_->orderingAlgorithm_ = algorithm;
+}
+
 void htd::BucketEliminationGraphDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {
     for (auto & labelingFunction : implementation_->labelingFunctions_)
@@ -577,11 +593,7 @@ std::pair<htd::IMutableGraphDecomposition *, std::size_t> htd::BucketElimination
 {
     htd::IMutableGraphDecomposition * ret = nullptr;
 
-    htd::IOrderingAlgorithm * algorithm = managementInstance_->orderingAlgorithmFactory().getOrderingAlgorithm();
-
-    HTD_ASSERT(algorithm != nullptr)
-
-    htd::IWidthLimitableOrderingAlgorithm * widthLimitableAlgorithm = dynamic_cast<htd::IWidthLimitableOrderingAlgorithm *>(algorithm);
+    htd::IWidthLimitableOrderingAlgorithm * widthLimitableAlgorithm = dynamic_cast<htd::IWidthLimitableOrderingAlgorithm *>(orderingAlgorithm_);
 
     std::size_t iterations = 0;
 
@@ -591,7 +603,7 @@ std::pair<htd::IMutableGraphDecomposition *, std::size_t> htd::BucketElimination
 
         do
         {
-            ordering = algorithm->computeOrdering(graph);
+            ordering = orderingAlgorithm_->computeOrdering(graph);
 
             if (ordering != nullptr)
             {
@@ -632,8 +644,6 @@ std::pair<htd::IMutableGraphDecomposition *, std::size_t> htd::BucketElimination
             delete ordering;
         }
     }
-
-    delete algorithm;
 
     return std::make_pair(ret, iterations);
 }

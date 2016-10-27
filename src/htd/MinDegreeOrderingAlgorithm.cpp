@@ -320,8 +320,6 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
     std::vector<std::vector<htd::vertex_t>> neighborhood(input.neighborhood.begin(), input.neighborhood.end());
 
-    std::vector<htd::vertex_t> newNeighborhood;
-
     std::vector<htd::vertex_t> difference;
 
     while (size > 0 && ret <= maxBagSize && !managementInstance_->isTerminated())
@@ -344,7 +342,7 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
         htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(pool);
 
-        auto & selectedNeighborhood = neighborhood[selectedVertex];
+        std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood[selectedVertex];
 
         if (selectedNeighborhood.size() > ret)
         {
@@ -355,82 +353,53 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
         
         if (selectedNeighborhood.size() > 1)
         {
+            selectedNeighborhood.erase(std::lower_bound(selectedNeighborhood.begin(), selectedNeighborhood.end(), selectedVertex));
+
             for (auto neighbor : selectedNeighborhood)
             {
-                if (neighbor != selectedVertex)
+                std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[neighbor];
+
+                currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
+
+                htd::set_difference(selectedNeighborhood, currentNeighborhood, difference);
+
+                if (!difference.empty())
                 {
-                    auto & currentNeighborhood = neighborhood[neighbor];
-
-                    htd::set_difference(selectedNeighborhood, currentNeighborhood, difference);
-                    
-                    if (!difference.empty())
+                    if (difference.size() <= 8)
                     {
-                        if (difference.size() == 1)
+                        auto it = currentNeighborhood.begin();
+
+                        for (htd::vertex_t newNeighbor : difference)
                         {
-                            auto first = currentNeighborhood.begin();
-                            auto last = currentNeighborhood.end();
-
-                            htd::vertex_t newVertex = difference[0];
-
-                            if (newVertex < selectedVertex)
-                            {
-                                if (selectedVertex - newVertex == 1)
-                                {
-                                    *std::lower_bound(first, last, selectedVertex) = newVertex;
-                                }
-                                else
-                                {
-                                    auto position = std::lower_bound(first, last, selectedVertex);
-
-                                    // coverity[use_iterator]
-                                    position = currentNeighborhood.erase(position);
-
-                                    currentNeighborhood.insert(std::lower_bound(first, position, newVertex), newVertex);
-                                }
-                            }
-                            else
-                            {
-                                if (newVertex - selectedVertex == 1)
-                                {
-                                    *std::lower_bound(first, last, selectedVertex) = newVertex;
-                                }
-                                else
-                                {
-                                    auto position = std::lower_bound(first, last, selectedVertex);
-
-                                    // coverity[use_iterator]
-                                    position = currentNeighborhood.erase(position);
-
-                                    currentNeighborhood.insert(std::lower_bound(position, currentNeighborhood.end(), newVertex), newVertex);
-                                }
-                            }
+                            it = currentNeighborhood.insert(std::lower_bound(it, currentNeighborhood.end(), newNeighbor), newNeighbor) + 1;
                         }
-                        else
-                        {
-                            htd::set_union(currentNeighborhood, difference, selectedVertex, newNeighborhood);
-
-                            std::swap(currentNeighborhood, newNeighborhood);
-
-                            newNeighborhood.clear();
-
-                            if (currentNeighborhood.size() - 1 > minDegree)
-                            {
-                                pool.erase(neighbor);
-                            }
-                        }
-
-                        difference.clear();
                     }
                     else
                     {
-                        currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
+                        std::size_t middle = currentNeighborhood.size();
 
-                        updatePool(neighbor, currentNeighborhood.size(), pool, minDegree);
+                        currentNeighborhood.insert(currentNeighborhood.end(), difference.begin(), difference.end());
+
+                        std::inplace_merge(currentNeighborhood.begin(),
+                                           currentNeighborhood.begin() + middle,
+                                           currentNeighborhood.end());
+
                     }
+
+                    if (currentNeighborhood.size() - 1 > minDegree)
+                    {
+                        pool.erase(neighbor);
+                    }
+
+                    difference.clear();
+                }
+                else
+                {
+                    updatePool(neighbor, currentNeighborhood.size(), pool, minDegree);
                 }
             }
         }
-        
+
         selectedNeighborhood.clear();
         
         vertices.erase(selectedVertex);

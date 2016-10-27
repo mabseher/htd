@@ -95,13 +95,25 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
     {
         htd::vertex_t vertex = *it;
 
-        auto & currentNeighborhood = neighborhood[vertex];
+        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
 
         graph.copyNeighborsTo(currentNeighborhood, vertex);
 
         weights[vertex] = 0;
 
         std::size_t tmp = currentNeighborhood.size();
+
+        if (tmp > 1)
+        {
+            auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
+
+            if (position != currentNeighborhood.end() && *position == vertex)
+            {
+                currentNeighborhood.erase(position);
+
+                --tmp;
+            }
+        }
 
         if (tmp <= minDegree)
         {
@@ -142,23 +154,17 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 
         htd::vertex_t selectedVertex = selectRandomElement<htd::vertex_t>(pool);
 
-        auto & selectedNeighborhood = neighborhood.at(selectedVertex);
+        std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood.at(selectedVertex);
 
         pool.erase(selectedVertex);
 
-        if (selectedNeighborhood.size() > 1)
+        for (htd::vertex_t neighbor : selectedNeighborhood)
         {
-            for (auto neighbor : selectedNeighborhood)
+            if (vertices.count(neighbor) == 1)
             {
-                if (neighbor != selectedVertex)
-                {
-                    if (vertices.count(neighbor) == 1)
-                    {
-                        weights[neighbor] += 1;
+                weights[neighbor] += 1;
 
-                        pool.erase(neighbor);
-                    }
-                }
+                pool.erase(neighbor);
             }
         }
 

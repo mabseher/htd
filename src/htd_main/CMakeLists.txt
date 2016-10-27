@@ -33,6 +33,9 @@ if(UNIX)
 endif(UNIX)
 
 if(UNIX)
+    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_exhaustive.sh"
+                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_exhaustive.sh" COPYONLY)
+
     configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_exhaustive.sh"
                    "${CMAKE_BINARY_DIR}/bin/htd_gr2td_minfill_exhaustive.sh" COPYONLY)
 

@@ -816,7 +816,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 
                 for (index = 0; index < edgeCount && !managementInstance.isTerminated(); ++index)
                 {
-                    const std::vector<htd::vertex_t> edgeElements = hyperedgePosition->sortedElements();
+                    const std::vector<htd::vertex_t> & edgeElements = hyperedgePosition->sortedElements();
 
                     if (edgeElements.size() == 2)
                     {

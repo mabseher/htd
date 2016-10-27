@@ -249,16 +249,6 @@ struct htd::MinFillOrderingAlgorithm::Implementation
 
                 fillValue[vertex] = currentFillValue;
 
-                DEBUGGING_CODE_LEVEL2(
-                std::cout << "Vertex " << vertex << ":" << std::endl;
-                htd::print(currentNeighborhood, std::cout, false);
-                std::cout << std::endl;
-                std::size_t neighborhoodSize = currentNeighborhood.size();
-                std::cout << "   INITIAL EDGE COUNT " << vertex << ": " << computeEdgeCount(neighborhood, neighborhood[vertex]) << std::endl;
-                std::cout << "   MAXIMUM EDGE COUNT " << vertex << ": " << (neighborhoodSize * (neighborhoodSize - 1)) / 2 << std::endl;
-                std::cout << "   INITIAL FILL VALUE " << vertex << ": " << requiredFillAmount[vertex] << std::endl;
-                )
-
                 totalFill += currentFillValue;
             }
         }
@@ -413,8 +403,6 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
         }
 
         pool.erase(selectedVertex);
-
-        updateStatus[selectedVertex] = 4;
 
         affectedVertices.clear();
 
@@ -683,9 +671,9 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                         totalFill -= fillReduction;
 
-                        updatePool(vertex, tmp, pool, minFill);
-
                         fillValue[vertex] = tmp;
+
+                        updatePool(vertex, tmp, pool, minFill);
                     }
                 }
 
@@ -810,11 +798,11 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
     {
         htd::vertex_t vertex = htd::selectRandomElement<htd::vertex_t>(vertices);
 
-        const std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood[vertex];
+        std::size_t neighborhoodSize = neighborhood[vertex].size();
 
-        if (selectedNeighborhood.size() > ret)
+        if (neighborhoodSize > ret)
         {
-            ret = selectedNeighborhood.size();
+            ret = neighborhoodSize;
         }
 
         target.push_back(vertexNames[vertex]);

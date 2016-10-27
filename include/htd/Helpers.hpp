@@ -419,7 +419,7 @@ namespace htd
     std::size_t set_union_size(InputIterator1 first1, InputIterator1 last1,
                                InputIterator2 first2, InputIterator2 last2)
     {
-        size_t ret = 0;
+        std::size_t ret = 0;
         
         while (first1 != last1)
         {
@@ -431,7 +431,7 @@ namespace htd
             }
             else
             {
-                ret++;
+                ++ret;
 
                 if (*first2 < *first1)
                 {
@@ -463,11 +463,11 @@ namespace htd
         {
             if (*first1 < *first2)
             {
-                ret++;
+                ++ret;
 
                 ++first1;
             } 
-            else 
+            else
             {
                 if (*first1 == *first2)
                 {

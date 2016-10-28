@@ -1001,7 +1001,7 @@ TEST(TreeDecompositionTest, CheckForgetNodeDetection)
     delete libraryInstance;
 }
 
-TEST(TreeDecompositionTest, CheckInducedHyperedges1)
+TEST(TreeDecompositionTest, CheckInducedHyperedges)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 

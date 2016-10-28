@@ -348,14 +348,23 @@ std::size_t htd::PathDecomposition::introduceNodeCount(void) const
 
     for (htd::vertex_t node : vertexVector())
     {
-        if (childCount(node) > 0)
+        const std::vector<htd::vertex_t> & bag = bagContent(node);
+
+        if (!isLeaf(node))
         {
             const std::vector<htd::vertex_t> & bag = bagContent(node);
             const std::vector<htd::vertex_t> & childBag = bagContent(child(node));
 
             if (htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
             {
-                ret++;
+                ++ret;
+            }
+        }
+        else
+        {
+            if (!bag.empty())
+            {
+                ++ret;
             }
         }
     }
@@ -376,12 +385,20 @@ void htd::PathDecomposition::copyIntroduceNodesTo(std::vector<htd::vertex_t> & t
 {
     for (htd::vertex_t node : vertexVector())
     {
-        if (childCount(node) > 0)
+        const std::vector<htd::vertex_t> & bag = bagContent(node);
+
+        if (!isLeaf(node))
         {
-            const std::vector<htd::vertex_t> & bag = bagContent(node);
             const std::vector<htd::vertex_t> & childBag = bagContent(child(node));
 
             if (htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end()))
+            {
+                target.push_back(node);
+            }
+        }
+        else
+        {
+            if (!bag.empty())
             {
                 target.push_back(node);
             }
@@ -408,12 +425,18 @@ bool htd::PathDecomposition::isIntroduceNode(htd::vertex_t vertex) const
 
     bool ret = false;
 
-    if (childCount(vertex) > 0)
+    const std::vector<htd::vertex_t> & bag = bagContent(vertex);
+
+    if (!isLeaf(vertex))
     {
         const std::vector<htd::vertex_t> & bag = bagContent(vertex);
         const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
 
         ret = htd::has_non_empty_set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end());
+    }
+    else
+    {
+        ret = !bag.empty();
     }
 
     return ret;
@@ -579,10 +602,17 @@ std::size_t htd::PathDecomposition::forgottenVertexCount(htd::vertex_t vertex) c
 {
     HTD_ASSERT(isVertex(vertex))
 
-    const std::vector<htd::vertex_t> & bag = bagContent(vertex);
-    const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
+    std::size_t ret = 0;
 
-    return htd::set_difference_size(childBag.begin(), childBag.end(), bag.begin(), bag.end());
+    if (!isLeaf(vertex))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContent(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
+
+        ret = htd::set_difference_size(childBag.begin(), childBag.end(), bag.begin(), bag.end());
+    }
+
+    return ret;
 }
 
 std::size_t htd::PathDecomposition::forgottenVertexCount(htd::vertex_t vertex, htd::vertex_t child) const
@@ -602,12 +632,15 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgottenVertices(ht
 
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    auto & result = ret.container();
+    if (!isLeaf(vertex))
+    {
+        auto & result = ret.container();
 
-    const std::vector<htd::vertex_t> & bag = bagContent(vertex);
-    const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
+        const std::vector<htd::vertex_t> & bag = bagContent(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
 
-    std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(result));
+        std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(result));
+    }
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
@@ -633,10 +666,13 @@ void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> 
 {
     HTD_ASSERT(isVertex(vertex))
 
-    const std::vector<htd::vertex_t> & bag = bagContent(vertex);
-    const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
+    if (!isLeaf(vertex))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContent(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
 
-    std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(target));
+        std::set_difference(childBag.begin(), childBag.end(), bag.begin(), bag.end(), std::back_inserter(target));
+    }
 }
 
 void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
@@ -694,10 +730,22 @@ std::size_t htd::PathDecomposition::introducedVertexCount(htd::vertex_t vertex) 
 {
     HTD_ASSERT(isVertex(vertex))
 
-    const std::vector<htd::vertex_t> & bag = bagContent(vertex);
-    const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
+    std::size_t ret = 0;
 
-    return htd::set_difference_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
+    const std::vector<htd::vertex_t> & bag = bagContent(vertex);
+
+    if (!isLeaf(vertex))
+    {
+        const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
+
+        ret = htd::set_difference_size(bag.begin(), bag.end(), childBag.begin(), childBag.end());
+    }
+    else
+    {
+        ret += bag.size();
+    }
+
+    return ret;
 }
 
 std::size_t htd::PathDecomposition::introducedVertexCount(htd::vertex_t vertex, htd::vertex_t child) const
@@ -720,9 +768,17 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introducedVertices(h
     auto & result = ret.container();
 
     const std::vector<htd::vertex_t> & bag = bagContent(vertex);
-    const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
 
-    std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(result));
+    if (!isLeaf(vertex))
+    {
+        const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
+
+        std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(result));
+    }
+    else
+    {
+        result.insert(result.end(), bag.begin(), bag.end());
+    }
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
@@ -748,10 +804,13 @@ void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
 {
     HTD_ASSERT(isVertex(vertex))
 
-    const std::vector<htd::vertex_t> & bag = bagContent(vertex);
-    const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
+    if (!isLeaf(vertex))
+    {
+        const std::vector<htd::vertex_t> & bag = bagContent(vertex);
+        const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
 
-    std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(target));
+        std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(target));
+    }
 }
 
 void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const

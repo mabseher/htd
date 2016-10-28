@@ -548,6 +548,411 @@ TEST(PathDecompositionTest, CheckCopyConstructors)
     delete libraryInstance;
 }
 
+TEST(PathDecompositionTest, CheckBagContentModifications)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition pd1(libraryInstance);
+
+    htd::vertex_t root = pd1.insertRoot();
+
+    ASSERT_EQ((std::size_t)0, pd1.bagSize(root));
+    ASSERT_EQ((std::size_t)0, pd1.bagContent(root).size());
+
+    std::vector<htd::vertex_t> bagContent { 1, 2, 3 };
+
+    pd1.mutableBagContent(root) = bagContent;
+
+    ASSERT_EQ((std::size_t)3, pd1.bagSize(root));
+    ASSERT_EQ((std::size_t)3, pd1.bagContent(root).size());
+
+    ASSERT_EQ((htd::vertex_t)1, pd1.bagContent(root)[0]);
+    ASSERT_EQ((htd::vertex_t)2, pd1.bagContent(root)[1]);
+    ASSERT_EQ((htd::vertex_t)3, pd1.bagContent(root)[2]);
+
+    pd1.mutableBagContent(root) = std::vector<htd::vertex_t> { 4, 5 };
+
+    ASSERT_EQ((std::size_t)2, pd1.bagSize(root));
+    ASSERT_EQ((std::size_t)2, pd1.bagContent(root).size());
+
+    ASSERT_EQ((htd::vertex_t)4, pd1.bagContent(root)[0]);
+    ASSERT_EQ((htd::vertex_t)5, pd1.bagContent(root)[1]);
+
+    delete libraryInstance;
+}
+
+TEST(PathDecompositionTest, CheckNodeTypeDetection)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::PathDecomposition pd1(libraryInstance);
+    htd::PathDecomposition pd2(libraryInstance);
+    htd::PathDecomposition pd3(libraryInstance);
+
+    htd::vertex_t root1 = pd1.insertRoot();
+    htd::vertex_t root2 = pd2.insertRoot();
+    htd::vertex_t root3 = pd3.insertRoot();
+
+    htd::vertex_t node11 = pd1.addChild(root1);
+    htd::vertex_t node21 = pd2.addChild(root2);
+    htd::vertex_t node31 = pd3.addChild(root3);
+
+    pd2.mutableBagContent(node21) = std::vector<htd::vertex_t> { 1, 2 };
+
+    pd3.mutableBagContent(root3) = std::vector<htd::vertex_t> { 1, 2 };
+    pd3.mutableBagContent(node31) = std::vector<htd::vertex_t> { 1 };
+
+    ASSERT_EQ((std::size_t)1, pd1.leafCount());
+    ASSERT_EQ((std::size_t)1, pd2.leafCount());
+    ASSERT_EQ((std::size_t)1, pd3.leafCount());
+
+    ASSERT_EQ((std::size_t)1, pd1.leaves().size());
+    ASSERT_EQ((std::size_t)1, pd2.leaves().size());
+    ASSERT_EQ((std::size_t)1, pd3.leaves().size());
+
+    ASSERT_EQ(node11, pd1.leaves()[0]);
+    ASSERT_EQ(node11, pd1.leafAtPosition(0));
+
+    ASSERT_EQ(node21, pd2.leaves()[0]);
+    ASSERT_EQ(node21, pd2.leafAtPosition(0));
+
+    ASSERT_EQ(node31, pd3.leaves()[0]);
+    ASSERT_EQ(node31, pd3.leafAtPosition(0));
+
+    ASSERT_EQ((std::size_t)0, pd1.joinNodeCount());
+    ASSERT_EQ((std::size_t)0, pd2.joinNodeCount());
+    ASSERT_EQ((std::size_t)0, pd3.joinNodeCount());
+
+    ASSERT_EQ((std::size_t)0, pd1.joinNodes().size());
+    ASSERT_EQ((std::size_t)0, pd2.joinNodes().size());
+    ASSERT_EQ((std::size_t)0, pd3.joinNodes().size());
+
+    ASSERT_EQ((std::size_t)0, pd1.forgetNodeCount());
+    ASSERT_EQ((std::size_t)1, pd2.forgetNodeCount());
+    ASSERT_EQ((std::size_t)0, pd3.forgetNodeCount());
+
+    ASSERT_EQ((std::size_t)0, pd1.forgetNodes().size());
+    ASSERT_EQ((std::size_t)1, pd2.forgetNodes().size());
+    ASSERT_EQ((std::size_t)0, pd3.forgetNodes().size());
+
+    ASSERT_EQ(root2, pd2.forgetNodes()[0]);
+    ASSERT_EQ(root2, pd2.forgetNodeAtPosition(0));
+
+    ASSERT_EQ((std::size_t)0, pd1.introduceNodeCount());
+    ASSERT_EQ((std::size_t)1, pd2.introduceNodeCount());
+    ASSERT_EQ((std::size_t)2, pd3.introduceNodeCount());
+
+    ASSERT_EQ((std::size_t)0, pd1.introduceNodes().size());
+    ASSERT_EQ((std::size_t)1, pd2.introduceNodes().size());
+    ASSERT_EQ((std::size_t)2, pd3.introduceNodes().size());
+
+    ASSERT_EQ((htd::vertex_t)1, pd2.introducedVertexAtPosition(node21, 0));
+    ASSERT_EQ((htd::vertex_t)2, pd2.introducedVertexAtPosition(node21, 1));
+
+    ASSERT_EQ((htd::vertex_t)2, pd3.introducedVertexAtPosition(root3, 0, node31));
+
+    ASSERT_EQ(root3, pd3.introduceNodes()[0]);
+    ASSERT_EQ(node31, pd3.introduceNodes()[1]);
+    ASSERT_EQ(root3, pd3.introduceNodeAtPosition(0));
+    ASSERT_EQ(node31, pd3.introduceNodeAtPosition(1));
+
+    ASSERT_EQ((std::size_t)1, pd3.introducedVertexCount(root3));
+    ASSERT_EQ((std::size_t)1, pd3.introducedVertexCount(node31));
+
+    ASSERT_EQ((std::size_t)1, pd3.introducedVertexCount(root3, node31));
+
+    ASSERT_EQ((std::size_t)1, pd3.introducedVertices(root3, node31).size());
+
+    ASSERT_EQ((htd::vertex_t)2, pd3.introducedVertices(root3, node31)[0]);
+    ASSERT_EQ((htd::vertex_t)2, pd3.introducedVertexAtPosition(root3, 0, node31));
+
+    ASSERT_EQ((std::size_t)0, pd1.rememberedVertexCount(root1));
+    ASSERT_EQ((std::size_t)0, pd1.rememberedVertexCount(root1, node11));
+    ASSERT_EQ((std::size_t)0, pd1.rememberedVertices(root1).size());
+    ASSERT_EQ((std::size_t)0, pd1.rememberedVertices(root1, node11).size());
+
+    ASSERT_EQ((std::size_t)0, pd2.rememberedVertexCount(root2));
+    ASSERT_EQ((std::size_t)0, pd2.rememberedVertexCount(root2, node21));
+    ASSERT_EQ((std::size_t)0, pd2.rememberedVertices(root2).size());
+    ASSERT_EQ((std::size_t)0, pd2.rememberedVertices(root2, node21).size());
+
+    ASSERT_EQ((std::size_t)1, pd3.rememberedVertexCount(root3));
+    ASSERT_EQ((std::size_t)1, pd3.rememberedVertexCount(root3, node31));
+    ASSERT_EQ((std::size_t)1, pd3.rememberedVertices(root3).size());
+    ASSERT_EQ((std::size_t)1, pd3.rememberedVertices(root3, node31).size());
+
+    ASSERT_EQ((htd::vertex_t)1, pd3.rememberedVertices(root3)[0]);
+    ASSERT_EQ((htd::vertex_t)1, pd3.rememberedVertexAtPosition(root3, 0));
+
+    ASSERT_EQ((htd::vertex_t)1, pd3.rememberedVertices(root3, node31)[0]);
+    ASSERT_EQ((htd::vertex_t)1, pd3.rememberedVertexAtPosition(root3, 0, node31));
+
+    delete libraryInstance;
+}
+
+TEST(PathDecompositionTest, CheckIntroduceNodeDetection)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::PathDecomposition pd(libraryInstance);
+
+    htd::vertex_t node1 = pd.insertRoot();
+
+    htd::vertex_t node11 = pd.addChild(node1);
+
+    htd::vertex_t node111 = pd.addChild(node11);
+
+    pd.mutableBagContent(node1) = std::vector<htd::vertex_t> { 1, 2 };
+    pd.mutableBagContent(node11) = std::vector<htd::vertex_t> { 1 };
+    pd.mutableBagContent(node111) = std::vector<htd::vertex_t> { };
+
+    ASSERT_EQ((std::size_t)2, pd.introduceNodeCount());
+    ASSERT_EQ(node1, pd.introduceNodes()[0]);
+    ASSERT_EQ(node1, pd.introduceNodeAtPosition(0));
+    ASSERT_EQ(node11, pd.introduceNodes()[1]);
+    ASSERT_EQ(node11, pd.introduceNodeAtPosition(1));
+
+    ASSERT_EQ((std::size_t)1, pd.introducedVertexCount(node1));
+    ASSERT_EQ((std::size_t)1, pd.introducedVertexCount(node11));
+    ASSERT_EQ((std::size_t)0, pd.introducedVertexCount(node111));
+
+    ASSERT_EQ((std::size_t)1, pd.introducedVertexCount(node1, node11));
+    ASSERT_EQ((std::size_t)1, pd.introducedVertexCount(node11, node111));
+
+    ASSERT_EQ((htd::vertex_t)2, pd.introducedVertices(node1)[0]);
+    ASSERT_EQ((htd::vertex_t)2, pd.introducedVertexAtPosition(node1, 0));
+
+    ASSERT_EQ((htd::vertex_t)1, pd.introducedVertices(node11)[0]);
+    ASSERT_EQ((htd::vertex_t)1, pd.introducedVertexAtPosition(node11, 0));
+
+    ASSERT_EQ((htd::vertex_t)2, pd.introducedVertices(node1, node11)[0]);
+    ASSERT_EQ((htd::vertex_t)2, pd.introducedVertexAtPosition(node1, 0, node11));
+
+    ASSERT_EQ((htd::vertex_t)1, pd.introducedVertices(node11, node111)[0]);
+    ASSERT_EQ((htd::vertex_t)1, pd.introducedVertexAtPosition(node11, 0, node111));
+
+    ASSERT_TRUE(pd.isIntroducedVertex(node1, 2));
+    ASSERT_TRUE(pd.isIntroducedVertex(node1, 2, node11));
+
+    ASSERT_TRUE(pd.isIntroducedVertex(node11, 1));
+    ASSERT_TRUE(pd.isIntroducedVertex(node11, 1, node111));
+
+    ASSERT_FALSE(pd.isRememberedVertex(node1, 2));
+    ASSERT_FALSE(pd.isRememberedVertex(node1, 2, node11));
+
+    ASSERT_FALSE(pd.isRememberedVertex(node11, 1));
+    ASSERT_FALSE(pd.isRememberedVertex(node11, 1, node111));
+
+    std::vector<htd::vertex_t> introducedVertices;
+
+    pd.copyIntroducedVerticesTo(introducedVertices, node11);
+
+    ASSERT_EQ((std::size_t)1, introducedVertices.size());
+    ASSERT_EQ((htd::vertex_t)1, introducedVertices[0]);
+
+    introducedVertices.clear();
+
+    ASSERT_EQ((std::size_t)0, introducedVertices.size());
+
+    pd.copyIntroducedVerticesTo(introducedVertices, node1, node11);
+
+    ASSERT_EQ((std::size_t)1, introducedVertices.size());
+    ASSERT_EQ((htd::vertex_t)2, introducedVertices[0]);
+
+    delete libraryInstance;
+}
+
+TEST(PathDecompositionTest, CheckRememberedVertexDetection)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::TreeDecomposition pd(libraryInstance);
+
+    htd::vertex_t node1 = pd.insertRoot();
+
+    htd::vertex_t node11 = pd.addChild(node1);
+
+    htd::vertex_t node111 = pd.addChild(node11);
+
+    pd.mutableBagContent(node1) = std::vector<htd::vertex_t> { 1, 2 };
+    pd.mutableBagContent(node11) = std::vector<htd::vertex_t> { 1 };
+    pd.mutableBagContent(node111) = std::vector<htd::vertex_t> { };
+
+    ASSERT_EQ((std::size_t)1, pd.rememberedVertexCount(node1));
+    ASSERT_EQ((std::size_t)0, pd.rememberedVertexCount(node11));
+    ASSERT_EQ((std::size_t)0, pd.rememberedVertexCount(node111));
+
+    ASSERT_EQ((std::size_t)1, pd.rememberedVertexCount(node1, node11));
+    ASSERT_EQ((std::size_t)0, pd.rememberedVertexCount(node11, node111));
+
+    ASSERT_EQ((htd::vertex_t)1, pd.rememberedVertices(node1)[0]);
+    ASSERT_EQ((htd::vertex_t)1, pd.rememberedVertexAtPosition(node1, 0));
+
+    ASSERT_TRUE(pd.isRememberedVertex(node1, 1));
+    ASSERT_FALSE(pd.isRememberedVertex(node1, 2));
+    ASSERT_TRUE(pd.isRememberedVertex(node1, 1, node11));
+    ASSERT_FALSE(pd.isRememberedVertex(node1, 2, node11));
+
+    std::vector<htd::vertex_t> rememberedVertices;
+
+    pd.copyRememberedVerticesTo(rememberedVertices, node11);
+
+    ASSERT_EQ((std::size_t)0, rememberedVertices.size());
+
+    pd.copyRememberedVerticesTo(rememberedVertices, node1);
+
+    ASSERT_EQ((std::size_t)1, rememberedVertices.size());
+    ASSERT_EQ((htd::vertex_t)1, rememberedVertices[0]);
+
+    rememberedVertices.clear();
+
+    pd.copyRememberedVerticesTo(rememberedVertices, node1, node11);
+
+    ASSERT_EQ((std::size_t)1, rememberedVertices.size());
+    ASSERT_EQ((htd::vertex_t)1, rememberedVertices[0]);
+
+    delete libraryInstance;
+}
+
+TEST(PathDecompositionTest, CheckForgetNodeDetection)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::PathDecomposition pd(libraryInstance);
+
+    htd::vertex_t node1 = pd.insertRoot();
+
+    htd::vertex_t node11 = pd.addChild(node1);
+
+    htd::vertex_t node111 = pd.addChild(node11);
+
+    htd::vertex_t root = pd.addParent(node1);
+
+    pd.mutableBagContent(root) = std::vector<htd::vertex_t> { 1 };
+    pd.mutableBagContent(node1) = std::vector<htd::vertex_t> { 1, 2 };
+    pd.mutableBagContent(node11) = std::vector<htd::vertex_t> { 1, 2 };
+    pd.mutableBagContent(node111) = std::vector<htd::vertex_t> { 1, 2, 3, 4 };
+
+    ASSERT_EQ((std::size_t)2, pd.forgetNodeCount());
+    ASSERT_EQ(node11, pd.forgetNodes()[0]);
+    ASSERT_EQ(node11, pd.forgetNodeAtPosition(0));
+    ASSERT_EQ(root, pd.forgetNodes()[1]);
+    ASSERT_EQ(root, pd.forgetNodeAtPosition(1));
+
+    ASSERT_EQ((std::size_t)1, pd.forgottenVertexCount(root));
+    ASSERT_EQ((std::size_t)0, pd.forgottenVertexCount(node1));
+    ASSERT_EQ((std::size_t)2, pd.forgottenVertexCount(node11));
+    ASSERT_EQ((std::size_t)0, pd.forgottenVertexCount(node111));
+
+    ASSERT_EQ((std::size_t)1, pd.forgottenVertexCount(root, node1));
+    ASSERT_EQ((std::size_t)0, pd.forgottenVertexCount(node1, node11));
+    ASSERT_EQ((std::size_t)2, pd.forgottenVertexCount(node11, node111));
+
+    ASSERT_EQ((htd::vertex_t)3, pd.forgottenVertices(node11)[0]);
+    ASSERT_EQ((htd::vertex_t)3, pd.forgottenVertexAtPosition(node11, 0));
+    ASSERT_EQ((htd::vertex_t)4, pd.forgottenVertices(node11)[1]);
+    ASSERT_EQ((htd::vertex_t)4, pd.forgottenVertexAtPosition(node11, 1));
+
+    ASSERT_EQ((htd::vertex_t)3, pd.forgottenVertices(node11, node111)[0]);
+    ASSERT_EQ((htd::vertex_t)3, pd.forgottenVertexAtPosition(node11, 0, node111));
+    ASSERT_EQ((htd::vertex_t)4, pd.forgottenVertices(node11, node111)[1]);
+    ASSERT_EQ((htd::vertex_t)4, pd.forgottenVertexAtPosition(node11, 1, node111));
+
+    ASSERT_FALSE(pd.isForgottenVertex(node11, 1));
+    ASSERT_FALSE(pd.isForgottenVertex(node11, 2));
+    ASSERT_TRUE(pd.isForgottenVertex(node11, 3));
+    ASSERT_TRUE(pd.isForgottenVertex(node11, 4));
+
+    ASSERT_FALSE(pd.isForgottenVertex(node11, 1, node111));
+    ASSERT_FALSE(pd.isForgottenVertex(node11, 2, node111));
+    ASSERT_TRUE(pd.isForgottenVertex(node11, 3, node111));
+    ASSERT_TRUE(pd.isForgottenVertex(node11, 4, node111));
+
+    ASSERT_TRUE(pd.isRememberedVertex(node11, 1));
+    ASSERT_TRUE(pd.isRememberedVertex(node11, 2));
+    ASSERT_FALSE(pd.isRememberedVertex(node11, 3));
+    ASSERT_FALSE(pd.isRememberedVertex(node11, 4));
+
+    ASSERT_TRUE(pd.isRememberedVertex(node11, 1, node111));
+    ASSERT_TRUE(pd.isRememberedVertex(node11, 2, node111));
+    ASSERT_FALSE(pd.isRememberedVertex(node11, 3, node111));
+    ASSERT_FALSE(pd.isRememberedVertex(node11, 4, node111));
+
+    std::vector<htd::vertex_t> forgottenVertices;
+
+    pd.copyForgottenVerticesTo(forgottenVertices, node11);
+
+    ASSERT_EQ((std::size_t)2, forgottenVertices.size());
+    ASSERT_EQ((htd::vertex_t)3, forgottenVertices[0]);
+    ASSERT_EQ((htd::vertex_t)4, forgottenVertices[1]);
+
+    forgottenVertices.clear();
+
+    pd.copyForgottenVerticesTo(forgottenVertices, node11, node111);
+
+    ASSERT_EQ((std::size_t)2, forgottenVertices.size());
+    ASSERT_EQ((htd::vertex_t)3, forgottenVertices[0]);
+    ASSERT_EQ((htd::vertex_t)4, forgottenVertices[1]);
+
+    delete libraryInstance;
+}
+
+TEST(PathDecompositionTest, CheckInducedHyperedges)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::PathDecomposition pd(libraryInstance);
+
+    htd::vertex_t node1 = pd.insertRoot();
+
+    ASSERT_EQ((std::size_t)0, pd.inducedHyperedges(node1).size());
+
+    htd::Hyperedge h1(1, 1, 2);
+    htd::Hyperedge h2(2, 2, 3);
+    htd::Hyperedge h3(3, 3, 3);
+
+    std::vector<htd::Hyperedge> inputEdges1 { h1, h2, h3 };
+
+    htd::FilteredHyperedgeCollection hyperedges1(new htd::HyperedgeVector(inputEdges1), std::vector<htd::index_t> { 0, 1, 2 });
+    htd::FilteredHyperedgeCollection hyperedges2(new htd::HyperedgeVector(inputEdges1), std::vector<htd::index_t> { 2, 1, 0 });
+
+    pd.mutableInducedHyperedges(node1) = hyperedges1;
+
+    ASSERT_EQ((std::size_t)3, pd.inducedHyperedges(node1).size());
+
+    auto it = pd.inducedHyperedges(node1).begin();
+
+    ASSERT_EQ((htd::id_t)1, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)2, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)3, it->id());
+
+    ASSERT_EQ((std::size_t)3, pd.inducedHyperedges(node1).size());
+
+    it = pd.inducedHyperedges(node1).begin();
+
+    ASSERT_EQ((htd::id_t)1, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)2, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)3, it->id());
+
+    pd.mutableInducedHyperedges(node1) = std::move(hyperedges2);
+
+    ASSERT_EQ((std::size_t)3, pd.inducedHyperedges(node1).size());
+
+    it = pd.inducedHyperedges(node1).begin();
+
+    ASSERT_EQ((htd::id_t)3, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)2, it->id());
+    ++it;
+    ASSERT_EQ((htd::id_t)1, it->id());
+
+    delete libraryInstance;
+}
+
 TEST(PathDecompositionTest, TestVertexLabelModifications)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);

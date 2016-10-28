@@ -133,7 +133,11 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
 
         for (const htd::IDecompositionManipulationOperation * operation : manipulationOperations)
         {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             clonedManipulationOperations.push_back(operation->clone());
+#else
+            clonedManipulationOperations.push_back(operation->cloneDecompositionManipulationOperation());
+#endif
         }
 
         htd::WidthMinimizingTreeDecompositionAlgorithm * widthMinimizingTreeDecompositionAlgorithm = dynamic_cast<htd::WidthMinimizingTreeDecompositionAlgorithm *>(*it);
@@ -242,7 +246,11 @@ void htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::addManipulationOper
 {
     for (htd::ITreeDecompositionAlgorithm * algorithm : implementation_->algorithms_)
     {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         algorithm->addManipulationOperation(manipulationOperation->clone());
+#else
+        algorithm->addManipulationOperation(manipulationOperation->cloneDecompositionManipulationOperation());
+#endif
     }
 
     delete manipulationOperation;

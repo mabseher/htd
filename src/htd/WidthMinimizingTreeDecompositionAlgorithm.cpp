@@ -144,7 +144,11 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
 
         for (const htd::IDecompositionManipulationOperation * operation : manipulationOperations)
         {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             clonedManipulationOperations.push_back(operation->clone());
+#else
+            clonedManipulationOperations.push_back(operation->cloneDecompositionManipulationOperation());
+#endif
         }
 
         std::pair<htd::ITreeDecomposition *, std::size_t> decompositionResult = implementation_->algorithm_->computeDecomposition(graph, clonedManipulationOperations, bestMaxBagSize - 1, implementation_->iterationCount_ - iteration);

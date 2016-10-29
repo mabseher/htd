@@ -53,7 +53,77 @@ class ManipulationOperationTest : public ::testing::Test
         }
 };
 
-std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> computeTreeDecomposition(const htd::LibraryInstance * const libraryInstance)
+class BagSizeLabelingFunction : public htd::ILabelingFunction
+{
+    public:
+        BagSizeLabelingFunction(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+        {
+
+        }
+
+        virtual ~BagSizeLabelingFunction()
+        {
+
+        }
+
+        std::string name() const HTD_OVERRIDE
+        {
+            return "BAG_SIZE";
+        }
+
+        htd::ILabel * computeLabel(const std::vector<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE
+        {
+            HTD_UNUSED(labels)
+
+            return new htd::Label<std::size_t>(vertices.size());
+        }
+
+        htd::ILabel * computeLabel(const htd::ConstCollection<htd::vertex_t> & vertices, const htd::ILabelCollection & labels) const HTD_OVERRIDE
+        {
+            HTD_UNUSED(labels)
+
+            return new htd::Label<std::size_t>(vertices.size());
+        }
+
+        const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE
+        {
+            return managementInstance_;
+        }
+
+        void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE
+        {
+            HTD_ASSERT(manager != nullptr)
+
+            managementInstance_ = manager;
+        }
+
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+        BagSizeLabelingFunction * clone(void) const HTD_OVERRIDE
+        {
+            return new BagSizeLabelingFunction(managementInstance_);
+        }
+#else
+        BagSizeLabelingFunction * clone(void) const
+        {
+            return new BagSizeLabelingFunction(managementInstance_);
+        }
+
+        htd::ILabelingFunction * cloneLabelingFunction(void) const HTD_OVERRIDE
+        {
+            return new BagSizeLabelingFunction(managementInstance_);
+        }
+
+        htd::IDecompositionManipulationOperation * cloneDecompositionManipulationOperation(void) const HTD_OVERRIDE
+        {
+            return new BagSizeLabelingFunction(managementInstance_);
+        }
+#endif
+
+    private:
+        const htd::LibraryInstance * managementInstance_;
+};
+
+htd::IMultiHypergraph * createInputGraph(const htd::LibraryInstance * const libraryInstance)
 {
     htd::MultiHypergraph * graph = new htd::MultiHypergraph(libraryInstance, 50);
 
@@ -517,9 +587,16 @@ std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> computeTree
     graph->addEdge(50,14);
     graph->addEdge(50,26);
 
+    return graph;
+}
+
+std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> computeTreeDecomposition(const htd::LibraryInstance * const libraryInstance, const std::vector<htd::IDecompositionManipulationOperation *> & operations = std::vector<htd::IDecompositionManipulationOperation *>())
+{
+    htd::IMultiHypergraph * graph = createInputGraph(libraryInstance);
+
     htd::BucketEliminationTreeDecompositionAlgorithm algorithm(libraryInstance);
 
-    return std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *>(graph, dynamic_cast<htd::IMutableTreeDecomposition *>(algorithm.computeDecomposition(*graph)));
+    return std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *>(graph, dynamic_cast<htd::IMutableTreeDecomposition *>(algorithm.computeDecomposition(*graph, operations)));
 }
 
 TEST(ManipulationOperationTest, CheckJoinNodeNormalizationOperation1)
@@ -537,6 +614,13 @@ TEST(ManipulationOperationTest, CheckJoinNodeNormalizationOperation1)
     ASSERT_TRUE(verifier.verify(*graph, *decomposition));
 
     htd::JoinNodeNormalizationOperation operation1(libraryInstance);
+
+    ASSERT_TRUE(operation1.isLocalOperation());
+    ASSERT_TRUE(operation1.createsTreeNodes());
+    ASSERT_FALSE(operation1.removesTreeNodes());
+    ASSERT_FALSE(operation1.modifiesBagContents());
+    ASSERT_FALSE(operation1.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation1.createsLocationDependendLabels());
 
     operation1.apply(*graph, *decomposition);
 
@@ -577,8 +661,258 @@ TEST(ManipulationOperationTest, CheckJoinNodeNormalizationOperation1)
         }
     }
 
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(operation1.managementInstance() == libraryInstance);
+
+    operation1.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(operation1.managementInstance() == libraryInstance2);
+
     delete graph;
     delete decomposition;
+    delete libraryInstance;
+    delete libraryInstance2;
+}
+
+TEST(ManipulationOperationTest, CheckJoinNodeNormalizationOperation2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> input = computeTreeDecomposition(libraryInstance, { new BagSizeLabelingFunction(libraryInstance) });
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutableTreeDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+    }
+
+    htd::JoinNodeNormalizationOperation operation(libraryInstance);
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation.apply(*graph, *decomposition, { labelingFunction });
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->joinNodes())
+    {
+        const std::vector<htd::vertex_t> & bag = decomposition->bagContent(vertex);
+
+        for (htd::vertex_t child : decomposition->children(vertex))
+        {
+            const std::vector<htd::vertex_t> & childBag = decomposition->bagContent(child);
+
+            ASSERT_TRUE(childBag == bag);
+        }
+    }
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+    }
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
+    delete libraryInstance;
+}
+
+TEST(ManipulationOperationTest, CheckJoinNodeNormalizationOperation3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+
+    graph->addVertices(5);
+
+    graph->addEdge(1, 2);
+    graph->addEdge(1, 3);
+    graph->addEdge(1, 4);
+    graph->addEdge(2, 3);
+    graph->addEdge(3, 5);
+
+    htd::vertex_t root = decomposition->insertRoot({ 1, 2, 3 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node1 = decomposition->addChild(root, { 1, 4 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node2 = decomposition->addChild(root, { 3, 5 }, htd::FilteredHyperedgeCollection());
+
+    decomposition->addChild(node1, { 1 }, htd::FilteredHyperedgeCollection());
+    decomposition->addChild(node1, { 4 }, htd::FilteredHyperedgeCollection());
+    decomposition->addChild(node2, { 3 }, htd::FilteredHyperedgeCollection());
+    decomposition->addChild(node2, { 5 }, htd::FilteredHyperedgeCollection());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::JoinNodeNormalizationOperation operation(libraryInstance);
+
+    std::vector<htd::vertex_t> createdVertices;
+    std::vector<htd::vertex_t> removedVertices;
+
+    operation.apply(*graph, *decomposition, { node1 }, createdVertices, removedVertices );
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ((std::size_t)2, createdVertices.size());
+    ASSERT_EQ((std::size_t)0, removedVertices.size());
+
+    for (htd::vertex_t createdVertex : createdVertices)
+    {
+        ASSERT_EQ(node1, decomposition->parent(createdVertex));
+
+        ASSERT_EQ((std::size_t)2, decomposition->bagSize(createdVertex));
+        ASSERT_EQ((htd::vertex_t)1, decomposition->bagContent(createdVertex)[0]);
+        ASSERT_EQ((htd::vertex_t)4, decomposition->bagContent(createdVertex)[1]);
+    }
+
+    createdVertices.clear();
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation.apply(*graph, *decomposition, { root, node2 }, { labelingFunction }, createdVertices, removedVertices );
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ((std::size_t)4, createdVertices.size());
+    ASSERT_EQ((std::size_t)0, removedVertices.size());
+
+    for (htd::vertex_t createdVertex : createdVertices)
+    {
+        if (decomposition->parent(createdVertex) == root)
+        {
+            ASSERT_EQ((std::size_t)3, decomposition->bagSize(createdVertex));
+            ASSERT_EQ((htd::vertex_t)1, decomposition->bagContent(createdVertex)[0]);
+            ASSERT_EQ((htd::vertex_t)2, decomposition->bagContent(createdVertex)[1]);
+            ASSERT_EQ((htd::vertex_t)3, decomposition->bagContent(createdVertex)[2]);
+        }
+        else if (decomposition->parent(createdVertex) == node2)
+        {
+            ASSERT_EQ((std::size_t)2, decomposition->bagSize(createdVertex));
+            ASSERT_EQ((htd::vertex_t)3, decomposition->bagContent(createdVertex)[0]);
+            ASSERT_EQ((htd::vertex_t)5, decomposition->bagContent(createdVertex)[1]);
+        }
+        else
+        {
+            FAIL();
+        }
+    }
+
+    for (htd::vertex_t createdVertex : createdVertices)
+    {
+        ASSERT_EQ(decomposition->bagSize(createdVertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", createdVertex)));
+    }
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
+    delete libraryInstance;
+}
+
+TEST(ManipulationOperationTest, CheckJoinNodeNormalizationOperation4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+
+    graph->addVertices(5);
+
+    graph->addEdge(1, 2);
+    graph->addEdge(1, 3);
+    graph->addEdge(1, 4);
+    graph->addEdge(2, 3);
+    graph->addEdge(3, 5);
+
+    htd::vertex_t root = decomposition->insertRoot({ 1, 2, 3 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node1 = decomposition->addChild(root, { 1, 4 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node2 = decomposition->addChild(root, { 3, 5 }, htd::FilteredHyperedgeCollection());
+
+    decomposition->addChild(node1, { 1 }, htd::FilteredHyperedgeCollection());
+    decomposition->addChild(node1, { 4 }, htd::FilteredHyperedgeCollection());
+    decomposition->addChild(node2, { 3 }, htd::FilteredHyperedgeCollection());
+    decomposition->addChild(node2, { 5 }, htd::FilteredHyperedgeCollection());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::JoinNodeNormalizationOperation operation(libraryInstance, true);
+
+    std::vector<htd::vertex_t> createdVertices;
+    std::vector<htd::vertex_t> removedVertices;
+
+    operation.apply(*graph, *decomposition, { node1 }, createdVertices, removedVertices );
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ((std::size_t)3, createdVertices.size());
+    ASSERT_EQ((std::size_t)0, removedVertices.size());
+
+    for (htd::vertex_t createdVertex : createdVertices)
+    {
+        if (decomposition->parent(createdVertex) == root || decomposition->parent(createdVertex) == node1)
+        {
+            ASSERT_EQ((std::size_t)2, decomposition->bagSize(createdVertex));
+            ASSERT_EQ((htd::vertex_t)1, decomposition->bagContent(createdVertex)[0]);
+            ASSERT_EQ((htd::vertex_t)4, decomposition->bagContent(createdVertex)[1]);
+        }
+        else
+        {
+            FAIL();
+        }
+    }
+
+    createdVertices.clear();
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation.apply(*graph, *decomposition, { root, node2 }, { labelingFunction }, createdVertices, removedVertices );
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ((std::size_t)6, createdVertices.size());
+    ASSERT_EQ((std::size_t)0, removedVertices.size());
+
+    for (htd::vertex_t createdVertex : createdVertices)
+    {
+        if (decomposition->isRoot(createdVertex) || decomposition->parent(createdVertex) == root)
+        {
+            ASSERT_EQ((std::size_t)3, decomposition->bagSize(createdVertex));
+            ASSERT_EQ((htd::vertex_t)1, decomposition->bagContent(createdVertex)[0]);
+            ASSERT_EQ((htd::vertex_t)2, decomposition->bagContent(createdVertex)[1]);
+            ASSERT_EQ((htd::vertex_t)3, decomposition->bagContent(createdVertex)[2]);
+        }
+        else if (decomposition->parent(node2) == createdVertex || decomposition->parent(createdVertex) == node2)
+        {
+            ASSERT_EQ((std::size_t)2, decomposition->bagSize(createdVertex));
+            ASSERT_EQ((htd::vertex_t)3, decomposition->bagContent(createdVertex)[0]);
+            ASSERT_EQ((htd::vertex_t)5, decomposition->bagContent(createdVertex)[1]);
+        }
+        else
+        {
+            FAIL();
+        }
+    }
+
+    for (htd::vertex_t createdVertex : createdVertices)
+    {
+        ASSERT_EQ(decomposition->bagSize(createdVertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", createdVertex)));
+    }
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
     delete libraryInstance;
 }
 

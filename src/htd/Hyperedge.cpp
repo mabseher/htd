@@ -492,7 +492,7 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
         const htd::vertex_t & operator[](htd::index_t index) const HTD_OVERRIDE
         {
-            return elements_.at(index);
+            return elements_[index];
         }
 
         ElementInformation * clone(void) const HTD_OVERRIDE
@@ -647,7 +647,7 @@ class SortedElementInformation : public htd::Hyperedge::IElementInformation
 
         const htd::vertex_t & operator[](htd::index_t index) const HTD_OVERRIDE
         {
-            return elements_.at(index);
+            return elements_[index];
         }
 
         SortedElementInformation * clone(void) const HTD_OVERRIDE
@@ -888,7 +888,7 @@ const htd::vertex_t & htd::Hyperedge::at(htd::index_t index) const
 
 const htd::vertex_t & htd::Hyperedge::operator[](htd::index_t index) const
 {
-    return content_->at(index);
+    return (*content_)[index];
 }
 
 htd::Hyperedge & htd::Hyperedge::operator=(const htd::Hyperedge & original)

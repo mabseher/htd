@@ -108,7 +108,7 @@ void htd::JoinNodeNormalizationOperation::apply(const htd::IMultiHypergraph & gr
 
         if (implementation_->identicalParent_)
         {
-            if (decomposition.bagContent(decomposition.parent(node)) != bag)
+            if (decomposition.isRoot(node) || decomposition.bagContent(decomposition.parent(node)) != bag)
             {
                 htd::vertex_t newParent = decomposition.addParent(node);
 

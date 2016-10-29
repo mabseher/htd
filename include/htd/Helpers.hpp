@@ -360,11 +360,6 @@ namespace htd
         return ret;
     }
 
-    HTD_API void merge(const std::vector<htd::vertex_t> & set1,
-                       const std::vector<htd::vertex_t> & set2,
-                       htd::vertex_t ignoredVertex,
-                       std::vector<htd::vertex_t> & result);
-
     HTD_API void set_union(const std::vector<htd::vertex_t> & set1,
                            const std::vector<htd::vertex_t> & set2,
                            htd::vertex_t ignoredVertex,
@@ -379,23 +374,6 @@ namespace htd
                                   std::vector<htd::vertex_t> & result);
 
     std::tuple<std::size_t, std::size_t, std::size_t> HTD_API analyze_sets(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
-
-    /**
-     *  Decompose two sets of vertices into vertices only in the first set, vertices only in the second set and vertices in both sets.
-     *
-     *  @param[in] set1                 The first set of vertices, sorted in ascending order.
-     *  @param[in] set2                 The second set of vertices, sorted in ascending order.
-     *  @param[in] ignoredVertex        The vertex which shall be ignored.
-     *  @param[out] resultOnlySet1      The set of vertices which are found only in the first set, sorted in ascending order.
-     *  @param[out] resultOnlySet2      The set of vertices which are found only in the second set, sorted in ascending order.
-     *  @param[out] resultIntersection  The set of vertices which are found in both sets, sorted in ascending order.
-     */
-    void decompose_sets(const std::vector<htd::vertex_t> & set1,
-                        const std::vector<htd::vertex_t> & set2,
-                        htd::vertex_t ignoredVertex,
-                        std::vector<htd::vertex_t> & resultOnlySet1,
-                        std::vector<htd::vertex_t> & resultOnlySet2,
-                        std::vector<htd::vertex_t> & resultIntersection) HTD_NOEXCEPT;
 
     /**
      *  Decompose two sets of vertices into vertices only in the first set, vertices only in the second set and vertices in both sets.

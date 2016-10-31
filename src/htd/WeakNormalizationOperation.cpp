@@ -95,9 +95,9 @@ void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
     apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -117,20 +117,20 @@ void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
     }
 }
 
-void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::WeakNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
     if (implementation_->emptyRoot_)
     {
         htd::AddEmptyRootOperation addEmptyRootOperation(implementation_->managementInstance_);
 
-        addEmptyRootOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
+        addEmptyRootOperation.apply(graph, decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
     }
 
     if (implementation_->emptyLeaves_)
     {
         htd::AddEmptyLeavesOperation addEmptyLeavesOperation(implementation_->managementInstance_);
 
-        addEmptyLeavesOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
+        addEmptyLeavesOperation.apply(graph, decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
     }
 }
 

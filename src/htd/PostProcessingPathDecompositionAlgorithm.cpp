@@ -144,7 +144,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
     joinNodeReplacementOperation.apply(graph, mutableTreeDecomposition);
 
-    ret = toPathDecomposition(mutableTreeDecomposition);
+    ret = toPathDecomposition(std::move(mutableTreeDecomposition));
 
     delete treeDecomposition;
 
@@ -220,7 +220,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
     return ret;
 }
 
-htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::toPathDecomposition(const htd::ITreeDecomposition & decomposition) const
+htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::toPathDecomposition(htd::IMutableTreeDecomposition && decomposition) const
 {
     htd::IMutablePathDecomposition * ret = managementInstance()->pathDecompositionFactory().getPathDecomposition();
 
@@ -230,7 +230,8 @@ htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::
 
         htd::vertex_t currentVertex = decomposition.root();
 
-        htd::vertex_t newVertex = ret->insertRoot();
+        htd::vertex_t newVertex = ret->insertRoot(std::move(decomposition.mutableBagContent(currentVertex)),
+                                                  std::move(decomposition.mutableInducedHyperedges(currentVertex)));
 
         for (const std::string & labelName : labelNames)
         {
@@ -244,7 +245,9 @@ htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::
         {
             currentVertex = decomposition.childAtPosition(currentVertex, 0);
 
-            newVertex = ret->addChild(newVertex);
+            newVertex = ret->addChild(newVertex,
+                                      std::move(decomposition.mutableBagContent(currentVertex)),
+                                      std::move(decomposition.mutableInducedHyperedges(currentVertex)));
 
             for (const std::string & labelName : labelNames)
             {
@@ -257,7 +260,7 @@ htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::
 
         if (decomposition.childCount(currentVertex) != 0)
         {
-            throw std::logic_error("htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::toPathDecomposition(const htd::ITreeDecomposition &) const");
+            throw std::logic_error("htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::toPathDecomposition(htd::IMutableTreeDecomposition &&) const");
         }
     }
 

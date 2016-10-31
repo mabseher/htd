@@ -72,9 +72,9 @@ void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
     apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -82,9 +82,9 @@ void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph,
     htd::WeakNormalizationOperation::apply(graph, decomposition, labelingFunctions);
 }
 
-void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    htd::WeakNormalizationOperation::apply(graph, decomposition, relevantVertices, labelingFunctions);
+    htd::WeakNormalizationOperation::apply(graph, decomposition, relevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
 
 void htd::SemiNormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const

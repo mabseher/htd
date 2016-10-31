@@ -73,11 +73,9 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
     apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-
-    apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -135,11 +133,61 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
     }
 }
 
-void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
+    HTD_UNUSED(graph)
+    HTD_UNUSED(removedVertices)
 
-    apply(graph, decomposition, labelingFunctions);
+    std::vector<htd::vertex_t> rememberedVertices;
+
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !managementInstance.isTerminated(); ++it)
+    {
+        htd::vertex_t vertex = *it;
+
+        if (decomposition.isExchangeNode(vertex))
+        {
+            const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+
+            std::vector<htd::vertex_t> children;
+
+            decomposition.copyChildrenTo(children, vertex);
+
+            for (htd::vertex_t child : children)
+            {
+                decomposition.copyRememberedVerticesTo(rememberedVertices, vertex, child);
+
+                if (bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
+                {
+                    htd::vertex_t newVertex = decomposition.addParent(child);
+
+                    decomposition.mutableBagContent(newVertex) = rememberedVertices;
+
+                    htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(vertex);
+
+                    newInducedHyperedges.restrictTo(rememberedVertices);
+
+                    decomposition.mutableInducedHyperedges(newVertex) = std::move(newInducedHyperedges);
+
+                    for (auto & labelingFunction : labelingFunctions)
+                    {
+                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newVertex);
+
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(rememberedVertices, *labelCollection);
+
+                        delete labelCollection;
+
+                        decomposition.setVertexLabel(labelingFunction->name(), newVertex, newLabel);
+                    }
+
+                    createdVertices.push_back(newVertex);
+                }
+
+                rememberedVertices.clear();
+            }
+        }
+    }
 }
 
 void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const

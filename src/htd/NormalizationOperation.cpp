@@ -80,9 +80,9 @@ void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd
     apply(graph, decomposition, std::vector<htd::ILabelingFunction *>());
 }
 
-void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const
+void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>());
+    apply(graph, decomposition, relevantVertices, std::vector<htd::ILabelingFunction *>(), createdVertices, removedVertices);
 }
 
 void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
@@ -102,21 +102,54 @@ void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd
     limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, labelingFunctions);
 }
 
-void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const
+void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    htd::SemiNormalizationOperation::apply(graph, decomposition, relevantVertices, labelingFunctions);
+    std::size_t newVertexCount = 0;
+
+    std::size_t oldCreatedVerticesCount = createdVertices.size();
+
+    std::vector<htd::vertex_t> newRelevantVertices(relevantVertices.begin(), relevantVertices.end());
+
+    htd::SemiNormalizationOperation::apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+
+    newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
+
+    if (newVertexCount > 0)
+    {
+        newRelevantVertices.insert(newRelevantVertices.end(), createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end());
+
+        oldCreatedVerticesCount = createdVertices.size();
+    }
 
     htd::ExchangeNodeReplacementOperation exchangeNodeReplacementOperation(managementInstance());
 
-    exchangeNodeReplacementOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
+    exchangeNodeReplacementOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 
-    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(managementInstance(), 1);
+    newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
 
-    limitMaximumForgottenVertexCountOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
+    if (newVertexCount > 0)
+    {
+        newRelevantVertices.insert(newRelevantVertices.end(), createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end());
 
-    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(managementInstance(), 1);
+        oldCreatedVerticesCount = createdVertices.size();
+    }
 
-    limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, relevantVertices, labelingFunctions);
+    htd::LimitMaximumForgottenVertexCountOperation limitMaximumForgottenVertexCountOperation(managementInstance(),1);
+
+    limitMaximumForgottenVertexCountOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
+
+    newVertexCount = createdVertices.size() - oldCreatedVerticesCount;
+
+    if (newVertexCount > 0)
+    {
+        newRelevantVertices.insert(newRelevantVertices.end(), createdVertices.begin() + oldCreatedVerticesCount, createdVertices.end());
+
+        oldCreatedVerticesCount = createdVertices.size();
+    }
+
+    htd::LimitMaximumIntroducedVertexCountOperation limitMaximumIntroducedVertexCountOperation(managementInstance(), 1, implementation_->treatLeafNodesAsIntroduceNodes_);
+
+    limitMaximumIntroducedVertexCountOperation.apply(graph, decomposition, newRelevantVertices, labelingFunctions, createdVertices, removedVertices);
 }
 
 void htd::NormalizationOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const

@@ -26,11 +26,10 @@
 #define HTD_HTD_POSTPROCESSINGPATHDECOMPOSITIONALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IHypergraph.hpp>
 #include <htd/IPathDecomposition.hpp>
 #include <htd/IPathDecompositionAlgorithm.hpp>
 #include <htd/IMutablePathDecomposition.hpp>
-#include <htd/ILabelingFunction.hpp>
+#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/IPathDecompositionManipulationOperation.hpp>
 
 #include <cstdarg>
@@ -114,7 +113,7 @@ namespace htd
              *
              *  @return A new IMutablePathDecomposition object constructed from the given tree decomposition.
              */
-            htd::IMutablePathDecomposition * toPathDecomposition(const htd::ITreeDecomposition & decomposition) const;
+            htd::IMutablePathDecomposition * toPathDecomposition(htd::IMutableTreeDecomposition && decomposition) const;
 
         private:
             struct Implementation;

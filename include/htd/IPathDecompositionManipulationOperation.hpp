@@ -58,8 +58,10 @@ namespace htd
              *  @param[in] graph            The graph from which the decomposition was computed.
              *  @param[in] decomposition    The path decomposition which shall be modified.
              *  @param[in] relevantVertices The collection of vertices to which the manipulation shall be applied.
+             *  @param[out] createdVertices A vector of vertices which were created by the manipulation operation.
+             *  @param[out] removedVertices A vector of vertices which were removed by the manipulation operation.
              */
-            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const = 0;
 
             /**
              *  Apply the manipulation operation to the given path decomposition.
@@ -81,8 +83,10 @@ namespace htd
              *  @param[in] decomposition        The path decomposition which shall be modified.
              *  @param[in] relevantVertices     The collection of vertices to which the manipulation shall be applied.
              *  @param[in] labelingFunctions    A vector of labeling functions which shall be applied after the modifications.
+             *  @param[out] createdVertices     A vector of vertices which were created by the manipulation operation.
+             *  @param[out] removedVertices     A vector of vertices which were removed by the manipulation operation.
              */
-            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions) const = 0;
+            virtual void apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const = 0;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**

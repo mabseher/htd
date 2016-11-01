@@ -37,18 +37,18 @@ namespace htd
     class ExhaustiveVertexSelectionStrategy : public htd::IVertexSelectionStrategy
     {
         public:
-            ExhaustiveVertexSelectionStrategy(void);
+            HTD_API ExhaustiveVertexSelectionStrategy(void);
 
-            virtual ~ExhaustiveVertexSelectionStrategy();
+            HTD_API virtual ~ExhaustiveVertexSelectionStrategy();
 
-            void selectVertices(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+            HTD_API void selectVertices(const htd::IMultiHypergraph & graph, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
             /**
              *  Create a deep copy of the current vertex selection strategy.
              *
              *  @return A new ExhaustiveVertexSelectionStrategy object identical to the current vertex selection strategy.
              */
-            ExhaustiveVertexSelectionStrategy * clone(void) const HTD_OVERRIDE;
+            HTD_API ExhaustiveVertexSelectionStrategy * clone(void) const HTD_OVERRIDE;
     };
 }
 

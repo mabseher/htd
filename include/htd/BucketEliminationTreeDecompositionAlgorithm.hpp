@@ -61,6 +61,13 @@ namespace htd
              */
             HTD_API BucketEliminationTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
+            /**
+             *  Copy constructor for a htd::BucketEliminationTreeDecompositionAlgorithm object.
+             *
+             *  @param[in] original The original htd::BucketEliminationTreeDecompositionAlgorithm object.
+             */
+            HTD_API BucketEliminationTreeDecompositionAlgorithm(const htd::BucketEliminationTreeDecompositionAlgorithm & original);
+
             HTD_API virtual ~BucketEliminationTreeDecompositionAlgorithm();
 
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;

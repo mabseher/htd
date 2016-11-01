@@ -123,6 +123,34 @@ class BagSizeLabelingFunction : public htd::ILabelingFunction
         const htd::LibraryInstance * managementInstance_;
 };
 
+class FitnessFunction : public htd::ITreeDecompositionFitnessFunction
+{
+    public:
+        FitnessFunction(void)
+        {
+
+        }
+
+        ~FitnessFunction()
+        {
+
+        }
+
+        htd::FitnessEvaluation * fitness(const htd::IMultiHypergraph & graph,
+                                         const htd::ITreeDecomposition & decomposition) const
+        {
+            HTD_UNUSED(graph)
+
+            return new htd::FitnessEvaluation(1,
+                                              -(double)(decomposition.height()));
+        }
+
+        FitnessFunction * clone(void) const
+        {
+            return new FitnessFunction();
+        }
+};
+
 htd::IMultiHypergraph * createInputGraph(const htd::LibraryInstance * const libraryInstance)
 {
     htd::MultiHypergraph * graph = new htd::MultiHypergraph(libraryInstance, 50);
@@ -740,6 +768,9 @@ TEST(ManipulationOperationTest, CheckLimitChildCountOperation3)
     decomposition->addChild(node3, { 3 }, htd::FilteredHyperedgeCollection());
     decomposition->addChild(node3, { 5 }, htd::FilteredHyperedgeCollection());
     decomposition->addChild(node3, { 6 }, htd::FilteredHyperedgeCollection());
+    decomposition->addChild(node3, { 3, 5 }, htd::FilteredHyperedgeCollection());
+    decomposition->addChild(node3, { 3, 6 }, htd::FilteredHyperedgeCollection());
+    decomposition->addChild(node3, { 5, 6 }, htd::FilteredHyperedgeCollection());
 
     htd::TreeDecompositionVerifier verifier;
 
@@ -754,15 +785,16 @@ TEST(ManipulationOperationTest, CheckLimitChildCountOperation3)
 
     ASSERT_TRUE(verifier.verify(*graph, *decomposition));
 
-    ASSERT_EQ((std::size_t)1, createdVertices.size());
+    ASSERT_EQ((std::size_t)4, createdVertices.size());
     ASSERT_EQ((std::size_t)0, removedVertices.size());
 
-    ASSERT_EQ(node3, decomposition->parent(createdVertices[0]));
-
-    ASSERT_LE(decomposition->childCount(createdVertices[0]), (std::size_t)2);
-    for (htd::vertex_t child : decomposition->children(createdVertices[0]))
+    for (htd::vertex_t createdVertex : createdVertices)
     {
-        ASSERT_LE(decomposition->childCount(child), (std::size_t)2);
+        ASSERT_LE(decomposition->childCount(createdVertex), (std::size_t)2);
+        for (htd::vertex_t child : decomposition->children(createdVertex))
+        {
+            ASSERT_LE(decomposition->childCount(child), (std::size_t)2);
+        }
     }
 
     createdVertices.clear();
@@ -1445,6 +1477,72 @@ TEST(ManipulationOperationTest, CheckPathDecompositionExchangeNodeReplacementOpe
     delete decomposition;
     delete labelingFunction;
     delete libraryInstance;
+}
+
+TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> input = computeTreeDecomposition(libraryInstance);
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutableTreeDecomposition * decomposition1 = input.second;
+
+    htd::IMutableTreeDecomposition * decomposition2 = input.second->clone();
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition1));
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition2));
+
+    htd::NormalizationOperation normalizationOperation(libraryInstance);
+
+    normalizationOperation.apply(*graph, *decomposition2);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition2));
+
+    std::size_t heightBefore = decomposition2->height();
+
+    FitnessFunction fitnessFunction;
+
+    htd::TreeDecompositionOptimizationOperation operation(libraryInstance, fitnessFunction);
+
+    ASSERT_FALSE(operation.isLocalOperation());
+    ASSERT_FALSE(operation.createsTreeNodes());
+    ASSERT_FALSE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation.createsLocationDependendLabels());
+
+    operation.setVertexSelectionStrategy(new htd::ExhaustiveVertexSelectionStrategy());
+
+    operation.addManipulationOperation(new htd::NormalizationOperation(libraryInstance));
+
+    operation.apply(*graph, *decomposition1);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition1));
+
+    ASSERT_LE(decomposition1->height(), heightBefore);
+
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance);
+
+    operation.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance2);
+
+    htd::TreeDecompositionOptimizationOperation * clonedOperation = operation.clone();
+
+    ASSERT_TRUE(clonedOperation->managementInstance() == libraryInstance2);
+
+    delete graph;
+    delete decomposition1;
+    delete decomposition2;
+    delete clonedOperation;
+    delete libraryInstance;
+    delete libraryInstance2;
 }
 
 int main(int argc, char **argv)

@@ -54,11 +54,37 @@ struct htd::BucketEliminationTreeDecompositionAlgorithm::Implementation
     /**
      *  Constructor for the implementation details structure.
      *
-     *  @param[in] manager   The management instance to which the current object instance belongs.
+     *  @param[in] manager  The management instance to which the current object instance belongs.
      */
     Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), baseAlgorithm_(new htd::BucketEliminationGraphDecompositionAlgorithm(manager)), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
     {
 
+    }
+
+    /**
+     *  Copy constructor for the implementation details structure.
+     *
+     *  @param[in] original The original implementation details structure.
+     */
+    Implementation(const Implementation & original) : managementInstance_(original.managementInstance_), baseAlgorithm_(original.baseAlgorithm_->clone()), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(original.computeInducedEdges_)
+    {
+        for (htd::ILabelingFunction * labelingFunction : original.labelingFunctions_)
+        {
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            labelingFunctions_.push_back(labelingFunction->clone());
+    #else
+            labelingFunctions_.push_back(labelingFunction->cloneLabelingFunction());
+    #endif
+        }
+
+        for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : original.postProcessingOperations_)
+        {
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            postProcessingOperations_.push_back(postProcessingOperation->clone());
+    #else
+            postProcessingOperations_.push_back(postProcessingOperation->cloneTreeDecompositionManipulationOperation());
+    #endif
+        }
     }
 
     virtual ~Implementation()
@@ -121,6 +147,11 @@ htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecomposi
 htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)  : implementation_(new Implementation(manager))
 {
     setManipulationOperations(manipulationOperations);
+}
+
+htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::BucketEliminationTreeDecompositionAlgorithm & original)  : implementation_(new Implementation(*(original.implementation_)))
+{
+
 }
 
 htd::BucketEliminationTreeDecompositionAlgorithm::~BucketEliminationTreeDecompositionAlgorithm()
@@ -338,33 +369,7 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::setComputeInducedEdges(bo
 
 htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDecompositionAlgorithm::clone(void) const
 {
-    htd::BucketEliminationTreeDecompositionAlgorithm * ret = new htd::BucketEliminationTreeDecompositionAlgorithm(implementation_->managementInstance_);
-
-    ret->implementation_->baseAlgorithm_ = implementation_->baseAlgorithm_->clone();
-
-    ret->setComputeInducedEdges(implementation_->computeInducedEdges_);
-
-    for (htd::ILabelingFunction * labelingFunction : implementation_->labelingFunctions_)
-    {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        ret->addManipulationOperation(labelingFunction->clone());
-#else
-        ret->addManipulationOperation(labelingFunction->cloneLabelingFunction());
-#endif
-    }
-
-    for (htd::ITreeDecompositionManipulationOperation * postProcessingOperation : implementation_->postProcessingOperations_)
-    {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        ret->addManipulationOperation(postProcessingOperation->clone());
-#else
-        ret->addManipulationOperation(postProcessingOperation->cloneTreeDecompositionManipulationOperation());
-#endif
-    }
-
-    ret->setManagementInstance(managementInstance());
-
-    return ret;
+    return new htd::BucketEliminationTreeDecompositionAlgorithm(*this);
 }
 
 std::pair<htd::IMutableTreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const

@@ -828,7 +828,16 @@ void htd::TreeDecompositionOptimizationOperation::setManagementInstance(const ht
 
 htd::TreeDecompositionOptimizationOperation * htd::TreeDecompositionOptimizationOperation::clone(void) const
 {
-    htd::TreeDecompositionOptimizationOperation * ret = new htd::TreeDecompositionOptimizationOperation(managementInstance(), *(implementation_->fitnessFunction_));
+    htd::TreeDecompositionOptimizationOperation * ret = nullptr;
+
+    if (implementation_->fitnessFunction_ == nullptr)
+    {
+        ret = new htd::TreeDecompositionOptimizationOperation(managementInstance());
+    }
+    else
+    {
+        ret = new htd::TreeDecompositionOptimizationOperation(managementInstance(), *(implementation_->fitnessFunction_));
+    }
 
     for (const htd::ITreeDecompositionManipulationOperation * manipulationOperation : implementation_->manipulationOperations_)
     {

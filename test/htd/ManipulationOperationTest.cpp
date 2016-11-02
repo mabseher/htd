@@ -1489,7 +1489,11 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation1)
 
     htd::IMutableTreeDecomposition * decomposition1 = input.second;
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     htd::IMutableTreeDecomposition * decomposition2 = input.second->clone();
+#else
+    htd::IMutableTreeDecomposition * decomposition2 = input.second->cloneMutableTreeDecomposition();
+#endif
 
     htd::TreeDecompositionVerifier verifier;
 
@@ -1507,6 +1511,76 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation1)
     FitnessFunction fitnessFunction;
 
     htd::TreeDecompositionOptimizationOperation operation(libraryInstance, fitnessFunction);
+
+    ASSERT_FALSE(operation.isLocalOperation());
+    ASSERT_FALSE(operation.createsTreeNodes());
+    ASSERT_FALSE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation.createsLocationDependendLabels());
+
+    operation.setVertexSelectionStrategy(new htd::ExhaustiveVertexSelectionStrategy());
+
+    operation.addManipulationOperation(new htd::NormalizationOperation(libraryInstance));
+
+    operation.apply(*graph, *decomposition1);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition1));
+
+    ASSERT_LE(decomposition1->height(), heightBefore);
+
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance);
+
+    operation.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance2);
+
+    htd::TreeDecompositionOptimizationOperation * clonedOperation = operation.clone();
+
+    ASSERT_TRUE(clonedOperation->managementInstance() == libraryInstance2);
+
+    delete graph;
+    delete decomposition1;
+    delete decomposition2;
+    delete clonedOperation;
+    delete libraryInstance;
+    delete libraryInstance2;
+}
+
+TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> input = computeTreeDecomposition(libraryInstance);
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutableTreeDecomposition * decomposition1 = input.second;
+
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    htd::IMutableTreeDecomposition * decomposition2 = input.second->clone();
+#else
+    htd::IMutableTreeDecomposition * decomposition2 = input.second->cloneMutableTreeDecomposition();
+#endif
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition1));
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition2));
+
+    htd::NormalizationOperation normalizationOperation(libraryInstance);
+
+    normalizationOperation.apply(*graph, *decomposition2);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition2));
+
+    std::size_t heightBefore = decomposition2->height();
+
+    FitnessFunction fitnessFunction;
+
+    htd::TreeDecompositionOptimizationOperation operation(libraryInstance, fitnessFunction, true);
 
     ASSERT_FALSE(operation.isLocalOperation());
     ASSERT_FALSE(operation.createsTreeNodes());

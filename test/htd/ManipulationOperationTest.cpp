@@ -1500,17 +1500,9 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation1)
     ASSERT_TRUE(verifier.verify(*graph, *decomposition1));
     ASSERT_TRUE(verifier.verify(*graph, *decomposition2));
 
-    htd::NormalizationOperation normalizationOperation(libraryInstance);
-
-    normalizationOperation.apply(*graph, *decomposition2);
-
-    ASSERT_TRUE(verifier.verify(*graph, *decomposition2));
-
     std::size_t heightBefore = decomposition2->height();
 
-    FitnessFunction fitnessFunction;
-
-    htd::TreeDecompositionOptimizationOperation operation(libraryInstance, fitnessFunction);
+    htd::TreeDecompositionOptimizationOperation operation(libraryInstance);
 
     ASSERT_FALSE(operation.isLocalOperation());
     ASSERT_FALSE(operation.createsTreeNodes());
@@ -1523,11 +1515,18 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation1)
 
     operation.addManipulationOperation(new htd::NormalizationOperation(libraryInstance));
 
+    ASSERT_FALSE(operation.isLocalOperation());
+    ASSERT_TRUE(operation.createsTreeNodes());
+    ASSERT_FALSE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation.createsLocationDependendLabels());
+
     operation.apply(*graph, *decomposition1);
 
     ASSERT_TRUE(verifier.verify(*graph, *decomposition1));
 
-    ASSERT_LE(decomposition1->height(), heightBefore);
+    ASSERT_GE(decomposition1->height(), heightBefore);
 
     htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
 
@@ -1580,6 +1579,78 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation2)
 
     FitnessFunction fitnessFunction;
 
+    htd::TreeDecompositionOptimizationOperation operation(libraryInstance, fitnessFunction);
+
+    ASSERT_FALSE(operation.isLocalOperation());
+    ASSERT_FALSE(operation.createsTreeNodes());
+    ASSERT_FALSE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation.createsLocationDependendLabels());
+
+    operation.setVertexSelectionStrategy(new htd::ExhaustiveVertexSelectionStrategy());
+
+    operation.addManipulationOperations({ new htd::NormalizationOperation(libraryInstance) });
+
+    operation.apply(*graph, *decomposition1);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition1));
+
+    ASSERT_LE(decomposition1->height(), heightBefore);
+
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance);
+
+    operation.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance2);
+
+    htd::TreeDecompositionOptimizationOperation * clonedOperation = operation.clone();
+
+    ASSERT_TRUE(clonedOperation->managementInstance() == libraryInstance2);
+
+    delete graph;
+    delete decomposition1;
+    delete decomposition2;
+    delete clonedOperation;
+    delete libraryInstance;
+    delete libraryInstance2;
+}
+
+TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> input = computeTreeDecomposition(libraryInstance);
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutableTreeDecomposition * decomposition1 = input.second;
+
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+    htd::IMutableTreeDecomposition * decomposition2 = input.second->clone();
+#else
+    htd::IMutableTreeDecomposition * decomposition2 = input.second->cloneMutableTreeDecomposition();
+#endif
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition1));
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition2));
+
+    std::size_t heightInitial = decomposition1->height();
+
+    htd::NormalizationOperation normalizationOperation(libraryInstance);
+
+    normalizationOperation.apply(*graph, *decomposition2);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition2));
+
+    std::size_t heightBefore = decomposition2->height();
+
+    FitnessFunction fitnessFunction;
+
     htd::TreeDecompositionOptimizationOperation operation(libraryInstance, fitnessFunction, true);
 
     ASSERT_FALSE(operation.isLocalOperation());
@@ -1593,11 +1664,36 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation2)
 
     operation.addManipulationOperation(new htd::NormalizationOperation(libraryInstance));
 
+    ASSERT_FALSE(operation.isLocalOperation());
+    ASSERT_TRUE(operation.createsTreeNodes());
+    ASSERT_FALSE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation.createsLocationDependendLabels());
+
     operation.apply(*graph, *decomposition1);
 
     ASSERT_TRUE(verifier.verify(*graph, *decomposition1));
 
-    ASSERT_LE(decomposition1->height(), heightBefore);
+    std::size_t heightAfter1 = decomposition1->height();
+
+    ASSERT_LE(heightAfter1, heightBefore);
+
+    operation.setManipulationOperations({ new htd::CompressionOperation(libraryInstance) });
+
+    ASSERT_FALSE(operation.isLocalOperation());
+    ASSERT_FALSE(operation.createsTreeNodes());
+    ASSERT_TRUE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation.createsLocationDependendLabels());
+
+    operation.apply(*graph, *decomposition1);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition1));
+
+    ASSERT_LE(decomposition1->height(), heightInitial);
+    ASSERT_LE(decomposition1->height(), heightAfter1);
 
     htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
 

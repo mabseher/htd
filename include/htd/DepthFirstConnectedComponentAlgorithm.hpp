@@ -41,19 +41,19 @@ namespace htd
              *
              *  @param[in] manager   The management instance to which the new algorithm belongs.
              */
-            DepthFirstConnectedComponentAlgorithm(const htd::LibraryInstance * const manager);
+            HTD_API DepthFirstConnectedComponentAlgorithm(const htd::LibraryInstance * const manager);
 
-            virtual ~DepthFirstConnectedComponentAlgorithm();
+            HTD_API virtual ~DepthFirstConnectedComponentAlgorithm();
 
-            void determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
+            HTD_API void determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
 
-            void determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+            HTD_API void determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
-            const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
-            DepthFirstConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
+            HTD_API DepthFirstConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
 
         private:
             struct Implementation;

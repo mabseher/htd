@@ -43,7 +43,8 @@ htd::DirectedGraph::DirectedGraph(const htd::LibraryInstance * const manager) : 
 
 htd::DirectedGraph::DirectedGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : base_(manager->hypergraphFactory().getHypergraph(initialSize)), incomingNeighborhood_(), outgoingNeighborhood_()
 {
-
+    incomingNeighborhood_.resize(initialSize, std::unordered_set<htd::vertex_t>());
+    outgoingNeighborhood_.resize(initialSize, std::unordered_set<htd::vertex_t>());
 }
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE

@@ -569,7 +569,7 @@ TEST(ConnectedComponentAlgorithmTest, CheckDepthFirstConnectedComponentAlgorithm
 
     ASSERT_TRUE(htd::is_sorted_and_duplicate_free(component1.begin(), component1.end()));
 
-    ASSERT_TRUE(std::binary_search(component1.begin(), component1.end(), 1));
+    ASSERT_TRUE(std::binary_search(component1.begin(), component1.end(), (htd::vertex_t)1));
 
     htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
 
@@ -694,7 +694,7 @@ TEST(ConnectedComponentAlgorithmTest, CheckTarjanStronglyConnectedComponentAlgor
 
     ASSERT_TRUE(htd::is_sorted_and_duplicate_free(component1.begin(), component1.end()));
 
-    ASSERT_TRUE(std::binary_search(component1.begin(), component1.end(), 1));
+    ASSERT_TRUE(std::binary_search(component1.begin(), component1.end(), (htd::vertex_t)1));
 
     htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
 

@@ -28,19 +28,16 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>
-#include <htd/BidirectionalGraphNaming.hpp>
 #include <htd/ILabelingFunction.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/GraphDecompositionFactory.hpp>
 #include <htd/IWidthLimitableOrderingAlgorithm.hpp>
 
 #include <algorithm>
-#include <array>
 #include <cstdarg>
 #include <functional>
 #include <memory>
 #include <stack>
-#include <stdexcept>
 #include <tuple>
 #include <unordered_map>
 #include <unordered_set>

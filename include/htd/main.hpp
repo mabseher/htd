@@ -29,7 +29,6 @@
 #include <htd/AddEmptyRootOperation.hpp>
 #include <htd/AddIdenticalJoinNodeParentOperation.hpp>
 #include <htd/Algorithm.hpp>
-#include <htd/BidirectionalGraphLabeling.hpp>
 #include <htd/BidirectionalGraphNaming.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>
 #include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>
@@ -73,7 +72,6 @@
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
 #include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/HypertreeDecomposition.hpp>
-#include <htd/IBidirectionalGraphLabeling.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
 #include <htd/Id.hpp>

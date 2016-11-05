@@ -111,11 +111,33 @@ void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, ht
 
 void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-    HTD_UNUSED(createdVertices)
+    HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
-    apply(graph, decomposition, labelingFunctions);
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !managementInstance.isTerminated(); ++it)
+    {
+        htd::vertex_t vertex = *it;
+
+        if (decomposition.isLeaf(vertex) && decomposition.bagSize(vertex) > 0)
+        {
+            htd::vertex_t newLeaf = decomposition.addChild(vertex);
+
+            for (auto & labelingFunction : labelingFunctions)
+            {
+                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newLeaf);
+
+                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newLeaf), *labelCollection);
+
+                delete labelCollection;
+
+                decomposition.setVertexLabel(labelingFunction->name(), newLeaf, newLabel);
+            }
+
+            createdVertices.push_back(newLeaf);
+        }
+    }
 }
 
 void htd::AddEmptyLeavesOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
@@ -213,7 +235,7 @@ bool htd::AddEmptyLeavesOperation::modifiesBagContents(void) const
 
 bool htd::AddEmptyLeavesOperation::createsSubsetMaximalBags(void) const
 {
-    return true;
+    return false;
 }
 
 bool htd::AddEmptyLeavesOperation::createsLocationDependendLabels(void) const

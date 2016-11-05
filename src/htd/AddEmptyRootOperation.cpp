@@ -226,7 +226,7 @@ bool htd::AddEmptyRootOperation::modifiesBagContents(void) const
 
 bool htd::AddEmptyRootOperation::createsSubsetMaximalBags(void) const
 {
-    return true;
+    return false;
 }
 
 bool htd::AddEmptyRootOperation::createsLocationDependendLabels(void) const

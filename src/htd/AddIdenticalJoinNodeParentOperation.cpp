@@ -103,7 +103,7 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(const htd::IMultiHypergraph
         std::cout << std::endl << std::endl;
         )
 
-        if (implementation_->enforceAdditionalNode_ || decomposition.bagContent(decomposition.parent(node)) != bag)
+        if (implementation_->enforceAdditionalNode_ || decomposition.isRoot(node) || decomposition.bagContent(decomposition.parent(node)) != bag)
         {
             htd::vertex_t newParent = decomposition.addParent(node);
 
@@ -143,7 +143,7 @@ void htd::AddIdenticalJoinNodeParentOperation::apply(const htd::IMultiHypergraph
             std::cout << std::endl << std::endl;
             )
 
-            if (implementation_->enforceAdditionalNode_ || decomposition.bagContent(decomposition.parent(vertex)) != bag)
+            if (implementation_->enforceAdditionalNode_ || decomposition.isRoot(vertex) || decomposition.bagContent(decomposition.parent(vertex)) != bag)
             {
                 htd::vertex_t newParent = decomposition.addParent(vertex);
 

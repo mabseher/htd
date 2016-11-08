@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <numeric>
 #include <random>
 #include <unordered_set>
 #include <vector>

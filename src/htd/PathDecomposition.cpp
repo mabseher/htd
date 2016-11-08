@@ -804,12 +804,17 @@ void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
 {
     HTD_ASSERT(isVertex(vertex))
 
+    const std::vector<htd::vertex_t> & bag = bagContent(vertex);
+
     if (!isLeaf(vertex))
     {
-        const std::vector<htd::vertex_t> & bag = bagContent(vertex);
         const std::vector<htd::vertex_t> & childBag = bagContent(child(vertex));
 
         std::set_difference(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(target));
+    }
+    else
+    {
+        std::copy(bag.begin(), bag.end(), std::back_inserter(target));
     }
 }
 

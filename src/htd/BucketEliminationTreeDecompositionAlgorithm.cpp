@@ -203,7 +203,19 @@ std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDeco
             }
         }
 
-        for (const auto & labelingFunction : implementation_->labelingFunctions_)
+        for (const htd::ITreeDecompositionManipulationOperation * operation : implementation_->postProcessingOperations_)
+        {
+            operation->apply(graph, *decomposition);
+        }
+
+        for (htd::ITreeDecompositionManipulationOperation * operation : postProcessingOperations)
+        {
+            operation->apply(graph, *decomposition);
+
+            delete operation;
+        }
+
+        for (const htd::ILabelingFunction * labelingFunction : implementation_->labelingFunctions_)
         {
             for (htd::vertex_t vertex : decomposition->vertices())
             {
@@ -217,7 +229,7 @@ std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDeco
             }
         }
 
-        for (const auto & labelingFunction : labelingFunctions)
+        for (htd::ILabelingFunction * labelingFunction : labelingFunctions)
         {
             for (htd::vertex_t vertex : decomposition->vertices())
             {
@@ -229,26 +241,8 @@ std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDeco
 
                 decomposition->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
-        }
 
-        for (const auto & operation : implementation_->postProcessingOperations_)
-        {
-            operation->apply(graph, *decomposition);
-        }
-
-        for (const auto & operation : postProcessingOperations)
-        {
-            operation->apply(graph, *decomposition);
-        }
-
-        for (auto & labelingFunction : labelingFunctions)
-        {
             delete labelingFunction;
-        }
-
-        for (auto & postProcessingOperation : postProcessingOperations)
-        {
-            delete postProcessingOperation;
         }
     }
     else

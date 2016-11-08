@@ -117,163 +117,86 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
             if (introducedVertexCount > implementation_->limit_)
             {
+                HTD_ASSERT(decomposition.childCount(node) < 2)
+
                 std::vector<htd::vertex_t> introducedVertices;
 
                 decomposition.copyIntroducedVerticesTo(introducedVertices, node);
 
-                std::size_t remainder = introducedVertexCount % implementation_->limit_;
+                htd::index_t index = implementation_->limit_;
 
-                introducedVertexCount -= remainder;
+                htd::vertex_t attachmentPoint = node;
 
-                std::size_t intermediatedVertexCount = introducedVertexCount / implementation_->limit_;
-
-                if (intermediatedVertexCount > 0)
+                if (decomposition.isLeaf(node))
                 {
-                    intermediatedVertexCount--;
-                }
-
-                if (remainder == 0)
-                {
-                    intermediatedVertexCount--;
-                }
-
-                std::vector<htd::vertex_t> children;
-
-                decomposition.copyChildrenTo(children, node);
-
-                if (children.empty())
-                {
-                    auto start = introducedVertices.begin();
-                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
-
-                    htd::vertex_t newNode = decomposition.addChild(node);
-
-                    decomposition.mutableBagContent(newNode) = std::vector<htd::vertex_t>(start, finish);
+                    std::vector<htd::vertex_t> newBagContent(introducedVertices.begin(), introducedVertices.begin() + index);
 
                     htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
-                    newInducedHyperedges.restrictTo(std::vector<htd::vertex_t>(start, finish));
+                    newInducedHyperedges.restrictTo(newBagContent);
 
-                    decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                    for (auto & labelingFunction : labelingFunctions)
-                    {
-                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
-
-                        delete labelCollection;
-
-                        decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                    }
-
-                    if (intermediatedVertexCount > 0)
-                    {
-                        std::advance(finish, implementation_->limit_);
-
-                        for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
-                        {
-                            newNode = decomposition.addParent(newNode);
-
-                            decomposition.mutableBagContent(newNode) = std::vector<htd::vertex_t>(start, finish);
-
-                            htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
-
-                            newInducedHyperedges.restrictTo(std::vector<htd::vertex_t>(start, finish));
-
-                            decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                            for (auto & labelingFunction : labelingFunctions)
-                            {
-                                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
-
-                                delete labelCollection;
-
-                                decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                            }
-
-                            if (index < introducedVertexCount + implementation_->limit_)
-                            {
-                                std::advance(finish, implementation_->limit_);
-                            }
-                        }
-                    }
+                    attachmentPoint = decomposition.addChild(node, std::move(newBagContent), std::move(newInducedHyperedges));
                 }
-                else if (children.size() == 1)
+                else
                 {
-                    htd::vertex_t child = children[0];
+                    htd::vertex_t child = decomposition.childAtPosition(node, 0);
 
-                    auto start = introducedVertices.begin();
-                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
+                    const std::vector<htd::vertex_t> & childBag = decomposition.bagContent(child);
 
-                    htd::vertex_t newNode = decomposition.addParent(child);
+                    std::vector<htd::vertex_t> newBagContent;
 
-                    std::vector<htd::vertex_t> newContent;
-
-                    const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(child);
-
-                    std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
-
-                    decomposition.mutableBagContent(newNode) = newContent;
+                    std::set_union(childBag.begin(), childBag.end(), introducedVertices.begin(), introducedVertices.begin() + index, std::back_inserter(newBagContent));
 
                     htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
-                    newInducedHyperedges.restrictTo(newContent);
+                    newInducedHyperedges.restrictTo(newBagContent);
 
-                    decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
+                    attachmentPoint = decomposition.addParent(child, std::move(newBagContent), std::move(newInducedHyperedges));
+                }
+
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(attachmentPoint);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(attachmentPoint), *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), attachmentPoint, newLabel);
+                }
+
+                index += implementation_->limit_;
+
+                while (index < introducedVertexCount)
+                {
+                    std::vector<htd::vertex_t> newBagContent;
+
+                    const std::vector<htd::vertex_t> & childBag = decomposition.bagContent(attachmentPoint);
+
+                    std::set_union(childBag.begin(), childBag.end(), introducedVertices.begin(), introducedVertices.begin() + index, std::back_inserter(newBagContent));
+
+                    htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                    newInducedHyperedges.restrictTo(newBagContent);
+
+                    attachmentPoint = decomposition.addParent(attachmentPoint, std::move(newBagContent), std::move(newInducedHyperedges));
 
                     for (auto & labelingFunction : labelingFunctions)
                     {
-                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
+                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(attachmentPoint);
 
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(newContent, *labelCollection);
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(attachmentPoint), *labelCollection);
 
                         delete labelCollection;
 
-                        decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
+                        decomposition.setVertexLabel(labelingFunction->name(), attachmentPoint, newLabel);
                     }
 
-                    if (intermediatedVertexCount > 0)
+                    index += implementation_->limit_;
+
+                    if (index > introducedVertexCount)
                     {
-                        std::advance(start, implementation_->limit_);
-                        std::advance(finish, implementation_->limit_);
-
-                        for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
-                        {
-                            newNode = decomposition.addParent(newNode);
-
-                            for (auto it = start; it != finish; it++)
-                            {
-                                newContent.push_back(*it);
-                            }
-
-                            decomposition.mutableBagContent(newNode) = newContent;
-
-                            htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
-
-                            newInducedHyperedges.restrictTo(newContent);
-
-                            decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                            for (auto & labelingFunction : labelingFunctions)
-                            {
-                                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                                htd::ILabel * newLabel = labelingFunction->computeLabel(newContent, *labelCollection);
-
-                                delete labelCollection;
-
-                                decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                            }
-
-                            if (index < introducedVertexCount + implementation_->limit_)
-                            {
-                                std::advance(start, implementation_->limit_);
-                                std::advance(finish, implementation_->limit_);
-                            }
-                        }
+                        index = introducedVertexCount;
                     }
                 }
             }
@@ -284,11 +207,123 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
 void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
-    HTD_UNUSED(createdVertices)
+    HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
-    apply(graph, decomposition, labelingFunctions);
+    std::vector<htd::vertex_t> introduceNodes;
+
+    decomposition.copyIntroduceNodesTo(introduceNodes);
+
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !managementInstance.isTerminated(); ++it)
+    {
+        htd::vertex_t node = *it;
+
+        if (decomposition.isIntroduceNode(node))
+        {
+            if (implementation_->treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
+            {
+                std::vector<htd::vertex_t> bagContent;
+
+                const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
+
+                std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
+
+                std::size_t introducedVertexCount = decomposition.introducedVertexCount(node);
+
+                if (introducedVertexCount > implementation_->limit_)
+                {
+                    HTD_ASSERT(decomposition.childCount(node) < 2)
+
+                    std::vector<htd::vertex_t> introducedVertices;
+
+                    decomposition.copyIntroducedVerticesTo(introducedVertices, node);
+
+                    htd::index_t index = implementation_->limit_;
+
+                    htd::vertex_t attachmentPoint = node;
+
+                    if (decomposition.isLeaf(node))
+                    {
+                        std::vector<htd::vertex_t> newBagContent(introducedVertices.begin(), introducedVertices.begin() + index);
+
+                        htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                        newInducedHyperedges.restrictTo(newBagContent);
+
+                        attachmentPoint = decomposition.addChild(node, std::move(newBagContent), std::move(newInducedHyperedges));
+                    }
+                    else
+                    {
+                        htd::vertex_t child = decomposition.childAtPosition(node, 0);
+
+                        const std::vector<htd::vertex_t> & childBag = decomposition.bagContent(child);
+
+                        std::vector<htd::vertex_t> newBagContent;
+
+                        std::set_union(childBag.begin(), childBag.end(), introducedVertices.begin(), introducedVertices.begin() + index, std::back_inserter(newBagContent));
+
+                        htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                        newInducedHyperedges.restrictTo(newBagContent);
+
+                        attachmentPoint = decomposition.addParent(child, std::move(newBagContent), std::move(newInducedHyperedges));
+                    }
+
+                    createdVertices.push_back(attachmentPoint);
+
+                    for (auto & labelingFunction : labelingFunctions)
+                    {
+                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(attachmentPoint);
+
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(attachmentPoint), *labelCollection);
+
+                        delete labelCollection;
+
+                        decomposition.setVertexLabel(labelingFunction->name(), attachmentPoint, newLabel);
+                    }
+
+                    index += implementation_->limit_;
+
+                    while (index < introducedVertexCount)
+                    {
+                        std::vector<htd::vertex_t> newBagContent;
+
+                        const std::vector<htd::vertex_t> & childBag = decomposition.bagContent(attachmentPoint);
+
+                        std::set_union(childBag.begin(), childBag.end(), introducedVertices.begin(), introducedVertices.begin() + index, std::back_inserter(newBagContent));
+
+                        htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                        newInducedHyperedges.restrictTo(newBagContent);
+
+                        attachmentPoint = decomposition.addParent(attachmentPoint, std::move(newBagContent), std::move(newInducedHyperedges));
+
+                        createdVertices.push_back(attachmentPoint);
+
+                        for (auto & labelingFunction : labelingFunctions)
+                        {
+                            htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(attachmentPoint);
+
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(attachmentPoint), *labelCollection);
+
+                            delete labelCollection;
+
+                            decomposition.setVertexLabel(labelingFunction->name(), attachmentPoint, newLabel);
+                        }
+
+                        index += implementation_->limit_;
+
+                        if (index > introducedVertexCount)
+                        {
+                            index = introducedVertexCount;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
@@ -327,166 +362,87 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
             if (introducedVertexCount > implementation_->limit_)
             {
+                HTD_ASSERT(decomposition.childCount(node) < 2)
+
                 std::vector<htd::vertex_t> introducedVertices;
 
                 decomposition.copyIntroducedVerticesTo(introducedVertices, node);
 
-                std::size_t remainder = introducedVertexCount % implementation_->limit_;
+                htd::index_t index = implementation_->limit_;
 
-                introducedVertexCount -= remainder;
+                htd::vertex_t attachmentPoint = node;
 
-                std::size_t intermediatedVertexCount = introducedVertexCount / implementation_->limit_;
-
-                if (intermediatedVertexCount > 0)
+                if (decomposition.isLeaf(node))
                 {
-                    intermediatedVertexCount--;
-                }
-
-                if (remainder == 0)
-                {
-                    intermediatedVertexCount--;
-                }
-
-                std::vector<htd::vertex_t> children;
-
-                decomposition.copyChildrenTo(children, node);
-
-                if (children.empty())
-                {
-                    auto start = introducedVertices.begin();
-                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
-
-                    htd::vertex_t newNode = decomposition.addChild(node);
-
-                    decomposition.mutableBagContent(newNode) = std::vector<htd::vertex_t>(start, finish);
+                    std::vector<htd::vertex_t> newBagContent(introducedVertices.begin(), introducedVertices.begin() + index);
 
                     htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
-                    newInducedHyperedges.restrictTo(std::vector<htd::vertex_t>(start, finish));
+                    newInducedHyperedges.restrictTo(newBagContent);
 
-                    decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                    for (auto & labelingFunction : labelingFunctions)
-                    {
-                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
-
-                        delete labelCollection;
-
-                        decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                    }
-
-                    if (intermediatedVertexCount > 0)
-                    {
-                        std::advance(finish, implementation_->limit_);
-
-                        for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
-                        {
-                            newNode = decomposition.addParent(newNode);
-
-                            decomposition.mutableBagContent(newNode) = std::vector<htd::vertex_t>(start, finish);
-
-                            htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
-
-                            newInducedHyperedges.restrictTo(std::vector<htd::vertex_t>(start, finish));
-
-                            decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                            for (auto & labelingFunction : labelingFunctions)
-                            {
-                                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                                htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
-
-                                delete labelCollection;
-
-                                decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                            }
-
-                            if (index < introducedVertexCount + implementation_->limit_)
-                            {
-                                std::advance(finish, implementation_->limit_);
-                            }
-                        }
-                    }
-                }
-                else if (children.size() == 1)
-                {
-                    htd::vertex_t child = children[0];
-
-                    auto start = introducedVertices.begin();
-                    auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
-
-                    htd::vertex_t newNode = decomposition.addParent(child);
-
-                    std::vector<htd::vertex_t> newContent;
-
-                    const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(child);
-
-                    std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
-
-                    decomposition.mutableBagContent(newNode) = newContent;
-
-                    htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
-
-                    newInducedHyperedges.restrictTo(newContent);
-
-                    decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                    for (auto & labelingFunction : labelingFunctions)
-                    {
-                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                        htd::ILabel * newLabel = labelingFunction->computeLabel(newContent, *labelCollection);
-
-                        delete labelCollection;
-
-                        decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                    }
-
-                    if (intermediatedVertexCount > 0)
-                    {
-                        std::advance(start, implementation_->limit_);
-                        std::advance(finish, implementation_->limit_);
-
-                        for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
-                        {
-                            newNode = decomposition.addParent(newNode);
-
-                            std::copy(start, finish, std::back_inserter(newContent));
-                            std::inplace_merge(newContent.begin(), newContent.end() - std::distance(start, finish), newContent.end());
-
-                            decomposition.mutableBagContent(newNode) = newContent;
-
-                            htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
-
-                            newInducedHyperedges.restrictTo(newContent);
-
-                            decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                            for (auto & labelingFunction : labelingFunctions)
-                            {
-                                htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                                htd::ILabel * newLabel = labelingFunction->computeLabel(newContent, *labelCollection);
-
-                                delete labelCollection;
-
-                                decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                            }
-
-                            if (index < introducedVertexCount + implementation_->limit_)
-                            {
-                                std::advance(start, implementation_->limit_);
-                                std::advance(finish, implementation_->limit_);
-                            }
-                        }
-                    }
+                    attachmentPoint = decomposition.addChild(node, std::move(newBagContent), std::move(newInducedHyperedges));
                 }
                 else
                 {
-                    throw std::logic_error("void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHypergraph &, htd::IMutableTreeDecomposition &) const");
+                    htd::vertex_t child = decomposition.childAtPosition(node, 0);
+
+                    const std::vector<htd::vertex_t> & childBag = decomposition.bagContent(child);
+
+                    std::vector<htd::vertex_t> newBagContent;
+
+                    std::set_union(childBag.begin(), childBag.end(), introducedVertices.begin(), introducedVertices.begin() + index, std::back_inserter(newBagContent));
+
+                    htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                    newInducedHyperedges.restrictTo(newBagContent);
+
+                    attachmentPoint = decomposition.addParent(child, std::move(newBagContent), std::move(newInducedHyperedges));
+                }
+
+                for (auto & labelingFunction : labelingFunctions)
+                {
+                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(attachmentPoint);
+
+                    htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(attachmentPoint), *labelCollection);
+
+                    delete labelCollection;
+
+                    decomposition.setVertexLabel(labelingFunction->name(), attachmentPoint, newLabel);
+                }
+
+                index += implementation_->limit_;
+
+                while (index < introducedVertexCount)
+                {
+                    std::vector<htd::vertex_t> newBagContent;
+
+                    const std::vector<htd::vertex_t> & childBag = decomposition.bagContent(attachmentPoint);
+
+                    std::set_union(childBag.begin(), childBag.end(), introducedVertices.begin(), introducedVertices.begin() + index, std::back_inserter(newBagContent));
+
+                    htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                    newInducedHyperedges.restrictTo(newBagContent);
+
+                    attachmentPoint = decomposition.addParent(attachmentPoint, std::move(newBagContent), std::move(newInducedHyperedges));
+
+                    for (auto & labelingFunction : labelingFunctions)
+                    {
+                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(attachmentPoint);
+
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(attachmentPoint), *labelCollection);
+
+                        delete labelCollection;
+
+                        decomposition.setVertexLabel(labelingFunction->name(), attachmentPoint, newLabel);
+                    }
+
+                    index += implementation_->limit_;
+
+                    if (index > introducedVertexCount)
+                    {
+                        index = introducedVertexCount;
+                    }
                 }
             }
         }
@@ -498,190 +454,115 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
     HTD_UNUSED(graph)
     HTD_UNUSED(removedVertices)
 
+    std::vector<htd::vertex_t> introduceNodes;
+
+    decomposition.copyIntroduceNodesTo(introduceNodes);
+
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
     for (auto it = relevantVertices.begin(); it != relevantVertices.end() && !managementInstance.isTerminated(); ++it)
     {
-        htd::vertex_t vertex = *it;
+        htd::vertex_t node = *it;
 
-        if (decomposition.isIntroduceNode(vertex))
+        if (decomposition.isIntroduceNode(node))
         {
-            if (implementation_->treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(vertex))
+            if (implementation_->treatLeafNodesAsIntroduceNodes_ || !decomposition.isLeaf(node))
             {
                 std::vector<htd::vertex_t> bagContent;
 
-                const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+                const std::vector<htd::vertex_t> & bag = decomposition.bagContent(node);
 
                 std::copy(std::begin(bag), std::end(bag), std::back_inserter(bagContent));
 
-                std::size_t introducedVertexCount = decomposition.introducedVertexCount(vertex);
+                std::size_t introducedVertexCount = decomposition.introducedVertexCount(node);
 
                 if (introducedVertexCount > implementation_->limit_)
                 {
+                    HTD_ASSERT(decomposition.childCount(node) < 2)
+
                     std::vector<htd::vertex_t> introducedVertices;
 
-                    decomposition.copyIntroducedVerticesTo(introducedVertices, vertex);
+                    decomposition.copyIntroducedVerticesTo(introducedVertices, node);
 
-                    std::size_t remainder = introducedVertexCount % implementation_->limit_;
+                    htd::index_t index = implementation_->limit_;
 
-                    introducedVertexCount -= remainder;
+                    htd::vertex_t attachmentPoint = node;
 
-                    std::size_t intermediatedVertexCount = introducedVertexCount / implementation_->limit_;
-
-                    if (intermediatedVertexCount > 0)
+                    if (decomposition.isLeaf(node))
                     {
-                        intermediatedVertexCount--;
-                    }
+                        std::vector<htd::vertex_t> newBagContent(introducedVertices.begin(), introducedVertices.begin() + index);
 
-                    if (remainder == 0)
-                    {
-                        intermediatedVertexCount--;
-                    }
+                        htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
 
-                    std::vector<htd::vertex_t> children;
+                        newInducedHyperedges.restrictTo(newBagContent);
 
-                    decomposition.copyChildrenTo(children, vertex);
-
-                    if (children.empty())
-                    {
-                        auto start = introducedVertices.begin();
-                        auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
-
-                        htd::vertex_t newNode = decomposition.addChild(vertex);
-
-                        decomposition.mutableBagContent(newNode) = std::vector<htd::vertex_t>(start, finish);
-
-                        htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(vertex);
-
-                        newInducedHyperedges.restrictTo(std::vector<htd::vertex_t>(start, finish));
-
-                        decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                        for (auto & labelingFunction : labelingFunctions)
-                        {
-                            htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                            htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
-
-                            delete labelCollection;
-
-                            decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                        }
-
-                        if (intermediatedVertexCount > 0)
-                        {
-                            std::advance(finish, implementation_->limit_);
-
-                            for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
-                            {
-                                newNode = decomposition.addParent(newNode);
-
-                                decomposition.mutableBagContent(newNode) = std::vector<htd::vertex_t>(start, finish);
-
-                                htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(vertex);
-
-                                newInducedHyperedges.restrictTo(std::vector<htd::vertex_t>(start, finish));
-
-                                decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                                for (auto & labelingFunction : labelingFunctions)
-                                {
-                                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                                    htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(newNode), *labelCollection);
-
-                                    delete labelCollection;
-
-                                    decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                                }
-
-                                if (index < introducedVertexCount + implementation_->limit_)
-                                {
-                                    std::advance(finish, implementation_->limit_);
-                                }
-                            }
-                        }
-                    }
-                    else if (children.size() == 1)
-                    {
-                        htd::vertex_t child = children[0];
-
-                        auto start = introducedVertices.begin();
-                        auto finish = introducedVertices.begin() + (remainder > 0 ? remainder : implementation_->limit_);
-
-                        htd::vertex_t newNode = decomposition.addParent(child);
-
-                        std::vector<htd::vertex_t> newContent;
-
-                        const std::vector<htd::vertex_t> & bagContent = decomposition.bagContent(child);
-
-                        std::set_union(bagContent.begin(), bagContent.end(), start, finish, std::back_inserter(newContent));
-
-                        decomposition.mutableBagContent(newNode) = newContent;
-
-                        htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(vertex);
-
-                        newInducedHyperedges.restrictTo(newContent);
-
-                        decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                        for (auto & labelingFunction : labelingFunctions)
-                        {
-                            htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                            htd::ILabel * newLabel = labelingFunction->computeLabel(newContent, *labelCollection);
-
-                            delete labelCollection;
-
-                            decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                        }
-
-                        createdVertices.push_back(newNode);
-
-                        if (intermediatedVertexCount > 0)
-                        {
-                            std::advance(start, implementation_->limit_);
-                            std::advance(finish, implementation_->limit_);
-
-                            for (htd::index_t index = 0; index < intermediatedVertexCount; index++)
-                            {
-                                newNode = decomposition.addParent(newNode);
-
-                                std::copy(start, finish, std::back_inserter(newContent));
-                                std::inplace_merge(newContent.begin(), newContent.end() - std::distance(start, finish), newContent.end());
-
-                                decomposition.mutableBagContent(newNode) = newContent;
-
-                                htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(vertex);
-
-                                newInducedHyperedges.restrictTo(newContent);
-
-                                decomposition.mutableInducedHyperedges(newNode) = newInducedHyperedges;
-
-                                for (auto & labelingFunction : labelingFunctions)
-                                {
-                                    htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(newNode);
-
-                                    htd::ILabel * newLabel = labelingFunction->computeLabel(newContent, *labelCollection);
-
-                                    delete labelCollection;
-
-                                    decomposition.setVertexLabel(labelingFunction->name(), newNode, newLabel);
-                                }
-
-                                createdVertices.push_back(newNode);
-
-                                if (index < introducedVertexCount + implementation_->limit_)
-                                {
-                                    std::advance(start, implementation_->limit_);
-                                    std::advance(finish, implementation_->limit_);
-                                }
-                            }
-                        }
+                        attachmentPoint = decomposition.addChild(node, std::move(newBagContent), std::move(newInducedHyperedges));
                     }
                     else
                     {
-                        throw std::logic_error("void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHypergraph &, htd::IMutableTreeDecomposition &) const");
+                        htd::vertex_t child = decomposition.childAtPosition(node, 0);
+
+                        const std::vector<htd::vertex_t> & childBag = decomposition.bagContent(child);
+
+                        std::vector<htd::vertex_t> newBagContent;
+
+                        std::set_union(childBag.begin(), childBag.end(), introducedVertices.begin(), introducedVertices.begin() + index, std::back_inserter(newBagContent));
+
+                        htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                        newInducedHyperedges.restrictTo(newBagContent);
+
+                        attachmentPoint = decomposition.addParent(child, std::move(newBagContent), std::move(newInducedHyperedges));
+                    }
+
+                    createdVertices.push_back(attachmentPoint);
+
+                    for (auto & labelingFunction : labelingFunctions)
+                    {
+                        htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(attachmentPoint);
+
+                        htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(attachmentPoint), *labelCollection);
+
+                        delete labelCollection;
+
+                        decomposition.setVertexLabel(labelingFunction->name(), attachmentPoint, newLabel);
+                    }
+
+                    index += implementation_->limit_;
+
+                    while (index < introducedVertexCount)
+                    {
+                        std::vector<htd::vertex_t> newBagContent;
+
+                        const std::vector<htd::vertex_t> & childBag = decomposition.bagContent(attachmentPoint);
+
+                        std::set_union(childBag.begin(), childBag.end(), introducedVertices.begin(), introducedVertices.begin() + index, std::back_inserter(newBagContent));
+
+                        htd::FilteredHyperedgeCollection newInducedHyperedges = decomposition.inducedHyperedges(node);
+
+                        newInducedHyperedges.restrictTo(newBagContent);
+
+                        attachmentPoint = decomposition.addParent(attachmentPoint, std::move(newBagContent), std::move(newInducedHyperedges));
+
+                        createdVertices.push_back(attachmentPoint);
+
+                        for (auto & labelingFunction : labelingFunctions)
+                        {
+                            htd::ILabelCollection * labelCollection = decomposition.labelings().exportVertexLabelCollection(attachmentPoint);
+
+                            htd::ILabel * newLabel = labelingFunction->computeLabel(decomposition.bagContent(attachmentPoint), *labelCollection);
+
+                            delete labelCollection;
+
+                            decomposition.setVertexLabel(labelingFunction->name(), attachmentPoint, newLabel);
+                        }
+
+                        index += implementation_->limit_;
+
+                        if (index > introducedVertexCount)
+                        {
+                            index = introducedVertexCount;
+                        }
                     }
                 }
             }

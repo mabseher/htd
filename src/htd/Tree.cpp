@@ -1156,7 +1156,7 @@ htd::vertex_t htd::Tree::addParent(htd::vertex_t vertex)
         parentNode.edges.erase(std::lower_bound(parentNode.edges.begin(), parentNode.edges.end(), oldHyperedge));
         selectedNode.edges.erase(std::lower_bound(selectedNode.edges.begin(), selectedNode.edges.end(), oldHyperedge));
 
-        ret = addChild(parentVertex);
+        ret = htd::Tree::addChild(parentVertex);
 
         auto & intermediateNode = *(implementation_->nodes_.at(ret));
 

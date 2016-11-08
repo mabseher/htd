@@ -24,7 +24,7 @@ For using **htd** via the command-line interface there is the front-end applicat
 
 A program call for **htd_main** is of the following form:
 
-`./htd_main [-h] [-s <SEED>] [--type <DECOMPOSITION_TYPE>] [--input <FORMAT>] [--output <FORMAT>] [--ordering <ALGORITHM>] [--opt <CRITERION>] [--iterations <LIMIT>] [--non-improvement-limit <LIMIT>] [--print-opt-progress] < $FILE`
+`./htd_main [-h] [-s <SEED>] [--type <DECOMPOSITION_TYPE>] [--input <FORMAT>] [--output <FORMAT>] [--strategy <ALGORITHM>] [--opt <CRITERION>] [--iterations <LIMIT>] [--print-opt-progress] < $FILE`
 
 Options are organized in the following groups:
 
@@ -55,10 +55,10 @@ Options are organized in the following groups:
 * Algorithm Options:
   * `--ordering <algorithm> :          Set the ordering algorithm which shall be used to <algorithm>.`
     * `Permitted Values:`
-      * `.) min-fill+       : Advanced minimum-fill ordering algorithm (default)`
-      * `.) min-fill        : Standard minimum-fill ordering algorithm`
+      * `.) min-fill        : Minimum-fill ordering algorithm (default)`
       * `.) min-degree      : Minimum-degree ordering algorithm`
       * `.) max-cardinality : Maximum cardinality search ordering algorithm`
+      * `.) challenge       : Use min-degree heuristic for first decomposition and min-fill afterwards.`
 
 * Optimization Options:
   * `--opt <criterion> :               Iteratively compute a decomposition which optimizes <criterion>.`
@@ -66,7 +66,6 @@ Options are organized in the following groups:
       * `.) none  : Do not perform any optimization. (default)`
       * `.) width : Minimize the maximum bag size of the computed decomposition.`
   * `--iterations <count> :            Set the number of iterations to be performed during optimization to <count> (0 = infinite). (Default: 10)`
-  * `--non-improvement-limit <count> : Terminate the algorithm if more than <count> iterations did not lead to an improvement (-1 = infinite). (Default: -1)`
   * `--print-opt-progress :            Print progress whenever a new optimal decomposition is found.`
 
 ### Using htd as a developer

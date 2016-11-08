@@ -53,7 +53,7 @@ Options are organized in the following groups:
       * `.) width : Provide only the maximum bag size of the decomposition.`
 
 * Algorithm Options:
-  * `--ordering <algorithm> :          Set the ordering algorithm which shall be used to <algorithm>.`
+  * `--strategy <algorithm> :          Set the decomposition strategy which shall be used to <algorithm>.`
     * `Permitted Values:`
       * `.) min-fill        : Minimum-fill ordering algorithm (default)`
       * `.) min-degree      : Minimum-degree ordering algorithm`
@@ -72,7 +72,7 @@ Options are organized in the following groups:
 
 The following example code uses the most important features of **htd**. 
 
-A full API documentation can be generated via `make doc` (requires [Doxygen](www.doxygen.org/)):
+A full API documentation can be generated via `make doc` (requires [Doxygen](http://www.doxygen.org/)):
 
 ```cpp
 #include <htd/main.hpp>

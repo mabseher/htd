@@ -585,7 +585,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                                                                                                         *it),
                                                                                        currentAdditionalNeighborhood2.end());
 
-                                fillUpdate -= fillReduction;
+                                fillUpdate -= static_cast<long>(fillReduction);
                             }
                         }
                     }

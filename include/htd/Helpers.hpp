@@ -953,6 +953,35 @@ namespace std
                 return ret;
             }
     };
+
+    /**
+     *  Implementation of std::hash for std::vector<htd::Hyperedge>.
+     */
+    template<>
+    struct hash<std::vector<htd::Hyperedge>>
+    {
+        public:
+            /**
+             *  Compute the hash code of a given htd::ConstCollection<htd::Hyperedge>.
+             *
+             *  @param[in] data The htd::ConstCollection<htd::Hyperedge> which's hash code shall be returned.
+             *
+             *  @return The hash code of the given htd::ConstCollection<htd::Hyperedge>.
+             */
+            std::size_t operator()(const std::vector<htd::Hyperedge> & data) const
+            {
+                std::size_t ret = 31;
+
+                std::hash<htd::Hyperedge> hashFunction;
+
+                for (const htd::Hyperedge & hyperedge : data)
+                {
+                    std::hash_combine(ret, hashFunction(hyperedge));
+                }
+
+                return ret;
+            }
+    };
 }
 
 #endif /* HTD_HTD_HELPERS_HPP */

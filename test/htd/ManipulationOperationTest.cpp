@@ -636,6 +636,76 @@ std::pair<htd::IMultiHypergraph *, htd::IMutablePathDecomposition *> computePath
     return std::pair<htd::IMultiHypergraph *, htd::IMutablePathDecomposition *>(graph, dynamic_cast<htd::IMutablePathDecomposition *>(algorithm.computeDecomposition(*graph, operations)));
 }
 
+bool isValidInducedEdgeLabel(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const std::string & labelName, htd::vertex_t vertex)
+{
+    bool ret = true;
+
+    HTD_ASSERT(decomposition.isVertex(vertex))
+
+    const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
+
+    std::vector<htd::Hyperedge> requiredEdges;
+
+    const std::vector<htd::Hyperedge> & coveringEdges =
+        htd::accessLabel<std::vector<htd::Hyperedge>>(decomposition.vertexLabel(labelName, vertex));
+
+    for (const htd::Hyperedge & edge : graph.hyperedges())
+    {
+        const std::vector<htd::vertex_t> & elements = edge.sortedElements();
+
+        if (std::includes(bag.begin(), bag.end(), elements.begin(), elements.end()))
+        {
+            requiredEdges.push_back(edge);
+
+            ret = false;
+
+            for (auto it = coveringEdges.begin(); !ret && it != coveringEdges.end(); ++it)
+            {
+                ret = it->id() == edge.id() && it->elements() == edge.elements() && it->sortedElements() == edge.sortedElements();
+            }
+        }
+
+        if (ret == false)
+        {
+            continue;
+        }
+    }
+
+    for (const htd::Hyperedge & edge : coveringEdges)
+    {
+        ret = false;
+
+        for (auto it = requiredEdges.begin(); !ret && it != requiredEdges.end(); ++it)
+        {
+            ret = it->id() == edge.id() && it->elements() == edge.elements() && it->sortedElements() == edge.sortedElements();
+        }
+
+        if (ret == false)
+        {
+            continue;
+        }
+    }
+
+    return ret;
+}
+
+bool isValidInducedEdgeLabel(const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const std::string & labelName)
+{
+    bool ret = true;
+
+    for (htd::vertex_t vertex : decomposition.vertices())
+    {
+        ret = isValidInducedEdgeLabel(graph, decomposition, labelName, vertex);
+
+        if (ret == false)
+        {
+            continue;
+        }
+    }
+
+    return ret;
+}
+
 TEST(ManipulationOperationTest, CheckLimitChildCountOperation1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
@@ -3713,6 +3783,162 @@ TEST(ManipulationOperationTest, CheckPathDecompositionLimitMaximumForgottenVerte
 
         ASSERT_EQ(decomposition->bagSize(createdVertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", createdVertex)));
     }
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
+    delete libraryInstance;
+}
+
+TEST(ManipulationOperationTest, CheckTreeDecompositionInducedSubgraphLabelingOperation1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> input = computeTreeDecomposition(libraryInstance);
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutableTreeDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::InducedSubgraphLabelingOperation operation(libraryInstance);
+
+    ASSERT_TRUE(operation.isLocalOperation());
+    ASSERT_FALSE(operation.createsTreeNodes());
+    ASSERT_FALSE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_TRUE(operation.createsLocationDependendLabels());
+
+    operation.apply(*graph, *decomposition);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_TRUE(isValidInducedEdgeLabel(*graph, *decomposition, htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER));
+
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance);
+
+    operation.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance2);
+
+    htd::InducedSubgraphLabelingOperation * clonedOperation = operation.clone();
+
+    ASSERT_TRUE(clonedOperation->managementInstance() == libraryInstance2);
+
+    delete graph;
+    delete decomposition;
+    delete clonedOperation;
+    delete libraryInstance;
+    delete libraryInstance2;
+}
+
+TEST(ManipulationOperationTest, CheckPathDecompositionInducedSubgraphLabelingOperation1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutablePathDecomposition *> input = computePathDecomposition(libraryInstance);
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutablePathDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::InducedSubgraphLabelingOperation operation(libraryInstance);
+
+    ASSERT_TRUE(operation.isLocalOperation());
+    ASSERT_FALSE(operation.createsTreeNodes());
+    ASSERT_FALSE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_TRUE(operation.createsLocationDependendLabels());
+
+    operation.apply(*graph, *decomposition);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_TRUE(isValidInducedEdgeLabel(*graph, *decomposition, htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER));
+
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance);
+
+    operation.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance2);
+
+    htd::InducedSubgraphLabelingOperation * clonedOperation = operation.clone();
+
+    ASSERT_TRUE(clonedOperation->managementInstance() == libraryInstance2);
+
+    delete graph;
+    delete decomposition;
+    delete clonedOperation;
+    delete libraryInstance;
+    delete libraryInstance2;
+}
+
+TEST(ManipulationOperationTest, CheckTreeDecompositionInducedSubgraphLabelingOperation2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> input = computeTreeDecomposition(libraryInstance);
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutableTreeDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::InducedSubgraphLabelingOperation operation1(libraryInstance);
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation1.apply(*graph, *decomposition, { labelingFunction });
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_TRUE(isValidInducedEdgeLabel(*graph, *decomposition, htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER));
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
+    delete libraryInstance;
+}
+
+TEST(ManipulationOperationTest, CheckPathDecompositionInducedSubgraphLabelingOperation2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutablePathDecomposition *> input = computePathDecomposition(libraryInstance);
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutablePathDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::InducedSubgraphLabelingOperation operation1(libraryInstance);
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation1.apply(*graph, *decomposition, { labelingFunction });
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_TRUE(isValidInducedEdgeLabel(*graph, *decomposition, htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER));
 
     delete graph;
     delete decomposition;

@@ -29,7 +29,6 @@
 #include <htd/Helpers.hpp>
 #include <htd/InducedSubgraphLabelingOperation.hpp>
 #include <htd/PostOrderTreeTraversal.hpp>
-#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <unordered_map>
@@ -110,9 +109,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
         HTD_UNUSED(parent)
         HTD_UNUSED(distanceToSubtreeRoot)
 
-        htd::VectorAdapter<htd::Hyperedge> label;
-
-        std::vector<htd::Hyperedge> & labelContent = label.container();
+        std::vector<htd::Hyperedge> label;
 
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
@@ -128,7 +125,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
 
                 decomposition.copyForgottenVerticesTo(forgottenVertices, vertex, child);
 
-                for (const htd::Hyperedge & hyperedge : htd::accessLabel<htd::ConstCollection<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
+                for (const htd::Hyperedge & hyperedge : htd::accessLabel<std::vector<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
                 {
                     index = hyperedgeIndices[hyperedge.id()];
 
@@ -165,11 +162,11 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
                 {
                     if (childHyperedgeState[index] == 2)
                     {
-                        labelContent.push_back(hyperedge);
+                        label.push_back(hyperedge);
                     }
                     else if (edgeIntroductionCheckNeeded && std::includes(bag.begin(), bag.end(), hyperedge.sortedElements().begin(), hyperedge.sortedElements().end()))
                     {
-                        labelContent.push_back(hyperedge);
+                        label.push_back(hyperedge);
 
                         hyperedgeState[index] = 2;
                     }
@@ -178,11 +175,11 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
                 {
                     if (childHyperedgeState[index] == 2)
                     {
-                        labelContent.push_back(hyperedge);
+                        label.push_back(hyperedge);
                     }
                     else if (edgeIntroductionCheckNeeded && std::includes(bag.begin(), bag.end(), hyperedge.sortedElements().begin(), hyperedge.sortedElements().end()))
                     {
-                        labelContent.push_back(hyperedge);
+                        label.push_back(hyperedge);
                     }
                 }
 
@@ -197,7 +194,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
             {
                 if (hyperedgeState[index] < 3)
                 {
-                    labelContent.push_back(hyperedge);
+                    label.push_back(hyperedge);
                 }
 
                 hyperedgeState[index] = 3;
@@ -206,7 +203,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
             }
         }
 
-        decomposition.setVertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(label)));
+        decomposition.setVertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, vertex, new htd::Label<std::vector<htd::Hyperedge>>(label));
     });
 }
 
@@ -258,9 +255,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
         HTD_UNUSED(parent)
         HTD_UNUSED(distanceToSubtreeRoot)
 
-        htd::VectorAdapter<htd::Hyperedge> label;
-
-        std::vector<htd::Hyperedge> & labelContent = label.container();
+        std::vector<htd::Hyperedge> label;
 
         const std::vector<htd::vertex_t> & bag = decomposition.bagContent(vertex);
 
@@ -276,7 +271,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
 
                 decomposition.copyForgottenVerticesTo(forgottenVertices, vertex, child);
 
-                for (const htd::Hyperedge & hyperedge : htd::accessLabel<htd::ConstCollection<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
+                for (const htd::Hyperedge & hyperedge : htd::accessLabel<std::vector<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
                 {
                     index = hyperedgeIndices[hyperedge.id()];
 
@@ -313,11 +308,11 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
                 {
                     if (childHyperedgeState[index] == 2)
                     {
-                        labelContent.push_back(hyperedge);
+                        label.push_back(hyperedge);
                     }
                     else if (edgeIntroductionCheckNeeded && std::includes(bag.begin(), bag.end(), hyperedge.sortedElements().begin(), hyperedge.sortedElements().end()))
                     {
-                        labelContent.push_back(hyperedge);
+                        label.push_back(hyperedge);
 
                         hyperedgeState[index] = 2;
                     }
@@ -326,11 +321,11 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
                 {
                     if (childHyperedgeState[index] == 2)
                     {
-                        labelContent.push_back(hyperedge);
+                        label.push_back(hyperedge);
                     }
                     else if (edgeIntroductionCheckNeeded && std::includes(bag.begin(), bag.end(), hyperedge.sortedElements().begin(), hyperedge.sortedElements().end()))
                     {
-                        labelContent.push_back(hyperedge);
+                        label.push_back(hyperedge);
                     }
                 }
 
@@ -345,7 +340,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
             {
                 if (hyperedgeState[index] < 3)
                 {
-                    labelContent.push_back(hyperedge);
+                    label.push_back(hyperedge);
                 }
 
                 hyperedgeState[index] = 3;
@@ -354,7 +349,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
             }
         }
 
-        decomposition.setVertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, vertex, new htd::Label<htd::ConstCollection<htd::Hyperedge>>(htd::ConstCollection<htd::Hyperedge>::getInstance(label)));
+        decomposition.setVertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, vertex, new htd::Label<std::vector<htd::Hyperedge>>(label));
     });
 }
 
@@ -394,7 +389,6 @@ bool htd::InducedSubgraphLabelingOperation::createsSubsetMaximalBags(void) const
 
 bool htd::InducedSubgraphLabelingOperation::createsLocationDependendLabels(void) const
 {
-    //TODO Change?
     return true;
 }
 

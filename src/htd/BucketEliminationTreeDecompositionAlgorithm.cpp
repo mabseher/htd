@@ -211,8 +211,6 @@ std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDeco
         for (htd::ITreeDecompositionManipulationOperation * operation : postProcessingOperations)
         {
             operation->apply(graph, *decomposition);
-
-            delete operation;
         }
 
         for (const htd::ILabelingFunction * labelingFunction : implementation_->labelingFunctions_)
@@ -241,16 +239,12 @@ std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDeco
 
                 decomposition->setVertexLabel(labelingFunction->name(), vertex, newLabel);
             }
-
-            delete labelingFunction;
         }
     }
-    else
+
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
-        for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
-        {
-            delete operation;
-        }
+        delete operation;
     }
 
     return ret;

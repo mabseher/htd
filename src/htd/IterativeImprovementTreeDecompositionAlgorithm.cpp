@@ -42,7 +42,7 @@ struct htd::IterativeImprovementTreeDecompositionAlgorithm::Implementation
      *  @param[in] fitnessFunction  The fitness function which will be used to evaluate the constructed tree decompositions.
      */
     Implementation(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction)
-        : managementInstance_(manager), iterationCount_(10), nonImprovementLimit_(-1), algorithm_(algorithm.clone()), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
+        : managementInstance_(manager), iterationCount_(1), nonImprovementLimit_(-1), algorithm_(algorithm.clone()), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
     {
 
     }
@@ -55,7 +55,7 @@ struct htd::IterativeImprovementTreeDecompositionAlgorithm::Implementation
      *  @param[in] fitnessFunction  The fitness function which will be used to evaluate the constructed tree decompositions.
      */
     Implementation(const htd::LibraryInstance * const manager, htd::ITreeDecompositionAlgorithm * algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction)
-        : managementInstance_(manager), iterationCount_(10), nonImprovementLimit_(-1), algorithm_(algorithm), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
+        : managementInstance_(manager), iterationCount_(1), nonImprovementLimit_(-1), algorithm_(algorithm), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
     {
 
     }
@@ -205,10 +205,18 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
 
         if (currentDecomposition != nullptr)
         {
-            for (auto it = implementation_->labelingFunctions_.begin(); it != implementation_->labelingFunctions_.end() && !managementInstance.isTerminated(); ++it)
+            for (const htd::ITreeDecompositionManipulationOperation * operation : implementation_->postProcessingOperations_)
             {
-                const auto & labelingFunction = *it;
+                operation->apply(graph, *currentDecomposition);
+            }
 
+            for (htd::ITreeDecompositionManipulationOperation * operation : postProcessingOperations)
+            {
+                operation->apply(graph, *currentDecomposition);
+            }
+
+            for (const htd::ILabelingFunction * labelingFunction : implementation_->labelingFunctions_)
+            {
                 for (htd::vertex_t vertex : currentDecomposition->vertices())
                 {
                     htd::ILabelCollection * labelCollection = currentDecomposition->labelings().exportVertexLabelCollection(vertex);
@@ -221,10 +229,8 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
                 }
             }
 
-            for (auto it = labelingFunctions.begin(); it != labelingFunctions.end() && !managementInstance.isTerminated(); ++it)
+            for (htd::ILabelingFunction * labelingFunction : labelingFunctions)
             {
-                const auto & labelingFunction = *it;
-
                 for (htd::vertex_t vertex : currentDecomposition->vertices())
                 {
                     htd::ILabelCollection * labelCollection = currentDecomposition->labelings().exportVertexLabelCollection(vertex);
@@ -235,20 +241,6 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
 
                     currentDecomposition->setVertexLabel(labelingFunction->name(), vertex, newLabel);
                 }
-            }
-
-            for (auto it = implementation_->postProcessingOperations_.begin(); it != implementation_->postProcessingOperations_.end() && !managementInstance.isTerminated(); ++it)
-            {
-                const auto & operation = *it;
-
-                operation->apply(graph, *currentDecomposition);
-            }
-
-            for (auto it = postProcessingOperations.begin(); it != postProcessingOperations.end() && !managementInstance.isTerminated(); ++it)
-            {
-                const auto & operation = *it;
-
-                operation->apply(graph, *currentDecomposition);
             }
 
             if (!managementInstance.isTerminated())
@@ -301,14 +293,9 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
         }
     }
 
-    for (auto & labelingFunction : labelingFunctions)
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
-        delete labelingFunction;
-    }
-
-    for (auto & postProcessingOperation : postProcessingOperations)
-    {
-        delete postProcessingOperation;
+        delete operation;
     }
 
     if (bestEvaluation != nullptr)

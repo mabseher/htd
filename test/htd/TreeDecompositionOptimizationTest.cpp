@@ -1335,8 +1335,9 @@ TEST(TreeDecompositionOptimizationTest, CheckResultComplexGraphWithLabelingFunct
     ASSERT_EQ((std::size_t)50, algorithm.iterationCount());
     ASSERT_EQ((std::size_t)1, algorithm.nonImprovementLimit());
 
-    bool nonImprovements = 0;
     std::size_t iterationCount = 0;
+    std::size_t nonImprovements = 0;
+
     std::size_t minimalHeight = (std::size_t)-1;
 
     htd::ITreeDecomposition * decomposition =

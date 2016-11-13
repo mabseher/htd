@@ -365,19 +365,7 @@ void htd::IterativeImprovementTreeDecompositionAlgorithm::addManipulationOperati
 {
     for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
     {
-        htd::ILabelingFunction * labelingFunction = dynamic_cast<htd::ILabelingFunction *>(operation);
-
-        if (labelingFunction != nullptr)
-        {
-            implementation_->labelingFunctions_.emplace_back(labelingFunction);
-        }
-
-        htd::ITreeDecompositionManipulationOperation * manipulationOperation = dynamic_cast<htd::ITreeDecompositionManipulationOperation *>(operation);
-
-        if (manipulationOperation != nullptr)
-        {
-            implementation_->postProcessingOperations_.emplace_back(manipulationOperation);
-        }
+        addManipulationOperation(operation);
     }
 }
 

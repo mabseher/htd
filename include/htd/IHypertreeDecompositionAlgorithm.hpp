@@ -26,18 +26,15 @@
 #define HTD_HTD_IHYPERTREEDECOMPOSITIONALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IHypergraph.hpp>
-#include <htd/IHypertreeDecomposition.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
-
-#include <vector>
+#include <htd/IHypertreeDecomposition.hpp>
 
 namespace htd
 {
     /**
      * Interface for algorithms which can be used to compute hypertree decompositions of a given graph.
      */
-    class IHypertreeDecompositionAlgorithm : public virtual htd::ITreeDecompositionAlgorithm
+    class IHypertreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
     {
         public:
             virtual ~IHypertreeDecompositionAlgorithm() = 0;

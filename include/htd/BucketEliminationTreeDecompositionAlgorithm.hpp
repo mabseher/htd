@@ -27,9 +27,6 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
-
-#include <htd/ILabelingFunction.hpp>
-#include <htd/ITreeDecompositionManipulationOperation.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
 
 #include <utility>

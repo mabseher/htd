@@ -27,17 +27,14 @@
 
 #include <htd/Globals.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
-#include <htd/IHypergraph.hpp>
 #include <htd/IPathDecomposition.hpp>
-
-#include <vector>
 
 namespace htd
 {
     /**
      * Interface for algorithms which can be used to compute path decompositions of a given graph.
      */
-    class IPathDecompositionAlgorithm : public virtual htd::ITreeDecompositionAlgorithm
+    class IPathDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
     {
         public:
             virtual ~IPathDecompositionAlgorithm() = 0;

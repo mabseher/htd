@@ -26,7 +26,7 @@
 #define HTD_HTD_IGRAPHDECOMPOSITIONALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IHypergraph.hpp>
+#include <htd/IMultiHypergraph.hpp>
 #include <htd/IGraphDecomposition.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
 

@@ -45,6 +45,8 @@ namespace htd
      *  width that was found so far. In case that this algorithm is interrupted before the first iteration
      *  is finished, the return value of computeDecomposition() will be nullptr.
      *
+     *  Per default, the first decomposition is returned, i.e. only a single iteration is performed.
+     *
      *  @note The algorithm always returns a valid tree decomposition according to the provided base
      *  decomposition algorithm and the given manipulations (or nullptr) also if it was interrupted
      *  by a call to htd::LibraryInstance::terminate().

@@ -596,6 +596,49 @@ TEST(TreeDecompositionOptimizationTest, CheckResultEmptyGraph)
     delete libraryInstance2;
 }
 
+TEST(TreeDecompositionOptimizationTest, CheckWidthMinimizationResultEmptyGraph)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
+
+    htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
+
+    htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_EQ(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), (std::size_t)0);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    const std::vector<htd::vertex_t> & bag = decomposition->bagContent(1);
+
+    EXPECT_EQ(bag.size(), (std::size_t)0);
+
+    ASSERT_TRUE(algorithm.isSafelyInterruptible());
+    ASSERT_EQ((std::size_t)1, algorithm.iterationCount());
+
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(algorithm.managementInstance() == libraryInstance);
+
+    algorithm.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(algorithm.managementInstance() == libraryInstance2);
+
+    htd::WidthMinimizingTreeDecompositionAlgorithm  * clonedAlgorithm = algorithm.clone();
+
+    ASSERT_TRUE(clonedAlgorithm->managementInstance() == libraryInstance2);
+
+    delete decomposition;
+    delete clonedAlgorithm;
+    delete libraryInstance;
+    delete libraryInstance2;
+}
+
 TEST(TreeDecompositionOptimizationTest, CheckResultDisconnectedGraph)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
@@ -612,6 +655,38 @@ TEST(TreeDecompositionOptimizationTest, CheckResultDisconnectedGraph)
     FitnessFunction fitnessFunction;
 
     htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction);
+
+    htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(graph, *decomposition));
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(TreeDecompositionOptimizationTest, CheckWidthMinimizationResultDisconnectedGraph)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
+
+    graph.addVertex();
+    graph.addVertex();
+    graph.addVertex();
+
+    htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
 
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -652,6 +727,41 @@ TEST(TreeDecompositionOptimizationTest, CheckResultSimpleGraph)
     FitnessFunction fitnessFunction;
 
     htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction);
+
+    htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(graph, *decomposition));
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(TreeDecompositionOptimizationTest, CheckWidthMinimizationResultSimpleGraph)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
 
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -729,6 +839,63 @@ TEST(TreeDecompositionOptimizationTest, CheckResultComplexGraph)
     ASSERT_TRUE(verifier.verify(*graph, *decomposition));
 
     ASSERT_EQ(minimalHeight, decomposition->height());
+
+    delete graph;
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(TreeDecompositionOptimizationTest, CheckWidthMinimizationResultComplexGraph)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMultiHypergraph * graph = createInputGraph(libraryInstance);
+
+    htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
+
+    htd::TreeDecompositionVerifier verifier;
+
+    algorithm.setIterationCount(25);
+
+    ASSERT_EQ((std::size_t)25, algorithm.iterationCount());
+
+    std::size_t iterationCount = 0;
+    std::size_t minimalWidth = (std::size_t)-1;
+
+    htd::ITreeDecomposition * decomposition =
+        algorithm.computeDecomposition(*graph,
+                                       [&](const htd::IMultiHypergraph & currentGraph, const htd::ITreeDecomposition & currentDecomposition, std::size_t maximumBagSize){
+        ASSERT_EQ(graph, &currentGraph);
+
+        ASSERT_TRUE(verifier.verify(currentGraph, currentDecomposition));
+
+        std::size_t currentWidth = currentDecomposition.maximumBagSize();
+
+        ASSERT_EQ(currentWidth, maximumBagSize);
+
+        if (currentWidth < minimalWidth)
+        {
+            minimalWidth = currentWidth;
+        }
+
+        ++iterationCount;
+    });
+
+    ASSERT_LE(iterationCount, (std::size_t)25);
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ(minimalWidth, decomposition->maximumBagSize());
 
     delete graph;
     delete decomposition;
@@ -824,6 +991,48 @@ TEST(TreeDecompositionOptimizationTest, CheckResultSimpleGraphWithLabelingFuncti
     FitnessFunction fitnessFunction;
 
     htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction);
+
+    /* False positive of coverity caused by variadic function. */
+    // coverity[leaked_storage]
+    htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph, 1, new BagSizeLabelingFunction(libraryInstance));
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+    }
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(TreeDecompositionOptimizationTest, CheckWidthMinimizationResultSimpleGraphWithLabelingFunction)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
 
     /* False positive of coverity caused by variadic function. */
     // coverity[leaked_storage]
@@ -969,6 +1178,48 @@ TEST(TreeDecompositionOptimizationTest, CheckResultSimpleGraphWithLabelingFuncti
     delete libraryInstance;
 }
 
+TEST(TreeDecompositionOptimizationTest, CheckWidthMinimizationResultSimpleGraphWithLabelingFunctionVector)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
+
+    htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph, { new BagSizeLabelingFunction(libraryInstance),
+                                                                                      new BagSizeLabelingFunction2(libraryInstance) });
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+        ASSERT_EQ(decomposition->bagSize(vertex) * 2, htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE_TIMES_2", vertex)));
+    }
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
 TEST(TreeDecompositionOptimizationTest, CheckResultSimpleGraphWithLabelingFunctionVectorAndManipulationOperation)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
@@ -990,6 +1241,49 @@ TEST(TreeDecompositionOptimizationTest, CheckResultSimpleGraphWithLabelingFuncti
     htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction,
                                                                   { new BagSizeLabelingFunction(libraryInstance),
                                                                     new htd::JoinNodeReplacementOperation(libraryInstance) });
+
+    htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph, { new BagSizeLabelingFunction2(libraryInstance) });
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+        ASSERT_EQ(decomposition->bagSize(vertex) * 2, htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE_TIMES_2", vertex)));
+    }
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(TreeDecompositionOptimizationTest, CheckWidthMinimizationResultSimpleGraphWithLabelingFunctionVectorAndManipulationOperation)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::MultiHypergraph graph(libraryInstance);
+
+    htd::vertex_t vertex1 = graph.addVertex();
+    htd::vertex_t vertex2 = graph.addVertex();
+    htd::vertex_t vertex3 = graph.addVertex();
+
+    graph.addEdge(vertex1, vertex2);
+    graph.addEdge(vertex2, vertex3);
+
+    htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance,
+                                                             { new BagSizeLabelingFunction(libraryInstance),
+                                                               new htd::JoinNodeReplacementOperation(libraryInstance) });
 
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph, { new BagSizeLabelingFunction2(libraryInstance) });
 
@@ -1083,6 +1377,70 @@ TEST(TreeDecompositionOptimizationTest, CheckResultComplexGraphWithLabelingFunct
     ASSERT_LE((std::size_t)1, nonImprovements);
 
     ASSERT_EQ(minimalHeight, decomposition->height());
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+        ASSERT_EQ(decomposition->bagSize(vertex) * 2, htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE_TIMES_2", vertex)));
+    }
+
+    delete graph;
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(TreeDecompositionOptimizationTest, CheckWidthMinimizationResultComplexGraphWithLabelingFunctionVectorAndManipulationOperation)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMultiHypergraph * graph = createInputGraph(libraryInstance);
+
+    htd::WidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance,
+                                                             { new BagSizeLabelingFunction(libraryInstance) });
+
+    htd::TreeDecompositionVerifier verifier;
+
+    algorithm.addManipulationOperations({ new htd::JoinNodeReplacementOperation(libraryInstance) });
+
+    algorithm.setIterationCount(50);
+
+    ASSERT_EQ((std::size_t)50, algorithm.iterationCount());
+
+    std::size_t iterationCount = 0;
+    std::size_t minimalWidth = (std::size_t)-1;
+
+    htd::ITreeDecomposition * decomposition =
+        algorithm.computeDecomposition(*graph, { new BagSizeLabelingFunction2(libraryInstance) },
+                                       [&](const htd::IMultiHypergraph & currentGraph, const htd::ITreeDecomposition & currentDecomposition, std::size_t maximumBagSize){
+        ASSERT_EQ(graph, &currentGraph);
+
+        ASSERT_TRUE(verifier.verify(currentGraph, currentDecomposition));
+
+        std::size_t currentWidth = currentDecomposition.maximumBagSize();
+
+        ASSERT_EQ(currentWidth, maximumBagSize);
+
+        if (currentWidth < minimalWidth)
+        {
+            minimalWidth = currentWidth;
+        }
+
+        ++iterationCount;
+    });
+
+    ASSERT_NE(decomposition, nullptr);
+
+    ASSERT_GE(decomposition->vertexCount(), (std::size_t)1);
+
+    EXPECT_EQ(decomposition->edgeCount(), decomposition->vertexCount() - 1);
+
+    ASSERT_EQ(decomposition->root(), (htd::vertex_t)1);
+
+    ASSERT_LE(decomposition->minimumBagSize(), decomposition->maximumBagSize());
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ(minimalWidth, decomposition->maximumBagSize());
 
     for (htd::vertex_t vertex : decomposition->vertices())
     {

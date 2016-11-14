@@ -74,9 +74,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 {
     std::size_t size = graph.vertexCount();
 
-    std::size_t minDegree = (std::size_t)-1;
-
-    std::unordered_set<htd::vertex_t> pool;
+    std::vector<htd::vertex_t> pool;
 
     std::unordered_set<htd::vertex_t> vertices(size);
 
@@ -101,54 +99,32 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 
         weights[vertex] = 0;
 
-        std::size_t tmp = currentNeighborhood.size();
+        auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
 
-        if (tmp > 1)
+        if (position != currentNeighborhood.end() && *position == vertex)
         {
-            auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
-
-            if (position != currentNeighborhood.end() && *position == vertex)
-            {
-                currentNeighborhood.erase(position);
-
-                --tmp;
-            }
-        }
-
-        if (tmp <= minDegree)
-        {
-            if (tmp < minDegree)
-            {
-                minDegree = tmp;
-
-                pool.clear();
-            }
-
-            pool.insert(vertex);
+            currentNeighborhood.erase(position);
         }
     }
 
     while (size > 0 && !managementInstance.isTerminated())
     {
-        if (pool.empty())
+        std::size_t maxCardinality = 0;
+
+        for (htd::vertex_t vertex : vertices)
         {
-            std::size_t maxCardinality = 0;
+            std::size_t tmp = weights.at(vertex);
 
-            for (htd::vertex_t vertex : vertices)
+            if (tmp >= maxCardinality)
             {
-                std::size_t tmp = weights.at(vertex);
-
-                if (tmp >= maxCardinality)
+                if (tmp > maxCardinality)
                 {
-                    if (tmp > maxCardinality)
-                    {
-                        maxCardinality = tmp;
+                    maxCardinality = tmp;
 
-                        pool.clear();
-                    }
-
-                    pool.insert(vertex);
+                    pool.clear();
                 }
+
+                pool.push_back(vertex);
             }
         }
 
@@ -156,15 +132,13 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 
         std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood.at(selectedVertex);
 
-        pool.erase(selectedVertex);
+        pool.clear();
 
         for (htd::vertex_t neighbor : selectedNeighborhood)
         {
             if (vertices.count(neighbor) == 1)
             {
                 weights[neighbor] += 1;
-
-                pool.erase(neighbor);
             }
         }
 
@@ -176,6 +150,8 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 
         ordering.push_back(selectedVertex);
     }
+
+    std::reverse(ordering.begin(), ordering.end());
 
     return new htd::VertexOrdering(std::move(ordering));
 }

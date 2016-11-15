@@ -29,6 +29,7 @@
 #include <htd/AddEmptyRootOperation.hpp>
 #include <htd/AddIdenticalJoinNodeParentOperation.hpp>
 #include <htd/Algorithm.hpp>
+#include <htd/AssemblyInfo.hpp>
 #include <htd/BidirectionalGraphNaming.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>
 #include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>

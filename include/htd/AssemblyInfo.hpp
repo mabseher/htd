@@ -1,5 +1,5 @@
 /* 
- * File:   AssemblyInfo.cpp
+ * File:   AssemblyInfo.hpp
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,17 +22,19 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_ASSEMBLYINFO_CPP
-#define HTD_HTD_ASSEMBLYINFO_CPP
+#ifndef HTD_HTD_ASSEMBLYINFO_HPP
+#define HTD_HTD_ASSEMBLYINFO_HPP
 
-#include <htd/AssemblyInfo.hpp>
+#include <htd/PreprocessorDefinitions.hpp>
 
 extern "C"
 {
-    const char * htd_version(void)
-    {
-        return "1.0.0-beta1";
-    }
+    /**
+     *  Access the current version identifier of the htd version at hand.
+     *
+     *  @return The current version identifier of the htd version at hand.
+     */
+    HTD_API const char * htd_version(void);
 }
 
-#endif /* HTD_HTD_ASSEMBLYINFO_CPP */
+#endif /* HTD_HTD_ASSEMBLYINFO_HPP */

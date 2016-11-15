@@ -52,6 +52,13 @@ class HelperTest : public ::testing::Test
         }
 };
 
+TEST(HelperTest, CheckAssemblyInfo)
+{
+    std::string version = htd_version();
+
+    ASSERT_EQ("1.0.0-beta1", version);
+}
+
 TEST(HelperTest, CheckPrintBoolToStdout1)
 {
     testing::internal::CaptureStdout();

@@ -3946,6 +3946,235 @@ TEST(ManipulationOperationTest, CheckPathDecompositionInducedSubgraphLabelingOpe
     delete libraryInstance;
 }
 
+TEST(ManipulationOperationTest, CheckTreeDecompositionCompressionOperation1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> input = computeTreeDecomposition(libraryInstance, { new htd::NormalizationOperation(libraryInstance) });
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutableTreeDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::CompressionOperation operation(libraryInstance);
+
+    ASSERT_TRUE(operation.isLocalOperation());
+    ASSERT_FALSE(operation.createsTreeNodes());
+    ASSERT_TRUE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation.createsLocationDependendLabels());
+
+    operation.apply(*graph, *decomposition);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex1 : decomposition->vertices())
+    {
+        bool supersetFound = false;
+
+        const std::vector<htd::vertex_t> & bag1 = decomposition->bagContent(vertex1);
+
+        for (htd::vertex_t vertex2 : decomposition->vertices())
+        {
+            if (vertex1 != vertex2)
+            {
+                const std::vector<htd::vertex_t> & bag2 = decomposition->bagContent(vertex2);
+
+                supersetFound = supersetFound || std::includes(bag2.begin(), bag2.end(), bag1.begin(), bag1.end());
+
+                if (supersetFound)
+                {
+                    std::cout << std::endl;
+                }
+            }
+        }
+
+        ASSERT_FALSE(supersetFound);
+    }
+
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance);
+
+    operation.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance2);
+
+    htd::CompressionOperation * clonedOperation = operation.clone();
+
+    ASSERT_TRUE(clonedOperation->managementInstance() == libraryInstance2);
+
+    delete graph;
+    delete decomposition;
+    delete clonedOperation;
+    delete libraryInstance;
+    delete libraryInstance2;
+}
+
+TEST(ManipulationOperationTest, CheckPathDecompositionCompressionOperation1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutablePathDecomposition *> input = computePathDecomposition(libraryInstance, { new htd::NormalizationOperation(libraryInstance) });
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutablePathDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::CompressionOperation operation(libraryInstance);
+
+    ASSERT_TRUE(operation.isLocalOperation());
+    ASSERT_FALSE(operation.createsTreeNodes());
+    ASSERT_TRUE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation.createsLocationDependendLabels());
+
+    operation.apply(*graph, *decomposition);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex1 : decomposition->vertices())
+    {
+        bool supersetFound = false;
+
+        const std::vector<htd::vertex_t> & bag1 = decomposition->bagContent(vertex1);
+
+        for (htd::vertex_t vertex2 : decomposition->vertices())
+        {
+            if (vertex1 != vertex2)
+            {
+                const std::vector<htd::vertex_t> & bag2 = decomposition->bagContent(vertex2);
+
+                supersetFound = supersetFound || std::includes(bag2.begin(), bag2.end(), bag1.begin(), bag1.end());
+            }
+        }
+
+        ASSERT_FALSE(supersetFound);
+    }
+
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance);
+
+    operation.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance2);
+
+    htd::CompressionOperation * clonedOperation = operation.clone();
+
+    ASSERT_TRUE(clonedOperation->managementInstance() == libraryInstance2);
+
+    delete graph;
+    delete decomposition;
+    delete clonedOperation;
+    delete libraryInstance;
+    delete libraryInstance2;
+}
+
+TEST(ManipulationOperationTest, CheckTreeDecompositionCompressionOperation2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> input = computeTreeDecomposition(libraryInstance, { new htd::NormalizationOperation(libraryInstance) });
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutableTreeDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::CompressionOperation operation1(libraryInstance);
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation1.apply(*graph, *decomposition, { labelingFunction });
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex1 : decomposition->vertices())
+    {
+        bool supersetFound = false;
+
+        const std::vector<htd::vertex_t> & bag1 = decomposition->bagContent(vertex1);
+
+        for (htd::vertex_t vertex2 : decomposition->vertices())
+        {
+            if (vertex1 != vertex2)
+            {
+                const std::vector<htd::vertex_t> & bag2 = decomposition->bagContent(vertex2);
+
+                supersetFound = supersetFound || std::includes(bag2.begin(), bag2.end(), bag1.begin(), bag1.end());
+            }
+        }
+
+        ASSERT_FALSE(supersetFound);
+    }
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
+    delete libraryInstance;
+}
+
+TEST(ManipulationOperationTest, CheckPathDecompositionCompressionOperation2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutablePathDecomposition *> input = computePathDecomposition(libraryInstance, { new htd::NormalizationOperation(libraryInstance) });
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutablePathDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::CompressionOperation operation1(libraryInstance);
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation1.apply(*graph, *decomposition, { labelingFunction });
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex1 : decomposition->vertices())
+    {
+        bool supersetFound = false;
+
+        const std::vector<htd::vertex_t> & bag1 = decomposition->bagContent(vertex1);
+
+        for (htd::vertex_t vertex2 : decomposition->vertices())
+        {
+            if (vertex1 != vertex2)
+            {
+                const std::vector<htd::vertex_t> & bag2 = decomposition->bagContent(vertex2);
+
+                supersetFound = supersetFound || std::includes(bag2.begin(), bag2.end(), bag1.begin(), bag1.end());
+            }
+        }
+
+        ASSERT_FALSE(supersetFound);
+    }
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
+    delete libraryInstance;
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

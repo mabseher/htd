@@ -83,43 +83,58 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
     HTD_UNUSED(graph)
     HTD_UNUSED(labelingFunctions)
 
-    if (decomposition.vertexCount() > 1)
+    htd::PostOrderTreeTraversal treeTraversal;
+
+    std::vector<htd::vertex_t> vertices;
+
+    vertices.reserve(decomposition.vertexCount());
+
+    treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
     {
-        htd::PostOrderTreeTraversal treeTraversal;
+        HTD_UNUSED(parent)
+        HTD_UNUSED(distanceToSubtreeRoot)
 
-        std::vector<htd::vertex_t> vertices;
+        vertices.push_back(vertex);
+    });
 
-        vertices.reserve(decomposition.vertexCount());
-
-        treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
+    for (htd::vertex_t vertex : vertices)
+    {
+        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
         {
-            HTD_UNUSED(parent)
-            HTD_UNUSED(distanceToSubtreeRoot)
+            htd::vertex_t parent = decomposition.parent(vertex);
 
-            vertices.push_back(vertex);
-        });
+            const std::vector<htd::vertex_t> & currentBag = decomposition.bagContent(vertex);
+            const std::vector<htd::vertex_t> & parentBag = decomposition.bagContent(parent);
 
-        for (htd::vertex_t vertex : vertices)
-        {
-            if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
+            const std::pair<std::size_t, std::size_t> & result = htd::symmetric_difference_sizes(currentBag, parentBag);
+
+            if (result.first == 0 && result.second > 0)
             {
-                htd::vertex_t parent = decomposition.parent(vertex);
+                decomposition.removeVertex(vertex);
+            }
+            else if (result.first > 0 && result.second == 0)
+            {
+                decomposition.swapWithParent(vertex);
 
-                const std::vector<htd::vertex_t> & currentBag = decomposition.bagContent(vertex);
-                const std::vector<htd::vertex_t> & parentBag = decomposition.bagContent(parent);
+                decomposition.removeVertex(parent);
+            }
+        }
 
-                const std::pair<std::size_t, std::size_t> & result = htd::symmetric_difference_sizes(currentBag, parentBag);
+        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0)
+        {
+            htd::vertex_t child = decomposition.child(vertex);
 
-                if (result.first > 0 && result.second == 0)
-                {
-                    decomposition.removeVertex(vertex);
-                }
-                else if (result.first == 0 && result.second > 0)
-                {
-                    decomposition.swapWithParent(vertex);
+            const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(child), decomposition.bagContent(vertex));
 
-                    decomposition.removeVertex(parent);
-                }
+            if (std::get<0>(result) == 0)
+            {
+                decomposition.removeVertex(child);
+            }
+            else if (std::get<2>(result) == 0)
+            {
+                decomposition.swapWithParent(child);
+
+                decomposition.removeVertex(vertex);
             }
         }
     }
@@ -127,11 +142,58 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
 
 void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutablePathDecomposition & decomposition, const std::vector<htd::vertex_t> & relevantVertices, const std::vector<htd::ILabelingFunction *> & labelingFunctions, std::vector<htd::vertex_t> & createdVertices, std::vector<htd::vertex_t> & removedVertices) const
 {
-    HTD_UNUSED(relevantVertices)
+    HTD_UNUSED(graph)
+    HTD_UNUSED(labelingFunctions)
     HTD_UNUSED(createdVertices)
-    HTD_UNUSED(removedVertices)
 
-    apply(graph, decomposition, labelingFunctions);
+    for (htd::vertex_t vertex : relevantVertices)
+    {
+        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
+        {
+            htd::vertex_t parent = decomposition.parent(vertex);
+
+            const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
+
+            if (std::get<0>(result) == 0)
+            {
+                decomposition.removeVertex(vertex);
+
+                removedVertices.push_back(vertex);
+            }
+            else if (std::get<2>(result) == 0)
+            {
+                decomposition.swapWithParent(vertex);
+
+                decomposition.removeVertex(parent);
+
+                removedVertices.push_back(parent);
+            }
+        }
+
+        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0)
+        {
+            htd::vertex_t child = decomposition.child(vertex);
+
+            const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(child), decomposition.bagContent(vertex));
+
+            if (std::get<0>(result) == 0)
+            {
+                decomposition.removeVertex(child);
+
+                removedVertices.push_back(child);
+            }
+            else if (std::get<2>(result) == 0)
+            {
+                decomposition.swapWithParent(child);
+
+                decomposition.removeVertex(vertex);
+
+                removedVertices.push_back(vertex);
+            }
+        }
+    }
+
+    std::sort(removedVertices.begin(), removedVertices.end());
 }
 
 void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::IMutableTreeDecomposition & decomposition) const
@@ -149,39 +211,59 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
     HTD_UNUSED(graph)
     HTD_UNUSED(labelingFunctions)
 
-    if (decomposition.vertexCount() > 1)
+    htd::PostOrderTreeTraversal treeTraversal;
+
+    std::vector<htd::vertex_t> vertices;
+
+    vertices.reserve(decomposition.vertexCount());
+
+    treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
     {
-        htd::PostOrderTreeTraversal treeTraversal;
+        HTD_UNUSED(parent)
+        HTD_UNUSED(distanceToSubtreeRoot)
 
-        std::vector<htd::vertex_t> vertices;
+        vertices.push_back(vertex);
+    });
 
-        vertices.reserve(decomposition.vertexCount());
-
-        treeTraversal.traverse(decomposition, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
+    for (htd::vertex_t vertex : vertices)
+    {
+        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
         {
-            HTD_UNUSED(parent)
-            HTD_UNUSED(distanceToSubtreeRoot)
+            htd::vertex_t parent = decomposition.parent(vertex);
 
-            vertices.push_back(vertex);
-        });
+            const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
 
-        for (htd::vertex_t vertex : vertices)
-        {
-            if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
+            if (std::get<0>(result) == 0)
             {
-                htd::vertex_t parent = decomposition.parent(vertex);
+                decomposition.removeVertex(vertex);
+            }
+            else if (std::get<2>(result) == 0)
+            {
+                decomposition.swapWithParent(vertex);
 
-                const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
+                decomposition.removeVertex(parent);
+            }
+        }
+
+        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0)
+        {
+            const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(vertex);
+
+            std::vector<htd::vertex_t> children(childCollection.begin(), childCollection.end());
+
+            for (htd::vertex_t child : children)
+            {
+                const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(child), decomposition.bagContent(vertex));
 
                 if (std::get<0>(result) == 0)
                 {
-                    decomposition.removeVertex(vertex);
+                    decomposition.removeVertex(child);
                 }
                 else if (std::get<2>(result) == 0)
                 {
-                    decomposition.swapWithParent(vertex);
+                    decomposition.swapWithParent(child);
 
-                    decomposition.removeVertex(parent);
+                    decomposition.removeVertex(vertex);
                 }
             }
         }
@@ -193,32 +275,28 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
     HTD_UNUSED(graph)
     HTD_UNUSED(labelingFunctions)
     HTD_UNUSED(createdVertices)
-    HTD_UNUSED(removedVertices)
 
     for (htd::vertex_t vertex : relevantVertices)
     {
-        if (decomposition.isVertex(vertex))
+        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
         {
-            if (!decomposition.isRoot(vertex))
+            htd::vertex_t parent = decomposition.parent(vertex);
+
+            const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
+
+            if (std::get<0>(result) == 0)
             {
-                htd::vertex_t parent = decomposition.parent(vertex);
+                decomposition.removeVertex(vertex);
 
-                const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
+                removedVertices.push_back(vertex);
+            }
+            else if (std::get<2>(result) == 0)
+            {
+                decomposition.swapWithParent(vertex);
 
-                if (std::get<0>(result) == 0)
-                {
-                    decomposition.removeVertex(vertex);
+                decomposition.removeVertex(parent);
 
-                    removedVertices.push_back(vertex);
-                }
-                else if (std::get<2>(result) == 0)
-                {
-                    decomposition.swapWithParent(vertex);
-
-                    decomposition.removeVertex(parent);
-
-                    removedVertices.push_back(parent);
-                }
+                removedVertices.push_back(parent);
             }
         }
 
@@ -248,9 +326,9 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
                 }
             }
         }
-
-        std::sort(removedVertices.begin(), removedVertices.end());
     }
+
+    std::sort(removedVertices.begin(), removedVertices.end());
 }
 
 bool htd::CompressionOperation::isLocalOperation(void) const

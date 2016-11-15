@@ -293,6 +293,315 @@ TEST(LibraryInstanceTest, CheckOrderingAlgorithmFactory2)
     delete libraryInstance;
 }
 
+TEST(LibraryInstanceTest, CheckGraphDecompositionFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableGraphDecomposition * decomposition = libraryInstance->graphDecompositionFactory().getGraphDecomposition();
+
+    ASSERT_NE(nullptr, decomposition);
+    ASSERT_EQ(libraryInstance, decomposition->managementInstance());
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckGraphDecompositionFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableGraphDecomposition * decomposition = constLibraryInstance.graphDecompositionFactory().getGraphDecomposition();
+
+    ASSERT_NE(nullptr, decomposition);
+    ASSERT_EQ(libraryInstance, decomposition->managementInstance());
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckTreeDecompositionFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+
+    ASSERT_NE(nullptr, decomposition);
+    ASSERT_EQ(libraryInstance, decomposition->managementInstance());
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckTreeDecompositionFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableTreeDecomposition * decomposition = constLibraryInstance.treeDecompositionFactory().getTreeDecomposition();
+
+    ASSERT_NE(nullptr, decomposition);
+    ASSERT_EQ(libraryInstance, decomposition->managementInstance());
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckPathDecompositionFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+
+    ASSERT_NE(nullptr, decomposition);
+    ASSERT_EQ(libraryInstance, decomposition->managementInstance());
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckPathDecompositionFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutablePathDecomposition * decomposition = constLibraryInstance.pathDecompositionFactory().getPathDecomposition();
+
+    ASSERT_NE(nullptr, decomposition);
+    ASSERT_EQ(libraryInstance, decomposition->managementInstance());
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckHypertreeDecompositionFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableHypertreeDecomposition * decomposition = libraryInstance->hypertreeDecompositionFactory().getHypertreeDecomposition();
+
+    ASSERT_NE(nullptr, decomposition);
+    ASSERT_EQ(libraryInstance, decomposition->managementInstance());
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckHypertreeDecompositionFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableHypertreeDecomposition * decomposition = constLibraryInstance.hypertreeDecompositionFactory().getHypertreeDecomposition();
+
+    ASSERT_NE(nullptr, decomposition);
+    ASSERT_EQ(libraryInstance, decomposition->managementInstance());
+
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckGraphDecompositionAlgorithFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IGraphDecompositionAlgorithm * algorithm = libraryInstance->graphDecompositionAlgorithmFactory().getGraphDecompositionAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckGraphDecompositionAlgorithFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IGraphDecompositionAlgorithm * algorithm = constLibraryInstance.graphDecompositionAlgorithmFactory().getGraphDecompositionAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckTreeDecompositionAlgorithmFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::ITreeDecompositionAlgorithm * algorithm = libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckTreeDecompositionAlgorithmFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::ITreeDecompositionAlgorithm * algorithm = constLibraryInstance.treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm();
+
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckPathDecompositionAlgorithmFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IPathDecompositionAlgorithm * algorithm = libraryInstance->pathDecompositionAlgorithmFactory().getPathDecompositionAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckPathDecompositionAlgorithmFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IPathDecompositionAlgorithm * algorithm = constLibraryInstance.pathDecompositionAlgorithmFactory().getPathDecompositionAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckHypertreeDecompositionAlgorithmFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IHypertreeDecompositionAlgorithm * algorithm = libraryInstance->hypertreeDecompositionAlgorithmFactory().getHypertreeDecompositionAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckHypertreeDecompositionAlgorithmFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IHypertreeDecompositionAlgorithm * algorithm = constLibraryInstance.hypertreeDecompositionAlgorithmFactory().getHypertreeDecompositionAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckConnectedComponentAlgorithmFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IConnectedComponentAlgorithm * algorithm = libraryInstance->connectedComponentAlgorithmFactory().getConnectedComponentAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckConnectedComponentAlgorithmFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IConnectedComponentAlgorithm * algorithm = constLibraryInstance.connectedComponentAlgorithmFactory().getConnectedComponentAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckStronglyConnectedComponentAlgorithmFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IStronglyConnectedComponentAlgorithm * algorithm = libraryInstance->stronglyConnectedComponentAlgorithmFactory().getStronglyConnectedComponentAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckStronglyConnectedComponentAlgorithmFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IStronglyConnectedComponentAlgorithm * algorithm = constLibraryInstance.stronglyConnectedComponentAlgorithmFactory().getStronglyConnectedComponentAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckSetCoverAlgorithmFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::ISetCoverAlgorithm * algorithm = libraryInstance->setCoverAlgorithmFactory().getSetCoverAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckSetCoverAlgorithmFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::ISetCoverAlgorithm * algorithm = constLibraryInstance.setCoverAlgorithmFactory().getSetCoverAlgorithm();
+
+    ASSERT_NE(nullptr, algorithm);
+    ASSERT_EQ(libraryInstance, algorithm->managementInstance());
+
+    delete algorithm;
+    delete libraryInstance;
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

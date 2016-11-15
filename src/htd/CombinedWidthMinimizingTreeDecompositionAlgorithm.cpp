@@ -234,10 +234,8 @@ void htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::setManipulationOper
 {
     for (htd::ITreeDecompositionAlgorithm * algorithm : implementation_->algorithms_)
     {
-        delete algorithm;
+        algorithm->setManipulationOperations(std::vector<htd::IDecompositionManipulationOperation *>());
     }
-
-    implementation_->algorithms_.clear();
 
     addManipulationOperations(manipulationOperations);
 }

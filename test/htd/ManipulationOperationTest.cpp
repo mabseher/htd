@@ -4175,6 +4175,87 @@ TEST(ManipulationOperationTest, CheckPathDecompositionCompressionOperation2)
     delete libraryInstance;
 }
 
+TEST(ManipulationOperationTest, CheckTreeDecompositionCompressionOperation3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+
+    graph->addVertices(12);
+
+    htd::vertex_t root = decomposition->insertRoot({ }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node1 = decomposition->addChild(root, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node2 = decomposition->addChild(root, { 11, 12 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node3 = decomposition->addChild(node1, { }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node4 = decomposition->addChild(node2, { 11 }, htd::FilteredHyperedgeCollection());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::CompressionOperation operation1(libraryInstance);
+
+    std::vector<htd::vertex_t> createdVertices;
+    std::vector<htd::vertex_t> removedVertices;
+
+    operation1.apply(*graph, *decomposition, { node1, node2, node3, node4 }, createdVertices, removedVertices);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ((std::size_t)0, createdVertices.size());
+    ASSERT_EQ((std::size_t)3, removedVertices.size());
+
+    ASSERT_EQ(root, removedVertices[0]);
+    ASSERT_EQ(node3, removedVertices[1]);
+    ASSERT_EQ(node4, removedVertices[2]);
+
+    delete graph;
+    delete decomposition;
+    delete libraryInstance;
+}
+
+TEST(ManipulationOperationTest, CheckPathDecompositionCompressionOperation3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+
+    graph->addVertices(12);
+
+    htd::vertex_t root = decomposition->insertRoot({ }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node1 = decomposition->addChild(root, { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node2 = decomposition->addChild(node1, { 1 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node3 = decomposition->addChild(node2, { 11, 12 }, htd::FilteredHyperedgeCollection());
+    decomposition->addChild(node3, { }, htd::FilteredHyperedgeCollection());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::CompressionOperation operation1(libraryInstance);
+
+    std::vector<htd::vertex_t> createdVertices;
+    std::vector<htd::vertex_t> removedVertices;
+
+    operation1.apply(*graph, *decomposition, { root, node1, node2 }, createdVertices, removedVertices);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ((std::size_t)0, createdVertices.size());
+    ASSERT_EQ((std::size_t)2, removedVertices.size());
+
+    ASSERT_EQ(root, removedVertices[0]);
+    ASSERT_EQ(node2, removedVertices[1]);
+
+    delete graph;
+    delete decomposition;
+    delete libraryInstance;
+}
+
 int main(int argc, char **argv)
 {
     /* GoogleTest may throw. This results in a non-zero exit code and is intended. */

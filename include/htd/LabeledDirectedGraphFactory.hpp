@@ -82,15 +82,6 @@ namespace htd
             HTD_API htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const;
 
             /**
-             *  Create a new IMutableLabeledDirectedGraph object.
-             *
-             *  @param[in] original The original labeled directed multi-graph acting as template for the created graph.
-             *
-             *  @return A new IMutableLabeledDirectedGraph object identical to the given original graph.
-             */
-            HTD_API htd::IMutableLabeledDirectedGraph * getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original) const;
-
-            /**
              *  Set the default implementation of the IMutableLabeledDirectedGraph interface.
              *
              *  @note When calling this method the control over the memory regions of the object instance of the original implementation

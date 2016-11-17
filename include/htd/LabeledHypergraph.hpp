@@ -151,27 +151,15 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             HTD_API LabeledHypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
 
-            HTD_API LabeledHypergraph & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
-
             HTD_API LabeledHypergraph & operator=(const htd::ILabeledHypergraph & original) HTD_OVERRIDE;
-
-            HTD_API LabeledHypergraph & operator=(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
 #else
             HTD_API LabeledHypergraph & operator=(const htd::IHypergraph & original);
 
-            HTD_API LabeledHypergraph & operator=(const htd::IMultiHypergraph & original);
-
             HTD_API LabeledHypergraph & operator=(const htd::ILabeledHypergraph & original);
-
-            HTD_API LabeledHypergraph & operator=(const htd::ILabeledMultiHypergraph & original);
 
             HTD_API void assign(const htd::IHypergraph & original) HTD_OVERRIDE;
 
-            HTD_API void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
-
             HTD_API void assign(const htd::ILabeledHypergraph & original) HTD_OVERRIDE;
-
-            HTD_API void assign(const htd::ILabeledMultiHypergraph & original) HTD_OVERRIDE;
 #endif
 
         private:

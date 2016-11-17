@@ -180,13 +180,6 @@ namespace htd
              *  @param[in] original  The original labeled directed graph.
              */
             virtual IMutableLabeledDirectedGraph & operator=(const htd::ILabeledDirectedGraph & original) = 0;
-
-            /**
-             *  Copy assignment operator for a mutable labeled directed graph.
-             *
-             *  @param[in] original  The original labeled directed multi-graph.
-             */
-            virtual IMutableLabeledDirectedGraph & operator=(const htd::ILabeledDirectedMultiGraph & original) = 0;
 #else
             /**
              *  Copy assignment operator for a mutable labeled directed graph.
@@ -194,13 +187,6 @@ namespace htd
              *  @param[in] original  The original labeled directed graph.
              */
             virtual void assign(const htd::ILabeledDirectedGraph & original) = 0;
-
-            /**
-             *  Copy assignment operator for a mutable labeled directed graph.
-             *
-             *  @param[in] original  The original labeled directed multi-graph.
-             */
-            virtual void assign(const htd::ILabeledDirectedMultiGraph & original) = 0;
 #endif
     };
 

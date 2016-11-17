@@ -109,21 +109,6 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
     return ret;
 }
 
-htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(const htd::ILabeledDirectedMultiGraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedGraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
 void htd::LabeledDirectedGraphFactory::setConstructionTemplate(htd::IMutableLabeledDirectedGraph * original)
 {
     HTD_ASSERT(original != nullptr)

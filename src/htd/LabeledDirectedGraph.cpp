@@ -300,17 +300,6 @@ htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::IDir
     return *this;
 }
 
-htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::IDirectedMultiGraph & original)
-{
-    htd::DirectedGraph::operator=(original);
-
-    delete labelings_;
-
-    labelings_ = new htd::LabelingCollection();
-
-    return *this;
-}
-
 htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::ILabeledDirectedGraph & original)
 {
     if (this != &original)
@@ -325,34 +314,13 @@ htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::ILab
     return *this;
 }
 
-htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::ILabeledDirectedMultiGraph & original)
-{
-    htd::DirectedGraph::operator=(original);
-
-    delete labelings_;
-
-    labelings_ = original.labelings().clone();
-
-    return *this;
-}
-
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 void htd::LabeledDirectedGraph::assign(const htd::IDirectedGraph & original)
 {
     *this = original;
 }
 
-void htd::LabeledDirectedGraph::assign(const htd::IDirectedMultiGraph & original)
-{
-    *this = original;
-}
-
 void htd::LabeledDirectedGraph::assign(const htd::ILabeledDirectedGraph & original)
-{
-    *this = original;
-}
-
-void htd::LabeledDirectedGraph::assign(const htd::ILabeledDirectedMultiGraph & original)
 {
     *this = original;
 }

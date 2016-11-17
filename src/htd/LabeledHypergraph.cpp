@@ -260,20 +260,6 @@ htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::IHypergrap
     return *this;
 }
 
-htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::IMultiHypergraph & original)
-{
-    if (this != &original)
-    {
-        htd::Hypergraph::operator=(original);
-
-        delete labelings_;
-
-        labelings_ = new htd::LabelingCollection();
-    }
-
-    return *this;
-}
-
 htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::ILabeledHypergraph & original)
 {
     if (this != &original)
@@ -288,34 +274,13 @@ htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::ILabeledHy
     return *this;
 }
 
-htd::LabeledHypergraph & htd::LabeledHypergraph::operator=(const htd::ILabeledMultiHypergraph & original)
-{
-    htd::Hypergraph::operator=(original);
-
-    delete labelings_;
-
-    labelings_ = original.labelings().clone();
-
-    return *this;
-}
-
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 void htd::LabeledHypergraph::assign(const htd::IHypergraph & original)
 {
     *this = original;
 }
 
-void htd::LabeledHypergraph::assign(const htd::IMultiHypergraph & original)
-{
-    *this = original;
-}
-
 void htd::LabeledHypergraph::assign(const htd::ILabeledHypergraph & original)
-{
-    *this = original;
-}
-
-void htd::LabeledHypergraph::assign(const htd::ILabeledMultiHypergraph & original)
 {
     *this = original;
 }

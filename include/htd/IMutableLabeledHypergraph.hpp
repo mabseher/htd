@@ -180,13 +180,6 @@ namespace htd
              *  @param[in] original  The original labeled hypergraph.
              */
             virtual IMutableLabeledHypergraph & operator=(const htd::ILabeledHypergraph & original) = 0;
-
-            /**
-             *  Copy assignment operator for a mutable labeled hypergraph.
-             *
-             *  @param[in] original  The original labeled multi-hypergraph.
-             */
-            virtual IMutableLabeledHypergraph & operator=(const htd::ILabeledMultiHypergraph & original) = 0;
 #else
             /**
              *  Copy assignment operator for a mutable labeled hypergraph.
@@ -194,13 +187,6 @@ namespace htd
              *  @param[in] original  The original labeled hypergraph.
              */
             virtual void assign(const htd::ILabeledHypergraph & original) = 0;
-
-            /**
-             *  Copy assignment operator for a mutable labeled hypergraph.
-             *
-             *  @param[in] original  The original labeled multi-hypergraph.
-             */
-            virtual void assign(const htd::ILabeledMultiHypergraph & original) = 0;
 #endif
     };
 

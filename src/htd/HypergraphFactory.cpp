@@ -147,21 +147,6 @@ htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IHype
     return ret;
 }
 
-htd::IMutableHypergraph * htd::HypergraphFactory::getHypergraph(const htd::IMultiHypergraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableHypergraph * ret = implementation_->constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableHypergraph * ret = implementation_->constructionTemplate_->cloneMutableHypergraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
 void htd::HypergraphFactory::setConstructionTemplate(htd::IMutableHypergraph * original)
 {
     HTD_ASSERT(original != nullptr)

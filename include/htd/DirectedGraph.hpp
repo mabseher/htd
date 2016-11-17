@@ -203,16 +203,10 @@ namespace htd
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             HTD_API DirectedGraph & operator=(const htd::IDirectedGraph & original) HTD_OVERRIDE;
-
-            HTD_API DirectedGraph & operator=(const htd::IDirectedMultiGraph & original) HTD_OVERRIDE;
 #else
             HTD_API DirectedGraph & operator=(const htd::IDirectedGraph & original);
 
-            HTD_API DirectedGraph & operator=(const htd::IDirectedMultiGraph & original);
-
             HTD_API void assign(const htd::IDirectedGraph & original) HTD_OVERRIDE;
-
-            HTD_API void assign(const htd::IDirectedMultiGraph & original) HTD_OVERRIDE;
 #endif
 
         private:

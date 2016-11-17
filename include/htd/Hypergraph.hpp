@@ -192,16 +192,10 @@ namespace htd
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             HTD_API Hypergraph & operator=(const htd::IHypergraph & original) HTD_OVERRIDE;
-
-            HTD_API Hypergraph & operator=(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
 #else
             HTD_API Hypergraph & operator=(const htd::IHypergraph & original);
 
-            HTD_API Hypergraph & operator=(const htd::IMultiHypergraph & original);
-
             HTD_API void assign(const htd::IHypergraph & original) HTD_OVERRIDE;
-
-            HTD_API void assign(const htd::IMultiHypergraph & original) HTD_OVERRIDE;
 #endif
 
         private:

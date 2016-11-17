@@ -563,44 +563,8 @@ htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::IDirectedGraph & o
     return *this;
 }
 
-htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::IDirectedMultiGraph & original)
-{
-    delete base_;
-
-    base_ = managementInstance()->hypergraphFactory().getHypergraph(original);
-
-    incomingNeighborhood_.clear();
-    outgoingNeighborhood_.clear();
-
-    htd::vertex_t nextVertex = htd::Vertex::FIRST;
-
-    for (htd::vertex_t vertex : original.vertices())
-    {
-        while (vertex > nextVertex)
-        {
-            incomingNeighborhood_.push_back(std::unordered_set<htd::vertex_t>());
-            outgoingNeighborhood_.push_back(std::unordered_set<htd::vertex_t>());
-
-            ++nextVertex;
-        }
-
-        const htd::ConstCollection<htd::vertex_t> & incomingNeighborCollection = original.incomingNeighbors(vertex);
-        const htd::ConstCollection<htd::vertex_t> & outgoingNeighborCollection = original.incomingNeighbors(vertex);
-
-        incomingNeighborhood_.push_back(std::unordered_set<htd::vertex_t>(incomingNeighborCollection.begin(), incomingNeighborCollection.end()));
-        outgoingNeighborhood_.push_back(std::unordered_set<htd::vertex_t>(outgoingNeighborCollection.begin(), outgoingNeighborCollection.end()));
-    }
-
-    return *this;
-}
-
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 void htd::DirectedGraph::assign(const htd::IDirectedGraph & original)
-{
-    *this = original;
-}
-
-void htd::DirectedGraph::assign(const htd::IDirectedMultiGraph & original)
 {
     *this = original;
 }

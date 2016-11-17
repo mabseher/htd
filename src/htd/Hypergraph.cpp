@@ -429,49 +429,8 @@ htd::Hypergraph & htd::Hypergraph::operator=(const htd::IHypergraph & original)
     return *this;
 }
 
-htd::Hypergraph & htd::Hypergraph::operator=(const htd::IMultiHypergraph & original)
-{
-    if (this != &original)
-    {
-        htd::IMutableMultiHypergraph * newBase = managementInstance()->multiHypergraphFactory().getMultiHypergraph(original);
-
-        delete base_;
-
-        base_ = newBase;
-
-        htd::id_t lastId = htd::Id::UNKNOWN;
-
-        std::vector<htd::id_t> removableIds;
-
-        for (const htd::Hyperedge & hyperedge : base_->hyperedges())
-        {
-            lastId = hyperedge.id();
-
-            for (htd::id_t id : base_->associatedEdgeIds(hyperedge.elements()))
-            {
-                if (id > lastId)
-                {
-                    removableIds.push_back(id);
-                }
-            }
-        }
-
-        for (htd::id_t id : removableIds)
-        {
-            base_->removeEdge(id);
-        }
-    }
-
-    return *this;
-}
-
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 void htd::Hypergraph::assign(const htd::IHypergraph & original)
-{
-    *this = original;
-}
-
-void htd::Hypergraph::assign(const htd::IMultiHypergraph & original)
 {
     *this = original;
 }

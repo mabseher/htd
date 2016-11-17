@@ -138,22 +138,10 @@ TEST(FactoryTest, CheckHypergraphFactory)
     ASSERT_EQ((std::size_t)2, multiHypergraph1->vertexCount());
     ASSERT_EQ((std::size_t)4, multiHypergraph1->edgeCount());
 
-    htd::IMutableHypergraph * hypergraph5 = libraryInstance->hypergraphFactory().getHypergraph(*multiHypergraph1);
-
-    ASSERT_EQ((std::size_t)2, hypergraph5->vertexCount());
-    ASSERT_EQ((std::size_t)2, hypergraph5->edgeCount());
-
-    ASSERT_EQ((htd::vertex_t)1, hypergraph5->hyperedge(1).at(0));
-    ASSERT_EQ((htd::vertex_t)2, hypergraph5->hyperedge(1).at(1));
-
-    ASSERT_EQ((htd::vertex_t)2, hypergraph5->hyperedge(2).at(0));
-    ASSERT_EQ((htd::vertex_t)1, hypergraph5->hyperedge(2).at(1));
-
     delete hypergraph1;
     delete hypergraph2;
     delete hypergraph3;
     delete hypergraph4;
-    delete hypergraph5;
     delete multiHypergraph1;
 
     delete libraryInstance;

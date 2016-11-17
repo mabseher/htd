@@ -110,21 +110,6 @@ htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(const h
     return ret;
 }
 
-htd::IMutableDirectedGraph * htd::DirectedGraphFactory::getDirectedGraph(const htd::IDirectedMultiGraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableDirectedGraph * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableDirectedGraph * ret = constructionTemplate_->cloneMutableDirectedGraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
 void htd::DirectedGraphFactory::setConstructionTemplate(htd::IMutableDirectedGraph * original)
 {
     HTD_ASSERT(original != nullptr)

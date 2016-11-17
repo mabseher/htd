@@ -26,8 +26,9 @@
 #define HTD_HTD_LABELEDHYPERGRAPH_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableLabeledHypergraph.hpp>
 #include <htd/Hypergraph.hpp>
+#include <htd/LabeledGraphType.hpp>
+#include <htd/IMutableLabeledHypergraph.hpp>
 
 MSVC_PRAGMA_WARNING_PUSH
 MSVC_PRAGMA_DISABLE_WARNING_C4250
@@ -37,7 +38,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableLabeledHypergraph interface.
      */
-    class LabeledHypergraph : public htd::Hypergraph, public virtual htd::IMutableLabeledHypergraph
+    class LabeledHypergraph : public htd::LabeledGraphType<htd::Hypergraph>, public virtual htd::IMutableLabeledHypergraph
     {
         public:
             /**
@@ -161,9 +162,6 @@ namespace htd
 
             HTD_API void assign(const htd::ILabeledHypergraph & original) HTD_OVERRIDE;
 #endif
-
-        private:
-            htd::ILabelingCollection * labelings_;
     };
 }
 

@@ -26,8 +26,9 @@
 #define HTD_HTD_LABELEDDIRECTEDGRAPH_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableLabeledDirectedGraph.hpp>
 #include <htd/DirectedGraph.hpp>
+#include <htd/LabeledGraphType.hpp>
+#include <htd/IMutableLabeledDirectedGraph.hpp>
 
 MSVC_PRAGMA_WARNING_PUSH
 MSVC_PRAGMA_DISABLE_WARNING_C4250
@@ -37,7 +38,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableLabeledDirectedGraph interface.
      */
-    class LabeledDirectedGraph : public htd::DirectedGraph, public virtual htd::IMutableLabeledDirectedGraph
+    class LabeledDirectedGraph : public htd::LabeledGraphType<htd::DirectedGraph>, public virtual htd::IMutableLabeledDirectedGraph
     {
         public:
             /**
@@ -177,9 +178,6 @@ namespace htd
 
             HTD_API void assign(const htd::ILabeledDirectedGraph & original) HTD_OVERRIDE;
 #endif
-
-        private:
-            htd::ILabelingCollection * labelings_;
     };
 }
 

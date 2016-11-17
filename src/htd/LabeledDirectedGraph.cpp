@@ -32,167 +32,134 @@
 
 #include <stdexcept>
 
-htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::LibraryInstance * const manager) : htd::DirectedGraph::DirectedGraph(manager), labelings_(new htd::LabelingCollection())
+htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::LibraryInstance * const manager) : htd::LabeledGraphType<htd::DirectedGraph>(manager)
 {
 
 }
 
-htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : htd::DirectedGraph::DirectedGraph(manager, initialSize), labelings_(new htd::LabelingCollection())
+htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : htd::LabeledGraphType<htd::DirectedGraph>(manager)
+{
+    addVertices(initialSize);
+}
+
+htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::LabeledDirectedGraph & original) : htd::LabeledGraphType<htd::DirectedGraph>(original)
 {
 
 }
 
-htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::LabeledDirectedGraph & original) : htd::DirectedGraph::DirectedGraph(original), labelings_(original.labelings_->clone())
+htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::IDirectedGraph & original) : htd::LabeledGraphType<htd::DirectedGraph>(original.managementInstance())
 {
-
+    *this = original;
 }
 
-htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::IDirectedGraph & original) : htd::DirectedGraph::DirectedGraph(original), labelings_(new htd::LabelingCollection())
+htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) : htd::LabeledGraphType<htd::DirectedGraph>(original.managementInstance())
 {
-
-}
-
-htd::LabeledDirectedGraph::LabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) : htd::DirectedGraph::DirectedGraph(original), labelings_(original.labelings().clone())
-{
-
+    *this = original;
 }
 
 htd::LabeledDirectedGraph::~LabeledDirectedGraph()
 {
-    if (labelings_ != nullptr)
-    {
-        delete labelings_;
 
-        labelings_ = nullptr;
-    }
 }
 
 void htd::LabeledDirectedGraph::removeVertex(htd::vertex_t vertex)
 {
-    htd::DirectedGraph::removeVertex(vertex);
-
-    labelings_->removeVertexLabels(vertex);
+    htd::LabeledGraphType<htd::DirectedGraph>::removeVertex(vertex);
 }
 
 void htd::LabeledDirectedGraph::removeEdge(htd::id_t edgeId)
 {
-    htd::DirectedGraph::removeEdge(edgeId);
-
-    labelings_->removeEdgeLabels(edgeId);
+    htd::LabeledGraphType<htd::DirectedGraph>::removeEdge(edgeId);
 }
 
 const htd::ILabelingCollection & htd::LabeledDirectedGraph::labelings(void) const
 {
-    return *labelings_;
+    return htd::LabeledGraphType<htd::DirectedGraph>::labelings();
 }
 
 std::size_t htd::LabeledDirectedGraph::labelCount(void) const
 {
-    return labelings_->labelCount();
+    return htd::LabeledGraphType<htd::DirectedGraph>::labelCount();
 }
 
 htd::ConstCollection<std::string> htd::LabeledDirectedGraph::labelNames(void) const
 {
-    return labelings_->labelNames();
+    return htd::LabeledGraphType<htd::DirectedGraph>::labelNames();
 }
 
 const std::string & htd::LabeledDirectedGraph::labelNameAtPosition(htd::index_t index) const
 {
-    return labelings_->labelNameAtPosition(index);
+    return htd::LabeledGraphType<htd::DirectedGraph>::labelNameAtPosition(index);
 }
 
 bool htd::LabeledDirectedGraph::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
+    return htd::LabeledGraphType<htd::DirectedGraph>::isLabeledVertex(labelName, vertex);
 }
 
 bool htd::LabeledDirectedGraph::isLabeledEdge(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
+    return htd::LabeledGraphType<htd::DirectedGraph>::isLabeledEdge(labelName, edgeId);
 }
 
 const htd::ILabel & htd::LabeledDirectedGraph::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->labeling(labelName).vertexLabel(vertex);
+    return htd::LabeledGraphType<htd::DirectedGraph>::vertexLabel(labelName, vertex);
 }
 
 const htd::ILabel & htd::LabeledDirectedGraph::edgeLabel(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->labeling(labelName).edgeLabel(edgeId);
+    return htd::LabeledGraphType<htd::DirectedGraph>::edgeLabel(labelName, edgeId);
 }
 
 void htd::LabeledDirectedGraph::setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        labelings_->setLabeling(labelName, new htd::GraphLabeling());
-    }
-
-    labelings_->labeling(labelName).setVertexLabel(vertex, label);
+    htd::LabeledGraphType<htd::DirectedGraph>::setVertexLabel(labelName, vertex, label);
 }
 
 void htd::LabeledDirectedGraph::setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        labelings_->setLabeling(labelName, new htd::GraphLabeling());
-    }
-
-    labelings_->labeling(labelName).setEdgeLabel(edgeId, label);
+    htd::LabeledGraphType<htd::DirectedGraph>::setEdgeLabel(labelName, edgeId, label);
 }
 
 void htd::LabeledDirectedGraph::removeVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (labelings_->isLabelName(labelName))
-    {
-        labelings_->labeling(labelName).removeVertexLabel(vertex);
-    }
+    htd::LabeledGraphType<htd::DirectedGraph>::removeVertexLabel(labelName, vertex);
 }
 
 void htd::LabeledDirectedGraph::removeEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (labelings_->isLabelName(labelName))
-    {
-        labelings_->labeling(labelName).removeEdgeLabel(edgeId);
-    }
+    htd::LabeledGraphType<htd::DirectedGraph>::removeEdgeLabel(labelName, edgeId);
 }
 
 void htd::LabeledDirectedGraph::swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    labelings_->swapVertexLabels(vertex1, vertex2);
+    htd::LabeledGraphType<htd::DirectedGraph>::swapVertexLabels(vertex1, vertex2);
 }
 
 void htd::LabeledDirectedGraph::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    labelings_->swapEdgeLabels(edgeId1, edgeId2);
+    htd::LabeledGraphType<htd::DirectedGraph>::swapEdgeLabels(edgeId1, edgeId2);
 }
 
 void htd::LabeledDirectedGraph::swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    labelings_->labeling(labelName).swapVertexLabels(vertex1, vertex2);
+    htd::LabeledGraphType<htd::DirectedGraph>::swapVertexLabel(labelName, vertex1, vertex2);
 }
 
 void htd::LabeledDirectedGraph::swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    labelings_->labeling(labelName).swapEdgeLabels(edgeId1, edgeId2);
+    htd::LabeledGraphType<htd::DirectedGraph>::swapEdgeLabel(labelName, edgeId1, edgeId2);
 }
 
 htd::ILabel * htd::LabeledDirectedGraph::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    return labelings_->labeling(labelName).transferVertexLabel(vertex);
+    return htd::LabeledGraphType<htd::DirectedGraph>::transferVertexLabel(labelName, vertex);
 }
 
 htd::ILabel * htd::LabeledDirectedGraph::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    return labelings_->labeling(labelName).transferEdgeLabel(edgeId);
+    return htd::LabeledGraphType<htd::DirectedGraph>::transferEdgeLabel(labelName, edgeId);
 }
 
 htd::LabeledDirectedGraph * htd::LabeledDirectedGraph::clone(void) const
@@ -276,11 +243,7 @@ htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::Labe
 {
     if (this != &original)
     {
-        htd::DirectedGraph::operator=(original);
-
-        delete labelings_;
-
-        labelings_ = original.labelings_->clone();
+        htd::LabeledGraphType<htd::DirectedGraph>::operator=(original);
     }
 
     return *this;
@@ -290,11 +253,9 @@ htd::LabeledDirectedGraph & htd::LabeledDirectedGraph::operator=(const htd::IDir
 {
     if (this != &original)
     {
+        labelings_->clear();
+
         htd::DirectedGraph::operator=(original);
-
-        delete labelings_;
-
-        labelings_ = new htd::LabelingCollection();
     }
 
     return *this;

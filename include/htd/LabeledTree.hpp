@@ -26,8 +26,9 @@
 #define HTD_HTD_LABELEDTREE_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableLabeledTree.hpp>
 #include <htd/Tree.hpp>
+#include <htd/LabeledGraphType.hpp>
+#include <htd/IMutableLabeledTree.hpp>
 
 MSVC_PRAGMA_WARNING_PUSH
 MSVC_PRAGMA_DISABLE_WARNING_C4250
@@ -37,7 +38,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableLabeledTree interface.
      */
-    class LabeledTree : public htd::Tree, public virtual htd::IMutableLabeledTree
+    class LabeledTree : public htd::LabeledGraphType<htd::Tree>, public virtual htd::IMutableLabeledTree
     {
         public:
             /**
@@ -163,9 +164,6 @@ namespace htd
 
             HTD_API void assign(const htd::ILabeledTree & original) HTD_OVERRIDE;
 #endif
-
-        private:
-            htd::ILabelingCollection * labelings_;
     };
 }
 

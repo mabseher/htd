@@ -32,167 +32,134 @@
 
 #include <stdexcept>
 
-htd::LabeledMultiHypergraph::LabeledMultiHypergraph(const htd::LibraryInstance * const manager) : htd::MultiHypergraph::MultiHypergraph(manager), labelings_(new htd::LabelingCollection())
+htd::LabeledMultiHypergraph::LabeledMultiHypergraph(const htd::LibraryInstance * const manager) : htd::LabeledGraphType<htd::MultiHypergraph>(manager)
 {
 
 }
 
-htd::LabeledMultiHypergraph::LabeledMultiHypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : htd::MultiHypergraph::MultiHypergraph(manager, initialSize), labelings_(new htd::LabelingCollection())
+htd::LabeledMultiHypergraph::LabeledMultiHypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : htd::LabeledGraphType<htd::MultiHypergraph>(manager)
+{
+    addVertices(initialSize);
+}
+
+htd::LabeledMultiHypergraph::LabeledMultiHypergraph(const htd::LabeledMultiHypergraph & original) : htd::LabeledGraphType<htd::MultiHypergraph>(original)
 {
 
 }
 
-htd::LabeledMultiHypergraph::LabeledMultiHypergraph(const htd::LabeledMultiHypergraph & original) : htd::MultiHypergraph::MultiHypergraph(original), labelings_(original.labelings_->clone())
+htd::LabeledMultiHypergraph::LabeledMultiHypergraph(const htd::IMultiHypergraph & original) : htd::LabeledGraphType<htd::MultiHypergraph>(original.managementInstance())
 {
-
+    *this = original;
 }
 
-htd::LabeledMultiHypergraph::LabeledMultiHypergraph(const htd::IMultiHypergraph & original) : htd::MultiHypergraph::MultiHypergraph(original), labelings_(new htd::LabelingCollection())
+htd::LabeledMultiHypergraph::LabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) : htd::LabeledGraphType<htd::MultiHypergraph>(original.managementInstance())
 {
-
-}
-
-htd::LabeledMultiHypergraph::LabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) : htd::MultiHypergraph::MultiHypergraph(original), labelings_(original.labelings().clone())
-{
-
+    *this = original;
 }
 
 htd::LabeledMultiHypergraph::~LabeledMultiHypergraph()
 {
-    if (labelings_ != nullptr)
-    {
-        delete labelings_;
 
-        labelings_ = nullptr;
-    }
 }
 
 void htd::LabeledMultiHypergraph::removeVertex(htd::vertex_t vertex)
 {
-    htd::MultiHypergraph::removeVertex(vertex);
-
-    labelings_->removeVertexLabels(vertex);
+    htd::LabeledGraphType<htd::MultiHypergraph>::removeVertex(vertex);
 }
 
 void htd::LabeledMultiHypergraph::removeEdge(htd::id_t edgeId)
 {
-    htd::MultiHypergraph::removeEdge(edgeId);
-
-    labelings_->removeEdgeLabels(edgeId);
+    htd::LabeledGraphType<htd::MultiHypergraph>::removeEdge(edgeId);
 }
 
 const htd::ILabelingCollection & htd::LabeledMultiHypergraph::labelings(void) const
 {
-    return *labelings_;
+    return htd::LabeledGraphType<htd::MultiHypergraph>::labelings();
 }
 
 std::size_t htd::LabeledMultiHypergraph::labelCount(void) const
 {
-    return labelings_->labelCount();
+    return htd::LabeledGraphType<htd::MultiHypergraph>::labelCount();
 }
 
 htd::ConstCollection<std::string> htd::LabeledMultiHypergraph::labelNames(void) const
 {
-    return labelings_->labelNames();
+    return htd::LabeledGraphType<htd::MultiHypergraph>::labelNames();
 }
 
 const std::string & htd::LabeledMultiHypergraph::labelNameAtPosition(htd::index_t index) const
 {
-    return labelings_->labelNameAtPosition(index);
+    return htd::LabeledGraphType<htd::MultiHypergraph>::labelNameAtPosition(index);
 }
 
 bool htd::LabeledMultiHypergraph::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
+    return htd::LabeledGraphType<htd::MultiHypergraph>::isLabeledVertex(labelName, vertex);
 }
 
 bool htd::LabeledMultiHypergraph::isLabeledEdge(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
+    return htd::LabeledGraphType<htd::MultiHypergraph>::isLabeledEdge(labelName, edgeId);
 }
 
 const htd::ILabel & htd::LabeledMultiHypergraph::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->labeling(labelName).vertexLabel(vertex);
+    return htd::LabeledGraphType<htd::MultiHypergraph>::vertexLabel(labelName, vertex);
 }
 
 const htd::ILabel & htd::LabeledMultiHypergraph::edgeLabel(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->labeling(labelName).edgeLabel(edgeId);
+    return htd::LabeledGraphType<htd::MultiHypergraph>::edgeLabel(labelName, edgeId);
 }
 
 void htd::LabeledMultiHypergraph::setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        labelings_->setLabeling(labelName, new htd::GraphLabeling());
-    }
-
-    labelings_->labeling(labelName).setVertexLabel(vertex, label);
+    htd::LabeledGraphType<htd::MultiHypergraph>::setVertexLabel(labelName, vertex, label);
 }
 
 void htd::LabeledMultiHypergraph::setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        labelings_->setLabeling(labelName, new htd::GraphLabeling());
-    }
-
-    labelings_->labeling(labelName).setEdgeLabel(edgeId, label);
+    htd::LabeledGraphType<htd::MultiHypergraph>::setEdgeLabel(labelName, edgeId, label);
 }
 
 void htd::LabeledMultiHypergraph::removeVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (labelings_->isLabelName(labelName))
-    {
-        labelings_->labeling(labelName).removeVertexLabel(vertex);
-    }
+    htd::LabeledGraphType<htd::MultiHypergraph>::removeVertexLabel(labelName, vertex);
 }
 
 void htd::LabeledMultiHypergraph::removeEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (labelings_->isLabelName(labelName))
-    {
-        labelings_->labeling(labelName).removeEdgeLabel(edgeId);
-    }
+    htd::LabeledGraphType<htd::MultiHypergraph>::removeEdgeLabel(labelName, edgeId);
 }
 
 void htd::LabeledMultiHypergraph::swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    labelings_->swapVertexLabels(vertex1, vertex2);
+    htd::LabeledGraphType<htd::MultiHypergraph>::swapVertexLabels(vertex1, vertex2);
 }
 
 void htd::LabeledMultiHypergraph::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    labelings_->swapEdgeLabels(edgeId1, edgeId2);
+    htd::LabeledGraphType<htd::MultiHypergraph>::swapEdgeLabels(edgeId1, edgeId2);
 }
 
 void htd::LabeledMultiHypergraph::swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    labelings_->labeling(labelName).swapVertexLabels(vertex1, vertex2);
+    htd::LabeledGraphType<htd::MultiHypergraph>::swapVertexLabel(labelName, vertex1, vertex2);
 }
 
 void htd::LabeledMultiHypergraph::swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    labelings_->labeling(labelName).swapEdgeLabels(edgeId1, edgeId2);
+    htd::LabeledGraphType<htd::MultiHypergraph>::swapEdgeLabel(labelName, edgeId1, edgeId2);
 }
 
 htd::ILabel * htd::LabeledMultiHypergraph::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    return labelings_->labeling(labelName).transferVertexLabel(vertex);
+    return htd::LabeledGraphType<htd::MultiHypergraph>::transferVertexLabel(labelName, vertex);
 }
 
 htd::ILabel * htd::LabeledMultiHypergraph::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    return labelings_->labeling(labelName).transferEdgeLabel(edgeId);
+    return htd::LabeledGraphType<htd::MultiHypergraph>::transferEdgeLabel(labelName, edgeId);
 }
 
 htd::LabeledMultiHypergraph * htd::LabeledMultiHypergraph::clone(void) const
@@ -226,11 +193,7 @@ htd::LabeledMultiHypergraph & htd::LabeledMultiHypergraph::operator=(const htd::
 {
     if (this != &original)
     {
-        htd::MultiHypergraph::operator=(original);
-
-        delete labelings_;
-
-        labelings_ = original.labelings_->clone();
+        htd::LabeledGraphType<htd::MultiHypergraph>::operator=(original);
     }
 
     return *this;
@@ -240,11 +203,9 @@ htd::LabeledMultiHypergraph & htd::LabeledMultiHypergraph::operator=(const htd::
 {
     if (this != &original)
     {
+        labelings_->clear();
+
         htd::MultiHypergraph::operator=(original);
-
-        delete labelings_;
-
-        labelings_ = new htd::LabelingCollection();
     }
 
     return *this;

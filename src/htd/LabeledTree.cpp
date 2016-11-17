@@ -32,155 +32,124 @@
 
 #include <stdexcept>
 
-htd::LabeledTree::LabeledTree(const htd::LibraryInstance * const manager) : htd::Tree::Tree(manager), labelings_(new htd::LabelingCollection())
+htd::LabeledTree::LabeledTree(const htd::LibraryInstance * const manager) : htd::LabeledGraphType<htd::Tree>(manager)
 {
 
 }
 
-htd::LabeledTree::LabeledTree(const htd::LabeledTree & original) : htd::Tree::Tree(original), labelings_(original.labelings_->clone())
+htd::LabeledTree::LabeledTree(const htd::LabeledTree & original) : htd::LabeledGraphType<htd::Tree>(original)
 {
 
 }
 
-htd::LabeledTree::LabeledTree(const htd::ITree & original) : htd::Tree::Tree(original), labelings_(new htd::LabelingCollection())
+htd::LabeledTree::LabeledTree(const htd::ITree & original) : htd::LabeledGraphType<htd::Tree>(original.managementInstance())
 {
-
+    *this = original;
 }
 
-htd::LabeledTree::LabeledTree(const htd::ILabeledTree & original) : htd::Tree::Tree(original), labelings_(original.labelings().clone())
+htd::LabeledTree::LabeledTree(const htd::ILabeledTree & original) : htd::LabeledGraphType<htd::Tree>(original.managementInstance())
 {
-
+    *this = original;
 }
 
 htd::LabeledTree::~LabeledTree()
 {
-    if (labelings_ != nullptr)
-    {
-        delete labelings_;
 
-        labelings_ = nullptr;
-    }
 }
 
 void htd::LabeledTree::removeVertex(htd::vertex_t vertex)
 {
-    htd::Tree::removeVertex(vertex);
-
-    labelings_->removeVertexLabels(vertex);
+    htd::LabeledGraphType<htd::Tree>::removeVertex(vertex);
 }
 
 const htd::ILabelingCollection & htd::LabeledTree::labelings(void) const
 {
-    return *labelings_;
+    return htd::LabeledGraphType<htd::Tree>::labelings();
 }
 
 std::size_t htd::LabeledTree::labelCount(void) const
 {
-    return labelings_->labelCount();
+    return htd::LabeledGraphType<htd::Tree>::labelCount();
 }
 
 htd::ConstCollection<std::string> htd::LabeledTree::labelNames(void) const
 {
-    return labelings_->labelNames();
+    return htd::LabeledGraphType<htd::Tree>::labelNames();
 }
 
 const std::string & htd::LabeledTree::labelNameAtPosition(htd::index_t index) const
 {
-    return labelings_->labelNameAtPosition(index);
+    return htd::LabeledGraphType<htd::Tree>::labelNameAtPosition(index);
 }
 
 bool htd::LabeledTree::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
+    return htd::LabeledGraphType<htd::Tree>::isLabeledVertex(labelName, vertex);
 }
 
 bool htd::LabeledTree::isLabeledEdge(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
+    return htd::LabeledGraphType<htd::Tree>::isLabeledEdge(labelName, edgeId);
 }
 
 const htd::ILabel & htd::LabeledTree::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->labeling(labelName).vertexLabel(vertex);
+    return htd::LabeledGraphType<htd::Tree>::vertexLabel(labelName, vertex);
 }
 
 const htd::ILabel & htd::LabeledTree::edgeLabel(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->labeling(labelName).edgeLabel(edgeId);
+    return htd::LabeledGraphType<htd::Tree>::edgeLabel(labelName, edgeId);
 }
 
 void htd::LabeledTree::setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        labelings_->setLabeling(labelName, new htd::GraphLabeling());
-    }
-
-    labelings_->labeling(labelName).setVertexLabel(vertex, label);
+    htd::LabeledGraphType<htd::Tree>::setVertexLabel(labelName, vertex, label);
 }
 
 void htd::LabeledTree::setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        labelings_->setLabeling(labelName, new htd::GraphLabeling());
-    }
-
-    labelings_->labeling(labelName).setEdgeLabel(edgeId, label);
+    htd::LabeledGraphType<htd::Tree>::setEdgeLabel(labelName, edgeId, label);
 }
 
 void htd::LabeledTree::removeVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (labelings_->isLabelName(labelName))
-    {
-        labelings_->labeling(labelName).removeVertexLabel(vertex);
-    }
+    htd::LabeledGraphType<htd::Tree>::removeVertexLabel(labelName, vertex);
 }
 
 void htd::LabeledTree::removeEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (labelings_->isLabelName(labelName))
-    {
-        labelings_->labeling(labelName).removeEdgeLabel(edgeId);
-    }
+    htd::LabeledGraphType<htd::Tree>::removeEdgeLabel(labelName, edgeId);
 }
 
 void htd::LabeledTree::swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    labelings_->swapVertexLabels(vertex1, vertex2);
+    htd::LabeledGraphType<htd::Tree>::swapVertexLabels(vertex1, vertex2);
 }
 
 void htd::LabeledTree::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    labelings_->swapEdgeLabels(edgeId1, edgeId2);
+    htd::LabeledGraphType<htd::Tree>::swapEdgeLabels(edgeId1, edgeId2);
 }
 
 void htd::LabeledTree::swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    labelings_->labeling(labelName).swapVertexLabels(vertex1, vertex2);
+    htd::LabeledGraphType<htd::Tree>::swapVertexLabel(labelName, vertex1, vertex2);
 }
 
 void htd::LabeledTree::swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    labelings_->labeling(labelName).swapEdgeLabels(edgeId1, edgeId2);
+    htd::LabeledGraphType<htd::Tree>::swapEdgeLabel(labelName, edgeId1, edgeId2);
 }
 
 htd::ILabel * htd::LabeledTree::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    return labelings_->labeling(labelName).transferVertexLabel(vertex);
+    return htd::LabeledGraphType<htd::Tree>::transferVertexLabel(labelName, vertex);
 }
 
 htd::ILabel * htd::LabeledTree::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    return labelings_->labeling(labelName).transferEdgeLabel(edgeId);
+    return htd::LabeledGraphType<htd::Tree>::transferEdgeLabel(labelName, edgeId);
 }
 
 htd::LabeledTree * htd::LabeledTree::clone(void) const
@@ -254,11 +223,7 @@ htd::LabeledTree & htd::LabeledTree::operator=(const htd::LabeledTree & original
 {
     if (this != &original)
     {
-        htd::Tree::operator=(original);
-
-        delete labelings_;
-
-        labelings_ = original.labelings_->clone();
+        htd::LabeledGraphType<htd::Tree>::operator=(original);
     }
 
     return *this;
@@ -268,11 +233,9 @@ htd::LabeledTree & htd::LabeledTree::operator=(const htd::ITree & original)
 {
     if (this != &original)
     {
+        labelings_->clear();
+
         htd::Tree::operator=(original);
-
-        delete labelings_;
-
-        labelings_ = new htd::LabelingCollection();
     }
 
     return *this;

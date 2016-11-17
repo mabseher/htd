@@ -82,13 +82,6 @@ namespace htd
                 labelings_->removeVertexLabels(vertex);
             }
 
-            void removeEdge(htd::id_t edgeId) HTD_OVERRIDE
-            {
-                GraphType::removeEdge(edgeId);
-
-                labelings_->removeEdgeLabels(edgeId);
-            }
-
             /**
              *  Access the collection of all labelings used in the graph.
              *

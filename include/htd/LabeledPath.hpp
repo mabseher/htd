@@ -26,8 +26,9 @@
 #define HTD_HTD_LABELEDPATH_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableLabeledPath.hpp>
 #include <htd/Path.hpp>
+#include <htd/LabeledGraphType.hpp>
+#include <htd/IMutableLabeledPath.hpp>
 
 MSVC_PRAGMA_WARNING_PUSH
 MSVC_PRAGMA_DISABLE_WARNING_C4250
@@ -37,7 +38,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableLabeledPath interface.
      */
-    class LabeledPath : public htd::Path, public virtual htd::IMutableLabeledPath
+    class LabeledPath : public htd::LabeledGraphType<htd::Path>, public virtual htd::IMutableLabeledPath
     {
         public:
             /**
@@ -167,9 +168,6 @@ namespace htd
 
             HTD_API void assign(const htd::ILabeledPath & original) HTD_OVERRIDE;
 #endif
-
-        private:
-            htd::ILabelingCollection * labelings_;
     };
 }
 

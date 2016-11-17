@@ -32,167 +32,134 @@
 
 #include <stdexcept>
 
-htd::LabeledGraph::LabeledGraph(const htd::LibraryInstance * const manager) : htd::Graph::Graph(manager), labelings_(new htd::LabelingCollection())
+htd::LabeledGraph::LabeledGraph(const htd::LibraryInstance * const manager) : htd::LabeledGraphType<htd::Graph>(manager)
 {
 
 }
 
-htd::LabeledGraph::LabeledGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : htd::Graph::Graph(manager, initialSize), labelings_(new htd::LabelingCollection())
+htd::LabeledGraph::LabeledGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : htd::LabeledGraphType<htd::Graph>(manager)
+{
+    addVertices(initialSize);
+}
+
+htd::LabeledGraph::LabeledGraph(const htd::LabeledGraph & original) : htd::LabeledGraphType<htd::Graph>(original)
 {
 
 }
 
-htd::LabeledGraph::LabeledGraph(const htd::LabeledGraph & original) : htd::Graph::Graph(original), labelings_(original.labelings_->clone())
+htd::LabeledGraph::LabeledGraph(const htd::IGraph & original) : htd::LabeledGraphType<htd::Graph>(original.managementInstance())
 {
-
+    *this = original;
 }
 
-htd::LabeledGraph::LabeledGraph(const htd::IGraph & original) : htd::Graph::Graph(original), labelings_(new htd::LabelingCollection())
+htd::LabeledGraph::LabeledGraph(const htd::ILabeledGraph & original) : htd::LabeledGraphType<htd::Graph>(original.managementInstance())
 {
-
-}
-
-htd::LabeledGraph::LabeledGraph(const htd::ILabeledGraph & original) : htd::Graph::Graph(original), labelings_(original.labelings().clone())
-{
-
+    *this = original;
 }
 
 htd::LabeledGraph::~LabeledGraph()
 {
-    if (labelings_ != nullptr)
-    {
-        delete labelings_;
 
-        labelings_ = nullptr;
-    }
 }
 
 void htd::LabeledGraph::removeVertex(htd::vertex_t vertex)
 {
-    htd::Graph::removeVertex(vertex);
-
-    labelings_->removeVertexLabels(vertex);
+    htd::LabeledGraphType<htd::Graph>::removeVertex(vertex);
 }
 
 void htd::LabeledGraph::removeEdge(htd::id_t edgeId)
 {
-    htd::Graph::removeEdge(edgeId);
-
-    labelings_->removeEdgeLabels(edgeId);
+    htd::LabeledGraphType<htd::Graph>::removeEdge(edgeId);
 }
 
 const htd::ILabelingCollection & htd::LabeledGraph::labelings(void) const
 {
-    return *labelings_;
+    return htd::LabeledGraphType<htd::Graph>::labelings();
 }
 
 std::size_t htd::LabeledGraph::labelCount(void) const
 {
-    return labelings_->labelCount();
+    return htd::LabeledGraphType<htd::Graph>::labelCount();
 }
 
 htd::ConstCollection<std::string> htd::LabeledGraph::labelNames(void) const
 {
-    return labelings_->labelNames();
+    return htd::LabeledGraphType<htd::Graph>::labelNames();
 }
 
 const std::string & htd::LabeledGraph::labelNameAtPosition(htd::index_t index) const
 {
-    return labelings_->labelNameAtPosition(index);
+    return htd::LabeledGraphType<htd::Graph>::labelNameAtPosition(index);
 }
 
 bool htd::LabeledGraph::isLabeledVertex(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledVertex(vertex);
+    return htd::LabeledGraphType<htd::Graph>::isLabeledVertex(labelName, vertex);
 }
 
 bool htd::LabeledGraph::isLabeledEdge(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->isLabelName(labelName) && labelings_->labeling(labelName).isLabeledEdge(edgeId);
+    return htd::LabeledGraphType<htd::Graph>::isLabeledEdge(labelName, edgeId);
 }
 
 const htd::ILabel & htd::LabeledGraph::vertexLabel(const std::string & labelName, htd::vertex_t vertex) const
 {
-    return labelings_->labeling(labelName).vertexLabel(vertex);
+    return htd::LabeledGraphType<htd::Graph>::vertexLabel(labelName, vertex);
 }
 
 const htd::ILabel & htd::LabeledGraph::edgeLabel(const std::string & labelName, htd::id_t edgeId) const
 {
-    return labelings_->labeling(labelName).edgeLabel(edgeId);
+    return htd::LabeledGraphType<htd::Graph>::edgeLabel(labelName, edgeId);
 }
 
 void htd::LabeledGraph::setVertexLabel(const std::string & labelName, htd::vertex_t vertex, htd::ILabel * label)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        labelings_->setLabeling(labelName, new htd::GraphLabeling());
-    }
-
-    labelings_->labeling(labelName).setVertexLabel(vertex, label);
+    htd::LabeledGraphType<htd::Graph>::setVertexLabel(labelName, vertex, label);
 }
 
 void htd::LabeledGraph::setEdgeLabel(const std::string & labelName, htd::id_t edgeId, htd::ILabel * label)
 {
-    if (!labelings_->isLabelName(labelName))
-    {
-        labelings_->setLabeling(labelName, new htd::GraphLabeling());
-    }
-
-    labelings_->labeling(labelName).setEdgeLabel(edgeId, label);
+    htd::LabeledGraphType<htd::Graph>::setEdgeLabel(labelName, edgeId, label);
 }
 
 void htd::LabeledGraph::removeVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    if (labelings_->isLabelName(labelName))
-    {
-        labelings_->labeling(labelName).removeVertexLabel(vertex);
-    }
+    htd::LabeledGraphType<htd::Graph>::removeVertexLabel(labelName, vertex);
 }
 
 void htd::LabeledGraph::removeEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    if (labelings_->isLabelName(labelName))
-    {
-        labelings_->labeling(labelName).removeEdgeLabel(edgeId);
-    }
+    htd::LabeledGraphType<htd::Graph>::removeEdgeLabel(labelName, edgeId);
 }
 
 void htd::LabeledGraph::swapVertexLabels(htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    labelings_->swapVertexLabels(vertex1, vertex2);
+    htd::LabeledGraphType<htd::Graph>::swapVertexLabels(vertex1, vertex2);
 }
 
 void htd::LabeledGraph::swapEdgeLabels(htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    labelings_->swapEdgeLabels(edgeId1, edgeId2);
+    htd::LabeledGraphType<htd::Graph>::swapEdgeLabels(edgeId1, edgeId2);
 }
 
 void htd::LabeledGraph::swapVertexLabel(const std::string & labelName, htd::vertex_t vertex1, htd::vertex_t vertex2)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    labelings_->labeling(labelName).swapVertexLabels(vertex1, vertex2);
+    htd::LabeledGraphType<htd::Graph>::swapVertexLabel(labelName, vertex1, vertex2);
 }
 
 void htd::LabeledGraph::swapEdgeLabel(const std::string & labelName, htd::id_t edgeId1, htd::id_t edgeId2)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    labelings_->labeling(labelName).swapEdgeLabels(edgeId1, edgeId2);
+    htd::LabeledGraphType<htd::Graph>::swapEdgeLabel(labelName, edgeId1, edgeId2);
 }
 
 htd::ILabel * htd::LabeledGraph::transferVertexLabel(const std::string & labelName, htd::vertex_t vertex)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    return labelings_->labeling(labelName).transferVertexLabel(vertex);
+    return htd::LabeledGraphType<htd::Graph>::transferVertexLabel(labelName, vertex);
 }
 
 htd::ILabel * htd::LabeledGraph::transferEdgeLabel(const std::string & labelName, htd::id_t edgeId)
 {
-    HTD_ASSERT(labelings_->isLabelName(labelName))
-
-    return labelings_->labeling(labelName).transferEdgeLabel(edgeId);
+    return htd::LabeledGraphType<htd::Graph>::transferEdgeLabel(labelName, edgeId);
 }
 
 htd::LabeledGraph * htd::LabeledGraph::clone(void) const
@@ -256,11 +223,7 @@ htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::LabeledGraph & origi
 {
     if (this != &original)
     {
-        htd::Graph::operator=(original);
-
-        delete labelings_;
-
-        labelings_ = original.labelings_->clone();
+        htd::LabeledGraphType<htd::Graph>::operator=(original);
     }
 
     return *this;
@@ -270,23 +233,10 @@ htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::IGraph & original)
 {
     if (this != &original)
     {
+        labelings_->clear();
+
         htd::Graph::operator=(original);
-
-        delete labelings_;
-
-        labelings_ = new htd::LabelingCollection();
     }
-
-    return *this;
-}
-
-htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::IMultiGraph & original)
-{
-    htd::Graph::operator=(original);
-
-    delete labelings_;
-
-    labelings_ = new htd::LabelingCollection();
 
     return *this;
 }
@@ -305,34 +255,13 @@ htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::ILabeledGraph & orig
     return *this;
 }
 
-htd::LabeledGraph & htd::LabeledGraph::operator=(const htd::ILabeledMultiGraph & original)
-{
-    htd::Graph::operator=(original);
-
-    delete labelings_;
-
-    labelings_ = original.labelings().clone();
-
-    return *this;
-}
-
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 void htd::LabeledGraph::assign(const htd::IGraph & original)
 {
     *this = original;
 }
 
-void htd::LabeledGraph::assign(const htd::IMultiGraph & original)
-{
-    *this = original;
-}
-
 void htd::LabeledGraph::assign(const htd::ILabeledGraph & original)
-{
-    *this = original;
-}
-
-void htd::LabeledGraph::assign(const htd::ILabeledMultiGraph & original)
 {
     *this = original;
 }

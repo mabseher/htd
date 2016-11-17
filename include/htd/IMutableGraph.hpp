@@ -129,13 +129,6 @@ namespace htd
              *  @param[in] original  The original graph.
              */
             virtual IMutableGraph & operator=(const htd::IGraph & original) = 0;
-
-            /**
-             *  Copy assignment operator for a mutable graph.
-             *
-             *  @param[in] original  The original multi-graph.
-             */
-            virtual IMutableGraph & operator=(const htd::IMultiGraph & original) = 0;
 #else
             /**
              *  Copy assignment operator for a mutable graph.
@@ -143,13 +136,6 @@ namespace htd
              *  @param[in] original  The original graph.
              */
             virtual void assign(const htd::IGraph & original) = 0;
-
-            /**
-             *  Copy assignment operator for a mutable graph.
-             *
-             *  @param[in] original  The original multi-graph.
-             */
-            virtual void assign(const htd::IMultiGraph & original) = 0;
 #endif
     };
 

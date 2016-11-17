@@ -152,6 +152,7 @@
 #include <htd/LabeledDirectedMultiGraph.hpp>
 #include <htd/LabeledGraphFactory.hpp>
 #include <htd/LabeledGraph.hpp>
+#include <htd/LabeledGraphType.hpp>
 #include <htd/LabeledHypergraphFactory.hpp>
 #include <htd/LabeledHypergraph.hpp>
 #include <htd/LabeledMultiGraphFactory.hpp>

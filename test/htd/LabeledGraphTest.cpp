@@ -522,6 +522,7 @@ TEST(LabeledGraphTest, CheckCopyConstructors)
 
     ASSERT_FALSE(graph4.isLabeledVertex("Label", 1));
     ASSERT_FALSE(graph4.isLabeledEdge("Label", edgeId1));
+
     graph3 = labeledGraphReference1;
 
     ASSERT_EQ((std::size_t)2, graph3.vertexCount());
@@ -573,39 +574,6 @@ TEST(LabeledGraphTest, CheckCopyConstructors)
     ASSERT_FALSE(clonedGraph->isLabeledEdge("Label", edgeId1));
 
     delete clonedGraph;
-
-    delete libraryInstance;
-}
-
-TEST(LabeledGraphTest, CheckConversionFunctions)
-{
-    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
-
-    htd::MultiGraph graph(libraryInstance, 2);
-
-    htd::LabeledMultiGraph labeledGraph(libraryInstance, 2);
-
-    graph.addEdge(1, 2);
-    graph.addEdge(1, 2);
-
-    labeledGraph.addEdge(1, 2);
-    labeledGraph.addEdge(1, 2);
-    labeledGraph.addEdge(2, 1);
-    labeledGraph.addEdge(2, 1);
-
-    htd::LabeledGraph gd1(libraryInstance);
-    htd::LabeledGraph gd2(libraryInstance);
-
-    gd1 = graph;
-    gd2 = labeledGraph;
-
-    ASSERT_EQ((std::size_t)1, gd1.edgeCount());
-    ASSERT_EQ((std::size_t)2, gd2.edgeCount());
-
-    ASSERT_EQ((htd::id_t)1, gd1.hyperedgeAtPosition(0).id());
-    ASSERT_EQ((htd::id_t)1, gd2.hyperedgeAtPosition(0).id());
-    ASSERT_EQ((htd::id_t)3, gd2.hyperedgeAtPosition(1).id());
-
     delete libraryInstance;
 }
 

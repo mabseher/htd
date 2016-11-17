@@ -179,16 +179,10 @@ namespace htd
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             HTD_API Graph & operator=(const htd::IGraph & original) HTD_OVERRIDE;
-
-            HTD_API Graph & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;
 #else
             HTD_API Graph & operator=(const htd::IGraph & original);
 
-            HTD_API Graph & operator=(const htd::IMultiGraph & original);
-
             HTD_API void assign(const htd::IGraph & original) HTD_OVERRIDE;
-
-            HTD_API void assign(const htd::IMultiGraph & original) HTD_OVERRIDE;
 #endif
 
         private:

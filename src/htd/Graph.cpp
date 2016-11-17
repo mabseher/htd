@@ -350,27 +350,8 @@ htd::Graph & htd::Graph::operator=(const htd::IGraph & original)
     return *this;
 }
 
-htd::Graph & htd::Graph::operator=(const htd::IMultiGraph & original)
-{
-    if (this != &original)
-    {
-        htd::IMutableHypergraph * newBase = managementInstance()->hypergraphFactory().getHypergraph(original);
-
-        delete base_;
-
-        base_ = newBase;
-    }
-
-    return *this;
-}
-
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 void htd::Graph::assign(const htd::IGraph & original)
-{
-    *this = original;
-}
-
-void htd::Graph::assign(const htd::IMultiGraph & original)
 {
     *this = original;
 }

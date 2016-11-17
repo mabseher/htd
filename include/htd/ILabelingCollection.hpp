@@ -163,6 +163,11 @@ namespace htd
             virtual htd::ILabelCollection * exportEdgeLabelCollection(htd::id_t edgeId) const = 0;
 
             /**
+             *  Clear the labeling collection at hand.
+             */
+            virtual void clear(void) = 0;
+
+            /**
              *  Create a deep copy of the current labeling collection.
              *
              *  @return A new ILabelingCollection object identical to the current labeling collection.

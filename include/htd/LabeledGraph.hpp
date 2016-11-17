@@ -26,8 +26,9 @@
 #define HTD_HTD_LABELEDGRAPH_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMutableLabeledGraph.hpp>
 #include <htd/Graph.hpp>
+#include <htd/LabeledGraphType.hpp>
+#include <htd/IMutableLabeledGraph.hpp>
 
 MSVC_PRAGMA_WARNING_PUSH
 MSVC_PRAGMA_DISABLE_WARNING_C4250
@@ -37,7 +38,7 @@ namespace htd
     /**
      *  Default implementation of the IMutableLabeledGraph interface.
      */
-    class LabeledGraph : public htd::Graph, public virtual htd::IMutableLabeledGraph
+    class LabeledGraph : public htd::LabeledGraphType<htd::Graph>, public virtual htd::IMutableLabeledGraph
     {
         public:
             /**
@@ -75,7 +76,7 @@ namespace htd
              *  @param[in] original  The original labeled graph.
              */
             HTD_API LabeledGraph(const htd::ILabeledGraph & original);
-            
+
             HTD_API virtual ~LabeledGraph();
 
             HTD_API void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
@@ -159,31 +160,16 @@ namespace htd
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             HTD_API LabeledGraph & operator=(const htd::IGraph & original) HTD_OVERRIDE;
 
-            HTD_API LabeledGraph & operator=(const htd::IMultiGraph & original) HTD_OVERRIDE;
-
             HTD_API LabeledGraph & operator=(const htd::ILabeledGraph & original) HTD_OVERRIDE;
-
-            HTD_API LabeledGraph & operator=(const htd::ILabeledMultiGraph & original) HTD_OVERRIDE;
 #else
             HTD_API LabeledGraph & operator=(const htd::IGraph & original);
 
-            HTD_API LabeledGraph & operator=(const htd::IMultiGraph & original);
-
             HTD_API LabeledGraph & operator=(const htd::ILabeledGraph & original);
-
-            HTD_API LabeledGraph & operator=(const htd::ILabeledMultiGraph & original);
 
             HTD_API void assign(const htd::IGraph & original) HTD_OVERRIDE;
 
-            HTD_API void assign(const htd::IMultiGraph & original) HTD_OVERRIDE;
-
             HTD_API void assign(const htd::ILabeledGraph & original) HTD_OVERRIDE;
-
-            HTD_API void assign(const htd::ILabeledMultiGraph & original) HTD_OVERRIDE;
 #endif
-
-        private:
-            htd::ILabelingCollection * labelings_;
     };
 }
 

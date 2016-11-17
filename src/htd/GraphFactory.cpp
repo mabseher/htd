@@ -110,21 +110,6 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IGraph & original) c
     return ret;
 }
 
-htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IMultiGraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableGraph * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableGraph * ret = constructionTemplate_->cloneMutableGraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
 void htd::GraphFactory::setConstructionTemplate(htd::IMutableGraph * original)
 {
     HTD_ASSERT(original != nullptr)

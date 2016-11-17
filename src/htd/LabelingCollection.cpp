@@ -61,15 +61,7 @@ htd::LabelingCollection::LabelingCollection(const htd::ILabelingCollection & ori
 
 htd::LabelingCollection::~LabelingCollection()
 {
-    for (auto & labeling : content_)
-    {
-        if (labeling.second != nullptr)
-        {
-            delete labeling.second;
-        }
-    }
-
-    content_.clear();
+    clear();
 }
 
 std::size_t htd::LabelingCollection::labelCount(void) const
@@ -222,6 +214,19 @@ htd::ILabelCollection * htd::LabelingCollection::exportEdgeLabelCollection(htd::
     }
 
     return ret;
+}
+
+void htd::LabelingCollection::clear(void)
+{
+    for (auto & labeling : content_)
+    {
+        if (labeling.second != nullptr)
+        {
+            delete labeling.second;
+        }
+    }
+
+    content_.clear();
 }
 
 htd::LabelingCollection * htd::LabelingCollection::clone(void) const

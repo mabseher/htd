@@ -92,6 +92,8 @@ namespace htd
 
             HTD_API htd::ILabelCollection * exportEdgeLabelCollection(htd::id_t edgeId) const HTD_OVERRIDE;
 
+            HTD_API void clear(void) HTD_OVERRIDE;
+
             HTD_API LabelingCollection * clone(void) const HTD_OVERRIDE;
 
             HTD_API htd::IGraphLabeling & operator[](const std::string & labelName) HTD_OVERRIDE;

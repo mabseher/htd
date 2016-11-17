@@ -109,21 +109,6 @@ htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd:
     return ret;
 }
 
-htd::IMutableLabeledGraph * htd::LabeledGraphFactory::getLabeledGraph(const htd::ILabeledMultiGraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledGraph * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableLabeledGraph * ret = constructionTemplate_->cloneMutableLabeledGraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
 void htd::LabeledGraphFactory::setConstructionTemplate(htd::IMutableLabeledGraph * original)
 {
     HTD_ASSERT(original != nullptr)

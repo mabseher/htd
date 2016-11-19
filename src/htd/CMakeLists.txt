@@ -14,6 +14,20 @@ else (BUILD_SHARED_LIBS)
     set(HTD_SHARED_LIBRARY OFF)
 endif (BUILD_SHARED_LIBS)
 
+set(HTD_VERSION_MAJOR 1)
+set(HTD_VERSION_MINOR 0)
+set(HTD_VERSION_PATCH 0-beta1)
+set(HTD_VERSION ${HTD_VERSION_MAJOR}.${HTD_VERSION_MINOR}.${HTD_VERSION_PATCH})
+
+if(HTD_GIT_COMMIT_ID)
+    set(HTD_VERSION_STRING "${HTD_VERSION} (GitHub-Commit-ID: ${HTD_GIT_COMMIT_ID})")
+else()
+    set(HTD_VERSION_STRING "${HTD_VERSION}")
+endif(HTD_GIT_COMMIT_ID)
+
+configure_file("${PROJECT_SOURCE_DIR}/cmake/templates/htd/AssemblyInfo.cpp.in"
+               "${PROJECT_SOURCE_DIR}/src/htd/AssemblyInfo.cpp")
+
 configure_file("${PROJECT_SOURCE_DIR}/cmake/templates/htd/Id.hpp.in"
                "${PROJECT_SOURCE_DIR}/include/htd/Id.hpp")
 

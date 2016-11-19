@@ -45,6 +45,10 @@ htd_cli::OptionManager * createOptionManager(void)
 
     try
     {
+        htd_cli::Option * versionOption = new htd_cli::Option("version", "Print version information and exit.", 'v');
+
+        manager->registerOption(versionOption, "General Options");
+
         htd_cli::Option * helpOption = new htd_cli::Option("help", "Print usage information and exit.", 'h');
 
         manager->registerOption(helpOption, "General Options");
@@ -147,6 +151,8 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
     const htd_cli::Option & helpOption = optionManager.accessOption("help");
 
+    const htd_cli::Option & versionOption = optionManager.accessOption("version");
+
     const htd_cli::Choice & outputFormatChoice = optionManager.accessChoice("output");
 
     const htd_cli::Choice & decompositionTypeChoice = optionManager.accessChoice("type");
@@ -165,9 +171,18 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
     if (ret && helpOption.used())
     {
+        std::cout << "VERSION: htd_main " << htd_version() << std::endl << std::endl;
+
         std::cout << "USAGE: " << argv[0] << " [options...] < input" << std::endl << std::endl;
 
         optionManager.printHelp();
+
+        ret = false;
+    }
+
+    if (ret && versionOption.used())
+    {
+        std::cout << "VERSION: htd_main " << htd_version() << std::endl << std::endl;
 
         ret = false;
     }

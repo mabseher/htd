@@ -17,6 +17,21 @@ include(CTest)
 include(CheckIncludeFileCXX)
 include(WriteCompilerDetectionHeader)
 
+find_package(Git)
+if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} update-index --refresh WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
+    execute_process(COMMAND ${GIT_EXECUTABLE} describe --tags --always WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}" RESULT_VARIABLE HTD_GIT_RETURN_VALUE OUTPUT_VARIABLE HTD_GIT_CURRENT_COMMIT_ID)
+    if(NOT ${HTD_GIT_RETURN_VALUE} EQUAL 0)
+        set(HTD_GIT_COMMIT_ID "")
+        message(WARNING "Could not derive Git commit ID. Build will not contain Git revision info.")
+    endif()
+
+    string(REPLACE "\n" "" HTD_GIT_COMMIT_ID "${HTD_GIT_CURRENT_COMMIT_ID}")
+else()
+    set(HTD_GIT_COMMIT_ID "")
+    message(WARNING "Could not find Git installation. Build will not contain Git revision info.")
+endif()
+
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING
         "Please choose the type of build. Options are: None Debug Release RelWithDebInfo MinSizeRel."

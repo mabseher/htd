@@ -1,6 +1,3 @@
-include_directories(${PROJECT_SOURCE_DIR}/include)
-aux_source_directory(. SRC_LIST)
-
 write_compiler_detection_header(
   FILE "${PROJECT_SOURCE_DIR}/include/htd/CompilerDetection.hpp"
   PREFIX HTD
@@ -54,6 +51,9 @@ if(APPLE)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
     endif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif(APPLE)
+
+include_directories(${PROJECT_SOURCE_DIR}/include)
+aux_source_directory(. SRC_LIST)
 
 add_library(htd ${SRC_LIST} ${HEADER_LIST})
 

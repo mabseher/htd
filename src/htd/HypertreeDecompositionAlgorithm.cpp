@@ -142,7 +142,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
     delete algorithm;
 
-    ret = managementInstance()->hypertreeDecompositionFactory().getHypertreeDecomposition(*treeDecomposition);
+    ret = managementInstance()->hypertreeDecompositionFactory().createInstance(*treeDecomposition);
 
     HTD_ASSERT(ret != nullptr)
 

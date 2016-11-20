@@ -26,6 +26,7 @@
 #define HTD_HTD_HYPERTREEDECOMPOSITIONFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableHypertreeDecomposition.hpp>
 
 namespace htd
@@ -33,9 +34,11 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableHypertreeDecomposition interface.
      */
-    class HypertreeDecompositionFactory
+    class HypertreeDecompositionFactory : public htd::GraphTypeFactory<htd::IHypertreeDecomposition, htd::IMutableHypertreeDecomposition>
     {
         public:
+            using htd::GraphTypeFactory<htd::IHypertreeDecomposition, htd::IMutableHypertreeDecomposition>::createInstance;
+
             /**
              *  Constructor for the factory class.
              */
@@ -44,12 +47,12 @@ namespace htd
             /**
              *  Copy constructor for the factory class.
              */
-            HTD_API HypertreeDecompositionFactory(const HypertreeDecompositionFactory & original);
+            HTD_API HypertreeDecompositionFactory(const HypertreeDecompositionFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            HTD_API HypertreeDecompositionFactory & operator=(const HypertreeDecompositionFactory & original);
+            HTD_API HypertreeDecompositionFactory & operator=(const HypertreeDecompositionFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -61,47 +64,16 @@ namespace htd
              *
              *  @return A new IMutableHypertreeDecomposition object.
              */
-            HTD_API htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(void) const;
+            HTD_API htd::IMutableHypertreeDecomposition * createInstance(void) const;
 
             /**
-             *  Create a new IMutableHypertreeDecomposition object.
+             *  Create a new IMutableTreeDecomposition object.
              *
-             *  @param[in] original The original hypertree decomposition acting as template for the created graph.
+             *  @param[in] original The original tree decomposition acting as template for the created decomposition.
              *
-             *  @return A new IMutableHypertreeDecomposition object identical to the given original graph.
+             *  @return A new IMutableTreeDecomposition object.
              */
-            HTD_API htd::IMutableHypertreeDecomposition * getHypertreeDecomposition(const htd::ITreeDecomposition & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableHypertreeDecomposition interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableHypertreeDecomposition interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableHypertreeDecomposition * original);
-
-            /**
-             *  Access the mutable interface of a given hypertree decomposition.
-             *
-             *  @return The mutable interface of the given hypertree decomposition.
-             */
-            HTD_API htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(htd::IHypertreeDecomposition & original) const;
-
-            /**
-             *  Access the mutable interface of a given hypertree decomposition.
-             *
-             *  @return The mutable interface of the given hypertree decomposition.
-             */
-            HTD_API const htd::IMutableHypertreeDecomposition & accessMutableHypertreeDecomposition(const htd::IHypertreeDecomposition & original) const;
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableHypertreeDecomposition * constructionTemplate_;
+            HTD_API htd::IMutableHypertreeDecomposition * createInstance(const htd::ITreeDecomposition & original) const;
     };
 }
 

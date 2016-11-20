@@ -37,6 +37,8 @@ namespace htd
     class TreeDecompositionFactory : public htd::GraphTypeFactory<htd::ITreeDecomposition, htd::IMutableTreeDecomposition>
     {
         public:
+            using htd::GraphTypeFactory<htd::ITreeDecomposition, htd::IMutableTreeDecomposition>::createInstance;
+
             /**
              *  Constructor for the factory class.
              */

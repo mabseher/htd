@@ -37,6 +37,8 @@ namespace htd
     class PathDecompositionFactory : public htd::GraphTypeFactory<htd::IPathDecomposition, htd::IMutablePathDecomposition>
     {
         public:
+            using htd::GraphTypeFactory<htd::IPathDecomposition, htd::IMutablePathDecomposition>::createInstance;
+
             /**
              *  Constructor for the factory class.
              */

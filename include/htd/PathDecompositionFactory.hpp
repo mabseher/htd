@@ -26,15 +26,15 @@
 #define HTD_HTD_PATHDECOMPOSITIONFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutablePathDecomposition.hpp>
-#include <htd/IPathDecomposition.hpp>
 
 namespace htd
 {
     /**
      *  Factory class for the default implementation of the IMutablePathDecomposition interface.
      */
-    class PathDecompositionFactory
+    class PathDecompositionFactory : public htd::GraphTypeFactory<htd::IPathDecomposition, htd::IMutablePathDecomposition>
     {
         public:
             /**
@@ -45,12 +45,12 @@ namespace htd
             /**
              *  Copy constructor for the factory class.
              */
-            HTD_API PathDecompositionFactory(const PathDecompositionFactory & original);
+            HTD_API PathDecompositionFactory(const PathDecompositionFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            HTD_API PathDecompositionFactory & operator=(const PathDecompositionFactory & original);
+            HTD_API PathDecompositionFactory & operator=(const PathDecompositionFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -62,47 +62,7 @@ namespace htd
              *
              *  @return A new IMutablePathDecomposition object.
              */
-            HTD_API htd::IMutablePathDecomposition * getPathDecomposition(void) const;
-
-            /**
-             *  Create a new IMutablePathDecomposition object.
-             *
-             *  @param[in] original The original path decomposition acting as template for the created graph.
-             *
-             *  @return A new IMutablePathDecomposition object identical to the given original graph.
-             */
-            HTD_API htd::IMutablePathDecomposition * getPathDecomposition(const htd::IPathDecomposition & original) const;
-
-            /**
-             *  Set the default implementation of the IMutablePathDecomposition interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutablePathDecomposition interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutablePathDecomposition * original);
-
-            /**
-             *  Access the mutable interface of a given path decomposition.
-             *
-             *  @return The mutable interface of the given path decomposition.
-             */
-            HTD_API htd::IMutablePathDecomposition & accessMutablePathDecomposition(htd::IPathDecomposition & original) const;
-
-            /**
-             *  Access the mutable interface of a given path decomposition.
-             *
-             *  @return The mutable interface of the given path decomposition.
-             */
-            HTD_API const htd::IMutablePathDecomposition & accessMutablePathDecomposition(const htd::IPathDecomposition & original) const;
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutablePathDecomposition * constructionTemplate_;
+            HTD_API htd::IMutablePathDecomposition * createInstance(void) const HTD_OVERRIDE;
     };
 }
 

@@ -222,7 +222,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 htd::IMutablePathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::toPathDecomposition(htd::IMutableTreeDecomposition && decomposition) const
 {
     htd::IMutablePathDecomposition * ret =
-        managementInstance()->pathDecompositionFactory().getPathDecomposition();
+        managementInstance()->pathDecompositionFactory().createInstance();
 
     if (decomposition.vertexCount() > 0)
     {

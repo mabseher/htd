@@ -353,7 +353,7 @@ TEST(LibraryInstanceTest, CheckPathDecompositionFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     ASSERT_NE(nullptr, decomposition);
     ASSERT_EQ(libraryInstance, decomposition->managementInstance());
@@ -368,7 +368,7 @@ TEST(LibraryInstanceTest, CheckPathDecompositionFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IMutablePathDecomposition * decomposition = constLibraryInstance.pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = constLibraryInstance.pathDecompositionFactory().createInstance();
 
     ASSERT_NE(nullptr, decomposition);
     ASSERT_EQ(libraryInstance, decomposition->managementInstance());

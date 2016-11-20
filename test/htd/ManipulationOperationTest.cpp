@@ -1608,7 +1608,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionExchangeNodeReplacementOpe
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2051,7 +2051,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyRootOperation1)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2154,7 +2154,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyRootOperation2)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2256,7 +2256,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyRootOperation3)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2376,7 +2376,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyLeavesOperation1)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2485,7 +2485,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyLeavesOperation2)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2589,7 +2589,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyLeavesOperation3)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -3236,7 +3236,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionLimitMaximumIntroducedVert
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(10);
 
@@ -3340,7 +3340,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionLimitMaximumIntroducedVert
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(10);
 
@@ -3637,7 +3637,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionLimitMaximumForgottenVerte
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(10);
 
@@ -3742,7 +3742,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionLimitMaximumForgottenVerte
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(10);
 
@@ -4222,7 +4222,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionCompressionOperation3)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
 
     graph->addVertices(12);
 

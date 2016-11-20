@@ -818,7 +818,7 @@ TEST(ManipulationOperationTest, CheckLimitChildCountOperation3)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -880,7 +880,7 @@ TEST(ManipulationOperationTest, CheckLimitChildCountOperation4)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -965,7 +965,7 @@ TEST(ManipulationOperationTest, CheckLimitChildCountOperation5)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -1179,7 +1179,7 @@ TEST(ManipulationOperationTest, CheckJoinNodeNormalizationOperation3)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -1272,7 +1272,7 @@ TEST(ManipulationOperationTest, CheckJoinNodeNormalizationOperation4)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -1536,7 +1536,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionExchangeNodeReplacementOpe
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -1991,7 +1991,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyRootOperation1)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2111,7 +2111,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyRootOperation2)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2197,7 +2197,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyRootOperation3)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2313,7 +2313,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyLeavesOperation1)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2439,7 +2439,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyLeavesOperation2)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2531,7 +2531,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyLeavesOperation3)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2777,7 +2777,7 @@ TEST(ManipulationOperationTest, CheckAddIdenticalJoinNodeParentOperation3)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -2867,7 +2867,7 @@ TEST(ManipulationOperationTest, CheckAddIdenticalJoinNodeParentOperation4)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -3186,7 +3186,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionLimitMaximumIntroducedVert
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -3285,7 +3285,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionLimitMaximumIntroducedVert
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(6);
 
@@ -3586,7 +3586,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionLimitMaximumForgottenVerte
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(5);
 
@@ -3686,7 +3686,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionLimitMaximumForgottenVerte
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(6);
 
@@ -4181,7 +4181,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionCompressionOperation3)
 
     htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     graph->addVertices(12);
 

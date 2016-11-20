@@ -325,7 +325,7 @@ TEST(LibraryInstanceTest, CheckTreeDecompositionFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
 
     ASSERT_NE(nullptr, decomposition);
     ASSERT_EQ(libraryInstance, decomposition->managementInstance());
@@ -340,7 +340,7 @@ TEST(LibraryInstanceTest, CheckTreeDecompositionFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IMutableTreeDecomposition * decomposition = constLibraryInstance.treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * decomposition = constLibraryInstance.treeDecompositionFactory().createInstance();
 
     ASSERT_NE(nullptr, decomposition);
     ASSERT_EQ(libraryInstance, decomposition->managementInstance());

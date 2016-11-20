@@ -133,7 +133,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
     delete algorithm;
 
     htd::IMutableTreeDecomposition & mutableTreeDecomposition =
-        managementInstance()->treeDecompositionFactory().accessMutableTreeDecomposition(*treeDecomposition);
+        managementInstance()->treeDecompositionFactory().accessMutableInstance(*treeDecomposition);
 
     htd::CompressionOperation compressionOperation(managementInstance());
 

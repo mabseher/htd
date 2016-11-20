@@ -28,98 +28,25 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
-#include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/TreeDecomposition.hpp>
 
-#include <stdexcept>
-
-htd::TreeDecompositionFactory::TreeDecompositionFactory(const htd::LibraryInstance * const manager)
+htd::TreeDecompositionFactory::TreeDecompositionFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::ITreeDecomposition, htd::IMutableTreeDecomposition>(new htd::TreeDecomposition(manager))
 {
-    constructionTemplate_ = new htd::TreeDecomposition(manager);
-}
 
-htd::TreeDecompositionFactory::TreeDecompositionFactory(const htd::TreeDecompositionFactory & original)
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    constructionTemplate_ = original.constructionTemplate_->clone();
-#else
-    constructionTemplate_ = original.constructionTemplate_->cloneMutableTreeDecomposition();
-#endif
-}
-
-htd::TreeDecompositionFactory & htd::TreeDecompositionFactory::operator=(const htd::TreeDecompositionFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    #else
-        constructionTemplate_ = original.constructionTemplate_->cloneMutableTreeDecomposition();
-    #endif
-    }
-
-    return *this;
 }
 
 htd::TreeDecompositionFactory::~TreeDecompositionFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IMutableTreeDecomposition * htd::TreeDecompositionFactory::getTreeDecomposition(void) const
+htd::IMutableTreeDecomposition * htd::TreeDecompositionFactory::createInstance(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
 #else
     return constructionTemplate_->cloneMutableTreeDecomposition();
 #endif
-}
-
-htd::IMutableTreeDecomposition * htd::TreeDecompositionFactory::getTreeDecomposition(const htd::ITreeDecomposition & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableTreeDecomposition * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableTreeDecomposition * ret = constructionTemplate_->cloneMutableTreeDecomposition();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
-void htd::TreeDecompositionFactory::setConstructionTemplate(htd::IMutableTreeDecomposition * original)
-{
-    HTD_ASSERT(original != nullptr)
-    HTD_ASSERT(original->vertexCount() == 0)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
-}
-
-htd::IMutableTreeDecomposition & htd::TreeDecompositionFactory::accessMutableTreeDecomposition(htd::ITreeDecomposition & original) const
-{
-    return *(dynamic_cast<htd::IMutableTreeDecomposition *>(&original));
-}
-
-const htd::IMutableTreeDecomposition & htd::TreeDecompositionFactory::accessMutableTreeDecomposition(const htd::ITreeDecomposition & original) const
-{
-    return *(dynamic_cast<const htd::IMutableTreeDecomposition *>(&original));
 }
 
 #endif /* HTD_HTD_TREEDECOMPOSITIONFACTORY_CPP */

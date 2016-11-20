@@ -26,6 +26,7 @@
 #define HTD_HTD_TREEDECOMPOSITIONFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 
 namespace htd
@@ -33,7 +34,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableTreeDecomposition interface.
      */
-    class TreeDecompositionFactory
+    class TreeDecompositionFactory : public htd::GraphTypeFactory<htd::ITreeDecomposition, htd::IMutableTreeDecomposition>
     {
         public:
             /**
@@ -44,12 +45,12 @@ namespace htd
             /**
              *  Copy constructor for the factory class.
              */
-            HTD_API TreeDecompositionFactory(const TreeDecompositionFactory & original);
+            HTD_API TreeDecompositionFactory(const TreeDecompositionFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            HTD_API TreeDecompositionFactory & operator=(const TreeDecompositionFactory & original);
+            HTD_API TreeDecompositionFactory & operator=(const TreeDecompositionFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -61,47 +62,7 @@ namespace htd
              *
              *  @return A new IMutableTreeDecomposition object.
              */
-            HTD_API htd::IMutableTreeDecomposition * getTreeDecomposition(void) const;
-
-            /**
-             *  Create a new IMutableTreeDecomposition object.
-             *
-             *  @param[in] original The original tree decomposition acting as template for the created graph.
-             *
-             *  @return A new IMutableTreeDecomposition object identical to the given original graph.
-             */
-            HTD_API htd::IMutableTreeDecomposition * getTreeDecomposition(const htd::ITreeDecomposition & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableTreeDecomposition interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableTreeDecomposition interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableTreeDecomposition * original);
-
-            /**
-             *  Access the mutable interface of a given tree decomposition.
-             *
-             *  @return The mutable interface of the given tree decomposition.
-             */
-            HTD_API htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(htd::ITreeDecomposition & original) const;
-
-            /**
-             *  Access the mutable interface of a given tree decomposition.
-             *
-             *  @return The mutable interface of the given tree decomposition.
-             */
-            HTD_API const htd::IMutableTreeDecomposition & accessMutableTreeDecomposition(const htd::ITreeDecomposition & original) const;
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableTreeDecomposition * constructionTemplate_;
+            HTD_API htd::IMutableTreeDecomposition * createInstance(void) const HTD_OVERRIDE;
     };
 }
 

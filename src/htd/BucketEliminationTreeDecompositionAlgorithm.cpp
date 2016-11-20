@@ -362,7 +362,7 @@ htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDec
 
 std::pair<htd::IMutableTreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const
 {
-    htd::IMutableTreeDecomposition * ret = managementInstance_->treeDecompositionFactory().getTreeDecomposition();
+    htd::IMutableTreeDecomposition * ret = managementInstance_->treeDecompositionFactory().createInstance();
 
     std::size_t iterations = 1;
 

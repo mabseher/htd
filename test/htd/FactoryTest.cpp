@@ -128,7 +128,7 @@ TEST(FactoryTest, CheckHypergraphFactory)
 
     ASSERT_EQ((std::size_t)4, hypergraph4->vertexCount());
 
-    htd::IMutableMultiHypergraph * multiHypergraph1 = libraryInstance->multiHypergraphFactory().getMultiHypergraph(2);
+    htd::IMutableMultiHypergraph * multiHypergraph1 = libraryInstance->multiHypergraphFactory().createInstance(2);
 
     multiHypergraph1->addEdge(1, 2);
     multiHypergraph1->addEdge(2, 1);
@@ -151,7 +151,7 @@ TEST(FactoryTest, CheckMultiHypergraphFactory)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * multiHypergraph1 = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * multiHypergraph1 = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMultiHypergraph & multiHypergraphReference1 = *multiHypergraph1;
     const htd::IMultiHypergraph & multiHypergraphConstReference1 = *multiHypergraph1;
@@ -167,10 +167,10 @@ TEST(FactoryTest, CheckMultiHypergraphFactory)
     ASSERT_EQ((std::size_t)1, multiHypergraphReference1.vertexCount());
     ASSERT_EQ((std::size_t)1, multiHypergraphConstReference1.vertexCount());
 
-    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableMultiHypergraph(multiHypergraphReference1)));
-    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableMultiHypergraph(multiHypergraphConstReference1)));
+    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableInstance(multiHypergraphReference1)));
+    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableInstance(multiHypergraphConstReference1)));
 
-    htd::IMutableMultiHypergraph * multiHypergraph2 = libraryInstance->multiHypergraphFactory().getMultiHypergraph(3);
+    htd::IMutableMultiHypergraph * multiHypergraph2 = libraryInstance->multiHypergraphFactory().createInstance(3);
 
     htd::IMultiHypergraph & multiHypergraphReference2 = *multiHypergraph2;
     const htd::IMultiHypergraph & multiHypergraphConstReference2 = *multiHypergraph2;
@@ -186,8 +186,8 @@ TEST(FactoryTest, CheckMultiHypergraphFactory)
     ASSERT_EQ((std::size_t)4, multiHypergraphReference2.vertexCount());
     ASSERT_EQ((std::size_t)4, multiHypergraphConstReference2.vertexCount());
 
-    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableMultiHypergraph(multiHypergraphReference2)));
-    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableMultiHypergraph(multiHypergraphConstReference2)));
+    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableInstance(multiHypergraphReference2)));
+    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableInstance(multiHypergraphConstReference2)));
 
     multiHypergraph1->removeVertex(1);
 
@@ -197,7 +197,7 @@ TEST(FactoryTest, CheckMultiHypergraphFactory)
     libraryInstance->multiHypergraphFactory().setConstructionTemplate(multiHypergraph1->cloneMutableMultiHypergraph());
 #endif
 
-    htd::IMutableMultiHypergraph * multiHypergraph3 = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * multiHypergraph3 = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMultiHypergraph & multiHypergraphReference3 = *multiHypergraph3;
     const htd::IMultiHypergraph & multiHypergraphConstReference3 = *multiHypergraph3;
@@ -214,10 +214,10 @@ TEST(FactoryTest, CheckMultiHypergraphFactory)
     ASSERT_EQ((std::size_t)2, multiHypergraphReference3.vertexCount());
     ASSERT_EQ((std::size_t)2, multiHypergraphConstReference3.vertexCount());
 
-    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableMultiHypergraph(multiHypergraphReference3)));
-    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableMultiHypergraph(multiHypergraphConstReference3)));
+    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableInstance(multiHypergraphReference3)));
+    ASSERT_NE(nullptr, &(libraryInstance->multiHypergraphFactory().accessMutableInstance(multiHypergraphConstReference3)));
 
-    htd::IMutableMultiHypergraph * multiHypergraph4 = libraryInstance->multiHypergraphFactory().getMultiHypergraph(*multiHypergraph2);
+    htd::IMutableMultiHypergraph * multiHypergraph4 = libraryInstance->multiHypergraphFactory().createInstance(*multiHypergraph2);
 
     ASSERT_NE(multiHypergraph2, multiHypergraph4);
 

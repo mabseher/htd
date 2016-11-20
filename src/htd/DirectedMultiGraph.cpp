@@ -92,12 +92,12 @@ struct htd::DirectedMultiGraph::Implementation
     std::vector<std::unordered_set<htd::vertex_t>> outgoingNeighborhood_;
 };
 
-htd::DirectedMultiGraph::DirectedMultiGraph(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager, manager->multiHypergraphFactory().getMultiHypergraph()))
+htd::DirectedMultiGraph::DirectedMultiGraph(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager, manager->multiHypergraphFactory().createInstance()))
 {
 
 }
 
-htd::DirectedMultiGraph::DirectedMultiGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : implementation_(new Implementation(manager, manager->multiHypergraphFactory().getMultiHypergraph(initialSize)))
+htd::DirectedMultiGraph::DirectedMultiGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : implementation_(new Implementation(manager, manager->multiHypergraphFactory().createInstance(initialSize)))
 {
 
 }
@@ -107,7 +107,7 @@ htd::DirectedMultiGraph::DirectedMultiGraph(const htd::DirectedMultiGraph & orig
 
 }
 
-htd::DirectedMultiGraph::DirectedMultiGraph(const htd::IDirectedMultiGraph & original) : implementation_(new Implementation(original.managementInstance(), original.managementInstance()->multiHypergraphFactory().getMultiHypergraph()))
+htd::DirectedMultiGraph::DirectedMultiGraph(const htd::IDirectedMultiGraph & original) : implementation_(new Implementation(original.managementInstance(), original.managementInstance()->multiHypergraphFactory().createInstance()))
 {
     *this = original;
 }
@@ -549,7 +549,7 @@ htd::DirectedMultiGraph & htd::DirectedMultiGraph::operator=(const htd::IDirecte
     {
         delete implementation_->base_;
 
-        implementation_->base_ = implementation_->managementInstance_->multiHypergraphFactory().getMultiHypergraph(original);
+        implementation_->base_ = implementation_->managementInstance_->multiHypergraphFactory().createInstance(original);
 
         implementation_->incomingNeighborhood_.clear();
         implementation_->outgoingNeighborhood_.clear();

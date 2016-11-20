@@ -83,12 +83,12 @@ struct htd::MultiGraph::Implementation
     htd::IMutableMultiHypergraph * base_;
 };
 
-htd::MultiGraph::MultiGraph(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager, manager->multiHypergraphFactory().getMultiHypergraph()))
+htd::MultiGraph::MultiGraph(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager, manager->multiHypergraphFactory().createInstance()))
 {
 
 }
 
-htd::MultiGraph::MultiGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : implementation_(new Implementation(manager, manager->multiHypergraphFactory().getMultiHypergraph(initialSize)))
+htd::MultiGraph::MultiGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : implementation_(new Implementation(manager, manager->multiHypergraphFactory().createInstance(initialSize)))
 {
 
 }
@@ -98,7 +98,7 @@ htd::MultiGraph::MultiGraph(const htd::MultiGraph & original) : implementation_(
 
 }
 
-htd::MultiGraph::MultiGraph(const htd::IMultiGraph & original) : implementation_(new Implementation(original.managementInstance(), original.managementInstance()->multiHypergraphFactory().getMultiHypergraph(original)))
+htd::MultiGraph::MultiGraph(const htd::IMultiGraph & original) : implementation_(new Implementation(original.managementInstance(), original.managementInstance()->multiHypergraphFactory().createInstance(original)))
 {
 
 }
@@ -352,7 +352,7 @@ htd::MultiGraph & htd::MultiGraph::operator=(const htd::IMultiGraph & original)
     {
         delete implementation_->base_;
 
-        implementation_->base_ = implementation_->managementInstance_->multiHypergraphFactory().getMultiHypergraph(original);
+        implementation_->base_ = implementation_->managementInstance_->multiHypergraphFactory().createInstance(original);
     }
 
     return *this;

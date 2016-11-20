@@ -101,7 +101,7 @@ TEST(LibraryInstanceTest, CheckMultiHypergraphFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());
@@ -116,7 +116,7 @@ TEST(LibraryInstanceTest, CheckMultiHypergraphFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IMutableMultiHypergraph * graph = constLibraryInstance.multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = constLibraryInstance.multiHypergraphFactory().createInstance();
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());

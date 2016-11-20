@@ -36,12 +36,12 @@
 #include <iterator>
 #include <vector>
 
-htd::Hypergraph::Hypergraph(const htd::LibraryInstance * const manager) : base_(manager->multiHypergraphFactory().getMultiHypergraph())
+htd::Hypergraph::Hypergraph(const htd::LibraryInstance * const manager) : base_(manager->multiHypergraphFactory().createInstance())
 {
 
 }
 
-htd::Hypergraph::Hypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : base_(manager->multiHypergraphFactory().getMultiHypergraph(initialSize))
+htd::Hypergraph::Hypergraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : base_(manager->multiHypergraphFactory().createInstance(initialSize))
 {
 
 }
@@ -58,7 +58,7 @@ htd::Hypergraph::Hypergraph(const htd::Hypergraph & original) : base_(original.b
 }
 #endif
 
-htd::Hypergraph::Hypergraph(const htd::IHypergraph & original) : base_(original.managementInstance()->multiHypergraphFactory().getMultiHypergraph(original))
+htd::Hypergraph::Hypergraph(const htd::IHypergraph & original) : base_(original.managementInstance()->multiHypergraphFactory().createInstance(original))
 {
     *this = original;
 }
@@ -419,7 +419,7 @@ htd::Hypergraph & htd::Hypergraph::operator=(const htd::IHypergraph & original)
 {
     if (this != &original)
     {
-        htd::IMutableMultiHypergraph * newBase = managementInstance()->multiHypergraphFactory().getMultiHypergraph(original);
+        htd::IMutableMultiHypergraph * newBase = managementInstance()->multiHypergraphFactory().createInstance(original);
 
         delete base_;
 

@@ -26,16 +26,20 @@
 #define HTD_HTD_MULTIHYPERGRAPHFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableMultiHypergraph.hpp>
+#include <htd/MultiHypergraph.hpp>
 
 namespace htd
 {
     /**
      *  Factory class for the default implementation of the IMutableMultiHypergraph interface.
      */
-    class MultiHypergraphFactory
+    class MultiHypergraphFactory : public htd::GraphTypeFactory<htd::IMultiHypergraph, htd::IMutableMultiHypergraph, htd::MultiHypergraph>
     {
         public:
+            using htd::GraphTypeFactory<htd::IMultiHypergraph, htd::IMutableMultiHypergraph, htd::MultiHypergraph>::createInstance;
+
             /**
              *  Constructor for the factory class.
              */
@@ -44,12 +48,12 @@ namespace htd
             /**
              *  Copy constructor for the factory class.
              */
-            HTD_API MultiHypergraphFactory(const MultiHypergraphFactory & original);
+            HTD_API MultiHypergraphFactory(const MultiHypergraphFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            HTD_API MultiHypergraphFactory & operator=(const MultiHypergraphFactory & original);
+            HTD_API MultiHypergraphFactory & operator=(const MultiHypergraphFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -61,7 +65,7 @@ namespace htd
              *
              *  @return A new IMutableMultiHypergraph object.
              */
-            HTD_API htd::IMutableMultiHypergraph * getMultiHypergraph(void) const;
+            HTD_API htd::IMutableMultiHypergraph * createInstance(void) const HTD_OVERRIDE;
 
             /**
              *  Create a new IMutableMultiHypergraph object.
@@ -70,46 +74,7 @@ namespace htd
              *
              *  @return A new IMutableMultiHypergraph object of the given size.
              */
-            HTD_API htd::IMutableMultiHypergraph * getMultiHypergraph(std::size_t initialSize) const;
-
-            /**
-             *  Create a new IMutableMultiHypergraph object.
-             *
-             *  @param[in] original The original multi-hypergraph acting as template for the created graph.
-             *
-             *  @return A new IMutableMultiHypergraph object identical to the given original graph.
-             */
-            HTD_API htd::IMutableMultiHypergraph * getMultiHypergraph(const htd::IMultiHypergraph & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableMultiHypergraph interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableMultiHypergraph interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableMultiHypergraph * original);
-
-            /**
-             *  Access the mutable interface of a given multi-hypergraph.
-             *
-             *  @return The mutable interface of the given multi-hypergraph.
-             */
-            HTD_API htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(htd::IMultiHypergraph & original) const;
-
-            /**
-             *  Access the mutable interface of a given multi-hypergraph.
-             *
-             *  @return The mutable interface of the given multi-hypergraph.
-             */
-            HTD_API const htd::IMutableMultiHypergraph & accessMutableMultiHypergraph(const htd::IMultiHypergraph & original) const;
-
-        private:
-            struct Implementation;
-
-            std::unique_ptr<Implementation> implementation_;
+            HTD_API htd::IMutableMultiHypergraph * createInstance(std::size_t initialSize) const;
     };
 }
 

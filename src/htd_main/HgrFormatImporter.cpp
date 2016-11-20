@@ -85,7 +85,7 @@ htd::IMultiHypergraph * htd_main::HgrFormatImporter::import(std::istream & strea
 
     bool error = false;
 
-    htd::IMutableMultiHypergraph * ret = implementation_->managementInstance_->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * ret = implementation_->managementInstance_->multiHypergraphFactory().createInstance();
 
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 

@@ -816,7 +816,7 @@ TEST(ManipulationOperationTest, CheckLimitChildCountOperation3)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -878,7 +878,7 @@ TEST(ManipulationOperationTest, CheckLimitChildCountOperation4)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -963,7 +963,7 @@ TEST(ManipulationOperationTest, CheckLimitChildCountOperation5)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -1177,7 +1177,7 @@ TEST(ManipulationOperationTest, CheckJoinNodeNormalizationOperation3)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -1270,7 +1270,7 @@ TEST(ManipulationOperationTest, CheckJoinNodeNormalizationOperation4)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -1534,7 +1534,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionExchangeNodeReplacementOpe
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -1606,7 +1606,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionExchangeNodeReplacementOpe
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -1989,7 +1989,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyRootOperation1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -2049,7 +2049,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyRootOperation1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -2109,7 +2109,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyRootOperation2)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -2152,7 +2152,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyRootOperation2)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -2195,7 +2195,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyRootOperation3)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -2254,7 +2254,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyRootOperation3)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -2311,7 +2311,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyLeavesOperation1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -2374,7 +2374,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyLeavesOperation1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -2437,7 +2437,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyLeavesOperation2)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -2483,7 +2483,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyLeavesOperation2)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -2529,7 +2529,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionAddEmptyLeavesOperation3)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -2587,7 +2587,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionAddEmptyLeavesOperation3)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -2775,7 +2775,7 @@ TEST(ManipulationOperationTest, CheckAddIdenticalJoinNodeParentOperation3)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -2865,7 +2865,7 @@ TEST(ManipulationOperationTest, CheckAddIdenticalJoinNodeParentOperation4)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -3184,7 +3184,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionLimitMaximumIntroducedVert
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -3234,7 +3234,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionLimitMaximumIntroducedVert
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -3283,7 +3283,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionLimitMaximumIntroducedVert
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -3338,7 +3338,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionLimitMaximumIntroducedVert
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -3584,7 +3584,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionLimitMaximumForgottenVerte
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -3635,7 +3635,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionLimitMaximumForgottenVerte
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -3684,7 +3684,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionLimitMaximumForgottenVerte
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -3740,7 +3740,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionLimitMaximumForgottenVerte
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 
@@ -4179,7 +4179,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionCompressionOperation3)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().getTreeDecomposition();
 
@@ -4220,7 +4220,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionCompressionOperation3)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().getMultiHypergraph();
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
 
     htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().getPathDecomposition();
 

@@ -213,7 +213,7 @@ TEST(LibraryInstanceTest, CheckDirectedMultiGraphFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableDirectedMultiGraph * graph = libraryInstance->directedMultiGraphFactory().getDirectedMultiGraph();
+    htd::IMutableDirectedMultiGraph * graph = libraryInstance->directedMultiGraphFactory().createInstance();
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());
@@ -228,7 +228,7 @@ TEST(LibraryInstanceTest, CheckDirectedMultiGraphFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IMutableDirectedMultiGraph * graph = constLibraryInstance.directedMultiGraphFactory().getDirectedMultiGraph();
+    htd::IMutableDirectedMultiGraph * graph = constLibraryInstance.directedMultiGraphFactory().createInstance();
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());

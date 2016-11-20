@@ -26,6 +26,7 @@
 #define HTD_HTD_DIRECTEDMULTIGRAPHFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableDirectedMultiGraph.hpp>
 
 namespace htd
@@ -33,9 +34,11 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableDirectedMultiGraph interface.
      */
-    class DirectedMultiGraphFactory
+    class DirectedMultiGraphFactory : public htd::GraphTypeFactory<htd::IDirectedMultiGraph, htd::IMutableDirectedMultiGraph>
     {
         public:
+            using htd::GraphTypeFactory<htd::IDirectedMultiGraph, htd::IMutableDirectedMultiGraph>::createInstance;
+
             /**
              *  Constructor for the factory class.
              */
@@ -44,12 +47,12 @@ namespace htd
             /**
              *  Copy constructor for the factory class.
              */
-            HTD_API DirectedMultiGraphFactory(const DirectedMultiGraphFactory & original);
+            HTD_API DirectedMultiGraphFactory(const DirectedMultiGraphFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            HTD_API DirectedMultiGraphFactory & operator=(const DirectedMultiGraphFactory & original);
+            HTD_API DirectedMultiGraphFactory & operator=(const DirectedMultiGraphFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -61,7 +64,7 @@ namespace htd
              *
              *  @return A new IMutableDirectedMultiGraph object.
              */
-            HTD_API htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(void) const;
+            HTD_API htd::IMutableDirectedMultiGraph * createInstance(void) const HTD_OVERRIDE;
 
             /**
              *  Create a new IMutableDirectedMultiGraph object.
@@ -70,47 +73,7 @@ namespace htd
              *
              *  @return A new IMutableDirectedMultiGraph object of the given size.
              */
-            HTD_API htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(std::size_t initialSize) const;
-
-            /**
-             *  Create a new IMutableDirectedMultiGraph object.
-             *
-             *  @param[in] original The original directed multi-graph acting as template for the created graph.
-             *
-             *  @return A new IMutableDirectedMultiGraph object identical to the given original graph.
-             */
-            HTD_API htd::IMutableDirectedMultiGraph * getDirectedMultiGraph(const htd::IDirectedMultiGraph & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableDirectedMultiGraph interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableDirectedMultiGraph interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableDirectedMultiGraph * original);
-
-            /**
-             *  Access the mutable interface of a given directed multi-graph.
-             *
-             *  @return The mutable interface of the given directed multi-graph.
-             */
-            HTD_API htd::IMutableDirectedMultiGraph & accessMutableDirectedMultiGraph(htd::IDirectedMultiGraph & original) const;
-
-            /**
-             *  Access the mutable interface of a given directed multi-graph.
-             *
-             *  @return The mutable interface of the given directed multi-graph.
-             */
-            HTD_API const htd::IMutableDirectedMultiGraph & accessMutableDirectedMultiGraph(const htd::IDirectedMultiGraph & original) const;
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableDirectedMultiGraph * constructionTemplate_;
+            HTD_API htd::IMutableDirectedMultiGraph * createInstance(std::size_t initialSize) const;
     };
 }
 

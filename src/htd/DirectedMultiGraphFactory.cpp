@@ -30,49 +30,17 @@
 #include <htd/DirectedMultiGraphFactory.hpp>
 #include <htd/DirectedMultiGraph.hpp>
 
-#include <stdexcept>
-
-htd::DirectedMultiGraphFactory::DirectedMultiGraphFactory(const htd::LibraryInstance * const manager)
+htd::DirectedMultiGraphFactory::DirectedMultiGraphFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::IDirectedMultiGraph, htd::IMutableDirectedMultiGraph>(new htd::DirectedMultiGraph(manager))
 {
-    constructionTemplate_ = new htd::DirectedMultiGraph(manager);
-}
 
-htd::DirectedMultiGraphFactory::DirectedMultiGraphFactory(const htd::DirectedMultiGraphFactory & original)
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    constructionTemplate_ = original.constructionTemplate_->clone();
-#else
-    constructionTemplate_ = original.constructionTemplate_->cloneMutableDirectedMultiGraph();
-#endif
-}
-
-htd::DirectedMultiGraphFactory & htd::DirectedMultiGraphFactory::operator=(const htd::DirectedMultiGraphFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    #else
-        constructionTemplate_ = original.constructionTemplate_->cloneMutableDirectedMultiGraph();
-    #endif
-    }
-
-    return *this;
 }
 
 htd::DirectedMultiGraphFactory::~DirectedMultiGraphFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IMutableDirectedMultiGraph * htd::DirectedMultiGraphFactory::getDirectedMultiGraph(void) const
+htd::IMutableDirectedMultiGraph * htd::DirectedMultiGraphFactory::createInstance(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -81,57 +49,13 @@ htd::IMutableDirectedMultiGraph * htd::DirectedMultiGraphFactory::getDirectedMul
 #endif
 }
 
-htd::IMutableDirectedMultiGraph * htd::DirectedMultiGraphFactory::getDirectedMultiGraph(std::size_t initialSize) const
+htd::IMutableDirectedMultiGraph * htd::DirectedMultiGraphFactory::createInstance(std::size_t initialSize) const
 {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableDirectedMultiGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableDirectedMultiGraph * ret = constructionTemplate_->cloneMutableDirectedMultiGraph();
-#endif
+    htd::IMutableDirectedMultiGraph * ret = createInstance();
 
     ret->addVertices(initialSize);
 
     return ret;
-}
-
-htd::IMutableDirectedMultiGraph * htd::DirectedMultiGraphFactory::getDirectedMultiGraph(const htd::IDirectedMultiGraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableDirectedMultiGraph * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableDirectedMultiGraph * ret = constructionTemplate_->cloneMutableDirectedMultiGraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
-void htd::DirectedMultiGraphFactory::setConstructionTemplate(htd::IMutableDirectedMultiGraph * original)
-{
-    HTD_ASSERT(original != nullptr)
-    HTD_ASSERT(original->vertexCount() == 0)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
-}
-
-htd::IMutableDirectedMultiGraph & htd::DirectedMultiGraphFactory::accessMutableDirectedMultiGraph(htd::IDirectedMultiGraph & original) const
-{
-    return *(dynamic_cast<htd::IMutableDirectedMultiGraph *>(&original));
-}
-
-const htd::IMutableDirectedMultiGraph & htd::DirectedMultiGraphFactory::accessMutableDirectedMultiGraph(const htd::IDirectedMultiGraph & original) const
-{
-    return *(dynamic_cast<const htd::IMutableDirectedMultiGraph *>(&original));
 }
 
 #endif /* HTD_HTD_DIRECTEDMULTIGRAPHFACTORY_CPP */

@@ -26,6 +26,7 @@
 #define HTD_HTD_GRAPHFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableGraph.hpp>
 
 namespace htd
@@ -33,9 +34,11 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableGraph interface.
      */
-    class GraphFactory
+    class GraphFactory : public htd::GraphTypeFactory<htd::IGraph, htd::IMutableGraph>
     {
         public:
+            using htd::GraphTypeFactory<htd::IGraph, htd::IMutableGraph>::createInstance;
+
             /**
              *  Constructor for the factory class.
              */
@@ -44,12 +47,12 @@ namespace htd
             /**
              *  Copy constructor for the factory class.
              */
-            HTD_API GraphFactory(const GraphFactory & original);
+            HTD_API GraphFactory(const GraphFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            HTD_API GraphFactory & operator=(const GraphFactory & original);
+            HTD_API GraphFactory & operator=(const GraphFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -61,7 +64,7 @@ namespace htd
              *
              *  @return A new IMutableGraph object.
              */
-            HTD_API htd::IMutableGraph * getGraph(void) const;
+            HTD_API htd::IMutableGraph * createInstance(void) const;
 
             /**
              *  Create a new IMutableGraph object.
@@ -70,56 +73,7 @@ namespace htd
              *
              *  @return A new IMutableGraph object of the given size.
              */
-            HTD_API htd::IMutableGraph * getGraph(std::size_t initialSize) const;
-
-            /**
-             *  Create a new IMutableGraph object.
-             *
-             *  @param[in] original The original graph acting as template for the created graph.
-             *
-             *  @return A new IMutableGraph object identical to the given original graph.
-             */
-            HTD_API htd::IMutableGraph * getGraph(const htd::IGraph & original) const;
-
-            /**
-             *  Create a new IMutableGraph object.
-             *
-             *  @param[in] original The original multi-graph acting as template for the created graph.
-             *
-             *  @return A new IMutableGraph object identical to the given original graph.
-             */
-            HTD_API htd::IMutableGraph * getGraph(const htd::IMultiGraph & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableGraph interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableGraph interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableGraph * original);
-
-            /**
-             *  Access the mutable interface of a given graph.
-             *
-             *  @return The mutable interface of the given graph.
-             */
-            HTD_API htd::IMutableGraph & accessMutableGraph(htd::IGraph & original) const;
-
-            /**
-             *  Access the mutable interface of a given graph.
-             *
-             *  @return The mutable interface of the given graph.
-             */
-            HTD_API const htd::IMutableGraph & accessMutableGraph(const htd::IGraph & original) const;
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableGraph * constructionTemplate_;
+            HTD_API htd::IMutableGraph * createInstance(std::size_t initialSize) const;
     };
 }
 

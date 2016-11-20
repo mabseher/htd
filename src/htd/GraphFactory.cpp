@@ -28,52 +28,19 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/GraphFactory.hpp>
-#include <htd/IMutableGraph.hpp>
 #include <htd/Graph.hpp>
 
-#include <stdexcept>
-
-htd::GraphFactory::GraphFactory(const htd::LibraryInstance * const manager)
+htd::GraphFactory::GraphFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::IGraph, htd::IMutableGraph>(new htd::Graph(manager))
 {
-    constructionTemplate_ = new htd::Graph(manager);
-}
 
-htd::GraphFactory::GraphFactory(const htd::GraphFactory & original)
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    constructionTemplate_ = original.constructionTemplate_->clone();
-#else
-    constructionTemplate_ = original.constructionTemplate_->cloneMutableGraph();
-#endif
-}
-
-htd::GraphFactory & htd::GraphFactory::operator=(const htd::GraphFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    #else
-        constructionTemplate_ = original.constructionTemplate_->cloneMutableGraph();
-    #endif
-    }
-
-    return *this;
 }
 
 htd::GraphFactory::~GraphFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IMutableGraph * htd::GraphFactory::getGraph(void) const
+htd::IMutableGraph * htd::GraphFactory::createInstance(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -82,57 +49,13 @@ htd::IMutableGraph * htd::GraphFactory::getGraph(void) const
 #endif
 }
 
-htd::IMutableGraph * htd::GraphFactory::getGraph(std::size_t initialSize) const
+htd::IMutableGraph * htd::GraphFactory::createInstance(std::size_t initialSize) const
 {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableGraph * ret = constructionTemplate_->cloneMutableGraph();
-#endif
+    htd::IMutableGraph * ret = createInstance();
 
     ret->addVertices(initialSize);
 
     return ret;
-}
-
-htd::IMutableGraph * htd::GraphFactory::getGraph(const htd::IGraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableGraph * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableGraph * ret = constructionTemplate_->cloneMutableGraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
-void htd::GraphFactory::setConstructionTemplate(htd::IMutableGraph * original)
-{
-    HTD_ASSERT(original != nullptr)
-    HTD_ASSERT(original->vertexCount() == 0)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
-}
-
-htd::IMutableGraph & htd::GraphFactory::accessMutableGraph(htd::IGraph & original) const
-{
-    return *(dynamic_cast<htd::IMutableGraph *>(&original));
-}
-
-const htd::IMutableGraph & htd::GraphFactory::accessMutableGraph(const htd::IGraph & original) const
-{
-    return *(dynamic_cast<const htd::IMutableGraph *>(&original));
 }
 
 #endif /* HTD_HTD_GRAPHFACTORY_CPP */

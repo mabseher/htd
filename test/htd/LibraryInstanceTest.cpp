@@ -185,7 +185,7 @@ TEST(LibraryInstanceTest, CheckGraphFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableGraph * graph = libraryInstance->graphFactory().getGraph();
+    htd::IMutableGraph * graph = libraryInstance->graphFactory().createInstance();
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());
@@ -200,7 +200,7 @@ TEST(LibraryInstanceTest, CheckGraphFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IMutableGraph * graph = constLibraryInstance.graphFactory().getGraph();
+    htd::IMutableGraph * graph = constLibraryInstance.graphFactory().createInstance();
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());

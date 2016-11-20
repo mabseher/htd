@@ -26,6 +26,7 @@
 #define HTD_HTD_HYPERGRAPHFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableHypergraph.hpp>
 
 namespace htd
@@ -33,9 +34,11 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableHypergraph interface.
      */
-    class HypergraphFactory
+    class HypergraphFactory : public htd::GraphTypeFactory<htd::IHypergraph, htd::IMutableHypergraph>
     {
         public:
+            using htd::GraphTypeFactory<htd::IHypergraph, htd::IMutableHypergraph>::createInstance;
+
             /**
              *  Constructor for the factory class.
              */
@@ -44,12 +47,12 @@ namespace htd
             /**
              *  Copy constructor for the factory class.
              */
-            HTD_API HypergraphFactory(const HypergraphFactory & original);
+            HTD_API HypergraphFactory(const HypergraphFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            HTD_API HypergraphFactory & operator=(const HypergraphFactory & original);
+            HTD_API HypergraphFactory & operator=(const HypergraphFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -61,7 +64,7 @@ namespace htd
              *
              *  @return A new IMutableHypergraph object.
              */
-            HTD_API htd::IMutableHypergraph * getHypergraph(void) const;
+            HTD_API htd::IMutableHypergraph * createInstance(void) const;
 
             /**
              *  Create a new IMutableHypergraph object.
@@ -70,55 +73,7 @@ namespace htd
              *
              *  @return A new IMutableHypergraph object of the given size.
              */
-            HTD_API htd::IMutableHypergraph * getHypergraph(std::size_t initialSize) const;
-
-            /**
-             *  Create a new IMutableHypergraph object.
-             *
-             *  @param[in] original The original hypergraph acting as template for the created graph.
-             *
-             *  @return A new IMutableHypergraph object identical to the given original graph.
-             */
-            HTD_API htd::IMutableHypergraph * getHypergraph(const htd::IHypergraph & original) const;
-
-            /**
-             *  Create a new IMutableHypergraph object.
-             *
-             *  @param[in] original The original multi-hypergraph acting as template for the created graph.
-             *
-             *  @return A new IMutableHypergraph object identical to the given original graph.
-             */
-            HTD_API htd::IMutableHypergraph * getHypergraph(const htd::IMultiHypergraph & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableHypergraph interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableHypergraph interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableHypergraph * original);
-
-            /**
-             *  Access the mutable interface of a given hypergraph.
-             *
-             *  @return The mutable interface of the given hypergraph.
-             */
-            HTD_API htd::IMutableHypergraph & accessMutableHypergraph(htd::IHypergraph & original) const;
-
-            /**
-             *  Access the mutable interface of a given hypergraph.
-             *
-             *  @return The mutable interface of the given hypergraph.
-             */
-            HTD_API const htd::IMutableHypergraph & accessMutableHypergraph(const htd::IHypergraph & original) const;
-
-        private:
-            struct Implementation;
-
-            std::unique_ptr<Implementation> implementation_;
+            HTD_API htd::IMutableHypergraph * createInstance(std::size_t initialSize) const;
     };
 }
 

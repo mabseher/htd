@@ -30,8 +30,6 @@
 #include <htd/MultiHypergraphFactory.hpp>
 #include <htd/MultiHypergraph.hpp>
 
-#include <stdexcept>
-
 htd::MultiHypergraphFactory::MultiHypergraphFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::IMultiHypergraph, htd::IMutableMultiHypergraph>(new htd::MultiHypergraph(manager))
 {
 

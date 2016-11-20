@@ -36,12 +36,12 @@
 #include <utility>
 #include <vector>
 
-htd::DirectedGraph::DirectedGraph(const htd::LibraryInstance * const manager) : base_(manager->hypergraphFactory().getHypergraph()), incomingNeighborhood_(), outgoingNeighborhood_()
+htd::DirectedGraph::DirectedGraph(const htd::LibraryInstance * const manager) : base_(manager->hypergraphFactory().createInstance()), incomingNeighborhood_(), outgoingNeighborhood_()
 {
 
 }
 
-htd::DirectedGraph::DirectedGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : base_(manager->hypergraphFactory().getHypergraph(initialSize)), incomingNeighborhood_(), outgoingNeighborhood_()
+htd::DirectedGraph::DirectedGraph(const htd::LibraryInstance * const manager, std::size_t initialSize) : base_(manager->hypergraphFactory().createInstance(initialSize)), incomingNeighborhood_(), outgoingNeighborhood_()
 {
     incomingNeighborhood_.resize(initialSize, std::unordered_set<htd::vertex_t>());
     outgoingNeighborhood_.resize(initialSize, std::unordered_set<htd::vertex_t>());
@@ -59,7 +59,7 @@ htd::DirectedGraph::DirectedGraph(const htd::DirectedGraph & original) : base_(o
 }
 #endif
 
-htd::DirectedGraph::DirectedGraph(const htd::IDirectedGraph & original) : base_(original.managementInstance()->hypergraphFactory().getHypergraph()), incomingNeighborhood_(), outgoingNeighborhood_()
+htd::DirectedGraph::DirectedGraph(const htd::IDirectedGraph & original) : base_(original.managementInstance()->hypergraphFactory().createInstance()), incomingNeighborhood_(), outgoingNeighborhood_()
 {
     *this = original;
 }
@@ -531,7 +531,7 @@ htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::IDirectedGraph & o
 {
     if (this != &original)
     {
-        htd::IMutableHypergraph * newBase = base_->managementInstance()->hypergraphFactory().getHypergraph(original);
+        htd::IMutableHypergraph * newBase = base_->managementInstance()->hypergraphFactory().createInstance(original);
 
         delete base_;
 

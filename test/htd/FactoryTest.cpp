@@ -56,7 +56,7 @@ TEST(FactoryTest, CheckHypergraphFactory)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableHypergraph * hypergraph1 = libraryInstance->hypergraphFactory().getHypergraph();
+    htd::IMutableHypergraph * hypergraph1 = libraryInstance->hypergraphFactory().createInstance();
 
     htd::IHypergraph & hypergraphReference1 = *hypergraph1;
     const htd::IHypergraph & hypergraphConstReference1 = *hypergraph1;
@@ -72,10 +72,10 @@ TEST(FactoryTest, CheckHypergraphFactory)
     ASSERT_EQ((std::size_t)1, hypergraphReference1.vertexCount());
     ASSERT_EQ((std::size_t)1, hypergraphConstReference1.vertexCount());
 
-    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableHypergraph(hypergraphReference1)));
-    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableHypergraph(hypergraphConstReference1)));
+    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableInstance(hypergraphReference1)));
+    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableInstance(hypergraphConstReference1)));
 
-    htd::IMutableHypergraph * hypergraph2 = libraryInstance->hypergraphFactory().getHypergraph(3);
+    htd::IMutableHypergraph * hypergraph2 = libraryInstance->hypergraphFactory().createInstance(3);
 
     htd::IHypergraph & hypergraphReference2 = *hypergraph2;
     const htd::IHypergraph & hypergraphConstReference2 = *hypergraph2;
@@ -91,8 +91,8 @@ TEST(FactoryTest, CheckHypergraphFactory)
     ASSERT_EQ((std::size_t)4, hypergraphReference2.vertexCount());
     ASSERT_EQ((std::size_t)4, hypergraphConstReference2.vertexCount());
 
-    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableHypergraph(hypergraphReference2)));
-    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableHypergraph(hypergraphConstReference2)));
+    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableInstance(hypergraphReference2)));
+    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableInstance(hypergraphConstReference2)));
 
     hypergraph1->removeVertex(1);
 
@@ -102,7 +102,7 @@ TEST(FactoryTest, CheckHypergraphFactory)
     libraryInstance->hypergraphFactory().setConstructionTemplate(hypergraph1->cloneMutableHypergraph());
 #endif
 
-    htd::IMutableHypergraph * hypergraph3 = libraryInstance->hypergraphFactory().getHypergraph();
+    htd::IMutableHypergraph * hypergraph3 = libraryInstance->hypergraphFactory().createInstance();
 
     htd::IHypergraph & hypergraphReference3 = *hypergraph3;
     const htd::IHypergraph & hypergraphConstReference3 = *hypergraph3;
@@ -119,10 +119,10 @@ TEST(FactoryTest, CheckHypergraphFactory)
     ASSERT_EQ((std::size_t)2, hypergraphReference3.vertexCount());
     ASSERT_EQ((std::size_t)2, hypergraphConstReference3.vertexCount());
 
-    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableHypergraph(hypergraphReference3)));
-    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableHypergraph(hypergraphConstReference3)));
+    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableInstance(hypergraphReference3)));
+    ASSERT_NE(nullptr, &(libraryInstance->hypergraphFactory().accessMutableInstance(hypergraphConstReference3)));
 
-    htd::IMutableHypergraph * hypergraph4 = libraryInstance->hypergraphFactory().getHypergraph(*hypergraph2);
+    htd::IMutableHypergraph * hypergraph4 = libraryInstance->hypergraphFactory().createInstance(*hypergraph2);
 
     ASSERT_NE(hypergraph2, hypergraph4);
 

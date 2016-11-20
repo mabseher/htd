@@ -37,12 +37,12 @@
 #include <vector>
 #include <set>
 
-htd::Graph::Graph(const htd::LibraryInstance * const manager) : base_(manager->hypergraphFactory().getHypergraph())
+htd::Graph::Graph(const htd::LibraryInstance * const manager) : base_(manager->hypergraphFactory().createInstance())
 {
 
 }
 
-htd::Graph::Graph(const htd::LibraryInstance * const manager, std::size_t initialSize) : base_(manager->hypergraphFactory().getHypergraph(initialSize))
+htd::Graph::Graph(const htd::LibraryInstance * const manager, std::size_t initialSize) : base_(manager->hypergraphFactory().createInstance(initialSize))
 {
 
 }
@@ -59,7 +59,7 @@ htd::Graph::Graph(const htd::Graph & original) : base_(original.base_->cloneMuta
 }
 #endif
 
-htd::Graph::Graph(const htd::IGraph & original) : base_(original.managementInstance()->hypergraphFactory().getHypergraph(original))
+htd::Graph::Graph(const htd::IGraph & original) : base_(original.managementInstance()->hypergraphFactory().createInstance(original))
 {
 
 }
@@ -340,7 +340,7 @@ htd::Graph & htd::Graph::operator=(const htd::IGraph & original)
 {
     if (this != &original)
     {
-        htd::IMutableHypergraph * newBase = managementInstance()->hypergraphFactory().getHypergraph(original);
+        htd::IMutableHypergraph * newBase = managementInstance()->hypergraphFactory().createInstance(original);
 
         delete base_;
 

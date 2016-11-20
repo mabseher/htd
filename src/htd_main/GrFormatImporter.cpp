@@ -85,7 +85,7 @@ htd::IMultiGraph * htd_main::GrFormatImporter::import(std::istream & stream) con
 
     bool error = false;
 
-    htd::IMutableMultiGraph * ret = implementation_->managementInstance_->multiGraphFactory().getMultiGraph();
+    htd::IMutableMultiGraph * ret = implementation_->managementInstance_->multiGraphFactory().createInstance();
 
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 

@@ -26,6 +26,7 @@
 #define HTD_HTD_MULTIGRAPHFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableMultiGraph.hpp>
 
 namespace htd
@@ -33,9 +34,11 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableMultiGraph interface.
      */
-    class MultiGraphFactory
+    class MultiGraphFactory : public htd::GraphTypeFactory<htd::IMultiGraph, htd::IMutableMultiGraph>
     {
         public:
+            using htd::GraphTypeFactory<htd::IMultiGraph, htd::IMutableMultiGraph>::createInstance;
+
             /**
              *  Constructor for the factory class.
              */
@@ -44,12 +47,12 @@ namespace htd
             /**
              *  Copy constructor for the factory class.
              */
-            HTD_API MultiGraphFactory(const MultiGraphFactory & original);
+            HTD_API MultiGraphFactory(const MultiGraphFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            HTD_API MultiGraphFactory & operator=(const MultiGraphFactory & original);
+            HTD_API MultiGraphFactory & operator=(const MultiGraphFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -61,7 +64,7 @@ namespace htd
              *
              *  @return A new IMutableMultiGraph object.
              */
-            HTD_API htd::IMutableMultiGraph * getMultiGraph(void) const;
+            HTD_API htd::IMutableMultiGraph * createInstance(void) const HTD_OVERRIDE;
 
             /**
              *  Create a new IMutableMultiGraph object.
@@ -70,47 +73,7 @@ namespace htd
              *
              *  @return A new IMutableMultiGraph object of the given size.
              */
-            HTD_API htd::IMutableMultiGraph * getMultiGraph(std::size_t initialSize) const;
-
-            /**
-             *  Create a new IMutableMultiGraph object.
-             *
-             *  @param[in] original The original multi-graph acting as template for the created graph.
-             *
-             *  @return A new IMutableMultiGraph object identical to the given original graph.
-             */
-            HTD_API htd::IMutableMultiGraph * getMultiGraph(const htd::IMultiGraph & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableMultiGraph interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableMultiGraph interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableMultiGraph * original);
-
-            /**
-             *  Access the mutable interface of a given multi-graph.
-             *
-             *  @return The mutable interface of the given multi-graph.
-             */
-            HTD_API htd::IMutableMultiGraph & accessMutableMultiGraph(htd::IMultiGraph & original) const;
-
-            /**
-             *  Access the mutable interface of a given multi-graph.
-             *
-             *  @return The mutable interface of the given multi-graph.
-             */
-            HTD_API const htd::IMutableMultiGraph & accessMutableMultiGraph(const htd::IMultiGraph & original) const;
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableMultiGraph * constructionTemplate_;
+            HTD_API htd::IMutableMultiGraph * createInstance(std::size_t initialSize) const;
     };
 }
 

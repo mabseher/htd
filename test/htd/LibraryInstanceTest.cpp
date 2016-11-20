@@ -157,7 +157,7 @@ TEST(LibraryInstanceTest, CheckMultiGraphFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableMultiGraph * graph = libraryInstance->multiGraphFactory().getMultiGraph();
+    htd::IMutableMultiGraph * graph = libraryInstance->multiGraphFactory().createInstance();
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());
@@ -172,7 +172,7 @@ TEST(LibraryInstanceTest, CheckMultiGraphFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IMutableMultiGraph * graph = constLibraryInstance.multiGraphFactory().getMultiGraph();
+    htd::IMutableMultiGraph * graph = constLibraryInstance.multiGraphFactory().createInstance();
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());

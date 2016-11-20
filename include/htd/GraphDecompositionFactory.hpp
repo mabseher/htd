@@ -26,6 +26,7 @@
 #define HTD_HTD_GRAPHDECOMPOSITIONFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableGraphDecomposition.hpp>
 
 namespace htd
@@ -33,7 +34,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableGraphDecomposition interface.
      */
-    class GraphDecompositionFactory
+    class GraphDecompositionFactory : public htd::GraphTypeFactory<htd::IGraphDecomposition, htd::IMutableGraphDecomposition>
     {
         public:
             /**
@@ -44,12 +45,12 @@ namespace htd
             /**
              *  Copy constructor for the factory class.
              */
-            HTD_API GraphDecompositionFactory(const GraphDecompositionFactory & original);
+            HTD_API GraphDecompositionFactory(const GraphDecompositionFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              */
-            HTD_API GraphDecompositionFactory & operator=(const GraphDecompositionFactory & original);
+            HTD_API GraphDecompositionFactory & operator=(const GraphDecompositionFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -61,47 +62,7 @@ namespace htd
              *
              *  @return A new IMutableGraphDecomposition object.
              */
-            HTD_API htd::IMutableGraphDecomposition * getGraphDecomposition(void) const;
-
-            /**
-             *  Create a new IMutableGraphDecomposition object.
-             *
-             *  @param[in] original The original graph decomposition acting as template for the created graph.
-             *
-             *  @return A new IMutableGraphDecomposition object identical to the given original graph.
-             */
-            HTD_API htd::IMutableGraphDecomposition * getGraphDecomposition(const htd::IGraphDecomposition & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableGraphDecomposition interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableGraphDecomposition interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableGraphDecomposition * original);
-
-            /**
-             *  Access the mutable interface of a given graph decomposition.
-             *
-             *  @return The mutable interface of the given graph decomposition.
-             */
-            HTD_API htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(htd::IGraphDecomposition & original) const;
-
-            /**
-             *  Access the mutable interface of a given graph decomposition.
-             *
-             *  @return The mutable interface of the given graph decomposition.
-             */
-            HTD_API const htd::IMutableGraphDecomposition & accessMutableGraphDecomposition(const htd::IGraphDecomposition & original) const;
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableGraphDecomposition * constructionTemplate_;
+            HTD_API htd::IMutableGraphDecomposition * createInstance(void) const;
     };
 }
 

@@ -372,7 +372,7 @@ std::pair<htd::IMutableTreeDecomposition *, std::size_t> htd::BucketEliminationT
 
         if (graphDecomposition.first != nullptr)
         {
-            htd::IMutableGraphDecomposition & mutableGraphDecomposition = managementInstance_->graphDecompositionFactory().accessMutableGraphDecomposition(*(graphDecomposition.first));
+            htd::IMutableGraphDecomposition & mutableGraphDecomposition = managementInstance_->graphDecompositionFactory().accessMutableInstance(*(graphDecomposition.first));
 
             if (!managementInstance_->isTerminated())
             {

@@ -30,95 +30,23 @@
 #include <htd/GraphDecompositionFactory.hpp>
 #include <htd/GraphDecomposition.hpp>
 
-#include <stdexcept>
-
-htd::GraphDecompositionFactory::GraphDecompositionFactory(const htd::LibraryInstance * const manager)
+htd::GraphDecompositionFactory::GraphDecompositionFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::IGraphDecomposition, htd::IMutableGraphDecomposition>(new htd::GraphDecomposition(manager))
 {
-    constructionTemplate_ = new htd::GraphDecomposition(manager);
-}
 
-htd::GraphDecompositionFactory::GraphDecompositionFactory(const htd::GraphDecompositionFactory & original)
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    constructionTemplate_ = original.constructionTemplate_->clone();
-#else
-    constructionTemplate_ = original.constructionTemplate_->cloneMutableGraphDecomposition();
-#endif
-}
-
-htd::GraphDecompositionFactory & htd::GraphDecompositionFactory::operator=(const htd::GraphDecompositionFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    #else
-        constructionTemplate_ = original.constructionTemplate_->cloneMutableGraphDecomposition();
-    #endif
-    }
-
-    return *this;
 }
 
 htd::GraphDecompositionFactory::~GraphDecompositionFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomposition(void) const
+htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::createInstance(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
 #else
     return constructionTemplate_->cloneMutableGraphDecomposition();
 #endif
-}
-
-htd::IMutableGraphDecomposition * htd::GraphDecompositionFactory::getGraphDecomposition(const htd::IGraphDecomposition & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableGraphDecomposition * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableGraphDecomposition * ret = constructionTemplate_->cloneMutableGraphDecomposition();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
-void htd::GraphDecompositionFactory::setConstructionTemplate(htd::IMutableGraphDecomposition * original)
-{
-    HTD_ASSERT(original != nullptr)
-    HTD_ASSERT(original->vertexCount() == 0)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
-}
-
-htd::IMutableGraphDecomposition & htd::GraphDecompositionFactory::accessMutableGraphDecomposition(htd::IGraphDecomposition & original) const
-{
-    return *(dynamic_cast<htd::IMutableGraphDecomposition *>(&original));
-}
-
-const htd::IMutableGraphDecomposition & htd::GraphDecompositionFactory::accessMutableGraphDecomposition(const htd::IGraphDecomposition & original) const
-{
-    return *(dynamic_cast<const htd::IMutableGraphDecomposition *>(&original));
 }
 
 #endif /* HTD_HTD_GRAPHDECOMPOSITIONFACTORY_CPP */

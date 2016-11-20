@@ -297,7 +297,7 @@ TEST(LibraryInstanceTest, CheckGraphDecompositionFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IMutableGraphDecomposition * decomposition = libraryInstance->graphDecompositionFactory().getGraphDecomposition();
+    htd::IMutableGraphDecomposition * decomposition = libraryInstance->graphDecompositionFactory().createInstance();
 
     ASSERT_NE(nullptr, decomposition);
     ASSERT_EQ(libraryInstance, decomposition->managementInstance());
@@ -312,7 +312,7 @@ TEST(LibraryInstanceTest, CheckGraphDecompositionFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IMutableGraphDecomposition * decomposition = constLibraryInstance.graphDecompositionFactory().getGraphDecomposition();
+    htd::IMutableGraphDecomposition * decomposition = constLibraryInstance.graphDecompositionFactory().createInstance();
 
     ASSERT_NE(nullptr, decomposition);
     ASSERT_EQ(libraryInstance, decomposition->managementInstance());

@@ -649,7 +649,7 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
 {
     const htd::LibraryInstance & managementInstance = *managementInstance_;
 
-    htd::IMutableGraphDecomposition * ret = managementInstance.graphDecompositionFactory().getGraphDecomposition();
+    htd::IMutableGraphDecomposition * ret = managementInstance.graphDecompositionFactory().createInstance();
 
     std::size_t size = graph.vertexCount();
 

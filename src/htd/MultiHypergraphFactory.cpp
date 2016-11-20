@@ -32,7 +32,7 @@
 
 #include <stdexcept>
 
-htd::MultiHypergraphFactory::MultiHypergraphFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::IMultiHypergraph, htd::IMutableMultiHypergraph, htd::MultiHypergraph>(manager)
+htd::MultiHypergraphFactory::MultiHypergraphFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::IMultiHypergraph, htd::IMutableMultiHypergraph>(new htd::MultiHypergraph(manager))
 {
 
 }

@@ -33,16 +33,20 @@ namespace htd
     /**
      *  Template class providing uniform structure for graph factory classes.
      */
-    template <typename GraphType, typename MutableGraphType, typename DefaultClass>
+    template <typename GraphType, typename MutableGraphType>
     class GraphTypeFactory
     {
         public:
             /**
              *  Constructor for the factory class.
              *
-             *  @param[in] manager  The management instance to which the new factory class belongs.
+             *  @note When calling this method the control over the memory regions of the object instance of the default implementation
+             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
+             *  assigning the same object instance multiple times will lead to undefined behavior.
+             *
+             *  @param[in] original The default implementation of the interface MutableGraphType.
              */
-            GraphTypeFactory(const htd::LibraryInstance * const manager) : managementInstance_(manager), constructionTemplate_(new DefaultClass(manager))
+            GraphTypeFactory(MutableGraphType * constructionTemplate) : managementInstance_(constructionTemplate->managementInstance()), constructionTemplate_(constructionTemplate)
             {
 
             }
@@ -52,14 +56,14 @@ namespace htd
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            GraphTypeFactory(const htd::GraphTypeFactory<GraphType, MutableGraphType, DefaultClass> & original) = delete;
+            GraphTypeFactory(const htd::GraphTypeFactory<GraphType, MutableGraphType> & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            GraphTypeFactory & operator=(const htd::GraphTypeFactory<GraphType, MutableGraphType, DefaultClass> & original) = delete;
+            GraphTypeFactory & operator=(const htd::GraphTypeFactory<GraphType, MutableGraphType> & original) = delete;
 
             /**
              *  Destructor of the factory class.

@@ -28,17 +28,16 @@
 #include <htd/Globals.hpp>
 #include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableMultiHypergraph.hpp>
-#include <htd/MultiHypergraph.hpp>
 
 namespace htd
 {
     /**
      *  Factory class for the default implementation of the IMutableMultiHypergraph interface.
      */
-    class MultiHypergraphFactory : public htd::GraphTypeFactory<htd::IMultiHypergraph, htd::IMutableMultiHypergraph, htd::MultiHypergraph>
+    class MultiHypergraphFactory : public htd::GraphTypeFactory<htd::IMultiHypergraph, htd::IMutableMultiHypergraph>
     {
         public:
-            using htd::GraphTypeFactory<htd::IMultiHypergraph, htd::IMutableMultiHypergraph, htd::MultiHypergraph>::createInstance;
+            using htd::GraphTypeFactory<htd::IMultiHypergraph, htd::IMutableMultiHypergraph>::createInstance;
 
             /**
              *  Constructor for the factory class.

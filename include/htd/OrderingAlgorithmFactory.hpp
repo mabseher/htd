@@ -26,6 +26,7 @@
 #define HTD_HTD_ORDERINGALGORITHMFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/AlgorithmFactory.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
 
 namespace htd
@@ -33,7 +34,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IOrderingAlgorithm interface.
      */
-    class OrderingAlgorithmFactory
+    class OrderingAlgorithmFactory : public htd::AlgorithmFactory<htd::IOrderingAlgorithm>
     {
         public:
             /**
@@ -48,14 +49,14 @@ namespace htd
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API OrderingAlgorithmFactory(const OrderingAlgorithmFactory & original);
+            HTD_API OrderingAlgorithmFactory(const OrderingAlgorithmFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API OrderingAlgorithmFactory & operator=(const OrderingAlgorithmFactory & original);
+            HTD_API OrderingAlgorithmFactory & operator=(const OrderingAlgorithmFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -67,33 +68,7 @@ namespace htd
              *
              *  @return A new IOrderingAlgorithm object.
              */
-            HTD_API htd::IOrderingAlgorithm * getOrderingAlgorithm(void) const;
-
-            /**
-             *  Create a new IOrderingAlgorithm object.
-             *
-             *  @param[in] manager   The management instance which shall be assigned to the new IOrderingAlgorithm object.
-             *
-             *  @return A new IOrderingAlgorithm object.
-             */
-            HTD_API htd::IOrderingAlgorithm * getOrderingAlgorithm(const htd::LibraryInstance * const manager) const;
-
-            /**
-             *  Set the default implementation of the IOrderingAlgorithm interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IOrderingAlgorithm interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IOrderingAlgorithm * original);
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IOrderingAlgorithm * constructionTemplate_;
+            HTD_API htd::IOrderingAlgorithm * createInstance(void) const HTD_OVERRIDE;
     };
 }
 

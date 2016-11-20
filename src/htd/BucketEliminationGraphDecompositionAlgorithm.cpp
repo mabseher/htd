@@ -54,7 +54,7 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
      *
      *  @param[in] manager   The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), orderingAlgorithm_(manager->orderingAlgorithmFactory().getOrderingAlgorithm()), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), orderingAlgorithm_(manager->orderingAlgorithmFactory().createInstance()), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
     {
 
     }

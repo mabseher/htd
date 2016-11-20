@@ -269,7 +269,7 @@ TEST(LibraryInstanceTest, CheckOrderingAlgorithmFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IOrderingAlgorithm * algorithm = libraryInstance->orderingAlgorithmFactory().getOrderingAlgorithm();
+    htd::IOrderingAlgorithm * algorithm = libraryInstance->orderingAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());
@@ -284,7 +284,7 @@ TEST(LibraryInstanceTest, CheckOrderingAlgorithmFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IOrderingAlgorithm * algorithm = constLibraryInstance.orderingAlgorithmFactory().getOrderingAlgorithm();
+    htd::IOrderingAlgorithm * algorithm = constLibraryInstance.orderingAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());

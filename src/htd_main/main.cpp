@@ -872,7 +872,7 @@ int main(int argc, const char * const * const argv)
 
         if (hypertreeDecompositionRequested)
         {
-            htd::IHypertreeDecompositionAlgorithm * algorithm = libraryInstance->hypertreeDecompositionAlgorithmFactory().getHypertreeDecompositionAlgorithm(libraryInstance);
+            htd::IHypertreeDecompositionAlgorithm * algorithm = libraryInstance->hypertreeDecompositionAlgorithmFactory().createInstance();
 
             htd_main::IHypertreeDecompositionExporter * exporter = nullptr;
 

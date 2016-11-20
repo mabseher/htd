@@ -39,6 +39,8 @@ namespace htd
         public:
             /**
              *  Constructor for the factory class.
+             *
+             *  @param[in] manager   The management instance to which the new factory class belongs.
              */
             HTD_API GraphDecompositionAlgorithmFactory(const htd::LibraryInstance * const manager);
 

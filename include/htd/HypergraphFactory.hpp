@@ -41,6 +41,8 @@ namespace htd
 
             /**
              *  Constructor for the factory class.
+             *
+             *  @param[in] manager   The management instance to which the new factory class belongs.
              */
             HTD_API HypergraphFactory(const htd::LibraryInstance * const manager);
 

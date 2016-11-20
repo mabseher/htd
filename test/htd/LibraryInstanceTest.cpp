@@ -494,7 +494,7 @@ TEST(LibraryInstanceTest, CheckHypertreeDecompositionAlgorithmFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IHypertreeDecompositionAlgorithm * algorithm = libraryInstance->hypertreeDecompositionAlgorithmFactory().getHypertreeDecompositionAlgorithm();
+    htd::IHypertreeDecompositionAlgorithm * algorithm = libraryInstance->hypertreeDecompositionAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());
@@ -509,7 +509,7 @@ TEST(LibraryInstanceTest, CheckHypertreeDecompositionAlgorithmFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IHypertreeDecompositionAlgorithm * algorithm = constLibraryInstance.hypertreeDecompositionAlgorithmFactory().getHypertreeDecompositionAlgorithm();
+    htd::IHypertreeDecompositionAlgorithm * algorithm = constLibraryInstance.hypertreeDecompositionAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());

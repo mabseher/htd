@@ -26,7 +26,6 @@
 #define HTD_HTD_TREEDECOMPOSITIONALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 

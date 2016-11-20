@@ -409,7 +409,7 @@ TEST(LibraryInstanceTest, CheckGraphDecompositionAlgorithFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IGraphDecompositionAlgorithm * algorithm = libraryInstance->graphDecompositionAlgorithmFactory().getGraphDecompositionAlgorithm();
+    htd::IGraphDecompositionAlgorithm * algorithm = libraryInstance->graphDecompositionAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());
@@ -424,7 +424,7 @@ TEST(LibraryInstanceTest, CheckGraphDecompositionAlgorithFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IGraphDecompositionAlgorithm * algorithm = constLibraryInstance.graphDecompositionAlgorithmFactory().getGraphDecompositionAlgorithm();
+    htd::IGraphDecompositionAlgorithm * algorithm = constLibraryInstance.graphDecompositionAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());

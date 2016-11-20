@@ -437,7 +437,7 @@ TEST(LibraryInstanceTest, CheckTreeDecompositionAlgorithmFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::ITreeDecompositionAlgorithm * algorithm = libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm();
+    htd::ITreeDecompositionAlgorithm * algorithm = libraryInstance->treeDecompositionAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());
@@ -452,7 +452,7 @@ TEST(LibraryInstanceTest, CheckTreeDecompositionAlgorithmFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::ITreeDecompositionAlgorithm * algorithm = constLibraryInstance.treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm();
+    htd::ITreeDecompositionAlgorithm * algorithm = constLibraryInstance.treeDecompositionAlgorithmFactory().createInstance();
 
 
     ASSERT_NE(nullptr, algorithm);

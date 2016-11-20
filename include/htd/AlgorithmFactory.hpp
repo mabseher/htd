@@ -1,5 +1,5 @@
 /*
- * File:   GraphTypeFactory.hpp
+ * File:   AlgorithmFactory.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_GRAPHTYPEFACTORY_HPP
-#define HTD_HTD_GRAPHTYPEFACTORY_HPP
+#ifndef HTD_HTD_ALGORITHMFACTORY_HPP
+#define HTD_HTD_ALGORITHMFACTORY_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/LibraryInstance.hpp>
@@ -31,10 +31,10 @@
 namespace htd
 {
     /**
-     *  Template class providing uniform structure for graph factory classes.
+     *  Template class providing uniform structure for algorithm factory classes.
      */
-    template <typename GraphType, typename MutableGraphType>
-    class GraphTypeFactory
+    template <typename AlgorithmType>
+    class AlgorithmFactory
     {
         public:
             /**
@@ -44,9 +44,9 @@ namespace htd
              *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
              *  assigning the same object instance multiple times will lead to undefined behavior.
              *
-             *  @param[in] constructionTemplate The default implementation of the interface MutableGraphType.
+             *  @param[in] constructionTemplate The default implementation of the interface AlgorithmType.
              */
-            GraphTypeFactory(MutableGraphType * constructionTemplate) : managementInstance_(constructionTemplate->managementInstance()), constructionTemplate_(constructionTemplate)
+            AlgorithmFactory(AlgorithmType * constructionTemplate) : managementInstance_(constructionTemplate->managementInstance()), constructionTemplate_(constructionTemplate)
             {
 
             }
@@ -56,93 +56,48 @@ namespace htd
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            GraphTypeFactory(const htd::GraphTypeFactory<GraphType, MutableGraphType> & original) = delete;
+            AlgorithmFactory(const AlgorithmFactory<AlgorithmType> & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            GraphTypeFactory & operator=(const htd::GraphTypeFactory<GraphType, MutableGraphType> & original) = delete;
+            AlgorithmFactory & operator=(const AlgorithmFactory<AlgorithmType> & original) = delete;
 
             /**
              *  Destructor of the factory class.
              */
-            virtual ~GraphTypeFactory()
+            virtual ~AlgorithmFactory()
             {
                 delete constructionTemplate_;
             }
 
             /**
-             *  Create a new object of type MutableGraphType.
+             *  Create a new object of type AlgorithmType.
              *
-             *  @return A new object of type MutableGraphType.
+             *  @return A new object of type AlgorithmType.
              */
-            virtual MutableGraphType * createInstance(void) const = 0;
+            virtual AlgorithmType * createInstance(void) const = 0;
 
             /**
-             *  Create a new object of type MutableGraphType.
-             *
-             *  @param[in] original The original graph acting as template for the created graph.
-             *
-             *  @return A new object of type MutableGraphType identical to the given original graph.
-             */
-            MutableGraphType * createInstance(const GraphType & original) const
-            {
-                MutableGraphType * ret = createInstance();
-
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-                *ret = original;
-#else
-                ret->assign(original);
-#endif
-
-                return ret;
-            }
-
-            /**
-             *  Set the default implementation of the interface MutableGraphType.
+             *  Set the default implementation of the interface AlgorithmType.
              *
              *  @note When calling this method the control over the memory regions of the object instance of the original implementation
              *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
              *  assigning the same object instance multiple times will lead to undefined behavior.
              *
-             *  @param[in] original The new default implementation of the interface MutableGraphType.
+             *  @param[in] original The new default implementation of the interface AlgorithmType.
              */
-            void setConstructionTemplate(MutableGraphType * original)
+            void setConstructionTemplate(AlgorithmType * original)
             {
                 HTD_ASSERT(original != nullptr)
-                HTD_ASSERT(original->vertexCount() == 0)
 
                 delete constructionTemplate_;
 
                 constructionTemplate_ = original;
 
                 constructionTemplate_->setManagementInstance(managementInstance_);
-            }
-
-            /**
-             *  Access the mutable interface of a given graph.
-             *
-             *  @param[in] graph    The graph whose mutable interface shall be accessed.
-             *
-             *  @return The mutable interface of the given graph.
-             */
-            MutableGraphType & accessMutableInstance(GraphType & graph) const
-            {
-                return *(dynamic_cast<MutableGraphType *>(&graph));
-            }
-
-            /**
-             *  Access the mutable interface of a given graph.
-             *
-             *  @param[in] graph    The graph whose mutable interface shall be accessed.
-             *
-             *  @return The mutable interface of the given graph.
-             */
-            const MutableGraphType & accessMutableInstance(const GraphType & graph) const
-            {
-                return *(dynamic_cast<const MutableGraphType *>(&graph));
             }
 
         protected:
@@ -154,8 +109,8 @@ namespace htd
             /**
              *  A pointer to a clean instance of the default implementation.
              */
-            MutableGraphType * constructionTemplate_;
+            AlgorithmType * constructionTemplate_;
     };
 }
 
-#endif /* HTD_HTD_GRAPHTYPEFACTORY_HPP */
+#endif /* HTD_HTD_ALGORITHMFACTORY_HPP */

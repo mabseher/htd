@@ -43,11 +43,15 @@ namespace htd
 
             /**
              *  Copy constructor for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API SetCoverAlgorithmFactory(const SetCoverAlgorithmFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API SetCoverAlgorithmFactory & operator=(const SetCoverAlgorithmFactory & original);
 

@@ -46,11 +46,15 @@ namespace htd
 
             /**
              *  Copy constructor for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API MultiHypergraphFactory(const MultiHypergraphFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API MultiHypergraphFactory & operator=(const MultiHypergraphFactory & original) = delete;
 

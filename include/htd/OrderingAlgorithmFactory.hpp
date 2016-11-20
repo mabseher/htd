@@ -43,11 +43,15 @@ namespace htd
 
             /**
              *  Copy constructor for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API OrderingAlgorithmFactory(const OrderingAlgorithmFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API OrderingAlgorithmFactory & operator=(const OrderingAlgorithmFactory & original);
 

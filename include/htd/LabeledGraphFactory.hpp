@@ -43,11 +43,15 @@ namespace htd
 
             /**
              *  Copy constructor for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API LabeledGraphFactory(const LabeledGraphFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API LabeledGraphFactory & operator=(const LabeledGraphFactory & original);
 

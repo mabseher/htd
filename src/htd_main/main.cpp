@@ -1030,7 +1030,7 @@ int main(int argc, const char * const * const argv)
                 }
                 else
                 {
-                    htd::ITreeDecompositionAlgorithm * algorithm = libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm(libraryInstance);
+                    htd::ITreeDecompositionAlgorithm * algorithm = libraryInstance->treeDecompositionAlgorithmFactory().createInstance();
 
                     run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
 

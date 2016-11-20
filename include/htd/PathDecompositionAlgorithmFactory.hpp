@@ -45,11 +45,15 @@ namespace htd
 
             /**
              *  Copy constructor for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API PathDecompositionAlgorithmFactory(const PathDecompositionAlgorithmFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API PathDecompositionAlgorithmFactory & operator=(const PathDecompositionAlgorithmFactory & original);
 

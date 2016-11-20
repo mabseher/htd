@@ -122,7 +122,7 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
 htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
-    htd::ITreeDecompositionAlgorithm * algorithm = managementInstance()->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm();
+    htd::ITreeDecompositionAlgorithm * algorithm = managementInstance()->treeDecompositionAlgorithmFactory().createInstance();
 
     HTD_ASSERT(algorithm != nullptr)
 

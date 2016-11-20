@@ -46,11 +46,15 @@ namespace htd
 
             /**
              *  Copy constructor for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API GraphDecompositionAlgorithmFactory(const GraphDecompositionAlgorithmFactory & original);
 
             /**
              *  Copy assignment operator for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API GraphDecompositionAlgorithmFactory & operator=(const GraphDecompositionAlgorithmFactory & original);
 

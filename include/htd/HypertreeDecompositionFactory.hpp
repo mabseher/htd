@@ -46,11 +46,15 @@ namespace htd
 
             /**
              *  Copy constructor for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API HypertreeDecompositionFactory(const HypertreeDecompositionFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
+             *
+             *  @param[in] original The original factory class which shall be copied.
              */
             HTD_API HypertreeDecompositionFactory & operator=(const HypertreeDecompositionFactory & original) = delete;
 

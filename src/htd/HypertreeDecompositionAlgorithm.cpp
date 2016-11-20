@@ -134,7 +134,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 {
     htd::IMutableHypertreeDecomposition * ret = nullptr;
 
-    htd::ITreeDecompositionAlgorithm * algorithm = managementInstance()->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm();
+    htd::ITreeDecompositionAlgorithm * algorithm = managementInstance()->treeDecompositionAlgorithmFactory().createInstance();
 
     HTD_ASSERT(algorithm != nullptr)
 

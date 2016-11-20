@@ -466,7 +466,7 @@ TEST(LibraryInstanceTest, CheckPathDecompositionAlgorithmFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IPathDecompositionAlgorithm * algorithm = libraryInstance->pathDecompositionAlgorithmFactory().getPathDecompositionAlgorithm();
+    htd::IPathDecompositionAlgorithm * algorithm = libraryInstance->pathDecompositionAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());
@@ -481,7 +481,7 @@ TEST(LibraryInstanceTest, CheckPathDecompositionAlgorithmFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IPathDecompositionAlgorithm * algorithm = constLibraryInstance.pathDecompositionAlgorithmFactory().getPathDecompositionAlgorithm();
+    htd::IPathDecompositionAlgorithm * algorithm = constLibraryInstance.pathDecompositionAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());

@@ -26,72 +26,22 @@
 #define HTD_HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/StronglyConnectedComponentAlgorithmFactory.hpp>
-#include <htd/IStronglyConnectedComponentAlgorithm.hpp>
 #include <htd/TarjanStronglyConnectedComponentAlgorithm.hpp>
 
-#include <memory>
-#include <stdexcept>
-
-htd::StronglyConnectedComponentAlgorithmFactory::StronglyConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager)
+htd::StronglyConnectedComponentAlgorithmFactory::StronglyConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager) : htd::AlgorithmFactory<htd::IStronglyConnectedComponentAlgorithm>(new htd::TarjanStronglyConnectedComponentAlgorithm(manager))
 {
-    constructionTemplate_ = new htd::TarjanStronglyConnectedComponentAlgorithm(manager);
-}
 
-htd::StronglyConnectedComponentAlgorithmFactory::StronglyConnectedComponentAlgorithmFactory(const htd::StronglyConnectedComponentAlgorithmFactory & original)
-{
-    constructionTemplate_ = original.constructionTemplate_->clone();
-}
-
-htd::StronglyConnectedComponentAlgorithmFactory & htd::StronglyConnectedComponentAlgorithmFactory::operator=(const htd::StronglyConnectedComponentAlgorithmFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    }
-
-    return *this;
 }
 
 htd::StronglyConnectedComponentAlgorithmFactory::~StronglyConnectedComponentAlgorithmFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgorithmFactory::getStronglyConnectedComponentAlgorithm(void) const
+htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgorithmFactory::createInstance(void) const
 {
     return constructionTemplate_->clone();
-}
-
-htd::IStronglyConnectedComponentAlgorithm * htd::StronglyConnectedComponentAlgorithmFactory::getStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const
-{
-    htd::IStronglyConnectedComponentAlgorithm * ret = constructionTemplate_->clone();
-
-    ret->setManagementInstance(manager);
-
-    return ret;
-}
-
-void htd::StronglyConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IStronglyConnectedComponentAlgorithm * original)
-{
-    HTD_ASSERT(original != nullptr)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
 }
 
 #endif /* HTD_HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_CPP */

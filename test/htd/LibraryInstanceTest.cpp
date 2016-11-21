@@ -550,7 +550,7 @@ TEST(LibraryInstanceTest, CheckStronglyConnectedComponentAlgorithmFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IStronglyConnectedComponentAlgorithm * algorithm = libraryInstance->stronglyConnectedComponentAlgorithmFactory().getStronglyConnectedComponentAlgorithm();
+    htd::IStronglyConnectedComponentAlgorithm * algorithm = libraryInstance->stronglyConnectedComponentAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());
@@ -565,7 +565,7 @@ TEST(LibraryInstanceTest, CheckStronglyConnectedComponentAlgorithmFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IStronglyConnectedComponentAlgorithm * algorithm = constLibraryInstance.stronglyConnectedComponentAlgorithmFactory().getStronglyConnectedComponentAlgorithm();
+    htd::IStronglyConnectedComponentAlgorithm * algorithm = constLibraryInstance.stronglyConnectedComponentAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());

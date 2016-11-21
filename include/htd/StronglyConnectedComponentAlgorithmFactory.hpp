@@ -26,6 +26,7 @@
 #define HTD_HTD_STRONGLYCONNECTEDCOMPONENTALGORITHMFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/AlgorithmFactory.hpp>
 #include <htd/IStronglyConnectedComponentAlgorithm.hpp>
 
 namespace htd
@@ -33,7 +34,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IStronglyConnectedComponentAlgorithm interface.
      */
-    class StronglyConnectedComponentAlgorithmFactory
+    class StronglyConnectedComponentAlgorithmFactory : public htd::AlgorithmFactory<htd::IStronglyConnectedComponentAlgorithm>
     {
         public:
             /**
@@ -48,14 +49,14 @@ namespace htd
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API StronglyConnectedComponentAlgorithmFactory(const StronglyConnectedComponentAlgorithmFactory & original);
+            HTD_API StronglyConnectedComponentAlgorithmFactory(const StronglyConnectedComponentAlgorithmFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API StronglyConnectedComponentAlgorithmFactory & operator=(const StronglyConnectedComponentAlgorithmFactory & original);
+            HTD_API StronglyConnectedComponentAlgorithmFactory & operator=(const StronglyConnectedComponentAlgorithmFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -67,33 +68,7 @@ namespace htd
              *
              *  @return A new IStronglyConnectedComponentAlgorithm object.
              */
-            HTD_API htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(void) const;
-
-            /**
-             *  Create a new IStronglyConnectedComponentAlgorithm object.
-             *
-             *  @param[in] manager   The management instance which shall be assigned to the new IStronglyConnectedComponentAlgorithm object.
-             *
-             *  @return A new IStronglyConnectedComponentAlgorithm object.
-             */
-            HTD_API htd::IStronglyConnectedComponentAlgorithm * getStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const;
-
-            /**
-             *  Set the default implementation of the IStronglyConnectedComponentAlgorithm interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IStronglyConnectedComponentAlgorithm interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IStronglyConnectedComponentAlgorithm * original);
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IStronglyConnectedComponentAlgorithm * constructionTemplate_;
+            HTD_API htd::IStronglyConnectedComponentAlgorithm * createInstance(void) const HTD_OVERRIDE;
     };
 }
 

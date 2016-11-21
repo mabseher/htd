@@ -49,7 +49,7 @@ namespace htd
             /**
              *  Constructor for a tree.
              */
-            NamedTree(const htd::LibraryInstance * const manager) : base_(manager->labeledTreeFactory().getLabeledTree()), names_()
+            NamedTree(const htd::LibraryInstance * const manager) : base_(manager->labeledTreeFactory().createInstance()), names_()
             {
 
             }

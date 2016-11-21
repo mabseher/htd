@@ -26,97 +26,26 @@
 #define HTD_HTD_LABELEDTREEFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/LabeledTreeFactory.hpp>
 #include <htd/LabeledTree.hpp>
 
-#include <stdexcept>
-
-htd::LabeledTreeFactory::LabeledTreeFactory(const htd::LibraryInstance * const manager)
+htd::LabeledTreeFactory::LabeledTreeFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::ILabeledTree, htd::IMutableLabeledTree>(new htd::LabeledTree(manager))
 {
-    constructionTemplate_ = new htd::LabeledTree(manager);
-}
 
-htd::LabeledTreeFactory::LabeledTreeFactory(const htd::LabeledTreeFactory & original)
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    constructionTemplate_ = original.constructionTemplate_->clone();
-#else
-    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledTree();
-#endif
-}
-
-htd::LabeledTreeFactory & htd::LabeledTreeFactory::operator=(const htd::LabeledTreeFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    #else
-        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledTree();
-    #endif
-    }
-
-    return *this;
 }
 
 htd::LabeledTreeFactory::~LabeledTreeFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IMutableLabeledTree * htd::LabeledTreeFactory::getLabeledTree(void) const
+htd::IMutableLabeledTree * htd::LabeledTreeFactory::createInstance(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
 #else
     return constructionTemplate_->cloneMutableLabeledTree();
 #endif
-}
-
-htd::IMutableLabeledTree * htd::LabeledTreeFactory::getLabeledTree(const htd::ILabeledTree & original) const
-{
-    htd::IMutableLabeledTree * ret = htd::LabeledTreeFactory::getLabeledTree();
-
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    *ret = original;
-#else
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
-void htd::LabeledTreeFactory::setConstructionTemplate(htd::IMutableLabeledTree * original)
-{
-    HTD_ASSERT(original != nullptr)
-    HTD_ASSERT(original->vertexCount() == 0)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
-}
-
-htd::IMutableLabeledTree & htd::LabeledTreeFactory::accessMutableLabeledTree(htd::ILabeledTree & original) const
-{
-    return *(dynamic_cast<htd::IMutableLabeledTree *>(&original));
-}
-
-const htd::IMutableLabeledTree & htd::LabeledTreeFactory::accessMutableLabeledTree(const htd::ILabeledTree & original) const
-{
-    return *(dynamic_cast<const htd::IMutableLabeledTree *>(&original));
 }
 
 #endif /* HTD_HTD_LABELEDTREEFACTORY_CPP */

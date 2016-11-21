@@ -26,6 +26,7 @@
 #define HTD_HTD_LABELEDPATHFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableLabeledPath.hpp>
 
 namespace htd
@@ -33,9 +34,11 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledPath interface.
      */
-    class LabeledPathFactory
+    class LabeledPathFactory : public htd::GraphTypeFactory<htd::ILabeledPath, htd::IMutableLabeledPath>
     {
         public:
+            using htd::GraphTypeFactory<htd::ILabeledPath, htd::IMutableLabeledPath>::createInstance;
+
             /**
              *  Constructor for the factory class.
              *
@@ -48,14 +51,14 @@ namespace htd
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API LabeledPathFactory(const LabeledPathFactory & original);
+            HTD_API LabeledPathFactory(const LabeledPathFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API LabeledPathFactory & operator=(const LabeledPathFactory & original);
+            HTD_API LabeledPathFactory & operator=(const LabeledPathFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -67,47 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledPath object.
              */
-            HTD_API htd::IMutableLabeledPath * getLabeledPath(void) const;
-
-            /**
-             *  Create a new IMutableLabeledPath object.
-             *
-             *  @param[in] original The original labeled path acting as template for the created graph.
-             *
-             *  @return A new IMutableLabeledPath object identical to the given original graph.
-             */
-            HTD_API htd::IMutableLabeledPath * getLabeledPath(const htd::ILabeledPath & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableLabeledPath interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableLabeledPath interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableLabeledPath * original);
-
-            /**
-             *  Access the mutable interface of a given labeled path.
-             *
-             *  @return The mutable interface of the given labeled path.
-             */
-            HTD_API htd::IMutableLabeledPath & accessMutableLabeledPath(htd::ILabeledPath & original) const;
-
-            /**
-             *  Access the mutable interface of a given labeled path.
-             *
-             *  @return The mutable interface of the given labeled path.
-             */
-            HTD_API const htd::IMutableLabeledPath & accessMutableLabeledPath(const htd::ILabeledPath & original) const;
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableLabeledPath * constructionTemplate_;
+            HTD_API htd::IMutableLabeledPath * createInstance(void) const HTD_OVERRIDE;
     };
 }
 

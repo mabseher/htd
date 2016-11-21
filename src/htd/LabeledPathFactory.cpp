@@ -26,99 +26,26 @@
 #define HTD_HTD_LABELEDPATHFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/LabeledPathFactory.hpp>
 #include <htd/LabeledPath.hpp>
 
-#include <stdexcept>
-
-htd::LabeledPathFactory::LabeledPathFactory(const htd::LibraryInstance * const manager)
+htd::LabeledPathFactory::LabeledPathFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::ILabeledPath, htd::IMutableLabeledPath>(new htd::LabeledPath(manager))
 {
-    constructionTemplate_ = new htd::LabeledPath(manager);
-}
 
-htd::LabeledPathFactory::LabeledPathFactory(const htd::LabeledPathFactory & original)
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    constructionTemplate_ = original.constructionTemplate_->clone();
-#else
-    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledPath();
-#endif
-}
-
-htd::LabeledPathFactory & htd::LabeledPathFactory::operator=(const htd::LabeledPathFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    #else
-        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledPath();
-    #endif
-    }
-
-    return *this;
 }
 
 htd::LabeledPathFactory::~LabeledPathFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(void) const
+htd::IMutableLabeledPath * htd::LabeledPathFactory::createInstance(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
 #else
     return constructionTemplate_->cloneMutableLabeledPath();
 #endif
-}
-
-htd::IMutableLabeledPath * htd::LabeledPathFactory::getLabeledPath(const htd::ILabeledPath & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledPath * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableLabeledPath * ret = constructionTemplate_->cloneMutableLabeledPath();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
-void htd::LabeledPathFactory::setConstructionTemplate(htd::IMutableLabeledPath * original)
-{
-    HTD_ASSERT(original != nullptr)
-    HTD_ASSERT(original->vertexCount() == 0)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
-}
-
-htd::IMutableLabeledPath & htd::LabeledPathFactory::accessMutableLabeledPath(htd::ILabeledPath & original) const
-{
-    return *(dynamic_cast<htd::IMutableLabeledPath *>(&original));
-}
-
-const htd::IMutableLabeledPath & htd::LabeledPathFactory::accessMutableLabeledPath(const htd::ILabeledPath & original) const
-{
-    return *(dynamic_cast<const htd::IMutableLabeledPath *>(&original));
 }
 
 #endif /* HTD_HTD_LABELEDPATHFACTORY_CPP */

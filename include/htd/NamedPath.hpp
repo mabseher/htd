@@ -49,7 +49,7 @@ namespace htd
             /**
              *  Constructor for a path.
              */
-            NamedPath(const htd::LibraryInstance * const manager) : base_(manager->labeledPathFactory().getLabeledPath()), names_()
+            NamedPath(const htd::LibraryInstance * const manager) : base_(manager->labeledPathFactory().createInstance()), names_()
             {
 
             }

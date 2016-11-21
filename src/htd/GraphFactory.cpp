@@ -26,7 +26,6 @@
 #define HTD_HTD_GRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/GraphFactory.hpp>
 #include <htd/Graph.hpp>
 

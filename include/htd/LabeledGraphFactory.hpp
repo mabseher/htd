@@ -26,6 +26,7 @@
 #define HTD_HTD_LABELEDGRAPHFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableLabeledGraph.hpp>
 
 namespace htd
@@ -33,9 +34,11 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledGraph interface.
      */
-    class LabeledGraphFactory
+    class LabeledGraphFactory : public htd::GraphTypeFactory<htd::ILabeledGraph, htd::IMutableLabeledGraph>
     {
         public:
+            using htd::GraphTypeFactory<htd::ILabeledGraph, htd::IMutableLabeledGraph>::createInstance;
+
             /**
              *  Constructor for the factory class.
              *
@@ -48,14 +51,14 @@ namespace htd
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API LabeledGraphFactory(const LabeledGraphFactory & original);
+            HTD_API LabeledGraphFactory(const LabeledGraphFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API LabeledGraphFactory & operator=(const LabeledGraphFactory & original);
+            HTD_API LabeledGraphFactory & operator=(const LabeledGraphFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -67,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledGraph object.
              */
-            HTD_API htd::IMutableLabeledGraph * getLabeledGraph(void) const;
+            HTD_API htd::IMutableLabeledGraph * createInstance(void) const HTD_OVERRIDE;
 
             /**
              *  Create a new IMutableLabeledGraph object.
@@ -76,47 +79,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledGraph object of the given size.
              */
-            HTD_API htd::IMutableLabeledGraph * getLabeledGraph(std::size_t initialSize) const;
-
-            /**
-             *  Create a new IMutableLabeledGraph object.
-             *
-             *  @param[in] original The original labeled graph acting as template for the created graph.
-             *
-             *  @return A new IMutableLabeledGraph object identical to the given original graph.
-             */
-            HTD_API htd::IMutableLabeledGraph * getLabeledGraph(const htd::ILabeledGraph & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableLabeledGraph interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableLabeledGraph interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableLabeledGraph * original);
-
-            /**
-             *  Access the mutable interface of a given labeled graph.
-             *
-             *  @return The mutable interface of the given labeled graph.
-             */
-            HTD_API htd::IMutableLabeledGraph & accessMutableLabeledGraph(htd::ILabeledGraph & original) const;
-
-            /**
-             *  Access the mutable interface of a given labeled graph.
-             *
-             *  @return The mutable interface of the given labeled graph.
-             */
-            HTD_API const htd::IMutableLabeledGraph & accessMutableLabeledGraph(const htd::ILabeledGraph & original) const;
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableLabeledGraph * constructionTemplate_;
+            HTD_API htd::IMutableLabeledGraph * createInstance(std::size_t initialSize) const;
     };
 }
 

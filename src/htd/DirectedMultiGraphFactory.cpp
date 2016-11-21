@@ -26,7 +26,6 @@
 #define HTD_HTD_DIRECTEDMULTIGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/DirectedMultiGraphFactory.hpp>
 #include <htd/DirectedMultiGraph.hpp>
 

@@ -26,6 +26,7 @@
 #define HTD_HTD_LABELEDDIRECTEDMULTIGRAPHFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/GraphTypeFactory.hpp>
 #include <htd/IMutableLabeledDirectedMultiGraph.hpp>
 
 namespace htd
@@ -33,9 +34,11 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IMutableLabeledDirectedMultiGraph interface.
      */
-    class LabeledDirectedMultiGraphFactory
+    class LabeledDirectedMultiGraphFactory : public htd::GraphTypeFactory<htd::ILabeledDirectedMultiGraph, htd::IMutableLabeledDirectedMultiGraph>
     {
         public:
+            using htd::GraphTypeFactory<htd::ILabeledDirectedMultiGraph, htd::IMutableLabeledDirectedMultiGraph>::createInstance;
+
             /**
              *  Constructor for the factory class.
              *
@@ -48,14 +51,14 @@ namespace htd
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API LabeledDirectedMultiGraphFactory(const LabeledDirectedMultiGraphFactory & original);
+            HTD_API LabeledDirectedMultiGraphFactory(const LabeledDirectedMultiGraphFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API LabeledDirectedMultiGraphFactory & operator=(const LabeledDirectedMultiGraphFactory & original);
+            HTD_API LabeledDirectedMultiGraphFactory & operator=(const LabeledDirectedMultiGraphFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -67,7 +70,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledDirectedMultiGraph object.
              */
-            HTD_API htd::IMutableLabeledDirectedMultiGraph * getLabeledDirectedMultiGraph(void) const;
+            HTD_API htd::IMutableLabeledDirectedMultiGraph * createInstance(void) const HTD_OVERRIDE;
 
             /**
              *  Create a new IMutableLabeledDirectedMultiGraph object.
@@ -76,47 +79,7 @@ namespace htd
              *
              *  @return A new IMutableLabeledDirectedMultiGraph object of the given size.
              */
-            HTD_API htd::IMutableLabeledDirectedMultiGraph * getLabeledDirectedMultiGraph(std::size_t initialSize) const;
-
-            /**
-             *  Create a new IMutableLabeledDirectedMultiGraph object.
-             *
-             *  @param[in] original The original labeled directed multi-graph acting as template for the created graph.
-             *
-             *  @return A new IMutableLabeledDirectedMultiGraph object identical to the given original graph.
-             */
-            HTD_API htd::IMutableLabeledDirectedMultiGraph * getLabeledDirectedMultiGraph(const htd::ILabeledDirectedMultiGraph & original) const;
-
-            /**
-             *  Set the default implementation of the IMutableLabeledDirectedMultiGraph interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IMutableLabeledDirectedMultiGraph interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IMutableLabeledDirectedMultiGraph * original);
-
-            /**
-             *  Access the mutable interface of a given labeled directed multi-graph.
-             *
-             *  @return The mutable interface of the given labeled directed multi-graph.
-             */
-            HTD_API htd::IMutableLabeledDirectedMultiGraph & accessMutableLabeledDirectedMultiGraph(htd::ILabeledDirectedMultiGraph & original) const;
-
-            /**
-             *  Access the mutable interface of a given labeled directed multi-graph.
-             *
-             *  @return The mutable interface of the given labeled directed multi-graph.
-             */
-            HTD_API const htd::IMutableLabeledDirectedMultiGraph & accessMutableLabeledDirectedMultiGraph(const htd::ILabeledDirectedMultiGraph & original) const;
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IMutableLabeledDirectedMultiGraph * constructionTemplate_;
+            HTD_API htd::IMutableLabeledDirectedMultiGraph * createInstance(std::size_t initialSize) const;
     };
 }
 

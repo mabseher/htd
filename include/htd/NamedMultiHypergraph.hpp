@@ -49,7 +49,7 @@ namespace htd
             /**
              *  Constructor for a multi-hypergraph.
              */
-            NamedMultiHypergraph(const htd::LibraryInstance * const manager) : base_(manager->labeledMultiHypergraphFactory().getLabeledMultiHypergraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledMultiHypergraph::addVertex, base_))
+            NamedMultiHypergraph(const htd::LibraryInstance * const manager) : base_(manager->labeledMultiHypergraphFactory().createInstance()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledMultiHypergraph::addVertex, base_))
             {
 
             }

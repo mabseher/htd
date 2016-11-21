@@ -26,53 +26,20 @@
 #define HTD_HTD_LABELEDMULTIHYPERGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/LabeledMultiHypergraphFactory.hpp>
 #include <htd/LabeledMultiHypergraph.hpp>
 
-#include <stdexcept>
-
-htd::LabeledMultiHypergraphFactory::LabeledMultiHypergraphFactory(const htd::LibraryInstance * const manager)
+htd::LabeledMultiHypergraphFactory::LabeledMultiHypergraphFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::ILabeledMultiHypergraph, htd::IMutableLabeledMultiHypergraph>(new htd::LabeledMultiHypergraph(manager))
 {
-    constructionTemplate_ = new htd::LabeledMultiHypergraph(manager);
-}
 
-htd::LabeledMultiHypergraphFactory::LabeledMultiHypergraphFactory(const htd::LabeledMultiHypergraphFactory & original)
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    constructionTemplate_ = original.constructionTemplate_->clone();
-#else
-    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledMultiHypergraph();
-#endif
-}
-
-htd::LabeledMultiHypergraphFactory & htd::LabeledMultiHypergraphFactory::operator=(const htd::LabeledMultiHypergraphFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    #else
-        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledMultiHypergraph();
-    #endif
-    }
-
-    return *this;
 }
 
 htd::LabeledMultiHypergraphFactory::~LabeledMultiHypergraphFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(void) const
+htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::createInstance(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -81,57 +48,13 @@ htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLab
 #endif
 }
 
-htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(std::size_t initialSize) const
+htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::createInstance(std::size_t initialSize) const
 {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->cloneMutableLabeledMultiHypergraph();
-#endif
+    htd::IMutableLabeledMultiHypergraph * ret = createInstance();
 
     ret->addVertices(initialSize);
 
     return ret;
-}
-
-htd::IMutableLabeledMultiHypergraph * htd::LabeledMultiHypergraphFactory::getLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableLabeledMultiHypergraph * ret = constructionTemplate_->cloneMutableLabeledMultiHypergraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
-void htd::LabeledMultiHypergraphFactory::setConstructionTemplate(htd::IMutableLabeledMultiHypergraph * original)
-{
-    HTD_ASSERT(original != nullptr)
-    HTD_ASSERT(original->vertexCount() == 0)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
-}
-
-htd::IMutableLabeledMultiHypergraph & htd::LabeledMultiHypergraphFactory::accessMutableLabeledMultiHypergraph(htd::ILabeledMultiHypergraph & original) const
-{
-    return *(dynamic_cast<htd::IMutableLabeledMultiHypergraph *>(&original));
-}
-
-const htd::IMutableLabeledMultiHypergraph & htd::LabeledMultiHypergraphFactory::accessMutableLabeledMultiHypergraph(const htd::ILabeledMultiHypergraph & original) const
-{
-    return *(dynamic_cast<const htd::IMutableLabeledMultiHypergraph *>(&original));
 }
 
 #endif /* HTD_HTD_LABELEDMULTIHYPERGRAPHFACTORY_CPP */

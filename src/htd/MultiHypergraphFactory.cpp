@@ -26,7 +26,6 @@
 #define HTD_HTD_MULTIHYPERGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/MultiHypergraphFactory.hpp>
 #include <htd/MultiHypergraph.hpp>
 

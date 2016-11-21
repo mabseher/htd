@@ -26,6 +26,7 @@
 #define HTD_HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/AlgorithmFactory.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
 
 namespace htd
@@ -33,7 +34,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the IConnectedComponentAlgorithm interface.
      */
-    class ConnectedComponentAlgorithmFactory
+    class ConnectedComponentAlgorithmFactory : public htd::AlgorithmFactory<htd::IConnectedComponentAlgorithm>
     {
         public:
             /**
@@ -48,14 +49,14 @@ namespace htd
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API ConnectedComponentAlgorithmFactory(const ConnectedComponentAlgorithmFactory & original);
+            HTD_API ConnectedComponentAlgorithmFactory(const ConnectedComponentAlgorithmFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API ConnectedComponentAlgorithmFactory & operator=(const ConnectedComponentAlgorithmFactory & original);
+            HTD_API ConnectedComponentAlgorithmFactory & operator=(const ConnectedComponentAlgorithmFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -67,33 +68,7 @@ namespace htd
              *
              *  @return A new IConnectedComponentAlgorithm object.
              */
-            HTD_API htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(void) const;
-
-            /**
-             *  Create a new IConnectedComponentAlgorithm object.
-             *
-             *  @param[in] manager   The management instance which shall be assigned to the new IConnectedComponentAlgorithm object.
-             *
-             *  @return A new IConnectedComponentAlgorithm object.
-             */
-            HTD_API htd::IConnectedComponentAlgorithm * getConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const;
-
-            /**
-             *  Set the default implementation of the IConnectedComponentAlgorithm interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the IConnectedComponentAlgorithm interface.
-             */
-            HTD_API void setConstructionTemplate(htd::IConnectedComponentAlgorithm * original);
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::IConnectedComponentAlgorithm * constructionTemplate_;
+            HTD_API htd::IConnectedComponentAlgorithm * createInstance(void) const HTD_OVERRIDE;
     };
 }
 

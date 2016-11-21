@@ -26,71 +26,22 @@
 #define HTD_HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/ConnectedComponentAlgorithmFactory.hpp>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
 
-#include <memory>
-#include <stdexcept>
-
-htd::ConnectedComponentAlgorithmFactory::ConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager)
+htd::ConnectedComponentAlgorithmFactory::ConnectedComponentAlgorithmFactory(const htd::LibraryInstance * const manager) : htd::AlgorithmFactory<htd::IConnectedComponentAlgorithm>(new htd::DepthFirstConnectedComponentAlgorithm(manager))
 {
-    constructionTemplate_ = new htd::DepthFirstConnectedComponentAlgorithm(manager);
-}
 
-htd::ConnectedComponentAlgorithmFactory::ConnectedComponentAlgorithmFactory(const htd::ConnectedComponentAlgorithmFactory & original)
-{
-    constructionTemplate_ = original.constructionTemplate_->clone();
-}
-
-htd::ConnectedComponentAlgorithmFactory & htd::ConnectedComponentAlgorithmFactory::operator=(const htd::ConnectedComponentAlgorithmFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    }
-
-    return *this;
 }
 
 htd::ConnectedComponentAlgorithmFactory::~ConnectedComponentAlgorithmFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IConnectedComponentAlgorithm * htd::ConnectedComponentAlgorithmFactory::getConnectedComponentAlgorithm(void) const
+htd::IConnectedComponentAlgorithm * htd::ConnectedComponentAlgorithmFactory::createInstance(void) const
 {
     return constructionTemplate_->clone();
-}
-
-htd::IConnectedComponentAlgorithm * htd::ConnectedComponentAlgorithmFactory::getConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) const
-{
-    htd::IConnectedComponentAlgorithm * ret = constructionTemplate_->clone();
-
-    ret->setManagementInstance(manager);
-
-    return ret;
-}
-
-void htd::ConnectedComponentAlgorithmFactory::setConstructionTemplate(htd::IConnectedComponentAlgorithm * original)
-{
-    HTD_ASSERT(original != nullptr)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
 }
 
 #endif /* HTD_HTD_CONNECTEDCOMPONENTALGORITHMFACTORY_CPP */

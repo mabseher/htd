@@ -378,7 +378,7 @@ std::pair<htd::IMutableTreeDecomposition *, std::size_t> htd::BucketEliminationT
             {
                 if (mutableGraphDecomposition.edgeCount() + 1 != mutableGraphDecomposition.vertexCount() || mutableGraphDecomposition.isolatedVertexCount() > 0)
                 {
-                    htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = managementInstance_->connectedComponentAlgorithmFactory().getConnectedComponentAlgorithm(managementInstance_);
+                    htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = managementInstance_->connectedComponentAlgorithmFactory().createInstance();
 
                     HTD_ASSERT(connectedComponentAlgorithm != nullptr)
 

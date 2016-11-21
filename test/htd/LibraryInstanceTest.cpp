@@ -522,7 +522,7 @@ TEST(LibraryInstanceTest, CheckConnectedComponentAlgorithmFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::IConnectedComponentAlgorithm * algorithm = libraryInstance->connectedComponentAlgorithmFactory().getConnectedComponentAlgorithm();
+    htd::IConnectedComponentAlgorithm * algorithm = libraryInstance->connectedComponentAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());
@@ -537,7 +537,7 @@ TEST(LibraryInstanceTest, CheckConnectedComponentAlgorithmFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::IConnectedComponentAlgorithm * algorithm = constLibraryInstance.connectedComponentAlgorithmFactory().getConnectedComponentAlgorithm();
+    htd::IConnectedComponentAlgorithm * algorithm = constLibraryInstance.connectedComponentAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());

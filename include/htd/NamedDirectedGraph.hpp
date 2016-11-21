@@ -49,7 +49,7 @@ namespace htd
             /**
              *  Constructor for a directed graph.
              */
-            NamedDirectedGraph(const htd::LibraryInstance * const manager) : base_(manager->labeledDirectedGraphFactory().getLabeledDirectedGraph()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledDirectedGraph::addVertex, base_))
+            NamedDirectedGraph(const htd::LibraryInstance * const manager) : base_(manager->labeledDirectedGraphFactory().createInstance()), names_(), vertexCreationFunction_(std::bind(&htd::IMutableLabeledDirectedGraph::addVertex, base_))
             {
 
             }

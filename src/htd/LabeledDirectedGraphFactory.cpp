@@ -26,53 +26,20 @@
 #define HTD_HTD_LABELEDDIRECTEDGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/LabeledDirectedGraphFactory.hpp>
 #include <htd/LabeledDirectedGraph.hpp>
 
-#include <stdexcept>
-
-htd::LabeledDirectedGraphFactory::LabeledDirectedGraphFactory(const htd::LibraryInstance * const manager)
+htd::LabeledDirectedGraphFactory::LabeledDirectedGraphFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::ILabeledDirectedGraph, htd::IMutableLabeledDirectedGraph>(new htd::LabeledDirectedGraph(manager))
 {
-    constructionTemplate_ = new htd::LabeledDirectedGraph(manager);
-}
 
-htd::LabeledDirectedGraphFactory::LabeledDirectedGraphFactory(const htd::LabeledDirectedGraphFactory & original)
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    constructionTemplate_ = original.constructionTemplate_->clone();
-#else
-    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledDirectedGraph();
-#endif
-}
-
-htd::LabeledDirectedGraphFactory & htd::LabeledDirectedGraphFactory::operator=(const htd::LabeledDirectedGraphFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    #else
-        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledDirectedGraph();
-    #endif
-    }
-
-    return *this;
 }
 
 htd::LabeledDirectedGraphFactory::~LabeledDirectedGraphFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(void) const
+htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::createInstance(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -81,57 +48,13 @@ htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeled
 #endif
 }
 
-htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(std::size_t initialSize) const
+htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::createInstance(std::size_t initialSize) const
 {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedGraph();
-#endif
+    htd::IMutableLabeledDirectedGraph * ret = createInstance();
 
     ret->addVertices(initialSize);
 
     return ret;
-}
-
-htd::IMutableLabeledDirectedGraph * htd::LabeledDirectedGraphFactory::getLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableLabeledDirectedGraph * ret = constructionTemplate_->cloneMutableLabeledDirectedGraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
-void htd::LabeledDirectedGraphFactory::setConstructionTemplate(htd::IMutableLabeledDirectedGraph * original)
-{
-    HTD_ASSERT(original != nullptr)
-    HTD_ASSERT(original->vertexCount() == 0)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
-}
-
-htd::IMutableLabeledDirectedGraph & htd::LabeledDirectedGraphFactory::accessMutableLabeledDirectedGraph(htd::ILabeledDirectedGraph & original) const
-{
-    return *(dynamic_cast<htd::IMutableLabeledDirectedGraph *>(&original));
-}
-
-const htd::IMutableLabeledDirectedGraph & htd::LabeledDirectedGraphFactory::accessMutableLabeledDirectedGraph(const htd::ILabeledDirectedGraph & original) const
-{
-    return *(dynamic_cast<const htd::IMutableLabeledDirectedGraph *>(&original));
 }
 
 #endif /* HTD_HTD_LABELEDDIRECTEDGRAPHFACTORY_CPP */

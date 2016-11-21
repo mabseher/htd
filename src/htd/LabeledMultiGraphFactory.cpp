@@ -26,53 +26,20 @@
 #define HTD_HTD_LABELEDMULTIGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/LabeledMultiGraphFactory.hpp>
 #include <htd/LabeledMultiGraph.hpp>
 
-#include <stdexcept>
-
-htd::LabeledMultiGraphFactory::LabeledMultiGraphFactory(const htd::LibraryInstance * const manager)
+htd::LabeledMultiGraphFactory::LabeledMultiGraphFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::ILabeledMultiGraph, htd::IMutableLabeledMultiGraph>(new htd::LabeledMultiGraph(manager))
 {
-    constructionTemplate_ = new htd::LabeledMultiGraph(manager);
-}
 
-htd::LabeledMultiGraphFactory::LabeledMultiGraphFactory(const htd::LabeledMultiGraphFactory & original)
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    constructionTemplate_ = original.constructionTemplate_->clone();
-#else
-    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledMultiGraph();
-#endif
-}
-
-htd::LabeledMultiGraphFactory & htd::LabeledMultiGraphFactory::operator=(const htd::LabeledMultiGraphFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    #else
-        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledMultiGraph();
-    #endif
-    }
-
-    return *this;
 }
 
 htd::LabeledMultiGraphFactory::~LabeledMultiGraphFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiGraph(void) const
+htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::createInstance(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -81,57 +48,13 @@ htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiG
 #endif
 }
 
-htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiGraph(std::size_t initialSize) const
+htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::createInstance(std::size_t initialSize) const
 {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledMultiGraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledMultiGraph * ret = constructionTemplate_->cloneMutableLabeledMultiGraph();
-#endif
+    htd::IMutableLabeledMultiGraph * ret = createInstance();
 
     ret->addVertices(initialSize);
 
     return ret;
-}
-
-htd::IMutableLabeledMultiGraph * htd::LabeledMultiGraphFactory::getLabeledMultiGraph(const htd::ILabeledMultiGraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledMultiGraph * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableLabeledMultiGraph * ret = constructionTemplate_->cloneMutableLabeledMultiGraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
-void htd::LabeledMultiGraphFactory::setConstructionTemplate(htd::IMutableLabeledMultiGraph * original)
-{
-    HTD_ASSERT(original != nullptr)
-    HTD_ASSERT(original->vertexCount() == 0)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
-}
-
-htd::IMutableLabeledMultiGraph & htd::LabeledMultiGraphFactory::accessMutableLabeledMultiGraph(htd::ILabeledMultiGraph & original) const
-{
-    return *(dynamic_cast<htd::IMutableLabeledMultiGraph *>(&original));
-}
-
-const htd::IMutableLabeledMultiGraph & htd::LabeledMultiGraphFactory::accessMutableLabeledMultiGraph(const htd::ILabeledMultiGraph & original) const
-{
-    return *(dynamic_cast<const htd::IMutableLabeledMultiGraph *>(&original));
 }
 
 #endif /* HTD_HTD_LABELEDMULTIGRAPHFACTORY_CPP */

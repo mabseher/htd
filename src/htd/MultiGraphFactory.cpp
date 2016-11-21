@@ -26,7 +26,6 @@
 #define HTD_HTD_MULTIGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/MultiGraphFactory.hpp>
 #include <htd/MultiGraph.hpp>
 

@@ -26,7 +26,6 @@
 #define HTD_HTD_HYPERGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/HypergraphFactory.hpp>
 #include <htd/Hypergraph.hpp>
 

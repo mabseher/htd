@@ -26,53 +26,20 @@
 #define HTD_HTD_LABELEDHYPERGRAPHFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/LabeledHypergraphFactory.hpp>
 #include <htd/LabeledHypergraph.hpp>
 
-#include <stdexcept>
-
-htd::LabeledHypergraphFactory::LabeledHypergraphFactory(const htd::LibraryInstance * const manager)
+htd::LabeledHypergraphFactory::LabeledHypergraphFactory(const htd::LibraryInstance * const manager) : htd::GraphTypeFactory<htd::ILabeledHypergraph, htd::IMutableLabeledHypergraph>(new htd::LabeledHypergraph(manager))
 {
-    constructionTemplate_ = new htd::LabeledHypergraph(manager);
-}
 
-htd::LabeledHypergraphFactory::LabeledHypergraphFactory(const htd::LabeledHypergraphFactory & original)
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    constructionTemplate_ = original.constructionTemplate_->clone();
-#else
-    constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledHypergraph();
-#endif
-}
-
-htd::LabeledHypergraphFactory & htd::LabeledHypergraphFactory::operator=(const htd::LabeledHypergraphFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    #else
-        constructionTemplate_ = original.constructionTemplate_->cloneMutableLabeledHypergraph();
-    #endif
-    }
-
-    return *this;
 }
 
 htd::LabeledHypergraphFactory::~LabeledHypergraphFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHypergraph(void) const
+htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::createInstance(void) const
 {
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     return constructionTemplate_->clone();
@@ -81,57 +48,13 @@ htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHyperg
 #endif
 }
 
-htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHypergraph(std::size_t initialSize) const
+htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::createInstance(std::size_t initialSize) const
 {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledHypergraph * ret = constructionTemplate_->clone();
-#else
-    htd::IMutableLabeledHypergraph * ret = constructionTemplate_->cloneMutableLabeledHypergraph();
-#endif
+    htd::IMutableLabeledHypergraph * ret = createInstance();
 
     ret->addVertices(initialSize);
 
     return ret;
-}
-
-htd::IMutableLabeledHypergraph * htd::LabeledHypergraphFactory::getLabeledHypergraph(const htd::ILabeledHypergraph & original) const
-{
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-    htd::IMutableLabeledHypergraph * ret = constructionTemplate_->clone();
-
-    *ret = original;
-#else
-    htd::IMutableLabeledHypergraph * ret = constructionTemplate_->cloneMutableLabeledHypergraph();
-
-    ret->assign(original);
-#endif
-
-    return ret;
-}
-
-void htd::LabeledHypergraphFactory::setConstructionTemplate(htd::IMutableLabeledHypergraph * original)
-{
-    HTD_ASSERT(original != nullptr)
-    HTD_ASSERT(original->vertexCount() == 0)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
-}
-
-htd::IMutableLabeledHypergraph & htd::LabeledHypergraphFactory::accessMutableLabeledHypergraph(htd::ILabeledHypergraph & original) const
-{
-    return *(dynamic_cast<htd::IMutableLabeledHypergraph *>(&original));
-}
-
-const htd::IMutableLabeledHypergraph & htd::LabeledHypergraphFactory::accessMutableLabeledHypergraph(const htd::ILabeledHypergraph & original) const
-{
-    return *(dynamic_cast<const htd::IMutableLabeledHypergraph *>(&original));
 }
 
 #endif /* HTD_HTD_LABELEDHYPERGRAPHFACTORY_CPP */

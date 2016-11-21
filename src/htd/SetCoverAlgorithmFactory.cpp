@@ -26,71 +26,22 @@
 #define HTD_HTD_SETCOVERALGORITHMFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
-#include <htd/ISetCoverAlgorithm.hpp>
 #include <htd/GreedySetCoverAlgorithm.hpp>
 
-#include <stdexcept>
-
-htd::SetCoverAlgorithmFactory::SetCoverAlgorithmFactory(const htd::LibraryInstance * const manager)
+htd::SetCoverAlgorithmFactory::SetCoverAlgorithmFactory(const htd::LibraryInstance * const manager) : htd::AlgorithmFactory<htd::ISetCoverAlgorithm>(new htd::GreedySetCoverAlgorithm(manager))
 {
-    constructionTemplate_ = new htd::GreedySetCoverAlgorithm(manager);
-}
 
-htd::SetCoverAlgorithmFactory::SetCoverAlgorithmFactory(const htd::SetCoverAlgorithmFactory & original)
-{
-    constructionTemplate_ = original.constructionTemplate_->clone();
-}
-
-htd::SetCoverAlgorithmFactory & htd::SetCoverAlgorithmFactory::operator=(const htd::SetCoverAlgorithmFactory & original)
-{
-    if (this != &original)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = original.constructionTemplate_->clone();
-    }
-
-    return *this;
 }
 
 htd::SetCoverAlgorithmFactory::~SetCoverAlgorithmFactory()
 {
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
 
-        constructionTemplate_ = nullptr;
-    }
 }
 
-htd::ISetCoverAlgorithm * htd::SetCoverAlgorithmFactory::getSetCoverAlgorithm(void) const
+htd::ISetCoverAlgorithm * htd::SetCoverAlgorithmFactory::createInstance(void) const
 {
     return constructionTemplate_->clone();
-}
-
-htd::ISetCoverAlgorithm * htd::SetCoverAlgorithmFactory::getSetCoverAlgorithm(const htd::LibraryInstance * const manager) const
-{
-    htd::ISetCoverAlgorithm * ret = constructionTemplate_->clone();
-
-    ret->setManagementInstance(manager);
-
-    return ret;
-}
-
-void htd::SetCoverAlgorithmFactory::setConstructionTemplate(htd::ISetCoverAlgorithm * original)
-{
-    HTD_ASSERT(original != nullptr)
-
-    if (constructionTemplate_ != nullptr)
-    {
-        delete constructionTemplate_;
-
-        constructionTemplate_ = nullptr;
-    }
-
-    constructionTemplate_ = original;
 }
 
 #endif /* HTD_HTD_SETCOVERALGORITHMFACTORY_CPP */

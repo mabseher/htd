@@ -578,7 +578,7 @@ TEST(LibraryInstanceTest, CheckSetCoverAlgorithmFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
-    htd::ISetCoverAlgorithm * algorithm = libraryInstance->setCoverAlgorithmFactory().getSetCoverAlgorithm();
+    htd::ISetCoverAlgorithm * algorithm = libraryInstance->setCoverAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());
@@ -593,7 +593,7 @@ TEST(LibraryInstanceTest, CheckSetCoverAlgorithmFactory2)
 
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
-    htd::ISetCoverAlgorithm * algorithm = constLibraryInstance.setCoverAlgorithmFactory().getSetCoverAlgorithm();
+    htd::ISetCoverAlgorithm * algorithm = constLibraryInstance.setCoverAlgorithmFactory().createInstance();
 
     ASSERT_NE(nullptr, algorithm);
     ASSERT_EQ(libraryInstance, algorithm->managementInstance());

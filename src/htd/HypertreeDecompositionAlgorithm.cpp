@@ -369,7 +369,7 @@ void htd::HypertreeDecompositionAlgorithm::Implementation::setCoveringEdges(cons
         ++it1;
     }
 
-    htd::ISetCoverAlgorithm * setCoverAlgorithm = managementInstance_->setCoverAlgorithmFactory().getSetCoverAlgorithm();
+    htd::ISetCoverAlgorithm * setCoverAlgorithm = managementInstance_->setCoverAlgorithmFactory().createInstance();
 
     htd::PostOrderTreeTraversal traversal;
 

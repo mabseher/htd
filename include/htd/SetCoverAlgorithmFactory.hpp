@@ -26,6 +26,7 @@
 #define HTD_HTD_SETCOVERALGORITHMFACTORY_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/AlgorithmFactory.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
 
 namespace htd
@@ -33,7 +34,7 @@ namespace htd
     /**
      *  Factory class for the default implementation of the ISetCoverAlgorithm interface.
      */
-    class SetCoverAlgorithmFactory
+    class SetCoverAlgorithmFactory : public htd::AlgorithmFactory<htd::ISetCoverAlgorithm>
     {
         public:
             /**
@@ -48,14 +49,14 @@ namespace htd
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API SetCoverAlgorithmFactory(const SetCoverAlgorithmFactory & original);
+            HTD_API SetCoverAlgorithmFactory(const SetCoverAlgorithmFactory & original) = delete;
 
             /**
              *  Copy assignment operator for the factory class.
              *
              *  @param[in] original The original factory class which shall be copied.
              */
-            HTD_API SetCoverAlgorithmFactory & operator=(const SetCoverAlgorithmFactory & original);
+            HTD_API SetCoverAlgorithmFactory & operator=(const SetCoverAlgorithmFactory & original) = delete;
 
             /**
              *  Destructor of the factory class.
@@ -67,33 +68,7 @@ namespace htd
              *
              *  @return A new ISetCoverAlgorithm object.
              */
-            HTD_API htd::ISetCoverAlgorithm * getSetCoverAlgorithm(void) const;
-
-            /**
-             *  Create a new ISetCoverAlgorithm object.
-             *
-             *  @param[in] manager   The management instance which shall be assigned to the new ISetCoverAlgorithm object.
-             *
-             *  @return A new ISetCoverAlgorithm object.
-             */
-            HTD_API htd::ISetCoverAlgorithm * getSetCoverAlgorithm(const htd::LibraryInstance * const manager) const;
-
-            /**
-             *  Set the default implementation of the ISetCoverAlgorithm interface.
-             *
-             *  @note When calling this method the control over the memory regions of the object instance of the original implementation
-             *  is transferred to the factory class. Deleting the object instance provided to this method outside the factory class or
-             *  assigning the same object instance multiple times will lead to undefined behavior.
-             *
-             *  @param[in] original The new default implementation of the ISetCoverAlgorithm interface.
-             */
-            HTD_API void setConstructionTemplate(htd::ISetCoverAlgorithm * original);
-
-        private:
-            /**
-             *  A pointer to a clean instance of the default implementation.
-             */
-            htd::ISetCoverAlgorithm * constructionTemplate_;
+            HTD_API htd::ISetCoverAlgorithm * createInstance(void) const HTD_OVERRIDE;
     };
 }
 

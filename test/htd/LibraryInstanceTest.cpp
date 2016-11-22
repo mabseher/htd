@@ -125,6 +125,36 @@ TEST(LibraryInstanceTest, CheckMultiHypergraphFactory2)
     delete libraryInstance;
 }
 
+TEST(LibraryInstanceTest, CheckMultiHypergraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckMultiHypergraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableMultiHypergraph * graph = constLibraryInstance.multiHypergraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
 TEST(LibraryInstanceTest, CheckHypergraphFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
@@ -148,6 +178,36 @@ TEST(LibraryInstanceTest, CheckHypergraphFactory2)
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckHypergraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableHypergraph * graph = libraryInstance->hypergraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckHypergraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableHypergraph * graph = constLibraryInstance.hypergraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
 
     delete graph;
     delete libraryInstance;
@@ -181,6 +241,36 @@ TEST(LibraryInstanceTest, CheckMultiGraphFactory2)
     delete libraryInstance;
 }
 
+TEST(LibraryInstanceTest, CheckMultiGraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableMultiGraph * graph = libraryInstance->multiGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckMultiGraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableMultiGraph * graph = constLibraryInstance.multiGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
 TEST(LibraryInstanceTest, CheckGraphFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
@@ -204,6 +294,36 @@ TEST(LibraryInstanceTest, CheckGraphFactory2)
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckGraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableGraph * graph = libraryInstance->graphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckGraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableGraph * graph = constLibraryInstance.graphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
 
     delete graph;
     delete libraryInstance;
@@ -237,6 +357,36 @@ TEST(LibraryInstanceTest, CheckDirectedMultiGraphFactory2)
     delete libraryInstance;
 }
 
+TEST(LibraryInstanceTest, CheckDirectedMultiGraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableDirectedMultiGraph * graph = libraryInstance->directedMultiGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckDirectedMultiGraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableDirectedMultiGraph * graph = constLibraryInstance.directedMultiGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
 TEST(LibraryInstanceTest, CheckDirectedGraphFactory1)
 {
     htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
@@ -257,6 +407,440 @@ TEST(LibraryInstanceTest, CheckDirectedGraphFactory2)
     const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
 
     htd::IMutableDirectedGraph * graph = constLibraryInstance.directedGraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckDirectedGraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableDirectedGraph * graph = libraryInstance->directedGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckDirectedGraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableDirectedGraph * graph = constLibraryInstance.directedGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledMultiHypergraphFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledMultiHypergraph * graph = libraryInstance->labeledMultiHypergraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledMultiHypergraphFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledMultiHypergraph * graph = constLibraryInstance.labeledMultiHypergraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledMultiHypergraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledMultiHypergraph * graph = libraryInstance->labeledMultiHypergraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledMultiHypergraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledMultiHypergraph * graph = constLibraryInstance.labeledMultiHypergraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledHypergraphFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledHypergraph * graph = libraryInstance->labeledHypergraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledHypergraphFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledHypergraph * graph = constLibraryInstance.labeledHypergraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledHypergraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledHypergraph * graph = libraryInstance->labeledHypergraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledHypergraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledHypergraph * graph = constLibraryInstance.labeledHypergraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledMultiGraphFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledMultiGraph * graph = libraryInstance->labeledMultiGraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledMultiGraphFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledMultiGraph * graph = constLibraryInstance.labeledMultiGraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledMultiGraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledMultiGraph * graph = libraryInstance->labeledMultiGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledMultiGraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledMultiGraph * graph = constLibraryInstance.labeledMultiGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledGraphFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledGraph * graph = libraryInstance->labeledGraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledGraphFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledGraph * graph = constLibraryInstance.labeledGraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledGraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledGraph * graph = libraryInstance->labeledGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledGraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledGraph * graph = constLibraryInstance.labeledGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledDirectedMultiGraphFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledDirectedMultiGraph * graph = libraryInstance->labeledDirectedMultiGraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledDirectedMultiGraphFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledDirectedMultiGraph * graph = constLibraryInstance.labeledDirectedMultiGraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledDirectedMultiGraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledDirectedMultiGraph * graph = libraryInstance->labeledDirectedMultiGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledDirectedMultiGraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledDirectedMultiGraph * graph = constLibraryInstance.labeledDirectedMultiGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledDirectedGraphFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledDirectedGraph * graph = libraryInstance->labeledDirectedGraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledDirectedGraphFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledDirectedGraph * graph = constLibraryInstance.labeledDirectedGraphFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledDirectedGraphFactory3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledDirectedGraph * graph = libraryInstance->labeledDirectedGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledDirectedGraphFactory4)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledDirectedGraph * graph = constLibraryInstance.labeledDirectedGraphFactory().createInstance(10);
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+    ASSERT_EQ((std::size_t)10, graph->vertexCount());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledTreeFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledTree * graph = libraryInstance->labeledTreeFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledTreeFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledTree * graph = constLibraryInstance.labeledTreeFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledPathFactory1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableLabeledPath * graph = libraryInstance->labeledPathFactory().createInstance();
+
+    ASSERT_NE(nullptr, graph);
+    ASSERT_EQ(libraryInstance, graph->managementInstance());
+
+    delete graph;
+    delete libraryInstance;
+}
+
+TEST(LibraryInstanceTest, CheckLabeledPathFactory2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    const htd::LibraryInstance & constLibraryInstance = *libraryInstance;
+
+    htd::IMutableLabeledPath * graph = constLibraryInstance.labeledPathFactory().createInstance();
 
     ASSERT_NE(nullptr, graph);
     ASSERT_EQ(libraryInstance, graph->managementInstance());

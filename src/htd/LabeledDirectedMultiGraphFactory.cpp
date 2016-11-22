@@ -50,7 +50,7 @@ htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::
 
 htd::IMutableLabeledDirectedMultiGraph * htd::LabeledDirectedMultiGraphFactory::createInstance(std::size_t initialSize) const
 {
-    htd::IMutableLabeledDirectedMultiGraph * ret = constructionTemplate_->clone();
+    htd::IMutableLabeledDirectedMultiGraph * ret = createInstance();
 
     ret->addVertices(initialSize);
 

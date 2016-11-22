@@ -26,7 +26,6 @@
 #define HTD_HTD_TREEDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/TreeDecomposition.hpp>
 

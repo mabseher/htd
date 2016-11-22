@@ -26,7 +26,6 @@
 #define HTD_HTD_GRAPHDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/GraphDecompositionFactory.hpp>
 #include <htd/GraphDecomposition.hpp>
 

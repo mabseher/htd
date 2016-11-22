@@ -26,7 +26,6 @@
 #define HTD_HTD_PATHDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/PathDecompositionFactory.hpp>
 #include <htd/PathDecomposition.hpp>
 

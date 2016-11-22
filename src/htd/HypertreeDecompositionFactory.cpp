@@ -26,7 +26,6 @@
 #define HTD_HTD_HYPERTREEDECOMPOSITIONFACTORY_CPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/HypertreeDecomposition.hpp>
 

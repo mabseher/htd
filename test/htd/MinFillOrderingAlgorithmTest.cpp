@@ -803,11 +803,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckSize50Graph)
 
 int main(int argc, char **argv)
 {
-    /* GoogleTest may throw. This results in a non-zero exit code and is intended. */
-    // coverity[fun_call_w_exception]
     ::testing::InitGoogleTest(&argc, argv);
 
-    /* GoogleTest may throw. This results in a non-zero exit code and is intended. */
-    // coverity[fun_call_w_exception]
     return RUN_ALL_TESTS();
 }

@@ -241,8 +241,6 @@ TEST(PostProcessingPathDecompositionAlgorithmTest, CheckResultSimpleGraphWithLab
 
     htd::PostProcessingPathDecompositionAlgorithm algorithm(libraryInstance);
 
-    /* False positive of coverity caused by variadic function. */
-    // coverity[leaked_storage]
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph, 1, new BagSizeLabelingFunction(libraryInstance));
 
     ASSERT_NE(decomposition, nullptr);
@@ -430,11 +428,7 @@ TEST(PostProcessingPathDecompositionAlgorithmTest, CheckResultSimpleGraphWithLab
 
 int main(int argc, char **argv)
 {
-    /* GoogleTest may throw. This results in a non-zero exit code and is intended. */
-    // coverity[fun_call_w_exception]
     ::testing::InitGoogleTest(&argc, argv);
 
-    /* GoogleTest may throw. This results in a non-zero exit code and is intended. */
-    // coverity[fun_call_w_exception]
     return RUN_ALL_TESTS();
 }

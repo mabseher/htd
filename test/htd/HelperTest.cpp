@@ -66,10 +66,8 @@ TEST(HelperTest, CheckPrintBoolToStdout1)
 
     htd::print(true);
 
-    // coverity[tainted_data]
     ASSERT_EQ("true", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -80,10 +78,8 @@ TEST(HelperTest, CheckPrintBoolToStdout2)
 
     htd::print(false);
 
-    // coverity[tainted_data]
     ASSERT_EQ("false", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -94,10 +90,8 @@ TEST(HelperTest, CheckPrintStringToStdout)
 
     htd::print(std::string("abc123!!!"));
 
-    // coverity[tainted_data]
     ASSERT_EQ("\"abc123!!!\"", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -110,10 +104,8 @@ TEST(HelperTest, CheckPrintVectorToStdout1)
 
     htd::print(inputSet);
 
-    // coverity[tainted_data]
     ASSERT_EQ("[ 1, 5, 3 ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -126,10 +118,8 @@ TEST(HelperTest, CheckPrintVectorToStdout2)
 
     htd::print(inputSet, false);
 
-    // coverity[tainted_data]
     ASSERT_EQ("[ 1, 5, 3 ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -142,10 +132,8 @@ TEST(HelperTest, CheckPrintVectorToStdout3)
 
     htd::print(inputSet, false);
 
-    // coverity[tainted_data]
     ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -158,10 +146,8 @@ TEST(HelperTest, CheckPrintVectorToStdout4)
 
     htd::print(inputSet);
 
-    // coverity[tainted_data]
     ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -174,10 +160,8 @@ TEST(HelperTest, CheckPrintVectorToStdout5)
 
     htd::print(inputSet, false);
 
-    // coverity[tainted_data]
     ASSERT_EQ("[ \"a\", \"e\", \"c\" ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -190,10 +174,8 @@ TEST(HelperTest, CheckPrintVectorToStdout6)
 
     htd::print(inputSet, false);
 
-    // coverity[tainted_data]
     ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -206,10 +188,8 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted1)
 
     htd::print(inputSet, true);
 
-    // coverity[tainted_data]
     ASSERT_EQ("[ 1, 3, 5 ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -222,10 +202,8 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted2)
 
     htd::print(inputSet, true);
 
-    // coverity[tainted_data]
     ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -238,10 +216,8 @@ TEST(HelperTest, CheckPrintVectorToStdoutSorted3)
 
     htd::print(inputSet, true);
 
-    // coverity[tainted_data]
     ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -254,10 +230,8 @@ TEST(HelperTest, CheckPrintSetToStdout1)
 
     htd::print(inputSet);
 
-    // coverity[tainted_data]
     ASSERT_EQ("[ 1, 3, 5 ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -270,10 +244,8 @@ TEST(HelperTest, CheckPrintSetToStdout2)
 
     htd::print(inputSet);
 
-    // coverity[tainted_data]
     ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -286,10 +258,8 @@ TEST(HelperTest, CheckPrintSetToStdout3)
 
     htd::print(inputSet);
 
-    // coverity[tainted_data]
     ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -302,7 +272,6 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout1)
 
     htd::print(inputSet);
 
-    // coverity[tainted_data]
     std::string output = testing::internal::GetCapturedStdout();
 
     if (output != "[ 1, 3, 5 ]" && output != "[ 1, 5, 3 ]" &&
@@ -314,7 +283,6 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout1)
         FAIL();
     }
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -327,10 +295,8 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout2)
 
     htd::print(inputSet);
 
-    // coverity[tainted_data]
     ASSERT_EQ("<EMPTY>", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -343,7 +309,6 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout3)
 
     htd::print(inputSet);
 
-    // coverity[tainted_data]
     std::string output = testing::internal::GetCapturedStdout();
 
     if (output != "[ \"a\", \"c\", \"e\" ]" && output != "[ \"a\", \"e\", \"c\" ]" &&
@@ -355,7 +320,6 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdout3)
         FAIL();
     }
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -368,10 +332,8 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted1)
 
     htd::print(inputSet, true);
 
-    // coverity[tainted_data]
     ASSERT_EQ("[ 1, 3, 5 ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -384,10 +346,8 @@ TEST(HelperTest, CheckPrintUnorderedSetToStdoutSorted2)
 
     htd::print(inputSet, true);
 
-    // coverity[tainted_data]
     ASSERT_EQ("[ \"a\", \"c\", \"e\" ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -398,10 +358,8 @@ TEST(HelperTest, CheckPrintHyperedgeToStdout1)
 
     htd::print(htd::Hyperedge(1, { 1, 5, 3, 5, 3 }));
 
-    // coverity[tainted_data]
     ASSERT_EQ("Hyperedge 1: [ 1, 5, 3, 5, 3 ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -412,10 +370,8 @@ TEST(HelperTest, CheckPrintHyperedgeToStdout2)
 
     htd::print(htd::Hyperedge(3, { 1, 5, 3, 5, 3 }));
 
-    // coverity[tainted_data]
     ASSERT_EQ("Hyperedge 3: [ 1, 5, 3, 5, 3 ]", testing::internal::GetCapturedStdout());
 
-    // coverity[tainted_data]
     ASSERT_EQ("", testing::internal::GetCapturedStderr());
 }
 
@@ -760,11 +716,7 @@ TEST(HelperTest, CheckSymmetricDifferenceSizes3)
 
 int main(int argc, char **argv)
 {
-    /* GoogleTest may throw. This results in a non-zero exit code and is intended. */
-    // coverity[fun_call_w_exception]
     ::testing::InitGoogleTest(&argc, argv);
 
-    /* GoogleTest may throw. This results in a non-zero exit code and is intended. */
-    // coverity[fun_call_w_exception]
     return RUN_ALL_TESTS();
 }

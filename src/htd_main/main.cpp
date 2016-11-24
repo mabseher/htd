@@ -864,8 +864,8 @@ int main(int argc, const char * const * const argv)
         htd::BucketEliminationGraphDecompositionAlgorithm * graphDecompositionAlgorithm = new htd::BucketEliminationGraphDecompositionAlgorithm(libraryInstance);
         htd::BucketEliminationTreeDecompositionAlgorithm * treeDecompositionAlgorithm = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
 
-        graphDecompositionAlgorithm->setComputeInducedEdges(false);
-        treeDecompositionAlgorithm->setComputeInducedEdges(false);
+        graphDecompositionAlgorithm->setComputeInducedEdgesEnabled(false);
+        treeDecompositionAlgorithm->setComputeInducedEdgesEnabled(false);
 
         libraryInstance->graphDecompositionAlgorithmFactory().setConstructionTemplate(graphDecompositionAlgorithm);
         libraryInstance->treeDecompositionAlgorithmFactory().setConstructionTemplate(treeDecompositionAlgorithm);
@@ -933,7 +933,7 @@ int main(int argc, const char * const * const argv)
                     {
                         htd::BucketEliminationTreeDecompositionAlgorithm * initialAlgorithm = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
 
-                        initialAlgorithm->setComputeInducedEdges(false);
+                        initialAlgorithm->setComputeInducedEdgesEnabled(false);
 
                         initialAlgorithm->setOrderingAlgorithm(new htd::MinDegreeOrderingAlgorithm(libraryInstance));
 
@@ -942,7 +942,7 @@ int main(int argc, const char * const * const argv)
 
                     htd::WidthMinimizingTreeDecompositionAlgorithm * baseAlgorithm = new htd::WidthMinimizingTreeDecompositionAlgorithm(libraryInstance);
 
-                    baseAlgorithm->setComputeInducedEdges(false);
+                    baseAlgorithm->setComputeInducedEdgesEnabled(false);
 
                     if (iterationOption.used())
                     {

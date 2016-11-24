@@ -252,14 +252,24 @@ void htd::WidthMinimizingTreeDecompositionAlgorithm::setIterationCount(std::size
     implementation_->iterationCount_ = iterationCount;
 }
 
+bool htd::WidthMinimizingTreeDecompositionAlgorithm::isCompressionEnabled(void) const
+{
+    return implementation_->algorithm_->isCompressionEnabled();
+}
+
+void htd::WidthMinimizingTreeDecompositionAlgorithm::setCompressionEnabled(bool compressionEnabled)
+{
+    implementation_->algorithm_->setCompressionEnabled(compressionEnabled);
+}
+
 bool htd::WidthMinimizingTreeDecompositionAlgorithm::isComputeInducedEdgesEnabled(void) const
 {
     return implementation_->algorithm_->isComputeInducedEdgesEnabled();
 }
 
-void htd::WidthMinimizingTreeDecompositionAlgorithm::setComputeInducedEdges(bool computeInducedEdges)
+void htd::WidthMinimizingTreeDecompositionAlgorithm::setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled)
 {
-    implementation_->algorithm_->setComputeInducedEdges(computeInducedEdges);
+    implementation_->algorithm_->setComputeInducedEdgesEnabled(computeInducedEdgesEnabled);
 }
 
 const htd::LibraryInstance * htd::WidthMinimizingTreeDecompositionAlgorithm::managementInstance(void) const HTD_NOEXCEPT

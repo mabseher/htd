@@ -156,6 +156,20 @@ namespace htd
             HTD_API void setIterationCount(std::size_t iterationCount);
 
             /**
+             *  Check whether the computed decompositions shall contain only subset-maximal bags.
+             *
+             *  @return A boolean flag indicating whether the computed decompositions shall contain only subset-maximal bags.
+             */
+            HTD_API bool isCompressionEnabled(void) const;
+
+            /**
+             *  Set whether the computed decompositions shall contain only subset-maximal bags.
+             *
+             *  @param[in] compressionEnabled   A boolean flag indicating whether the computed decompositions shall contain only subset-maximal bags.
+             */
+            HTD_API void setCompressionEnabled(bool compressionEnabled);
+
+            /**
              *  Check whether the edges induced by the bag contents shall be computed.
              *
              *  @return A boolean flag indicating whether the edges induced by the bag contents shall be computed.
@@ -165,9 +179,9 @@ namespace htd
             /**
              *  Set whether the edges induced by the bag contents shall be computed.
              *
-             *  @param[in] computeInducedEdges  A boolean flag indicating whether the edges induced by the bag contents shall be computed.
+             *  @param[in] computeInducedEdgesEnabled   A boolean flag indicating whether the edges induced by the bag contents shall be computed.
              */
-            HTD_API void setComputeInducedEdges(bool computeInducedEdges);
+            HTD_API void setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled);
 
             HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 

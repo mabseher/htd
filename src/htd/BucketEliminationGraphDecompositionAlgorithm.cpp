@@ -54,7 +54,7 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
      *
      *  @param[in] manager   The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), orderingAlgorithm_(manager->orderingAlgorithmFactory().createInstance()), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), orderingAlgorithm_(manager->orderingAlgorithmFactory().createInstance()), labelingFunctions_(), postProcessingOperations_(), compressionEnabled_(true), computeInducedEdges_(true)
     {
 
     }
@@ -93,6 +93,11 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
      *  The manipuation operations which are applied after the decomposition was computed.
      */
     std::vector<htd::IGraphDecompositionManipulationOperation *> postProcessingOperations_;
+
+    /**
+     *  A boolean flag indicating whether the computed decompositions shall contain only subset-maximal bags.
+     */
+    bool compressionEnabled_;
 
     /**
      *  A boolean flag indicating whether the hyperedges induced by a respective bag shall be computed.
@@ -549,21 +554,32 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::setManagementInstance(co
     implementation_->managementInstance_ = manager;
 }
 
+bool htd::BucketEliminationGraphDecompositionAlgorithm::isCompressionEnabled(void) const
+{
+    return implementation_->compressionEnabled_;
+}
+
+void htd::BucketEliminationGraphDecompositionAlgorithm::setCompressionEnabled(bool compressionEnabled)
+{
+    implementation_->compressionEnabled_ = compressionEnabled;
+}
+
 bool htd::BucketEliminationGraphDecompositionAlgorithm::isComputeInducedEdgesEnabled(void) const
 {
     return implementation_->computeInducedEdges_;
 }
 
-void htd::BucketEliminationGraphDecompositionAlgorithm::setComputeInducedEdges(bool computeInducedEdges)
+void htd::BucketEliminationGraphDecompositionAlgorithm::setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled)
 {
-    implementation_->computeInducedEdges_ = computeInducedEdges;
+    implementation_->computeInducedEdges_ = computeInducedEdgesEnabled;
 }
 
 htd::BucketEliminationGraphDecompositionAlgorithm * htd::BucketEliminationGraphDecompositionAlgorithm::clone(void) const
 {
     htd::BucketEliminationGraphDecompositionAlgorithm * ret = new htd::BucketEliminationGraphDecompositionAlgorithm(implementation_->managementInstance_);
 
-    ret->setComputeInducedEdges(implementation_->computeInducedEdges_);
+    ret->setCompressionEnabled(implementation_->compressionEnabled_);
+    ret->setComputeInducedEdgesEnabled(implementation_->computeInducedEdges_);
 
     for (const auto & labelingFunction : implementation_->labelingFunctions_)
     {
@@ -799,13 +815,22 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 }
             }
 
-            std::unordered_set<htd::vertex_t> unvisitedVertices(ordering.begin(), ordering.end());
+            std::unordered_set<htd::vertex_t> unvisitedVertices;
 
-            while (!unvisitedVertices.empty())
+            if (compressionEnabled_)
             {
-                htd::vertex_t currentVertex = *(unvisitedVertices.begin());
+                unvisitedVertices.insert(ordering.begin(), ordering.end());
 
-                compressDecomposition(currentVertex, neighbors, buckets, unvisitedVertices, relevantVertices, inducedEdges, edgeTarget);
+                while (!unvisitedVertices.empty())
+                {
+                    htd::vertex_t currentVertex = *(unvisitedVertices.begin());
+
+                    compressDecomposition(currentVertex, neighbors, buckets, unvisitedVertices, relevantVertices, inducedEdges, edgeTarget);
+                }
+            }
+            else
+            {
+                relevantVertices = ordering;
             }
 
             for (htd::vertex_t vertex : relevantVertices)

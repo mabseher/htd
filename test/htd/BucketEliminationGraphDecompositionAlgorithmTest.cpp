@@ -181,7 +181,7 @@ TEST(BucketEliminationGraphDecompositionAlgorithmTest, CheckResultSimpleHypergra
 
     htd::BucketEliminationGraphDecompositionAlgorithm algorithm(libraryInstance);
 
-    algorithm.setComputeInducedEdges(false);
+    algorithm.setComputeInducedEdgesEnabled(false);
 
     htd::IGraphDecomposition * decomposition = algorithm.computeDecomposition(graph);
 

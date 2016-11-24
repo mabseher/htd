@@ -56,7 +56,7 @@ struct htd::BucketEliminationTreeDecompositionAlgorithm::Implementation
      *
      *  @param[in] manager  The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), baseAlgorithm_(new htd::BucketEliminationGraphDecompositionAlgorithm(manager)), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), baseAlgorithm_(new htd::BucketEliminationGraphDecompositionAlgorithm(manager)), labelingFunctions_(), postProcessingOperations_()
     {
 
     }
@@ -66,7 +66,7 @@ struct htd::BucketEliminationTreeDecompositionAlgorithm::Implementation
      *
      *  @param[in] original The original implementation details structure.
      */
-    Implementation(const Implementation & original) : managementInstance_(original.managementInstance_), baseAlgorithm_(original.baseAlgorithm_->clone()), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(original.computeInducedEdges_)
+    Implementation(const Implementation & original) : managementInstance_(original.managementInstance_), baseAlgorithm_(original.baseAlgorithm_->clone()), labelingFunctions_(), postProcessingOperations_()
     {
         for (htd::ILabelingFunction * labelingFunction : original.labelingFunctions_)
         {
@@ -108,7 +108,7 @@ struct htd::BucketEliminationTreeDecompositionAlgorithm::Implementation
     const htd::LibraryInstance * managementInstance_;
 
     /**
-     * @brief orderingAlgorithm_
+     *  The underlying graph decomposition algorithm based on bucket elimination.
      */
     htd::BucketEliminationGraphDecompositionAlgorithm * baseAlgorithm_;
 
@@ -121,11 +121,6 @@ struct htd::BucketEliminationTreeDecompositionAlgorithm::Implementation
      *  The manipuation operations which are applied after the decomposition was computed.
      */
     std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
-
-    /**
-     *  A boolean flag indicating whether the hyperedges induced by a respective bag shall be computed.
-     */
-    bool computeInducedEdges_;
 
     /**
      *  Compute a new mutable tree decompostion of the given graph.
@@ -345,14 +340,24 @@ void htd::BucketEliminationTreeDecompositionAlgorithm::setManagementInstance(con
     implementation_->managementInstance_ = manager;
 }
 
-bool htd::BucketEliminationTreeDecompositionAlgorithm::isComputeInducedEdgesEnabled(void) const
+bool htd::BucketEliminationTreeDecompositionAlgorithm::isCompressionEnabled(void) const
 {
-    return implementation_->computeInducedEdges_;
+    return implementation_->baseAlgorithm_->isCompressionEnabled();
 }
 
-void htd::BucketEliminationTreeDecompositionAlgorithm::setComputeInducedEdges(bool computeInducedEdges)
+void htd::BucketEliminationTreeDecompositionAlgorithm::setCompressionEnabled(bool compressionEnabled)
 {
-    implementation_->computeInducedEdges_ = computeInducedEdges;
+    implementation_->baseAlgorithm_->setCompressionEnabled(compressionEnabled);
+}
+
+bool htd::BucketEliminationTreeDecompositionAlgorithm::isComputeInducedEdgesEnabled(void) const
+{
+    return implementation_->baseAlgorithm_->isComputeInducedEdgesEnabled();
+}
+
+void htd::BucketEliminationTreeDecompositionAlgorithm::setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled)
+{
+    implementation_->baseAlgorithm_->setComputeInducedEdgesEnabled(computeInducedEdgesEnabled);
 }
 
 htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDecompositionAlgorithm::clone(void) const

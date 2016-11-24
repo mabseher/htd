@@ -40,9 +40,20 @@ struct htd::CompressionOperation::Implementation
     /**
      *  Constructor for the implementation details structure.
      *
-     *  @param[in] manager   The management instance to which the current object instance belongs.
+     *  @param[in] manager              The management instance to which the current object instance belongs.
+     *  @param[in] compressJoinNodes    A boolean flag indicating whether join nodes shall be considered for compression.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    Implementation(const htd::LibraryInstance * const manager, bool compressJoinNodes) : managementInstance_(manager), compressJoinNodes_(compressJoinNodes)
+    {
+
+    }
+
+    /**
+     *  Copy constructor for the implementation details structure.
+     *
+     *  @param[in] original The original implementation details structure.
+     */
+    Implementation(const Implementation & original) : managementInstance_(original.managementInstance_), compressJoinNodes_(original.compressJoinNodes_)
     {
 
     }
@@ -56,9 +67,19 @@ struct htd::CompressionOperation::Implementation
      *  The management instance to which the current object instance belongs.
      */
     const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  A boolean flag indicating whether join nodes shall be considered for compression.
+     */
+    bool compressJoinNodes_;
 };
 
-htd::CompressionOperation::CompressionOperation(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
+htd::CompressionOperation::CompressionOperation(const htd::LibraryInstance * const manager, bool compressJoinNodes) : implementation_(new Implementation(manager, compressJoinNodes))
+{
+
+}
+
+htd::CompressionOperation::CompressionOperation(const htd::CompressionOperation & original) : implementation_(new Implementation(*(original.implementation_)))
 {
 
 }
@@ -227,7 +248,7 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
 
     for (htd::vertex_t vertex : vertices)
     {
-        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
+        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex) && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
         {
             htd::vertex_t parent = decomposition.parent(vertex);
 
@@ -245,7 +266,7 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
             }
         }
 
-        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0)
+        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
         {
             const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(vertex);
 
@@ -278,7 +299,7 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
 
     for (htd::vertex_t vertex : relevantVertices)
     {
-        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
+        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex) && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
         {
             htd::vertex_t parent = decomposition.parent(vertex);
 
@@ -300,7 +321,7 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
             }
         }
 
-        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0)
+        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
         {
             const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(vertex);
 

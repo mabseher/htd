@@ -42,9 +42,17 @@ namespace htd
             /**
              *  Constructor for a new manipulation operation of type CompressionOperation.
              *
-             *  @param[in] manager   The management instance to which the new manipulation operation belongs.
+             *  @param[in] manager              The management instance to which the new manipulation operation belongs.
+             *  @param[in] compressJoinNodes    A boolean flag indicating whether join nodes shall be considered for compression.
              */
-            HTD_API CompressionOperation(const htd::LibraryInstance * const manager);
+            HTD_API CompressionOperation(const htd::LibraryInstance * const manager, bool compressJoinNodes = true);
+
+            /**
+             *  Copy constructor for a manipulation operation of type CompressionOperation.
+             *
+             *  @param[in] original The original htd::CompressionOperation object.
+             */
+            HTD_API CompressionOperation(const CompressionOperation & original);
 
             HTD_API virtual ~CompressionOperation();
 

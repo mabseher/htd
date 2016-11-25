@@ -1329,15 +1329,13 @@ void htd::Tree::swapWithParent(htd::vertex_t vertex)
 
     Implementation::Node & parentNode = *(implementation_->nodes_.at(parent));
 
-    node.children.swap(parentNode.children);
-
     node.parent = parentNode.parent;
+
+    node.children.insert(std::lower_bound(node.children.begin(), node.children.end(), parent), parent);
 
     parentNode.parent = vertex;
 
-    node.children.erase(std::lower_bound(node.children.begin(), node.children.end(), vertex));
-
-    node.children.insert(std::lower_bound(node.children.begin(), node.children.end(), parent), parent);
+    parentNode.children.erase(std::lower_bound(parentNode.children.begin(), parentNode.children.end(), vertex));
 
     if (node.parent == htd::Vertex::UNKNOWN)
     {

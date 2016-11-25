@@ -861,13 +861,10 @@ int main(int argc, const char * const * const argv)
 
         bool hypertreeDecompositionRequested = decompositionTypeChoice.used() && std::string(decompositionTypeChoice.value()) == "hypertree";
 
-        htd::BucketEliminationGraphDecompositionAlgorithm * graphDecompositionAlgorithm = new htd::BucketEliminationGraphDecompositionAlgorithm(libraryInstance);
         htd::BucketEliminationTreeDecompositionAlgorithm * treeDecompositionAlgorithm = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
 
-        graphDecompositionAlgorithm->setComputeInducedEdgesEnabled(false);
         treeDecompositionAlgorithm->setComputeInducedEdgesEnabled(false);
 
-        libraryInstance->graphDecompositionAlgorithmFactory().setConstructionTemplate(graphDecompositionAlgorithm);
         libraryInstance->treeDecompositionAlgorithmFactory().setConstructionTemplate(treeDecompositionAlgorithm);
 
         if (hypertreeDecompositionRequested)

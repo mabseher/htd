@@ -248,17 +248,17 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
 
     for (htd::vertex_t vertex : vertices)
     {
-        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex) && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
+        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
         {
             htd::vertex_t parent = decomposition.parent(vertex);
 
             const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
 
-            if (std::get<0>(result) == 0)
+            if (std::get<0>(result) == 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
             {
                 decomposition.removeVertex(vertex);
             }
-            else if (std::get<2>(result) == 0)
+            else if (std::get<2>(result) == 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(parent) < 2))
             {
                 decomposition.swapWithParent(vertex);
 
@@ -266,21 +266,21 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
             }
         }
 
-        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
+        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0)
         {
-            const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(vertex);
+            std::vector<htd::vertex_t> children;
 
-            std::vector<htd::vertex_t> children(childCollection.begin(), childCollection.end());
+            decomposition.copyChildrenTo(children, vertex);
 
             for (htd::vertex_t child : children)
             {
                 const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(child), decomposition.bagContent(vertex));
 
-                if (std::get<0>(result) == 0)
+                if (std::get<0>(result) == 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(child) < 2))
                 {
                     decomposition.removeVertex(child);
                 }
-                else if (std::get<2>(result) == 0)
+                else if (std::get<2>(result) == 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
                 {
                     decomposition.swapWithParent(child);
 
@@ -299,19 +299,19 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
 
     for (htd::vertex_t vertex : relevantVertices)
     {
-        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex) && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
+        if (decomposition.isVertex(vertex) && !decomposition.isRoot(vertex))
         {
             htd::vertex_t parent = decomposition.parent(vertex);
 
             const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(vertex), decomposition.bagContent(parent));
 
-            if (std::get<0>(result) == 0)
+            if (std::get<0>(result) == 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
             {
                 decomposition.removeVertex(vertex);
 
                 removedVertices.push_back(vertex);
             }
-            else if (std::get<2>(result) == 0)
+            else if (std::get<2>(result) == 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(parent) < 2))
             {
                 decomposition.swapWithParent(vertex);
 
@@ -321,23 +321,23 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
             }
         }
 
-        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
+        if (decomposition.isVertex(vertex) && decomposition.childCount(vertex) > 0)
         {
-            const htd::ConstCollection<htd::vertex_t> & childCollection = decomposition.children(vertex);
+            std::vector<htd::vertex_t> children;
 
-            std::vector<htd::vertex_t> children(childCollection.begin(), childCollection.end());
+            decomposition.copyChildrenTo(children, vertex);
 
             for (htd::vertex_t child : children)
             {
                 const std::tuple<std::size_t, std::size_t, std::size_t> & result = htd::analyze_sets(decomposition.bagContent(child), decomposition.bagContent(vertex));
 
-                if (std::get<0>(result) == 0)
+                if (std::get<0>(result) == 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(child) < 2))
                 {
                     decomposition.removeVertex(child);
 
                     removedVertices.push_back(child);
                 }
-                else if (std::get<2>(result) == 0)
+                else if (std::get<2>(result) == 0 && (implementation_->compressJoinNodes_ || decomposition.childCount(vertex) < 2))
                 {
                     decomposition.swapWithParent(child);
 
@@ -384,7 +384,7 @@ bool htd::CompressionOperation::createsLocationDependendLabels(void) const
 
 htd::CompressionOperation * htd::CompressionOperation::clone(void) const
 {
-    return new htd::CompressionOperation(managementInstance());
+    return new htd::CompressionOperation(*this);
 }
 
 const htd::LibraryInstance * htd::CompressionOperation::managementInstance(void) const HTD_NOEXCEPT

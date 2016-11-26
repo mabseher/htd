@@ -389,7 +389,7 @@ htd::DirectedGraph & htd::DirectedGraph::operator=(const htd::DirectedGraph & or
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
         base_ = original.base_->clone();
 #else
-        base_ = original.base_->cloneMutableHypergraph();
+        base_ = original.base_->cloneMutableDirectedMultiGraph();
 #endif
     }
 

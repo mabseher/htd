@@ -105,6 +105,8 @@ struct htd::Path::Implementation
         {
             delete edge;
         }
+
+        edges_->clear();
     }
 
     /**
@@ -143,6 +145,13 @@ struct htd::Path::Implementation
             }
 
             nodes_.clear();
+
+            for (htd::Hyperedge * edge : *edges_)
+            {
+                delete edge;
+            }
+
+            edges_->clear();
         }
 
         size_ = 0;
@@ -856,6 +865,8 @@ void htd::Path::removeVertex(htd::vertex_t vertex)
             implementation_->edges_->clear();
 
             implementation_->vertices_.clear();
+
+            delete &node;
         }
     }
 }
@@ -883,12 +894,6 @@ htd::vertex_t htd::Path::insertRoot(void)
 
         implementation_->next_vertex_ = implementation_->root_ + 1;
 
-        for (auto it = implementation_->nodes_.begin(); it != implementation_->nodes_.end(); it++)
-        {
-            delete it->second;
-        }
-
-        implementation_->nodes_.clear();
         implementation_->nodes_.emplace(implementation_->root_, new Implementation::Node(implementation_->root_, htd::Vertex::UNKNOWN));
 
         implementation_->vertices_.push_back(implementation_->root_);

@@ -162,6 +162,11 @@ struct htd::Tree::Implementation
      */
     void reset(void)
     {
+        for (auto it = nodes_.begin(); it != nodes_.end(); it++)
+        {
+            delete it->second;
+        }
+
         nodes_.clear();
 
         for (htd::Hyperedge * edge : *edges_)

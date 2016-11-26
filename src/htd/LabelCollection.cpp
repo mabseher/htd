@@ -37,6 +37,26 @@ htd::LabelCollection::LabelCollection(void) : labelNames_(), content_()
  
 }
 
+htd::LabelCollection::LabelCollection(const htd::LabelCollection & original) : labelNames_(), content_()
+{
+    for (const std::string & labelName : original.labelNames())
+    {
+        labelNames_.push_back(labelName);
+
+        content_[labelName] = original.label(labelName).clone();
+    }
+}
+
+htd::LabelCollection::LabelCollection(const htd::ILabelCollection & original) : labelNames_(), content_()
+{
+    for (const std::string & labelName : original.labelNames())
+    {
+        labelNames_.push_back(labelName);
+
+        content_[labelName] = original.label(labelName).clone();
+    }
+}
+
 htd::LabelCollection::~LabelCollection()
 {
     for (auto & storedLabel : content_)
@@ -91,12 +111,17 @@ void htd::LabelCollection::setLabel(const std::string & labelName, htd::ILabel *
 
     if (oldPosition != content_.end())
     {
+        delete oldPosition->second;
+
         content_.erase(oldPosition);
     }
 
     auto position = std::lower_bound(labelNames_.begin(), labelNames_.end(), labelName);
 
-    labelNames_.insert(position, labelName);
+    if (position == labelNames_.end() || *position != labelName)
+    {
+        labelNames_.insert(position, labelName);
+    }
 
     content_[labelName] = label;
 }

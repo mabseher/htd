@@ -41,25 +41,42 @@ namespace htd
     class LabelCollection : public htd::ILabelCollection
     {
         public:
-            LabelCollection(void);
+            /**
+             *  Constructor for a label collection.
+             */
+            HTD_API LabelCollection(void);
+
+            /**
+             *  Copy constructor for a label collection.
+             *
+             *  @param[in] original The original label collection.
+             */
+            HTD_API LabelCollection(const htd::LabelCollection & original);
+
+            /**
+             *  Copy constructor for a label collection.
+             *
+             *  @param[in] original The original label collection.
+             */
+            HTD_API LabelCollection(const htd::ILabelCollection & original);
 	    
-            virtual ~LabelCollection();
+            HTD_API virtual ~LabelCollection();
 
-            std::size_t labelCount(void) const HTD_OVERRIDE;
+            HTD_API std::size_t labelCount(void) const HTD_OVERRIDE;
 
-            htd::ConstCollection<std::string> labelNames(void) const HTD_OVERRIDE;
+            HTD_API htd::ConstCollection<std::string> labelNames(void) const HTD_OVERRIDE;
 
-            const std::string & labelNameAtPosition(htd::index_t index) const HTD_OVERRIDE;
+            HTD_API const std::string & labelNameAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
-            htd::ILabel & label(const std::string & labelName) HTD_OVERRIDE;
+            HTD_API htd::ILabel & label(const std::string & labelName) HTD_OVERRIDE;
 
-            const htd::ILabel & label(const std::string & labelName) const HTD_OVERRIDE;
+            HTD_API const htd::ILabel & label(const std::string & labelName) const HTD_OVERRIDE;
 
-            void setLabel(const std::string & labelName, htd::ILabel * label) HTD_OVERRIDE;
+            HTD_API void setLabel(const std::string & labelName, htd::ILabel * label) HTD_OVERRIDE;
 
-            void removeLabel(const std::string & labelName) HTD_OVERRIDE;
+            HTD_API void removeLabel(const std::string & labelName) HTD_OVERRIDE;
 
-            LabelCollection * clone(void) const HTD_OVERRIDE;
+            HTD_API LabelCollection * clone(void) const HTD_OVERRIDE;
 
         private:
             std::vector<std::string> labelNames_;

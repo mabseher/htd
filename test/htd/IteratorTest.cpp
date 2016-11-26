@@ -56,6 +56,7 @@ class IteratorTest : public ::testing::Test
 TEST(IteratorTest, CheckEmptyCollection)
 {
     htd::Collection<int> collection1;
+    htd::Collection<int> collection2;
 
     ASSERT_TRUE(collection1.empty());
     ASSERT_EQ((std::size_t)0, collection1.size());
@@ -69,11 +70,15 @@ TEST(IteratorTest, CheckEmptyCollection)
     ASSERT_FALSE(collection1.begin() != collection1.end());
     ASSERT_FALSE(collection1.end() != collection1.begin());
     ASSERT_FALSE(collection1.end() != collection1.end());
+
+    ASSERT_TRUE(collection1 == collection2);
+    ASSERT_FALSE(collection1 != collection2);
 }
 
 TEST(IteratorTest, CheckEmptyConstCollection)
 {
     htd::ConstCollection<int> collection1;
+    htd::ConstCollection<int> collection2;
 
     ASSERT_TRUE(collection1.empty());
     ASSERT_EQ((std::size_t)0, collection1.size());
@@ -87,6 +92,9 @@ TEST(IteratorTest, CheckEmptyConstCollection)
     ASSERT_FALSE(collection1.begin() != collection1.end());
     ASSERT_FALSE(collection1.end() != collection1.begin());
     ASSERT_FALSE(collection1.end() != collection1.end());
+
+    ASSERT_TRUE(collection1 == collection2);
+    ASSERT_FALSE(collection1 != collection2);
 }
 
 TEST(IteratorTest, CheckCollectionWrapper1)
@@ -153,7 +161,21 @@ TEST(IteratorTest, CheckCollectionWrapper2)
     ASSERT_TRUE(it1 == collection1.end());
 }
 
-TEST(IteratorTest, CheckIteratorCloneMethod)
+TEST(IteratorTest, CheckIteratorCloneMethod1)
+{
+    htd::Collection<int> collection1;
+
+    auto it1 = collection1.begin();
+
+    auto it2 = it1.clone();
+
+    ASSERT_TRUE(it1 == *it2);
+    ASSERT_FALSE(it1 != *it2);
+
+    delete it2;
+}
+
+TEST(IteratorTest, CheckIteratorCloneMethod2)
 {
     std::vector<int> values { 1, 2, 3 };
 
@@ -168,6 +190,7 @@ TEST(IteratorTest, CheckIteratorCloneMethod)
     ASSERT_EQ(2, *(*it2));
 
     ASSERT_TRUE(it1 == *it2);
+    ASSERT_FALSE(it1 != *it2);
 
     delete it2;
 }
@@ -236,7 +259,21 @@ TEST(IteratorTest, CheckConstCollectionWrapper2)
     ASSERT_TRUE(it1 == collection1.end());
 }
 
-TEST(IteratorTest, CheckConstIteratorCloneMethod)
+TEST(IteratorTest, CheckConstIteratorCloneMethod1)
+{
+    htd::ConstCollection<int> collection1;
+
+    auto it1 = collection1.begin();
+
+    auto it2 = it1.clone();
+
+    ASSERT_TRUE(it1 == *it2);
+    ASSERT_FALSE(it1 != *it2);
+
+    delete it2;
+}
+
+TEST(IteratorTest, CheckConstIteratorCloneMethod2)
 {
     std::vector<int> values { 1, 2, 3 };
 
@@ -251,6 +288,7 @@ TEST(IteratorTest, CheckConstIteratorCloneMethod)
     ASSERT_EQ(2, *(*it2));
 
     ASSERT_TRUE(it1 == *it2);
+    ASSERT_FALSE(it1 != *it2);
 
     delete it2;
 }

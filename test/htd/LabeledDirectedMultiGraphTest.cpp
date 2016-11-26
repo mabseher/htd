@@ -191,6 +191,23 @@ TEST(LabeledDirectedMultiGraphTest, CheckSize3Graph)
     ASSERT_EQ((std::size_t)1, graph.edgeCount((htd::vertex_t)2));
     ASSERT_EQ((std::size_t)0, graph.edgeCount((htd::vertex_t)3));
 
+    ASSERT_EQ((std::size_t)1, graph.incomingNeighborCount(1));
+    ASSERT_EQ((htd::vertex_t)2, graph.incomingNeighbors(1)[0]);
+    ASSERT_EQ((htd::vertex_t)2, graph.incomingNeighborAtPosition(1, 0));
+    ASSERT_EQ((std::size_t)0, graph.incomingNeighborCount(2));
+    ASSERT_TRUE(graph.isIncomingNeighbor(1, 2));
+    ASSERT_FALSE(graph.isIncomingNeighbor(2, 1));
+
+    ASSERT_EQ((std::size_t)0, graph.outgoingNeighborCount(1));
+    ASSERT_EQ((std::size_t)1, graph.outgoingNeighborCount(2));
+    ASSERT_EQ((htd::vertex_t)1, graph.outgoingNeighbors(2)[0]);
+    ASSERT_EQ((htd::vertex_t)1, graph.outgoingNeighborAtPosition(2, 0));
+    ASSERT_TRUE(graph.isOutgoingNeighbor(2, 1));
+    ASSERT_FALSE(graph.isOutgoingNeighbor(1, 2));
+
+    ASSERT_FALSE(graph.isReachable(1, 2));
+    ASSERT_TRUE(graph.isReachable(2, 1));
+
     std::vector<htd::vertex_t> elements1 { 1, 2 };
     std::vector<htd::vertex_t> elements2 { 2, 1 };
 

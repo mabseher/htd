@@ -26,9 +26,7 @@
 #define HTD_HTD_DIRECTEDGRAPH_HPP
 
 #include <htd/IMutableDirectedGraph.hpp>
-#include <htd/IMutableHypergraph.hpp>
-
-#include <unordered_set>
+#include <htd/IMutableDirectedMultiGraph.hpp>
 
 namespace htd
 {
@@ -210,10 +208,7 @@ namespace htd
 #endif
 
         private:
-            htd::IMutableHypergraph * base_;
-
-            std::vector<std::unordered_set<htd::vertex_t>> incomingNeighborhood_;
-            std::vector<std::unordered_set<htd::vertex_t>> outgoingNeighborhood_;
+            htd::IMutableDirectedMultiGraph * base_;
     };
 }
 

@@ -102,9 +102,11 @@ void htd::JoinNodeComplexityReductionOperation::apply(const htd::IMultiHypergrap
 
         for (htd::vertex_t child : children)
         {
+            const std::vector<htd::vertex_t> & childBag = decomposition.bagContent(child);
+
             decomposition.copyRememberedVerticesTo(rememberedVertices, node, child);
 
-            if (bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
+            if (childBag.size() > bag.size() || bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
             {
                 htd::vertex_t newVertex = decomposition.addParent(child);
 
@@ -156,9 +158,11 @@ void htd::JoinNodeComplexityReductionOperation::apply(const htd::IMultiHypergrap
 
             for (htd::vertex_t child : children)
             {
+                const std::vector<htd::vertex_t> & childBag = decomposition.bagContent(child);
+
                 decomposition.copyRememberedVerticesTo(rememberedVertices, vertex, child);
 
-                if (bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
+                if (childBag.size() > bag.size() || bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
                 {
                     htd::vertex_t newVertex = decomposition.addParent(child);
 

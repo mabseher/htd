@@ -51,6 +51,27 @@ namespace htd
             /**
              *  Copy constructor for a hypertree decomposition.
              *
+             *  @param[in] original  The original hypertree decomposition.
+             */
+            HTD_API HypertreeDecomposition(const htd::HypertreeDecomposition & original);
+
+            /**
+             *  Copy constructor for a hypertree decomposition.
+             *
+             *  @param[in] original  The original labeled tree.
+             */
+            HTD_API HypertreeDecomposition(const htd::ITree & original);
+
+            /**
+             *  Copy constructor for a hypertree decomposition.
+             *
+             *  @param[in] original  The original labeled tree.
+             */
+            HTD_API HypertreeDecomposition(const htd::ILabeledTree & original);
+
+            /**
+             *  Copy constructor for a hypertree decomposition.
+             *
              *  @param[in] original  The original tree decomposition.
              */
             HTD_API HypertreeDecomposition(const htd::ITreeDecomposition & original);
@@ -63,6 +84,30 @@ namespace htd
             HTD_API HypertreeDecomposition(const htd::IHypertreeDecomposition & original);
 
             HTD_API virtual ~HypertreeDecomposition();
+
+            HTD_API void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            HTD_API void removeSubtree(htd::vertex_t subtreeRoot) HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t insertRoot(void) HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t insertRoot(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t insertRoot(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t addChild(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t addChild(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t addChild(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t addParent(htd::vertex_t vertex) HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t addParent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges) HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t addParent(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges) HTD_OVERRIDE;
+
+            HTD_API void removeChild(htd::vertex_t vertex, htd::vertex_t child) HTD_OVERRIDE;
 
             HTD_API const std::vector<htd::Hyperedge> & coveringEdges(htd::vertex_t vertex) const HTD_OVERRIDE;
 

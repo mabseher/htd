@@ -29,31 +29,168 @@
 #include <htd/Helpers.hpp>
 #include <htd/HypertreeDecomposition.hpp>
 #include <htd/TreeDecomposition.hpp>
-#include <htd/GraphLabeling.hpp>
-#include <htd/Label.hpp>
-#include <htd/VectorAdapter.hpp>
+#include <htd/PostOrderTreeTraversal.hpp>
 
 #include <algorithm>
 #include <stdexcept>
 
-htd::HypertreeDecomposition::HypertreeDecomposition(const htd::LibraryInstance * const manager) : htd::TreeDecomposition(manager)
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::LibraryInstance * const manager) : htd::TreeDecomposition(manager), coveringEdges_()
 {
     
 }
 
-htd::HypertreeDecomposition::HypertreeDecomposition(const htd::ITreeDecomposition & original) : htd::TreeDecomposition(original)
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::HypertreeDecomposition & original) : htd::TreeDecomposition(original), coveringEdges_(original.coveringEdges_)
 {
 
 }
 
-htd::HypertreeDecomposition::HypertreeDecomposition(const htd::IHypertreeDecomposition & original) : htd::TreeDecomposition(original)
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::ITree & original) : htd::TreeDecomposition(original), coveringEdges_()
 {
+    for (htd::vertex_t vertex : original.vertices())
+    {
+        coveringEdges_[vertex] = std::vector<htd::Hyperedge>();
+    }
+}
 
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::ILabeledTree & original) : htd::TreeDecomposition(original), coveringEdges_()
+{
+    for (htd::vertex_t vertex : original.vertices())
+    {
+        coveringEdges_[vertex] = std::vector<htd::Hyperedge>();
+    }
+}
+
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::ITreeDecomposition & original) : htd::TreeDecomposition(original), coveringEdges_()
+{
+    for (htd::vertex_t vertex : original.vertices())
+    {
+        coveringEdges_[vertex] = std::vector<htd::Hyperedge>();
+    }
+}
+
+htd::HypertreeDecomposition::HypertreeDecomposition(const htd::IHypertreeDecomposition & original) : htd::TreeDecomposition(original), coveringEdges_()
+{
+    for (htd::vertex_t vertex : original.vertices())
+    {
+        coveringEdges_[vertex] = original.coveringEdges(vertex);
+    }
 }
 
 htd::HypertreeDecomposition::~HypertreeDecomposition()
 {
 
+}
+
+void htd::HypertreeDecomposition::removeVertex(htd::vertex_t vertex)
+{
+    htd::TreeDecomposition::removeVertex(vertex);
+
+    coveringEdges_.erase(vertex);
+}
+
+void htd::HypertreeDecomposition::removeSubtree(htd::vertex_t subtreeRoot)
+{
+    HTD_ASSERT(isVertex(subtreeRoot))
+
+    htd::PostOrderTreeTraversal treeTraversal;
+
+    treeTraversal.traverse(*this, [&](htd::vertex_t vertex, htd::vertex_t parent, std::size_t distanceToSubtreeRoot)
+    {
+        HTD_UNUSED(parent)
+        HTD_UNUSED(distanceToSubtreeRoot)
+
+        coveringEdges_.erase(vertex);
+    }, subtreeRoot);
+
+    htd::TreeDecomposition::removeSubtree(subtreeRoot);
+}
+
+htd::vertex_t htd::HypertreeDecomposition::insertRoot(void)
+{
+    htd::vertex_t ret = htd::TreeDecomposition::insertRoot();
+
+    coveringEdges_[ret] = std::vector<htd::Hyperedge>();
+
+    return ret;
+}
+
+htd::vertex_t htd::HypertreeDecomposition::insertRoot(const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    htd::vertex_t ret = htd::TreeDecomposition::insertRoot(bagContent, inducedEdges);
+
+    coveringEdges_[ret] = std::vector<htd::Hyperedge>();
+
+    return ret;
+}
+
+htd::vertex_t htd::HypertreeDecomposition::insertRoot(std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    htd::vertex_t ret = htd::TreeDecomposition::insertRoot(std::move(bagContent), std::move(inducedEdges));
+
+    coveringEdges_[ret] = std::vector<htd::Hyperedge>();
+
+    return ret;
+}
+
+htd::vertex_t htd::HypertreeDecomposition::addChild(htd::vertex_t vertex)
+{
+    htd::vertex_t ret = htd::TreeDecomposition::addChild(vertex);
+
+    coveringEdges_[ret] = std::vector<htd::Hyperedge>();
+
+    return ret;
+}
+
+htd::vertex_t htd::HypertreeDecomposition::addChild(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    htd::vertex_t ret = htd::TreeDecomposition::addChild(vertex, bagContent, inducedEdges);
+
+    coveringEdges_[ret] = std::vector<htd::Hyperedge>();
+
+    return ret;
+}
+
+htd::vertex_t htd::HypertreeDecomposition::addChild(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    htd::vertex_t ret = htd::TreeDecomposition::addChild(vertex, std::move(bagContent), std::move(inducedEdges));
+
+    coveringEdges_[ret] = std::vector<htd::Hyperedge>();
+
+    return ret;
+}
+
+htd::vertex_t htd::HypertreeDecomposition::addParent(htd::vertex_t vertex)
+{
+    htd::vertex_t ret = htd::TreeDecomposition::addParent(vertex);
+
+    coveringEdges_[ret] = std::vector<htd::Hyperedge>();
+
+    return ret;
+}
+
+htd::vertex_t htd::HypertreeDecomposition::addParent(htd::vertex_t vertex, const std::vector<htd::vertex_t> & bagContent, const htd::FilteredHyperedgeCollection & inducedEdges)
+{
+    htd::vertex_t ret = htd::TreeDecomposition::addParent(vertex, bagContent, inducedEdges);
+
+    coveringEdges_[ret] = std::vector<htd::Hyperedge>();
+
+    return ret;
+}
+
+htd::vertex_t htd::HypertreeDecomposition::addParent(htd::vertex_t vertex, std::vector<htd::vertex_t> && bagContent, htd::FilteredHyperedgeCollection && inducedEdges)
+{
+    htd::vertex_t ret = htd::TreeDecomposition::addParent(vertex, std::move(bagContent), std::move(inducedEdges));
+
+    coveringEdges_[ret] = std::vector<htd::Hyperedge>();
+
+    return ret;
+}
+
+void htd::HypertreeDecomposition::removeChild(htd::vertex_t vertex, htd::vertex_t child)
+{
+    htd::TreeDecomposition::removeChild(vertex, child);
+
+    coveringEdges_.erase(child);
 }
 
 const std::vector<htd::Hyperedge> & htd::HypertreeDecomposition::coveringEdges(htd::vertex_t vertex) const
@@ -217,6 +354,8 @@ htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::
     {
         htd::TreeDecomposition::operator=(original);
 
+        coveringEdges_.clear();
+
         for (htd::vertex_t vertex : original.vertices())
         {
             coveringEdges_[vertex] = std::vector<htd::Hyperedge>();
@@ -231,6 +370,8 @@ htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::
     if (this != &original)
     {
         htd::TreeDecomposition::operator=(original);
+
+        coveringEdges_.clear();
 
         for (htd::vertex_t vertex : original.vertices())
         {
@@ -247,6 +388,8 @@ htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::
     {
         htd::TreeDecomposition::operator=(original);
 
+        coveringEdges_.clear();
+
         for (htd::vertex_t vertex : original.vertices())
         {
             coveringEdges_[vertex] = std::vector<htd::Hyperedge>();
@@ -261,6 +404,8 @@ htd::HypertreeDecomposition & htd::HypertreeDecomposition::operator=(const htd::
     if (this != &original)
     {
         htd::TreeDecomposition::operator=(original);
+
+        coveringEdges_.clear();
 
         for (htd::vertex_t vertex : original.vertices())
         {

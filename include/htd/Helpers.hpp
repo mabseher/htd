@@ -33,6 +33,7 @@
 #include <htd/Label.hpp>
 #include <htd/FilteredHyperedgeCollection.hpp>
 #include <htd/LibraryInstance.hpp>
+#include <htd/ITreeDecomposition.hpp>
 
 #include <algorithm>
 #include <cassert>
@@ -723,6 +724,16 @@ namespace htd
             ++it;
         }
     }
+
+    /**
+     *  Compute the collection of all vertices which are present at least two child bags.
+     *
+     *  @param[in] decomposition    The tree decomposition to which the given vertex belongs.
+     *  @param[in] vertex           The vertex which shall be investigated.
+     *
+     *  @return The collection of all vertices which are present in at least two child bags. The result is sorted in ascending order.
+     */
+    std::vector<htd::vertex_t> * computeJoinVertices(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex);
 }
 
 namespace std

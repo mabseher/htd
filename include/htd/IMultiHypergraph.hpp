@@ -26,10 +26,10 @@
 #define HTD_HTD_IMULTIHYPERGRAPH_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/Helpers.hpp>
 #include <htd/ConstCollection.hpp>
 #include <htd/FilteredHyperedgeCollection.hpp>
 #include <htd/Hyperedge.hpp>
+#include <htd/LibraryInstance.hpp>
 
 #include <cstdlib>
 #include <memory>

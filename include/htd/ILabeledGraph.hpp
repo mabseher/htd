@@ -30,8 +30,6 @@
 #include <htd/ILabeledHypergraph.hpp>
 #include <htd/ILabeledMultiGraph.hpp>
 
-#include <string>
-
 namespace htd
 {
     /**

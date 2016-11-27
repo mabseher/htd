@@ -984,56 +984,6 @@ bool htd::PathDecomposition::isRememberedVertex(htd::vertex_t vertex, htd::verte
     return std::binary_search(rememberedVertexCollection.begin(), rememberedVertexCollection.end(), rememberedVertex);
 }
 
-
-std::size_t htd::PathDecomposition::joinVertexCount(htd::vertex_t vertex) const
-{
-    HTD_ASSERT(isVertex(vertex))
-
-    const htd::ConstCollection<htd::vertex_t> & joinVertexCollection = joinVertices(vertex);
-
-    return joinVertexCollection.size();
-}
-
-htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::joinVertices(htd::vertex_t vertex) const
-{
-    HTD_UNUSED(vertex)
-
-    HTD_ASSERT(isVertex(vertex))
-
-    return htd::ConstCollection<htd::vertex_t>::getInstance(htd::VectorAdapter<htd::vertex_t>());
-}
-
-void htd::PathDecomposition::copyJoinVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
-{
-    HTD_UNUSED(vertex)
-    HTD_UNUSED(target)
-
-    HTD_ASSERT(isVertex(vertex))
-}
-
-htd::vertex_t htd::PathDecomposition::joinVertexAtPosition(htd::vertex_t vertex, htd::index_t index) const
-{
-    const htd::ConstCollection<htd::vertex_t> & joinVertexCollection = joinVertices(vertex);
-
-    HTD_ASSERT(index < joinVertexCollection.size())
-
-    htd::ConstIterator<htd::vertex_t> it = joinVertexCollection.begin();
-
-    std::advance(it, index);
-
-    return *it;
-}
-
-bool htd::PathDecomposition::isJoinVertex(htd::vertex_t vertex, htd::vertex_t joinVertex) const
-{
-    HTD_UNUSED(vertex)
-    HTD_UNUSED(joinVertex)
-
-    HTD_ASSERT(isVertex(vertex))
-
-    return false;
-}
-
 htd::PathDecomposition * htd::PathDecomposition::clone(void) const
 {
     return new htd::PathDecomposition(*this);

@@ -342,4 +342,43 @@ std::pair<std::size_t, std::size_t> htd::symmetric_difference_sizes(const std::v
     return std::pair<std::size_t, std::size_t>(onlySet1, onlySet2);
 }
 
+std::vector<htd::vertex_t> * htd::computeJoinVertices(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex)
+{
+    HTD_ASSERT(decomposition.isVertex(vertex))
+
+    std::vector<htd::vertex_t> * ret = new std::vector<htd::vertex_t>();
+
+    if (decomposition.childCount(vertex) >= 2)
+    {
+        std::unordered_set<htd::vertex_t> result;
+
+        std::vector<htd::vertex_t> children;
+
+        decomposition.copyChildrenTo(children, vertex);
+
+        std::unordered_set<htd::vertex_t> visitedVertices;
+
+        for (htd::index_t index = 0; index < children.size(); ++index)
+        {
+            for (htd::vertex_t bagElement : decomposition.bagContent(children[index]))
+            {
+                if (visitedVertices.count(bagElement) == 1)
+                {
+                    result.insert(bagElement);
+                }
+                else
+                {
+                    visitedVertices.insert(bagElement);
+                }
+            }
+        }
+
+        ret->insert(ret->end(), result.begin(), result.end());
+
+        std::sort(ret->begin(), ret->end());
+    }
+
+    return ret;
+}
+
 #endif /* HTD_HTD_HELPERS_CPP */

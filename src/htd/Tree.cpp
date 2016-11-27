@@ -1358,43 +1358,6 @@ void htd::Tree::swapWithParent(htd::vertex_t vertex)
 
         grandParentNode.children.insert(std::lower_bound(grandParentNode.children.begin(), grandParentNode.children.end(), vertex), vertex);
     }
-
-    for (htd::vertex_t child : node.children)
-    {
-        htd::vertex_t & parentReference = implementation_->nodes_.at(child)->parent;
-
-        if (parentReference != vertex)
-        {
-            Implementation::Node & childNode = *(implementation_->nodes_.at(child));
-
-            htd::vertex_t & parentReference2 = childNode.parent;
-
-            if (parentReference2 != vertex)
-            {
-                Implementation::Node & oldParentNode = *(implementation_->nodes_.at(parentReference2));
-
-                implementation_->updateEdgesAfterSwapWithParent(childNode, oldParentNode, parentNode);
-
-                parentReference2 = vertex;
-            }
-        }
-    }
-
-    for (htd::vertex_t child : parentNode.children)
-    {
-        Implementation::Node & childNode = *(implementation_->nodes_.at(child));
-
-        htd::vertex_t & parentReference = childNode.parent;
-
-        if (parentReference != parent)
-        {
-            Implementation::Node & oldParentNode = *(implementation_->nodes_.at(parentReference));
-
-            implementation_->updateEdgesAfterSwapWithParent(parentNode, oldParentNode, childNode);
-
-            parentReference = parent;
-        }
-    }
 }
 
 void htd::Tree::Implementation::deleteNode(Node * node)

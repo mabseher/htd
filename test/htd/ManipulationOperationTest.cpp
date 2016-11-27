@@ -4466,6 +4466,432 @@ TEST(ManipulationOperationTest, CheckJoinNodeComplexityReductionOperation4)
     delete libraryInstance;
 }
 
+TEST(ManipulationOperationTest, CheckTreeDecompositionNormalizationOperation1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> input = computeTreeDecomposition(libraryInstance);
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutableTreeDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::NormalizationOperation operation(libraryInstance, true, true, true, true);
+
+    ASSERT_TRUE(operation.isLocalOperation());
+    ASSERT_TRUE(operation.createsTreeNodes());
+    ASSERT_FALSE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation.createsLocationDependendLabels());
+
+    operation.apply(*graph, *decomposition);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_FALSE(decomposition->isExchangeNode(vertex));
+
+        if (decomposition->isJoinNode(vertex))
+        {
+            ASSERT_EQ((std::size_t)2, decomposition->childCount(vertex));
+
+            ASSERT_TRUE(decomposition->bagContent(decomposition->parent(vertex)) == decomposition->bagContent(vertex));
+        }
+
+        for (htd::vertex_t child : decomposition->children(vertex))
+        {
+            if (decomposition->isJoinNode(vertex))
+            {
+                ASSERT_TRUE(decomposition->bagContent(vertex) == decomposition->bagContent(child));
+            }
+
+            ASSERT_LE(decomposition->introducedVertexCount(vertex, child), (std::size_t)1);
+            ASSERT_LE(decomposition->forgottenVertexCount(vertex, child), (std::size_t)1);
+        }
+    }
+
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance);
+
+    operation.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance2);
+
+    htd::NormalizationOperation * clonedOperation = operation.clone();
+
+    ASSERT_TRUE(clonedOperation->managementInstance() == libraryInstance2);
+
+    delete graph;
+    delete decomposition;
+    delete clonedOperation;
+    delete libraryInstance;
+    delete libraryInstance2;
+}
+
+TEST(ManipulationOperationTest, CheckPathDecompositionNormalizationOperation1)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutablePathDecomposition *> input = computePathDecomposition(libraryInstance);
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutablePathDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::NormalizationOperation operation(libraryInstance, true, true, true, true);
+
+    ASSERT_TRUE(operation.isLocalOperation());
+    ASSERT_TRUE(operation.createsTreeNodes());
+    ASSERT_FALSE(operation.removesTreeNodes());
+    ASSERT_FALSE(operation.modifiesBagContents());
+    ASSERT_FALSE(operation.createsSubsetMaximalBags());
+    ASSERT_FALSE(operation.createsLocationDependendLabels());
+
+    operation.apply(*graph, *decomposition);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_FALSE(decomposition->isExchangeNode(vertex));
+
+        for (htd::vertex_t child : decomposition->children(vertex))
+        {
+            ASSERT_LE(decomposition->introducedVertexCount(vertex, child), (std::size_t)1);
+            ASSERT_LE(decomposition->forgottenVertexCount(vertex, child), (std::size_t)1);
+        }
+    }
+
+    htd::LibraryInstance * libraryInstance2 = htd::createManagementInstance(2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance);
+
+    operation.setManagementInstance(libraryInstance2);
+
+    ASSERT_TRUE(operation.managementInstance() == libraryInstance2);
+
+    htd::NormalizationOperation * clonedOperation = operation.clone();
+
+    ASSERT_TRUE(clonedOperation->managementInstance() == libraryInstance2);
+
+    delete graph;
+    delete decomposition;
+    delete clonedOperation;
+    delete libraryInstance;
+    delete libraryInstance2;
+}
+
+TEST(ManipulationOperationTest, CheckTreeDecompositionNormalizationOperation2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutableTreeDecomposition *> input = computeTreeDecomposition(libraryInstance, { new BagSizeLabelingFunction(libraryInstance) });
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutableTreeDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+    }
+
+    htd::NormalizationOperation operation(libraryInstance, true, true, true, true);
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation.apply(*graph, *decomposition, { labelingFunction });
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_FALSE(decomposition->isExchangeNode(vertex));
+
+        if (decomposition->isJoinNode(vertex))
+        {
+            ASSERT_EQ((std::size_t)2, decomposition->childCount(vertex));
+
+            ASSERT_TRUE(decomposition->bagContent(decomposition->parent(vertex)) == decomposition->bagContent(vertex));
+        }
+
+        for (htd::vertex_t child : decomposition->children(vertex))
+        {
+            if (decomposition->isJoinNode(vertex))
+            {
+                ASSERT_TRUE(decomposition->bagContent(vertex) == decomposition->bagContent(child));
+            }
+
+            ASSERT_LE(decomposition->introducedVertexCount(vertex, child), (std::size_t)1);
+            ASSERT_LE(decomposition->forgottenVertexCount(vertex, child), (std::size_t)1);
+        }
+
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+    }
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
+    delete libraryInstance;
+}
+
+TEST(ManipulationOperationTest, CheckPathDecompositionNormalizationOperation2)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    std::pair<htd::IMultiHypergraph *, htd::IMutablePathDecomposition *> input = computePathDecomposition(libraryInstance, { new BagSizeLabelingFunction(libraryInstance) });
+
+    htd::IMultiHypergraph * graph = input.first;
+
+    htd::IMutablePathDecomposition * decomposition = input.second;
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+    }
+
+    htd::NormalizationOperation operation(libraryInstance, true, true, true, true);
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation.apply(*graph, *decomposition, { labelingFunction });
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    for (htd::vertex_t vertex : decomposition->vertices())
+    {
+        ASSERT_FALSE(decomposition->isExchangeNode(vertex));
+
+        for (htd::vertex_t child : decomposition->children(vertex))
+        {
+            ASSERT_LE(decomposition->introducedVertexCount(vertex, child), (std::size_t)1);
+            ASSERT_LE(decomposition->forgottenVertexCount(vertex, child), (std::size_t)1);
+        }
+
+        ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+    }
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
+    delete libraryInstance;
+}
+
+TEST(ManipulationOperationTest, CheckTreeDecompositionNormalizationOperation3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
+
+    htd::IMutableTreeDecomposition * decomposition = libraryInstance->treeDecompositionFactory().createInstance();
+
+    graph->addVertices(5);
+
+    graph->addEdge(1, 2);
+    graph->addEdge(1, 3);
+    graph->addEdge(2, 3);
+    graph->addEdge(3, 4);
+
+    htd::vertex_t root = decomposition->insertRoot({ 1, 2, 3 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node1 = decomposition->addChild(root, { 1, 3 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node2 = decomposition->addChild(node1, { 3 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node3 = decomposition->addChild(node1, { 3, 4, 5 }, htd::FilteredHyperedgeCollection());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::NormalizationOperation operation(libraryInstance, true, true, true, true);
+
+    std::vector<htd::vertex_t> createdVertices;
+    std::vector<htd::vertex_t> removedVertices;
+
+    operation.apply(*graph, *decomposition, { node2, node3 }, createdVertices, removedVertices);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ((std::size_t)4, createdVertices.size());
+    ASSERT_EQ((std::size_t)0, removedVertices.size());
+
+    createdVertices.push_back(node2);
+    createdVertices.push_back(node3);
+
+    for (htd::vertex_t vertex : createdVertices)
+    {
+        ASSERT_FALSE(decomposition->isExchangeNode(vertex));
+
+        if (decomposition->isJoinNode(vertex))
+        {
+            ASSERT_EQ((std::size_t)2, decomposition->childCount(vertex));
+
+            ASSERT_TRUE(decomposition->bagContent(decomposition->parent(vertex)) == decomposition->bagContent(vertex));
+        }
+
+        for (htd::vertex_t child : decomposition->children(vertex))
+        {
+            if (decomposition->isJoinNode(vertex))
+            {
+                ASSERT_TRUE(decomposition->bagContent(vertex) == decomposition->bagContent(child));
+            }
+
+            ASSERT_LE(decomposition->introducedVertexCount(vertex, child), (std::size_t)1);
+            ASSERT_LE(decomposition->forgottenVertexCount(vertex, child), (std::size_t)1);
+        }
+    }
+
+    createdVertices.clear();
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation.apply(*graph, *decomposition, { node1 }, { labelingFunction }, createdVertices, removedVertices);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ((std::size_t)5, createdVertices.size());
+    ASSERT_EQ((std::size_t)0, removedVertices.size());
+
+    createdVertices.push_back(node1);
+
+    for (htd::vertex_t vertex : createdVertices)
+    {
+        ASSERT_FALSE(decomposition->isExchangeNode(vertex));
+
+        if (decomposition->isJoinNode(vertex))
+        {
+            ASSERT_EQ((std::size_t)2, decomposition->childCount(vertex));
+
+            ASSERT_TRUE(decomposition->bagContent(decomposition->parent(vertex)) == decomposition->bagContent(vertex));
+        }
+
+        for (htd::vertex_t child : decomposition->children(vertex))
+        {
+            if (decomposition->isJoinNode(vertex))
+            {
+                ASSERT_TRUE(decomposition->bagContent(vertex) == decomposition->bagContent(child));
+            }
+
+            ASSERT_LE(decomposition->introducedVertexCount(vertex, child), (std::size_t)1);
+            ASSERT_LE(decomposition->forgottenVertexCount(vertex, child), (std::size_t)1);
+        }
+
+        if (vertex != node1)
+        {
+            ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+        }
+    }
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
+    delete libraryInstance;
+}
+
+TEST(ManipulationOperationTest, CheckPathDecompositionNormalizationOperation3)
+{
+    htd::LibraryInstance * libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
+
+    htd::IMutableMultiHypergraph * graph = libraryInstance->multiHypergraphFactory().createInstance();
+
+    htd::IMutablePathDecomposition * decomposition = libraryInstance->pathDecompositionFactory().createInstance();
+
+    graph->addVertices(5);
+
+    graph->addEdge(1, 2);
+    graph->addEdge(1, 3);
+    graph->addEdge(2, 3);
+    graph->addEdge(3, 4);
+
+    htd::vertex_t root = decomposition->insertRoot({ 1, 2, 3 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node1 = decomposition->addChild(root, { 1, 3 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node2 = decomposition->addChild(node1, { 3, 4 }, htd::FilteredHyperedgeCollection());
+    htd::vertex_t node3 = decomposition->addChild(node2, { 4, 5 }, htd::FilteredHyperedgeCollection());
+
+    decomposition->addChild(node3, { 4 }, htd::FilteredHyperedgeCollection());
+
+    htd::TreeDecompositionVerifier verifier;
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    htd::NormalizationOperation operation(libraryInstance, true, true, true, true);
+
+    std::vector<htd::vertex_t> createdVertices;
+    std::vector<htd::vertex_t> removedVertices;
+
+    operation.apply(*graph, *decomposition, { node1 }, createdVertices, removedVertices);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ((std::size_t)1, createdVertices.size());
+    ASSERT_EQ((std::size_t)0, removedVertices.size());
+
+    createdVertices.push_back(node1);
+
+    for (htd::vertex_t vertex : createdVertices)
+    {
+        ASSERT_FALSE(decomposition->isExchangeNode(vertex));
+
+        for (htd::vertex_t child : decomposition->children(vertex))
+        {
+            ASSERT_LE(decomposition->introducedVertexCount(vertex, child), (std::size_t)1);
+            ASSERT_LE(decomposition->forgottenVertexCount(vertex, child), (std::size_t)1);
+        }
+    }
+
+    createdVertices.clear();
+
+    BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
+
+    operation.apply(*graph, *decomposition, { root, node2 }, { labelingFunction }, createdVertices, removedVertices);
+
+    ASSERT_TRUE(verifier.verify(*graph, *decomposition));
+
+    ASSERT_EQ((std::size_t)4, createdVertices.size());
+    ASSERT_EQ((std::size_t)0, removedVertices.size());
+
+    createdVertices.push_back(root);
+    createdVertices.push_back(node2);
+
+    for (htd::vertex_t vertex : createdVertices)
+    {
+        ASSERT_FALSE(decomposition->isExchangeNode(vertex));
+
+        for (htd::vertex_t child : decomposition->children(vertex))
+        {
+            ASSERT_LE(decomposition->introducedVertexCount(vertex, child), (std::size_t)1);
+            ASSERT_LE(decomposition->forgottenVertexCount(vertex, child), (std::size_t)1);
+        }
+
+        if (vertex != root && vertex != node2)
+        {
+            ASSERT_EQ(decomposition->bagSize(vertex), htd::accessLabel<std::size_t>(decomposition->vertexLabel("BAG_SIZE", vertex)));
+        }
+    }
+
+    delete graph;
+    delete decomposition;
+    delete labelingFunction;
+    delete libraryInstance;
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

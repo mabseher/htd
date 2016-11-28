@@ -75,6 +75,11 @@ namespace htd
                 delete labelings_;
             }
 
+            /**
+             *  Remove a vertex from the graph.
+             *
+             *  @param[in] vertex   The ID of the vertex which shall be removed.
+             */
             void removeVertex(htd::vertex_t vertex) HTD_OVERRIDE
             {
                 GraphType::removeVertex(vertex);
@@ -341,22 +346,42 @@ namespace htd
             }
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            /**
+             *  Create a deep copy of the current htd::LabeledGraphType object.
+             *
+             *  @return A new htd::LabeledGraphType object identical to the current htd::LabeledGraphType object.
+             */
             LabeledGraphType<GraphType> * clone(void) const HTD_OVERRIDE
             {
                 return new LabeledGraphType<GraphType>(*this);
             }
 #else
+            /**
+             *  Create a deep copy of the current htd::LabeledGraphType object.
+             *
+             *  @return A new htd::LabeledGraphType object identical to the current htd::LabeledGraphType object.
+             */
             virtual LabeledGraphType<GraphType> * clone(void) const
             {
                 return new LabeledGraphType<GraphType>(*this);
             }
 
+            /**
+             *  Create a deep copy of the current htd::LabeledGraphType object.
+             *
+             *  @return A new htd::LabeledGraphType object identical to the current htd::LabeledGraphType object.
+             */
             virtual LabeledGraphType<GraphType> * cloneLabeledGraphType(void) const
             {
                 return clone();
             }
 #endif
 
+            /**
+             *  Copy assignment operator for a htd::LabeledGraphType object.
+             *
+             *  @param[in] original  The original htd::LabeledGraphType object.
+             */
             virtual LabeledGraphType<GraphType> & operator=(const LabeledGraphType<GraphType> & original)
             {
                 if (this != &original)
@@ -372,6 +397,11 @@ namespace htd
             }
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            /**
+             *  Copy assignment operator for a htd::LabeledGraphType object.
+             *
+             *  @param[in] original  The original GraphType object.
+             */
             virtual LabeledGraphType<GraphType> & operator=(const GraphType & original)
             {
                 if (this != &original)
@@ -387,9 +417,9 @@ namespace htd
             }
 #else
             /**
-             *  Copy assignment operator for a mutable labeled directed graph.
+             *  Copy assignment operator for a htd::LabeledGraphType object.
              *
-             *  @param[in] original  The original labeled directed graph.
+             *  @param[in] original  The original GraphType object.
              */
             virtual void assign(const GraphType & original)
             {
@@ -405,6 +435,9 @@ namespace htd
 #endif
 
         protected:
+            /**
+             *  The collection of graph labelings underlying the labeled graph type.
+             */
             htd::ILabelingCollection * labelings_;
     };
 }

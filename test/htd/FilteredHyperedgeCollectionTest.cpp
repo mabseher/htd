@@ -348,6 +348,63 @@ TEST(FilteredHyperedgeCollectionTest, TestRestriction)
     ASSERT_EQ((std::size_t)0, hyperedges2.size());
 }
 
+TEST(FilteredHyperedgeCollectionTest, TestSwapMethod)
+{
+    htd::Hyperedge h1(1, 1, 2);
+    htd::Hyperedge h2(2, 2, 3);
+    htd::Hyperedge h3(3, 4, 3);
+    htd::Hyperedge h4(4, 5, 5);
+
+    std::vector<htd::Hyperedge> inputEdges1 { h1, h2 };
+    std::vector<htd::Hyperedge> inputEdges2 { h3, h4 };
+
+    htd::FilteredHyperedgeCollection hyperedges1(new htd::HyperedgeVector(inputEdges1), std::vector<htd::index_t> { 0, 1 });
+    htd::FilteredHyperedgeCollection hyperedges2(new htd::HyperedgeVector(inputEdges2), std::vector<htd::index_t> { 0, 1 });
+
+    ASSERT_EQ((std::size_t)2, hyperedges1.size());
+    ASSERT_EQ((std::size_t)2, hyperedges2.size());
+
+    auto it1 = hyperedges1.begin();
+    auto it2 = hyperedges2.begin();
+
+    ASSERT_EQ((htd::vertex_t)1, it1->id());
+    ASSERT_EQ((htd::vertex_t)3, it2->id());
+
+    ++it1;
+    ++it2;
+
+    ASSERT_EQ((htd::vertex_t)2, it1->id());
+    ASSERT_EQ((htd::vertex_t)4, it2->id());
+
+    hyperedges1.swap(hyperedges2);
+
+    it1 = hyperedges1.begin();
+    it2 = hyperedges2.begin();
+
+    ASSERT_EQ((htd::vertex_t)3, it1->id());
+    ASSERT_EQ((htd::vertex_t)1, it2->id());
+
+    ++it1;
+    ++it2;
+
+    ASSERT_EQ((htd::vertex_t)4, it1->id());
+    ASSERT_EQ((htd::vertex_t)2, it2->id());
+
+    hyperedges2.swap(hyperedges1);
+
+    it1 = hyperedges1.begin();
+    it2 = hyperedges2.begin();
+
+    ASSERT_EQ((htd::vertex_t)1, it1->id());
+    ASSERT_EQ((htd::vertex_t)3, it2->id());
+
+    ++it1;
+    ++it2;
+
+    ASSERT_EQ((htd::vertex_t)2, it1->id());
+    ASSERT_EQ((htd::vertex_t)4, it2->id());
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

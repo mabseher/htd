@@ -285,6 +285,8 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
                     decomposition.swapWithParent(child);
 
                     decomposition.removeVertex(vertex);
+
+                    vertex = child;
                 }
             }
         }
@@ -344,6 +346,8 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
                     decomposition.removeVertex(vertex);
 
                     removedVertices.push_back(vertex);
+
+                    vertex = child;
                 }
             }
         }

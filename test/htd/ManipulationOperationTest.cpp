@@ -3960,7 +3960,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionCompressionOperation1)
 
     ASSERT_TRUE(verifier.verify(*graph, *decomposition));
 
-    htd::CompressionOperation operation(libraryInstance);
+    htd::CompressionOperation operation(libraryInstance, true);
 
     ASSERT_TRUE(operation.isLocalOperation());
     ASSERT_FALSE(operation.createsTreeNodes());
@@ -3986,11 +3986,6 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionCompressionOperation1)
                 const std::vector<htd::vertex_t> & bag2 = decomposition->bagContent(vertex2);
 
                 supersetFound = supersetFound || std::includes(bag2.begin(), bag2.end(), bag1.begin(), bag1.end());
-
-                if (supersetFound)
-                {
-                    std::cout << std::endl;
-                }
             }
         }
 
@@ -4095,7 +4090,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionCompressionOperation2)
 
     ASSERT_TRUE(verifier.verify(*graph, *decomposition));
 
-    htd::CompressionOperation operation1(libraryInstance);
+    htd::CompressionOperation operation1(libraryInstance, true);
 
     BagSizeLabelingFunction * labelingFunction = new BagSizeLabelingFunction(libraryInstance);
 
@@ -4195,7 +4190,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionCompressionOperation3)
 
     ASSERT_TRUE(verifier.verify(*graph, *decomposition));
 
-    htd::CompressionOperation operation1(libraryInstance);
+    htd::CompressionOperation operation1(libraryInstance, true);
 
     std::vector<htd::vertex_t> createdVertices;
     std::vector<htd::vertex_t> removedVertices;
@@ -4236,7 +4231,7 @@ TEST(ManipulationOperationTest, CheckPathDecompositionCompressionOperation3)
 
     ASSERT_TRUE(verifier.verify(*graph, *decomposition));
 
-    htd::CompressionOperation operation1(libraryInstance);
+    htd::CompressionOperation operation1(libraryInstance, true);
 
     std::vector<htd::vertex_t> createdVertices;
     std::vector<htd::vertex_t> removedVertices;

@@ -45,7 +45,7 @@ namespace htd
              *  @param[in] manager              The management instance to which the new manipulation operation belongs.
              *  @param[in] compressJoinNodes    A boolean flag indicating whether join nodes shall be considered for compression.
              */
-            HTD_API CompressionOperation(const htd::LibraryInstance * const manager, bool compressJoinNodes = true);
+            HTD_API CompressionOperation(const htd::LibraryInstance * const manager, bool compressJoinNodes = false);
 
             /**
              *  Copy constructor for a manipulation operation of type CompressionOperation.

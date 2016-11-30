@@ -125,6 +125,8 @@ void htd_main::TdFormatExporter::write(const htd::ITreeDecomposition & decomposi
             }
 
             outputStream << "\n";
+
+            ++it;
         }
     }
 }

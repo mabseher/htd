@@ -36,6 +36,8 @@
 
 #include <csignal>
 #include <cstring>
+#include <fstream>
+#include <iostream>
 
 htd::LibraryInstance * const libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
 
@@ -76,6 +78,10 @@ htd_cli::OptionManager * createOptionManager(void)
         inputFormatChoice->setDefaultValue("gr");
 
         manager->registerOption(inputFormatChoice, "Input-Specific Options");
+
+        htd_cli::SingleValueOption * inputFileOption = new htd_cli::SingleValueOption("instance", "Read the input graph from file <instance>.", "instance");
+
+        manager->registerOption(inputFileOption, "Input-Specific Options");
 
         htd_cli::Choice * outputFormatChoice = new htd_cli::Choice("output", "Set the output format of the decomposition to <format>.\n  (See https://github.com/mabseher/htd/blob/master/FORMATS.md for information about the available output formats.)", "format");
 
@@ -161,6 +167,8 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
     const htd_cli::SingleValueOption & seedOption = optionManager.accessSingleValueOption("seed");
 
+    const htd_cli::SingleValueOption & instanceOption = optionManager.accessSingleValueOption("instance");
+
     const htd_cli::Choice & optimizationChoice = optionManager.accessChoice("opt");
 
     const htd_cli::SingleValueOption & iterationOption = optionManager.accessSingleValueOption("iterations");
@@ -221,6 +229,21 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
         else
         {
             srand(static_cast<unsigned int>(time(NULL)));
+        }
+    }
+
+    if (ret)
+    {
+        if (instanceOption.used())
+        {
+            std::ifstream instanceStream(instanceOption.value());
+
+            if (!instanceStream.good())
+            {
+                std::cerr << "INVALID INSTANCE FILE: " << instanceOption.value() << std::endl;
+
+                ret = false;
+            }
         }
     }
 
@@ -365,11 +388,9 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
     return ret;
 }
 
-template <typename DecompositionAlgorithm, typename Importer, typename Exporter>
-void decompose(const htd::LibraryInstance & instance, const DecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter)
+template <typename DecompositionAlgorithm, typename GraphType, typename Exporter>
+void decompose(const htd::LibraryInstance & instance, const DecompositionAlgorithm & algorithm, GraphType * graph, const Exporter & exporter)
 {
-    auto * graph = importer.import(std::cin);
-
     if (graph != nullptr && !instance.isTerminated())
     {
         auto * decomposition = algorithm.computeDecomposition(*graph);
@@ -414,11 +435,9 @@ void decompose(const htd::LibraryInstance & instance, const DecompositionAlgorit
     }
 }
 
-template <typename DecompositionAlgorithm, typename Importer, typename Exporter>
-void decomposeNamed(const htd::LibraryInstance & instance, const DecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter)
+template <typename DecompositionAlgorithm, typename GraphType, typename Exporter>
+void decomposeNamed(const htd::LibraryInstance & instance, const DecompositionAlgorithm & algorithm, GraphType * graph, const Exporter & exporter)
 {
-    auto * graph = importer.import(std::cin);
-
     if (graph != nullptr && !instance.isTerminated())
     {
         auto * decomposition = algorithm.computeDecomposition(graph->internalGraph());
@@ -627,11 +646,9 @@ void optimizeNamed(const htd::LibraryInstance & instance, const htd::IterativeIm
     }
 }
 
-template <typename Importer, typename Exporter>
-void minimizeWidth(const htd::LibraryInstance & instance, const htd::CombinedWidthMinimizingTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
+template <typename GraphType, typename Exporter>
+void minimizeWidth(const htd::LibraryInstance & instance, const htd::CombinedWidthMinimizingTreeDecompositionAlgorithm & algorithm, GraphType * graph, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
 {
-    auto * graph = importer.import(std::cin);
-
     if (graph != nullptr)
     {
         if (!instance.isTerminated())
@@ -700,66 +717,71 @@ void minimizeWidth(const htd::LibraryInstance & instance, const htd::CombinedWid
     }
 }
 
-template <typename Importer, typename Exporter>
-void minimizeWidthNamed(const htd::LibraryInstance & instance, const htd::CombinedWidthMinimizingTreeDecompositionAlgorithm & algorithm, const Importer & importer, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
+template <typename GraphType, typename Exporter>
+void minimizeWidthNamed(const htd::LibraryInstance & instance, const htd::CombinedWidthMinimizingTreeDecompositionAlgorithm & algorithm, GraphType * graph, const Exporter & exporter, bool printProgress, const std::string & outputFormat)
 {
-    auto * graph = importer.import(std::cin);
-
-    if (graph != nullptr && !instance.isTerminated())
+    if (graph != nullptr)
     {
-        std::size_t optimalMaximumBagSize = (std::size_t)-1;
+        if (!instance.isTerminated())
+        {
+            std::size_t optimalMaximumBagSize = (std::size_t)-1;
 
-        htd::ITreeDecomposition * decomposition =
-            algorithm.computeDecomposition(graph->internalGraph(), [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, std::size_t maximumBagSize)
-            {
-                HTD_UNUSED(graph)
-                HTD_UNUSED(decomposition)
-
-                if (printProgress)
+            htd::ITreeDecomposition * decomposition =
+                algorithm.computeDecomposition(graph->internalGraph(), [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, std::size_t maximumBagSize)
                 {
-                    if (maximumBagSize < optimalMaximumBagSize)
+                    HTD_UNUSED(graph)
+                    HTD_UNUSED(decomposition)
+
+                    if (printProgress)
                     {
-                        optimalMaximumBagSize = maximumBagSize;
-
-                        std::chrono::milliseconds::rep msSinceEpoch =
-                            std::chrono::duration_cast<std::chrono::milliseconds>
-                                (std::chrono::system_clock::now().time_since_epoch()).count();
-
-                        if (outputFormat == "td")
+                        if (maximumBagSize < optimalMaximumBagSize)
                         {
-                            std::cout << "c status " << optimalMaximumBagSize << " " << msSinceEpoch << std::endl;
-                        }
-                        else
-                        {
-                            std::cerr << "New optimal bag size: " << optimalMaximumBagSize << std::endl;
+                            optimalMaximumBagSize = maximumBagSize;
+
+                            std::chrono::milliseconds::rep msSinceEpoch =
+                                std::chrono::duration_cast<std::chrono::milliseconds>
+                                    (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                            if (outputFormat == "td")
+                            {
+                                std::cout << "c status " << optimalMaximumBagSize << " " << msSinceEpoch << std::endl;
+                            }
+                            else
+                            {
+                                std::cerr << "New optimal bag size: " << optimalMaximumBagSize << std::endl;
+                            }
                         }
                     }
-                }
-            });
+                });
 
-        if (decomposition != nullptr)
-        {
-            if (!instance.isTerminated() || algorithm.isSafelyInterruptible())
+            if (decomposition != nullptr)
             {
-                exporter.write(*decomposition, *graph, std::cout);
+                if (!instance.isTerminated() || algorithm.isSafelyInterruptible())
+                {
+                    exporter.write(*decomposition, *graph, std::cout);
+                }
+                else
+                {
+                    std::cerr << "Program was terminated successfully!" << std::endl;
+                }
+
+                delete decomposition;
             }
             else
             {
-                std::cerr << "Program was terminated successfully!" << std::endl;
+                if (instance.isTerminated())
+                {
+                    std::cerr << "Program was terminated successfully!" << std::endl;
+                }
+                else
+                {
+                    std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
+                }
             }
-
-            delete decomposition;
         }
         else
         {
-            if (instance.isTerminated())
-            {
-                std::cerr << "Program was terminated successfully!" << std::endl;
-            }
-            else
-            {
-                std::cerr << "NO TREE DECOMPOSITION COMPUTED!" << std::endl;
-            }
+            std::cerr << "Program was terminated successfully!" << std::endl;
         }
 
         delete graph;
@@ -774,11 +796,6 @@ void minimizeWidthNamed(const htd::LibraryInstance & instance, const htd::Combin
         {
             std::cerr << "NO VALID INSTANCE PROVIDED!" << std::endl;
         }
-
-        if (graph != nullptr)
-        {
-            delete graph;
-        }
     }
 }
 
@@ -789,19 +806,42 @@ void run(const DecompositionAlgorithm & algorithm, const Exporter & exporter, co
     {
         htd_main::GrFormatImporter importer(manager);
 
-        decompose(*manager, algorithm, importer, exporter);
+        decompose(*manager, algorithm, importer.import(std::cin), exporter);
     }
     else if (inputFormat == "lp")
     {
         htd_main::LpFormatImporter importer(manager);
 
-        decomposeNamed(*manager, algorithm, importer, exporter);
+        decomposeNamed(*manager, algorithm, importer.import(std::cin), exporter);
     }
     else if (inputFormat == "hgr")
     {
         htd_main::HgrFormatImporter importer(manager);
 
-        decompose(*manager, algorithm, importer, exporter);
+        decompose(*manager, algorithm, importer.import(std::cin), exporter);
+    }
+}
+
+template <typename DecompositionAlgorithm, typename Exporter>
+void run(const DecompositionAlgorithm & algorithm, const Exporter & exporter, const std::string & inputFormat, const htd::LibraryInstance * const manager, const std::string & instanceFile)
+{
+    if (inputFormat == "gr")
+    {
+        htd_main::GrFormatImporter importer(manager);
+
+        decompose(*manager, algorithm, importer.import(instanceFile), exporter);
+    }
+    else if (inputFormat == "lp")
+    {
+        htd_main::LpFormatImporter importer(manager);
+
+        decomposeNamed(*manager, algorithm, importer.import(instanceFile), exporter);
+    }
+    else if (inputFormat == "hgr")
+    {
+        htd_main::HgrFormatImporter importer(manager);
+
+        decompose(*manager, algorithm, importer.import(instanceFile), exporter);
     }
 }
 
@@ -853,6 +893,8 @@ int main(int argc, const char * const * const argv)
 
         const htd_cli::SingleValueOption & iterationOption = optionManager->accessSingleValueOption("iterations");
 
+        const htd_cli::SingleValueOption & instanceOption = optionManager->accessSingleValueOption("instance");
+
         //const htd_cli::SingleValueOption & nonImprovementLimitOption = optionManager->accessSingleValueOption("non-improvement-limit");
 
         const htd_cli::Option & printProgressOption = optionManager->accessOption("print-opt-progress");
@@ -890,7 +932,14 @@ int main(int argc, const char * const * const argv)
 
             if (!error)
             {
-                run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
+                if (instanceOption.used())
+                {
+                    run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance, instanceOption.value());
+                }
+                else
+                {
+                    run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
+                }
 
                 delete exporter;
             }
@@ -968,19 +1017,40 @@ int main(int argc, const char * const * const argv)
                     {
                         htd_main::GrFormatImporter importer(libraryInstance);
 
-                        minimizeWidth(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                        if (instanceOption.used())
+                        {
+                            minimizeWidth(*libraryInstance, algorithm, importer.import(instanceOption.value()), *exporter, printProgressOption.used(), outputFormat);
+                        }
+                        else
+                        {
+                            minimizeWidth(*libraryInstance, algorithm, importer.import(std::cin), *exporter, printProgressOption.used(), outputFormat);
+                        }
                     }
                     else if (inputFormat == "lp")
                     {
                         htd_main::LpFormatImporter importer(libraryInstance);
 
-                        minimizeWidthNamed(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                        if (instanceOption.used())
+                        {
+                            minimizeWidthNamed(*libraryInstance, algorithm, importer.import(instanceOption.value()), *exporter, printProgressOption.used(), outputFormat);
+                        }
+                        else
+                        {
+                            minimizeWidthNamed(*libraryInstance, algorithm, importer.import(std::cin), *exporter, printProgressOption.used(), outputFormat);
+                        }
                     }
                     else if (inputFormat == "hgr")
                     {
                         htd_main::HgrFormatImporter importer(libraryInstance);
 
-                        minimizeWidth(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
+                        if (instanceOption.used())
+                        {
+                            minimizeWidth(*libraryInstance, algorithm, importer.import(instanceOption.value()), *exporter, printProgressOption.used(), outputFormat);
+                        }
+                        else
+                        {
+                            minimizeWidth(*libraryInstance, algorithm, importer.import(std::cin), *exporter, printProgressOption.used(), outputFormat);
+                        }
                     }
 
                     /*
@@ -1029,7 +1099,14 @@ int main(int argc, const char * const * const argv)
                 {
                     htd::ITreeDecompositionAlgorithm * algorithm = libraryInstance->treeDecompositionAlgorithmFactory().createInstance();
 
-                    run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
+                    if (instanceOption.used())
+                    {
+                        run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance, instanceOption.value());
+                    }
+                    else
+                    {
+                        run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
+                    }
 
                     delete algorithm;
                 }

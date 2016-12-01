@@ -67,7 +67,12 @@ TEST(MultiHypergraphTest, CheckEmptyGraph)
     ASSERT_EQ((std::size_t)0, graph.isolatedVertexCount());
     ASSERT_EQ((std::size_t)0, graph.isolatedVertices().size());
 
+    ASSERT_EQ((std::size_t)0, graph.vertexVector().size());
+
     ASSERT_TRUE(graph.isConnected());
+
+    ASSERT_EQ((htd::vertex_t)1, graph.nextVertex());
+    ASSERT_EQ((htd::id_t)1, graph.nextEdgeId());
 
     delete libraryInstance;
 }
@@ -108,6 +113,12 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph1)
     ASSERT_TRUE(graph.isConnected());
     ASSERT_TRUE(graph.isConnected((htd::vertex_t)1, (htd::vertex_t)1));
 
+    ASSERT_EQ((std::size_t)1, graph.vertexVector().size());
+    ASSERT_EQ((htd::vertex_t)1, graph.vertexVector()[0]);
+
+    ASSERT_EQ((htd::vertex_t)2, graph.nextVertex());
+    ASSERT_EQ((htd::id_t)1, graph.nextEdgeId());
+
     delete libraryInstance;
 }
 
@@ -139,6 +150,14 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_TRUE(graph.isVertex((htd::vertex_t)1));
     ASSERT_TRUE(graph.isVertex((htd::vertex_t)2));
     ASSERT_TRUE(graph.isVertex((htd::vertex_t)3));
+
+    ASSERT_EQ((std::size_t)3, graph.vertexVector().size());
+    ASSERT_EQ((htd::vertex_t)1, graph.vertexVector()[0]);
+    ASSERT_EQ((htd::vertex_t)2, graph.vertexVector()[1]);
+    ASSERT_EQ((htd::vertex_t)3, graph.vertexVector()[2]);
+
+    ASSERT_EQ((htd::vertex_t)4, graph.nextVertex());
+    ASSERT_EQ((htd::id_t)1, graph.nextEdgeId());
 
     ASSERT_EQ((htd::vertex_t)1, isolatedVertices[0]);
     ASSERT_EQ((htd::vertex_t)2, isolatedVertices[1]);
@@ -192,6 +211,8 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
     ASSERT_EQ((std::size_t)1, graph.edgeCount((htd::vertex_t)1));
     ASSERT_EQ((std::size_t)1, graph.edgeCount((htd::vertex_t)2));
     ASSERT_EQ((std::size_t)0, graph.edgeCount((htd::vertex_t)3));
+
+    ASSERT_EQ((htd::id_t)2, graph.nextEdgeId());
 
     std::vector<htd::vertex_t> elements1 { 1, 2 };
     std::vector<htd::vertex_t> elements2 { 2, 1 };

@@ -119,6 +119,16 @@ TEST(LabelCollectionTest, TestLabelCollection)
     ASSERT_EQ((std::size_t)1, labels2.labelCount());
     ASSERT_EQ("Label2", labels2.labelNames()[0]);
     ASSERT_EQ("Label2", labels2.labelNameAtPosition(0));
+
+    htd::LabelCollection * clonedLabelCollection = labels2.clone();
+
+    ASSERT_EQ((std::size_t)1, clonedLabelCollection->labelCount());
+    ASSERT_EQ("Label2", clonedLabelCollection->labelNames()[0]);
+    ASSERT_EQ("Label2", clonedLabelCollection->labelNameAtPosition(0));
+
+    ASSERT_EQ(456, htd::accessLabel<int>(clonedLabelCollection->label("Label2")));
+
+    delete clonedLabelCollection;
 }
 
 int main(int argc, char **argv)

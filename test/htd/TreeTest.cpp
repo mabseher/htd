@@ -306,9 +306,9 @@ TEST(TreeTest, CheckSize3Tree)
     ASSERT_EQ((std::size_t)0, childNeighbors2.size());
     ASSERT_EQ((std::size_t)0, newRootNeighbors2.size());
 
-    tree.copyNeighborsTo(rootNeighbors2, root);
-    tree.copyNeighborsTo(childNeighbors2, child);
-    tree.copyNeighborsTo(newRootNeighbors2, newRoot);
+    tree.copyNeighborsTo(root, rootNeighbors2);
+    tree.copyNeighborsTo(child, childNeighbors2);
+    tree.copyNeighborsTo(newRoot, newRootNeighbors2);
 
     ASSERT_EQ((std::size_t)2, rootNeighbors2.size());
     ASSERT_EQ((std::size_t)1, childNeighbors2.size());

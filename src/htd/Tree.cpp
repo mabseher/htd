@@ -468,12 +468,12 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::neighbors(htd::vertex_t vertex) c
 
     htd::VectorAdapter<htd::vertex_t> ret;
 
-    copyNeighborsTo(ret.container(), vertex);
+    copyNeighborsTo(vertex, ret.container());
 
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::Tree::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::Tree::copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
@@ -687,7 +687,7 @@ htd::ConstCollection<htd::vertex_t> htd::Tree::children(htd::vertex_t vertex) co
     return htd::ConstCollection<htd::vertex_t>::getInstance(implementation_->nodes_.at(vertex)->children);
 }
 
-void htd::Tree::copyChildrenTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::Tree::copyChildrenTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 

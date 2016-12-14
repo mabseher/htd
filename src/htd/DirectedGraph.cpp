@@ -183,9 +183,9 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::neighbors(htd::vertex_t 
     return base_->neighbors(vertex);
 }
 
-void htd::DirectedGraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::DirectedGraph::copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
-    base_->copyNeighborsTo(target, vertex);
+    base_->copyNeighborsTo(vertex, target);
 }
 
 htd::vertex_t htd::DirectedGraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const

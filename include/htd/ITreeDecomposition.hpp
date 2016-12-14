@@ -238,19 +238,19 @@ namespace htd
             /**
              *  Compute the collection of all vertices which are present in at least one child bag but not in the bag of the given vertex and write it to the end of a given vector. The result is sorted in ascending order.
              *
-             *  @param[out] target  The target vector to which the forgotten vertices shall be appended.
              *  @param[in] vertex   The vertex.
+             *  @param[out] target  The target vector to which the forgotten vertices shall be appended.
              */
-            virtual void copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
+            virtual void copyForgottenVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const = 0;
 
             /**
              *  Compute the collection of all vertices which are present in the given child's bag but not in the bag of the given vertex and write it to the end of a given vector. The result is sorted in ascending order.
              *
-             *  @param[out] target  The target vector to which the forgotten vertices shall be appended.
              *  @param[in] vertex   The vertex.
+             *  @param[out] target  The target vector to which the forgotten vertices shall be appended.
              *  @param[in] child    The child.
              */
-            virtual void copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual void copyForgottenVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target, htd::vertex_t child) const = 0;
 
             /**
              *  Access the forgotten vertex at the specific position. A forgotten vertex is a vertex which is present in at least one child bag but not in the bag of the given vertex.
@@ -335,19 +335,19 @@ namespace htd
             /**
              *  Compute the collection of all vertices which are present in the bag of the given vertex but not in any child bag and write it to the end of a given vector. The result is sorted in ascending order.
              *
-             *  @param[out] target  The target vector to which the introduced vertices shall be appended.
              *  @param[in] vertex   The vertex.
+             *  @param[out] target  The target vector to which the introduced vertices shall be appended.
              */
-            virtual void copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
+            virtual void copyIntroducedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const = 0;
 
             /**
              *  Compute the collection of all vertices which are present in the bag of the given vertex but not in the given child's bag and write it to the end of a given vector. The result is sorted in ascending order.
              *
-             *  @param[out] target  The target vector to which the introduced vertices shall be appended.
              *  @param[in] vertex   The vertex.
+             *  @param[out] target  The target vector to which the introduced vertices shall be appended.
              *  @param[in] child    The child.
              */
-            virtual void copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual void copyIntroducedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target, htd::vertex_t child) const = 0;
 
             /**
              *  Access the introduced vertex at the specific position. An introduced vertex is a vertex which is present in the bag of the given vertex but not in any child bag.
@@ -432,19 +432,19 @@ namespace htd
             /**
              *  Compute the collection of all vertices which are present in the bag of the given vertex and in at least one child bag and write it to the end of a given vector. The result is sorted in ascending order.
              *
-             *  @param[out] target  The target vector to which the remembered vertices shall be appended.
              *  @param[in] vertex   The vertex.
+             *  @param[out] target  The target vector to which the remembered vertices shall be appended.
              */
-            virtual void copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
+            virtual void copyRememberedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const = 0;
 
             /**
              *  Compute the collection of all vertices which are present in the bag of the given vertex and in the given child's bag and write it to the end of a given vector. The result is sorted in ascending order.
              *
-             *  @param[out] target  The target vector to which the remembered vertices shall be appended.
              *  @param[in] vertex   The vertex.
+             *  @param[out] target  The target vector to which the remembered vertices shall be appended.
              *  @param[in] child    The child.
              */
-            virtual void copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const = 0;
+            virtual void copyRememberedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target, htd::vertex_t child) const = 0;
 
             /**
              *  Access the remembered vertex at the specific position. A remembered vertex is a vertex which is present in the bag of the given vertex and in at least one child bag.

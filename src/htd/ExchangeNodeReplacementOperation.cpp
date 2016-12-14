@@ -98,11 +98,11 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
 
         std::vector<htd::vertex_t> children;
 
-        decomposition.copyChildrenTo(children, node);
+        decomposition.copyChildrenTo(node, children);
 
         for (htd::vertex_t child : children)
         {
-            decomposition.copyRememberedVerticesTo(rememberedVertices, node, child);
+            decomposition.copyRememberedVerticesTo(node, rememberedVertices, child);
 
             if (bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
             {
@@ -152,11 +152,11 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
 
             std::vector<htd::vertex_t> children;
 
-            decomposition.copyChildrenTo(children, vertex);
+            decomposition.copyChildrenTo(vertex, children);
 
             for (htd::vertex_t child : children)
             {
-                decomposition.copyRememberedVerticesTo(rememberedVertices, vertex, child);
+                decomposition.copyRememberedVerticesTo(vertex, rememberedVertices, child);
 
                 if (bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
                 {
@@ -220,11 +220,11 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
 
         std::vector<htd::vertex_t> children;
 
-        decomposition.copyChildrenTo(children, node);
+        decomposition.copyChildrenTo(node, children);
 
         for (htd::vertex_t child : children)
         {
-            decomposition.copyRememberedVerticesTo(rememberedVertices, node, child);
+            decomposition.copyRememberedVerticesTo(node, rememberedVertices, child);
 
             if (bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
             {
@@ -274,11 +274,11 @@ void htd::ExchangeNodeReplacementOperation::apply(const htd::IMultiHypergraph & 
 
             std::vector<htd::vertex_t> children;
 
-            decomposition.copyChildrenTo(children, vertex);
+            decomposition.copyChildrenTo(vertex, children);
 
             for (htd::vertex_t child : children)
             {
-                decomposition.copyRememberedVerticesTo(rememberedVertices, vertex, child);
+                decomposition.copyRememberedVerticesTo(vertex, rememberedVertices, child);
 
                 if (bag.size() != rememberedVertices.size() || !htd::equal(bag.begin(), bag.end(), rememberedVertices.begin(), rememberedVertices.end()))
                 {

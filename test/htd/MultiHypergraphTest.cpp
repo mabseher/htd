@@ -187,7 +187,7 @@ TEST(MultiHypergraphTest, CheckSizeInitializedGraph2)
 
     std::vector<htd::vertex_t> neighbors1;
 
-    graph.copyNeighborsTo(neighbors1, 1);
+    graph.copyNeighborsTo((htd::vertex_t)1, neighbors1);
 
     ASSERT_EQ((std::size_t)0, neighbors1.size());
 

@@ -95,7 +95,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 
         std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
 
-        graph.copyNeighborsTo(currentNeighborhood, vertex);
+        graph.copyNeighborsTo(vertex, currentNeighborhood);
 
         weights[vertex] = 0;
 

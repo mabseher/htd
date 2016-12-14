@@ -460,7 +460,7 @@ htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::neighbors(htd::vertex_
     return htd::ConstCollection<htd::vertex_t>::getInstance(implementation_->neighborhood_[vertex - htd::Vertex::FIRST]);
 }
 
-void htd::MultiHypergraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::MultiHypergraph::copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 

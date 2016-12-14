@@ -662,7 +662,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::forgottenVertices(ht
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::PathDecomposition::copyForgottenVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
@@ -675,7 +675,7 @@ void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> 
     }
 }
 
-void htd::PathDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::PathDecomposition::copyForgottenVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target, htd::vertex_t child) const
 {
     HTD_ASSERT(isVertex(vertex))
     HTD_ASSERT(isChild(vertex, child))
@@ -800,7 +800,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::introducedVertices(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::PathDecomposition::copyIntroducedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
@@ -818,7 +818,7 @@ void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
     }
 }
 
-void htd::PathDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::PathDecomposition::copyIntroducedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target, htd::vertex_t child) const
 {
     HTD_ASSERT(isVertex(vertex))
     HTD_ASSERT(isChild(vertex, child))
@@ -923,7 +923,7 @@ htd::ConstCollection<htd::vertex_t> htd::PathDecomposition::rememberedVertices(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::PathDecomposition::copyRememberedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
@@ -933,7 +933,7 @@ void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>
     std::set_intersection(bag.begin(), bag.end(), childBag.begin(), childBag.end(), std::back_inserter(target));
 }
 
-void htd::PathDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::PathDecomposition::copyRememberedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target, htd::vertex_t child) const
 {
     HTD_ASSERT(isVertex(vertex))
     HTD_ASSERT(isChild(vertex, child))

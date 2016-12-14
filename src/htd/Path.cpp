@@ -444,7 +444,7 @@ htd::ConstCollection<htd::vertex_t> htd::Path::neighbors(htd::vertex_t vertex) c
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::Path::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::Path::copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
@@ -689,7 +689,7 @@ htd::ConstCollection<htd::vertex_t> htd::Path::children(htd::vertex_t vertex) co
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::Path::copyChildrenTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::Path::copyChildrenTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 

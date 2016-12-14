@@ -306,9 +306,9 @@ TEST(PathDecompositionTest, CheckSize3Path)
     ASSERT_EQ((std::size_t)0, childNeighbors2.size());
     ASSERT_EQ((std::size_t)0, newRootNeighbors2.size());
 
-    decomposition.copyNeighborsTo(rootNeighbors2, root);
-    decomposition.copyNeighborsTo(childNeighbors2, child);
-    decomposition.copyNeighborsTo(newRootNeighbors2, newRoot);
+    decomposition.copyNeighborsTo(root, rootNeighbors2);
+    decomposition.copyNeighborsTo(child, childNeighbors2);
+    decomposition.copyNeighborsTo(newRoot, newRootNeighbors2);
 
     ASSERT_EQ((std::size_t)2, rootNeighbors2.size());
     ASSERT_EQ((std::size_t)1, childNeighbors2.size());
@@ -745,7 +745,7 @@ TEST(PathDecompositionTest, CheckIntroduceNodeDetection)
 
     std::vector<htd::vertex_t> introducedVertices;
 
-    pd.copyIntroducedVerticesTo(introducedVertices, node11);
+    pd.copyIntroducedVerticesTo(node11, introducedVertices);
 
     ASSERT_EQ((std::size_t)1, introducedVertices.size());
     ASSERT_EQ((htd::vertex_t)1, introducedVertices[0]);
@@ -754,7 +754,7 @@ TEST(PathDecompositionTest, CheckIntroduceNodeDetection)
 
     ASSERT_EQ((std::size_t)0, introducedVertices.size());
 
-    pd.copyIntroducedVerticesTo(introducedVertices, node1, node11);
+    pd.copyIntroducedVerticesTo(node1, introducedVertices, node11);
 
     ASSERT_EQ((std::size_t)1, introducedVertices.size());
     ASSERT_EQ((htd::vertex_t)2, introducedVertices[0]);
@@ -795,18 +795,18 @@ TEST(PathDecompositionTest, CheckRememberedVertexDetection)
 
     std::vector<htd::vertex_t> rememberedVertices;
 
-    pd.copyRememberedVerticesTo(rememberedVertices, node11);
+    pd.copyRememberedVerticesTo(node11, rememberedVertices);
 
     ASSERT_EQ((std::size_t)0, rememberedVertices.size());
 
-    pd.copyRememberedVerticesTo(rememberedVertices, node1);
+    pd.copyRememberedVerticesTo(node1, rememberedVertices);
 
     ASSERT_EQ((std::size_t)1, rememberedVertices.size());
     ASSERT_EQ((htd::vertex_t)1, rememberedVertices[0]);
 
     rememberedVertices.clear();
 
-    pd.copyRememberedVerticesTo(rememberedVertices, node1, node11);
+    pd.copyRememberedVerticesTo(node1, rememberedVertices, node11);
 
     ASSERT_EQ((std::size_t)1, rememberedVertices.size());
     ASSERT_EQ((htd::vertex_t)1, rememberedVertices[0]);
@@ -880,7 +880,7 @@ TEST(PathDecompositionTest, CheckForgetNodeDetection)
 
     std::vector<htd::vertex_t> forgottenVertices;
 
-    pd.copyForgottenVerticesTo(forgottenVertices, node11);
+    pd.copyForgottenVerticesTo(node11, forgottenVertices);
 
     ASSERT_EQ((std::size_t)2, forgottenVertices.size());
     ASSERT_EQ((htd::vertex_t)3, forgottenVertices[0]);
@@ -888,7 +888,7 @@ TEST(PathDecompositionTest, CheckForgetNodeDetection)
 
     forgottenVertices.clear();
 
-    pd.copyForgottenVerticesTo(forgottenVertices, node11, node111);
+    pd.copyForgottenVerticesTo(node11, forgottenVertices, node111);
 
     ASSERT_EQ((std::size_t)2, forgottenVertices.size());
     ASSERT_EQ((htd::vertex_t)3, forgottenVertices[0]);

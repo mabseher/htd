@@ -686,7 +686,7 @@ void htd::TreeDecompositionOptimizationOperation::Implementation::removeCreatedN
 
     std::vector<htd::vertex_t> neighbors;
 
-    decomposition.copyNeighborsTo(neighbors, current);
+    decomposition.copyNeighborsTo(current, neighbors);
 
     for (htd::vertex_t neighbor : neighbors)
     {
@@ -711,7 +711,7 @@ void htd::TreeDecompositionOptimizationOperation::Implementation::removeCreatedN
 
         neighbors.clear();
 
-        decomposition.copyNeighborsTo(neighbors, current);
+        decomposition.copyNeighborsTo(current, neighbors);
 
         for (htd::vertex_t neighbor : neighbors)
         {

@@ -109,7 +109,7 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
 
             std::vector<htd::vertex_t> children;
 
-            decomposition.copyChildrenTo(children, node);
+            decomposition.copyChildrenTo(node, children);
 
             htd::index_t index = implementation_->limit_ - 1;
 
@@ -195,7 +195,7 @@ void htd::LimitChildCountOperation::apply(const htd::IMultiHypergraph & graph, h
 
             std::vector<htd::vertex_t> children;
 
-            decomposition.copyChildrenTo(children, vertex);
+            decomposition.copyChildrenTo(vertex, children);
 
             htd::index_t index = implementation_->limit_ - 1;
 

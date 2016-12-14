@@ -396,7 +396,7 @@ void htd::HypertreeDecompositionAlgorithm::Implementation::setCoveringEdges(cons
         {
             std::size_t forgottenVertexCount = forgottenVertices.size();
 
-            decomposition.copyForgottenVerticesTo(forgottenVertices, parent, vertex);
+            decomposition.copyForgottenVerticesTo(parent, forgottenVertices, vertex);
 
             std::inplace_merge(forgottenVertices.begin(), forgottenVertices.begin() + forgottenVertexCount, forgottenVertices.end());
 

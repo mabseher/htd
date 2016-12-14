@@ -161,11 +161,11 @@ htd::ConstCollection<htd::vertex_t> htd::Graph::neighbors(htd::vertex_t vertex) 
     return base_->neighbors(vertex);
 }
 
-void htd::Graph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::Graph::copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
-    base_->copyNeighborsTo(target, vertex);
+    base_->copyNeighborsTo(vertex, target);
 }
 
 htd::vertex_t htd::Graph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const

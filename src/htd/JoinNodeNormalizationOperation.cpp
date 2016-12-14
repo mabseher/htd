@@ -131,7 +131,7 @@ void htd::JoinNodeNormalizationOperation::apply(const htd::IMultiHypergraph & gr
 
         std::vector<htd::vertex_t> children;
 
-        decomposition.copyChildrenTo(children, node);
+        decomposition.copyChildrenTo(node, children);
 
         for (htd::vertex_t child : children)
         {
@@ -208,7 +208,7 @@ void htd::JoinNodeNormalizationOperation::apply(const htd::IMultiHypergraph & gr
 
             std::vector<htd::vertex_t> children;
 
-            decomposition.copyChildrenTo(children, vertex);
+            decomposition.copyChildrenTo(vertex, children);
 
             for (htd::vertex_t child : children)
             {

@@ -354,7 +354,7 @@ std::vector<htd::vertex_t> * htd::computeJoinVertices(const htd::ITreeDecomposit
 
         std::vector<htd::vertex_t> children;
 
-        decomposition.copyChildrenTo(children, vertex);
+        decomposition.copyChildrenTo(vertex, children);
 
         std::unordered_set<htd::vertex_t> visitedVertices;
 

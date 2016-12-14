@@ -123,7 +123,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
             {
                 std::vector<htd::vertex_t> forgottenVertices;
 
-                decomposition.copyForgottenVerticesTo(forgottenVertices, vertex, child);
+                decomposition.copyForgottenVerticesTo(vertex, forgottenVertices, child);
 
                 for (const htd::Hyperedge & hyperedge : htd::accessLabel<std::vector<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
                 {
@@ -269,7 +269,7 @@ void htd::InducedSubgraphLabelingOperation::apply(const htd::IMultiHypergraph & 
             {
                 std::vector<htd::vertex_t> forgottenVertices;
 
-                decomposition.copyForgottenVerticesTo(forgottenVertices, vertex, child);
+                decomposition.copyForgottenVerticesTo(vertex, forgottenVertices, child);
 
                 for (const htd::Hyperedge & hyperedge : htd::accessLabel<std::vector<htd::Hyperedge>>(decomposition.vertexLabel(htd::InducedSubgraphLabelingOperation::INDUCED_SUBGRAPH_LABEL_IDENTIFIER, child)))
                 {

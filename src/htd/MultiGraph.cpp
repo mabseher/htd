@@ -193,9 +193,9 @@ htd::ConstCollection<htd::vertex_t> htd::MultiGraph::neighbors(htd::vertex_t ver
     return implementation_->base_->neighbors(vertex);
 }
 
-void htd::MultiGraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::MultiGraph::copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
-    implementation_->base_->copyNeighborsTo(target, vertex);
+    implementation_->base_->copyNeighborsTo(vertex, target);
 }
 
 htd::vertex_t htd::MultiGraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const

@@ -270,7 +270,7 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
         {
             std::vector<htd::vertex_t> children;
 
-            decomposition.copyChildrenTo(children, vertex);
+            decomposition.copyChildrenTo(vertex, children);
 
             for (htd::vertex_t child : children)
             {
@@ -327,7 +327,7 @@ void htd::CompressionOperation::apply(const htd::IMultiHypergraph & graph, htd::
         {
             std::vector<htd::vertex_t> children;
 
-            decomposition.copyChildrenTo(children, vertex);
+            decomposition.copyChildrenTo(vertex, children);
 
             for (htd::vertex_t child : children)
             {

@@ -202,7 +202,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecompositionVerifier::violationsCo
 
         if (parent != htd::Vertex::UNKNOWN)
         {
-            decomposition.copyForgottenVerticesTo(forgottenBagContent, parent, vertex);
+            decomposition.copyForgottenVerticesTo(parent, forgottenBagContent, vertex);
 
             for (htd::vertex_t bagElement : bag)
             {

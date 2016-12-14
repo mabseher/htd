@@ -145,10 +145,10 @@ namespace htd
             /**
              *  Get the collection of all children of a given vertex in the graph and write it to the end of a given vector. The result is sorted in ascending order.
              *
-             *  @param[out] target  The target vector to which the children shall be appended.
              *  @param[in] vertex   The vertex for which the collection of children shall be returned.
+             *  @param[out] target  The target vector to which the children of the vertex shall be appended.
              */
-            virtual void copyChildrenTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const = 0;
+            virtual void copyChildrenTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const = 0;
 
             /**
              *  Access the child at the specific position.

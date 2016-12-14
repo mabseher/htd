@@ -413,9 +413,9 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_EQ((std::size_t)1, graph.neighbors((htd::vertex_t)2).size());
     ASSERT_EQ((std::size_t)0, graph.neighbors((htd::vertex_t)3).size());
 
-    graph.copyNeighborsTo(neighbors1, (htd::vertex_t)1);
-    graph.copyNeighborsTo(neighbors2, (htd::vertex_t)2);
-    graph.copyNeighborsTo(neighbors3, (htd::vertex_t)3);
+    graph.copyNeighborsTo((htd::vertex_t)1, neighbors1);
+    graph.copyNeighborsTo((htd::vertex_t)2, neighbors2);
+    graph.copyNeighborsTo((htd::vertex_t)3, neighbors3);
 
     ASSERT_EQ((std::size_t)1, neighbors1.size());
     ASSERT_EQ((std::size_t)1, neighbors2.size());
@@ -477,8 +477,8 @@ TEST(MultiGraphTest, CheckGraphModifications)
     ASSERT_EQ((std::size_t)0, graph.neighbors((htd::vertex_t)1).size());
     ASSERT_EQ((std::size_t)0, graph.neighbors((htd::vertex_t)2).size());
 
-    graph.copyNeighborsTo(neighbors1, (htd::vertex_t)1);
-    graph.copyNeighborsTo(neighbors2, (htd::vertex_t)2);
+    graph.copyNeighborsTo((htd::vertex_t)1, neighbors1);
+    graph.copyNeighborsTo((htd::vertex_t)2, neighbors2);
 
     ASSERT_EQ((std::size_t)0, neighbors1.size());
     ASSERT_EQ((std::size_t)0, neighbors2.size());

@@ -306,9 +306,9 @@ TEST(PathTest, CheckSize3Path)
     ASSERT_EQ((std::size_t)0, childNeighbors2.size());
     ASSERT_EQ((std::size_t)0, newRootNeighbors2.size());
 
-    path.copyNeighborsTo(rootNeighbors2, root);
-    path.copyNeighborsTo(childNeighbors2, child);
-    path.copyNeighborsTo(newRootNeighbors2, newRoot);
+    path.copyNeighborsTo(root, rootNeighbors2);
+    path.copyNeighborsTo(child, childNeighbors2);
+    path.copyNeighborsTo(newRoot, newRootNeighbors2);
 
     ASSERT_EQ((std::size_t)2, rootNeighbors2.size());
     ASSERT_EQ((std::size_t)1, childNeighbors2.size());

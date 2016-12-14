@@ -111,7 +111,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
             std::vector<htd::vertex_t> forgottenVertices;
 
-            decomposition.copyForgottenVerticesTo(forgottenVertices, node);
+            decomposition.copyForgottenVerticesTo(node, forgottenVertices);
 
             htd::index_t index = implementation_->limit_;
 
@@ -178,7 +178,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
             {
                 std::vector<htd::vertex_t> forgottenVertices;
 
-                decomposition.copyForgottenVerticesTo(forgottenVertices, vertex);
+                decomposition.copyForgottenVerticesTo(vertex, forgottenVertices);
 
                 htd::index_t index = implementation_->limit_;
 
@@ -261,7 +261,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
             std::vector<htd::vertex_t> forgottenVertices;
 
-            decomposition.copyForgottenVerticesTo(forgottenVertices, node);
+            decomposition.copyForgottenVerticesTo(node, forgottenVertices);
 
             htd::index_t index = implementation_->limit_;
 
@@ -330,7 +330,7 @@ void htd::LimitMaximumForgottenVertexCountOperation::apply(const htd::IMultiHype
 
                 std::vector<htd::vertex_t> forgottenVertices;
 
-                decomposition.copyForgottenVerticesTo(forgottenVertices, vertex);
+                decomposition.copyForgottenVerticesTo(vertex, forgottenVertices);
 
                 htd::index_t index = implementation_->limit_;
 

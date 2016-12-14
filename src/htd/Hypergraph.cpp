@@ -160,11 +160,11 @@ htd::ConstCollection<htd::vertex_t> htd::Hypergraph::neighbors(htd::vertex_t ver
     return base_->neighbors(vertex);
 }
 
-void htd::Hypergraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::Hypergraph::copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
-    base_->copyNeighborsTo(target, vertex);
+    base_->copyNeighborsTo(vertex, target);
 }
 
 htd::vertex_t htd::Hypergraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const

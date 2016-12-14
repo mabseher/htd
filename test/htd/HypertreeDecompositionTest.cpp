@@ -293,9 +293,9 @@ TEST(HypertreeDecompositionTest, CheckSize3Tree)
     ASSERT_EQ((std::size_t)0, childNeighbors2.size());
     ASSERT_EQ((std::size_t)0, newRootNeighbors2.size());
 
-    decomposition.copyNeighborsTo(rootNeighbors2, root);
-    decomposition.copyNeighborsTo(childNeighbors2, child);
-    decomposition.copyNeighborsTo(newRootNeighbors2, newRoot);
+    decomposition.copyNeighborsTo(root, rootNeighbors2);
+    decomposition.copyNeighborsTo(child, childNeighbors2);
+    decomposition.copyNeighborsTo(newRoot, newRootNeighbors2);
 
     ASSERT_EQ((std::size_t)2, rootNeighbors2.size());
     ASSERT_EQ((std::size_t)1, childNeighbors2.size());
@@ -862,7 +862,7 @@ TEST(HypertreeDecompositionTest, CheckIntroduceNodeDetection)
 
     std::vector<htd::vertex_t> introducedVertices;
 
-    td.copyIntroducedVerticesTo(introducedVertices, node12);
+    td.copyIntroducedVerticesTo(node12, introducedVertices);
 
     ASSERT_EQ((std::size_t)1, introducedVertices.size());
     ASSERT_EQ((htd::vertex_t)2, introducedVertices[0]);
@@ -871,7 +871,7 @@ TEST(HypertreeDecompositionTest, CheckIntroduceNodeDetection)
 
     ASSERT_EQ((std::size_t)0, introducedVertices.size());
 
-    td.copyIntroducedVerticesTo(introducedVertices, node12, node121);
+    td.copyIntroducedVerticesTo(node12, introducedVertices, node121);
 
     ASSERT_EQ((std::size_t)1, introducedVertices.size());
     ASSERT_EQ((htd::vertex_t)2, introducedVertices[0]);
@@ -917,11 +917,11 @@ TEST(HypertreeDecompositionTest, CheckRememberedVertexDetection)
 
     std::vector<htd::vertex_t> rememberedVertices;
 
-    td.copyRememberedVerticesTo(rememberedVertices, node12);
+    td.copyRememberedVerticesTo(node12, rememberedVertices);
 
     ASSERT_EQ((std::size_t)0, rememberedVertices.size());
 
-    td.copyRememberedVerticesTo(rememberedVertices, node1);
+    td.copyRememberedVerticesTo(node1, rememberedVertices);
 
     ASSERT_EQ((std::size_t)2, rememberedVertices.size());
     ASSERT_EQ((htd::vertex_t)1, rememberedVertices[0]);
@@ -929,7 +929,7 @@ TEST(HypertreeDecompositionTest, CheckRememberedVertexDetection)
 
     rememberedVertices.clear();
 
-    td.copyRememberedVerticesTo(rememberedVertices, node1, node12);
+    td.copyRememberedVerticesTo(node1, rememberedVertices, node12);
 
     ASSERT_EQ((std::size_t)1, rememberedVertices.size());
     ASSERT_EQ((htd::vertex_t)2, rememberedVertices[0]);
@@ -1007,7 +1007,7 @@ TEST(HypertreeDecompositionTest, CheckForgetNodeDetection)
 
     std::vector<htd::vertex_t> forgottenVertices;
 
-    td.copyForgottenVerticesTo(forgottenVertices, node12);
+    td.copyForgottenVerticesTo(node12, forgottenVertices);
 
     ASSERT_EQ((std::size_t)2, forgottenVertices.size());
     ASSERT_EQ((htd::vertex_t)3, forgottenVertices[0]);
@@ -1015,7 +1015,7 @@ TEST(HypertreeDecompositionTest, CheckForgetNodeDetection)
 
     forgottenVertices.clear();
 
-    td.copyForgottenVerticesTo(forgottenVertices, node12, node121);
+    td.copyForgottenVerticesTo(node12, forgottenVertices, node121);
 
     ASSERT_EQ((std::size_t)2, forgottenVertices.size());
     ASSERT_EQ((htd::vertex_t)3, forgottenVertices[0]);

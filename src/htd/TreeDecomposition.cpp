@@ -645,7 +645,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::forgottenVertices(ht
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::TreeDecomposition::copyForgottenVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
@@ -658,7 +658,7 @@ void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> 
     std::set_difference(childBagContent.begin(), childBagContent.end(), bag.begin(), bag.end(), std::back_inserter(target));
 }
 
-void htd::TreeDecomposition::copyForgottenVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::TreeDecomposition::copyForgottenVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target, htd::vertex_t child) const
 {
     HTD_ASSERT(isVertex(vertex))
     HTD_ASSERT(isChild(vertex, child))
@@ -769,7 +769,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::introducedVertices(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::TreeDecomposition::copyIntroducedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
@@ -782,7 +782,7 @@ void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t>
     std::set_difference(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end(), std::back_inserter(target));
 }
 
-void htd::TreeDecomposition::copyIntroducedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::TreeDecomposition::copyIntroducedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target, htd::vertex_t child) const
 {
     HTD_ASSERT(isVertex(vertex))
     HTD_ASSERT(isChild(vertex, child))
@@ -893,7 +893,7 @@ htd::ConstCollection<htd::vertex_t> htd::TreeDecomposition::rememberedVertices(h
     return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
-void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::TreeDecomposition::copyRememberedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
@@ -906,7 +906,7 @@ void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t>
     std::set_intersection(bag.begin(), bag.end(), childBagContent.begin(), childBagContent.end(), std::back_inserter(target));
 }
 
-void htd::TreeDecomposition::copyRememberedVerticesTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex, htd::vertex_t child) const
+void htd::TreeDecomposition::copyRememberedVerticesTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target, htd::vertex_t child) const
 {
     HTD_ASSERT(isVertex(vertex))
     HTD_ASSERT(isChild(vertex, child))

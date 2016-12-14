@@ -280,11 +280,11 @@ htd::ConstCollection<htd::vertex_t> htd::DirectedMultiGraph::neighbors(htd::vert
     return implementation_->base_->neighbors(vertex);
 }
 
-void htd::DirectedMultiGraph::copyNeighborsTo(std::vector<htd::vertex_t> & target, htd::vertex_t vertex) const
+void htd::DirectedMultiGraph::copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(isVertex(vertex))
 
-    implementation_->base_->copyNeighborsTo(target, vertex);
+    implementation_->base_->copyNeighborsTo(vertex, target);
 }
 
 htd::vertex_t htd::DirectedMultiGraph::neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const

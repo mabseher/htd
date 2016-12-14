@@ -121,7 +121,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                 std::vector<htd::vertex_t> introducedVertices;
 
-                decomposition.copyIntroducedVerticesTo(introducedVertices, node);
+                decomposition.copyIntroducedVerticesTo(node, introducedVertices);
 
                 htd::index_t index = implementation_->limit_;
 
@@ -238,7 +238,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                     std::vector<htd::vertex_t> introducedVertices;
 
-                    decomposition.copyIntroducedVerticesTo(introducedVertices, node);
+                    decomposition.copyIntroducedVerticesTo(node, introducedVertices);
 
                     htd::index_t index = implementation_->limit_;
 
@@ -366,7 +366,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                 std::vector<htd::vertex_t> introducedVertices;
 
-                decomposition.copyIntroducedVerticesTo(introducedVertices, node);
+                decomposition.copyIntroducedVerticesTo(node, introducedVertices);
 
                 htd::index_t index = implementation_->limit_;
 
@@ -482,7 +482,7 @@ void htd::LimitMaximumIntroducedVertexCountOperation::apply(const htd::IMultiHyp
 
                     std::vector<htd::vertex_t> introducedVertices;
 
-                    decomposition.copyIntroducedVerticesTo(introducedVertices, node);
+                    decomposition.copyIntroducedVerticesTo(node, introducedVertices);
 
                     htd::index_t index = implementation_->limit_;
 

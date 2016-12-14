@@ -156,6 +156,24 @@ namespace htd
             HTD_API void setIterationCount(std::size_t iterationCount);
 
             /**
+             *  Getter for the maximum number of iterations without improvement after which the algorithm shall terminate (0=return after first non-improving decomposition was found).
+             *
+             *  @note The current non-improvement count is reset to 0 after each iteration resulting in an improved decomposition.
+             *
+             *  @return The maximum number of iterations without improvement after which the algorithm shall terminate.
+             */
+            HTD_API std::size_t nonImprovementLimit(void) const;
+
+            /**
+             *  Set the maximum number of iterations without improvement after which the algorithm shall terminate (0=return after first non-improving decomposition was found).
+             *
+             *  @note The current non-improvement count is reset to 0 after each iteration resulting in an improved decomposition.
+             *
+             *  @param[in] nonImprovementLimit  The maximum number of iterations without improvement after which the algorithm shall terminate.
+             */
+            HTD_API void setNonImprovementLimit(std::size_t nonImprovementLimit);
+
+            /**
              *  Check whether the computed decompositions shall contain only subset-maximal bags.
              *
              *  @return A boolean flag indicating whether the computed decompositions shall contain only subset-maximal bags.

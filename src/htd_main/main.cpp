@@ -71,7 +71,6 @@ htd_cli::OptionManager * createOptionManager(void)
         htd_cli::Choice * inputFormatChoice = new htd_cli::Choice("input", "Assume that the input graph is given in format <format>.\n  (See https://github.com/mabseher/htd/blob/master/FORMATS.md for information about the available input formats.)", "format");
 
         inputFormatChoice->addPossibility("gr", "Use the input format 'gr'.");
-        //inputFormatChoice->addPossibility("hg", "Use the input format 'hg'.");
         inputFormatChoice->addPossibility("lp", "Use the input format 'lp'.");
         inputFormatChoice->addPossibility("hgr", "Use the input format 'hgr'.");
 
@@ -86,7 +85,6 @@ htd_cli::OptionManager * createOptionManager(void)
         htd_cli::Choice * outputFormatChoice = new htd_cli::Choice("output", "Set the output format of the decomposition to <format>.\n  (See https://github.com/mabseher/htd/blob/master/FORMATS.md for information about the available output formats.)", "format");
 
         outputFormatChoice->addPossibility("td", "Use the output format 'td'.");
-        //outputFormatChoice->addPossibility("graphml", "Use the output format 'graphml'.");
         outputFormatChoice->addPossibility("human", "Provide a human-readable output of the decomposition.");
         outputFormatChoice->addPossibility("width", "Provide only the maximum bag size of the decomposition.");
 
@@ -118,11 +116,9 @@ htd_cli::OptionManager * createOptionManager(void)
 
         manager->registerOption(iterationOption, "Optimization Options");
 
-        /*
-        htd_cli::SingleValueOption * nonImprovementLimitOption = new htd_cli::SingleValueOption("non-improvement-limit", "Terminate the algorithm if more than <count> iterations did not lead to an improvement (-1 = infinite). (Default: -1)", "count");
+        htd_cli::SingleValueOption * patienceOption = new htd_cli::SingleValueOption("patience", "Terminate the algorithm if more than <amount> iterations did not lead to an improvement (-1 = infinite). (Default: -1)", "amount");
 
-        manager->registerOption(nonImprovementLimitOption, "Optimization Options");
-        */
+        manager->registerOption(patienceOption, "Optimization Options");
 
         htd_cli::Option * printProgressOption = new htd_cli::Option("print-opt-progress", "Print progress whenever a new optimal decomposition is found.");
 
@@ -173,7 +169,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
     const htd_cli::SingleValueOption & iterationOption = optionManager.accessSingleValueOption("iterations");
 
-    //const htd_cli::SingleValueOption & nonImprovementLimitOption = optionManager.accessSingleValueOption("non-improvement-limit");
+    const htd_cli::SingleValueOption & patienceOption = optionManager.accessSingleValueOption("patience");
 
     const htd_cli::Option & printProgressOption = optionManager.accessOption("print-opt-progress");
 
@@ -335,20 +331,19 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
         }
     }
 
-    /*
     if (ret)
     {
-        if (nonImprovementLimitOption.used())
+        if (patienceOption.used())
         {
             if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
             {
                 std::size_t index = 0;
 
-                const std::string & value = nonImprovementLimitOption.value();
+                const std::string & value = patienceOption.value();
 
                 if (value.empty() || (value != "-1" && value.find_first_not_of("01234567890") != std::string::npos))
                 {
-                    std::cerr << "INVALID MAXIMUM NUMBER OF NON-IMPROVED DECOMPOSITIONS: " << nonImprovementLimitOption.value() << std::endl;
+                    std::cerr << "INVALID LEVEL OF PATIENCE: " << patienceOption.value() << std::endl;
 
                     ret = false;
                 }
@@ -359,7 +354,7 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
                     if (index != value.length())
                     {
-                        std::cerr << "INVALID MAXIMUM NUMBER OF NON-IMPROVED DECOMPOSITIONS: " << value << std::endl;
+                        std::cerr << "INVALID LEVEL OF PATIENCE: " << value << std::endl;
 
                         ret = false;
                     }
@@ -367,13 +362,12 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
             }
             else
             {
-                std::cerr << "INVALID PROGRAM CALL: Option --non-improvement-limit may only be used when option --opt is set to \"width\"!" << std::endl;
+                std::cerr << "INVALID PROGRAM CALL: Option --patience may only be used when option --opt is set to \"width\"!" << std::endl;
 
                 ret = false;
             }
         }
     }
-    */
 
     if (ret)
     {
@@ -895,7 +889,7 @@ int main(int argc, const char * const * const argv)
 
         const htd_cli::SingleValueOption & instanceOption = optionManager->accessSingleValueOption("instance");
 
-        //const htd_cli::SingleValueOption & nonImprovementLimitOption = optionManager->accessSingleValueOption("non-improvement-limit");
+        const htd_cli::SingleValueOption & patienceOption = optionManager->accessSingleValueOption("patience");
 
         const htd_cli::Option & printProgressOption = optionManager->accessOption("print-opt-progress");
 
@@ -994,22 +988,24 @@ int main(int argc, const char * const * const argv)
                     {
                         baseAlgorithm->setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
                     }
-
-                    algorithm.addDecompositionAlgorithm(baseAlgorithm);
-
-                    /*
-                    if (nonImprovementLimitOption.used())
+                    else
                     {
-                        if (std::string(nonImprovementLimitOption.value()) == "-1")
+                        baseAlgorithm->setIterationCount(10);
+                    }
+
+                    if (patienceOption.used())
+                    {
+                        if (std::string(patienceOption.value()) == "-1")
                         {
-                            algorithm.setNonImprovementLimit((std::size_t)-1);
+                            baseAlgorithm->setNonImprovementLimit((std::size_t)-1);
                         }
                         else
                         {
-                            algorithm.setNonImprovementLimit(std::stoul(nonImprovementLimitOption.value(), nullptr, 10));
+                            baseAlgorithm->setNonImprovementLimit(std::stoul(patienceOption.value(), nullptr, 10));
                         }
                     }
-                    */
+
+                    algorithm.addDecompositionAlgorithm(baseAlgorithm);
 
                     const std::string & inputFormat = inputFormatChoice.value();
 
@@ -1052,48 +1048,6 @@ int main(int argc, const char * const * const argv)
                             minimizeWidth(*libraryInstance, algorithm, importer.import(std::cin), *exporter, printProgressOption.used(), outputFormat);
                         }
                     }
-
-                    /*
-                    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, libraryInstance->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm(libraryInstance), WidthMinimizingFitnessFunction());
-
-                    if (iterationOption.used())
-                    {
-                        algorithm.setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
-                    }
-
-                    if (nonImprovementLimitOption.used())
-                    {
-                        if (std::string(nonImprovementLimitOption.value()) == "-1")
-                        {
-                            algorithm.setNonImprovementLimit((std::size_t)-1);
-                        }
-                        else
-                        {
-                            algorithm.setNonImprovementLimit(std::stoul(nonImprovementLimitOption.value(), nullptr, 10));
-                        }
-                    }
-
-                    const std::string & inputFormat = inputFormatChoice.value();
-
-                    if (inputFormat == "gr")
-                    {
-                        htd_main::GrFormatImporter importer(libraryInstance);
-
-                        optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
-                    }
-                    else if (inputFormat == "lp")
-                    {
-                        htd_main::LpFormatImporter importer(libraryInstance);
-
-                        optimizeNamed(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
-                    }
-                    else if (inputFormat == "hgr")
-                    {
-                        htd_main::HgrFormatImporter importer(libraryInstance);
-
-                        optimize(*libraryInstance, algorithm, importer, *exporter, printProgressOption.used(), outputFormat);
-                    }
-                    */
                 }
                 else
                 {

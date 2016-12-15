@@ -47,13 +47,13 @@ htd_cli::OptionManager * createOptionManager(void)
 
     try
     {
-        htd_cli::Option * versionOption = new htd_cli::Option("version", "Print version information and exit.", 'v');
-
-        manager->registerOption(versionOption, "General Options");
-
         htd_cli::Option * helpOption = new htd_cli::Option("help", "Print usage information and exit.", 'h');
 
         manager->registerOption(helpOption, "General Options");
+
+        htd_cli::Option * versionOption = new htd_cli::Option("version", "Print version information and exit.", 'v');
+
+        manager->registerOption(versionOption, "General Options");
 
         htd_cli::SingleValueOption * seedOption = new htd_cli::SingleValueOption("seed", "Set the seed for the random number generator to <seed>.", "seed", 's');
 

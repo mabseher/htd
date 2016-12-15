@@ -55,6 +55,13 @@ struct htd_main::LpFormatImporter::Implementation
      *  The management instance to which the current object instance belongs.
      */
     const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  Remove all leading and trailing whitespaces from a given string.
+     *
+     *  @param[in] value    The string which shall be trimmed.
+     */
+    void trim(std::string & value);
 };
 
 htd_main::LpFormatImporter::LpFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -115,13 +122,19 @@ htd::NamedMultiHypergraph<std::string, std::string> * htd_main::LpFormatImporter
                     
                     while (nextPosition != std::string::npos)
                     {
-                        hyperedge.push_back(line.substr(0, nextPosition));
+                        std::string element = line.substr(0, nextPosition);
+
+                        this->implementation_->trim(element);
+
+                        hyperedge.push_back(element);
                         
                         line.erase(0, nextPosition + 1);
                         
                         nextPosition = line.find(",");
                     }
-                    
+
+                    this->implementation_->trim(line);
+
                     if (line.length() > 0)
                     {
                         hyperedge.push_back(line);
@@ -148,6 +161,8 @@ htd::NamedMultiHypergraph<std::string, std::string> * htd_main::LpFormatImporter
                         line.erase(finishPosition, std::string(").").length());
                         line.erase(0, startPosition);
 
+                        this->implementation_->trim(line);
+
                         ret->addVertex(line);
                     }
                 }
@@ -167,6 +182,12 @@ htd::NamedMultiHypergraph<std::string, std::string> * htd_main::LpFormatImporter
     }
     
     return ret;
+}
+
+void htd_main::LpFormatImporter::Implementation::trim(std::string & value)
+{
+    value.erase(0, value.find_first_not_of(" \t\n\r\f\v"));
+    value.erase(value.find_last_not_of(" \t\n\r\f\v") + 1);
 }
 
 #endif /* HTD_MAIN_LPFORMATIMPORTER_CPP */

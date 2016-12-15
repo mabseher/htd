@@ -60,21 +60,10 @@ struct htd::MinDegreeOrderingAlgorithm::Implementation
     const htd::LibraryInstance * managementInstance_;
 
     /**
-     *  Update the pool of vertices with minimum degree.
-     *
-     *  @param[in] vertex           The vertex whose degree shall be updated.
-     *  @param[in] degree           The new degree of the given vertex.
-     *  @param[in] pool             The pool of vertices with minimum degree.
-     *  @param[in,out] minDegree    A reference to a variable representing the minimum degree. This information is updated if degree < minDegree.
-     */
-    static void updatePool(htd::vertex_t vertex, std::size_t degree, std::unordered_set<htd::vertex_t> & pool, std::size_t & minDegree);
-
-    /**
      *  Structure representing the pre-processed input for the algorithm.
      *
-     *  The pre-processing step consists of replacing the vertex identifiers by indices starting at 0 so that vectors
-     *  instead of maps can be used for efficiently accessing information. Additionally, the pool of vertices with
-     *  minimum degree is initialized.
+     *  The pre-processing step consists of replacing the vertex identifiers by indices starting
+     *  at 0 so that vectors instead of maps can be used for efficiently accessing information.
      */
     struct PreparedInput
     {
@@ -197,7 +186,7 @@ struct htd::MinDegreeOrderingAlgorithm::Implementation
          *  @param[in] managementInstance   The management instance to which the new algorithm belongs.
          *  @param[in] graph                The input graph which shall be pre-processed.
          */
-        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::IMultiHypergraph & graph) : minDegree((std::size_t)-1), vertexNames(), pool(), neighborhood()
+        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::IMultiHypergraph & graph) : vertexNames(), neighborhood()
         {
             HTD_UNUSED(managementInstance)
 
@@ -208,11 +197,6 @@ struct htd::MinDegreeOrderingAlgorithm::Implementation
             neighborhood.resize(size);
 
             initialize(graph, vertexNames, neighborhood);
-
-            for (htd::vertex_t vertex = 0; vertex < size; ++vertex)
-            {
-                updatePool(vertex, neighborhood[vertex].size(), pool, minDegree);
-            }
         }
 
         ~PreparedInput()
@@ -221,19 +205,9 @@ struct htd::MinDegreeOrderingAlgorithm::Implementation
         }
 
         /**
-         *  The minimum degree of all vertices.
-         */
-        std::size_t minDegree;
-
-        /**
          *  The actual identifiers of the vertices.
          */
         std::vector<htd::vertex_t> vertexNames;
-
-        /**
-         *  The pool of vertices with minimum degree.
-         */
-        std::unordered_set<htd::vertex_t> pool;
 
         /**
          *  A vector containing the neighborhood of each of the vertices.
@@ -251,6 +225,37 @@ struct htd::MinDegreeOrderingAlgorithm::Implementation
      *  @return The maximum bag size of the decomposition which is obtained via bucket elimination using the input graph and the resulting ordering.
      */
     std::size_t writeOrderingTo(const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
+
+    /**
+     *  Get a random vertex having minimum degree.
+     *
+     *  @param[in] vertices     The set of vertices which shall be considered.
+     *  @param[in] neighborhood A vector containing the neighborhood of each of the vertices.
+     *  @param[out] pool        The vertex pool which shall be filled with all vertices of minimum degree.
+     */
+    void fillMinDegreePool(const std::unordered_set<htd::vertex_t> & vertices, const std::vector<std::vector<htd::vertex_t>> & neighborhood, std::vector<htd::vertex_t> & pool) const HTD_NOEXCEPT
+    {
+        std::size_t min = (std::size_t)-1;
+
+        pool.clear();
+
+        for (htd::vertex_t vertex : vertices)
+        {
+            std::size_t degree = neighborhood[vertex].size();
+
+            if (degree <= min)
+            {
+                if (degree < min)
+                {
+                    min = degree;
+
+                    pool.clear();
+                }
+
+                pool.push_back(vertex);
+            }
+        }
+    }
 };
 
 htd::MinDegreeOrderingAlgorithm::MinDegreeOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -305,10 +310,6 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
     std::size_t size = input.vertexNames.size();
 
-    std::size_t minDegree = input.minDegree;
-
-    std::unordered_set<htd::vertex_t> pool(input.pool.begin(), input.pool.end());
-
     std::unordered_set<htd::vertex_t> vertices(size);
 
     for (htd::vertex_t vertex = 0; vertex < size; ++vertex)
@@ -322,23 +323,11 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
     std::vector<htd::vertex_t> difference;
 
+    std::vector<htd::vertex_t> pool;
+
     while (size > 0 && ret <= maxBagSize && !managementInstance_->isTerminated())
     {
-        if (pool.empty())
-        {
-            minDegree = (std::size_t)-1;
-    
-            for (htd::vertex_t vertex : vertices)
-            {
-                updatePool(vertex, neighborhood[vertex].size(), pool, minDegree);
-            }
-        }
-
-        DEBUGGING_CODE_LEVEL2(
-        std::cout << "POOL (DEGREE=" << min << "): ";
-        htd::print(pool, false);
-        std::cout << std::endl;
-        )
+        fillMinDegreePool(vertices, neighborhood, pool);
 
         htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(pool);
 
@@ -349,19 +338,7 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
             ret = selectedNeighborhood.size();
         }
 
-        pool.erase(selectedVertex);
-
         vertices.erase(selectedVertex);
-
-        if (pool.empty())
-        {
-            minDegree = (std::size_t)-1;
-
-            for (htd::vertex_t vertex : vertices)
-            {
-                updatePool(vertex, neighborhood[vertex].size(), pool, minDegree);
-            }
-        }
 
         if (selectedNeighborhood.size() > 1)
         {
@@ -397,16 +374,7 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
                                            currentNeighborhood.end());
                     }
 
-                    if (currentNeighborhood.size() > minDegree)
-                    {
-                        pool.erase(neighbor);
-                    }
-
                     difference.clear();
-                }
-                else
-                {
-                    updatePool(neighbor, currentNeighborhood.size(), pool, minDegree);
                 }
             }
         }
@@ -449,20 +417,5 @@ htd::IWidthLimitableOrderingAlgorithm * htd::MinDegreeOrderingAlgorithm::cloneWi
     return new htd::MinDegreeOrderingAlgorithm(implementation_->managementInstance_);
 }
 #endif
-
-void htd::MinDegreeOrderingAlgorithm::Implementation::updatePool(htd::vertex_t vertex, std::size_t degree, std::unordered_set<htd::vertex_t> & pool, std::size_t & minDegree)
-{
-    if (degree <= minDegree)
-    {
-        if (degree < minDegree)
-        {
-            minDegree = degree;
-
-            pool.clear();
-        }
-
-        pool.insert(vertex);
-    }
-}
 
 #endif /* HTD_HTD_MINDEGREEORDERINGALGORITHM_CPP */

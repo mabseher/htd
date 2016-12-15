@@ -24,12 +24,13 @@ For using **htd** via the command-line interface there is the front-end applicat
 
 A program call for **htd_main** is of the following form:
 
-`./htd_main [-h] [-s <SEED>] [--type <DECOMPOSITION_TYPE>] [--input <FORMAT>] [--output <FORMAT>] [--strategy <ALGORITHM>] [--opt <CRITERION>] [--iterations <LIMIT>] [--print-opt-progress] < $FILE`
+`./htd_main [-h] [-v] [-s <SEED>] [--type <DECOMPOSITION_TYPE>] [--input <FORMAT>] [--output <FORMAT>] [--strategy <ALGORITHM>] [--opt <CRITERION>] [--iterations <LIMIT>] [--print-opt-progress] < $FILE`
 
 Options are organized in the following groups:
 
 * General Options:
   * `--help, -h :                      Print usage information and exit.`
+  * `--version, -v :                   Print version information and exit.`
   * `--seed, -s <seed> :               Set the seed for the random number generator to <seed>.`
 
 * Decomposition Options:
@@ -38,19 +39,23 @@ Options are organized in the following groups:
       * `.) tree      : Compute a tree decomposition of the input graph. (default)`
       * `.) hypertree : Compute a hypertree decomposition of the input graph.`
 
-  * Input-Specific Options:
-    * `--input <format> :              Assume that the input graph is given in format <format>.` (See [FORMATS](https://github.com/mabseher/htd/blob/master/FORMATS.md) for information about the available input formats.)
-      * `Permitted Values:`
-        * `.) gr  : Use the input format 'gr'. (default)`
-        * `.) lp  : Use the input format 'lp'.`
-        * `.) hgr : Use the input format 'hgr'.`
+* Input-Specific Options:
+  * `--input <format> :                Assume that the input graph is given in format <format>.` 
+    * `Permitted Values:`
+      * `.) gr  : Use the input format 'gr'. (default)`
+      * `.) lp  : Use the input format 'lp'.`
+      * `.) hgr : Use the input format 'hgr'.`
+        
+    (See [FORMATS](https://github.com/mabseher/htd/blob/master/FORMATS.md) for information about the available input formats.)
 
 * Output-Specific Options:
-  * `--output <format> :               Set the output format of the decomposition to <format>.` (See [FORMATS](https://github.com/mabseher/htd/blob/master/FORMATS.md) for information about the available output formats.)
+  * `--output <format> :               Set the output format of the decomposition to <format>.`
     * `Permitted Values:`
       * `.) td    : Use the output format 'td'. (default)`
       * `.) human : Provide a human-readable output of the decomposition.`
       * `.) width : Provide only the maximum bag size of the decomposition.`
+  
+    (See [FORMATS](https://github.com/mabseher/htd/blob/master/FORMATS.md) for information about the available output formats.)
 
 * Algorithm Options:
   * `--strategy <algorithm> :          Set the decomposition strategy which shall be used to <algorithm>.`
@@ -66,6 +71,7 @@ Options are organized in the following groups:
       * `.) none  : Do not perform any optimization. (default)`
       * `.) width : Minimize the maximum bag size of the computed decomposition.`
   * `--iterations <count> :            Set the number of iterations to be performed during optimization to <count> (0 = infinite). (Default: 10)`
+  * `--patience <amount>:              Terminate the algorithm if more than <amount> iterations did not lead to an improvement (-1 = infinite). (Default: -1)`
   * `--print-opt-progress :            Print progress whenever a new optimal decomposition is found.`
 
 ### Using htd as a developer

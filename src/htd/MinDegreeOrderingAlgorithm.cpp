@@ -350,7 +350,19 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
         }
 
         pool.erase(selectedVertex);
-        
+
+        vertices.erase(selectedVertex);
+
+        if (pool.empty())
+        {
+            minDegree = (std::size_t)-1;
+
+            for (htd::vertex_t vertex : vertices)
+            {
+                updatePool(vertex, neighborhood[vertex].size(), pool, minDegree);
+            }
+        }
+
         if (selectedNeighborhood.size() > 1)
         {
             selectedNeighborhood.erase(std::lower_bound(selectedNeighborhood.begin(), selectedNeighborhood.end(), selectedVertex));
@@ -383,10 +395,9 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
                         std::inplace_merge(currentNeighborhood.begin(),
                                            currentNeighborhood.begin() + middle,
                                            currentNeighborhood.end());
-
                     }
 
-                    if (currentNeighborhood.size() - 1 > minDegree)
+                    if (currentNeighborhood.size() > minDegree)
                     {
                         pool.erase(neighbor);
                     }
@@ -401,8 +412,6 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
         }
 
         selectedNeighborhood.clear();
-        
-        vertices.erase(selectedVertex);
 
         size--;
 

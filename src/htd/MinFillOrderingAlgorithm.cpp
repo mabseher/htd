@@ -404,9 +404,21 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
         pool.erase(selectedVertex);
 
+        vertices.erase(selectedVertex);
+
         affectedVertices.clear();
 
         totalFill -= minFill;
+
+        if (pool.empty())
+        {
+            minFill = (std::size_t)-1;
+
+            for (htd::vertex_t vertex : vertices)
+            {
+                updatePool(vertex, fillValue[vertex], pool, minFill);
+            }
+        }
 
         selectedNeighborhood.erase(std::lower_bound(selectedNeighborhood.begin(), selectedNeighborhood.end(), selectedVertex));
 
@@ -601,6 +613,16 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                         if (fillUpdate > 0)
                         {
                             pool.erase(vertex);
+
+                            if (pool.empty())
+                            {
+                                minFill = (std::size_t)-1;
+
+                                for (htd::vertex_t vertex : vertices)
+                                {
+                                    updatePool(vertex, fillValue[vertex], pool, minFill);
+                                }
+                            }
                         }
                         else
                         {
@@ -694,8 +716,6 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
         std::vector<htd::vertex_t>().swap(additionalNeighbors[selectedVertex]);
         std::vector<htd::vertex_t>().swap(unaffectedNeighbors[selectedVertex]);
         std::vector<htd::vertex_t>().swap(existingNeighbors[selectedVertex]);
-
-        vertices.erase(selectedVertex);
 
         target.push_back(vertexNames[selectedVertex]);
 

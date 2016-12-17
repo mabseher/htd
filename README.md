@@ -47,6 +47,7 @@ Options are organized in the following groups:
       * `.) hgr : Use the input format 'hgr'.`
         
     (See [FORMATS](https://github.com/mabseher/htd/blob/master/FORMATS.md) for information about the available input formats.)
+  * `--instance <instance> :           Read the input graph from file <instance>.`
 
 * Output-Specific Options:
   * `--output <format> :               Set the output format of the decomposition to <format>.`
@@ -161,7 +162,7 @@ int main(int, const char * const * const)
 
     // Create a new graph instance which can handle (multi-)hyperedges.
     htd::IMutableMultiHypergraph * graph =
-        manager->multiHypergraphFactory().getMultiHypergraph();
+        manager->multiHypergraphFactory().createInstance();
 
     /**
      *  Add five vertices to the sample graph.
@@ -207,15 +208,15 @@ int main(int, const char * const * const)
     operation->addManipulationOperation(new htd::NormalizationOperation(manager.get()));
 
     /**
-      * Optionally, we can set the vertex elimination algorithm.
-      * We decide to use the min-degree heuristic in this case.
-      */
+     *  Optionally, we can set the vertex elimination algorithm.
+     *  We decide to use the min-degree heuristic in this case.
+     */
     manager->orderingAlgorithmFactory()
         .setConstructionTemplate(new htd::MinDegreeOrderingAlgorithm(manager.get()));
 
     // Get the default tree decomposition algorithm. One can also choose a custom one.
     htd::ITreeDecompositionAlgorithm * baseAlgorithm =
-        manager->treeDecompositionAlgorithmFactory().getTreeDecompositionAlgorithm();
+        manager->treeDecompositionAlgorithmFactory().createInstance();
 
     /**
      *  Set the optimization operation as manipulation operation in order

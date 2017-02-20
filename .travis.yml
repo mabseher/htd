@@ -23,7 +23,7 @@ install:
     mkdir -p "${DEPENDENCIES_DIRECTORY}/gcov/bin"
     export PATH=${DEPENDENCIES_DIRECTORY}/gcov/bin:${PATH}
     ln -fs /usr/bin/gcov-4.9 "${DEPENDENCIES_DIRECTORY}/gcov/bin/gcov" && gcov --version
-    LCOV_URL="http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.12.orig.tar.gz"
+    LCOV_URL="http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.13.orig.tar.gz"
     mkdir lcov && travis_retry wget --no-check-certificate --quiet -O - ${LCOV_URL} | tar --strip-components=1 -xz -C lcov
     export PATH=${DEPENDENCIES_DIRECTORY}/lcov/bin:${PATH}
     lcov --version

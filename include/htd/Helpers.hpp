@@ -733,7 +733,7 @@ namespace htd
      *
      *  @return The collection of all vertices which are present in at least two child bags. The result is sorted in ascending order.
      */
-    std::vector<htd::vertex_t> * computeJoinVertices(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex);
+    HTD_API std::vector<htd::vertex_t> * computeJoinVertices(const htd::ITreeDecomposition & decomposition, htd::vertex_t vertex);
 }
 
 namespace std

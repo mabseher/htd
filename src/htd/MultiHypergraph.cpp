@@ -828,10 +828,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
     auto position = std::unique(elementsBegin, elementsEnd);
 
-    for (auto it = position; it != elementsEnd; ++it)
-    {
-        implementation_->selfLoops_.insert(*it);
-    }
+    implementation_->selfLoops_.insert(position, elementsEnd);
 
     elementsEnd = sortedElements.erase(position, elementsEnd);
 

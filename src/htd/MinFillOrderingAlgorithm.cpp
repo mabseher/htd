@@ -29,6 +29,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
 #include <htd/VectorAdapter.hpp>
+#include <htd/OrderingAlgorithmPreprocessor.hpp>
 
 #include <algorithm>
 #include <unordered_map>
@@ -128,122 +129,24 @@ struct htd::MinFillOrderingAlgorithm::Implementation
         }
 
         /**
-         *  Inititialize the data structure.
-         *
-         *  @param[in] graph            The input graph.
-         *  @param[in,out] vertexNames  A vector which holds the vertex identifier corresponding to an index. This information is initialized by the function.
-         *  @param[in,out] neighborhood The neighborhood relation of the input graph where the vertex identifiers are replaced by their zero-based indices. This information is initialized by the function.
-         */
-        void initialize(const htd::IMultiHypergraph & graph,
-                        std::vector<htd::vertex_t> & vertexNames,
-                        std::vector<std::vector<htd::vertex_t>> & neighborhood)
-        {
-            std::size_t size = graph.vertexCount();
-
-            if (size > 0)
-            {
-                if (graph.vertexAtPosition(size - 1) == static_cast<htd::vertex_t>(size))
-                {
-                    for (htd::index_t index = 0; index < size; ++index)
-                    {
-                        htd::vertex_t vertex = static_cast<htd::vertex_t>(index) + 1;
-
-                        htd::vertex_t mappedVertex = static_cast<htd::vertex_t>(index);
-
-                        vertexNames.push_back(vertex);
-
-                        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[mappedVertex];
-
-                        const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
-
-                        auto position = neighborCollection.begin();
-
-                        currentNeighborhood.reserve(neighborCollection.size() + 1);
-
-                        for (std::size_t remainder = neighborCollection.size(); remainder > 0; --remainder)
-                        {
-                            currentNeighborhood.push_back((*position) - 1);
-
-                            ++position;
-                        }
-
-                        auto position2 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), mappedVertex);
-
-                        if (position2 == currentNeighborhood.end() || *position2 != mappedVertex)
-                        {
-                            currentNeighborhood.insert(position2, mappedVertex);
-                        }
-                    }
-                }
-                else
-                {
-                    const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
-
-                    auto position = vertexCollection.begin();
-
-                    std::unordered_map<htd::vertex_t, htd::vertex_t> mapping(vertexCollection.size());
-
-                    for (std::size_t remainder = vertexCollection.size(); remainder > 0; --remainder)
-                    {
-                        htd::vertex_t vertex = *position;
-
-                        htd::vertex_t mappedVertex = registerVertex(vertex, mapping, vertexNames);
-
-                        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[mappedVertex];
-
-                        const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
-
-                        auto position2 = neighborCollection.begin();
-
-                        currentNeighborhood.reserve(neighborCollection.size() + 1);
-
-                        for (std::size_t remainder2 = neighborCollection.size(); remainder2 > 0; --remainder2)
-                        {
-                            currentNeighborhood.push_back(registerVertex(*position2, mapping, vertexNames));
-
-                            ++position2;
-                        }
-
-                        std::sort(currentNeighborhood.begin(), currentNeighborhood.end());
-
-                        auto position3 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), mappedVertex);
-
-                        if (position3 == currentNeighborhood.end() || *position3 != mappedVertex)
-                        {
-                            currentNeighborhood.insert(position3, mappedVertex);
-                        }
-
-                        ++position;
-                    }
-                }
-            }
-        }
-
-        /**
          *  Contructor for the PreparedInput data structure.
          *
          *  @param[in] managementInstance   The management instance to which the new algorithm belongs.
-         *  @param[in] graph                The input graph which shall be pre-processed.
+         *  @param[in] preparedInput        The input graph in pre-processed format.
          */
-        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::IMultiHypergraph & graph) : minFill((std::size_t)-1), totalFill(0), fillValue(), vertexNames(), pool(), neighborhood()
+        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::PreparedOrderingAlgorithmInput & preparedInput) : minFill((std::size_t)-1), totalFill(0), fillValue(), pool()
         {
             HTD_UNUSED(managementInstance)
 
-            std::size_t size = graph.vertexCount();
+            std::size_t size = preparedInput.vertexCount();
 
             fillValue.resize(size, 0);
 
-            vertexNames.reserve(size);
-
-            neighborhood.resize(size);
-
-            initialize(graph, vertexNames, neighborhood);
-
-            for (htd::vertex_t vertex = 0; vertex < size; ++vertex)
+            for (htd::vertex_t vertex : preparedInput.remainingVertices())
             {
-                std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+                const std::vector<htd::vertex_t> & currentNeighborhood = preparedInput.neighborhood(vertex);
 
-                std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(neighborhood, currentNeighborhood);
+                std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(preparedInput.neighborhood(), currentNeighborhood);
 
                 updatePool(vertex, currentFillValue, pool, minFill);
 
@@ -274,31 +177,22 @@ struct htd::MinFillOrderingAlgorithm::Implementation
         std::vector<std::size_t> fillValue;
 
         /**
-         *  The actual identifiers of the vertices.
-         */
-        std::vector<htd::vertex_t> vertexNames;
-
-        /**
          *  The pool of vertices with minimum fill value.
          */
         std::unordered_set<htd::vertex_t> pool;
-
-        /**
-         *  A vector containing the neighborhood of each of the vertices.
-         */
-        std::vector<std::vector<htd::vertex_t>> neighborhood;
     };
 
     /**
      *  Compute the vertex ordering of a given graph and write it to the end of a given vector.
      *
-     *  @param[in] input                The pre-processed input data for which the vertex ordering shall be computed.
+     *  @param[in] preparedInput        The input graph in pre-processed format.
+     *  @param[in] input                The pre-processed, algorithm-specific input data.
      *  @param[out] target              The target vector to which the computed ordering shall be appended.
      *  @param[in] maxBagSize           The upper bound for the maximum bag size of a decomposition based on the resulting ordering.
      *
      *  @return The maximum bag size of the decomposition which is obtained via bucket elimination using the input graph and the resulting ordering.
      */
-    std::size_t writeOrderingTo(const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
+    std::size_t writeOrderingTo(const htd::PreparedOrderingAlgorithmInput & preparedInput, const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
 };
 
 htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -318,12 +212,30 @@ htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::
 
 htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
 {
+    htd::OrderingAlgorithmPreprocessor preprocessor(implementation_->managementInstance_);
+
+    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph);
+
+    htd::VertexOrdering * ret = computeOrdering(graph, *preparedInput, maxBagSize, maxIterationCount);
+
+    delete preparedInput;
+
+    return ret;
+}
+
+htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput) const HTD_NOEXCEPT
+{
+    return computeOrdering(graph, preparedInput, (std::size_t)-1, 1);
+}
+
+htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
+{
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
     std::vector<htd::vertex_t> ordering;
     ordering.reserve(graph.vertexCount());
 
-    htd::MinFillOrderingAlgorithm::Implementation::PreparedInput input(managementInstance, graph);
+    htd::MinFillOrderingAlgorithm::Implementation::PreparedInput input(managementInstance, preparedInput);
 
     std::size_t iterations = 0;
 
@@ -333,7 +245,7 @@ htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::
     {
         ordering.clear();
 
-        currentMaxBagSize = implementation_->writeOrderingTo(input, ordering, maxBagSize);
+        currentMaxBagSize = implementation_->writeOrderingTo(preparedInput, input, ordering, maxBagSize);
 
         ++iterations;
     }
@@ -347,11 +259,11 @@ htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::
     return new htd::VertexOrdering(std::move(ordering), iterations);
 }
 
-std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT
+std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const htd::PreparedOrderingAlgorithmInput & preparedInput, const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT
 {
     std::size_t ret = 0;
 
-    std::size_t size = input.vertexNames.size();
+    std::size_t size = preparedInput.vertexCount();
 
     std::size_t minFill = input.minFill;
 
@@ -359,16 +271,11 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
     std::unordered_set<htd::vertex_t> vertices(size);
 
-    for (htd::vertex_t vertex = 0; vertex < size; ++vertex)
-    {
-        vertices.insert(vertex);
-    }
+    htd::fillSet(preparedInput.remainingVertices(), vertices);
 
     std::vector<std::size_t> fillValue(input.fillValue.begin(), input.fillValue.end());
 
-    std::vector<htd::vertex_t> vertexNames(input.vertexNames.begin(), input.vertexNames.end());
-
-    std::vector<std::vector<htd::vertex_t>> neighborhood(input.neighborhood.begin(), input.neighborhood.end());
+    std::vector<std::vector<htd::vertex_t>> neighborhood(preparedInput.neighborhood().begin(), preparedInput.neighborhood().end());
 
     std::size_t totalFill = input.totalFill;
 
@@ -380,6 +287,21 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
     std::vector<htd::vertex_t> affectedVertices;
     affectedVertices.reserve(size);
+
+    target.insert(target.end(),
+                  preparedInput.preprocessedEliminationOrdering().begin(),
+                  preparedInput.preprocessedEliminationOrdering().end());
+
+    ret = preparedInput.minTreeWidth() + 1;
+
+    size = preparedInput.remainingVertices().size();
+
+    for (htd::vertex_t vertex : vertices)
+    {
+        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+
+        currentNeighborhood.insert(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), vertex);
+    }
 
     while (totalFill > 0 && ret <= maxBagSize && !managementInstance_->isTerminated())
     {
@@ -717,7 +639,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
         std::vector<htd::vertex_t>().swap(unaffectedNeighbors[selectedVertex]);
         std::vector<htd::vertex_t>().swap(existingNeighbors[selectedVertex]);
 
-        target.push_back(vertexNames[selectedVertex]);
+        target.push_back(preparedInput.vertexName(selectedVertex));
 
         --size;
 
@@ -825,7 +747,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
             ret = neighborhoodSize;
         }
 
-        target.push_back(vertexNames[vertex]);
+        target.push_back(preparedInput.vertexName(vertex));
 
         vertices.erase(vertex);
 

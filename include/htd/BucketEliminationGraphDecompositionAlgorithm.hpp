@@ -28,9 +28,9 @@
 #include <htd/Globals.hpp>
 #include <htd/IGraphDecompositionAlgorithm.hpp>
 
-#include <htd/ILabelingFunction.hpp>
 #include <htd/IGraphDecompositionManipulationOperation.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
+#include <htd/PreparedOrderingAlgorithmInput.hpp>
 
 #include <utility>
 
@@ -62,7 +62,7 @@ namespace htd
             HTD_API BucketEliminationGraphDecompositionAlgorithm(const htd::LibraryInstance * const manager, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations);
 
             HTD_API virtual ~BucketEliminationGraphDecompositionAlgorithm();
-            
+
             HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
             HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
@@ -117,6 +117,87 @@ namespace htd
              *  @return A pair consisting of the new IGraphDecomposition object representing the decomposition of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
              */
             HTD_API std::pair<htd::IGraphDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const;
+
+            /**
+             *  Compute a decomposition of the given graph.
+             *
+             *  @param[in] graph            The input graph to decompose.
+             *  @param[in] preparedInput    The input graph in pre-processed format.
+             *
+             *  @return A new IGraphDecomposition object representing the decomposition of the given graph.
+             */
+            HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput) const;
+
+            /**
+             *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
+             *
+             *  @param[in] graph                    The input graph to decompose.
+             *  @param[in] preparedInput            The input graph in pre-processed format.
+             *  @param[in] manipulationOperations   The manipulation operations which shall be applied.
+             *
+             *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
+             *
+             *  @note When calling this method the control over the memory regions of the manipulation operations is transferred to the
+             *  decomposition algorithm. Deleting a manipulation operation provided to this method outside the decomposition algorithm
+             *  or assigning the same manipulation operation multiple times will lead to undefined behavior.
+             *
+             *  @return A new IGraphDecomposition object representing the decomposition of the given graph.
+             */
+            HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const;
+
+            /**
+             *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
+             *
+             *  @param[in] graph                        The input graph to decompose.
+             *  @param[in] preparedInput                The input graph in pre-processed format.
+             *  @param[in] manipulationOperationCount   The number of manipulation operations which are provided to this function.
+             *
+             *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
+             *
+             *  @note When calling this method the control over the memory regions of the manipulation operations is transferred to the
+             *  decomposition algorithm. Deleting a manipulation operation provided to this method outside the decomposition algorithm
+             *  or assigning the same manipulation operation multiple times will lead to undefined behavior.
+             *
+             *  @return A new IGraphDecomposition object representing the decomposition of the given graph.
+             */
+            HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, int manipulationOperationCount, ...) const;
+
+            /**
+             *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
+             *
+             *  @param[in] graph                    The input graph to decompose.
+             *  @param[in] preparedInput            The input graph in pre-processed format.
+             *  @param[in] maxBagSize               The upper bound for the maximum bag size of the decomposition.
+             *  @param[in] maxIterationCount        The maximum number of iterations resulting in a higher maximum bag size than maxBagSize after which a null-pointer is returned.
+             *
+             *  @note The bag size which is compared to maxBagSize is the maximum bag size of the decomposition BEFORE the manipulation operations are applied.
+             *  Therefore, the result of this function may have a maximum bag size exceeding maxBagSize if the requested manipulations create larger bags.
+             *
+             *  @return A pair consisting of the new IGraphDecomposition object representing the decomposition of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
+             */
+            HTD_API std::pair<htd::IGraphDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const;
+
+            /**
+             *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
+             *
+             *  @param[in] graph                    The input graph to decompose.
+             *  @param[in] preparedInput            The input graph in pre-processed format.
+             *  @param[in] manipulationOperations   The manipulation operations which shall be applied.
+             *  @param[in] maxBagSize               The upper bound for the maximum bag size of the decomposition.
+             *  @param[in] maxIterationCount        The maximum number of iterations resulting in a higher maximum bag size than maxBagSize after which a null-pointer is returned.
+             *
+             *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
+             *
+             *  @note When calling this method the control over the memory regions of the manipulation operations is transferred to the
+             *  decomposition algorithm. Deleting a manipulation operation provided to this method outside the decomposition algorithm
+             *  or assigning the same manipulation operation multiple times will lead to undefined behavior.
+             *
+             *  @note The bag size which is compared to maxBagSize is the maximum bag size of the decomposition BEFORE the manipulation operations are applied.
+             *  Therefore, the result of this function may have a maximum bag size exceeding maxBagSize if the requested manipulations create larger bags.
+             *
+             *  @return A pair consisting of the new IGraphDecomposition object representing the decomposition of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
+             */
+            HTD_API std::pair<htd::IGraphDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const;
 
             /**
              *  Set the ordering algorithm which shall be used to compute the vertex elimination ordering.

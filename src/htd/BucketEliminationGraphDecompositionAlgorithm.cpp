@@ -32,6 +32,7 @@
 #include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/GraphDecompositionFactory.hpp>
 #include <htd/IWidthLimitableOrderingAlgorithm.hpp>
+#include <htd/OrderingAlgorithmPreprocessor.hpp>
 
 #include <algorithm>
 #include <cstdarg>
@@ -118,12 +119,13 @@ struct htd::BucketEliminationGraphDecompositionAlgorithm::Implementation
      *  Compute a new mutable graph decompostion of the given graph.
      *
      *  @param[in] graph                The graph which shall be decomposed.
+     *  @param[in] preparedInput        The input graph in pre-processed format.
      *  @param[in] maxBagSize           The upper bound for the maximum bag size of the decomposition.
      *  @param[in] maxIterationCount    The maximum number of iterations resulting in a higher maximum bag size than maxBagSize after which a null-pointer is returned.
      *
      *  @return A pair consisting of a mutable graph decompostion of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
      */
-    std::pair<htd::IMutableGraphDecomposition *, std::size_t> computeMutableDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const;
+    std::pair<htd::IMutableGraphDecomposition *, std::size_t> computeMutableDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const;
 
     /**
      *  Get the vertex which is ranked first in the vertex elimination ordering.
@@ -369,7 +371,36 @@ std::pair<htd::IGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDe
 
 std::pair<htd::IGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const
 {
-    std::pair<htd::IMutableGraphDecomposition *, std::size_t> ret = implementation_->computeMutableDecomposition(graph, maxBagSize, maxIterationCount);
+    htd::OrderingAlgorithmPreprocessor preprocessor(implementation_->managementInstance_);
+
+    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph);
+
+    std::pair<htd::IGraphDecomposition *, std::size_t> ret =
+        computeDecomposition(graph, *preparedInput, manipulationOperations, maxBagSize, maxIterationCount);
+
+    delete preparedInput;
+
+    return ret;
+}
+
+htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput) const
+{
+    return computeDecomposition(graph, preparedInput, std::vector<htd::IDecompositionManipulationOperation *>());
+}
+
+htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
+{
+    return computeDecomposition(graph, preparedInput, manipulationOperations, (std::size_t)-1, 1).first;
+}
+
+std::pair<htd::IGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const
+{
+    return computeDecomposition(graph, preparedInput, std::vector<htd::IDecompositionManipulationOperation *>(), maxBagSize, maxIterationCount);
+}
+
+std::pair<htd::IGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const
+{
+    std::pair<htd::IMutableGraphDecomposition *, std::size_t> ret = implementation_->computeMutableDecomposition(graph, preparedInput, maxBagSize, maxIterationCount);
 
     htd::IMutableGraphDecomposition * decomposition = ret.first;
 
@@ -471,6 +502,24 @@ htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::co
     va_end(arguments);
 
     return computeDecomposition(graph, manipulationOperations);
+}
+
+htd::IGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, int manipulationOperationCount, ...) const
+{
+    va_list arguments;
+
+    va_start(arguments, manipulationOperationCount);
+
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+
+    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
+    {
+        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
+    }
+
+    va_end(arguments);
+
+    return computeDecomposition(graph, preparedInput, manipulationOperations);
 }
 
 void htd::BucketEliminationGraphDecompositionAlgorithm::setOrderingAlgorithm(htd::IOrderingAlgorithm * algorithm)
@@ -602,7 +651,7 @@ htd::BucketEliminationGraphDecompositionAlgorithm * htd::BucketEliminationGraphD
     return ret;
 }
 
-std::pair<htd::IMutableGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const
+std::pair<htd::IMutableGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const
 {
     htd::IMutableGraphDecomposition * ret = nullptr;
 
@@ -616,7 +665,7 @@ std::pair<htd::IMutableGraphDecomposition *, std::size_t> htd::BucketElimination
 
         do
         {
-            ordering = orderingAlgorithm_->computeOrdering(graph);
+            ordering = orderingAlgorithm_->computeOrdering(graph, preparedInput);
 
             if (ordering != nullptr)
             {
@@ -643,7 +692,7 @@ std::pair<htd::IMutableGraphDecomposition *, std::size_t> htd::BucketElimination
     }
     else
     {
-        htd::VertexOrdering * ordering = widthLimitableAlgorithm->computeOrdering(graph, maxBagSize, maxIterationCount);
+        htd::VertexOrdering * ordering = widthLimitableAlgorithm->computeOrdering(graph, preparedInput, maxBagSize, maxIterationCount);
 
         if (ordering != nullptr)
         {

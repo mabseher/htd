@@ -29,6 +29,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/MaximumCardinalitySearchOrderingAlgorithm.hpp>
 #include <htd/VectorAdapter.hpp>
+#include <htd/OrderingAlgorithmPreprocessor.hpp>
 
 #include <algorithm>
 #include <unordered_map>
@@ -72,40 +73,41 @@ htd::MaximumCardinalitySearchOrderingAlgorithm::~MaximumCardinalitySearchOrderin
 
 htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
-    std::size_t size = graph.vertexCount();
+    htd::OrderingAlgorithmPreprocessor preprocessor(implementation_->managementInstance_);
 
-    std::vector<htd::vertex_t> pool;
+    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph);
+
+    htd::VertexOrdering * ret = computeOrdering(graph, *preparedInput);
+
+    delete preparedInput;
+
+    return ret;
+}
+
+htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput) const HTD_NOEXCEPT
+{
+    HTD_UNUSED(graph)
+
+    std::size_t size = preparedInput.remainingVertices().size();
 
     std::unordered_set<htd::vertex_t> vertices(size);
 
-    std::unordered_map<htd::vertex_t, std::vector<htd::vertex_t>> neighborhood(size);
+    htd::fillSet(preparedInput.remainingVertices(), vertices);
 
-    std::unordered_map<htd::vertex_t, std::size_t> weights(size);
+    std::vector<std::vector<htd::vertex_t>> neighborhood(preparedInput.neighborhood().begin(), preparedInput.neighborhood().end());
 
-    htd::fillSet(graph.vertices(), vertices);
+    std::vector<htd::vertex_t> pool;
+
+    std::vector<std::size_t> weights(preparedInput.vertexCount());
 
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
     std::vector<htd::vertex_t> ordering;
-    ordering.reserve(size);
+    ordering.reserve(preparedInput.vertexCount());
 
-    for (auto it = vertices.begin(); it != vertices.end() && !managementInstance.isTerminated(); ++it)
-    {
-        htd::vertex_t vertex = *it;
-
-        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
-
-        graph.copyNeighborsTo(vertex, currentNeighborhood);
-
-        weights[vertex] = 0;
-
-        auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
-
-        if (position != currentNeighborhood.end() && *position == vertex)
-        {
-            currentNeighborhood.erase(position);
-        }
-    }
+    ordering.insert(ordering.end(),
+                    preparedInput.preprocessedEliminationOrdering().begin(),
+                    preparedInput.preprocessedEliminationOrdering().end());
 
     while (size > 0 && !managementInstance.isTerminated())
     {
@@ -113,7 +115,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 
         for (htd::vertex_t vertex : vertices)
         {
-            std::size_t tmp = weights.at(vertex);
+            std::size_t tmp = weights[vertex];
 
             if (tmp >= maxCardinality)
             {
@@ -128,7 +130,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
             }
         }
 
-        htd::vertex_t selectedVertex = selectRandomElement<htd::vertex_t>(pool);
+        htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(pool);
 
         std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood.at(selectedVertex);
 
@@ -146,9 +148,9 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 
         vertices.erase(selectedVertex);
 
-        size--;
+        --size;
 
-        ordering.push_back(selectedVertex);
+        ordering.push_back(preparedInput.vertexName(selectedVertex));
     }
 
     std::reverse(ordering.begin(), ordering.end());

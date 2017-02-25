@@ -51,6 +51,18 @@ namespace htd
              */
             virtual htd::VertexOrdering * computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT = 0;
 
+            /**
+             *  Compute the vertex ordering of a given graph.
+             *
+             *  @param[in] graph                The input graph for which the vertex ordering shall be computed.
+             *  @param[in] preparedInput        The input graph in pre-processed format.
+             *  @param[in] maxBagSize           The upper bound for the maximum bag size of a decomposition based on the resulting ordering.
+             *  @param[in] maxIterationCount    The maximum number of iterations resulting in a higher maximum bag size than maxBagSize after which an empty ordering is returned.
+             *
+             *  @return The vertex ordering of the given graph.
+             */
+            virtual htd::VertexOrdering * computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT = 0;
+
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**
              *  Create a deep copy of the current ordering algorithm.

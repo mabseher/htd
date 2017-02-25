@@ -72,6 +72,13 @@ htd::VertexOrdering * htd::NaturalOrderingAlgorithm::computeOrdering(const htd::
     return new htd::VertexOrdering(std::vector<htd::vertex_t>(graph.vertices().begin(), graph.vertices().end()));
 }
 
+htd::VertexOrdering * htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput) const HTD_NOEXCEPT
+{
+    HTD_UNUSED(preparedInput)
+
+    return new htd::VertexOrdering(std::vector<htd::vertex_t>(graph.vertices().begin(), graph.vertices().end()));
+}
+
 const htd::LibraryInstance * htd::NaturalOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT
 {
     return implementation_->managementInstance_;

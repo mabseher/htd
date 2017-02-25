@@ -28,6 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/IMultiHypergraph.hpp>
 #include <htd/VertexOrdering.hpp>
+#include <htd/PreparedOrderingAlgorithmInput.hpp>
 
 namespace htd
 {
@@ -61,6 +62,16 @@ namespace htd
              *  @return The vertex ordering of the given graph.
              */
             virtual htd::VertexOrdering * computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT = 0;
+
+            /**
+             *  Compute the vertex ordering of a given graph.
+             *
+             *  @param[in] graph            The input graph for which the vertex ordering shall be computed.
+             *  @param[in] preparedInput    The input graph in pre-processed format.
+             *
+             *  @return The vertex ordering of the given graph.
+             */
+            virtual htd::VertexOrdering * computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput) const HTD_NOEXCEPT = 0;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**

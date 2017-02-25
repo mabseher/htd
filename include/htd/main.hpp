@@ -189,6 +189,7 @@
 #include <htd/NaturalOrderingAlgorithm.hpp>
 #include <htd/NormalizationOperation.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
+#include <htd/OrderingAlgorithmPreprocessor.hpp>
 #include <htd/PathDecompositionAlgorithmFactory.hpp>
 #include <htd/PathDecompositionFactory.hpp>
 #include <htd/PathDecomposition.hpp>
@@ -196,6 +197,7 @@
 #include <htd/PostOrderTreeTraversal.hpp>
 #include <htd/PostProcessingPathDecompositionAlgorithm.hpp>
 #include <htd/PreOrderTreeTraversal.hpp>
+#include <htd/PreparedOrderingAlgorithmInput.hpp>
 #include <htd/PreprocessorDefinitions.hpp>
 #include <htd/RandomVertexSelectionStrategy.hpp>
 #include <htd/SemiNormalizationOperation.hpp>

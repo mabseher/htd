@@ -175,7 +175,7 @@ std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDeco
 {
     htd::OrderingAlgorithmPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph);
+    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph, false);
 
     std::pair<htd::ITreeDecomposition *, std::size_t> ret =
         computeDecomposition(graph, *preparedInput, manipulationOperations, maxBagSize, maxIterationCount);

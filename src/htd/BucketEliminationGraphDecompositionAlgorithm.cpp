@@ -373,7 +373,7 @@ std::pair<htd::IGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDe
 {
     htd::OrderingAlgorithmPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph);
+    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph, false);
 
     std::pair<htd::IGraphDecomposition *, std::size_t> ret =
         computeDecomposition(graph, *preparedInput, manipulationOperations, maxBagSize, maxIterationCount);

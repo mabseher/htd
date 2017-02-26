@@ -75,7 +75,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 {
     htd::OrderingAlgorithmPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph);
+    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph, false);
 
     htd::VertexOrdering * ret = computeOrdering(graph, *preparedInput);
 

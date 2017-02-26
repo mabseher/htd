@@ -341,41 +341,43 @@ htd::OrderingAlgorithmPreprocessor::~OrderingAlgorithmPreprocessor()
 
 htd::PreparedOrderingAlgorithmInput * htd::OrderingAlgorithmPreprocessor::prepare(const htd::IMultiHypergraph & graph, bool applyPreProcessing) const HTD_NOEXCEPT
 {
+    htd::PreparedOrderingAlgorithmInput * ret = nullptr;
+
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
     htd::OrderingAlgorithmPreprocessor::Implementation::PreparedInput input(managementInstance, graph);
 
     std::size_t size = input.vertexNames.size();
 
-    std::unordered_set<htd::vertex_t> vertices(size);
-
-    std::vector<htd::vertex_t> ordering;
-    ordering.reserve(size);
-
     std::vector<htd::vertex_t> vertexNames(input.vertexNames.begin(), input.vertexNames.end());
 
     std::vector<std::vector<htd::vertex_t>> neighborhood(input.neighborhood.begin(), input.neighborhood.end());
 
-    std::unordered_set<htd::vertex_t> vertexGroup1;
-    std::unordered_set<htd::vertex_t> vertexGroup2;
-    std::unordered_set<htd::vertex_t> vertexGroup3;
-
-    std::size_t minTreeWidth = 0;
-
-    for (htd::vertex_t vertex = 0; vertex < size; ++vertex)
-    {
-        vertices.insert(vertex);
-
-        implementation_->assignVertexToGroup(vertex, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood[vertex].size());
-    }
-
-    while (implementation_->eliminateVerticesOfDegreeLessThanTwo(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
-    {
-
-    }
-
     if (applyPreProcessing)
     {
+        std::unordered_set<htd::vertex_t> vertices(size);
+
+        std::unordered_set<htd::vertex_t> vertexGroup1;
+        std::unordered_set<htd::vertex_t> vertexGroup2;
+        std::unordered_set<htd::vertex_t> vertexGroup3;
+
+        std::vector<htd::vertex_t> ordering;
+        ordering.reserve(size);
+
+        std::size_t minTreeWidth = 0;
+
+        for (htd::vertex_t vertex = 0; vertex < size; ++vertex)
+        {
+            vertices.insert(vertex);
+
+            implementation_->assignVertexToGroup(vertex, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood[vertex].size());
+        }
+
+        while (implementation_->eliminateVerticesOfDegreeLessThanTwo(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
+        {
+
+        }
+
         bool ok = false;
 
         if (!vertices.empty())
@@ -447,13 +449,23 @@ htd::PreparedOrderingAlgorithmInput * htd::OrderingAlgorithmPreprocessor::prepar
         {
             ordering[index] = vertexNames[ordering[index]];
         }
+
+        std::vector<htd::vertex_t> remainingVertices(vertices.begin(), vertices.end());
+
+        std::sort(remainingVertices.begin(), remainingVertices.end());
+
+        ret = new htd::PreparedOrderingAlgorithmInput(std::move(vertexNames), std::move(neighborhood), std::move(ordering), std::move(remainingVertices), minTreeWidth);
+    }
+    else
+    {
+        std::vector<htd::vertex_t> remainingVertices(size);
+
+        std::iota(remainingVertices.begin(), remainingVertices.end(), 0);
+
+        ret = new htd::PreparedOrderingAlgorithmInput(std::move(vertexNames), std::move(neighborhood), std::vector<htd::vertex_t>(), std::move(remainingVertices), 0);
     }
 
-    std::vector<htd::vertex_t> remainingVertices(vertices.begin(), vertices.end());
-
-    std::sort(remainingVertices.begin(), remainingVertices.end());
-
-    return new htd::PreparedOrderingAlgorithmInput(std::move(vertexNames), std::move(neighborhood), std::move(ordering), std::move(remainingVertices), minTreeWidth);
+    return ret;
 }
 
 const htd::LibraryInstance * htd::OrderingAlgorithmPreprocessor::managementInstance(void) const HTD_NOEXCEPT

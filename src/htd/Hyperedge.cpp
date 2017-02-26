@@ -520,6 +520,16 @@ class SortedElementInformation : public htd::Hyperedge::IElementInformation
         /**
          *  Constructor for a hyperedge element information.
          *
+         *  @param[in] vertex   The single endpoint of the constructed hyperedge.
+         */
+        SortedElementInformation(htd::vertex_t vertex) HTD_NOEXCEPT : elements_(std::initializer_list<htd::vertex_t> { vertex })
+        {
+
+        }
+
+        /**
+         *  Constructor for a hyperedge element information.
+         *
          *  @param[in] vertex1  The first endpoint of the constructed hyperedge.
          *  @param[in] vertex2  The second endpoint of the constructed hyperedge.
          */
@@ -663,6 +673,11 @@ class SortedElementInformation : public htd::Hyperedge::IElementInformation
     private:
         std::vector<htd::vertex_t> elements_;
 };
+
+htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex) HTD_NOEXCEPT : id_(id)
+{
+    content_.reset(new SortedElementInformation(vertex));
+}
 
 htd::Hyperedge::Hyperedge(htd::id_t id, htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT : id_(id)
 {

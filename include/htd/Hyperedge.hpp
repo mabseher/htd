@@ -48,6 +48,14 @@ namespace htd
              *  Constructor for a hyperedge.
              *
              *  @param[in] id       The ID of the constructed hyperedge.
+             *  @param[in] vertex   The single endpoint of the constructed hyperedge.
+             */
+            HTD_API Hyperedge(htd::id_t id, htd::vertex_t vertex) HTD_NOEXCEPT;
+
+            /**
+             *  Constructor for a hyperedge.
+             *
+             *  @param[in] id       The ID of the constructed hyperedge.
              *  @param[in] vertex1  The first endpoint of the constructed hyperedge.
              *  @param[in] vertex2  The second endpoint of the constructed hyperedge.
              */

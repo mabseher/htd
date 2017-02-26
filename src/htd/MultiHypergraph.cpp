@@ -338,14 +338,9 @@ bool htd::MultiHypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighb
 
 std::size_t htd::MultiHypergraph::neighborCount(htd::vertex_t vertex) const
 {
-    std::size_t ret = 0;
-    
-    if (isVertex(vertex))
-    {
-        ret = implementation_->neighborhood_[vertex - htd::Vertex::FIRST].size();
-    }
-    
-    return ret;
+    HTD_ASSERT(isVertex(vertex))
+
+    return implementation_->neighborhood_[vertex - htd::Vertex::FIRST].size();
 }
 
 bool htd::MultiHypergraph::isConnected(void) const
@@ -398,49 +393,48 @@ bool htd::MultiHypergraph::isConnected(void) const
 
 bool htd::MultiHypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const
 {
+    HTD_ASSERT(isVertex(vertex1) && isVertex(vertex2))
+
     bool ret = false;
-    
-    if (isVertex(vertex1) && isVertex(vertex2))
+
+    if (vertex1 == vertex2)
     {
-        if (vertex1 == vertex2)
+        ret = true;
+    }
+    else
+    {
+        std::vector<htd::vertex_t> newVertices;
+        std::vector<htd::vertex_t> tmpVertices;
+
+        std::vector<bool> reachableVertices(implementation_->size_);
+
+        reachableVertices[vertex1 - htd::Vertex::FIRST] = true;
+
+        newVertices.push_back(vertex1);
+
+        while (!ret && !newVertices.empty())
         {
-            ret = true;
-        }
-        else
-        {
-            std::vector<htd::vertex_t> newVertices;
-            std::vector<htd::vertex_t> tmpVertices;
+            std::swap(tmpVertices, newVertices);
 
-            std::vector<bool> reachableVertices(implementation_->size_);
+            newVertices.resize(0);
 
-            reachableVertices[vertex1 - htd::Vertex::FIRST] = true;
-
-            newVertices.push_back(vertex1);
-
-            while (!ret && !newVertices.empty())
+            for (auto it = tmpVertices.begin(); !ret && it != tmpVertices.end(); it++)
             {
-                std::swap(tmpVertices, newVertices);
-
-                newVertices.resize(0);
-
-                for (auto it = tmpVertices.begin(); !ret && it != tmpVertices.end(); it++)
+                for (auto it2 = implementation_->edges_->begin(); !ret && it2 != implementation_->edges_->end(); it2++)
                 {
-                    for (auto it2 = implementation_->edges_->begin(); !ret && it2 != implementation_->edges_->end(); it2++)
+                    if (std::find((*it2).begin(), (*it2).end(), *it) != (*it2).end())
                     {
-                        if (std::find((*it2).begin(), (*it2).end(), *it) != (*it2).end())
+                        for (auto it3 = (*it2).begin(); !ret && it3 != (*it2).end(); it3++)
                         {
-                            for (auto it3 = (*it2).begin(); !ret && it3 != (*it2).end(); it3++)
+                            if (*it3 != *it && !reachableVertices[*it3 - htd::Vertex::FIRST])
                             {
-                                if (*it3 != *it && !reachableVertices[*it3 - htd::Vertex::FIRST])
+                                reachableVertices[*it3 - htd::Vertex::FIRST] = true;
+
+                                newVertices.push_back(*it3);
+
+                                if (*it3 == vertex2)
                                 {
-                                    reachableVertices[*it3 - htd::Vertex::FIRST] = true;
-
-                                    newVertices.push_back(*it3);
-
-                                    if (*it3 == vertex2)
-                                    {
-                                        ret = true;
-                                    }
+                                    ret = true;
                                 }
                             }
                         }
@@ -694,51 +688,50 @@ htd::vertex_t htd::MultiHypergraph::addVertices(std::size_t count)
 
 void htd::MultiHypergraph::removeVertex(htd::vertex_t vertex)
 {
-    if (isVertex(vertex))
+    HTD_ASSERT(isVertex(vertex))
+
+    htd::index_t currentIndex = 0;
+
+    std::vector<htd::index_t> emptyEdges;
+
+    for (auto & edge : *(implementation_->edges_))
     {
-        htd::index_t currentIndex = 0;
-        
-        std::vector<htd::index_t> emptyEdges;
-        
-        for (auto & edge : *(implementation_->edges_))
+        edge.erase(vertex);
+
+        if (edge.empty())
         {
-            edge.erase(vertex);
-            
-            if (edge.empty())
-            {
-                emptyEdges.push_back(currentIndex);
-            }
-            
-            ++currentIndex;
+            emptyEdges.push_back(currentIndex);
         }
 
-        for (auto it = emptyEdges.rbegin(); it != emptyEdges.rend(); ++it)
-        {
-            implementation_->edges_->erase(implementation_->edges_->begin() + *it);
-        }
-
-        implementation_->selfLoops_.erase(vertex);
-
-        implementation_->deletions_.insert(vertex);
-
-        for (htd::vertex_t neighbor : implementation_->neighborhood_[vertex - htd::Vertex::FIRST])
-        {
-            if (neighbor != vertex)
-            {
-                auto & currentNeighborhood = implementation_->neighborhood_[neighbor - htd::Vertex::FIRST];
-
-                /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'currentNeighborhood'. */
-                // coverity[use_iterator]
-                currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex));
-            }
-        }
-
-        implementation_->neighborhood_[vertex - htd::Vertex::FIRST].clear();
-
-        implementation_->vertices_.erase(std::lower_bound(implementation_->vertices_.begin(), implementation_->vertices_.end(), vertex));
-
-        --(implementation_->size_);
+        ++currentIndex;
     }
+
+    for (auto it = emptyEdges.rbegin(); it != emptyEdges.rend(); ++it)
+    {
+        implementation_->edges_->erase(implementation_->edges_->begin() + *it);
+    }
+
+    implementation_->selfLoops_.erase(vertex);
+
+    implementation_->deletions_.insert(vertex);
+
+    for (htd::vertex_t neighbor : implementation_->neighborhood_[vertex - htd::Vertex::FIRST])
+    {
+        if (neighbor != vertex)
+        {
+            auto & currentNeighborhood = implementation_->neighborhood_[neighbor - htd::Vertex::FIRST];
+
+            /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'currentNeighborhood'. */
+            // coverity[use_iterator]
+            currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex));
+        }
+    }
+
+    implementation_->neighborhood_[vertex - htd::Vertex::FIRST].clear();
+
+    implementation_->vertices_.erase(std::lower_bound(implementation_->vertices_.begin(), implementation_->vertices_.end(), vertex));
+
+    --(implementation_->size_);
 }
 
 htd::id_t htd::MultiHypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)
@@ -747,37 +740,33 @@ htd::id_t htd::MultiHypergraph::addEdge(htd::vertex_t vertex1, htd::vertex_t ver
 
     implementation_->edges_->emplace_back(implementation_->next_edge_, vertex1, vertex2);
 
-    if (vertex1 == vertex2)
+    if (vertex1 != vertex2)
     {
-        auto & currentNeighborhood1 = implementation_->neighborhood_[vertex1 - htd::Vertex::FIRST];
+        std::vector<htd::vertex_t> & currentNeighborhood1 = implementation_->neighborhood_[vertex1 - htd::Vertex::FIRST];
 
-        auto position1 = std::lower_bound(currentNeighborhood1.begin(), currentNeighborhood1.end(), vertex1);
+        auto position = std::lower_bound(currentNeighborhood1.begin(), currentNeighborhood1.end(), vertex2);
 
-        if (position1 == currentNeighborhood1.end() || *position1 != vertex1)
+        if (position == currentNeighborhood1.end() || *position != vertex2)
         {
-            currentNeighborhood1.insert(position1, vertex1);
-        }
+            currentNeighborhood1.insert(position, vertex2);
 
-        implementation_->selfLoops_.insert(vertex1);
+            std::vector<htd::vertex_t> & currentNeighborhood2 = implementation_->neighborhood_[vertex2 - htd::Vertex::FIRST];
+
+            currentNeighborhood2.insert(std::lower_bound(currentNeighborhood2.begin(), currentNeighborhood2.end(), vertex1), vertex1);
+        }
     }
     else
     {
-        auto & currentNeighborhood1 = implementation_->neighborhood_[vertex1 - htd::Vertex::FIRST];
-        auto & currentNeighborhood2 = implementation_->neighborhood_[vertex2 - htd::Vertex::FIRST];
+        std::vector<htd::vertex_t> & currentNeighborhood1 = implementation_->neighborhood_[vertex1 - htd::Vertex::FIRST];
 
-        auto position1 = std::lower_bound(currentNeighborhood1.begin(), currentNeighborhood1.end(), vertex2);
+        auto position = std::lower_bound(currentNeighborhood1.begin(), currentNeighborhood1.end(), vertex1);
 
-        if (position1 == currentNeighborhood1.end() || *position1 != vertex2)
+        if (position == currentNeighborhood1.end() || *position != vertex1)
         {
-            currentNeighborhood1.insert(position1, vertex2);
+            currentNeighborhood1.insert(position, vertex1);
         }
 
-        auto position2 = std::lower_bound(currentNeighborhood2.begin(), currentNeighborhood2.end(), vertex1);
-
-        if (position2 == currentNeighborhood2.end() || *position2 != vertex1)
-        {
-            currentNeighborhood2.insert(position2, vertex1);
-        }
+        implementation_->selfLoops_.insert(vertex1);
     }
 
     return implementation_->next_edge_++;
@@ -798,7 +787,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
         {
             HTD_ASSERT(isVertex(elements[0]))
 
-            implementation_->edges_->emplace_back(implementation_->next_edge_, std::move(elements));
+            implementation_->edges_->emplace_back(implementation_->next_edge_, elements[0]);
 
             return implementation_->next_edge_++;
         }
@@ -844,36 +833,32 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
         if (!tmp.empty())
         {
-            if (tmp.size() > 1 && implementation_->selfLoops_.count(vertex) == 0)
+            if (implementation_->selfLoops_.count(vertex) == 0)
             {
-                auto position2 = std::lower_bound(tmp.begin(), tmp.end(), vertex);
-
-                if (position2 != tmp.end() && *position2 == vertex)
-                {
-                    /* The iterator 'position2' is no longer used after this step and it is valid beforehand. */
-                    // coverity[use_iterator]
-                    tmp.erase(position2);
-                }
+                tmp.erase(std::lower_bound(tmp.begin(), tmp.end(), vertex));
             }
 
-            if (tmp.size() <= 8)
+            if (!tmp.empty())
             {
-                auto it = currentNeighborhood.begin();
-
-                for (htd::vertex_t newVertex : tmp)
+                if (tmp.size() <= 8)
                 {
-                    it = currentNeighborhood.insert(std::lower_bound(it, currentNeighborhood.end(), newVertex), newVertex) + 1;
+                    auto it = currentNeighborhood.begin();
+
+                    for (htd::vertex_t newVertex : tmp)
+                    {
+                        it = currentNeighborhood.insert(std::lower_bound(it, currentNeighborhood.end(), newVertex), newVertex) + 1;
+                    }
                 }
-            }
-            else
-            {
-                htd::index_t middle = currentNeighborhood.size();
+                else
+                {
+                    htd::index_t middle = currentNeighborhood.size();
 
-                currentNeighborhood.insert(currentNeighborhood.end(), tmp.begin(), tmp.end());
+                    currentNeighborhood.insert(currentNeighborhood.end(), tmp.begin(), tmp.end());
 
-                std::inplace_merge(currentNeighborhood.begin(),
-                                   currentNeighborhood.begin() + middle,
-                                   currentNeighborhood.end());
+                    std::inplace_merge(currentNeighborhood.begin(),
+                                       currentNeighborhood.begin() + middle,
+                                       currentNeighborhood.end());
+                }
             }
         }
     }

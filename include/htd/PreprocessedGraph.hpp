@@ -1,5 +1,5 @@
 /* 
- * File:   PreparedOrderingAlgorithmInput.hpp
+ * File:   PreprocessedGraph.hpp
  * 
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_PREPAREDORDERINGALGORITHMINPUT_HPP
-#define HTD_HTD_PREPAREDORDERINGALGORITHMINPUT_HPP
+#ifndef HTD_HTD_PREPROCESSEDGRAPH_HPP
+#define HTD_HTD_PREPROCESSEDGRAPH_HPP
 
 #include <htd/Globals.hpp>
 
@@ -33,9 +33,9 @@
 namespace htd
 {
     /**
-     *  This class is designed to hold the pre-processed input for vertex elimination ordering algorithms.
+     *  This class is designed to hold the information of preprocessed graphs.
      *
-     *  In the pre-processing phase, it has to be ensured that the vertices stored in this
+     *  In the preprocessing phase, it has to be ensured that the vertices stored in this
      *  container are numbered from 0 to n-1 where n denotes the total number of vertices
      *  in the graph.
      *
@@ -44,28 +44,28 @@ namespace htd
      *  vertex is assigned the ID 0. This allows for efficient storage and data handling
      *  based on arrays and vectors.
      */
-    class PreparedOrderingAlgorithmInput
+    class PreprocessedGraph
     {
         public:
             /**
-             *  Constructor for a new ordering algorithm input data structure.
+             *  Constructor for a new, preprocessed graph data structure.
              *
-             *  @param[in] vertexNames                      The actual identifiers of the vertices.
-             *  @param[in] neighborhood                     A vector containing the neighborhood of each of the vertices.
-             *  @param[in] preprocessedEliminationOrdering  A partial vertex elimination ordering computed during the pre-processing phase.
-             *  @param[in] remainingVertices                The set of vertices which were not eliminated during the pre-processing phase.
-             *  @param[in] minTreeWidth                     The lower bound for the treewidth of the original input graph.
+             *  @param[in] vertexNames          The actual identifiers of the vertices.
+             *  @param[in] neighborhood         A vector containing the preprocessed neighborhood of each of the vertices.
+             *  @param[in] eliminationSequence  A partial vertex elimination ordering computed during the preprocessing phase.
+             *  @param[in] remainingVertices    The set of vertices which were not eliminated during the preprocessing phase.
+             *  @param[in] minTreeWidth         The lower bound for the treewidth of the original input graph.
              */
-            HTD_API PreparedOrderingAlgorithmInput(std::vector<htd::vertex_t> && vertexNames,
-                                                   std::vector<std::vector<htd::vertex_t>> && neighborhood,
-                                                   std::vector<htd::vertex_t> && preprocessedEliminationOrdering,
-                                                   std::vector<htd::vertex_t> && remainingVertices,
-                                                   std::size_t minTreeWidth);
+            HTD_API PreprocessedGraph(std::vector<htd::vertex_t> && vertexNames,
+                                      std::vector<std::vector<htd::vertex_t>> && neighborhood,
+                                      std::vector<htd::vertex_t> && eliminationSequence,
+                                      std::vector<htd::vertex_t> && remainingVertices,
+                                      std::size_t minTreeWidth);
 
             /**
-             *  Destructor for an ordering algorithm input data structure.
+             *  Destructor for a preprocessed graph data structure.
              */
-            HTD_API virtual ~PreparedOrderingAlgorithmInput();
+            HTD_API virtual ~PreprocessedGraph();
 
             /**
              *  Getter for the vertex count of the input graph.
@@ -89,36 +89,36 @@ namespace htd
             HTD_API htd::vertex_t vertexName(htd::vertex_t vertex) const;
 
             /**
-             *  Getter for the vector containing the neighborhood of each of the vertices.
+             *  Getter for the vector containing the preprocessed neighborhood of each of the vertices.
              *
              *  @note The neighborhood of each vertex returned by this data structure does not include the respective vertex itself.
              *
-             *  @return The vector containing the neighborhood of each of the vertices.
+             *  @return The vector containing the preprocessed neighborhood of each of the vertices.
              */
             HTD_API const std::vector<std::vector<htd::vertex_t>> & neighborhood(void) const HTD_NOEXCEPT;
 
             /**
-             *  Getter for the vector containing the neighborhood of each of the vertices.
+             *  Getter for the vector containing the preprocessed neighborhood of a vertex.
              *
              *  @note The neighborhood returned by this data structure does not include the vertex itself.
              *
              *  @param[in] vertex   The vertex whose neighborhood shall be returned.
              *
-             *  @return The vector containing the neighborhood of the requested vertex.
+             *  @return The vector containing the preprocessed neighborhood of the requested vertex.
              */
             HTD_API const std::vector<htd::vertex_t> & neighborhood(htd::vertex_t vertex) const;
 
             /**
-             *  Getter for the partial vertex elimination ordering computed during the pre-processing phase.
+             *  Getter for the partial vertex elimination ordering computed during the preprocessing phase.
              *
-             *  @return The partial vertex elimination ordering computed during the pre-processing phase.
+             *  @return The partial vertex elimination ordering computed during the preprocessing phase.
              */
-            HTD_API const std::vector<htd::vertex_t> & preprocessedEliminationOrdering(void) const HTD_NOEXCEPT;
+            HTD_API const std::vector<htd::vertex_t> & eliminationSequence(void) const HTD_NOEXCEPT;
 
             /**
-             *  Getter for the set of vertices (with 0-based IDs) which were not eliminated during the pre-processing phase.
+             *  Getter for the set of vertices (with 0-based IDs) which were not eliminated during the preprocessing phase.
              *
-             *  @return The set of vertices (with 0-based IDs) which were not eliminated during the pre-processing phase.
+             *  @return The set of vertices (with 0-based IDs) which were not eliminated during the preprocessing phase.
              */
             HTD_API const std::vector<htd::vertex_t> & remainingVertices(void) const HTD_NOEXCEPT;
 
@@ -136,4 +136,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_PREPAREDORDERINGALGORITHMINPUT_HPP */
+#endif /* HTD_HTD_PREPROCESSEDGRAPH_HPP */

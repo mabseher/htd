@@ -29,7 +29,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 #include <htd/VectorAdapter.hpp>
-#include <htd/OrderingAlgorithmPreprocessor.hpp>
+#include <htd/GraphPreprocessor.hpp>
 
 #include <algorithm>
 #include <unordered_map>
@@ -63,13 +63,13 @@ struct htd::MinDegreeOrderingAlgorithm::Implementation
     /**
      *  Compute the vertex ordering of a given graph and write it to the end of a given vector.
      *
-     *  @param[in] preparedInput        The input graph in pre-processed format.
+     *  @param[in] preprocessedGraph    The input graph in preprocessed format.
      *  @param[out] target              The target vector to which the computed ordering shall be appended.
      *  @param[in] maxBagSize           The upper bound for the maximum bag size of a decomposition based on the resulting ordering.
      *
      *  @return The maximum bag size of the decomposition which is obtained via bucket elimination using the input graph and the resulting ordering.
      */
-    std::size_t writeOrderingTo(const htd::PreparedOrderingAlgorithmInput & preparedInput, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
+    std::size_t writeOrderingTo(const htd::PreprocessedGraph & preprocessedGraph, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
 
     /**
      *  Get a random vertex having minimum degree.
@@ -120,23 +120,23 @@ htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd
 
 htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
 {
-    htd::OrderingAlgorithmPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph, false);
+    htd::PreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
 
-    htd::VertexOrdering * ret = computeOrdering(graph, *preparedInput, maxBagSize, maxIterationCount);
+    htd::VertexOrdering * ret = computeOrdering(graph, *preprocessedGraph, maxBagSize, maxIterationCount);
 
-    delete preparedInput;
+    delete preprocessedGraph;
 
     return ret;
 }
 
-htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput) const HTD_NOEXCEPT
+htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
 {
-    return computeOrdering(graph, preparedInput, (std::size_t)-1, 1);
+    return computeOrdering(graph, preprocessedGraph, (std::size_t)-1, 1);
 }
 
-htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
+htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
 {
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
@@ -151,7 +151,7 @@ htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd
     {
         ordering.clear();
 
-        currentMaxBagSize = implementation_->writeOrderingTo(preparedInput, ordering, maxBagSize);
+        currentMaxBagSize = implementation_->writeOrderingTo(preprocessedGraph, ordering, maxBagSize);
 
         ++iterations;
     }
@@ -165,27 +165,27 @@ htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd
     return new htd::VertexOrdering(std::move(ordering), iterations);
 }
 
-std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(const htd::PreparedOrderingAlgorithmInput & preparedInput, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT
+std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(const htd::PreprocessedGraph & preprocessedGraph, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT
 {
     std::size_t ret = 0;
 
-    std::size_t size = preparedInput.remainingVertices().size();
+    std::size_t size = preprocessedGraph.remainingVertices().size();
 
     std::unordered_set<htd::vertex_t> vertices(size);
 
-    htd::fillSet(preparedInput.remainingVertices(), vertices);
+    htd::fillSet(preprocessedGraph.remainingVertices(), vertices);
 
-    std::vector<std::vector<htd::vertex_t>> neighborhood(preparedInput.neighborhood().begin(), preparedInput.neighborhood().end());
+    std::vector<std::vector<htd::vertex_t>> neighborhood(preprocessedGraph.neighborhood().begin(), preprocessedGraph.neighborhood().end());
 
     std::vector<htd::vertex_t> difference;
 
     std::vector<htd::vertex_t> pool;
 
     target.insert(target.end(),
-                  preparedInput.preprocessedEliminationOrdering().begin(),
-                  preparedInput.preprocessedEliminationOrdering().end());
+                  preprocessedGraph.eliminationSequence().begin(),
+                  preprocessedGraph.eliminationSequence().end());
 
-    ret = preparedInput.minTreeWidth() + 1;
+    ret = preprocessedGraph.minTreeWidth() + 1;
 
     for (htd::vertex_t vertex : vertices)
     {
@@ -252,7 +252,7 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
         size--;
 
-        target.push_back(preparedInput.vertexName(selectedVertex));
+        target.push_back(preprocessedGraph.vertexName(selectedVertex));
     }
 
     return ret;

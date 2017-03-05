@@ -29,7 +29,7 @@
 #include <htd/Helpers.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
 #include <htd/VectorAdapter.hpp>
-#include <htd/OrderingAlgorithmPreprocessor.hpp>
+#include <htd/GraphPreprocessor.hpp>
 
 #include <algorithm>
 #include <unordered_map>
@@ -71,9 +71,9 @@ struct htd::MinFillOrderingAlgorithm::Implementation
     static void updatePool(htd::vertex_t vertex, std::size_t fillValue, std::unordered_set<htd::vertex_t> & pool, std::size_t & minFill);
 
     /**
-     *  Structure representing the pre-processed input for the algorithm.
+     *  Structure representing the preprocessed input for the algorithm.
      *
-     *  The pre-processing step consists of replacing the vertex identifiers by indices starting at 0 so that vectors
+     *  The preprocessing step consists of replacing the vertex identifiers by indices starting at 0 so that vectors
      *  instead of maps can be used for efficiently accessing information. Additionally, the initial fill value for
      *  each vertex is computed and the pool of vertices with minimum fill value is initialized.
      */
@@ -132,21 +132,21 @@ struct htd::MinFillOrderingAlgorithm::Implementation
          *  Contructor for the PreparedInput data structure.
          *
          *  @param[in] managementInstance   The management instance to which the new algorithm belongs.
-         *  @param[in] preparedInput        The input graph in pre-processed format.
+         *  @param[in] preprocessedGraph    The input graph in preprocessed format.
          */
-        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::PreparedOrderingAlgorithmInput & preparedInput) : minFill((std::size_t)-1), totalFill(0), fillValue(), pool()
+        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::PreprocessedGraph & preprocessedGraph) : minFill((std::size_t)-1), totalFill(0), fillValue(), pool()
         {
             HTD_UNUSED(managementInstance)
 
-            std::size_t size = preparedInput.vertexCount();
+            std::size_t size = preprocessedGraph.vertexCount();
 
             fillValue.resize(size, 0);
 
-            for (htd::vertex_t vertex : preparedInput.remainingVertices())
+            for (htd::vertex_t vertex : preprocessedGraph.remainingVertices())
             {
-                const std::vector<htd::vertex_t> & currentNeighborhood = preparedInput.neighborhood(vertex);
+                const std::vector<htd::vertex_t> & currentNeighborhood = preprocessedGraph.neighborhood(vertex);
 
-                std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(preparedInput.neighborhood(), currentNeighborhood);
+                std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(preprocessedGraph.neighborhood(), currentNeighborhood);
 
                 updatePool(vertex, currentFillValue, pool, minFill);
 
@@ -185,14 +185,14 @@ struct htd::MinFillOrderingAlgorithm::Implementation
     /**
      *  Compute the vertex ordering of a given graph and write it to the end of a given vector.
      *
-     *  @param[in] preparedInput        The input graph in pre-processed format.
-     *  @param[in] input                The pre-processed, algorithm-specific input data.
+     *  @param[in] preprocessedGraph    The input graph in preprocessed format.
+     *  @param[in] input                The preprocessed, algorithm-specific input data.
      *  @param[out] target              The target vector to which the computed ordering shall be appended.
      *  @param[in] maxBagSize           The upper bound for the maximum bag size of a decomposition based on the resulting ordering.
      *
      *  @return The maximum bag size of the decomposition which is obtained via bucket elimination using the input graph and the resulting ordering.
      */
-    std::size_t writeOrderingTo(const htd::PreparedOrderingAlgorithmInput & preparedInput, const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
+    std::size_t writeOrderingTo(const htd::PreprocessedGraph & preprocessedGraph, const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
 };
 
 htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -212,30 +212,30 @@ htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::
 
 htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
 {
-    htd::OrderingAlgorithmPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph, false);
+    htd::PreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
 
-    htd::VertexOrdering * ret = computeOrdering(graph, *preparedInput, maxBagSize, maxIterationCount);
+    htd::VertexOrdering * ret = computeOrdering(graph, *preprocessedGraph, maxBagSize, maxIterationCount);
 
-    delete preparedInput;
+    delete preprocessedGraph;
 
     return ret;
 }
 
-htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput) const HTD_NOEXCEPT
+htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
 {
-    return computeOrdering(graph, preparedInput, (std::size_t)-1, 1);
+    return computeOrdering(graph, preprocessedGraph, (std::size_t)-1, 1);
 }
 
-htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
+htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
 {
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
     std::vector<htd::vertex_t> ordering;
     ordering.reserve(graph.vertexCount());
 
-    htd::MinFillOrderingAlgorithm::Implementation::PreparedInput input(managementInstance, preparedInput);
+    htd::MinFillOrderingAlgorithm::Implementation::PreparedInput input(managementInstance, preprocessedGraph);
 
     std::size_t iterations = 0;
 
@@ -245,7 +245,7 @@ htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::
     {
         ordering.clear();
 
-        currentMaxBagSize = implementation_->writeOrderingTo(preparedInput, input, ordering, maxBagSize);
+        currentMaxBagSize = implementation_->writeOrderingTo(preprocessedGraph, input, ordering, maxBagSize);
 
         ++iterations;
     }
@@ -259,11 +259,11 @@ htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::
     return new htd::VertexOrdering(std::move(ordering), iterations);
 }
 
-std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const htd::PreparedOrderingAlgorithmInput & preparedInput, const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT
+std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const htd::PreprocessedGraph & preprocessedGraph, const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT
 {
     std::size_t ret = 0;
 
-    std::size_t size = preparedInput.vertexCount();
+    std::size_t size = preprocessedGraph.vertexCount();
 
     std::size_t minFill = input.minFill;
 
@@ -271,11 +271,11 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
     std::unordered_set<htd::vertex_t> vertices(size);
 
-    htd::fillSet(preparedInput.remainingVertices(), vertices);
+    htd::fillSet(preprocessedGraph.remainingVertices(), vertices);
 
     std::vector<std::size_t> fillValue(input.fillValue.begin(), input.fillValue.end());
 
-    std::vector<std::vector<htd::vertex_t>> neighborhood(preparedInput.neighborhood().begin(), preparedInput.neighborhood().end());
+    std::vector<std::vector<htd::vertex_t>> neighborhood(preprocessedGraph.neighborhood().begin(), preprocessedGraph.neighborhood().end());
 
     std::size_t totalFill = input.totalFill;
 
@@ -289,12 +289,12 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
     affectedVertices.reserve(size);
 
     target.insert(target.end(),
-                  preparedInput.preprocessedEliminationOrdering().begin(),
-                  preparedInput.preprocessedEliminationOrdering().end());
+                  preprocessedGraph.eliminationSequence().begin(),
+                  preprocessedGraph.eliminationSequence().end());
 
-    ret = preparedInput.minTreeWidth() + 1;
+    ret = preprocessedGraph.minTreeWidth() + 1;
 
-    size = preparedInput.remainingVertices().size();
+    size = preprocessedGraph.remainingVertices().size();
 
     for (htd::vertex_t vertex : vertices)
     {
@@ -639,7 +639,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
         std::vector<htd::vertex_t>().swap(unaffectedNeighbors[selectedVertex]);
         std::vector<htd::vertex_t>().swap(existingNeighbors[selectedVertex]);
 
-        target.push_back(preparedInput.vertexName(selectedVertex));
+        target.push_back(preprocessedGraph.vertexName(selectedVertex));
 
         --size;
 
@@ -747,7 +747,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
             ret = neighborhoodSize;
         }
 
-        target.push_back(preparedInput.vertexName(vertex));
+        target.push_back(preprocessedGraph.vertexName(vertex));
 
         vertices.erase(vertex);
 

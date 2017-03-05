@@ -1,5 +1,5 @@
 /* 
- * File:   OrderingAlgorithmPreprocessor.hpp
+ * File:   GraphPreprocessor.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,35 +22,35 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_ORDERINGALGORITHMPREPROCESSOR_HPP
-#define HTD_HTD_ORDERINGALGORITHMPREPROCESSOR_HPP
+#ifndef HTD_HTD_GRAPHPREPROCESSOR_HPP
+#define HTD_HTD_GRAPHPREPROCESSOR_HPP
 
 #include <htd/Globals.hpp>
 #include <htd/LibraryInstance.hpp>
 #include <htd/IMultiHypergraph.hpp>
-#include <htd/PreparedOrderingAlgorithmInput.hpp>
+#include <htd/PreprocessedGraph.hpp>
 
 namespace htd
 {
     /**
-     *  Pre-processor for ordering algorithms.
+     *  Preprocessor for graphs.
      */
-    class OrderingAlgorithmPreprocessor
+    class GraphPreprocessor
     {
         public:
             /**
-             *  Constructor for a new ordering algorithm of type MinDegreeOrderingAlgorithm.
+             *  Constructor for a graph preprocessor.
              *
-             *  @param[in] manager   The management instance to which the new algorithm belongs.
+             *  @param[in] manager   The management instance to which the new preprocessor belongs.
              */
-            HTD_API OrderingAlgorithmPreprocessor(const htd::LibraryInstance * const manager);
+            HTD_API GraphPreprocessor(const htd::LibraryInstance * const manager);
             
-            HTD_API virtual ~OrderingAlgorithmPreprocessor();
+            HTD_API virtual ~GraphPreprocessor();
 
             /**
              *  Prepare the given graph so that the resulting data structure
-             *  allows for efficient decomposition of the graph in vertex
-             *  elimination ordering algorithms.
+             *  allows for efficient decomposition of the graph in following
+             *  algorithms.
              *
              *  The resulting data structure contains the graph in the form of an
              *  adjacency list and it is guaranteed that the vertices are numbered
@@ -59,14 +59,14 @@ namespace htd
              *  within algorithms.
              *
              *  @param[in] graph                The input graph which shall be prepared.
-             *  @param[in] applyPreProcessing   A boolean flag indicating whether the input graph shall
-             *                                  be pre-processed in order to increase efficiency of
-             *                                  algorithms. The pre-processing does not increase the
-             *                                  width of the resulting decompositions.
+             *  @param[in] applyPreprocessing   A boolean flag indicating whether the input graph shall be
+             *                                  preprocessed in order to increase efficiency of algorithms.
+             *                                  The preprocessing does not increase the width of the
+             *                                  resulting decompositions.
              *
-             *  @return A prepared version of the input graph.
+             *  @return A preprocessed version of the input graph.
              */
-            HTD_API htd::PreparedOrderingAlgorithmInput * prepare(const htd::IMultiHypergraph & graph, bool applyPreProcessing = true) const HTD_NOEXCEPT;
+            HTD_API htd::PreprocessedGraph * prepare(const htd::IMultiHypergraph & graph, bool applyPreprocessing = true) const HTD_NOEXCEPT;
 
             /**
              *  Getter for the associated management class.
@@ -83,19 +83,19 @@ namespace htd
             HTD_API void setManagementInstance(const htd::LibraryInstance * const manager);
 
             /**
-             *  Create a deep copy of the current ordering algorithm pre-processor.
+             *  Create a deep copy of the current graph preprocessor.
              *
-             *  @return A new OrderingAlgorithmPreprocessor object identical to the current ordering algorithm pre-processor.
+             *  @return A new GraphPreprocessor object identical to the current graph preprocessor.
              */
-            HTD_API OrderingAlgorithmPreprocessor * clone(void) const;
+            HTD_API GraphPreprocessor * clone(void) const;
 
         protected:
             /**
-             *  Copy assignment operator for an ordering algorithm pre-processor.
+             *  Copy assignment operator for a graph preprocessor.
              *
-             *  @note This operator is protected to prevent assignments to an already initialized pre-processor.
+             *  @note This operator is protected to prevent assignments to an already initialized preprocessor.
              */
-            OrderingAlgorithmPreprocessor & operator=(const OrderingAlgorithmPreprocessor &) { return *this; }
+            GraphPreprocessor & operator=(const GraphPreprocessor &) { return *this; }
 
         private:
             struct Implementation;

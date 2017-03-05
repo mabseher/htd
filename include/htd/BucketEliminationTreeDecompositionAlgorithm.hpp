@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/ITreeDecompositionAlgorithm.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
-#include <htd/PreparedOrderingAlgorithmInput.hpp>
+#include <htd/PreprocessedGraph.hpp>
 
 #include <utility>
 
@@ -126,18 +126,18 @@ namespace htd
             /**
              *  Compute a decomposition of the given graph.
              *
-             *  @param[in] graph            The input graph to decompose.
-             *  @param[in] preparedInput    The input graph in pre-processed format.
+             *  @param[in] graph                The input graph to decompose.
+             *  @param[in] preprocessedGraph    The input graph in preprocessed format.
              *
              *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
              */
-            HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const PreparedOrderingAlgorithmInput & preparedInput) const;
+            HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph) const;
 
             /**
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it.
              *
              *  @param[in] graph                    The input graph to decompose.
-             *  @param[in] preparedInput            The input graph in pre-processed format.
+             *  @param[in] preprocessedGraph        The input graph in preprocessed format.
              *  @param[in] manipulationOperations   The manipulation operations which shall be applied.
              *
              *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
@@ -148,13 +148,13 @@ namespace htd
              *
              *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
              */
-            HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const PreparedOrderingAlgorithmInput & preparedInput, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const;
+            HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const;
 
             /**
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
              *
              *  @param[in] graph                        The input graph to decompose.
-             *  @param[in] preparedInput                The input graph in pre-processed format.
+             *  @param[in] preprocessedGraph            The input graph in preprocessed format.
              *  @param[in] manipulationOperationCount   The number of manipulation operations which are provided to this function.
              *
              *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
@@ -165,13 +165,13 @@ namespace htd
              *
              *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
              */
-            HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const PreparedOrderingAlgorithmInput & preparedInput, int manipulationOperationCount, ...) const;
+            HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, int manipulationOperationCount, ...) const;
 
             /**
              *  Compute a decomposition of the given graph.
              *
              *  @param[in] graph                The input graph to decompose.
-             *  @param[in] preparedInput        The input graph in pre-processed format.
+             *  @param[in] preprocessedGraph    The input graph in preprocessed format.
              *  @param[in] maxBagSize           The upper bound for the maximum bag size of the decomposition.
              *  @param[in] maxIterationCount    The maximum number of iterations resulting in a higher maximum bag size than maxBagSize after which a null-pointer is returned.
              *
@@ -180,13 +180,13 @@ namespace htd
              *
              *  @return A pair consisting of the new ITreeDecomposition object representing the decomposition of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
              */
-            HTD_API std::pair<htd::ITreeDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const;
+            HTD_API std::pair<htd::ITreeDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const;
 
             /**
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
              *
              *  @param[in] graph                    The input graph to decompose.
-             *  @param[in] preparedInput            The input graph in pre-processed format.
+             *  @param[in] preprocessedGraph        The input graph in preprocessed format.
              *  @param[in] manipulationOperations   The manipulation operations which shall be applied.
              *  @param[in] maxBagSize               The upper bound for the maximum bag size of the decomposition.
              *  @param[in] maxIterationCount        The maximum number of iterations resulting in a higher maximum bag size than maxBagSize after which a null-pointer is returned.
@@ -202,7 +202,7 @@ namespace htd
              *
              *  @return A pair consisting of the new ITreeDecomposition object representing the decomposition of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
              */
-            HTD_API std::pair<htd::ITreeDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const PreparedOrderingAlgorithmInput & preparedInput, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const;
+            HTD_API std::pair<htd::ITreeDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const;
 
             /**
              *  Set the ordering algorithm which shall be used to compute the vertex elimination ordering.

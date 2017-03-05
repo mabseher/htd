@@ -28,7 +28,7 @@
 #include <htd/WidthMinimizingTreeDecompositionAlgorithm.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 
-#include <htd/OrderingAlgorithmPreprocessor.hpp>
+#include <htd/GraphPreprocessor.hpp>
 
 #include <cstdarg>
 #include <algorithm>
@@ -142,9 +142,9 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
 
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
-    htd::OrderingAlgorithmPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph);
+    htd::PreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
 
     htd::ITreeDecomposition * ret = nullptr;
 
@@ -170,7 +170,7 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
             remainingIterations = std::min(remainingIterations, implementation_->nonImprovementLimit_);
         }
 
-        std::pair<htd::ITreeDecomposition *, std::size_t> decompositionResult = implementation_->algorithm_->computeDecomposition(graph, *preparedInput, clonedManipulationOperations, bestMaxBagSize - 1, remainingIterations);
+        std::pair<htd::ITreeDecomposition *, std::size_t> decompositionResult = implementation_->algorithm_->computeDecomposition(graph, *preprocessedGraph, clonedManipulationOperations, bestMaxBagSize - 1, remainingIterations);
 
         htd::ITreeDecomposition * currentDecomposition = decompositionResult.first;
 
@@ -228,7 +228,7 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
         delete operation;
     }
 
-    delete preparedInput;
+    delete preprocessedGraph;
 
     return ret;
 }

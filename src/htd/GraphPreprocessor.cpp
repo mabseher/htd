@@ -1,5 +1,5 @@
 /* 
- * File:   OrderingAlgorithmPreprocessor.cpp
+ * File:   GraphPreprocessor.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,21 +22,21 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_ORDERINGALGORITHMPREPROCESSOR_CPP
-#define HTD_HTD_ORDERINGALGORITHMPREPROCESSOR_CPP
+#ifndef HTD_HTD_GRAPHPREPROCESSOR_CPP
+#define HTD_HTD_GRAPHPREPROCESSOR_CPP
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
-#include <htd/OrderingAlgorithmPreprocessor.hpp>
+#include <htd/GraphPreprocessor.hpp>
 
 #include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
 
 /**
- *  Private implementation details of class htd::MinDegreeOrderingAlgorithm.
+ *  Private implementation details of class htd::GraphPreprocessor.
  */
-struct htd::OrderingAlgorithmPreprocessor::Implementation
+struct htd::GraphPreprocessor::Implementation
 {
     /**
      *  Constructor for the implementation details structure.
@@ -59,9 +59,9 @@ struct htd::OrderingAlgorithmPreprocessor::Implementation
     const htd::LibraryInstance * managementInstance_;
 
     /**
-     *  Structure representing the pre-processed input for the algorithm.
+     *  Structure representing the preprocessed input for the algorithm.
      *
-     *  The pre-processing step consists of replacing the vertex identifiers by indices starting
+     *  The preprocessing step consists of replacing the vertex identifiers by indices starting
      *  at 0 so that vectors instead of maps can be used for efficiently accessing information.
      */
     struct PreparedInput
@@ -183,7 +183,7 @@ struct htd::OrderingAlgorithmPreprocessor::Implementation
          *  Contructor for the PreparedInput data structure.
          *
          *  @param[in] managementInstance   The management instance to which the new algorithm belongs.
-         *  @param[in] graph                The input graph which shall be pre-processed.
+         *  @param[in] graph                The input graph which shall be preprocessed.
          */
         PreparedInput(const htd::LibraryInstance & managementInstance, const htd::IMultiHypergraph & graph) : vertexNames(), neighborhood()
         {
@@ -224,7 +224,7 @@ struct htd::OrderingAlgorithmPreprocessor::Implementation
      *  @param[in] neighborhood The neighborhood relation of the remaining graph.
      *  @param[in] ordering     The resulting, partial vertex elimination ordering.
      *
-     *  @return True if at least one vertex was removed due to this pre-processing step, false otherwise.
+     *  @return True if at least one vertex was removed due to this preprocessing step, false otherwise.
      */
     bool eliminateVerticesOfDegreeLessThanTwo(std::unordered_set<htd::vertex_t> & vertices,
                                               std::unordered_set<htd::vertex_t> & vertexGroup1,
@@ -243,7 +243,7 @@ struct htd::OrderingAlgorithmPreprocessor::Implementation
      *  @param[in] neighborhood The neighborhood relation of the remaining graph.
      *  @param[in] ordering     The resulting, partial vertex elimination ordering.
      *
-     *  @return True if at least one vertex was removed due to this pre-processing step, false otherwise.
+     *  @return True if at least one vertex was removed due to this preprocessing step, false otherwise.
      */
     bool contractPaths(std::unordered_set<htd::vertex_t> & vertices,
                        std::unordered_set<htd::vertex_t> & vertexGroup1,
@@ -263,7 +263,7 @@ struct htd::OrderingAlgorithmPreprocessor::Implementation
      *  @param[in] neighborhood The neighborhood relation of the remaining graph.
      *  @param[in] ordering     The resulting, partial vertex elimination ordering.
      *
-     *  @return True if at least one vertex was removed due to this pre-processing step, false otherwise.
+     *  @return True if at least one vertex was removed due to this preprocessing step, false otherwise.
      */
     bool shrinkTriangles(std::unordered_set<htd::vertex_t> & vertices,
                          std::unordered_set<htd::vertex_t> & vertexGroup1,
@@ -282,10 +282,10 @@ struct htd::OrderingAlgorithmPreprocessor::Implementation
      *  @param[in] vertexGroup3 The set of all vertices of degree 3.
      *  @param[in] neighborhood The neighborhood relation of the remaining graph.
      *  @param[in] ordering     The resulting, partial vertex elimination ordering.
-     *  @param[in] maxDegree    The degree up to which a vertex shall be considered for this pre-processing.
+     *  @param[in] maxDegree    The degree up to which a vertex shall be considered for this preprocessing.
      *  @param[in] minTreeWidth The lower bound for the treewidth of the given graph.
      *
-     *  @return True if at least one vertex was removed due to this pre-processing step, false otherwise.
+     *  @return True if at least one vertex was removed due to this preprocessing step, false otherwise.
      */
     bool eliminateSimplicialVertices(std::unordered_set<htd::vertex_t> & vertices,
                                      std::unordered_set<htd::vertex_t> & vertexGroup1,
@@ -329,23 +329,23 @@ struct htd::OrderingAlgorithmPreprocessor::Implementation
                              std::size_t newDegree);
 };
 
-htd::OrderingAlgorithmPreprocessor::OrderingAlgorithmPreprocessor(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
+htd::GraphPreprocessor::GraphPreprocessor(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
     
 }
             
-htd::OrderingAlgorithmPreprocessor::~OrderingAlgorithmPreprocessor()
+htd::GraphPreprocessor::~GraphPreprocessor()
 {
     
 }
 
-htd::PreparedOrderingAlgorithmInput * htd::OrderingAlgorithmPreprocessor::prepare(const htd::IMultiHypergraph & graph, bool applyPreProcessing) const HTD_NOEXCEPT
+htd::PreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHypergraph & graph, bool applyPreProcessing) const HTD_NOEXCEPT
 {
-    htd::PreparedOrderingAlgorithmInput * ret = nullptr;
+    htd::PreprocessedGraph * ret = nullptr;
 
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
-    htd::OrderingAlgorithmPreprocessor::Implementation::PreparedInput input(managementInstance, graph);
+    htd::GraphPreprocessor::Implementation::PreparedInput input(managementInstance, graph);
 
     std::size_t size = input.vertexNames.size();
 
@@ -454,7 +454,7 @@ htd::PreparedOrderingAlgorithmInput * htd::OrderingAlgorithmPreprocessor::prepar
 
         std::sort(remainingVertices.begin(), remainingVertices.end());
 
-        ret = new htd::PreparedOrderingAlgorithmInput(std::move(vertexNames), std::move(neighborhood), std::move(ordering), std::move(remainingVertices), minTreeWidth);
+        ret = new htd::PreprocessedGraph(std::move(vertexNames), std::move(neighborhood), std::move(ordering), std::move(remainingVertices), minTreeWidth);
     }
     else
     {
@@ -462,34 +462,34 @@ htd::PreparedOrderingAlgorithmInput * htd::OrderingAlgorithmPreprocessor::prepar
 
         std::iota(remainingVertices.begin(), remainingVertices.end(), 0);
 
-        ret = new htd::PreparedOrderingAlgorithmInput(std::move(vertexNames), std::move(neighborhood), std::vector<htd::vertex_t>(), std::move(remainingVertices), 0);
+        ret = new htd::PreprocessedGraph(std::move(vertexNames), std::move(neighborhood), std::vector<htd::vertex_t>(), std::move(remainingVertices), 0);
     }
 
     return ret;
 }
 
-const htd::LibraryInstance * htd::OrderingAlgorithmPreprocessor::managementInstance(void) const HTD_NOEXCEPT
+const htd::LibraryInstance * htd::GraphPreprocessor::managementInstance(void) const HTD_NOEXCEPT
 {
     return implementation_->managementInstance_;
 }
 
-void htd::OrderingAlgorithmPreprocessor::setManagementInstance(const htd::LibraryInstance * const manager)
+void htd::GraphPreprocessor::setManagementInstance(const htd::LibraryInstance * const manager)
 {
     HTD_ASSERT(manager != nullptr)
 
     implementation_->managementInstance_ = manager;
 }
 
-htd::OrderingAlgorithmPreprocessor * htd::OrderingAlgorithmPreprocessor::clone(void) const
+htd::GraphPreprocessor * htd::GraphPreprocessor::clone(void) const
 {
-    return new htd::OrderingAlgorithmPreprocessor(implementation_->managementInstance_);
+    return new htd::GraphPreprocessor(implementation_->managementInstance_);
 }
 
-void htd::OrderingAlgorithmPreprocessor::Implementation::assignVertexToGroup(htd::vertex_t vertex,
-                                                                             std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                                             std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                                             std::unordered_set<htd::vertex_t> & vertexGroup3,
-                                                                             std::size_t newDegree)
+void htd::GraphPreprocessor::Implementation::assignVertexToGroup(htd::vertex_t vertex,
+                                                                 std::unordered_set<htd::vertex_t> & vertexGroup1,
+                                                                 std::unordered_set<htd::vertex_t> & vertexGroup2,
+                                                                 std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                                 std::size_t newDegree)
 {
     switch (newDegree)
     {
@@ -515,12 +515,12 @@ void htd::OrderingAlgorithmPreprocessor::Implementation::assignVertexToGroup(htd
     }
 }
 
-void htd::OrderingAlgorithmPreprocessor::Implementation::assignVertexToGroup(htd::vertex_t vertex,
-                                                                             std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                                             std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                                             std::unordered_set<htd::vertex_t> & vertexGroup3,
-                                                                             std::size_t newDegree,
-                                                                             std::size_t oldDegree)
+void htd::GraphPreprocessor::Implementation::assignVertexToGroup(htd::vertex_t vertex,
+                                                                 std::unordered_set<htd::vertex_t> & vertexGroup1,
+                                                                 std::unordered_set<htd::vertex_t> & vertexGroup2,
+                                                                 std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                                 std::size_t newDegree,
+                                                                 std::size_t oldDegree)
 {
     switch (oldDegree)
     {
@@ -548,12 +548,12 @@ void htd::OrderingAlgorithmPreprocessor::Implementation::assignVertexToGroup(htd
     assignVertexToGroup(vertex, vertexGroup1, vertexGroup2, vertexGroup3, newDegree);
 }
 
-bool htd::OrderingAlgorithmPreprocessor::Implementation::eliminateVerticesOfDegreeLessThanTwo(std::unordered_set<htd::vertex_t> & vertices,
-                                                                                              std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                                                              std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                                                              std::unordered_set<htd::vertex_t> & vertexGroup3,
-                                                                                              std::vector<std::vector<htd::vertex_t>> & neighborhood,
-                                                                                              std::vector<htd::vertex_t> & ordering)
+bool htd::GraphPreprocessor::Implementation::eliminateVerticesOfDegreeLessThanTwo(std::unordered_set<htd::vertex_t> & vertices,
+                                                                                  std::unordered_set<htd::vertex_t> & vertexGroup1,
+                                                                                  std::unordered_set<htd::vertex_t> & vertexGroup2,
+                                                                                  std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                                                  std::vector<std::vector<htd::vertex_t>> & neighborhood,
+                                                                                  std::vector<htd::vertex_t> & ordering)
 {
     std::size_t oldOrderingSize = ordering.size();
 
@@ -589,12 +589,12 @@ bool htd::OrderingAlgorithmPreprocessor::Implementation::eliminateVerticesOfDegr
     return ordering.size() > oldOrderingSize;
 }
 
-bool htd::OrderingAlgorithmPreprocessor::Implementation::contractPaths(std::unordered_set<htd::vertex_t> & vertices,
-                                                                       std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                                       std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                                       std::unordered_set<htd::vertex_t> & vertexGroup3,
-                                                                       std::vector<std::vector<htd::vertex_t>> & neighborhood,
-                                                                       std::vector<htd::vertex_t> & ordering)
+bool htd::GraphPreprocessor::Implementation::contractPaths(std::unordered_set<htd::vertex_t> & vertices,
+                                                           std::unordered_set<htd::vertex_t> & vertexGroup1,
+                                                           std::unordered_set<htd::vertex_t> & vertexGroup2,
+                                                           std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                           std::vector<std::vector<htd::vertex_t>> & neighborhood,
+                                                           std::vector<htd::vertex_t> & ordering)
 {
     std::size_t oldOrderingSize = ordering.size();
 
@@ -642,12 +642,12 @@ bool htd::OrderingAlgorithmPreprocessor::Implementation::contractPaths(std::unor
     return ordering.size() > oldOrderingSize;
 }
 
-bool htd::OrderingAlgorithmPreprocessor::Implementation::shrinkTriangles(std::unordered_set<htd::vertex_t> & vertices,
-                                                                         std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                                         std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                                         std::unordered_set<htd::vertex_t> & vertexGroup3,
-                                                                         std::vector<std::vector<htd::vertex_t>> & neighborhood,
-                                                                         std::vector<htd::vertex_t> & ordering)
+bool htd::GraphPreprocessor::Implementation::shrinkTriangles(std::unordered_set<htd::vertex_t> & vertices,
+                                                             std::unordered_set<htd::vertex_t> & vertexGroup1,
+                                                             std::unordered_set<htd::vertex_t> & vertexGroup2,
+                                                             std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                             std::vector<std::vector<htd::vertex_t>> & neighborhood,
+                                                             std::vector<htd::vertex_t> & ordering)
 {
     std::size_t oldOrderingSize = ordering.size();
 
@@ -760,14 +760,14 @@ bool htd::OrderingAlgorithmPreprocessor::Implementation::shrinkTriangles(std::un
     return ordering.size() > oldOrderingSize;
 }
 
-bool htd::OrderingAlgorithmPreprocessor::Implementation::eliminateSimplicialVertices(std::unordered_set<htd::vertex_t> & vertices,
-                                                                                     std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                                                     std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                                                     std::unordered_set<htd::vertex_t> & vertexGroup3,
-                                                                                     std::vector<std::vector<htd::vertex_t>> & neighborhood,
-                                                                                     std::vector<htd::vertex_t> & ordering,
-                                                                                     std::size_t maxDegree,
-                                                                                     std::size_t & minTreewidth)
+bool htd::GraphPreprocessor::Implementation::eliminateSimplicialVertices(std::unordered_set<htd::vertex_t> & vertices,
+                                                                         std::unordered_set<htd::vertex_t> & vertexGroup1,
+                                                                         std::unordered_set<htd::vertex_t> & vertexGroup2,
+                                                                         std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                                         std::vector<std::vector<htd::vertex_t>> & neighborhood,
+                                                                         std::vector<htd::vertex_t> & ordering,
+                                                                         std::size_t maxDegree,
+                                                                         std::size_t & minTreewidth)
 {
     std::size_t oldOrderingSize = ordering.size();
 
@@ -818,4 +818,4 @@ bool htd::OrderingAlgorithmPreprocessor::Implementation::eliminateSimplicialVert
     return ordering.size() > oldOrderingSize;
 }
 
-#endif /* HTD_HTD_ORDERINGALGORITHMPREPROCESSOR_CPP */
+#endif /* HTD_HTD_GRAPHPREPROCESSOR_CPP */

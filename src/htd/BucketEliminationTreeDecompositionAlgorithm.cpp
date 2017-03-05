@@ -38,7 +38,7 @@
 #include <htd/CompressionOperation.hpp>
 #include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>
-#include <htd/OrderingAlgorithmPreprocessor.hpp>
+#include <htd/GraphPreprocessor.hpp>
 
 #include <algorithm>
 #include <cstdarg>
@@ -127,13 +127,13 @@ struct htd::BucketEliminationTreeDecompositionAlgorithm::Implementation
      *  Compute a new mutable tree decompostion of the given graph.
      *
      *  @param[in] graph                The graph which shall be decomposed.
-     *  @param[in] preparedInput        The input graph in pre-processed format.
+     *  @param[in] preprocessedGraph    The input graph in preprocessed format.
      *  @param[in] maxBagSize           The upper bound for the maximum bag size of the decomposition.
      *  @param[in] maxIterationCount    The maximum number of iterations resulting in a higher maximum bag size than maxBagSize after which a null-pointer is returned.
      *
      *  @return A pair consisting of a mutable tree decompostion of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
      */
-    std::pair<htd::IMutableTreeDecomposition *, std::size_t> computeMutableDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const;
+    std::pair<htd::IMutableTreeDecomposition *, std::size_t> computeMutableDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const;
 };
 
 htd::BucketEliminationTreeDecompositionAlgorithm::BucketEliminationTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -173,36 +173,36 @@ std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDeco
 
 std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const
 {
-    htd::OrderingAlgorithmPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::PreparedOrderingAlgorithmInput * preparedInput = preprocessor.prepare(graph, false);
+    htd::PreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
 
     std::pair<htd::ITreeDecomposition *, std::size_t> ret =
-        computeDecomposition(graph, *preparedInput, manipulationOperations, maxBagSize, maxIterationCount);
+        computeDecomposition(graph, *preprocessedGraph, manipulationOperations, maxBagSize, maxIterationCount);
 
-    delete preparedInput;
+    delete preprocessedGraph;
 
     return ret;
 }
 
-htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput) const
+htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph) const
 {
-    return computeDecomposition(graph, preparedInput, std::vector<htd::IDecompositionManipulationOperation *>());
+    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>());
 }
 
-htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
+htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
-    return computeDecomposition(graph, preparedInput, manipulationOperations, (std::size_t)-1, 1).first;
+    return computeDecomposition(graph, preprocessedGraph, manipulationOperations, (std::size_t)-1, 1).first;
 }
 
-std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const
+std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const
 {
-    return computeDecomposition(graph, preparedInput, std::vector<htd::IDecompositionManipulationOperation *>(), maxBagSize, maxIterationCount);
+    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), maxBagSize, maxIterationCount);
 }
 
-std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const
+std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const
 {
-    std::pair<htd::IMutableTreeDecomposition *, std::size_t> ret = implementation_->computeMutableDecomposition(graph, preparedInput, maxBagSize, maxIterationCount);
+    std::pair<htd::IMutableTreeDecomposition *, std::size_t> ret = implementation_->computeMutableDecomposition(graph, preprocessedGraph, maxBagSize, maxIterationCount);
 
     htd::IMutableTreeDecomposition * decomposition = ret.first;
 
@@ -294,7 +294,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
     return computeDecomposition(graph, manipulationOperations);
 }
 
-htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, int manipulationOperationCount, ...) const
+htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, int manipulationOperationCount, ...) const
 {
     va_list arguments;
 
@@ -309,7 +309,7 @@ htd::ITreeDecomposition * htd::BucketEliminationTreeDecompositionAlgorithm::comp
 
     va_end(arguments);
 
-    return computeDecomposition(graph, preparedInput, manipulationOperations);
+    return computeDecomposition(graph, preprocessedGraph, manipulationOperations);
 }
 
 void htd::BucketEliminationTreeDecompositionAlgorithm::setOrderingAlgorithm(htd::IOrderingAlgorithm * algorithm)
@@ -414,7 +414,7 @@ htd::BucketEliminationTreeDecompositionAlgorithm * htd::BucketEliminationTreeDec
     return new htd::BucketEliminationTreeDecompositionAlgorithm(*this);
 }
 
-std::pair<htd::IMutableTreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph, const htd::PreparedOrderingAlgorithmInput & preparedInput, std::size_t maxBagSize, std::size_t maxIterationCount) const
+std::pair<htd::IMutableTreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::Implementation::computeMutableDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const
 {
     htd::IMutableTreeDecomposition * ret = managementInstance_->treeDecompositionFactory().createInstance();
 
@@ -422,7 +422,7 @@ std::pair<htd::IMutableTreeDecomposition *, std::size_t> htd::BucketEliminationT
 
     if (graph.vertexCount() > 0)
     {
-        std::pair<htd::IGraphDecomposition *, std::size_t> graphDecomposition = baseAlgorithm_->computeDecomposition(graph, preparedInput, maxBagSize, maxIterationCount);
+        std::pair<htd::IGraphDecomposition *, std::size_t> graphDecomposition = baseAlgorithm_->computeDecomposition(graph, preprocessedGraph, maxBagSize, maxIterationCount);
 
         if (graphDecomposition.first != nullptr)
         {

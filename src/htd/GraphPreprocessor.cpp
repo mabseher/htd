@@ -28,8 +28,10 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/GraphPreprocessor.hpp>
+#include <htd/PreprocessedGraph.hpp>
 
 #include <algorithm>
+#include <numeric>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -339,9 +341,9 @@ htd::GraphPreprocessor::~GraphPreprocessor()
     
 }
 
-htd::PreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHypergraph & graph, bool applyPreProcessing) const HTD_NOEXCEPT
+htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHypergraph & graph, bool applyPreProcessing) const HTD_NOEXCEPT
 {
-    htd::PreprocessedGraph * ret = nullptr;
+    htd::IPreprocessedGraph * ret = nullptr;
 
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 

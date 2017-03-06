@@ -30,7 +30,7 @@
 
 #include <htd/IGraphDecompositionManipulationOperation.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
-#include <htd/PreprocessedGraph.hpp>
+#include <htd/IPreprocessedGraph.hpp>
 
 #include <utility>
 
@@ -126,7 +126,7 @@ namespace htd
              *
              *  @return A new IGraphDecomposition object representing the decomposition of the given graph.
              */
-            HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph) const;
+            HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const;
 
             /**
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
@@ -143,7 +143,7 @@ namespace htd
              *
              *  @return A new IGraphDecomposition object representing the decomposition of the given graph.
              */
-            HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const;
+            HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const;
 
             /**
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
@@ -160,7 +160,7 @@ namespace htd
              *
              *  @return A new IGraphDecomposition object representing the decomposition of the given graph.
              */
-            HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, int manipulationOperationCount, ...) const;
+            HTD_API htd::IGraphDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, int manipulationOperationCount, ...) const;
 
             /**
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
@@ -175,7 +175,7 @@ namespace htd
              *
              *  @return A pair consisting of the new IGraphDecomposition object representing the decomposition of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
              */
-            HTD_API std::pair<htd::IGraphDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const;
+            HTD_API std::pair<htd::IGraphDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const;
 
             /**
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
@@ -197,7 +197,7 @@ namespace htd
              *
              *  @return A pair consisting of the new IGraphDecomposition object representing the decomposition of the given graph or a null-pointer in case that no decomposition with a appropriate maximum bag size could be found after maxIterationCount iterations and the number of iterations actually needed to find the decomposition at hand.
              */
-            HTD_API std::pair<htd::IGraphDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const;
+            HTD_API std::pair<htd::IGraphDecomposition *, std::size_t> computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const;
 
             /**
              *  Set the ordering algorithm which shall be used to compute the vertex elimination ordering.

@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/IMultiHypergraph.hpp>
 #include <htd/VertexOrdering.hpp>
-#include <htd/PreprocessedGraph.hpp>
+#include <htd/IPreprocessedGraph.hpp>
 
 namespace htd
 {
@@ -71,7 +71,7 @@ namespace htd
              *
              *  @return The vertex ordering of the given graph.
              */
-            virtual htd::VertexOrdering * computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT = 0;
+            virtual htd::VertexOrdering * computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT = 0;
 
 #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             /**

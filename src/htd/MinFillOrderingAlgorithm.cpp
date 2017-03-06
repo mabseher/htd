@@ -134,7 +134,7 @@ struct htd::MinFillOrderingAlgorithm::Implementation
          *  @param[in] managementInstance   The management instance to which the new algorithm belongs.
          *  @param[in] preprocessedGraph    The input graph in preprocessed format.
          */
-        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::PreprocessedGraph & preprocessedGraph) : minFill((std::size_t)-1), totalFill(0), fillValue(), pool()
+        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::IPreprocessedGraph & preprocessedGraph) : minFill((std::size_t)-1), totalFill(0), fillValue(), pool()
         {
             HTD_UNUSED(managementInstance)
 
@@ -192,7 +192,7 @@ struct htd::MinFillOrderingAlgorithm::Implementation
      *
      *  @return The maximum bag size of the decomposition which is obtained via bucket elimination using the input graph and the resulting ordering.
      */
-    std::size_t writeOrderingTo(const htd::PreprocessedGraph & preprocessedGraph, const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
+    std::size_t writeOrderingTo(const htd::IPreprocessedGraph & preprocessedGraph, const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
 };
 
 htd::MinFillOrderingAlgorithm::MinFillOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -214,7 +214,7 @@ htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::
 {
     htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::PreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
 
     htd::VertexOrdering * ret = computeOrdering(graph, *preprocessedGraph, maxBagSize, maxIterationCount);
 
@@ -223,12 +223,12 @@ htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::
     return ret;
 }
 
-htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
+htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
 {
     return computeOrdering(graph, preprocessedGraph, (std::size_t)-1, 1);
 }
 
-htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
+htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
 {
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
@@ -259,7 +259,7 @@ htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::
     return new htd::VertexOrdering(std::move(ordering), iterations);
 }
 
-std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const htd::PreprocessedGraph & preprocessedGraph, const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT
+std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const htd::IPreprocessedGraph & preprocessedGraph, const PreparedInput & input, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT
 {
     std::size_t ret = 0;
 

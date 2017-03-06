@@ -129,6 +129,7 @@
 #include <htd/IPathDecomposition.hpp>
 #include <htd/IPathDecompositionManipulationOperation.hpp>
 #include <htd/IPath.hpp>
+#include <htd/IPreprocessedGraph.hpp>
 #include <htd/ISetCoverAlgorithm.hpp>
 #include <htd/IStronglyConnectedComponentAlgorithm.hpp>
 #include <htd/IterativeImprovementTreeDecompositionAlgorithm.hpp>

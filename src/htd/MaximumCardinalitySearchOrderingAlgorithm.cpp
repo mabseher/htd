@@ -75,7 +75,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 {
     htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::PreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
 
     htd::VertexOrdering * ret = computeOrdering(graph, *preprocessedGraph);
 
@@ -84,7 +84,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
     return ret;
 }
 
-htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::PreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
+htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
 {
     HTD_UNUSED(graph)
 

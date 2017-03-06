@@ -26,6 +26,7 @@
 #define HTD_HTD_PREPROCESSEDGRAPH_HPP
 
 #include <htd/Globals.hpp>
+#include <htd/IPreprocessedGraph.hpp>
 
 #include <vector>
 #include <memory>
@@ -44,7 +45,7 @@ namespace htd
      *  vertex is assigned the ID 0. This allows for efficient storage and data handling
      *  based on arrays and vectors.
      */
-    class PreprocessedGraph
+    class PreprocessedGraph : public htd::IPreprocessedGraph
     {
         public:
             /**
@@ -67,67 +68,21 @@ namespace htd
              */
             HTD_API virtual ~PreprocessedGraph();
 
-            /**
-             *  Getter for the vertex count of the input graph.
-             *
-             *  @return The vertex count of the input graph.
-             */
-            HTD_API std::size_t vertexCount(void) const HTD_NOEXCEPT;
+            HTD_API std::size_t vertexCount(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            /**
-             *  Getter for the actual identifiers of the vertices.
-             *
-             *  @return The actual identifiers of the vertices.
-             */
-            HTD_API const std::vector<htd::vertex_t> & vertexNames(void) const HTD_NOEXCEPT;
+            HTD_API const std::vector<htd::vertex_t> & vertexNames(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            /**
-             *  Getter for the actual identifier of the given vertex.
-             *
-             *  @return The actual identifier of the given vertex.
-             */
-            HTD_API htd::vertex_t vertexName(htd::vertex_t vertex) const;
+            HTD_API htd::vertex_t vertexName(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            /**
-             *  Getter for the vector containing the preprocessed neighborhood of each of the vertices.
-             *
-             *  @note The neighborhood of each vertex returned by this data structure does not include the respective vertex itself.
-             *
-             *  @return The vector containing the preprocessed neighborhood of each of the vertices.
-             */
-            HTD_API const std::vector<std::vector<htd::vertex_t>> & neighborhood(void) const HTD_NOEXCEPT;
+            HTD_API const std::vector<std::vector<htd::vertex_t>> & neighborhood(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            /**
-             *  Getter for the vector containing the preprocessed neighborhood of a vertex.
-             *
-             *  @note The neighborhood returned by this data structure does not include the vertex itself.
-             *
-             *  @param[in] vertex   The vertex whose neighborhood shall be returned.
-             *
-             *  @return The vector containing the preprocessed neighborhood of the requested vertex.
-             */
-            HTD_API const std::vector<htd::vertex_t> & neighborhood(htd::vertex_t vertex) const;
+            HTD_API const std::vector<htd::vertex_t> & neighborhood(htd::vertex_t vertex) const HTD_OVERRIDE;
 
-            /**
-             *  Getter for the partial vertex elimination ordering computed during the preprocessing phase.
-             *
-             *  @return The partial vertex elimination ordering computed during the preprocessing phase.
-             */
-            HTD_API const std::vector<htd::vertex_t> & eliminationSequence(void) const HTD_NOEXCEPT;
+            HTD_API const std::vector<htd::vertex_t> & eliminationSequence(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            /**
-             *  Getter for the set of vertices (with 0-based IDs) which were not eliminated during the preprocessing phase.
-             *
-             *  @return The set of vertices (with 0-based IDs) which were not eliminated during the preprocessing phase.
-             */
-            HTD_API const std::vector<htd::vertex_t> & remainingVertices(void) const HTD_NOEXCEPT;
+            HTD_API const std::vector<htd::vertex_t> & remainingVertices(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            /**
-             *  Getter for the lower bound of the treewidth of the input graph.
-             *
-             *  @return The lower bound of the treewidth of the input graph.
-             */
-            HTD_API std::size_t minTreeWidth(void) const HTD_NOEXCEPT;
+            HTD_API std::size_t minTreeWidth(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
         private:
             struct Implementation;

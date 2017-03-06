@@ -33,6 +33,9 @@
 #include <htd_main/WidthExporter.hpp>
 #include <htd_main/TdFormatExporter.hpp>
 #include <htd_main/HumanReadableExporter.hpp>
+#include <htd_main/GrFormatGraphToTreeDecompositionProcessor.hpp>
+#include <htd_main/HgrFormatGraphToTreeDecompositionProcessor.hpp>
+#include <htd_main/LpFormatGraphToTreeDecompositionProcessor.hpp>
 
 #include <csignal>
 #include <cstring>
@@ -1048,24 +1051,69 @@ int main(int argc, const char * const * const argv)
                             minimizeWidth(*libraryInstance, algorithm, importer.import(std::cin), *exporter, printProgressOption.used(), outputFormat);
                         }
                     }
+
+                    delete exporter;
                 }
                 else
                 {
-                    htd::ITreeDecompositionAlgorithm * algorithm = libraryInstance->treeDecompositionAlgorithmFactory().createInstance();
+                    htd_main::IGraphToTreeDecompositionProcessor * processor = nullptr;
+
+                    if (std::string(inputFormatChoice.value()) == "gr")
+                    {
+                        processor = new htd_main::GrFormatGraphToTreeDecompositionProcessor(libraryInstance);
+                    }
+                    else if (std::string(inputFormatChoice.value()) == "hgr")
+                    {
+                        processor = new htd_main::HgrFormatGraphToTreeDecompositionProcessor(libraryInstance);
+                    }
+                    else if (std::string(inputFormatChoice.value()) == "lp")
+                    {
+                        processor = new htd_main::LpFormatGraphToTreeDecompositionProcessor(libraryInstance);
+                    }
+
+                    processor->setExporter(exporter);
+
+                    processor->registerParsingCallback([](void){
+                        std::chrono::milliseconds::rep msSinceEpoch =
+                            std::chrono::duration_cast<std::chrono::milliseconds>
+                                (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                        std::cout << "PARSING FINISHED:        " << msSinceEpoch << std::endl;
+                    });
+
+                    processor->registerPreprocessingCallback([](void){
+                        std::chrono::milliseconds::rep msSinceEpoch =
+                            std::chrono::duration_cast<std::chrono::milliseconds>
+                                (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                        std::cout << "PRE-PROCESSING FINISHED: " << msSinceEpoch << std::endl;
+                    });
+
+                    processor->registerDecompositionCallback([](void){
+                        std::chrono::milliseconds::rep msSinceEpoch =
+                            std::chrono::duration_cast<std::chrono::milliseconds>
+                                (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                        std::cout << "DECOMPOSITION FINISHED:  " << msSinceEpoch << std::endl;
+                    });
+
+                    std::chrono::milliseconds::rep msSinceEpoch =
+                        std::chrono::duration_cast<std::chrono::milliseconds>
+                            (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                    std::cout << "START:                   " << msSinceEpoch << std::endl;
 
                     if (instanceOption.used())
                     {
-                        run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance, instanceOption.value());
+                        processor->process(instanceOption.value(), std::cout);
                     }
                     else
                     {
-                        run(*algorithm, *exporter, inputFormatChoice.value(), libraryInstance);
+                        processor->process();
                     }
 
-                    delete algorithm;
+                    delete processor;
                 }
-
-                delete exporter;
             }
         }
     }

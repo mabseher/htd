@@ -59,6 +59,27 @@ namespace htd
             virtual htd::IHypertreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE = 0;
 
             /**
+             *  Compute a decomposition of the given graph.
+             *
+             *  @param[in] graph                The input graph to decompose.
+             *  @param[in] preprocessedGraph    The input graph in preprocessed format.
+             *
+             *  @return A new IHypertreeDecomposition object representing the decomposition of the given graph.
+             */
+            virtual htd::IHypertreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_OVERRIDE = 0;
+
+            /**
+             *  Compute a decomposition of the given graph and apply the given manipulation operations to it.
+             *
+             *  @param[in] graph                    The input graph to decompose.
+             *  @param[in] preprocessedGraph        The input graph in preprocessed format.
+             *  @param[in] manipulationOperations   The manipulation operations which shall be applied.
+             *
+             *  @return A new IHypertreeDecomposition object representing the decomposition of the given graph.
+             */
+            virtual htd::IHypertreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE = 0;
+
+            /**
              *  Create a deep copy of the current hypertree decomposition algorithm.
              *
              *  @return A new IHypertreeDecompositionAlgorithm object identical to the current hypertree decomposition algorithm.

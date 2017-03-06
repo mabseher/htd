@@ -28,7 +28,7 @@
 #include <htd/Globals.hpp>
 #include <htd/LibraryInstance.hpp>
 #include <htd/IMultiHypergraph.hpp>
-#include <htd/PreprocessedGraph.hpp>
+#include <htd/IPreprocessedGraph.hpp>
 
 namespace htd
 {
@@ -66,7 +66,7 @@ namespace htd
              *
              *  @return A preprocessed version of the input graph.
              */
-            HTD_API htd::PreprocessedGraph * prepare(const htd::IMultiHypergraph & graph, bool applyPreprocessing = true) const HTD_NOEXCEPT;
+            HTD_API htd::IPreprocessedGraph * prepare(const htd::IMultiHypergraph & graph, bool applyPreprocessing = true) const HTD_NOEXCEPT;
 
             /**
              *  Getter for the associated management class.

@@ -138,13 +138,46 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
                                                                                                const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
                                                                                                const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const
 {
-    std::size_t bestMaxBagSize = (std::size_t)-1;
-
-    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+    htd::ITreeDecomposition * ret = nullptr;
 
     htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::PreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
+
+    ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations, progressCallback);
+
+    delete preprocessedGraph;
+
+    return ret;
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const
+{
+    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t){});
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                               const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                               const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const
+{
+    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), progressCallback);
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                               const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                               const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
+{
+    return computeDecomposition(graph, preprocessedGraph, manipulationOperations, [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t){});
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                               const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                               const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
+                                                                                               const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const
+{
+    std::size_t bestMaxBagSize = (std::size_t)-1;
+
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
     htd::ITreeDecomposition * ret = nullptr;
 
@@ -170,7 +203,7 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
             remainingIterations = std::min(remainingIterations, implementation_->nonImprovementLimit_);
         }
 
-        std::pair<htd::ITreeDecomposition *, std::size_t> decompositionResult = implementation_->algorithm_->computeDecomposition(graph, *preprocessedGraph, clonedManipulationOperations, bestMaxBagSize - 1, remainingIterations);
+        std::pair<htd::ITreeDecomposition *, std::size_t> decompositionResult = implementation_->algorithm_->computeDecomposition(graph, preprocessedGraph, clonedManipulationOperations, bestMaxBagSize - 1, remainingIterations);
 
         htd::ITreeDecomposition * currentDecomposition = decompositionResult.first;
 
@@ -228,8 +261,6 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
         delete operation;
     }
 
-    delete preprocessedGraph;
-
     return ret;
 }
 
@@ -251,6 +282,23 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
     return computeDecomposition(graph, manipulationOperations);
 }
 
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, int manipulationOperationCount, ...) const
+{
+    va_list arguments;
+
+    va_start(arguments, manipulationOperationCount);
+
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+
+    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
+    {
+        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
+    }
+
+    va_end(arguments);
+
+    return computeDecomposition(graph, preprocessedGraph, manipulationOperations);
+}
 
 void htd::WidthMinimizingTreeDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {

@@ -34,6 +34,7 @@
 #include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/PostOrderTreeTraversal.hpp>
+#include <htd/GraphPreprocessor.hpp>
 
 #include <cstdarg>
 #include <stdexcept>
@@ -112,25 +113,27 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
     return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>());
 }
 
-htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, int manipulationOperationCount, ...) const
+htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
-    va_list arguments;
+    htd::IHypertreeDecomposition * ret = nullptr;
 
-    va_start(arguments, manipulationOperationCount);
+    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
 
-    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
-    {
-        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
-    }
+    ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations);
 
-    va_end(arguments);
+    delete preprocessedGraph;
 
-    return computeDecomposition(graph, manipulationOperations);
+    return ret;
 }
 
-htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
+htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const
+{
+    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>());
+}
+
+htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
     htd::IMutableHypertreeDecomposition * ret = nullptr;
 
@@ -138,7 +141,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
     HTD_ASSERT(algorithm != nullptr)
 
-    htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph);
+    htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph, preprocessedGraph);
 
     delete algorithm;
 
@@ -220,6 +223,42 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
     delete treeDecomposition;
 
     return ret;
+}
+
+htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, int manipulationOperationCount, ...) const
+{
+    va_list arguments;
+
+    va_start(arguments, manipulationOperationCount);
+
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+
+    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
+    {
+        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
+    }
+
+    va_end(arguments);
+
+    return computeDecomposition(graph, manipulationOperations);
+}
+
+htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, int manipulationOperationCount, ...) const
+{
+    va_list arguments;
+
+    va_start(arguments, manipulationOperationCount);
+
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+
+    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
+    {
+        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
+    }
+
+    va_end(arguments);
+
+    return computeDecomposition(graph, preprocessedGraph, manipulationOperations);
 }
 
 void htd::HypertreeDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)

@@ -27,6 +27,8 @@
 
 #include <htd/IterativeImprovementTreeDecompositionAlgorithm.hpp>
 
+#include <htd/GraphPreprocessor.hpp>
+
 #include <cstdarg>
 
 /**
@@ -170,6 +172,43 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
                                                                                                     const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
                                                                                                     const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
 {
+    htd::ITreeDecomposition * ret = nullptr;
+
+    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
+
+    ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations, progressCallback);
+
+    delete preprocessedGraph;
+
+    return ret;
+}
+
+htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const
+{
+    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){});
+}
+
+htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                    const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                                    const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
+{
+    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), progressCallback);
+}
+
+htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                    const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                                    const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
+{
+    return computeDecomposition(graph, preprocessedGraph, manipulationOperations, [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){});
+}
+
+htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                    const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                                    const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
+                                                                                                    const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
+{
     std::vector<htd::ILabelingFunction *> labelingFunctions;
 
     std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations;
@@ -201,7 +240,7 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
 
     for (htd::index_t iteration = 0; (iteration == 0 || implementation_->iterationCount_ == 0 || iteration < implementation_->iterationCount_) && nonImprovementCount <= implementation_->nonImprovementLimit_ && !managementInstance.isTerminated(); ++iteration)
     {
-        htd::IMutableTreeDecomposition * currentDecomposition = dynamic_cast<htd::IMutableTreeDecomposition *>(implementation_->algorithm_->computeDecomposition(graph));
+        htd::IMutableTreeDecomposition * currentDecomposition = dynamic_cast<htd::IMutableTreeDecomposition *>(implementation_->algorithm_->computeDecomposition(graph, preprocessedGraph));
 
         if (currentDecomposition != nullptr)
         {
@@ -324,6 +363,23 @@ htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::c
     return computeDecomposition(graph, manipulationOperations);
 }
 
+htd::ITreeDecomposition * htd::IterativeImprovementTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, int manipulationOperationCount, ...) const
+{
+    va_list arguments;
+
+    va_start(arguments, manipulationOperationCount);
+
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+
+    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
+    {
+        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
+    }
+
+    va_end(arguments);
+
+    return computeDecomposition(graph, preprocessedGraph, manipulationOperations);
+}
 
 void htd::IterativeImprovementTreeDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {

@@ -28,6 +28,8 @@
 #include <htd/CombinedWidthMinimizingTreeDecompositionAlgorithm.hpp>
 #include <htd/WidthMinimizingTreeDecompositionAlgorithm.hpp>
 
+#include <htd/GraphPreprocessor.hpp>
+
 #include <cstdarg>
 
 /**
@@ -121,6 +123,43 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
                                                                                                        const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
                                                                                                        const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const
 {
+    htd::ITreeDecomposition * ret = nullptr;
+
+    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
+
+    ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations, progressCallback);
+
+    delete preprocessedGraph;
+
+    return ret;
+}
+
+htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const
+{
+    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t){});
+}
+
+htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                       const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const
+{
+    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), progressCallback);
+}
+
+htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                       const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                                       const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
+{
+    return computeDecomposition(graph, preprocessedGraph, manipulationOperations, [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t){});
+}
+
+htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                       const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                                       const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
+                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const
+{
     std::size_t bestMaxBagSize = (std::size_t)-1;
 
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
@@ -145,7 +184,7 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
         if (widthMinimizingTreeDecompositionAlgorithm != nullptr)
         {
             htd::ITreeDecomposition * currentDecomposition =
-                widthMinimizingTreeDecompositionAlgorithm->computeDecomposition(graph, clonedManipulationOperations, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, std::size_t maximumBagSize)
+                widthMinimizingTreeDecompositionAlgorithm->computeDecomposition(graph, preprocessedGraph, clonedManipulationOperations, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, std::size_t maximumBagSize)
                 {
                     progressCallback(graph, decomposition, maximumBagSize);
                 });
@@ -172,7 +211,7 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
         }
         else
         {
-            htd::ITreeDecomposition * currentDecomposition = (*it)->computeDecomposition(graph, clonedManipulationOperations);
+            htd::ITreeDecomposition * currentDecomposition = (*it)->computeDecomposition(graph, preprocessedGraph, clonedManipulationOperations);
 
             if (currentDecomposition != nullptr)
             {
@@ -229,6 +268,23 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
     return computeDecomposition(graph, manipulationOperations);
 }
 
+htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, int manipulationOperationCount, ...) const
+{
+    va_list arguments;
+
+    va_start(arguments, manipulationOperationCount);
+
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+
+    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
+    {
+        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
+    }
+
+    va_end(arguments);
+
+    return computeDecomposition(graph, preprocessedGraph, manipulationOperations);
+}
 
 void htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)
 {

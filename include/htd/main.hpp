@@ -84,6 +84,7 @@
 #include <htd/IGraphDecompositionManipulationOperation.hpp>
 #include <htd/IGraph.hpp>
 #include <htd/IGraphLabeling.hpp>
+#include <htd/IGraphPreprocessor.hpp>
 #include <htd/IGraphTraversal.hpp>
 #include <htd/IHyperedgeCollection.hpp>
 #include <htd/IHypergraph.hpp>

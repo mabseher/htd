@@ -45,7 +45,11 @@ struct htd::GraphPreprocessor::Implementation
      *
      *  @param[in] manager   The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager),
+                                                                 applyPreprocessing1_(false),
+                                                                 applyPreprocessing2_(false),
+                                                                 applyPreprocessing3_(false),
+                                                                 applyPreprocessing4_(false)
     {
 
     }
@@ -59,6 +63,35 @@ struct htd::GraphPreprocessor::Implementation
      *  The management instance to which the current object instance belongs.
      */
     const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  A boolean flag indicating whether all vertices
+     *  of degree less than 2 should be removed from
+     *  an input graph.
+     */
+    bool applyPreprocessing1_;
+
+    /**
+     *  A boolean flag indicating whether all paths
+     *  in an input graph should be contracted.
+     */
+    bool applyPreprocessing2_;
+
+    /**
+     *  A boolean flag indicating whether all vertices
+     *  of degree 3 should be eliminated from a given
+     *  input graph in case that at least two of its
+     *  neighbors are adjacent.
+     */
+    bool applyPreprocessing3_;
+
+    /**
+     *  A boolean flag indicating whether all vertices,
+     *  for which it holds that all its neighbors form
+     *  a clique, should be removed from a given input
+     *  graph.
+     */
+    bool applyPreprocessing4_;
 
     /**
      *  Structure representing the preprocessed input for the algorithm.
@@ -341,7 +374,7 @@ htd::GraphPreprocessor::~GraphPreprocessor()
     
 }
 
-htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHypergraph & graph, bool applyPreProcessing) const HTD_NOEXCEPT
+htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
     htd::IPreprocessedGraph * ret = nullptr;
 
@@ -355,7 +388,7 @@ htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHyper
 
     std::vector<std::vector<htd::vertex_t>> neighborhood(input.neighborhood.begin(), input.neighborhood.end());
 
-    if (applyPreProcessing)
+    if (implementation_->applyPreprocessing1_ || implementation_->applyPreprocessing2_ || implementation_->applyPreprocessing3_ || implementation_->applyPreprocessing4_)
     {
         std::unordered_set<htd::vertex_t> vertices(size);
 
@@ -456,7 +489,7 @@ htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHyper
 
         std::sort(remainingVertices.begin(), remainingVertices.end());
 
-        ret = new htd::PreprocessedGraph(std::move(vertexNames), std::move(neighborhood), std::move(ordering), std::move(remainingVertices), minTreeWidth);
+        ret = new htd::PreprocessedGraph(std::move(vertexNames), std::move(neighborhood), std::move(ordering), std::move(remainingVertices), graph.edgeCount(), minTreeWidth);
     }
     else
     {
@@ -464,10 +497,42 @@ htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHyper
 
         std::iota(remainingVertices.begin(), remainingVertices.end(), 0);
 
-        ret = new htd::PreprocessedGraph(std::move(vertexNames), std::move(neighborhood), std::vector<htd::vertex_t>(), std::move(remainingVertices), 0);
+        ret = new htd::PreprocessedGraph(std::move(vertexNames), std::move(neighborhood), std::vector<htd::vertex_t>(), std::move(remainingVertices), graph.edgeCount(), 0);
     }
 
     return ret;
+}
+
+void htd::GraphPreprocessor::setPreprocessingStrategy(std::size_t level)
+{
+    if (level == 0)
+    {
+        implementation_->applyPreprocessing1_ = false;
+        implementation_->applyPreprocessing2_ = false;
+        implementation_->applyPreprocessing3_ = false;
+        implementation_->applyPreprocessing4_ = false;
+    }
+    else if (level == 1)
+    {
+        implementation_->applyPreprocessing1_ = true;
+        implementation_->applyPreprocessing2_ = true;
+        implementation_->applyPreprocessing3_ = false;
+        implementation_->applyPreprocessing4_ = false;
+    }
+    else if (level == 2)
+    {
+        implementation_->applyPreprocessing1_ = true;
+        implementation_->applyPreprocessing2_ = true;
+        implementation_->applyPreprocessing3_ = true;
+        implementation_->applyPreprocessing4_ = false;
+    }
+    else if (level > 2)
+    {
+        implementation_->applyPreprocessing1_ = true;
+        implementation_->applyPreprocessing2_ = true;
+        implementation_->applyPreprocessing3_ = true;
+        implementation_->applyPreprocessing4_ = true;
+    }
 }
 
 const htd::LibraryInstance * htd::GraphPreprocessor::managementInstance(void) const HTD_NOEXCEPT

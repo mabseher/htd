@@ -27,15 +27,14 @@
 
 #include <htd/Globals.hpp>
 #include <htd/LibraryInstance.hpp>
-#include <htd/IMultiHypergraph.hpp>
-#include <htd/IPreprocessedGraph.hpp>
+#include <htd/IGraphPreprocessor.hpp>
 
 namespace htd
 {
     /**
      *  Preprocessor for graphs.
      */
-    class GraphPreprocessor
+    class GraphPreprocessor : public htd::IGraphPreprocessor
     {
         public:
             /**
@@ -47,47 +46,25 @@ namespace htd
             
             HTD_API virtual ~GraphPreprocessor();
 
-            /**
-             *  Prepare the given graph so that the resulting data structure
-             *  allows for efficient decomposition of the graph in following
-             *  algorithms.
-             *
-             *  The resulting data structure contains the graph in the form of an
-             *  adjacency list and it is guaranteed that the vertices are numbered
-             *  between 0 and n-1 where n is the total number of vertices in the
-             *  given graph. This allows for efficient use of arrays and vectors
-             *  within algorithms.
-             *
-             *  @param[in] graph                The input graph which shall be prepared.
-             *  @param[in] applyPreprocessing   A boolean flag indicating whether the input graph shall be
-             *                                  preprocessed in order to increase efficiency of algorithms.
-             *                                  The preprocessing does not increase the width of the
-             *                                  resulting decompositions.
-             *
-             *  @return A preprocessed version of the input graph.
-             */
-            HTD_API htd::IPreprocessedGraph * prepare(const htd::IMultiHypergraph & graph, bool applyPreprocessing = true) const HTD_NOEXCEPT;
+            HTD_API htd::IPreprocessedGraph * prepare(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             /**
-             *  Getter for the associated management class.
+             *  Set the preprocessing strategy which shall be used.
              *
-             *  @return The associated management class.
+             *  @param[in] level    The level of preprocessing which shall be applied. (0: none, 1: simple, 2: advanced, 3 or more: full)
              */
-            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT;
+            HTD_API void setPreprocessingStrategy(std::size_t level);
 
-            /**
-             *  Set a new management class for the library object.
-             *
-             *  @param[in] manager   The new management class for the library object.
-             */
-            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager);
+            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT  HTD_OVERRIDE;
+
+            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager)  HTD_OVERRIDE;
 
             /**
              *  Create a deep copy of the current graph preprocessor.
              *
              *  @return A new GraphPreprocessor object identical to the current graph preprocessor.
              */
-            HTD_API GraphPreprocessor * clone(void) const;
+            HTD_API GraphPreprocessor * clone(void) const HTD_OVERRIDE;
 
         protected:
             /**
@@ -104,4 +81,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_ORDERINGALGORITHMPREPROCESSOR_HPP */
+#endif /* HTD_HTD_GRAPHPREPROCESSOR_HPP */

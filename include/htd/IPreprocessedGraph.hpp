@@ -49,11 +49,32 @@ namespace htd
             virtual ~IPreprocessedGraph() = 0;
 
             /**
+             *  Getter for the vertex count of the preprocessed graph.
+             *
+             *  @return The vertex count of the preprocessed graph.
+             */
+            virtual std::size_t vertexCount(void) const HTD_NOEXCEPT = 0;
+
+            /**
              *  Getter for the vertex count of the input graph.
              *
              *  @return The vertex count of the input graph.
              */
-            virtual std::size_t vertexCount(void) const HTD_NOEXCEPT = 0;
+            virtual std::size_t inputGraphVertexCount(void) const HTD_NOEXCEPT = 0;
+
+            /**
+             *  Getter for the edge count of the preprocessed graph.
+             *
+             *  @return The edge count of the preprocessed graph.
+             */
+            virtual std::size_t edgeCount(void) const HTD_NOEXCEPT = 0;
+
+            /**
+             *  Getter for the edge count of the input graph.
+             *
+             *  @return The edge count of the input graph.
+             */
+            virtual std::size_t inputGraphEdgeCount(void) const HTD_NOEXCEPT = 0;
 
             /**
              *  Getter for the actual identifiers of the vertices.

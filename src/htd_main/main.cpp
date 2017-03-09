@@ -106,6 +106,17 @@ htd_cli::OptionManager * createOptionManager(void)
 
         manager->registerOption(strategyChoice, "Algorithm Options");
 
+        htd_cli::Choice * preprocessingChoice = new htd_cli::Choice("preprocessing", "Set the preprocessing strategy which shall be used to <strategy>.", "strategy");
+
+        preprocessingChoice->addPossibility("none", "Do not preprocess input graph.");
+        preprocessingChoice->addPossibility("simple", "Use simple preprocessing capabilities.");
+        preprocessingChoice->addPossibility("advanced", "Use advanced preprocessing capabilities.");
+        preprocessingChoice->addPossibility("full", "Use the full set of preprocessing capabilities.");
+
+        preprocessingChoice->setDefaultValue("none");
+
+        manager->registerOption(preprocessingChoice, "Algorithm Options");
+
         htd_cli::Choice * optimizationChoice = new htd_cli::Choice("opt", "Iteratively compute a decomposition which optimizes <criterion>.", "criterion");
 
         optimizationChoice->addPossibility("none", "Do not perform any optimization.");
@@ -886,6 +897,8 @@ int main(int argc, const char * const * const argv)
 
         const htd_cli::Choice & strategyChoice = optionManager->accessChoice("strategy");
 
+        const htd_cli::Choice & preprocessingChoice = optionManager->accessChoice("preprocessing");
+
         const htd_cli::Choice & optimizationChoice = optionManager->accessChoice("opt");
 
         const htd_cli::SingleValueOption & iterationOption = optionManager->accessSingleValueOption("iterations");
@@ -1056,6 +1069,25 @@ int main(int argc, const char * const * const argv)
                 }
                 else
                 {
+                    htd::GraphPreprocessor * preprocessor = new htd::GraphPreprocessor(libraryInstance);
+
+                    if (std::string(preprocessingChoice.value()) == "none")
+                    {
+                        preprocessor->setPreprocessingStrategy(0);
+                    }
+                    else if (std::string(preprocessingChoice.value()) == "simple")
+                    {
+                        preprocessor->setPreprocessingStrategy(1);
+                    }
+                    else if (std::string(preprocessingChoice.value()) == "advanced")
+                    {
+                        preprocessor->setPreprocessingStrategy(2);
+                    }
+                    else if (std::string(preprocessingChoice.value()) == "full")
+                    {
+                        preprocessor->setPreprocessingStrategy(3);
+                    }
+
                     htd_main::IGraphToTreeDecompositionProcessor * processor = nullptr;
 
                     if (std::string(inputFormatChoice.value()) == "gr")
@@ -1073,20 +1105,26 @@ int main(int argc, const char * const * const argv)
 
                     processor->setExporter(exporter);
 
-                    processor->registerParsingCallback([](void){
+                    processor->setPreprocessor(preprocessor);
+
+                    processor->registerParsingCallback([](std::size_t vertexCount, std::size_t edgeCount){
                         std::chrono::milliseconds::rep msSinceEpoch =
                             std::chrono::duration_cast<std::chrono::milliseconds>
                                 (std::chrono::system_clock::now().time_since_epoch()).count();
 
                         std::cout << "PARSING FINISHED:        " << msSinceEpoch << std::endl;
+                        std::cout << "   VERTICES:        " << std::right << std::setw(18) << vertexCount << std::endl;
+                        std::cout << "   EDGES:           " << std::right << std::setw(18) << edgeCount << std::endl;
                     });
 
-                    processor->registerPreprocessingCallback([](void){
+                    processor->registerPreprocessingCallback([](std::size_t vertexCount, std::size_t edgeCount){
                         std::chrono::milliseconds::rep msSinceEpoch =
                             std::chrono::duration_cast<std::chrono::milliseconds>
                                 (std::chrono::system_clock::now().time_since_epoch()).count();
 
                         std::cout << "PRE-PROCESSING FINISHED: " << msSinceEpoch << std::endl;
+                        std::cout << "   VERTICES:        " << std::right << std::setw(18) << vertexCount << std::endl;
+                        std::cout << "   EDGES:           " << std::right << std::setw(18) << edgeCount << std::endl;
                     });
 
                     processor->registerDecompositionCallback([](void){

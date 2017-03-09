@@ -119,7 +119,7 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
     htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
 
     ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations);
 

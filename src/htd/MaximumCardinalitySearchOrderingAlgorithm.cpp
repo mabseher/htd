@@ -75,7 +75,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 {
     htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
 
     htd::VertexOrdering * ret = computeOrdering(graph, *preprocessedGraph);
 
@@ -98,7 +98,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 
     std::vector<htd::vertex_t> pool;
 
-    std::vector<std::size_t> weights(preprocessedGraph.vertexCount());
+    std::vector<std::size_t> weights(preprocessedGraph.inputGraphVertexCount());
 
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 

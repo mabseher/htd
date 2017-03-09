@@ -122,7 +122,7 @@ htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd
 {
     htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
 
     htd::VertexOrdering * ret = computeOrdering(graph, *preprocessedGraph, maxBagSize, maxIterationCount);
 

@@ -56,16 +56,19 @@ namespace htd_main
             virtual void setExporter(htd_main::ITreeDecompositionExporter * exporter) = 0;
 
             /**
-             *  Register a new callback function which is invoked after pre-processing the input graph.
+             *  Register a new callback function which is invoked after preprocessing the input graph.
+             *
+             *  The first argument of the callback denotes the number of vertices of the input graph and
+             *  the second argument of the callback provides the number of edges in the given input graph.
              *
              *  @note It is possible to append multiple callback functions. That is, this function does not
              *  override existing callback functions. Instead, all relevant callback functions are invoked
              *  after parsing is finished. The invocation of the callback functions is guaranteed to happen
              *  in the order the callback functions were registered.
              *
-             *  @param[in] callback The new callback function which is invoked after pre-processing the input graph.
+             *  @param[in] callback The new callback function which is invoked after preprocessing the input graph.
              */
-            virtual void registerPreprocessingCallback(const std::function<void(void)> & callback) = 0;
+            virtual void registerPreprocessingCallback(const std::function<void(std::size_t vertexCount, std::size_t edgeCount)> & callback) = 0;
 
             /**
              *  Register a new callback function which is invoked after decomposing the input graph is finished.

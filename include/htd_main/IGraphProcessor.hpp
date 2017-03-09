@@ -26,6 +26,7 @@
 #define HTD_MAIN_IGRAPHPROCESSOR_HPP
 
 #include <htd_main/IGraphDecompositionExporter.hpp>
+#include <htd/IGraphPreprocessor.hpp>
 
 #include <string>
 #include <iostream>
@@ -77,7 +78,21 @@ namespace htd_main
             virtual void process(std::istream & inputStream = std::cin, std::ostream & outputStream = std::cout) const = 0;
 
             /**
+             *  Set the preprocessor which shall be used to preprocess the input graphs.
+             *
+             *  @note When calling this method the control over the memory regions of the graph preprocessor
+             *  is transferred to the graph processor. Deleting a graph preprocessor provided to this method
+             *  outside the graph processor will lead to undefined behavior.
+             *
+             *  @param[in] preprocessor The preprocessor which shall be used to preprocess the input graphs.
+             */
+            virtual void setPreprocessor(htd::IGraphPreprocessor * preprocessor) = 0;
+
+            /**
              *  Register a new callback function which is invoked after parsing the input graph is finished.
+             *
+             *  The first argument of the callback denotes the number of vertices of the input graph and
+             *  the second argument of the callback provides the number of edges in the given input graph.
              *
              *  @note It is possible to append multiple callback functions. That is, this function does not
              *  override existing callback functions. Instead, all relevant callback functions are invoked
@@ -86,7 +101,7 @@ namespace htd_main
              *
              *  @param[in] callback The new callback function which is invoked after parsing the input graph is finished.
              */
-            virtual void registerParsingCallback(const std::function<void(void)> & callback) = 0;
+            virtual void registerParsingCallback(const std::function<void(std::size_t, std::size_t)> & callback) = 0;
     };
 
     inline htd_main::IGraphProcessor::~IGraphProcessor() { }

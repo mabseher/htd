@@ -42,16 +42,23 @@ struct htd::PreprocessedGraph::Implementation
      *  @param[in] neighborhood         A vector containing the neighborhood of each of the vertices.
      *  @param[in] eliminationSequence  A partial vertex elimination ordering computed during the preprocessing phase.
      *  @param[in] remainingVertices    The set of vertices which were not eliminated during the preprocessing phase.
+     *  @param[in] inputGraphEdgeCount  The number of edges in the input graph.
      *  @param[in] minTreeWidth         The lower bound for the treewidth of the original input graph.
      */
     Implementation(std::vector<htd::vertex_t> && vertexNames,
                    std::vector<std::vector<htd::vertex_t>> && neighborhood,
                    std::vector<htd::vertex_t> && eliminationSequence,
                    std::vector<htd::vertex_t> && remainingVertices,
+                   std::size_t inputGraphEdgeCount,
                    std::size_t minTreeWidth)
-        : names(vertexNames), neighborhood(neighborhood), eliminationSequence(eliminationSequence), remainder(remainingVertices), minTreeWidth(minTreeWidth)
+        : names_(std::move(vertexNames)), neighborhood_(std::move(neighborhood)), eliminationSequence_(std::move(eliminationSequence)), remainingVertices_(std::move(remainingVertices)), minTreeWidth_(minTreeWidth), edgeCount_(0), inputGraphEdgeCount_(inputGraphEdgeCount)
     {
+        for (htd::vertex_t vertex : remainingVertices_)
+        {
+            edgeCount_ += neighborhood_[vertex].size();
+        }
 
+        edgeCount_ = edgeCount_ >> 1;
     }
 
     virtual ~Implementation()
@@ -62,38 +69,50 @@ struct htd::PreprocessedGraph::Implementation
     /**
      *  The actual identifiers of the vertices.
      */
-    std::vector<htd::vertex_t> names;
+    std::vector<htd::vertex_t> names_;
 
     /**
      *  A vector containing the neighborhood of each of the vertices.
      */
-    std::vector<std::vector<htd::vertex_t>> neighborhood;
+    std::vector<std::vector<htd::vertex_t>> neighborhood_;
 
     /**
      *  A partial vertex elimination ordering computed during the preprocessing phase.
      */
-    std::vector<htd::vertex_t> eliminationSequence;
+    std::vector<htd::vertex_t> eliminationSequence_;
 
     /**
      *  The set of vertices which were not eliminated during the preprocessing phase.
      */
-    std::vector<htd::vertex_t> remainder;
+    std::vector<htd::vertex_t> remainingVertices_;
 
     /**
      *  The lower bound of the treewidth of the input graph.
      */
-    std::size_t minTreeWidth;
+    std::size_t minTreeWidth_;
+
+    /**
+     *  The number of edges in the preprocessed graph.
+     */
+    std::size_t edgeCount_;
+
+    /**
+     *  The number of edges in the input graph.
+     */
+    std::size_t inputGraphEdgeCount_;
 };
 
 htd::PreprocessedGraph::PreprocessedGraph(std::vector<htd::vertex_t> && vertexNames,
                                           std::vector<std::vector<htd::vertex_t>> && neighborhood,
                                           std::vector<htd::vertex_t> && eliminationSequence,
                                           std::vector<htd::vertex_t> && remainingVertices,
+                                          std::size_t inputGraphEdgeCount,
                                           std::size_t minTreeWidth)
     : implementation_(new Implementation(std::move(vertexNames),
                                          std::move(neighborhood),
                                          std::move(eliminationSequence),
                                          std::move(remainingVertices),
+                                         inputGraphEdgeCount,
                                          minTreeWidth))
 {
 
@@ -106,44 +125,59 @@ htd::PreprocessedGraph::~PreprocessedGraph()
 
 std::size_t htd::PreprocessedGraph::vertexCount(void) const HTD_NOEXCEPT
 {
-    return implementation_->names.size();
+    return implementation_->remainingVertices_.size();
+}
+
+std::size_t htd::PreprocessedGraph::inputGraphVertexCount(void) const HTD_NOEXCEPT
+{
+    return implementation_->names_.size();
+}
+
+std::size_t htd::PreprocessedGraph::edgeCount(void) const HTD_NOEXCEPT
+{
+    return implementation_->edgeCount_;
+}
+
+std::size_t htd::PreprocessedGraph::inputGraphEdgeCount(void) const HTD_NOEXCEPT
+{
+    return implementation_->inputGraphEdgeCount_;
 }
 
 const std::vector<htd::vertex_t> & htd::PreprocessedGraph::vertexNames(void) const HTD_NOEXCEPT
 {
-    return implementation_->names;
+    return implementation_->names_;
 }
 
 htd::vertex_t htd::PreprocessedGraph::vertexName(htd::vertex_t vertex) const
 {
-    return implementation_->names[vertex];
+    return implementation_->names_[vertex];
 }
 
 const std::vector<std::vector<htd::vertex_t>> & htd::PreprocessedGraph::neighborhood(void) const HTD_NOEXCEPT
 {
-    return implementation_->neighborhood;
+    return implementation_->neighborhood_;
 }
 
 const std::vector<htd::vertex_t> & htd::PreprocessedGraph::neighborhood(htd::vertex_t vertex) const
 {
-    HTD_ASSERT(vertex < implementation_->names.size());
+    HTD_ASSERT(vertex < implementation_->names_.size());
 
-    return implementation_->neighborhood[vertex];
+    return implementation_->neighborhood_[vertex];
 }
 
 const std::vector<htd::vertex_t> & htd::PreprocessedGraph::eliminationSequence(void) const HTD_NOEXCEPT
 {
-    return implementation_->eliminationSequence;
+    return implementation_->eliminationSequence_;
 }
 
 const std::vector<htd::vertex_t> & htd::PreprocessedGraph::remainingVertices(void) const HTD_NOEXCEPT
 {
-    return implementation_->remainder;
+    return implementation_->remainingVertices_;
 }
 
 std::size_t htd::PreprocessedGraph::minTreeWidth(void) const HTD_NOEXCEPT
 {
-    return implementation_->minTreeWidth;
+    return implementation_->minTreeWidth_;
 }
 
 #endif /* HTD_HTD_PREPROCESSEDGRAPH_CPP */

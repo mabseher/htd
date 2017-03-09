@@ -80,27 +80,6 @@ struct htd::MinFillOrderingAlgorithm::Implementation
     struct PreparedInput
     {
         /**
-         *  Register a given vertex and return its index.
-         *
-         *  @param[in] vertex           The vertex which shall be registered.
-         *  @param[in,out] mapping      A map which maps to each vertex its corresponding index. This information is updated when the given vertex is registered for the first time.
-         *  @param[in,out] vertexNames  A vector which holds the vertex identifier corresponding to an index. This information is updated when the given vertex is registered for the first time.
-         *
-         *  @return The index of the vertex within the (updated) vector vertexNames.
-         */
-        htd::vertex_t registerVertex(htd::vertex_t vertex, std::unordered_map<htd::vertex_t, htd::vertex_t> & mapping, std::vector<htd::vertex_t> & vertexNames)
-        {
-            auto result = mapping.emplace(vertex, vertexNames.size());
-
-            if (result.second)
-            {
-                vertexNames.push_back(vertex);
-            }
-
-            return result.first->second;
-        }
-
-        /**
          *  Compute the number of edges between a set of vertices.
          *
          *  @param[in] availableNeighborhoods   The neighborhoods of the provided vertices.
@@ -138,7 +117,7 @@ struct htd::MinFillOrderingAlgorithm::Implementation
         {
             HTD_UNUSED(managementInstance)
 
-            std::size_t size = preprocessedGraph.vertexCount();
+            std::size_t size = preprocessedGraph.inputGraphVertexCount();
 
             fillValue.resize(size, 0);
 
@@ -214,7 +193,7 @@ htd::VertexOrdering * htd::MinFillOrderingAlgorithm::computeOrdering(const htd::
 {
     htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph, false);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
 
     htd::VertexOrdering * ret = computeOrdering(graph, *preprocessedGraph, maxBagSize, maxIterationCount);
 
@@ -263,7 +242,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 {
     std::size_t ret = 0;
 
-    std::size_t size = preprocessedGraph.vertexCount();
+    std::size_t size = preprocessedGraph.inputGraphVertexCount();
 
     std::size_t minFill = input.minFill;
 

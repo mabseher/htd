@@ -55,12 +55,14 @@ namespace htd
              *  @param[in] neighborhood         A vector containing the preprocessed neighborhood of each of the vertices.
              *  @param[in] eliminationSequence  A partial vertex elimination ordering computed during the preprocessing phase.
              *  @param[in] remainingVertices    The set of vertices which were not eliminated during the preprocessing phase.
+             *  @param[in] inputGraphEdgeCount  The number of edges in the input graph.
              *  @param[in] minTreeWidth         The lower bound for the treewidth of the original input graph.
              */
             HTD_API PreprocessedGraph(std::vector<htd::vertex_t> && vertexNames,
                                       std::vector<std::vector<htd::vertex_t>> && neighborhood,
                                       std::vector<htd::vertex_t> && eliminationSequence,
                                       std::vector<htd::vertex_t> && remainingVertices,
+                                      std::size_t inputGraphEdgeCount,
                                       std::size_t minTreeWidth);
 
             /**
@@ -69,6 +71,12 @@ namespace htd
             HTD_API virtual ~PreprocessedGraph();
 
             HTD_API std::size_t vertexCount(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            HTD_API std::size_t inputGraphVertexCount(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            HTD_API std::size_t edgeCount(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            HTD_API std::size_t inputGraphEdgeCount(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API const std::vector<htd::vertex_t> & vertexNames(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 

@@ -44,7 +44,7 @@ struct htd_main::GrFormatGraphToTreeDecompositionProcessor::Implementation
      *
      *  @param[in] manager   The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), exporter_(nullptr)
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), exporter_(nullptr), preprocessor_(nullptr)
     {
 
     }
@@ -54,6 +54,11 @@ struct htd_main::GrFormatGraphToTreeDecompositionProcessor::Implementation
         if (exporter_ != nullptr)
         {
             delete exporter_;
+        }
+
+        if (preprocessor_ != nullptr)
+        {
+            delete preprocessor_;
         }
     }
 
@@ -68,14 +73,19 @@ struct htd_main::GrFormatGraphToTreeDecompositionProcessor::Implementation
     htd_main::ITreeDecompositionExporter * exporter_;
 
     /**
-     *  A vector of callback functions which are invoked after parsing the input graph is finished.
+     *  The preprocessor which shall be used to preprocess the input graphs.
      */
-    std::vector<std::function<void(void)>> parsingCallbacks_;
+    htd::IGraphPreprocessor * preprocessor_;
 
     /**
-     *  A vector of callback functions which are invoked after pre-processing the input graph.
+     *  A vector of callback functions which are invoked after parsing the input graph is finished.
      */
-    std::vector<std::function<void(void)>> preprocessingCallbacks_;
+    std::vector<std::function<void(std::size_t, std::size_t)>> parsingCallbacks_;
+
+    /**
+     *  A vector of callback functions which are invoked after preprocessing the input graph.
+     */
+    std::vector<std::function<void(std::size_t, std::size_t)>> preprocessingCallbacks_;
 
     /**
      *  A vector of callback functions which are invoked after decomposing the input graph is finished.
@@ -84,23 +94,29 @@ struct htd_main::GrFormatGraphToTreeDecompositionProcessor::Implementation
 
     /**
      *  Invoke all callback functions after parsing the input graph.
+     *
+     *  @param[in] vertexCount  The vertex count of the input graph.
+     *  @param[in] edgeCount    The edge count of the input graph.
      */
-    void invokeParsingCallbacks(void) const
+    void invokeParsingCallbacks(std::size_t vertexCount, std::size_t edgeCount) const
     {
-        for (const std::function<void(void)> & callback : parsingCallbacks_)
+        for (const std::function<void(std::size_t, std::size_t)> & callback : parsingCallbacks_)
         {
-            callback();
+            callback(vertexCount, edgeCount);
         }
     }
 
     /**
-     *  Invoke all callback functions after pre-processing the input graph.
+     *  Invoke all callback functions after preprocessing the input graph.
+     *
+     *  @param[in] vertexCount  The vertex count of the preprocessed input graph.
+     *  @param[in] edgeCount    The edge count of the preprocessed input graph.
      */
-    void invokePreprocessingCallbacks(void) const
+    void invokePreprocessingCallbacks(std::size_t vertexCount, std::size_t edgeCount) const
     {
-        for (const std::function<void(void)> & callback : preprocessingCallbacks_)
+        for (const std::function<void(std::size_t, std::size_t)> & callback : preprocessingCallbacks_)
         {
-            callback();
+            callback(vertexCount, edgeCount);
         }
     }
 
@@ -154,23 +170,43 @@ void htd_main::GrFormatGraphToTreeDecompositionProcessor::process(std::istream &
 
     htd::IMultiGraph * graph = importer.import(inputStream);
 
-    implementation_->invokeParsingCallbacks();
+    implementation_->invokeParsingCallbacks(graph->vertexCount(), graph->edgeCount());
 
     htd::ITreeDecompositionAlgorithm * algorithm = implementation_->managementInstance_->treeDecompositionAlgorithmFactory().createInstance();
 
-    implementation_->invokePreprocessingCallbacks();
+    htd::ITreeDecomposition * decomposition = nullptr;
 
-    htd::ITreeDecomposition * decomposition = algorithm->computeDecomposition(*graph);
-
-    implementation_->invokeDecompositionCallbacks();
-
-    if (implementation_->exporter_ != nullptr)
+    if (implementation_->preprocessor_ != nullptr)
     {
-        implementation_->exporter_->write(*decomposition, *graph, outputStream);
+        htd::IPreprocessedGraph * preprocessedGraph = implementation_->preprocessor_->prepare(*graph);
+
+        HTD_ASSERT(preprocessedGraph != nullptr)
+
+        implementation_->invokePreprocessingCallbacks(preprocessedGraph->vertexCount(), preprocessedGraph->edgeCount());
+
+        decomposition = algorithm->computeDecomposition(*graph, *preprocessedGraph);
+
+        delete preprocessedGraph;
+    }
+    else
+    {
+        decomposition = algorithm->computeDecomposition(*graph);
     }
 
-    delete decomposition;
     delete algorithm;
+
+    if (decomposition != nullptr)
+    {
+        implementation_->invokeDecompositionCallbacks();
+
+        if (implementation_->exporter_ != nullptr)
+        {
+            implementation_->exporter_->write(*decomposition, *graph, outputStream);
+        }
+
+        delete decomposition;
+    }
+
     delete graph;
 }
 
@@ -184,12 +220,22 @@ void htd_main::GrFormatGraphToTreeDecompositionProcessor::setExporter(htd_main::
     implementation_->exporter_ = exporter;
 }
 
-void htd_main::GrFormatGraphToTreeDecompositionProcessor::registerParsingCallback(const std::function<void(void)> & callback)
+void htd_main::GrFormatGraphToTreeDecompositionProcessor::setPreprocessor(htd::IGraphPreprocessor * preprocessor)
+{
+    if (implementation_->preprocessor_ != nullptr)
+    {
+        delete implementation_->preprocessor_;
+    }
+
+    implementation_->preprocessor_ = preprocessor;
+}
+
+void htd_main::GrFormatGraphToTreeDecompositionProcessor::registerParsingCallback(const std::function<void(std::size_t, std::size_t)> & callback)
 {
     implementation_->parsingCallbacks_.push_back(callback);
 }
 
-void htd_main::GrFormatGraphToTreeDecompositionProcessor::registerPreprocessingCallback(const std::function<void(void)> & callback)
+void htd_main::GrFormatGraphToTreeDecompositionProcessor::registerPreprocessingCallback(const std::function<void(std::size_t vertexCount, std::size_t edgeCount)> & callback)
 {
     implementation_->preprocessingCallbacks_.push_back(callback);
 }

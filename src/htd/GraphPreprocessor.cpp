@@ -624,33 +624,36 @@ bool htd::GraphPreprocessor::Implementation::eliminateVerticesOfDegreeLessThanTw
 {
     std::size_t oldOrderingSize = ordering.size();
 
-    std::vector<htd::vertex_t> relevantVertices(vertexGroup1.begin(), vertexGroup1.end());
-
-    for (htd::vertex_t vertex : relevantVertices)
+    if (applyPreprocessing1_)
     {
-        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+        std::vector<htd::vertex_t> relevantVertices(vertexGroup1.begin(), vertexGroup1.end());
 
-        if (currentNeighborhood.size() == 1)
+        for (htd::vertex_t vertex : relevantVertices)
         {
-            htd::vertex_t neighbor = currentNeighborhood[0];
+            std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
 
-            std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
+            if (currentNeighborhood.size() == 1)
+            {
+                htd::vertex_t neighbor = currentNeighborhood[0];
 
-            otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
+                std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
 
-            assignVertexToGroup(neighbor, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood.size(), otherNeighborhood.size() + 1);
+                otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
+
+                assignVertexToGroup(neighbor, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood.size(), otherNeighborhood.size() + 1);
+            }
+
+            currentNeighborhood.clear();
+
+            ordering.push_back(vertex);
         }
 
-        currentNeighborhood.clear();
+        for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
+        {
+            vertices.erase(*it);
 
-        ordering.push_back(vertex);
-    }
-
-    for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
-    {
-        vertices.erase(*it);
-
-        vertexGroup1.erase(*it);
+            vertexGroup1.erase(*it);
+        }
     }
 
     return ordering.size() > oldOrderingSize;
@@ -665,45 +668,48 @@ bool htd::GraphPreprocessor::Implementation::contractPaths(std::unordered_set<ht
 {
     std::size_t oldOrderingSize = ordering.size();
 
-    std::vector<htd::vertex_t> relevantVertices(vertexGroup2.begin(), vertexGroup2.end());
-
-    for (htd::vertex_t vertex : relevantVertices)
+    if (applyPreprocessing2_)
     {
-        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+        std::vector<htd::vertex_t> relevantVertices(vertexGroup2.begin(), vertexGroup2.end());
 
-        if (currentNeighborhood.size() == 2)
+        for (htd::vertex_t vertex : relevantVertices)
         {
-            htd::vertex_t neighbor1 = currentNeighborhood[0];
-            htd::vertex_t neighbor2 = currentNeighborhood[1];
+            std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
 
-            std::vector<htd::vertex_t> & otherNeighborhood1 = neighborhood[neighbor1];
-            std::vector<htd::vertex_t> & otherNeighborhood2 = neighborhood[neighbor2];
-
-            otherNeighborhood1.erase(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), vertex));
-            otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
-
-            if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
+            if (currentNeighborhood.size() == 2)
             {
-                assignVertexToGroup(neighbor1, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood1.size(), otherNeighborhood1.size() + 1);
-                assignVertexToGroup(neighbor2, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood2.size(), otherNeighborhood2.size() + 1);
-            }
-            else
-            {
-                otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2), neighbor2);
-                otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
-            }
+                htd::vertex_t neighbor1 = currentNeighborhood[0];
+                htd::vertex_t neighbor2 = currentNeighborhood[1];
 
-            currentNeighborhood.clear();
+                std::vector<htd::vertex_t> & otherNeighborhood1 = neighborhood[neighbor1];
+                std::vector<htd::vertex_t> & otherNeighborhood2 = neighborhood[neighbor2];
 
-            ordering.push_back(vertex);
+                otherNeighborhood1.erase(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), vertex));
+                otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
+
+                if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
+                {
+                    assignVertexToGroup(neighbor1, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood1.size(), otherNeighborhood1.size() + 1);
+                    assignVertexToGroup(neighbor2, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood2.size(), otherNeighborhood2.size() + 1);
+                }
+                else
+                {
+                    otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2), neighbor2);
+                    otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
+                }
+
+                currentNeighborhood.clear();
+
+                ordering.push_back(vertex);
+            }
         }
-    }
 
-    for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
-    {
-        vertices.erase(*it);
+        for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
+        {
+            vertices.erase(*it);
 
-        vertexGroup2.erase(*it);
+            vertexGroup2.erase(*it);
+        }
     }
 
     return ordering.size() > oldOrderingSize;
@@ -718,110 +724,113 @@ bool htd::GraphPreprocessor::Implementation::shrinkTriangles(std::unordered_set<
 {
     std::size_t oldOrderingSize = ordering.size();
 
-    std::vector<htd::vertex_t> relevantVertices(vertexGroup3.begin(), vertexGroup3.end());
-
-    for (htd::vertex_t vertex : relevantVertices)
+    if (applyPreprocessing3_)
     {
-        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+        std::vector<htd::vertex_t> relevantVertices(vertexGroup3.begin(), vertexGroup3.end());
 
-        if (currentNeighborhood.size() == 3)
+        for (htd::vertex_t vertex : relevantVertices)
         {
-            htd::vertex_t neighbor1 = currentNeighborhood[0];
-            htd::vertex_t neighbor2 = currentNeighborhood[1];
-            htd::vertex_t neighbor3 = currentNeighborhood[2];
+            std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
 
-            std::vector<htd::vertex_t> & otherNeighborhood1 = neighborhood[neighbor1];
-            std::vector<htd::vertex_t> & otherNeighborhood2 = neighborhood[neighbor2];
-            std::vector<htd::vertex_t> & otherNeighborhood3 = neighborhood[neighbor3];
-
-            std::size_t neighborDegree1 = otherNeighborhood1.size();
-            std::size_t neighborDegree2 = otherNeighborhood1.size();
-            std::size_t neighborDegree3 = otherNeighborhood1.size();
-
-            bool preprocessingApplicable = false;
-
-            if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
+            if (currentNeighborhood.size() == 3)
             {
-                if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
+                htd::vertex_t neighbor1 = currentNeighborhood[0];
+                htd::vertex_t neighbor2 = currentNeighborhood[1];
+                htd::vertex_t neighbor3 = currentNeighborhood[2];
+
+                std::vector<htd::vertex_t> & otherNeighborhood1 = neighborhood[neighbor1];
+                std::vector<htd::vertex_t> & otherNeighborhood2 = neighborhood[neighbor2];
+                std::vector<htd::vertex_t> & otherNeighborhood3 = neighborhood[neighbor3];
+
+                std::size_t neighborDegree1 = otherNeighborhood1.size();
+                std::size_t neighborDegree2 = otherNeighborhood1.size();
+                std::size_t neighborDegree3 = otherNeighborhood1.size();
+
+                bool preprocessingApplicable = false;
+
+                if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
                 {
-                    otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3), neighbor3);
-                    otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor1), neighbor1);
+                    if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
+                    {
+                        otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3), neighbor3);
+                        otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor1), neighbor1);
+                    }
+
+                    if (!std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
+                    {
+                        otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3), neighbor3);
+                        otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor2), neighbor2);
+                    }
+
+                    preprocessingApplicable = true;
+                }
+                else if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
+                {
+                    if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
+                    {
+                        otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2), neighbor2);
+                        otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
+                    }
+
+                    if (!std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
+                    {
+                        otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3), neighbor3);
+                        otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor2), neighbor2);
+                    }
+
+                    preprocessingApplicable = true;
+                }
+                else if (std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
+                {
+                    if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
+                    {
+                        otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2), neighbor2);
+                        otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
+                    }
+
+                    if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
+                    {
+                        otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3), neighbor3);
+                        otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor1), neighbor1);
+                    }
+
+                    preprocessingApplicable = true;
                 }
 
-                if (!std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
+                if (preprocessingApplicable)
                 {
-                    otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3), neighbor3);
-                    otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor2), neighbor2);
+                    otherNeighborhood1.erase(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), vertex));
+                    otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
+                    otherNeighborhood3.erase(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), vertex));
+
+                    if (neighborDegree1 != otherNeighborhood1.size())
+                    {
+                        assignVertexToGroup(neighbor1, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood1.size(), neighborDegree1);
+                    }
+
+                    if (neighborDegree2 != otherNeighborhood2.size())
+                    {
+                        assignVertexToGroup(neighbor2, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood2.size(), neighborDegree2);
+                    }
+
+                    if (neighborDegree3 != otherNeighborhood3.size())
+                    {
+                        assignVertexToGroup(neighbor3, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood3.size(), neighborDegree3);
+                    }
+
+                    currentNeighborhood.clear();
+
+                    ordering.push_back(vertex);
                 }
-
-                preprocessingApplicable = true;
-            }
-            else if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
-            {
-                if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
-                {
-                    otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2), neighbor2);
-                    otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
-                }
-
-                if (!std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
-                {
-                    otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3), neighbor3);
-                    otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor2), neighbor2);
-                }
-
-                preprocessingApplicable = true;
-            }
-            else if (std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
-            {
-                if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
-                {
-                    otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2), neighbor2);
-                    otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
-                }
-
-                if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
-                {
-                    otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3), neighbor3);
-                    otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor1), neighbor1);
-                }
-
-                preprocessingApplicable = true;
-            }
-
-            if (preprocessingApplicable)
-            {
-                otherNeighborhood1.erase(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), vertex));
-                otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
-                otherNeighborhood3.erase(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), vertex));
-
-                if (neighborDegree1 != otherNeighborhood1.size())
-                {
-                    assignVertexToGroup(neighbor1, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood1.size(), neighborDegree1);
-                }
-
-                if (neighborDegree2 != otherNeighborhood2.size())
-                {
-                    assignVertexToGroup(neighbor2, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood2.size(), neighborDegree2);
-                }
-
-                if (neighborDegree3 != otherNeighborhood3.size())
-                {
-                    assignVertexToGroup(neighbor3, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood3.size(), neighborDegree3);
-                }
-
-                currentNeighborhood.clear();
-
-                ordering.push_back(vertex);
             }
         }
-    }
 
-    for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
-    {
-        vertices.erase(*it);
+        for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
+        {
+            vertices.erase(*it);
 
-        vertexGroup3.erase(*it);
+            vertexGroup3.erase(*it);
+        }
     }
 
     return ordering.size() > oldOrderingSize;
@@ -838,48 +847,51 @@ bool htd::GraphPreprocessor::Implementation::eliminateSimplicialVertices(std::un
 {
     std::size_t oldOrderingSize = ordering.size();
 
-    for (htd::vertex_t vertex : vertices)
+    if (applyPreprocessing4_)
     {
-        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
-
-        if (currentNeighborhood.size() <= maxDegree)
+        for (htd::vertex_t vertex : vertices)
         {
-            bool ok = true;
+            std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
 
-            for (auto it = currentNeighborhood.begin(); ok && it != currentNeighborhood.end(); ++it)
+            if (currentNeighborhood.size() <= maxDegree)
             {
-                std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[*it];
+                bool ok = true;
 
-                ok = htd::set_intersection_size(otherNeighborhood.begin(), otherNeighborhood.end(), currentNeighborhood.begin(), currentNeighborhood.end()) == currentNeighborhood.size() - 1;
-            }
-
-            if (ok)
-            {
-                for (htd::vertex_t neighbor : currentNeighborhood)
+                for (auto it = currentNeighborhood.begin(); ok && it != currentNeighborhood.end(); ++it)
                 {
-                    std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
+                    std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[*it];
 
-                    otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
-
-                    assignVertexToGroup(neighbor, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood.size(), otherNeighborhood.size() + 1);
+                    ok = htd::set_intersection_size(otherNeighborhood.begin(), otherNeighborhood.end(), currentNeighborhood.begin(), currentNeighborhood.end()) == currentNeighborhood.size() - 1;
                 }
 
-                minTreewidth = std::max(minTreewidth, currentNeighborhood.size());
+                if (ok)
+                {
+                    for (htd::vertex_t neighbor : currentNeighborhood)
+                    {
+                        std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
 
-                currentNeighborhood.clear();
+                        otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
 
-                ordering.push_back(vertex);
+                        assignVertexToGroup(neighbor, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood.size(), otherNeighborhood.size() + 1);
+                    }
+
+                    minTreewidth = std::max(minTreewidth, currentNeighborhood.size());
+
+                    currentNeighborhood.clear();
+
+                    ordering.push_back(vertex);
+                }
             }
         }
-    }
 
-    for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
-    {
-        vertices.erase(*it);
+        for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
+        {
+            vertices.erase(*it);
 
-        vertexGroup1.erase(*it);
-        vertexGroup2.erase(*it);
-        vertexGroup3.erase(*it);
+            vertexGroup1.erase(*it);
+            vertexGroup2.erase(*it);
+            vertexGroup3.erase(*it);
+        }
     }
 
     return ordering.size() > oldOrderingSize;

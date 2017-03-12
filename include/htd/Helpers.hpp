@@ -566,6 +566,30 @@ namespace htd
     }
 
     template <typename T>
+    void inplace_merge(std::vector<T> & set1, const std::vector<T> & set2)
+    {
+        if (set2.size() <= 4)
+        {
+            auto it = set1.begin();
+
+            for (htd::vertex_t newElement : set2)
+            {
+                it = set1.insert(std::lower_bound(it, set1.end(), newElement), newElement) + 1;
+            }
+        }
+        else
+        {
+            std::size_t middle = set1.size();
+
+            set1.insert(set1.end(), set2.begin(), set2.end());
+
+            std::inplace_merge(set1.begin(),
+                               set1.begin() + middle,
+                               set1.end());
+        }
+    }
+
+    template <typename T>
     void inplace_set_union(std::vector<T> & set1, const std::vector<T> & set2)
     {
         std::vector<T> tmp;
@@ -575,23 +599,7 @@ namespace htd
 
         if (!tmp.empty())
         {
-            if (tmp.size() <= 8)
-            {
-                auto it = set1.begin();
-
-                for (htd::vertex_t newVertex : tmp)
-                {
-                    it = set1.insert(std::lower_bound(it, set1.end(), newVertex), newVertex) + 1;
-                }
-            }
-            else
-            {
-                htd::index_t middle = set1.size();
-
-                set1.insert(set1.end(), tmp.begin(), tmp.end());
-
-                std::inplace_merge(set1.begin(), set1.begin() + middle, set1.end());
-            }
+            htd::inplace_merge(set1, tmp);
         }
     }
 

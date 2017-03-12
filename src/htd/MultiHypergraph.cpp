@@ -840,25 +840,7 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
 
             if (!tmp.empty())
             {
-                if (tmp.size() <= 8)
-                {
-                    auto it = currentNeighborhood.begin();
-
-                    for (htd::vertex_t newVertex : tmp)
-                    {
-                        it = currentNeighborhood.insert(std::lower_bound(it, currentNeighborhood.end(), newVertex), newVertex) + 1;
-                    }
-                }
-                else
-                {
-                    htd::index_t middle = currentNeighborhood.size();
-
-                    currentNeighborhood.insert(currentNeighborhood.end(), tmp.begin(), tmp.end());
-
-                    std::inplace_merge(currentNeighborhood.begin(),
-                                       currentNeighborhood.begin() + middle,
-                                       currentNeighborhood.end());
-                }
+                htd::inplace_merge(currentNeighborhood, tmp);
             }
         }
     }

@@ -418,27 +418,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                 if (additionalNeighborCount > 0)
                 {
-                    std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
-
-                    if (additionalNeighborCount <= 8)
-                    {
-                        auto it = currentNeighborhood.begin();
-
-                        for (htd::vertex_t newNeighbor : currentAdditionalNeighborhood)
-                        {
-                            it = currentNeighborhood.insert(std::lower_bound(it, currentNeighborhood.end(), newNeighbor), newNeighbor) + 1;
-                        }
-                    }
-                    else
-                    {
-                        std::size_t middle = currentNeighborhood.size();
-
-                        currentNeighborhood.insert(currentNeighborhood.end(), currentAdditionalNeighborhood.begin(), currentAdditionalNeighborhood.end());
-
-                        std::inplace_merge(currentNeighborhood.begin(),
-                                           currentNeighborhood.begin() + middle,
-                                           currentNeighborhood.end());
-                    }
+                    htd::inplace_merge(neighborhood[vertex], currentAdditionalNeighborhood);
                 }
 
                 std::size_t tmp = fillValue[vertex];
@@ -478,11 +458,7 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
                         {
                             if (currentAdditionalNeighborhood2.size() == 1)
                             {
-                                htd::vertex_t additionalNeighbor = currentAdditionalNeighborhood2[0];
-
-                                auto position = std::lower_bound(it, neighborhoodEnd, additionalNeighbor);
-
-                                if (position != neighborhoodEnd && *position == additionalNeighbor)
+                                if (std::binary_search(it, neighborhoodEnd, currentAdditionalNeighborhood2[0]))
                                 {
                                     --fillUpdate;
                                 }
@@ -555,21 +531,17 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                     auto neighborhoodEnd = relevantNeighborhood.end();
 
-                    for (auto it = relevantNeighborhood.begin(); it != neighborhoodEnd && tmp - fillReduction > 0;)
+                    for (auto it = relevantNeighborhood.begin(); it != neighborhoodEnd - 1 && tmp - fillReduction > 0;)
                     {
                         const std::vector<htd::vertex_t> & currentAdditionalNeighborhood2 = additionalNeighbors[*it];
 
                         ++it;
 
-                        if (!currentAdditionalNeighborhood2.empty() && it != neighborhoodEnd)
+                        if (!currentAdditionalNeighborhood2.empty())
                         {
                             if (currentAdditionalNeighborhood2.size() == 1)
                             {
-                                htd::vertex_t additionalNeighbor = currentAdditionalNeighborhood2[0];
-
-                                auto position = std::lower_bound(it, neighborhoodEnd, additionalNeighbor);
-
-                                if (position != neighborhoodEnd && *position == additionalNeighbor)
+                                if (std::binary_search(it, neighborhoodEnd, currentAdditionalNeighborhood2[0]))
                                 {
                                     ++fillReduction;
                                 }

@@ -209,48 +209,27 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
         vertices.erase(selectedVertex);
 
-        if (selectedNeighborhood.size() > 1)
+        selectedNeighborhood.erase(std::lower_bound(selectedNeighborhood.begin(), selectedNeighborhood.end(), selectedVertex));
+
+        for (htd::vertex_t neighbor : selectedNeighborhood)
         {
-            selectedNeighborhood.erase(std::lower_bound(selectedNeighborhood.begin(), selectedNeighborhood.end(), selectedVertex));
+            std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[neighbor];
 
-            for (auto neighbor : selectedNeighborhood)
+            currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
+
+            htd::set_difference(selectedNeighborhood, currentNeighborhood, difference);
+
+            if (!difference.empty())
             {
-                std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[neighbor];
+                htd::inplace_merge(currentNeighborhood, difference);
 
-                currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
-
-                htd::set_difference(selectedNeighborhood, currentNeighborhood, difference);
-
-                if (!difference.empty())
-                {
-                    if (difference.size() <= 8)
-                    {
-                        auto it = currentNeighborhood.begin();
-
-                        for (htd::vertex_t newNeighbor : difference)
-                        {
-                            it = currentNeighborhood.insert(std::lower_bound(it, currentNeighborhood.end(), newNeighbor), newNeighbor) + 1;
-                        }
-                    }
-                    else
-                    {
-                        std::size_t middle = currentNeighborhood.size();
-
-                        currentNeighborhood.insert(currentNeighborhood.end(), difference.begin(), difference.end());
-
-                        std::inplace_merge(currentNeighborhood.begin(),
-                                           currentNeighborhood.begin() + middle,
-                                           currentNeighborhood.end());
-                    }
-
-                    difference.clear();
-                }
+                difference.clear();
             }
         }
 
-        selectedNeighborhood.clear();
+        std::vector<htd::vertex_t>().swap(selectedNeighborhood);
 
-        size--;
+        --size;
 
         target.push_back(preprocessedGraph.vertexName(selectedVertex));
     }

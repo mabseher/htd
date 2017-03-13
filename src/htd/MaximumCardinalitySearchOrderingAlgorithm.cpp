@@ -168,7 +168,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
         ordering.push_back(preprocessedGraph.vertexName(selectedVertex));
     }
 
-    std::reverse(ordering.begin(), ordering.end());
+    std::reverse(ordering.begin() + preprocessedGraph.eliminationSequence().size(), ordering.end());
 
     return new htd::VertexOrdering(std::move(ordering));
 }

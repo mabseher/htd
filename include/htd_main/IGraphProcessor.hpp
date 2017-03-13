@@ -26,6 +26,8 @@
 #define HTD_MAIN_IGRAPHPROCESSOR_HPP
 
 #include <htd_main/IGraphDecompositionExporter.hpp>
+
+#include <htd_main/ParsingResult.hpp>
 #include <htd/IGraphPreprocessor.hpp>
 
 #include <string>
@@ -91,8 +93,11 @@ namespace htd_main
             /**
              *  Register a new callback function which is invoked after parsing the input graph is finished.
              *
-             *  The first argument of the callback denotes the number of vertices of the input graph and
-             *  the second argument of the callback provides the number of edges in the given input graph.
+             *  The first argument of the callback indicates whether the parsing process was successful, the
+             *  second argument denotes the number of vertices of the input graph and the third argument of
+             *  the callback provides the number of edges in the given input graph. In those cases where the
+             *  parsing process was not successful, i.e., where the result is not equal to 'OK', the numbers
+             *  for vertex and edge count are set to 0.
              *
              *  @note It is possible to append multiple callback functions. That is, this function does not
              *  override existing callback functions. Instead, all relevant callback functions are invoked
@@ -101,7 +106,7 @@ namespace htd_main
              *
              *  @param[in] callback The new callback function which is invoked after parsing the input graph is finished.
              */
-            virtual void registerParsingCallback(const std::function<void(std::size_t, std::size_t)> & callback) = 0;
+            virtual void registerParsingCallback(const std::function<void(htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount)> & callback) = 0;
     };
 
     inline htd_main::IGraphProcessor::~IGraphProcessor() { }

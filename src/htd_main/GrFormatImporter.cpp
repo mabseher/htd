@@ -93,6 +93,8 @@ htd::IMultiGraph * htd_main::GrFormatImporter::import(std::istream & stream) con
     {
         std::string line;
 
+        std::size_t pos = 0;
+
         while (!error && std::getline(stream, line) && !managementInstance.isTerminated())
         {
             if (line.empty())
@@ -117,8 +119,6 @@ htd::IMultiGraph * htd_main::GrFormatImporter::import(std::istream & stream) con
 
                         line = line.substr(5);
 
-                        std::size_t pos = 0;
-
                         vertexCount = std::stol(line, &pos);
 
                         if (line[pos] != ' ')
@@ -141,27 +141,27 @@ htd::IMultiGraph * htd_main::GrFormatImporter::import(std::istream & stream) con
                     }
                     else
                     {
-                        std::size_t pos = 0;
-
                         htd::vertex_t vertex1 = std::stoul(line, &pos);
 
                         if (line[pos] != ' ')
                         {
                             error = true;
                         }
-
-                        line = line.substr(pos + 1);
-
-                        htd::vertex_t vertex2 = std::stoul(line, &pos);
-
-                        if (pos != line.length())
+                        else
                         {
-                            error = true;
+                            line = line.substr(pos + 1);
+
+                            htd::vertex_t vertex2 = std::stoul(line, &pos);
+
+                            if (pos != line.length())
+                            {
+                                error = true;
+                            }
+
+                            ret->addEdge(vertex1, vertex2);
+
+                            edgeCount--;
                         }
-
-                        ret->addEdge(vertex1, vertex2);
-
-                        edgeCount--;
                     }
                 }
             }

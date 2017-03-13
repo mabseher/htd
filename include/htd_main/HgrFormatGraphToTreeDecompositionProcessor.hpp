@@ -59,7 +59,7 @@ namespace htd_main
 
             void setPreprocessor(htd::IGraphPreprocessor * preprocessor) HTD_OVERRIDE;
 
-            void registerParsingCallback(const std::function<void(std::size_t, std::size_t)> & callback) HTD_OVERRIDE;
+            void registerParsingCallback(const std::function<void(htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount)> & callback) HTD_OVERRIDE;
 
             void registerPreprocessingCallback(const std::function<void(std::size_t vertexCount, std::size_t edgeCount)> & callback) HTD_OVERRIDE;
 

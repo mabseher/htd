@@ -1107,14 +1107,21 @@ int main(int argc, const char * const * const argv)
 
                     processor->setPreprocessor(preprocessor);
 
-                    processor->registerParsingCallback([](std::size_t vertexCount, std::size_t edgeCount){
+                    processor->registerParsingCallback([](htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount){
                         std::chrono::milliseconds::rep msSinceEpoch =
                             std::chrono::duration_cast<std::chrono::milliseconds>
                                 (std::chrono::system_clock::now().time_since_epoch()).count();
 
-                        std::cout << "PARSING FINISHED:        " << msSinceEpoch << std::endl;
-                        std::cout << "   VERTICES:        " << std::right << std::setw(18) << vertexCount << std::endl;
-                        std::cout << "   EDGES:           " << std::right << std::setw(18) << edgeCount << std::endl;
+                        if (result == htd_main::ParsingResult::OK)
+                        {
+                            std::cout << "PARSING FINISHED:        " << msSinceEpoch << std::endl;
+                            std::cout << "   VERTICES:        " << std::right << std::setw(18) << vertexCount << std::endl;
+                            std::cout << "   EDGES:           " << std::right << std::setw(18) << edgeCount << std::endl;
+                        }
+                        else
+                        {
+                            std::cout << "PARSING FAILED:          " << msSinceEpoch << std::endl;
+                        }
                     });
 
                     processor->registerPreprocessingCallback([](std::size_t vertexCount, std::size_t edgeCount){

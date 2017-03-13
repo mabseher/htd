@@ -72,7 +72,7 @@ struct htd::MinDegreeOrderingAlgorithm::Implementation
     std::size_t writeOrderingTo(const htd::IPreprocessedGraph & preprocessedGraph, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
 
     /**
-     *  Get a random vertex having minimum degree.
+     *  Fill the pool of vertices having minimum degree.
      *
      *  @param[in] vertices     The set of vertices which shall be considered.
      *  @param[in] neighborhood A vector containing the neighborhood of each of the vertices.
@@ -217,7 +217,9 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
             currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
 
-            htd::set_difference(selectedNeighborhood, currentNeighborhood, difference);
+            std::set_difference(selectedNeighborhood.begin(), selectedNeighborhood.end(),
+                                currentNeighborhood.begin(), currentNeighborhood.end(),
+                                std::back_inserter(difference));
 
             if (!difference.empty())
             {

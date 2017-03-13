@@ -59,6 +59,37 @@ struct htd::MaximumCardinalitySearchOrderingAlgorithm::Implementation
      *  The management instance to which the current object instance belongs.
      */
     const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  Fill the pool of vertices having maximum weight.
+     *
+     *  @param[in] vertices The set of vertices which shall be considered.
+     *  @param[in] weights  A vector containing the weights associated with each of the vertices.
+     *  @param[out] pool    The vertex pool which shall be filled with all vertices of maximum weight.
+     */
+    void fillMaxCardinalityPool(const std::unordered_set<htd::vertex_t> & vertices, const std::vector<std::size_t> & weights, std::vector<htd::vertex_t> & pool) const HTD_NOEXCEPT
+    {
+        std::size_t max = 0;
+
+        pool.clear();
+
+        for (htd::vertex_t vertex : vertices)
+        {
+            std::size_t tmp = weights[vertex];
+
+            if (tmp >= max)
+            {
+                if (tmp > max)
+                {
+                    max = tmp;
+
+                    pool.clear();
+                }
+
+                pool.push_back(vertex);
+            }
+        }
+    }
 };
 
 htd::MaximumCardinalitySearchOrderingAlgorithm::MaximumCardinalitySearchOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -111,40 +142,24 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 
     while (size > 0 && !managementInstance.isTerminated())
     {
-        std::size_t maxCardinality = 0;
-
-        for (htd::vertex_t vertex : vertices)
-        {
-            std::size_t tmp = weights[vertex];
-
-            if (tmp >= maxCardinality)
-            {
-                if (tmp > maxCardinality)
-                {
-                    maxCardinality = tmp;
-
-                    pool.clear();
-                }
-
-                pool.push_back(vertex);
-            }
-        }
+        implementation_->fillMaxCardinalityPool(vertices, weights, pool);
 
         htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(pool);
 
-        std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood.at(selectedVertex);
+        std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood[selectedVertex];
 
         pool.clear();
 
         for (htd::vertex_t neighbor : selectedNeighborhood)
         {
-            if (vertices.count(neighbor) == 1)
-            {
-                weights[neighbor] += 1;
-            }
+            std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[neighbor];
+
+            currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
+
+            weights[neighbor] += 1;
         }
 
-        selectedNeighborhood.clear();
+        std::vector<htd::vertex_t>().swap(selectedNeighborhood);
 
         vertices.erase(selectedVertex);
 

@@ -29,12 +29,13 @@
 #include <htd/Helpers.hpp>
 #include <htd/MultiHypergraph.hpp>
 #include <htd/VectorAdapter.hpp>
-#include <htd/HyperedgeVector.hpp>
+#include <htd/HyperedgeDeque.hpp>
 
 #include <htd/Algorithm.hpp>
 
 #include <algorithm>
 #include <array>
+#include <deque>
 #include <iterator>
 #include <stack>
 #include <unordered_set>
@@ -58,7 +59,7 @@ struct htd::MultiHypergraph::Implementation
           vertices_(),
           selfLoops_(),
           deletions_(),
-          edges_(std::make_shared<std::vector<htd::Hyperedge>>()),
+          edges_(std::make_shared<std::deque<htd::Hyperedge>>()),
           neighborhood_()
     {
 
@@ -82,7 +83,7 @@ struct htd::MultiHypergraph::Implementation
           vertices_(original.vertices_),
           selfLoops_(original.selfLoops_),
           deletions_(original.deletions_),
-          edges_(std::make_shared<std::vector<htd::Hyperedge>>(*(original.edges_))),
+          edges_(std::make_shared<std::deque<htd::Hyperedge>>(*(original.edges_))),
           neighborhood_(original.neighborhood_)
     {
 
@@ -148,7 +149,7 @@ struct htd::MultiHypergraph::Implementation
     /**
      *  The collection of hyperedges sorted by ID in ascending order.
      */
-    std::shared_ptr<std::vector<htd::Hyperedge>> edges_;
+    std::shared_ptr<std::deque<htd::Hyperedge>> edges_;
 
     /**
      *  The vector of neighbors for each vertex in the hypergraph. The neighborhood of each vertex is sorted in ascending order.
@@ -624,12 +625,12 @@ const htd::Hyperedge & htd::MultiHypergraph::hyperedgeAtPosition(htd::index_t in
 
 htd::FilteredHyperedgeCollection htd::MultiHypergraph::hyperedgesAtPositions(const std::vector<htd::index_t> & indices) const
 {
-    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(implementation_->edges_), indices);
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgeDeque(implementation_->edges_), indices);
 }
 
 htd::FilteredHyperedgeCollection htd::MultiHypergraph::hyperedgesAtPositions(std::vector<htd::index_t> && indices) const
 {
-    return htd::FilteredHyperedgeCollection(new htd::HyperedgeVector(implementation_->edges_), std::move(indices));
+    return htd::FilteredHyperedgeCollection(new htd::HyperedgeDeque(implementation_->edges_), std::move(indices));
 }
 
 htd::vertex_t htd::MultiHypergraph::nextVertex(void) const

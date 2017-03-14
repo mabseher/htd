@@ -1,21 +1,21 @@
-/* 
+/*
  * File:   GraphPreprocessor.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
- * 
+ *
  * Copyright 2015-2017, Michael Abseher
  *    E-Mail: <abseher@dbai.tuwien.ac.at>
- * 
+ *
  * This file is part of htd.
- * 
- * htd is free software: you can redistribute it and/or modify it under 
- * the terms of the GNU General Public License as published by the Free 
- * Software Foundation, either version 3 of the License, or (at your 
+ *
+ * htd is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your
  * option) any later version.
- * 
- * htd is distributed in the hope that it will be useful, but WITHOUT 
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public 
+ *
+ * htd is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
  * License for more details.
 
  * You should have received a copy of the GNU General Public License
@@ -243,38 +243,30 @@ struct htd::GraphPreprocessor::Implementation
     /**
      *  Eliminate all vertices of degree less than 2 from the graph.
      *
-     *  @param[in] vertices     The set of all available vertices.
-     *  @param[in] vertexGroup1 The set of all vertices of degree <= 2.
-     *  @param[in] vertexGroup2 The set of all vertices of degree 2.
-     *  @param[in] vertexGroup3 The set of all vertices of degree 3.
-     *  @param[in] neighborhood The neighborhood relation of the remaining graph.
-     *  @param[in] ordering     The resulting, partial vertex elimination ordering.
+     *  @param[in] vertices         The set of all available vertices.
+     *  @param[in] verticesByDegree A vector of vertex sets. The degree of each vertex in a given set is equal to the index of the set within the vector.
+     *  @param[in] neighborhood     The neighborhood relation of the remaining graph.
+     *  @param[in] ordering         The resulting, partial vertex elimination ordering.
      *
      *  @return True if at least one vertex was removed due to this preprocessing step, false otherwise.
      */
     bool eliminateVerticesOfDegreeLessThanTwo(std::unordered_set<htd::vertex_t> & vertices,
-                                              std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                              std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                              std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                              std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                                               std::vector<std::vector<htd::vertex_t>> & neighborhood,
                                               std::vector<htd::vertex_t> & ordering);
 
     /**
      *  Eliminate all vertices of degree 2 from the graph.
      *
-     *  @param[in] vertices     The set of all available vertices.
-     *  @param[in] vertexGroup1 The set of all vertices of degree <= 2.
-     *  @param[in] vertexGroup2 The set of all vertices of degree 2.
-     *  @param[in] vertexGroup3 The set of all vertices of degree 3.
-     *  @param[in] neighborhood The neighborhood relation of the remaining graph.
-     *  @param[in] ordering     The resulting, partial vertex elimination ordering.
+     *  @param[in] vertices         The set of all available vertices.
+     *  @param[in] verticesByDegree A vector of vertex sets. The degree of each vertex in a given set is equal to the index of the set within the vector.
+     *  @param[in] neighborhood     The neighborhood relation of the remaining graph.
+     *  @param[in] ordering         The resulting, partial vertex elimination ordering.
      *
      *  @return True if at least one vertex was removed due to this preprocessing step, false otherwise.
      */
     bool contractPaths(std::unordered_set<htd::vertex_t> & vertices,
-                       std::unordered_set<htd::vertex_t> & vertexGroup1,
-                       std::unordered_set<htd::vertex_t> & vertexGroup2,
-                       std::unordered_set<htd::vertex_t> & vertexGroup3,
+                       std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                        std::vector<std::vector<htd::vertex_t>> & neighborhood,
                        std::vector<htd::vertex_t> & ordering);
 
@@ -282,19 +274,15 @@ struct htd::GraphPreprocessor::Implementation
      *  Eliminate all vertices of degree 3 from the graph in
      *  case that at least two of its neighbors are adjacent.
      *
-     *  @param[in] vertices     The set of all available vertices.
-     *  @param[in] vertexGroup1 The set of all vertices of degree <= 2.
-     *  @param[in] vertexGroup2 The set of all vertices of degree 2.
-     *  @param[in] vertexGroup3 The set of all vertices of degree 3.
-     *  @param[in] neighborhood The neighborhood relation of the remaining graph.
-     *  @param[in] ordering     The resulting, partial vertex elimination ordering.
+     *  @param[in] vertices         The set of all available vertices.
+     *  @param[in] verticesByDegree A vector of vertex sets. The degree of each vertex in a given set is equal to the index of the set within the vector.
+     *  @param[in] neighborhood     The neighborhood relation of the remaining graph.
+     *  @param[in] ordering         The resulting, partial vertex elimination ordering.
      *
      *  @return True if at least one vertex was removed due to this preprocessing step, false otherwise.
      */
     bool shrinkTriangles(std::unordered_set<htd::vertex_t> & vertices,
-                         std::unordered_set<htd::vertex_t> & vertexGroup1,
-                         std::unordered_set<htd::vertex_t> & vertexGroup2,
-                         std::unordered_set<htd::vertex_t> & vertexGroup3,
+                         std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                          std::vector<std::vector<htd::vertex_t>> & neighborhood,
                          std::vector<htd::vertex_t> & ordering);
 
@@ -302,21 +290,17 @@ struct htd::GraphPreprocessor::Implementation
      *  Eliminate all vertices from the graph for which
      *  it holds that all its neighbors form a clique.
      *
-     *  @param[in] vertices     The set of all available vertices.
-     *  @param[in] vertexGroup1 The set of all vertices of degree <= 2.
-     *  @param[in] vertexGroup2 The set of all vertices of degree 2.
-     *  @param[in] vertexGroup3 The set of all vertices of degree 3.
-     *  @param[in] neighborhood The neighborhood relation of the remaining graph.
-     *  @param[in] ordering     The resulting, partial vertex elimination ordering.
-     *  @param[in] maxDegree    The degree up to which a vertex shall be considered for this preprocessing.
-     *  @param[in] minTreeWidth The lower bound for the treewidth of the given graph.
+     *  @param[in] vertices         The set of all available vertices.
+     *  @param[in] verticesByDegree A vector of vertex sets. The degree of each vertex in a given set is equal to the index of the set within the vector.
+     *  @param[in] neighborhood     The neighborhood relation of the remaining graph.
+     *  @param[in] ordering         The resulting, partial vertex elimination ordering.
+     *  @param[in] maxDegree        The degree up to which a vertex shall be considered for this preprocessing.
+     *  @param[in] minTreeWidth     The lower bound for the treewidth of the given graph.
      *
      *  @return True if at least one vertex was removed due to this preprocessing step, false otherwise.
      */
     bool eliminateSimplicialVertices(std::unordered_set<htd::vertex_t> & vertices,
-                                     std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                     std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                     std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                     std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                                      std::vector<std::vector<htd::vertex_t>> & neighborhood,
                                      std::vector<htd::vertex_t> & ordering,
                                      std::size_t maxDegree,
@@ -325,44 +309,36 @@ struct htd::GraphPreprocessor::Implementation
     /**
      *  Update the group to which the given vertex belongs.
      *
-     *  @param[in] vertex       The vertex which shall be assigned to a group.
-     *  @param[in] vertexGroup1 The set of all vertices of degree <= 2.
-     *  @param[in] vertexGroup2 The set of all vertices of degree 2.
-     *  @param[in] vertexGroup3 The set of all vertices of degree 3.
-     *  @param[in] newDegree    The new degree of the vertex.
-     *  @param[in] oldDegree    The old degree of the vertex.
+     *  @param[in] vertex           The vertex which shall be assigned to a group.
+     *  @param[in] verticesByDegree A vector of vertex sets. The degree of each vertex in a given set is equal to the index of the set within the vector.
+     *  @param[in] newDegree        The new degree of the vertex.
+     *  @param[in] oldDegree        The old degree of the vertex.
      */
     void assignVertexToGroup(htd::vertex_t vertex,
-                             std::unordered_set<htd::vertex_t> & vertexGroup1,
-                             std::unordered_set<htd::vertex_t> & vertexGroup2,
-                             std::unordered_set<htd::vertex_t> & vertexGroup3,
+                             std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                              std::size_t newDegree,
                              std::size_t oldDegree);
 
     /**
      *  Update the group to which the given vertex belongs.
      *
-     *  @param[in] vertex       The vertex which shall be assigned to a group.
-     *  @param[in] vertexGroup1 The set of all vertices of degree <= 2.
-     *  @param[in] vertexGroup2 The set of all vertices of degree 2.
-     *  @param[in] vertexGroup3 The set of all vertices of degree 3.
-     *  @param[in] newDegree    The new degree of the vertex.
+     *  @param[in] vertex           The vertex which shall be assigned to a group.
+     *  @param[in] verticesByDegree A vector of vertex sets. The degree of each vertex in a given set is equal to the index of the set within the vector.
+     *  @param[in] newDegree        The new degree of the vertex.
      */
     void assignVertexToGroup(htd::vertex_t vertex,
-                             std::unordered_set<htd::vertex_t> & vertexGroup1,
-                             std::unordered_set<htd::vertex_t> & vertexGroup2,
-                             std::unordered_set<htd::vertex_t> & vertexGroup3,
+                             std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                              std::size_t newDegree);
 };
 
 htd::GraphPreprocessor::GraphPreprocessor(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
-    
+
 }
-            
+
 htd::GraphPreprocessor::~GraphPreprocessor()
 {
-    
+
 }
 
 htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
@@ -383,9 +359,7 @@ htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHyper
     {
         std::unordered_set<htd::vertex_t> vertices(size);
 
-        std::unordered_set<htd::vertex_t> vertexGroup1;
-        std::unordered_set<htd::vertex_t> vertexGroup2;
-        std::unordered_set<htd::vertex_t> vertexGroup3;
+        std::vector<std::unordered_set<htd::vertex_t>> verticesByDegree(4);
 
         std::vector<htd::vertex_t> ordering;
         ordering.reserve(size);
@@ -396,50 +370,50 @@ htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHyper
         {
             vertices.insert(vertex);
 
-            implementation_->assignVertexToGroup(vertex, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood[vertex].size());
+            implementation_->assignVertexToGroup(vertex, verticesByDegree, neighborhood[vertex].size());
         }
 
-        while (implementation_->eliminateVerticesOfDegreeLessThanTwo(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
+        while (implementation_->eliminateVerticesOfDegreeLessThanTwo(vertices, verticesByDegree, neighborhood, ordering))
         {
 
         }
 
         bool ok = false;
 
-        if (!vertices.empty())
+        if (!vertices.empty() && implementation_->applyPreprocessing2_)
         {
             minTreeWidth = 2;
 
-            while (implementation_->contractPaths(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
+            while (implementation_->contractPaths(vertices, verticesByDegree, neighborhood, ordering))
             {
                 ok = true;
             }
 
             if (ok)
             {
-                while (implementation_->eliminateVerticesOfDegreeLessThanTwo(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
+                while (implementation_->eliminateVerticesOfDegreeLessThanTwo(vertices, verticesByDegree, neighborhood, ordering))
                 {
 
                 }
             }
         }
 
-        if (!vertices.empty())
+        if (!vertices.empty() && implementation_->applyPreprocessing3_)
         {
             minTreeWidth = 3;
 
-            while (implementation_->shrinkTriangles(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
+            while (implementation_->shrinkTriangles(vertices, verticesByDegree, neighborhood, ordering))
             {
                 ok = false;
 
-                while (implementation_->contractPaths(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
+                while (implementation_->contractPaths(vertices, verticesByDegree, neighborhood, ordering))
                 {
                     ok = true;
                 }
 
                 if (ok)
                 {
-                    while (implementation_->eliminateVerticesOfDegreeLessThanTwo(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
+                    while (implementation_->eliminateVerticesOfDegreeLessThanTwo(vertices, verticesByDegree, neighborhood, ordering))
                     {
 
                     }
@@ -447,22 +421,22 @@ htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHyper
             }
         }
 
-        if (!vertices.empty())
+        if (!vertices.empty() && implementation_->applyPreprocessing4_)
         {
-            while (implementation_->eliminateSimplicialVertices(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering, 16, minTreeWidth))
+            while (implementation_->eliminateSimplicialVertices(vertices, verticesByDegree, neighborhood, ordering, 64, minTreeWidth))
             {
-                while (implementation_->shrinkTriangles(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
+                while (implementation_->shrinkTriangles(vertices, verticesByDegree, neighborhood, ordering))
                 {
                     ok = false;
 
-                    while (implementation_->contractPaths(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
+                    while (implementation_->contractPaths(vertices, verticesByDegree, neighborhood, ordering))
                     {
                         ok = true;
                     }
 
                     if (ok)
                     {
-                        while (implementation_->eliminateVerticesOfDegreeLessThanTwo(vertices, vertexGroup1, vertexGroup2, vertexGroup3, neighborhood, ordering))
+                        while (implementation_->eliminateVerticesOfDegreeLessThanTwo(vertices, verticesByDegree, neighborhood, ordering))
                         {
 
                         }
@@ -544,151 +518,242 @@ htd::GraphPreprocessor * htd::GraphPreprocessor::clone(void) const
 }
 
 void htd::GraphPreprocessor::Implementation::assignVertexToGroup(htd::vertex_t vertex,
-                                                                 std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                                 std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                                 std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                                 std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                                                                  std::size_t newDegree)
 {
-    switch (newDegree)
+    if (newDegree < verticesByDegree.size())
     {
-        case 0:
-        case 1:
-        {
-            vertexGroup1.insert(vertex);
-
-            break;
-        }
-        case 2:
-        {
-            vertexGroup2.insert(vertex);
-
-            break;
-        }
-        case 3:
-        {
-            vertexGroup3.insert(vertex);
-
-            break;
-        }
+        verticesByDegree[newDegree].insert(vertex);
     }
 }
 
 void htd::GraphPreprocessor::Implementation::assignVertexToGroup(htd::vertex_t vertex,
-                                                                 std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                                 std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                                 std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                                 std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                                                                  std::size_t newDegree,
                                                                  std::size_t oldDegree)
 {
-    switch (oldDegree)
+    if (oldDegree < verticesByDegree.size())
     {
-        case 0:
-        case 1:
-        {
-            vertexGroup1.erase(vertex);
-
-            break;
-        }
-        case 2:
-        {
-            vertexGroup2.erase(vertex);
-
-            break;
-        }
-        case 3:
-        {
-            vertexGroup3.erase(vertex);
-
-            break;
-        }
+        verticesByDegree[oldDegree].erase(vertex);
     }
 
-    assignVertexToGroup(vertex, vertexGroup1, vertexGroup2, vertexGroup3, newDegree);
+    assignVertexToGroup(vertex, verticesByDegree, newDegree);
 }
 
 bool htd::GraphPreprocessor::Implementation::eliminateVerticesOfDegreeLessThanTwo(std::unordered_set<htd::vertex_t> & vertices,
-                                                                                  std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                                                  std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                                                  std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                                                  std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                                                                                   std::vector<std::vector<htd::vertex_t>> & neighborhood,
                                                                                   std::vector<htd::vertex_t> & ordering)
 {
     std::size_t oldOrderingSize = ordering.size();
 
-    if (applyPreprocessing1_)
+    for (htd::vertex_t vertex : verticesByDegree[0])
     {
-        std::vector<htd::vertex_t> relevantVertices(vertexGroup1.begin(), vertexGroup1.end());
+        ordering.push_back(vertex);
+    }
 
-        for (htd::vertex_t vertex : relevantVertices)
+    verticesByDegree[0].clear();
+
+    std::unordered_set<htd::vertex_t> & verticesDegree1 = verticesByDegree[1];
+
+    std::vector<htd::vertex_t> relevantVertices(verticesDegree1.begin(), verticesDegree1.end());
+
+    for (htd::vertex_t vertex : relevantVertices)
+    {
+        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+
+        if (currentNeighborhood.size() == 1)
         {
-            std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+            htd::vertex_t neighbor = currentNeighborhood[0];
 
-            if (currentNeighborhood.size() == 1)
-            {
-                htd::vertex_t neighbor = currentNeighborhood[0];
+            std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
 
-                std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
+            otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
 
-                otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
-
-                assignVertexToGroup(neighbor, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood.size(), otherNeighborhood.size() + 1);
-            }
+            assignVertexToGroup(neighbor, verticesByDegree, otherNeighborhood.size(), otherNeighborhood.size() + 1);
 
             currentNeighborhood.clear();
-
-            ordering.push_back(vertex);
         }
 
-        for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
-        {
-            vertices.erase(*it);
+        ordering.push_back(vertex);
+    }
 
-            vertexGroup1.erase(*it);
-        }
+    for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
+    {
+        vertices.erase(*it);
+
+        verticesDegree1.erase(*it);
     }
 
     return ordering.size() > oldOrderingSize;
 }
 
 bool htd::GraphPreprocessor::Implementation::contractPaths(std::unordered_set<htd::vertex_t> & vertices,
-                                                           std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                           std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                           std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                           std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                                                            std::vector<std::vector<htd::vertex_t>> & neighborhood,
                                                            std::vector<htd::vertex_t> & ordering)
 {
     std::size_t oldOrderingSize = ordering.size();
 
-    if (applyPreprocessing2_)
+    std::unordered_set<htd::vertex_t> & verticesDegree2 = verticesByDegree[2];
+
+    std::vector<htd::vertex_t> relevantVertices(verticesDegree2.begin(), verticesDegree2.end());
+
+    for (htd::vertex_t vertex : relevantVertices)
     {
-        std::vector<htd::vertex_t> relevantVertices(vertexGroup2.begin(), vertexGroup2.end());
+        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
 
-        for (htd::vertex_t vertex : relevantVertices)
+        if (currentNeighborhood.size() == 2)
         {
-            std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+            htd::vertex_t neighbor1 = currentNeighborhood[0];
+            htd::vertex_t neighbor2 = currentNeighborhood[1];
 
-            if (currentNeighborhood.size() == 2)
+            std::vector<htd::vertex_t> & otherNeighborhood1 = neighborhood[neighbor1];
+            std::vector<htd::vertex_t> & otherNeighborhood2 = neighborhood[neighbor2];
+
+            otherNeighborhood1.erase(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), vertex));
+            otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
+
+            auto position = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2);
+
+            if (position != otherNeighborhood1.end() && *position == neighbor2)
             {
-                htd::vertex_t neighbor1 = currentNeighborhood[0];
-                htd::vertex_t neighbor2 = currentNeighborhood[1];
+                assignVertexToGroup(neighbor1, verticesByDegree, otherNeighborhood1.size(), otherNeighborhood1.size() + 1);
+                assignVertexToGroup(neighbor2, verticesByDegree, otherNeighborhood2.size(), otherNeighborhood2.size() + 1);
+            }
+            else
+            {
+                otherNeighborhood1.insert(position, neighbor2);
+                otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
+            }
 
-                std::vector<htd::vertex_t> & otherNeighborhood1 = neighborhood[neighbor1];
-                std::vector<htd::vertex_t> & otherNeighborhood2 = neighborhood[neighbor2];
+            currentNeighborhood.clear();
 
+            ordering.push_back(vertex);
+        }
+    }
+
+    for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
+    {
+        vertices.erase(*it);
+
+        verticesDegree2.erase(*it);
+    }
+
+    return ordering.size() > oldOrderingSize;
+}
+
+bool htd::GraphPreprocessor::Implementation::shrinkTriangles(std::unordered_set<htd::vertex_t> & vertices,
+                                                             std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
+                                                             std::vector<std::vector<htd::vertex_t>> & neighborhood,
+                                                             std::vector<htd::vertex_t> & ordering)
+{
+    std::size_t oldOrderingSize = ordering.size();
+
+    std::unordered_set<htd::vertex_t> & verticesDegree3 = verticesByDegree[3];
+
+    std::vector<htd::vertex_t> relevantVertices(verticesDegree3.begin(), verticesDegree3.end());
+
+    for (htd::vertex_t vertex : relevantVertices)
+    {
+        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+
+        if (currentNeighborhood.size() == 3)
+        {
+            htd::vertex_t neighbor1 = currentNeighborhood[0];
+            htd::vertex_t neighbor2 = currentNeighborhood[1];
+            htd::vertex_t neighbor3 = currentNeighborhood[2];
+
+            std::vector<htd::vertex_t> & otherNeighborhood1 = neighborhood[neighbor1];
+            std::vector<htd::vertex_t> & otherNeighborhood2 = neighborhood[neighbor2];
+            std::vector<htd::vertex_t> & otherNeighborhood3 = neighborhood[neighbor3];
+
+            std::size_t neighborDegree1 = otherNeighborhood1.size();
+            std::size_t neighborDegree2 = otherNeighborhood2.size();
+            std::size_t neighborDegree3 = otherNeighborhood3.size();
+
+            bool preprocessingApplicable = false;
+
+            if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
+            {
+                auto position1 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3);
+
+                if (position1 == otherNeighborhood1.end() || *position1 != neighbor3)
+                {
+                    otherNeighborhood1.insert(position1, neighbor3);
+                    otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor1), neighbor1);
+                }
+
+                auto position2 = std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3);
+
+                if (position2 == otherNeighborhood2.end() || *position2 != neighbor3)
+                {
+                    otherNeighborhood2.insert(position2, neighbor3);
+                    otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor2), neighbor2);
+                }
+
+                preprocessingApplicable = true;
+            }
+            else if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
+            {
+                auto position1 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2);
+
+                if (position1 == otherNeighborhood1.end() || *position1 != neighbor2)
+                {
+                    otherNeighborhood1.insert(position1, neighbor2);
+                    otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
+                }
+
+                auto position2 = std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3);
+
+                if (position2 == otherNeighborhood2.end() || *position2 != neighbor3)
+                {
+                    otherNeighborhood2.insert(position2, neighbor3);
+                    otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor2), neighbor2);
+                }
+
+                preprocessingApplicable = true;
+            }
+            else if (std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
+            {
+                auto position1 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2);
+
+                if (position1 == otherNeighborhood1.end() || *position1 != neighbor2)
+                {
+                    otherNeighborhood1.insert(position1, neighbor2);
+                    otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
+                }
+
+                auto position2 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3);
+
+                if (position2 == otherNeighborhood1.end() || *position2 != neighbor3)
+                {
+                    otherNeighborhood1.insert(position2, neighbor3);
+                    otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor1), neighbor1);
+                }
+
+                preprocessingApplicable = true;
+            }
+
+            if (preprocessingApplicable)
+            {
                 otherNeighborhood1.erase(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), vertex));
                 otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
+                otherNeighborhood3.erase(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), vertex));
 
-                auto position = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2);
-
-                if (position != otherNeighborhood1.end() && *position == neighbor2)
+                if (neighborDegree1 != otherNeighborhood1.size())
                 {
-                    assignVertexToGroup(neighbor1, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood1.size(), otherNeighborhood1.size() + 1);
-                    assignVertexToGroup(neighbor2, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood2.size(), otherNeighborhood2.size() + 1);
+                    assignVertexToGroup(neighbor1, verticesByDegree, otherNeighborhood1.size(), neighborDegree1);
                 }
-                else
+
+                if (neighborDegree2 != otherNeighborhood2.size())
                 {
-                    otherNeighborhood1.insert(position, neighbor2);
-                    otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
+                    assignVertexToGroup(neighbor2, verticesByDegree, otherNeighborhood2.size(), neighborDegree2);
+                }
+
+                if (neighborDegree3 != otherNeighborhood3.size())
+                {
+                    assignVertexToGroup(neighbor3, verticesByDegree, otherNeighborhood3.size(), neighborDegree3);
                 }
 
                 currentNeighborhood.clear();
@@ -696,155 +761,20 @@ bool htd::GraphPreprocessor::Implementation::contractPaths(std::unordered_set<ht
                 ordering.push_back(vertex);
             }
         }
-
-        for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
-        {
-            vertices.erase(*it);
-
-            vertexGroup2.erase(*it);
-        }
     }
 
-    return ordering.size() > oldOrderingSize;
-}
-
-bool htd::GraphPreprocessor::Implementation::shrinkTriangles(std::unordered_set<htd::vertex_t> & vertices,
-                                                             std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                             std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                             std::unordered_set<htd::vertex_t> & vertexGroup3,
-                                                             std::vector<std::vector<htd::vertex_t>> & neighborhood,
-                                                             std::vector<htd::vertex_t> & ordering)
-{
-    std::size_t oldOrderingSize = ordering.size();
-
-    if (applyPreprocessing3_)
+    for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
     {
-        std::vector<htd::vertex_t> relevantVertices(vertexGroup3.begin(), vertexGroup3.end());
+        vertices.erase(*it);
 
-        for (htd::vertex_t vertex : relevantVertices)
-        {
-            std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
-
-            if (currentNeighborhood.size() == 3)
-            {
-                htd::vertex_t neighbor1 = currentNeighborhood[0];
-                htd::vertex_t neighbor2 = currentNeighborhood[1];
-                htd::vertex_t neighbor3 = currentNeighborhood[2];
-
-                std::vector<htd::vertex_t> & otherNeighborhood1 = neighborhood[neighbor1];
-                std::vector<htd::vertex_t> & otherNeighborhood2 = neighborhood[neighbor2];
-                std::vector<htd::vertex_t> & otherNeighborhood3 = neighborhood[neighbor3];
-
-                std::size_t neighborDegree1 = otherNeighborhood1.size();
-                std::size_t neighborDegree2 = otherNeighborhood1.size();
-                std::size_t neighborDegree3 = otherNeighborhood1.size();
-
-                bool preprocessingApplicable = false;
-
-                if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
-                {
-                    auto position1 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3);
-
-                    if (position1 == otherNeighborhood1.end() || *position1 != neighbor3)
-                    {
-                        otherNeighborhood1.insert(position1, neighbor3);
-                        otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor1), neighbor1);
-                    }
-
-                    auto position2 = std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3);
-
-                    if (position2 == otherNeighborhood2.end() || *position2 != neighbor3)
-                    {
-                        otherNeighborhood2.insert(position2, neighbor3);
-                        otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor2), neighbor2);
-                    }
-
-                    preprocessingApplicable = true;
-                }
-                else if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
-                {
-                    auto position1 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2);
-
-                    if (position1 == otherNeighborhood1.end() || *position1 != neighbor2)
-                    {
-                        otherNeighborhood1.insert(position1, neighbor2);
-                        otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
-                    }
-
-                    auto position2 = std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3);
-
-                    if (position2 == otherNeighborhood2.end() || *position2 != neighbor3)
-                    {
-                        otherNeighborhood2.insert(position2, neighbor3);
-                        otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor2), neighbor2);
-                    }
-
-                    preprocessingApplicable = true;
-                }
-                else if (std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
-                {
-                    auto position1 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2);
-
-                    if (position1 == otherNeighborhood1.end() || *position1 != neighbor2)
-                    {
-                        otherNeighborhood1.insert(position1, neighbor2);
-                        otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
-                    }
-
-                    auto position2 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3);
-
-                    if (position2 == otherNeighborhood1.end() || *position2 != neighbor3)
-                    {
-                        otherNeighborhood1.insert(position2, neighbor3);
-                        otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor1), neighbor1);
-                    }
-
-                    preprocessingApplicable = true;
-                }
-
-                if (preprocessingApplicable)
-                {
-                    otherNeighborhood1.erase(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), vertex));
-                    otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
-                    otherNeighborhood3.erase(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), vertex));
-
-                    if (neighborDegree1 != otherNeighborhood1.size())
-                    {
-                        assignVertexToGroup(neighbor1, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood1.size(), neighborDegree1);
-                    }
-
-                    if (neighborDegree2 != otherNeighborhood2.size())
-                    {
-                        assignVertexToGroup(neighbor2, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood2.size(), neighborDegree2);
-                    }
-
-                    if (neighborDegree3 != otherNeighborhood3.size())
-                    {
-                        assignVertexToGroup(neighbor3, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood3.size(), neighborDegree3);
-                    }
-
-                    currentNeighborhood.clear();
-
-                    ordering.push_back(vertex);
-                }
-            }
-        }
-
-        for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
-        {
-            vertices.erase(*it);
-
-            vertexGroup3.erase(*it);
-        }
+        verticesDegree3.erase(*it);
     }
 
     return ordering.size() > oldOrderingSize;
 }
 
 bool htd::GraphPreprocessor::Implementation::eliminateSimplicialVertices(std::unordered_set<htd::vertex_t> & vertices,
-                                                                         std::unordered_set<htd::vertex_t> & vertexGroup1,
-                                                                         std::unordered_set<htd::vertex_t> & vertexGroup2,
-                                                                         std::unordered_set<htd::vertex_t> & vertexGroup3,
+                                                                         std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                                                                          std::vector<std::vector<htd::vertex_t>> & neighborhood,
                                                                          std::vector<htd::vertex_t> & ordering,
                                                                          std::size_t maxDegree,
@@ -852,51 +782,54 @@ bool htd::GraphPreprocessor::Implementation::eliminateSimplicialVertices(std::un
 {
     std::size_t oldOrderingSize = ordering.size();
 
-    if (applyPreprocessing4_)
+    for (htd::vertex_t vertex : vertices)
     {
-        for (htd::vertex_t vertex : vertices)
+        std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+
+        if (currentNeighborhood.size() <= maxDegree)
         {
-            std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
+            bool ok = true;
 
-            if (currentNeighborhood.size() <= maxDegree)
+            for (auto it = currentNeighborhood.begin(); ok && it != currentNeighborhood.end(); ++it)
             {
-                bool ok = true;
+                const std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[*it];
 
-                for (auto it = currentNeighborhood.begin(); ok && it != currentNeighborhood.end(); ++it)
+                ok = htd::set_intersection_size(otherNeighborhood.begin(), otherNeighborhood.end(), currentNeighborhood.begin(), currentNeighborhood.end()) == currentNeighborhood.size() - 1;
+            }
+
+            if (ok)
+            {
+                for (htd::vertex_t neighbor : currentNeighborhood)
                 {
-                    const std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[*it];
+                    std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
 
-                    ok = htd::set_intersection_size(otherNeighborhood.begin(), otherNeighborhood.end(), currentNeighborhood.begin(), currentNeighborhood.end()) == currentNeighborhood.size() - 1;
+                    otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
+
+                    assignVertexToGroup(neighbor, verticesByDegree, otherNeighborhood.size(), otherNeighborhood.size() + 1);
                 }
 
-                if (ok)
-                {
-                    for (htd::vertex_t neighbor : currentNeighborhood)
-                    {
-                        std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
+                minTreewidth = std::max(minTreewidth, currentNeighborhood.size());
 
-                        otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
+                currentNeighborhood.clear();
 
-                        assignVertexToGroup(neighbor, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood.size(), otherNeighborhood.size() + 1);
-                    }
-
-                    minTreewidth = std::max(minTreewidth, currentNeighborhood.size());
-
-                    currentNeighborhood.clear();
-
-                    ordering.push_back(vertex);
-                }
+                ordering.push_back(vertex);
             }
         }
+    }
 
-        for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
-        {
-            vertices.erase(*it);
+    std::unordered_set<htd::vertex_t> & verticesDegree0 = verticesByDegree[0];
+    std::unordered_set<htd::vertex_t> & verticesDegree1 = verticesByDegree[1];
+    std::unordered_set<htd::vertex_t> & verticesDegree2 = verticesByDegree[2];
+    std::unordered_set<htd::vertex_t> & verticesDegree3 = verticesByDegree[3];
 
-            vertexGroup1.erase(*it);
-            vertexGroup2.erase(*it);
-            vertexGroup3.erase(*it);
-        }
+    for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
+    {
+        vertices.erase(*it);
+
+        verticesDegree0.erase(*it);
+        verticesDegree1.erase(*it);
+        verticesDegree2.erase(*it);
+        verticesDegree3.erase(*it);
     }
 
     return ordering.size() > oldOrderingSize;

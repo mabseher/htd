@@ -178,11 +178,11 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
          */
         ElementInformation(htd::vertex_t vertex1, htd::vertex_t vertex2) HTD_NOEXCEPT : elements_(std::initializer_list<htd::vertex_t> { vertex1, vertex2 }), sortedElements_()
         {
-            sortedElements_.emplace_back(vertex2);
+            sortedElements_.push_back(vertex2);
 
             if (vertex1 > vertex2)
             {
-                sortedElements_.emplace_back(vertex1);
+                sortedElements_.push_back(vertex1);
             }
         }
 
@@ -204,12 +204,12 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
                 if (vertex1 > vertex2)
                 {
-                    sortedElements_.emplace_back(vertex2);
-                    sortedElements_.emplace_back(vertex1);
+                    sortedElements_.push_back(vertex2);
+                    sortedElements_.push_back(vertex1);
                 }
                 else
                 {
-                    sortedElements_.emplace_back(vertex1);
+                    sortedElements_.push_back(vertex1);
                 }
             }
             else
@@ -263,12 +263,12 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
                 if (vertex1 > vertex2)
                 {
-                    sortedElements_.emplace_back(vertex2);
-                    sortedElements_.emplace_back(vertex1);
+                    sortedElements_.push_back(vertex2);
+                    sortedElements_.push_back(vertex1);
                 }
                 else
                 {
-                    sortedElements_.emplace_back(vertex1);
+                    sortedElements_.push_back(vertex1);
                 }
             }
             else
@@ -322,12 +322,12 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
                 if (vertex1 > vertex2)
                 {
-                    sortedElements_.emplace_back(vertex2);
-                    sortedElements_.emplace_back(vertex1);
+                    sortedElements_.push_back(vertex2);
+                    sortedElements_.push_back(vertex1);
                 }
                 else
                 {
-                    sortedElements_.emplace_back(vertex1);
+                    sortedElements_.push_back(vertex1);
                 }
             }
             else
@@ -344,16 +344,16 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
         {
             elements_.clear();
 
-            elements_.emplace_back(vertex1);
-            elements_.emplace_back(vertex2);
+            elements_.push_back(vertex1);
+            elements_.push_back(vertex2);
 
             sortedElements_.clear();
 
-            sortedElements_.emplace_back(vertex2);
+            sortedElements_.push_back(vertex2);
 
             if (vertex1 > vertex2)
             {
-                sortedElements_.emplace_back(vertex1);
+                sortedElements_.push_back(vertex1);
             }
         }
 
@@ -377,12 +377,12 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
                 if (vertex1 > vertex2)
                 {
-                    sortedElements_.emplace_back(vertex2);
-                    sortedElements_.emplace_back(vertex1);
+                    sortedElements_.push_back(vertex2);
+                    sortedElements_.push_back(vertex1);
                 }
                 else
                 {
-                    sortedElements_.emplace_back(vertex1);
+                    sortedElements_.push_back(vertex1);
                 }
             }
             else
@@ -415,12 +415,12 @@ class ElementInformation : public htd::Hyperedge::IElementInformation
 
                 if (vertex1 > vertex2)
                 {
-                    sortedElements_.emplace_back(vertex2);
-                    sortedElements_.emplace_back(vertex1);
+                    sortedElements_.push_back(vertex2);
+                    sortedElements_.push_back(vertex1);
                 }
                 else
                 {
-                    sortedElements_.emplace_back(vertex1);
+                    sortedElements_.push_back(vertex1);
                 }
             }
             else
@@ -572,8 +572,8 @@ class SortedElementInformation : public htd::Hyperedge::IElementInformation
         {
             elements_.clear();
 
-            elements_.emplace_back(vertex1);
-            elements_.emplace_back(vertex2);
+            elements_.push_back(vertex1);
+            elements_.push_back(vertex2);
         }
 
         /**

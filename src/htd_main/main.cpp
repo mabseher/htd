@@ -875,6 +875,8 @@ int main(int argc, const char * const * const argv)
 
     bool error = false;
 
+    std::ios_base::sync_with_stdio(false);
+
     std::signal(SIGINT, handleSignal);
     std::signal(SIGTERM, handleSignal);
 

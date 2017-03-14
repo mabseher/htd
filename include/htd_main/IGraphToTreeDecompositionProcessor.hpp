@@ -27,6 +27,8 @@
 
 #include <htd_main/IGraphProcessor.hpp>
 
+#include <htd/FitnessEvaluation.hpp>
+
 #include <string>
 #include <iostream>
 #include <functional>
@@ -80,7 +82,7 @@ namespace htd_main
              *
              *  @param[in] callback The new callback function which is invoked after decomposing the input graph is finished.
              */
-            virtual void registerDecompositionCallback(const std::function<void(void)> & callback) = 0;
+            virtual void registerDecompositionCallback(const std::function<void(const htd::FitnessEvaluation &)> & callback) = 0;
     };
 
     inline htd_main::IGraphToTreeDecompositionProcessor::~IGraphToTreeDecompositionProcessor() { }

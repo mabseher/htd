@@ -104,11 +104,11 @@ void htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::addDecompositionAlg
 
 htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph) const
 {
-    return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t){});
+    return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){});
 }
 
 htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
-                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const
+                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
 {
     return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>(), progressCallback);
 }
@@ -116,12 +116,12 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
 htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
                                                                                                        const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
-    return computeDecomposition(graph, manipulationOperations, [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t){});
+    return computeDecomposition(graph, manipulationOperations, [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){});
 }
 
 htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
                                                                                                        const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
-                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const
+                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
 {
     htd::ITreeDecomposition * ret = nullptr;
 
@@ -138,12 +138,12 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
 
 htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const
 {
-    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t){});
+    return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){});
 }
 
 htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
                                                                                                        const htd::IPreprocessedGraph & preprocessedGraph,
-                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const
+                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
 {
     return computeDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), progressCallback);
 }
@@ -152,13 +152,13 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
                                                                                                        const htd::IPreprocessedGraph & preprocessedGraph,
                                                                                                        const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
-    return computeDecomposition(graph, preprocessedGraph, manipulationOperations, [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t){});
+    return computeDecomposition(graph, preprocessedGraph, manipulationOperations, [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){});
 }
 
 htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph,
                                                                                                        const htd::IPreprocessedGraph & preprocessedGraph,
                                                                                                        const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
-                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const
+                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
 {
     std::size_t bestMaxBagSize = (std::size_t)-1;
 
@@ -184,16 +184,14 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
         if (widthMinimizingTreeDecompositionAlgorithm != nullptr)
         {
             htd::ITreeDecomposition * currentDecomposition =
-                widthMinimizingTreeDecompositionAlgorithm->computeDecomposition(graph, preprocessedGraph, clonedManipulationOperations, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, std::size_t maximumBagSize)
+                widthMinimizingTreeDecompositionAlgorithm->computeDecomposition(graph, preprocessedGraph, clonedManipulationOperations, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
                 {
-                    progressCallback(graph, decomposition, maximumBagSize);
+                    progressCallback(graph, decomposition, fitness);
                 });
 
             if (currentDecomposition != nullptr)
             {
                 std::size_t currentMaxBagSize = currentDecomposition->maximumBagSize();
-
-                progressCallback(graph, *currentDecomposition, currentMaxBagSize);
 
                 if (currentMaxBagSize < bestMaxBagSize)
                 {
@@ -219,7 +217,7 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
                 {
                     std::size_t currentMaxBagSize = currentDecomposition->maximumBagSize();
 
-                    progressCallback(graph, *currentDecomposition, currentMaxBagSize);
+                    progressCallback(graph, *currentDecomposition, htd::FitnessEvaluation(1, -(static_cast<double>(currentMaxBagSize))));
 
                     if (currentMaxBagSize < bestMaxBagSize)
                     {

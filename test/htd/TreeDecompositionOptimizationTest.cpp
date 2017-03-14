@@ -1030,14 +1030,14 @@ TEST(TreeDecompositionOptimizationTest, CheckWidthMinimizationResultComplexGraph
 
     htd::ITreeDecomposition * decomposition =
         algorithm.computeDecomposition(*graph,
-                                       [&](const htd::IMultiHypergraph & currentGraph, const htd::ITreeDecomposition & currentDecomposition, std::size_t maximumBagSize){
+                                       [&](const htd::IMultiHypergraph & currentGraph, const htd::ITreeDecomposition & currentDecomposition, const htd::FitnessEvaluation & fitness){
         ASSERT_EQ(graph, &currentGraph);
 
         ASSERT_TRUE(verifier.verify(currentGraph, currentDecomposition));
 
         std::size_t currentWidth = currentDecomposition.maximumBagSize();
 
-        ASSERT_EQ(currentWidth, maximumBagSize);
+        ASSERT_EQ(currentWidth, static_cast<std::size_t>(-fitness.at(0)));
 
         if (currentWidth < minimalWidth)
         {
@@ -1101,14 +1101,14 @@ TEST(TreeDecompositionOptimizationTest, CheckCombinedWidthMinimizationResultComp
 
     htd::ITreeDecomposition * decomposition =
         algorithm.computeDecomposition(*graph,
-                                       [&](const htd::IMultiHypergraph & currentGraph, const htd::ITreeDecomposition & currentDecomposition, std::size_t maximumBagSize){
+                                       [&](const htd::IMultiHypergraph & currentGraph, const htd::ITreeDecomposition & currentDecomposition, const htd::FitnessEvaluation & fitness){
         ASSERT_EQ(graph, &currentGraph);
 
         ASSERT_TRUE(verifier.verify(currentGraph, currentDecomposition));
 
         std::size_t currentWidth = currentDecomposition.maximumBagSize();
 
-        ASSERT_EQ(currentWidth, maximumBagSize);
+        ASSERT_EQ(currentWidth, static_cast<std::size_t>(-fitness.at(0)));
 
         if (currentWidth < minimalWidth)
         {
@@ -1838,14 +1838,14 @@ TEST(TreeDecompositionOptimizationTest, CheckWidthMinimizationResultComplexGraph
 
     htd::ITreeDecomposition * decomposition =
         algorithm.computeDecomposition(*graph, { new BagSizeLabelingFunction2(libraryInstance) },
-                                       [&](const htd::IMultiHypergraph & currentGraph, const htd::ITreeDecomposition & currentDecomposition, std::size_t maximumBagSize){
+                                       [&](const htd::IMultiHypergraph & currentGraph, const htd::ITreeDecomposition & currentDecomposition, const htd::FitnessEvaluation & fitness){
         ASSERT_EQ(graph, &currentGraph);
 
         ASSERT_TRUE(verifier.verify(currentGraph, currentDecomposition));
 
         std::size_t currentWidth = currentDecomposition.maximumBagSize();
 
-        ASSERT_EQ(currentWidth, maximumBagSize);
+        ASSERT_EQ(currentWidth, static_cast<std::size_t>(-fitness.at(0)));
 
         if (currentWidth < minimalWidth)
         {
@@ -1900,14 +1900,14 @@ TEST(TreeDecompositionOptimizationTest, CheckCombinedWidthMinimizationResultComp
 
     htd::ITreeDecomposition * decomposition =
         algorithm.computeDecomposition(*graph, { new BagSizeLabelingFunction2(libraryInstance) },
-                                       [&](const htd::IMultiHypergraph & currentGraph, const htd::ITreeDecomposition & currentDecomposition, std::size_t maximumBagSize){
+                                       [&](const htd::IMultiHypergraph & currentGraph, const htd::ITreeDecomposition & currentDecomposition, const htd::FitnessEvaluation & fitness){
         ASSERT_EQ(graph, &currentGraph);
 
         ASSERT_TRUE(verifier.verify(currentGraph, currentDecomposition));
 
         std::size_t currentWidth = currentDecomposition.maximumBagSize();
 
-        ASSERT_EQ(currentWidth, maximumBagSize);
+        ASSERT_EQ(currentWidth, static_cast<std::size_t>(-fitness.at(0)));
 
         if (currentWidth < minimalWidth)
         {

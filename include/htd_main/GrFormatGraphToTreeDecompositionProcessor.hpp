@@ -63,7 +63,7 @@ namespace htd_main
 
             void registerPreprocessingCallback(const std::function<void(std::size_t vertexCount, std::size_t edgeCount)> & callback) HTD_OVERRIDE;
 
-            void registerDecompositionCallback(const std::function<void(void)> & callback) HTD_OVERRIDE;
+            void registerDecompositionCallback(const std::function<void(const htd::FitnessEvaluation &)> & callback) HTD_OVERRIDE;
 
         private:
             struct Implementation;

@@ -91,7 +91,7 @@ struct htd_main::LpFormatGraphToTreeDecompositionProcessor::Implementation
     /**
      *  A vector of callback functions which are invoked after decomposing the input graph is finished.
      */
-    std::vector<std::function<void(void)>> decompositionCallbacks_;
+    std::vector<std::function<void(const htd::FitnessEvaluation &)>> decompositionCallbacks_;
 
     /**
      *  Invoke all callback functions after parsing the input graph.
@@ -124,12 +124,14 @@ struct htd_main::LpFormatGraphToTreeDecompositionProcessor::Implementation
 
     /**
      *  Invoke all callback functions after after decomposing the input graph.
+     *
+     *  @param[in] fitness  The fitness evaluation of the computed decomposition.
      */
-    void invokeDecompositionCallbacks(void) const
+    void invokeDecompositionCallbacks(const htd::FitnessEvaluation & fitness) const
     {
-        for (const std::function<void(void)> & callback : decompositionCallbacks_)
+        for (const std::function<void(const htd::FitnessEvaluation &)> & callback : decompositionCallbacks_)
         {
-            callback();
+            callback(fitness);
         }
     }
 };
@@ -188,21 +190,63 @@ void htd_main::LpFormatGraphToTreeDecompositionProcessor::process(std::istream &
 
             implementation_->invokePreprocessingCallbacks(preprocessedGraph->vertexCount(), preprocessedGraph->edgeCount());
 
-            decomposition = algorithm->computeDecomposition(graph->internalGraph(), *preprocessedGraph);
+            htd::ICustomizedTreeDecompositionAlgorithm * customizedAlgorithm = dynamic_cast<htd::ICustomizedTreeDecompositionAlgorithm *>(algorithm);
+
+            if (customizedAlgorithm != nullptr)
+            {
+                decomposition = customizedAlgorithm->computeDecomposition(graph->internalGraph(), *preprocessedGraph, [&](const htd::IMultiHypergraph & graph,
+                                                                                                                          const htd::ITreeDecomposition & decomposition,
+                                                                                                                          const htd::FitnessEvaluation & fitness)
+                {
+                    HTD_UNUSED(graph)
+                    HTD_UNUSED(decomposition)
+
+                    implementation_->invokeDecompositionCallbacks(fitness);
+                });
+            }
+            else
+            {
+                decomposition = algorithm->computeDecomposition(graph->internalGraph(), *preprocessedGraph);
+
+                if (decomposition != nullptr)
+                {
+                    implementation_->invokeDecompositionCallbacks(htd::FitnessEvaluation(1, -(static_cast<double>(decomposition->maximumBagSize()))));
+                }
+            }
 
             delete preprocessedGraph;
         }
         else
         {
-            decomposition = algorithm->computeDecomposition(graph->internalGraph());
+            htd::ICustomizedTreeDecompositionAlgorithm * customizedAlgorithm = dynamic_cast<htd::ICustomizedTreeDecompositionAlgorithm *>(algorithm);
+
+            if (customizedAlgorithm != nullptr)
+            {
+                decomposition = customizedAlgorithm->computeDecomposition(graph->internalGraph(), [&](const htd::IMultiHypergraph & graph,
+                                                                                                      const htd::ITreeDecomposition & decomposition,
+                                                                                                      const htd::FitnessEvaluation & fitness)
+                {
+                    HTD_UNUSED(graph)
+                    HTD_UNUSED(decomposition)
+
+                    implementation_->invokeDecompositionCallbacks(fitness);
+                });
+            }
+            else
+            {
+                decomposition = algorithm->computeDecomposition(graph->internalGraph());
+
+                if (decomposition != nullptr)
+                {
+                    implementation_->invokeDecompositionCallbacks(htd::FitnessEvaluation(1, -(static_cast<double>(decomposition->maximumBagSize()))));
+                }
+            }
         }
 
         delete algorithm;
 
         if (decomposition != nullptr)
         {
-            implementation_->invokeDecompositionCallbacks();
-
             if (implementation_->exporter_ != nullptr)
             {
                 implementation_->exporter_->write(*decomposition, *graph, outputStream);
@@ -249,7 +293,7 @@ void htd_main::LpFormatGraphToTreeDecompositionProcessor::registerPreprocessingC
     implementation_->preprocessingCallbacks_.push_back(callback);
 }
 
-void htd_main::LpFormatGraphToTreeDecompositionProcessor::registerDecompositionCallback(const std::function<void(void)> & callback)
+void htd_main::LpFormatGraphToTreeDecompositionProcessor::registerDecompositionCallback(const std::function<void(const htd::FitnessEvaluation &)> & callback)
 {
     implementation_->decompositionCallbacks_.push_back(callback);
 }

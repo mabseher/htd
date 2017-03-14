@@ -75,6 +75,7 @@
 #include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/HypertreeDecomposition.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
+#include <htd/ICustomizedTreeDecompositionAlgorithm.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
 #include <htd/Id.hpp>
 #include <htd/IDirectedGraph.hpp>

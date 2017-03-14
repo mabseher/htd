@@ -26,7 +26,7 @@
 #define HTD_HTD_COMBINEDWIDTHMINIMIZINGTREEDECOMPOSITIONALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/ITreeDecompositionAlgorithm.hpp>
+#include <htd/ICustomizedTreeDecompositionAlgorithm.hpp>
 
 #include <htd/ILabelingFunction.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
@@ -51,7 +51,7 @@ namespace htd
      *
      *  @note The base algorithms must be assigned before the optional manipulation operations!
      */
-    class CombinedWidthMinimizingTreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
+    class CombinedWidthMinimizingTreeDecompositionAlgorithm : public htd::ICustomizedTreeDecompositionAlgorithm
     {
         public:
             /**
@@ -83,38 +83,15 @@ namespace htd
 
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
-            /**
-             *  Compute a decomposition of the given graph.
-             *
-             *  @param[in] graph            The input graph to decompose.
-             *  @param[in] progressCallback A callback function which is invoked in each iteration after the new decomposition was computed.
-             *
-             *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
-             */
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph,
-                                                                   const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const;
+                                                                   const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const HTD_OVERRIDE;
 
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph,
                                                                    const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
 
-            /**
-             *  Compute a decomposition of the given graph and apply the given manipulation operations to it.
-             *
-             *  @param[in] graph                    The input graph to decompose.
-             *  @param[in] manipulationOperations   The manipulation operations which shall be applied.
-             *  @param[in] progressCallback         A callback function which is invoked in each iteration after the new decomposition was computed.
-             *
-             *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
-             *
-             *  @note When calling this method the control over the memory regions of the manipulation operations is transferred to the
-             *  decomposition algorithm. Deleting a manipulation operation provided to this method outside the decomposition algorithm
-             *  or assigning the same manipulation operation multiple times will lead to undefined behavior.
-             *
-             *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
-             */
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph,
                                                                    const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
-                                                                   const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const;
+                                                                   const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const HTD_OVERRIDE;
 
             /**
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
@@ -134,43 +111,18 @@ namespace htd
 
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_OVERRIDE;
 
-            /**
-             *  Compute a decomposition of the given graph.
-             *
-             *  @param[in] graph                The input graph to decompose.
-             *  @param[in] preprocessedGraph    The input graph in preprocessed format.
-             *  @param[in] progressCallback     A callback function which is invoked in each iteration after the new decomposition was computed.
-             *
-             *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
-             */
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph,
                                                                    const htd::IPreprocessedGraph & preprocessedGraph,
-                                                                   const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const;
+                                                                   const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const HTD_OVERRIDE;
 
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph,
                                                                    const htd::IPreprocessedGraph & preprocessedGraph,
                                                                    const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const HTD_OVERRIDE;
 
-            /**
-             *  Compute a decomposition of the given graph and apply the given manipulation operations to it.
-             *
-             *  @param[in] graph                    The input graph to decompose.
-             *  @param[in] preprocessedGraph        The input graph in preprocessed format.
-             *  @param[in] manipulationOperations   The manipulation operations which shall be applied.
-             *  @param[in] progressCallback         A callback function which is invoked in each iteration after the new decomposition was computed.
-             *
-             *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
-             *
-             *  @note When calling this method the control over the memory regions of the manipulation operations is transferred to the
-             *  decomposition algorithm. Deleting a manipulation operation provided to this method outside the decomposition algorithm
-             *  or assigning the same manipulation operation multiple times will lead to undefined behavior.
-             *
-             *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
-             */
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph,
                                                                    const htd::IPreprocessedGraph & preprocessedGraph,
                                                                    const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
-                                                                   const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, std::size_t)> & progressCallback) const;
+                                                                   const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const HTD_OVERRIDE;
 
             /**
              *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.

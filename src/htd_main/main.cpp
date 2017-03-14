@@ -40,6 +40,7 @@
 #include <csignal>
 #include <cstring>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 
 htd::LibraryInstance * const libraryInstance = htd::createManagementInstance(htd::Id::FIRST);
@@ -68,6 +69,10 @@ htd_cli::OptionManager * createOptionManager(void)
         decompositionTypeChoice->addPossibility("hypertree", "Compute a hypertree decomposition of the input graph.");
 
         decompositionTypeChoice->setDefaultValue("tree");
+
+        htd_cli::Option * printProgressOption = new htd_cli::Option("print-progress", "Print progress whenever a new optimal decomposition is found.");
+
+        manager->registerOption(printProgressOption, "General Options");
 
         manager->registerOption(decompositionTypeChoice, "Decomposition Options");
 
@@ -133,10 +138,6 @@ htd_cli::OptionManager * createOptionManager(void)
         htd_cli::SingleValueOption * patienceOption = new htd_cli::SingleValueOption("patience", "Terminate the algorithm if more than <amount> iterations did not lead to an improvement (-1 = infinite). (Default: -1)", "amount");
 
         manager->registerOption(patienceOption, "Optimization Options");
-
-        htd_cli::Option * printProgressOption = new htd_cli::Option("print-opt-progress", "Print progress whenever a new optimal decomposition is found.");
-
-        manager->registerOption(printProgressOption, "Optimization Options");
     }
     catch (const std::runtime_error & exception)
     {
@@ -184,8 +185,6 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
     const htd_cli::SingleValueOption & iterationOption = optionManager.accessSingleValueOption("iterations");
 
     const htd_cli::SingleValueOption & patienceOption = optionManager.accessSingleValueOption("patience");
-
-    const htd_cli::Option & printProgressOption = optionManager.accessOption("print-opt-progress");
 
     if (ret && helpOption.used())
     {
@@ -380,16 +379,6 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
                 ret = false;
             }
-        }
-    }
-
-    if (ret)
-    {
-        if (printProgressOption.used() && !optimizationChoice.used())
-        {
-            std::cerr << "INVALID PROGRAM CALL: Option --print-opt-progress may only be used when option --opt is set to \"width\"!" << std::endl;
-
-            ret = false;
         }
     }
 
@@ -664,13 +653,15 @@ void minimizeWidth(const htd::LibraryInstance & instance, const htd::CombinedWid
             std::size_t optimalMaximumBagSize = (std::size_t)-1;
 
             htd::ITreeDecomposition * decomposition =
-                algorithm.computeDecomposition(*graph, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, std::size_t maximumBagSize)
+                algorithm.computeDecomposition(*graph, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
                 {
                     HTD_UNUSED(graph)
                     HTD_UNUSED(decomposition)
 
                     if (printProgress)
                     {
+                        std::size_t maximumBagSize = static_cast<std::size_t>(-fitness.at(0));
+
                         if (maximumBagSize < optimalMaximumBagSize)
                         {
                             optimalMaximumBagSize = maximumBagSize;
@@ -735,13 +726,15 @@ void minimizeWidthNamed(const htd::LibraryInstance & instance, const htd::Combin
             std::size_t optimalMaximumBagSize = (std::size_t)-1;
 
             htd::ITreeDecomposition * decomposition =
-                algorithm.computeDecomposition(graph->internalGraph(), [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, std::size_t maximumBagSize)
+                algorithm.computeDecomposition(graph->internalGraph(), [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
                 {
                     HTD_UNUSED(graph)
                     HTD_UNUSED(decomposition)
 
                     if (printProgress)
                     {
+                        std::size_t maximumBagSize = static_cast<std::size_t>(-fitness.at(0));
+
                         if (maximumBagSize < optimalMaximumBagSize)
                         {
                             optimalMaximumBagSize = maximumBagSize;
@@ -907,7 +900,7 @@ int main(int argc, const char * const * const argv)
 
         const htd_cli::SingleValueOption & patienceOption = optionManager->accessSingleValueOption("patience");
 
-        const htd_cli::Option & printProgressOption = optionManager->accessOption("print-opt-progress");
+        const htd_cli::Option & printProgressOption = optionManager->accessOption("print-progress");
 
         const std::string & outputFormat = outputFormatChoice.value();
 
@@ -981,9 +974,11 @@ int main(int argc, const char * const * const argv)
 
             if (!error)
             {
+                std::size_t optimalMaximumBagSize = (std::size_t)-1;
+
                 if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
                 {
-                    htd::CombinedWidthMinimizingTreeDecompositionAlgorithm algorithm(libraryInstance);
+                    htd::CombinedWidthMinimizingTreeDecompositionAlgorithm * algorithm = new htd::CombinedWidthMinimizingTreeDecompositionAlgorithm(libraryInstance);
 
                     if (std::string(strategyChoice.value()) == "challenge")
                     {
@@ -993,7 +988,7 @@ int main(int argc, const char * const * const argv)
 
                         initialAlgorithm->setOrderingAlgorithm(new htd::MinDegreeOrderingAlgorithm(libraryInstance));
 
-                        algorithm.addDecompositionAlgorithm(initialAlgorithm);
+                        algorithm->addDecompositionAlgorithm(initialAlgorithm);
                     }
 
                     htd::WidthMinimizingTreeDecompositionAlgorithm * baseAlgorithm = new htd::WidthMinimizingTreeDecompositionAlgorithm(libraryInstance);
@@ -1021,144 +1016,190 @@ int main(int argc, const char * const * const argv)
                         }
                     }
 
-                    algorithm.addDecompositionAlgorithm(baseAlgorithm);
+                    algorithm->addDecompositionAlgorithm(baseAlgorithm);
 
-                    const std::string & inputFormat = inputFormatChoice.value();
-
-                    if (inputFormat == "gr")
-                    {
-                        htd_main::GrFormatImporter importer(libraryInstance);
-
-                        if (instanceOption.used())
-                        {
-                            minimizeWidth(*libraryInstance, algorithm, importer.import(instanceOption.value()), *exporter, printProgressOption.used(), outputFormat);
-                        }
-                        else
-                        {
-                            minimizeWidth(*libraryInstance, algorithm, importer.import(std::cin), *exporter, printProgressOption.used(), outputFormat);
-                        }
-                    }
-                    else if (inputFormat == "lp")
-                    {
-                        htd_main::LpFormatImporter importer(libraryInstance);
-
-                        if (instanceOption.used())
-                        {
-                            minimizeWidthNamed(*libraryInstance, algorithm, importer.import(instanceOption.value()), *exporter, printProgressOption.used(), outputFormat);
-                        }
-                        else
-                        {
-                            minimizeWidthNamed(*libraryInstance, algorithm, importer.import(std::cin), *exporter, printProgressOption.used(), outputFormat);
-                        }
-                    }
-                    else if (inputFormat == "hgr")
-                    {
-                        htd_main::HgrFormatImporter importer(libraryInstance);
-
-                        if (instanceOption.used())
-                        {
-                            minimizeWidth(*libraryInstance, algorithm, importer.import(instanceOption.value()), *exporter, printProgressOption.used(), outputFormat);
-                        }
-                        else
-                        {
-                            minimizeWidth(*libraryInstance, algorithm, importer.import(std::cin), *exporter, printProgressOption.used(), outputFormat);
-                        }
-                    }
-
-                    delete exporter;
+                    libraryInstance->treeDecompositionAlgorithmFactory().setConstructionTemplate(algorithm);
                 }
-                else
+
+                htd::GraphPreprocessor * preprocessor = new htd::GraphPreprocessor(libraryInstance);
+
+                if (std::string(preprocessingChoice.value()) == "none")
                 {
-                    htd::GraphPreprocessor * preprocessor = new htd::GraphPreprocessor(libraryInstance);
+                    preprocessor->setPreprocessingStrategy(0);
+                }
+                else if (std::string(preprocessingChoice.value()) == "simple")
+                {
+                    preprocessor->setPreprocessingStrategy(1);
+                }
+                else if (std::string(preprocessingChoice.value()) == "advanced")
+                {
+                    preprocessor->setPreprocessingStrategy(2);
+                }
+                else if (std::string(preprocessingChoice.value()) == "full")
+                {
+                    preprocessor->setPreprocessingStrategy(3);
+                }
 
-                    if (std::string(preprocessingChoice.value()) == "none")
-                    {
-                        preprocessor->setPreprocessingStrategy(0);
-                    }
-                    else if (std::string(preprocessingChoice.value()) == "simple")
-                    {
-                        preprocessor->setPreprocessingStrategy(1);
-                    }
-                    else if (std::string(preprocessingChoice.value()) == "advanced")
-                    {
-                        preprocessor->setPreprocessingStrategy(2);
-                    }
-                    else if (std::string(preprocessingChoice.value()) == "full")
-                    {
-                        preprocessor->setPreprocessingStrategy(3);
-                    }
+                htd_main::IGraphToTreeDecompositionProcessor * processor = nullptr;
 
-                    htd_main::IGraphToTreeDecompositionProcessor * processor = nullptr;
+                if (std::string(inputFormatChoice.value()) == "gr")
+                {
+                    processor = new htd_main::GrFormatGraphToTreeDecompositionProcessor(libraryInstance);
+                }
+                else if (std::string(inputFormatChoice.value()) == "hgr")
+                {
+                    processor = new htd_main::HgrFormatGraphToTreeDecompositionProcessor(libraryInstance);
+                }
+                else if (std::string(inputFormatChoice.value()) == "lp")
+                {
+                    processor = new htd_main::LpFormatGraphToTreeDecompositionProcessor(libraryInstance);
+                }
 
-                    if (std::string(inputFormatChoice.value()) == "gr")
-                    {
-                        processor = new htd_main::GrFormatGraphToTreeDecompositionProcessor(libraryInstance);
-                    }
-                    else if (std::string(inputFormatChoice.value()) == "hgr")
-                    {
-                        processor = new htd_main::HgrFormatGraphToTreeDecompositionProcessor(libraryInstance);
-                    }
-                    else if (std::string(inputFormatChoice.value()) == "lp")
-                    {
-                        processor = new htd_main::LpFormatGraphToTreeDecompositionProcessor(libraryInstance);
-                    }
+                processor->setExporter(exporter);
 
-                    processor->setExporter(exporter);
+                processor->setPreprocessor(preprocessor);
 
-                    processor->setPreprocessor(preprocessor);
+                std::chrono::milliseconds::rep start =
+                    std::chrono::duration_cast<std::chrono::milliseconds>
+                        (std::chrono::system_clock::now().time_since_epoch()).count();
 
-                    processor->registerParsingCallback([](htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount){
-                        std::chrono::milliseconds::rep msSinceEpoch =
+                std::chrono::milliseconds::rep lastStepFinished = start;
+
+                if (printProgressOption.used())
+                {
+                    processor->registerParsingCallback([&](htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount){
+                        lastStepFinished =
                             std::chrono::duration_cast<std::chrono::milliseconds>
                                 (std::chrono::system_clock::now().time_since_epoch()).count();
 
                         if (result == htd_main::ParsingResult::OK)
                         {
-                            std::cout << "PARSING FINISHED:        " << msSinceEpoch << std::endl;
-                            std::cout << "   VERTICES:        " << std::right << std::setw(18) << vertexCount << std::endl;
-                            std::cout << "   EDGES:           " << std::right << std::setw(18) << edgeCount << std::endl;
+                            if (outputFormat == "td")
+                            {
+                                std::cout << "c progress PARSING COMPLETED " << lastStepFinished << std::endl;
+                            }
+                            else
+                            {
+                                std::ios::fmtflags oldflags(std::cout.flags());
+
+                                std::cout << "Parsing completed:" << std::endl;
+                                std::cout << "   Duration:         " << std::right << std::setw(15) << std::fixed << std::setprecision(3) << ((lastStepFinished - start) / 1000.0) << " s" << std::endl;
+                                std::cout << "   - - - - - - - - - - - - - - - - - -" << std::endl;
+                                std::cout << "   Vertices:         " << std::right << std::setw(17) << vertexCount << std::endl;
+                                std::cout << "   Hyperedges:       " << std::right << std::setw(17) << edgeCount << std::endl;
+                                std::cout << std::endl;
+
+                                std::cout.flags(oldflags);
+                            }
                         }
                         else
                         {
-                            std::cout << "PARSING FAILED:          " << msSinceEpoch << std::endl;
+                            if (outputFormat == "td")
+                            {
+                                std::cout << "c progress PARSING FAILED " << lastStepFinished << std::endl;
+                            }
+                            else
+                            {
+                                std::ios::fmtflags oldflags(std::cout.flags());
+
+                                std::cout << "Parsing failed:" << std::endl;
+                                std::cout << "   Duration:         " << std::right << std::setw(15) << std::fixed << std::setprecision(3) << ((lastStepFinished - start) / 1000.0) << " s" << std::endl;
+                                std::cout << "   - - - - - - - - - - - - - - - - - -" << std::endl;
+                                std::cout << std::endl;
+
+                                std::cout.flags(oldflags);
+                            }
                         }
                     });
 
-                    processor->registerPreprocessingCallback([](std::size_t vertexCount, std::size_t edgeCount){
+                    if (std::string(preprocessingChoice.value()) != "none")
+                    {
+                        processor->registerPreprocessingCallback([&](std::size_t vertexCount, std::size_t edgeCount){
+                            std::chrono::milliseconds::rep msSinceEpoch =
+                                std::chrono::duration_cast<std::chrono::milliseconds>
+                                    (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                            if (outputFormat == "td")
+                            {
+                                std::cout << "c progress PREPROCESSING FINISHED " << msSinceEpoch << std::endl;
+                            }
+                            else
+                            {
+                                std::ios::fmtflags oldflags(std::cout.flags());
+
+                                std::cout << "Preprocessing finished:" << std::endl;
+                                std::cout << "   Duration:         " << std::right << std::setw(15) << std::fixed << std::setprecision(3) << ((msSinceEpoch - lastStepFinished) / 1000.0) << " s" << std::endl;
+                                std::cout << "   - - - - - - - - - - - - - - - - - -" << std::endl;
+                                std::cout << "   Vertices:         " << std::right << std::setw(17) << vertexCount << std::endl;
+                                std::cout << "   Hyperedges:       " << std::right << std::setw(17) << edgeCount << std::endl;
+                                std::cout << std::endl;
+
+                                std::cout.flags(oldflags);
+                            }
+
+                            lastStepFinished = msSinceEpoch;
+                        });
+                    }
+
+                    processor->registerDecompositionCallback([&](const htd::FitnessEvaluation & fitness){
                         std::chrono::milliseconds::rep msSinceEpoch =
                             std::chrono::duration_cast<std::chrono::milliseconds>
                                 (std::chrono::system_clock::now().time_since_epoch()).count();
 
-                        std::cout << "PRE-PROCESSING FINISHED: " << msSinceEpoch << std::endl;
-                        std::cout << "   VERTICES:        " << std::right << std::setw(18) << vertexCount << std::endl;
-                        std::cout << "   EDGES:           " << std::right << std::setw(18) << edgeCount << std::endl;
+                        if (outputFormat != "td")
+                        {
+                            std::ios::fmtflags oldflags(std::cout.flags());
+
+                            std::cout << "New decomposition computed:" << std::endl;
+                            std::cout << "   Duration:         " << std::right << std::setw(15) << std::fixed << std::setprecision(3) << ((msSinceEpoch - lastStepFinished) / 1000.0) << " s" << std::endl;
+                            std::cout << "   - - - - - - - - - - - - - - - - - -" << std::endl;
+
+                            std::cout.flags(oldflags);
+                        }
+
+                        std::size_t maximumBagSize = static_cast<std::size_t>(-fitness.at(0));
+
+                        if (maximumBagSize < optimalMaximumBagSize)
+                        {
+                            optimalMaximumBagSize = maximumBagSize;
+
+                            std::chrono::milliseconds::rep msSinceEpoch =
+                                std::chrono::duration_cast<std::chrono::milliseconds>
+                                    (std::chrono::system_clock::now().time_since_epoch()).count();
+
+                            if (outputFormat == "td")
+                            {
+                                std::cout << "c status " << optimalMaximumBagSize << " " << msSinceEpoch << std::endl;
+                            }
+                            else
+                            {
+                                std::ios::fmtflags oldflags(std::cout.flags());
+
+                                std::cout << "   Improved Maximum Bag Size: " << std::right << std::setw(8) << optimalMaximumBagSize << std::endl;
+
+                                std::cout.flags(oldflags);
+                            }
+                        }
+
+                        if (outputFormat != "td")
+                        {
+                            std::cout << std::endl;
+                        }
+
+                        lastStepFinished = msSinceEpoch;
                     });
-
-                    processor->registerDecompositionCallback([](void){
-                        std::chrono::milliseconds::rep msSinceEpoch =
-                            std::chrono::duration_cast<std::chrono::milliseconds>
-                                (std::chrono::system_clock::now().time_since_epoch()).count();
-
-                        std::cout << "DECOMPOSITION FINISHED:  " << msSinceEpoch << std::endl;
-                    });
-
-                    std::chrono::milliseconds::rep msSinceEpoch =
-                        std::chrono::duration_cast<std::chrono::milliseconds>
-                            (std::chrono::system_clock::now().time_since_epoch()).count();
-
-                    std::cout << "START:                   " << msSinceEpoch << std::endl;
-
-                    if (instanceOption.used())
-                    {
-                        processor->process(instanceOption.value(), std::cout);
-                    }
-                    else
-                    {
-                        processor->process();
-                    }
-
-                    delete processor;
                 }
+
+                if (instanceOption.used())
+                {
+                    processor->process(instanceOption.value(), std::cout);
+                }
+                else
+                {
+                    processor->process();
+                }
+
+                delete processor;
             }
         }
     }

@@ -149,25 +149,16 @@ struct htd::GraphPreprocessor::Implementation
 
                         std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[mappedVertex];
 
-                        const htd::ConstCollection<htd::vertex_t> & neighborCollection = graph.neighbors(vertex);
+                        graph.copyNeighborsTo(vertex, currentNeighborhood);
 
-                        auto position = neighborCollection.begin();
+                        auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
 
-                        currentNeighborhood.reserve(neighborCollection.size() + 1);
-
-                        for (std::size_t remainder = neighborCollection.size(); remainder > 0; --remainder)
+                        if (position != currentNeighborhood.end() && *position == mappedVertex)
                         {
-                            currentNeighborhood.push_back((*position) - 1);
-
-                            ++position;
+                            currentNeighborhood.erase(position);
                         }
 
-                        auto position2 = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), mappedVertex);
-
-                        if (position2 != currentNeighborhood.end() && *position2 == mappedVertex)
-                        {
-                            currentNeighborhood.erase(position2);
-                        }
+                        std::for_each(currentNeighborhood.begin(), currentNeighborhood.end(), [](htd::vertex_t & neighbor){ --neighbor; });
                     }
                 }
                 else
@@ -687,14 +678,16 @@ bool htd::GraphPreprocessor::Implementation::contractPaths(std::unordered_set<ht
                 otherNeighborhood1.erase(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), vertex));
                 otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
 
-                if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
+                auto position = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2);
+
+                if (position != otherNeighborhood1.end() && *position == neighbor2)
                 {
                     assignVertexToGroup(neighbor1, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood1.size(), otherNeighborhood1.size() + 1);
                     assignVertexToGroup(neighbor2, vertexGroup1, vertexGroup2, vertexGroup3, otherNeighborhood2.size(), otherNeighborhood2.size() + 1);
                 }
                 else
                 {
-                    otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2), neighbor2);
+                    otherNeighborhood1.insert(position, neighbor2);
                     otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
                 }
 
@@ -750,15 +743,19 @@ bool htd::GraphPreprocessor::Implementation::shrinkTriangles(std::unordered_set<
 
                 if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
                 {
-                    if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
+                    auto position1 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3);
+
+                    if (position1 == otherNeighborhood1.end() || *position1 != neighbor3)
                     {
-                        otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3), neighbor3);
+                        otherNeighborhood1.insert(position1, neighbor3);
                         otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor1), neighbor1);
                     }
 
-                    if (!std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
+                    auto position2 = std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3);
+
+                    if (position2 == otherNeighborhood2.end() || *position2 != neighbor3)
                     {
-                        otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3), neighbor3);
+                        otherNeighborhood2.insert(position2, neighbor3);
                         otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor2), neighbor2);
                     }
 
@@ -766,15 +763,19 @@ bool htd::GraphPreprocessor::Implementation::shrinkTriangles(std::unordered_set<
                 }
                 else if (std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
                 {
-                    if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
+                    auto position1 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2);
+
+                    if (position1 == otherNeighborhood1.end() || *position1 != neighbor2)
                     {
-                        otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2), neighbor2);
+                        otherNeighborhood1.insert(position1, neighbor2);
                         otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
                     }
 
-                    if (!std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
+                    auto position2 = std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3);
+
+                    if (position2 == otherNeighborhood2.end() || *position2 != neighbor3)
                     {
-                        otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3), neighbor3);
+                        otherNeighborhood2.insert(position2, neighbor3);
                         otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor2), neighbor2);
                     }
 
@@ -782,15 +783,19 @@ bool htd::GraphPreprocessor::Implementation::shrinkTriangles(std::unordered_set<
                 }
                 else if (std::binary_search(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor3))
                 {
-                    if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2))
+                    auto position1 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2);
+
+                    if (position1 == otherNeighborhood1.end() || *position1 != neighbor2)
                     {
-                        otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2), neighbor2);
+                        otherNeighborhood1.insert(position1, neighbor2);
                         otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
                     }
 
-                    if (!std::binary_search(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3))
+                    auto position2 = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3);
+
+                    if (position2 == otherNeighborhood1.end() || *position2 != neighbor3)
                     {
-                        otherNeighborhood1.insert(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor3), neighbor3);
+                        otherNeighborhood1.insert(position2, neighbor3);
                         otherNeighborhood3.insert(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), neighbor1), neighbor1);
                     }
 
@@ -859,7 +864,7 @@ bool htd::GraphPreprocessor::Implementation::eliminateSimplicialVertices(std::un
 
                 for (auto it = currentNeighborhood.begin(); ok && it != currentNeighborhood.end(); ++it)
                 {
-                    std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[*it];
+                    const std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[*it];
 
                     ok = htd::set_intersection_size(otherNeighborhood.begin(), otherNeighborhood.end(), currentNeighborhood.begin(), currentNeighborhood.end()) == currentNeighborhood.size() - 1;
                 }

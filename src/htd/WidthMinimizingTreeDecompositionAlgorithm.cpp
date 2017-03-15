@@ -175,93 +175,7 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
                                                                                                const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
                                                                                                const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
 {
-    std::size_t bestMaxBagSize = (std::size_t)-1;
-
-    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
-
-    htd::ITreeDecomposition * ret = nullptr;
-
-    htd::index_t iteration = 0;
-
-    while ((iteration == 0 || implementation_->iterationCount_ == 0 || iteration < implementation_->iterationCount_) && !managementInstance.isTerminated())
-    {
-        std::vector<htd::IDecompositionManipulationOperation *> clonedManipulationOperations;
-
-        for (const htd::IDecompositionManipulationOperation * operation : manipulationOperations)
-        {
-#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-            clonedManipulationOperations.push_back(operation->clone());
-#else
-            clonedManipulationOperations.push_back(operation->cloneDecompositionManipulationOperation());
-#endif
-        }
-
-        std::size_t remainingIterations = implementation_->iterationCount_ - iteration;
-
-        if (implementation_->nonImprovementLimit_ < (std::size_t)-1)
-        {
-            remainingIterations = std::min(remainingIterations, implementation_->nonImprovementLimit_);
-        }
-
-        std::pair<htd::ITreeDecomposition *, std::size_t> decompositionResult = implementation_->algorithm_->computeDecomposition(graph, preprocessedGraph, clonedManipulationOperations, bestMaxBagSize - 1, remainingIterations);
-
-        htd::ITreeDecomposition * currentDecomposition = decompositionResult.first;
-
-        iteration += decompositionResult.second;
-
-        if (decompositionResult.second < implementation_->nonImprovementLimit_)
-        {
-            iteration += decompositionResult.second;
-        }
-        else
-        {
-            iteration = (std::size_t)-1;
-        }
-
-        if (currentDecomposition != nullptr)
-        {
-            if (!managementInstance.isTerminated())
-            {
-                std::size_t currentMaxBagSize = currentDecomposition->maximumBagSize();
-
-                if (!managementInstance.isTerminated())
-                {
-                    progressCallback(graph, *currentDecomposition, htd::FitnessEvaluation(1, -(static_cast<double>(currentMaxBagSize))));
-
-                    if (iteration == 0 || currentMaxBagSize < bestMaxBagSize)
-                    {
-                        if (iteration > 0)
-                        {
-                            delete ret;
-                        }
-
-                        ret = currentDecomposition;
-
-                        bestMaxBagSize = currentMaxBagSize;
-                    }
-                    else
-                    {
-                        delete currentDecomposition;
-                    }
-                }
-                else
-                {
-                    delete currentDecomposition;
-                }
-            }
-            else
-            {
-                delete currentDecomposition;
-            }
-        }
-    }
-
-    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
-    {
-        delete operation;
-    }
-
-    return ret;
+    return computeImprovedDecomposition(graph, preprocessedGraph, manipulationOperations, progressCallback, (std::size_t)-1);
 }
 
 htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, int manipulationOperationCount, ...) const
@@ -298,6 +212,187 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
     va_end(arguments);
 
     return computeDecomposition(graph, preprocessedGraph, manipulationOperations);
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeImprovedDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize) const
+{
+    return computeImprovedDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){}, maxBagSize);
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback, std::size_t maxBagSize) const
+{
+    return computeImprovedDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>(), progressCallback, maxBagSize);
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                       const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize) const
+{
+    return computeImprovedDecomposition(graph, manipulationOperations, [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){}, maxBagSize);
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                       const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
+                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback, std::size_t maxBagSize) const
+{
+    htd::ITreeDecomposition * ret = nullptr;
+
+    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
+
+    ret = computeImprovedDecomposition(graph, *preprocessedGraph, manipulationOperations, progressCallback, maxBagSize);
+
+    delete preprocessedGraph;
+
+    return ret;
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeImprovedDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, std::size_t maxBagSize) const
+{
+    return computeImprovedDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){}, maxBagSize);
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                       const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback, std::size_t maxBagSize) const
+{
+    return computeImprovedDecomposition(graph, preprocessedGraph, std::vector<htd::IDecompositionManipulationOperation *>(), progressCallback, maxBagSize);
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                       const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                                       const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize) const
+{
+    return computeImprovedDecomposition(graph, preprocessedGraph, manipulationOperations, [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){}, maxBagSize);
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                                                       const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                                                       const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
+                                                                                                       const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback, std::size_t maxBagSize) const
+{
+    std::size_t bestMaxBagSize = maxBagSize + 1;
+
+    const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
+
+    htd::ITreeDecomposition * ret = nullptr;
+
+    htd::index_t iteration = 0;
+
+    while ((iteration == 0 || implementation_->iterationCount_ == 0 || iteration < implementation_->iterationCount_) && !managementInstance.isTerminated())
+    {
+        std::vector<htd::IDecompositionManipulationOperation *> clonedManipulationOperations;
+
+        for (const htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+        {
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            clonedManipulationOperations.push_back(operation->clone());
+#else
+            clonedManipulationOperations.push_back(operation->cloneDecompositionManipulationOperation());
+#endif
+        }
+
+        std::size_t remainingIterations = implementation_->iterationCount_ - iteration;
+
+        if (implementation_->nonImprovementLimit_ < (std::size_t)-1)
+        {
+            remainingIterations = std::min(remainingIterations, implementation_->nonImprovementLimit_);
+        }
+
+        std::pair<htd::ITreeDecomposition *, std::size_t> decompositionResult = implementation_->algorithm_->computeDecomposition(graph, preprocessedGraph, clonedManipulationOperations, bestMaxBagSize - 1, remainingIterations);
+
+        htd::ITreeDecomposition * currentDecomposition = decompositionResult.first;
+
+        if (decompositionResult.second < implementation_->nonImprovementLimit_)
+        {
+            iteration += decompositionResult.second;
+        }
+        else
+        {
+            iteration = (std::size_t)-1;
+        }
+
+        if (currentDecomposition != nullptr)
+        {
+            if (!managementInstance.isTerminated())
+            {
+                std::size_t currentMaxBagSize = currentDecomposition->maximumBagSize();
+
+                if (!managementInstance.isTerminated())
+                {
+                    progressCallback(graph, *currentDecomposition, htd::FitnessEvaluation(1, -(static_cast<double>(currentMaxBagSize))));
+
+                    if ((iteration == 1 && bestMaxBagSize == 0) || currentMaxBagSize < bestMaxBagSize)
+                    {
+                        if (iteration > 1)
+                        {
+                            delete ret;
+                        }
+
+                        ret = currentDecomposition;
+
+                        bestMaxBagSize = currentMaxBagSize;
+                    }
+                    else
+                    {
+                        delete currentDecomposition;
+                    }
+                }
+                else
+                {
+                    delete currentDecomposition;
+                }
+            }
+            else
+            {
+                delete currentDecomposition;
+            }
+        }
+    }
+
+    for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)
+    {
+        delete operation;
+    }
+
+    return ret;
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeImprovedDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, int manipulationOperationCount, ...) const
+{
+    va_list arguments;
+
+    va_start(arguments, manipulationOperationCount);
+
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+
+    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
+    {
+        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
+    }
+
+    va_end(arguments);
+
+    return computeImprovedDecomposition(graph, manipulationOperations, maxBagSize);
+}
+
+htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::computeImprovedDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, int manipulationOperationCount, ...) const
+{
+    va_list arguments;
+
+    va_start(arguments, manipulationOperationCount);
+
+    std::vector<htd::IDecompositionManipulationOperation *> manipulationOperations;
+
+    for (int manipulationOperationIndex = 0; manipulationOperationIndex < manipulationOperationCount; manipulationOperationIndex++)
+    {
+        manipulationOperations.push_back(va_arg(arguments, htd::IDecompositionManipulationOperation *));
+    }
+
+    va_end(arguments);
+
+    return computeImprovedDecomposition(graph, preprocessedGraph, manipulationOperations, maxBagSize);
 }
 
 void htd::WidthMinimizingTreeDecompositionAlgorithm::setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations)

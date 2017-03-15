@@ -184,10 +184,10 @@ htd::ITreeDecomposition * htd::CombinedWidthMinimizingTreeDecompositionAlgorithm
         if (widthMinimizingTreeDecompositionAlgorithm != nullptr)
         {
             htd::ITreeDecomposition * currentDecomposition =
-                widthMinimizingTreeDecompositionAlgorithm->computeDecomposition(graph, preprocessedGraph, clonedManipulationOperations, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
+                widthMinimizingTreeDecompositionAlgorithm->computeImprovedDecomposition(graph, preprocessedGraph, clonedManipulationOperations, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
                 {
                     progressCallback(graph, decomposition, fitness);
-                });
+                }, bestMaxBagSize - 1);
 
             if (currentDecomposition != nullptr)
             {

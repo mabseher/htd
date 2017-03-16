@@ -27,6 +27,7 @@
 
 #include <htd_main/TdFormatExporter.hpp>
 
+#include <sstream>
 #include <unordered_map>
 
 htd_main::TdFormatExporter::TdFormatExporter(void)
@@ -49,18 +50,24 @@ void htd_main::TdFormatExporter::write(const htd::ITreeDecomposition & decomposi
     {
         std::size_t index = 1;
 
+        std::stringstream tmpStream;
+
         for (htd::vertex_t node : decomposition.vertices())
         {
-            outputStream << "b " << index << " ";
+            tmpStream << "b " << index << " ";
 
-            indices[node] = index;
+            indices.emplace(node, index);
 
             for (htd::vertex_t vertex : decomposition.bagContent(node))
             {
-                outputStream << vertex << " ";
+                tmpStream << vertex << " ";
             }
 
-            outputStream << "\n";
+            tmpStream << "\n" << std::flush;
+
+            outputStream << tmpStream.rdbuf();
+
+            tmpStream.clear();
 
             ++index;
         }
@@ -73,12 +80,10 @@ void htd_main::TdFormatExporter::write(const htd::ITreeDecomposition & decomposi
 
         for (htd::index_t index = 0; index < edgeCount; ++index)
         {
-            for (htd::vertex_t vertex : *it)
-            {
-                outputStream << indices[vertex] << " ";
-            }
+            htd::vertex_t vertex1 = indices.at((*it)[0]);
+            htd::vertex_t vertex2 = indices.at((*it)[1]);
 
-            outputStream << "\n";
+            outputStream << vertex1 << " " << vertex2 << "\n";
 
             ++it;
         }
@@ -95,18 +100,24 @@ void htd_main::TdFormatExporter::write(const htd::ITreeDecomposition & decomposi
     {
         std::size_t index = 1;
 
+        std::stringstream tmpStream;
+
         for (htd::vertex_t node : decomposition.vertices())
         {
-            outputStream << "b " << index << " ";
+            tmpStream << "b " << index << " ";
 
-            indices[node] = index;
+            indices.emplace(node, index);
 
             for (htd::vertex_t vertex : decomposition.bagContent(node))
             {
-                outputStream << vertex << " ";
+                tmpStream << vertex << " ";
             }
 
-            outputStream << "\n";
+            tmpStream << "\n" << std::flush;
+
+            outputStream << tmpStream.rdbuf();
+
+            tmpStream.clear();
 
             ++index;
         }
@@ -119,12 +130,10 @@ void htd_main::TdFormatExporter::write(const htd::ITreeDecomposition & decomposi
 
         for (htd::index_t index = 0; index < edgeCount; ++index)
         {
-            for (htd::vertex_t vertex : *it)
-            {
-                outputStream << indices[vertex] << " ";
-            }
+            htd::vertex_t vertex1 = indices.at((*it)[0]);
+            htd::vertex_t vertex2 = indices.at((*it)[1]);
 
-            outputStream << "\n";
+            outputStream << vertex1 << " " << vertex2 << "\n";
 
             ++it;
         }

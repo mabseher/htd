@@ -632,6 +632,8 @@ htd::BucketEliminationGraphDecompositionAlgorithm * htd::BucketEliminationGraphD
 #endif
     }
 
+    ret->setOrderingAlgorithm(implementation_->orderingAlgorithm_->clone());
+
     return ret;
 }
 

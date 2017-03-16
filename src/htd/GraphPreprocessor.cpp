@@ -547,12 +547,14 @@ bool htd::GraphPreprocessor::Implementation::eliminateVerticesOfDegreeLessThanTw
 {
     std::size_t oldOrderingSize = ordering.size();
 
-    for (htd::vertex_t vertex : verticesByDegree[0])
+    std::unordered_set<htd::vertex_t> & verticesDegree0 = verticesByDegree[0];
+
+    for (htd::vertex_t vertex : verticesDegree0)
     {
         ordering.push_back(vertex);
     }
 
-    verticesByDegree[0].clear();
+    verticesDegree0.clear();
 
     std::unordered_set<htd::vertex_t> & verticesDegree1 = verticesByDegree[1];
 
@@ -573,6 +575,12 @@ bool htd::GraphPreprocessor::Implementation::eliminateVerticesOfDegreeLessThanTw
             assignVertexToGroup(neighbor, verticesByDegree, otherNeighborhood.size(), otherNeighborhood.size() + 1);
 
             currentNeighborhood.clear();
+
+            verticesDegree1.erase(vertex);
+        }
+        else
+        {
+            verticesDegree0.erase(vertex);
         }
 
         ordering.push_back(vertex);
@@ -581,8 +589,6 @@ bool htd::GraphPreprocessor::Implementation::eliminateVerticesOfDegreeLessThanTw
     for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
     {
         vertices.erase(*it);
-
-        verticesDegree1.erase(*it);
     }
 
     return ordering.size() > oldOrderingSize;

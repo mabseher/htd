@@ -102,6 +102,7 @@ htd_cli::OptionManager * createOptionManager(void)
 
         htd_cli::Choice * strategyChoice = new htd_cli::Choice("strategy", "Set the decomposition strategy which shall be used to <algorithm>.", "algorithm");
 
+        strategyChoice->addPossibility("random", "Use a random vertex ordering.");
         strategyChoice->addPossibility("min-fill", "Minimum fill ordering algorithm");
         strategyChoice->addPossibility("min-degree", "Minimum degree ordering algorithm");
         strategyChoice->addPossibility("max-cardinality", "Maximum cardinality search ordering algorithm");
@@ -280,6 +281,10 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
 
                 ret = false;
             }
+        }
+        else if (value == "random")
+        {
+            manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::RandomOrderingAlgorithm(manager));
         }
         else
         {

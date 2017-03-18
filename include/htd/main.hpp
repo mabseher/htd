@@ -202,6 +202,7 @@
 #include <htd/PreOrderTreeTraversal.hpp>
 #include <htd/PreprocessedGraph.hpp>
 #include <htd/PreprocessorDefinitions.hpp>
+#include <htd/RandomOrderingAlgorithm.hpp>
 #include <htd/RandomVertexSelectionStrategy.hpp>
 #include <htd/SemiNormalizationOperation.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>

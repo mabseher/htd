@@ -66,8 +66,7 @@ std::vector<htd::id_t> * createContainer(htd::id_t minValue,
 
     std::vector<htd::id_t> * ret = new std::vector<htd::id_t>();
 
-    std::random_device rd;
-    std::mt19937 g(rd());
+    std::mt19937 g(static_cast<std::mt19937::result_type>(std::rand()));
 
     std::vector<htd::id_t> values(maxValue - minValue + 1);
 

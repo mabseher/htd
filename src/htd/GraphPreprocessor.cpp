@@ -631,7 +631,7 @@ bool htd::GraphPreprocessor::Implementation::eliminateVerticesOfDegreeLessThanTw
 
             assignVertexToGroup(neighbor, verticesByDegree, otherNeighborhood.size(), otherNeighborhood.size() + 1);
 
-            currentNeighborhood.clear();
+            std::vector<htd::vertex_t>().swap(currentNeighborhood);
 
             verticesDegree1.erase(vertex);
         }
@@ -690,17 +690,14 @@ bool htd::GraphPreprocessor::Implementation::contractPaths(std::unordered_set<ht
                 otherNeighborhood2.insert(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), neighbor1), neighbor1);
             }
 
-            currentNeighborhood.clear();
+            std::vector<htd::vertex_t>().swap(currentNeighborhood);
+
+            verticesDegree2.erase(vertex);
 
             ordering.push_back(vertex);
+
+            vertices.erase(vertex);
         }
-    }
-
-    for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
-    {
-        vertices.erase(*it);
-
-        verticesDegree2.erase(*it);
     }
 
     return ordering.size() > oldOrderingSize;
@@ -819,18 +816,15 @@ bool htd::GraphPreprocessor::Implementation::shrinkTriangles(std::unordered_set<
                     assignVertexToGroup(neighbor3, verticesByDegree, otherNeighborhood3.size(), neighborDegree3);
                 }
 
-                currentNeighborhood.clear();
+                std::vector<htd::vertex_t>().swap(currentNeighborhood);
+
+                verticesDegree3.erase(vertex);
 
                 ordering.push_back(vertex);
+
+                vertices.erase(vertex);
             }
         }
-    }
-
-    for (auto it = ordering.begin() + oldOrderingSize; it != ordering.end(); ++it)
-    {
-        vertices.erase(*it);
-
-        verticesDegree3.erase(*it);
     }
 
     return ordering.size() > oldOrderingSize;
@@ -920,8 +914,8 @@ bool htd::GraphPreprocessor::Implementation::handleBuddies(std::unordered_set<ht
                             assignVertexToGroup(neighbor2, verticesByDegree, neighborhood[neighbor2].size(), neighborDegree2);
                             assignVertexToGroup(neighbor3, verticesByDegree, neighborhood[neighbor3].size(), neighborDegree3);
 
-                            currentNeighborhood1.clear();
-                            currentNeighborhood2.clear();
+                            std::vector<htd::vertex_t>().swap(currentNeighborhood1);
+                            std::vector<htd::vertex_t>().swap(currentNeighborhood2);
 
                             ordering.push_back(vertex1);
                             ordering.push_back(vertex2);
@@ -981,7 +975,7 @@ bool htd::GraphPreprocessor::Implementation::eliminateSimplicialVertices(std::un
 
                 minTreewidth = std::max(minTreewidth, currentNeighborhood.size());
 
-                currentNeighborhood.clear();
+                std::vector<htd::vertex_t>().swap(currentNeighborhood);
 
                 ordering.push_back(vertex);
             }
@@ -1052,7 +1046,7 @@ bool htd::GraphPreprocessor::Implementation::eliminateAlmostSimplicialVertices(s
 
                 minTreeWidth = std::max(minTreeWidth, currentNeighborhood.size());
 
-                currentNeighborhood.clear();
+                std::vector<htd::vertex_t>().swap(currentNeighborhood);
 
                 ordering.push_back(vertex);
             }
@@ -1114,7 +1108,7 @@ bool htd::GraphPreprocessor::Implementation::eliminateAlmostSimplicialVertices(s
                                 assignVertexToGroup(neighbor, verticesByDegree, otherNeighborhood2.size(), otherNeighborhood2.size() + 1);
                             }
 
-                            currentNeighborhood.clear();
+                            std::vector<htd::vertex_t>().swap(currentNeighborhood);
 
                             ordering.push_back(vertex);
                         }

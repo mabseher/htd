@@ -1020,13 +1020,13 @@ bool htd::GraphPreprocessor::Implementation::eliminateAlmostSimplicialVertices(s
 
             std::vector<htd::vertex_t> missingVertices;
 
-            for (auto it = currentNeighborhood.begin(); ok && it != currentNeighborhood.end() - 1;)
+            for (auto it = currentNeighborhood.begin(); ok && it != currentNeighborhood.end(); ++it)
             {
                 const std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[*it];
 
-                ++it;
+                std::set_difference(currentNeighborhood.begin(), currentNeighborhood.end(), otherNeighborhood.begin(), otherNeighborhood.end(), std::back_inserter(missingVertices));
 
-                std::set_difference(it, currentNeighborhood.end(), otherNeighborhood.begin(), otherNeighborhood.end(), std::back_inserter(missingVertices));
+                missingVertices.erase(std::lower_bound(missingVertices.begin() + oldMissingVertexCount, missingVertices.end(), *it));
 
                 std::inplace_merge(missingVertices.begin(), missingVertices.begin() + oldMissingVertexCount, missingVertices.end());
 

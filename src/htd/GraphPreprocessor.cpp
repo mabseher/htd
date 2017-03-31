@@ -670,8 +670,8 @@ bool htd::GraphPreprocessor::Implementation::shrinkTriangles(std::unordered_set<
             std::vector<htd::vertex_t> & otherNeighborhood3 = neighborhood[neighbor3];
 
             std::size_t neighborDegree1 = otherNeighborhood1.size();
-            std::size_t neighborDegree2 = otherNeighborhood1.size();
-            std::size_t neighborDegree3 = otherNeighborhood1.size();
+            std::size_t neighborDegree2 = otherNeighborhood2.size();
+            std::size_t neighborDegree3 = otherNeighborhood3.size();
 
             bool preprocessingApplicable = false;
 

@@ -26,8 +26,10 @@
 #define HTD_HTD_IGRAPHPREPROCESSOR_HPP
 
 #include <htd/Globals.hpp>
+
 #include <htd/IMultiHypergraph.hpp>
 #include <htd/IPreprocessedGraph.hpp>
+#include <htd/LibraryInstance.hpp>
 
 namespace htd
 {

@@ -37,8 +37,9 @@ struct htd::VertexOrdering::Implementation
      *
      *  @param[in] sequence     The sequence of vertices.
      *  @param[in] iterations   The number of iterations which was needed to find the sequence of vertices at hand.
+     *  @param[in] maxBagSize   The maximum bag size a decomposition based on bucket elimination and the computed ordering will have.
      */
-    Implementation(const std::vector<htd::vertex_t> & sequence, std::size_t iterations) : sequence_(sequence), iterations_(iterations)
+    Implementation(const std::vector<htd::vertex_t> & sequence, std::size_t iterations, std::size_t maxBagSize) : sequence_(sequence), iterations_(iterations), maxBagSize_(maxBagSize)
     {
 
     }
@@ -48,8 +49,9 @@ struct htd::VertexOrdering::Implementation
      *
      *  @param[in] sequence     The sequence of vertices.
      *  @param[in] iterations   The number of iterations which was needed to find the sequence of vertices at hand.
+     *  @param[in] maxBagSize   The maximum bag size a decomposition based on bucket elimination and the computed ordering will have.
      */
-    Implementation(std::vector<htd::vertex_t> && sequence, std::size_t iterations) : sequence_(std::move(sequence)), iterations_(iterations)
+    Implementation(std::vector<htd::vertex_t> && sequence, std::size_t iterations, std::size_t maxBagSize) : sequence_(std::move(sequence)), iterations_(iterations), maxBagSize_(maxBagSize)
     {
 
     }
@@ -68,14 +70,29 @@ struct htd::VertexOrdering::Implementation
      *  The number of iterations which was needed to find the sequence of vertices at hand.
      */
     std::size_t iterations_;
+
+    /**
+     *  The maximum bag size a decomposition based on bucket elimination and the computed ordering will have.
+     */
+    std::size_t maxBagSize_;
 };
 
-htd::VertexOrdering::VertexOrdering(const std::vector<htd::vertex_t> & sequence, std::size_t iterations) : implementation_(new Implementation(sequence, iterations))
+htd::VertexOrdering::VertexOrdering(const std::vector<htd::vertex_t> & sequence, std::size_t iterations) : implementation_(new Implementation(sequence, iterations, 0))
 {
 
 }
 
-htd::VertexOrdering::VertexOrdering(std::vector<htd::vertex_t> && sequence, std::size_t iterations) : implementation_(new Implementation(std::move(sequence), iterations))
+htd::VertexOrdering::VertexOrdering(std::vector<htd::vertex_t> && sequence, std::size_t iterations) : implementation_(new Implementation(std::move(sequence), iterations, 0))
+{
+
+}
+
+htd::VertexOrdering::VertexOrdering(const std::vector<htd::vertex_t> & sequence, std::size_t iterations, std::size_t maxBagSize) : implementation_(new Implementation(sequence, iterations, maxBagSize))
+{
+
+}
+
+htd::VertexOrdering::VertexOrdering(std::vector<htd::vertex_t> && sequence, std::size_t iterations, std::size_t maxBagSize) : implementation_(new Implementation(std::move(sequence), iterations, maxBagSize))
 {
 
 }
@@ -103,6 +120,16 @@ const std::vector<htd::vertex_t> & htd::VertexOrdering::sequence(void) const
 std::size_t htd::VertexOrdering::requiredIterations(void) const
 {
     return implementation_->iterations_;
+}
+
+std::size_t htd::VertexOrdering::maximumBagSize(void) const
+{
+    return implementation_->maxBagSize_;
+}
+
+void htd::VertexOrdering::setMaximumBagSize(std::size_t maxBagSize)
+{
+    implementation_->maxBagSize_ = maxBagSize;
 }
 
 #endif /* HTD_HTD_VERTEXORDERING_CPP */

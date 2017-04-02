@@ -28,8 +28,9 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
-#include <htd/VectorAdapter.hpp>
-#include <htd/GraphPreprocessor.hpp>
+#include <htd/GraphPreprocessorFactory.hpp>
+#include <htd/IGraphPreprocessor.hpp>
+#include <htd/VertexOrdering.hpp>
 
 #include <algorithm>
 #include <unordered_map>
@@ -113,30 +114,31 @@ htd::MinDegreeOrderingAlgorithm::~MinDegreeOrderingAlgorithm()
     
 }
 
-htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
+htd::IVertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
     return computeOrdering(graph, (std::size_t)-1, 1);
 }
 
-htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
+htd::IWidthLimitedVertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
 {
-    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::IGraphPreprocessor * preprocessor = implementation_->managementInstance_->graphPreprocessorFactory().createInstance();
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor->prepare(graph);
 
-    htd::VertexOrdering * ret = computeOrdering(graph, *preprocessedGraph, maxBagSize, maxIterationCount);
+    htd::IWidthLimitedVertexOrdering * ret = computeOrdering(graph, *preprocessedGraph, maxBagSize, maxIterationCount);
 
     delete preprocessedGraph;
+    delete preprocessor;
 
     return ret;
 }
 
-htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
+htd::IVertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
 {
     return computeOrdering(graph, preprocessedGraph, (std::size_t)-1, 1);
 }
 
-htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
+htd::IWidthLimitedVertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, std::size_t maxIterationCount) const HTD_NOEXCEPT
 {
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
@@ -160,9 +162,11 @@ htd::VertexOrdering * htd::MinDegreeOrderingAlgorithm::computeOrdering(const htd
     if (maxIterationCount == 0 && currentMaxBagSize > maxBagSize)
     {
         ordering.clear();
+
+        currentMaxBagSize = 0;
     }
 
-    return new htd::VertexOrdering(std::move(ordering), iterations);
+    return new htd::VertexOrdering(std::move(ordering), iterations, currentMaxBagSize);
 }
 
 std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(const htd::IPreprocessedGraph & preprocessedGraph, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT

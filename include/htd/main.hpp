@@ -30,6 +30,7 @@
 #include <htd/AddIdenticalJoinNodeParentOperation.hpp>
 #include <htd/Algorithm.hpp>
 #include <htd/AssemblyInfo.hpp>
+#include <htd/BiconnectedComponentAlgorithm.hpp>
 #include <htd/BidirectionalGraphNaming.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>
 #include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>
@@ -61,6 +62,7 @@
 #include <htd/Graph.hpp>
 #include <htd/GraphLabeling.hpp>
 #include <htd/GraphPreprocessor.hpp>
+#include <htd/GraphPreprocessorFactory.hpp>
 #include <htd/GreedySetCoverAlgorithm.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/HyperedgeDeque.hpp>
@@ -74,6 +76,7 @@
 #include <htd/HypertreeDecompositionAlgorithm.hpp>
 #include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/HypertreeDecomposition.hpp>
+#include <htd/IBiconnectedComponentAlgorithm.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
 #include <htd/ICustomizedTreeDecompositionAlgorithm.hpp>
 #include <htd/IDecompositionManipulationOperation.hpp>
@@ -86,6 +89,7 @@
 #include <htd/IGraph.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/IGraphPreprocessor.hpp>
+#include <htd/IGraphStructure.hpp>
 #include <htd/IGraphTraversal.hpp>
 #include <htd/IHyperedgeCollection.hpp>
 #include <htd/IHypergraph.hpp>
@@ -145,8 +149,10 @@
 #include <htd/ITreeDecompositionVerifier.hpp>
 #include <htd/ITree.hpp>
 #include <htd/ITreeTraversal.hpp>
+#include <htd/IVertexOrdering.hpp>
 #include <htd/IVertexSelectionStrategy.hpp>
 #include <htd/IWidthLimitableOrderingAlgorithm.hpp>
+#include <htd/IWidthLimitedVertexOrdering.hpp>
 #include <htd/JoinNodeComplexityReductionOperation.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>

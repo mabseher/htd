@@ -53,6 +53,7 @@
 #include <htd/StronglyConnectedComponentAlgorithmFactory.hpp>
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
+#include <htd/GraphPreprocessorFactory.hpp>
 
 #include <csignal>
 
@@ -111,6 +112,8 @@ struct htd::LibraryInstance::Implementation
         setCoverAlgorithmFactory_.reset(new htd::SetCoverAlgorithmFactory(manager));
         stronglyConnectedComponentAlgorithmFactory_.reset(new htd::StronglyConnectedComponentAlgorithmFactory(manager));
         treeDecompositionFactory_.reset(new htd::TreeDecompositionFactory(manager));
+        graphDecompositionFactory_.reset(new htd::GraphDecompositionFactory(manager));
+        graphPreprocessorFactory_.reset(new htd::GraphPreprocessorFactory(manager));
     }
 
     /**
@@ -257,6 +260,11 @@ struct htd::LibraryInstance::Implementation
      *  The factory class for the default implementation of the htd::ITreeDecomposition interface.
      */
     std::unique_ptr<htd::TreeDecompositionFactory> treeDecompositionFactory_;
+
+    /**
+     *  The factory class for the default implementation of the htd::IGraphPreprocessor interface.
+     */
+    std::unique_ptr<htd::GraphPreprocessorFactory> graphPreprocessorFactory_;
 };
 
 htd::LibraryInstance::LibraryInstance(htd::id_t id) : implementation_(new Implementation(id))
@@ -552,6 +560,16 @@ htd::TreeDecompositionFactory & htd::LibraryInstance::treeDecompositionFactory(v
 const htd::TreeDecompositionFactory & htd::LibraryInstance::treeDecompositionFactory(void) const
 {
     return *(implementation_->treeDecompositionFactory_);
+}
+
+htd::GraphPreprocessorFactory & htd::LibraryInstance::graphPreprocessorFactory(void)
+{
+    return *(implementation_->graphPreprocessorFactory_);
+}
+
+const htd::GraphPreprocessorFactory & htd::LibraryInstance::graphPreprocessorFactory(void) const
+{
+    return *(implementation_->graphPreprocessorFactory_);
 }
 
 #endif /* HTD_HTD_LIBRARYINSTANCE_CPP */

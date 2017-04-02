@@ -26,6 +26,7 @@
 #define HTD_HTD_TARJANSTRONGLYCONNECTEDCOMPONENTALGORITHM_HPP
 
 #include <htd/Globals.hpp>
+
 #include <htd/IStronglyConnectedComponentAlgorithm.hpp>
 
 namespace htd
@@ -45,11 +46,11 @@ namespace htd
 
             HTD_API virtual ~TarjanStronglyConnectedComponentAlgorithm();
 
-            HTD_API void determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
+            HTD_API void determineComponents(const htd::IGraphStructure & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
 
             HTD_API void determineComponents(const htd::IDirectedMultiGraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
 
-            HTD_API void determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+            HTD_API void determineComponent(const htd::IGraphStructure & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
             HTD_API void determineComponent(const htd::IDirectedMultiGraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 

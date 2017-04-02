@@ -729,6 +729,9 @@ int main(int argc, const char * const * const argv)
                 else if (std::string(preprocessingChoice.value()) == "full")
                 {
                     preprocessor->setPreprocessingStrategy(3);
+
+                    preprocessor->setIterationCount(256);
+                    preprocessor->setNonImprovementLimit(64);
                 }
 
                 htd_main::IGraphToTreeDecompositionProcessor * processor = nullptr;

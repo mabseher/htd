@@ -111,7 +111,7 @@ TEST(MaximumCardinalitySearchOrderingAlgorithmTest, CheckEmptyGraph)
 
     htd::MaximumCardinalitySearchOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_TRUE(ordering->sequence().empty());
     ASSERT_EQ((std::size_t)1, ordering->requiredIterations());
@@ -128,7 +128,7 @@ TEST(MaximumCardinalitySearchOrderingAlgorithmTest, CheckSize1Graph)
 
     htd::MaximumCardinalitySearchOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ((std::size_t)1, ordering->sequence().size());
     ASSERT_EQ((htd::vertex_t)1, ordering->sequence()[0]);
@@ -144,7 +144,7 @@ TEST(MaximumCardinalitySearchOrderingAlgorithmTest, CheckSize2Graph)
 
     htd::MaximumCardinalitySearchOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ((std::size_t)2, ordering->sequence().size());
 
@@ -163,7 +163,7 @@ TEST(MaximumCardinalitySearchOrderingAlgorithmTest, CheckSimpleGraph1)
 
     htd::MaximumCardinalitySearchOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -189,7 +189,7 @@ TEST(MaximumCardinalitySearchOrderingAlgorithmTest, CheckSimpleGraph2)
 
     htd::MaximumCardinalitySearchOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -221,7 +221,7 @@ TEST(MaximumCardinalitySearchOrderingAlgorithmTest, CheckSimpleGraph3)
 
     htd::MaximumCardinalitySearchOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -253,7 +253,7 @@ TEST(MaximumCardinalitySearchOrderingAlgorithmTest, CheckSimpleGraph4)
 
     htd::MaximumCardinalitySearchOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -285,7 +285,7 @@ TEST(MaximumCardinalitySearchOrderingAlgorithmTest, CheckSimpleGraph5)
 
     htd::MaximumCardinalitySearchOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -762,7 +762,7 @@ TEST(MaximumCardinalitySearchOrderingAlgorithmTest, CheckSize50Graph)
 
     htd::MaximumCardinalitySearchOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 

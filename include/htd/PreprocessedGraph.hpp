@@ -66,6 +66,13 @@ namespace htd
                                       std::size_t minTreeWidth);
 
             /**
+             *  Copy constructor for a preprocessed graph data structure.
+             *
+             *  @param[in] original  The original preprocessed graph data structure.
+             */
+            HTD_API PreprocessedGraph(const htd::PreprocessedGraph & original);
+
+            /**
              *  Destructor for a preprocessed graph data structure.
              */
             HTD_API virtual ~PreprocessedGraph();
@@ -76,21 +83,117 @@ namespace htd
 
             HTD_API std::size_t edgeCount(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
+            HTD_API std::size_t edgeCount(htd::vertex_t vertex) const HTD_OVERRIDE;
+
             HTD_API std::size_t inputGraphEdgeCount(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+            HTD_API htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
+
+            HTD_API bool isVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
+
+            HTD_API std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
+
+            HTD_API htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t isolatedVertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
+
+            HTD_API bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE;
+
+            HTD_API std::size_t neighborCount(htd::vertex_t vertex) const HTD_OVERRIDE;
+
+            HTD_API htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE;
+
+            HTD_API void copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
+
+            HTD_API bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE;
+
+            HTD_API bool isConnected(void) const HTD_OVERRIDE;
+
+            HTD_API bool isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
 
             HTD_API const std::vector<htd::vertex_t> & vertexNames(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API htd::vertex_t vertexName(htd::vertex_t vertex) const HTD_OVERRIDE;
 
+            /**
+             *  Updatable getter for the vector containing the preprocessed neighborhood of each of the vertices.
+             *
+             *  @note The neighborhood of each vertex returned by this data structure does not include the respective vertex itself.
+             *
+             *  @return The updatable vector containing the preprocessed neighborhood of each of the vertices.
+             */
+            HTD_API std::vector<std::vector<htd::vertex_t>> & neighborhood(void) HTD_NOEXCEPT;
+
             HTD_API const std::vector<std::vector<htd::vertex_t>> & neighborhood(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
+            /**
+             *  Updatable getter for the vector containing the preprocessed neighborhood of a vertex.
+             *
+             *  @note The neighborhood returned by this data structure does not include the vertex itself.
+             *
+             *  @param[in] vertex   The vertex whose neighborhood shall be returned.
+             *
+             *  @return The updatable vector containing the preprocessed neighborhood of the requested vertex.
+             */
+            HTD_API std::vector<htd::vertex_t> & neighborhood(htd::vertex_t vertex);
+
             HTD_API const std::vector<htd::vertex_t> & neighborhood(htd::vertex_t vertex) const HTD_OVERRIDE;
+
+            /**
+             *  Recompute the number of edges in the graph to update the result of the function edgeCount().
+             */
+            HTD_API void updateEdgeCount(void);
+
+            /**
+             *  Updatable getter for the partial vertex elimination ordering computed during the preprocessing phase.
+             *
+             *  @return The updatable partial vertex elimination ordering computed during the preprocessing phase.
+             */
+            HTD_API std::vector<htd::vertex_t> & eliminationSequence(void) HTD_NOEXCEPT;
 
             HTD_API const std::vector<htd::vertex_t> & eliminationSequence(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API const std::vector<htd::vertex_t> & remainingVertices(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
+            /**
+             *  Set the vertices (with 0-based IDs) which were not eliminated during the preprocessing phase.
+             *
+             *  @param[in] remainingVertices    The set of vertices (with 0-based IDs) which were not eliminated during the preprocessing phase.
+             */
+            HTD_API void setRemainingVertices(const std::vector<htd::vertex_t> & remainingVertices);
+
+            /**
+             *  Set the vertices (with 0-based IDs) which were not eliminated during the preprocessing phase.
+             *
+             *  @param[in] remainingVertices    The set of vertices (with 0-based IDs) which were not eliminated during the preprocessing phase.
+             */
+            HTD_API void setRemainingVertices(std::vector<htd::vertex_t> && remainingVertices);
+
+            /**
+             *  Updatable getter for the lower bound of the treewidth of the input graph.
+             *
+             *  @return The updatable lower bound of the treewidth of the input graph.
+             */
+            HTD_API std::size_t & minTreeWidth(void) HTD_NOEXCEPT;
+
             HTD_API std::size_t minTreeWidth(void) const HTD_NOEXCEPT HTD_OVERRIDE;
+
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            HTD_API PreprocessedGraph * clone(void) const HTD_OVERRIDE;
+#else
+            /**
+             *  Create a deep copy of the current preprocessed graph.
+             *
+             *  @return A new PreprocessedGraph object identical to the current preprocessed graph.
+             */
+            HTD_API PreprocessedGraph * clone(void) const;
+
+            HTD_API htd::IGraphStructure * cloneGraphStructure(void) const HTD_OVERRIDE;
+#endif
 
         private:
             struct Implementation;

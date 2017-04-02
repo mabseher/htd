@@ -309,6 +309,11 @@ htd::IHypergraph * htd::Graph::cloneHypergraph(void) const
     return clone();
 }
 
+htd::IGraphStructure * htd::Graph::cloneGraphStructure(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::Graph::cloneMultiHypergraph(void) const
 {
     return clone();

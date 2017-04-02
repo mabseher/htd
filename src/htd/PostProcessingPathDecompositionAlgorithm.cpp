@@ -33,7 +33,8 @@
 #include <htd/TreeDecompositionAlgorithmFactory.hpp>
 #include <htd/CompressionOperation.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>
-#include <htd/GraphPreprocessor.hpp>
+#include <htd/GraphPreprocessorFactory.hpp>
+#include <htd/IGraphPreprocessor.hpp>
 
 #include <cstdarg>
 #include <stdexcept>
@@ -105,15 +106,14 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
 
 htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
-    htd::IPathDecomposition * ret = nullptr;
+    htd::IGraphPreprocessor * preprocessor = implementation_->managementInstance_->graphPreprocessorFactory().createInstance();
 
-    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor->prepare(graph);
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
-
-    ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations);
+    htd::IPathDecomposition * ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations);
 
     delete preprocessedGraph;
+    delete preprocessor;
 
     return ret;
 }

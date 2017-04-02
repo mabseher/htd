@@ -26,8 +26,8 @@
 #define HTD_HTD_GRAPHPREPROCESSOR_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/LibraryInstance.hpp>
 #include <htd/IGraphPreprocessor.hpp>
+#include <htd/IWidthLimitableOrderingAlgorithm.hpp>
 
 namespace htd
 {
@@ -51,13 +51,58 @@ namespace htd
             /**
              *  Set the preprocessing strategy which shall be used.
              *
-             *  @param[in] level    The level of preprocessing which shall be applied. (0: none, 1: simple, 2: advanced, 3 or more: full)
+             *  @param[in] level    The level of preprocessing which shall be applied. (0: none, 1: simple, 2: advanced, 3: full, 4 or more: full + retain only largest biconnected component)
              */
             HTD_API void setPreprocessingStrategy(std::size_t level);
 
-            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT  HTD_OVERRIDE;
+            HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
-            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager)  HTD_OVERRIDE;
+            HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
+
+            /**
+             *  Getter for the number of iterations which shall be performed (0=infinite).
+             *
+             *  @return The number of iterations which shall be performed.
+             */
+            HTD_API std::size_t iterationCount(void) const;
+
+            /**
+             *  Set the number of iterations which shall be performed (0=infinite).
+             *
+             *  @param[in] iterationCount   The number of iterations which shall be performed.
+             */
+            HTD_API void setIterationCount(std::size_t iterationCount);
+
+            /**
+             *  Getter for the maximum number of iterations without improvement after which the algorithm shall terminate (0=return after first non-improving decomposition was found).
+             *
+             *  @note The current non-improvement count is reset to 0 after each iteration resulting in an improved decomposition.
+             *
+             *  @return The maximum number of iterations without improvement after which the algorithm shall terminate.
+             */
+            HTD_API std::size_t nonImprovementLimit(void) const;
+
+            /**
+             *  Set the maximum number of iterations without improvement after which the algorithm shall terminate (0=return after first non-improving decomposition was found).
+             *
+             *  @note The current non-improvement count is reset to 0 after each iteration resulting in an improved decomposition.
+             *
+             *  @param[in] nonImprovementLimit  The maximum number of iterations without improvement after which the algorithm shall terminate.
+             */
+            HTD_API void setNonImprovementLimit(std::size_t nonImprovementLimit);
+
+            /**
+             *  Set the ordering algorithm which shall be used to compute the vertex elimination
+             *  ordering of the remainder of the input graph when only the largest biconnected
+             *  component is retained.
+             *
+             *  @param[in] algorithm    The ordering algorithm which shall be used to compute the vertex elimination ordering.
+             *
+             *  @note When calling this method the control over the memory region of the ordering algorithm is transferred to the
+             *  preprocessor. Deleting the ordering algorithm provided to this method outside the preprocessor or assigning the
+             *  same ordering algorithm multiple times will lead to undefined behavior.
+             */
+            HTD_API void setOrderingAlgorithm(htd::IWidthLimitableOrderingAlgorithm * algorithm);
 
             /**
              *  Create a deep copy of the current graph preprocessor.

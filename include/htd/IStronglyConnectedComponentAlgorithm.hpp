@@ -26,6 +26,7 @@
 #define HTD_HTD_ISTRONGLYCONNECTEDCOMPONENTALGORITHM_HPP
 
 #include <htd/Globals.hpp>
+
 #include <htd/IConnectedComponentAlgorithm.hpp>
 #include <htd/IDirectedMultiGraph.hpp>
 

@@ -27,7 +27,9 @@
 
 #include <htd/Globals.hpp>
 #include <htd/RandomOrderingAlgorithm.hpp>
-#include <htd/GraphPreprocessor.hpp>
+#include <htd/GraphPreprocessorFactory.hpp>
+#include <htd/IGraphPreprocessor.hpp>
+#include <htd/VertexOrdering.hpp>
 
 #include <algorithm>
 #include <random>
@@ -68,20 +70,21 @@ htd::RandomOrderingAlgorithm::~RandomOrderingAlgorithm()
     
 }
 
-htd::VertexOrdering * htd::RandomOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
+htd::IVertexOrdering * htd::RandomOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
-    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::IGraphPreprocessor * preprocessor = implementation_->managementInstance_->graphPreprocessorFactory().createInstance();
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor->prepare(graph);
 
-    htd::VertexOrdering * ret = computeOrdering(graph, *preprocessedGraph);
+    htd::IVertexOrdering * ret = computeOrdering(graph, *preprocessedGraph);
 
     delete preprocessedGraph;
+    delete preprocessor;
 
     return ret;
 }
 
-htd::VertexOrdering * htd::RandomOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
+htd::IVertexOrdering * htd::RandomOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
 {
     HTD_UNUSED(graph)
 
@@ -107,7 +110,7 @@ htd::VertexOrdering * htd::RandomOrderingAlgorithm::computeOrdering(const htd::I
 
     std::shuffle(middle, ordering.end(), g);
 
-    return new htd::VertexOrdering(std::move(ordering));
+    return new htd::VertexOrdering(std::move(ordering), 1);
 }
 
 const htd::LibraryInstance * htd::RandomOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT
@@ -130,7 +133,7 @@ htd::RandomOrderingAlgorithm * htd::RandomOrderingAlgorithm::clone(void) const
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
 htd::IOrderingAlgorithm * htd::RandomOrderingAlgorithm::cloneOrderingAlgorithm(void) const
 {
-    return new htd::NaturalOrderingAlgorithm(implementation_->managementInstance_);
+    return new htd::RandomOrderingAlgorithm(implementation_->managementInstance_);
 }
 #endif
 

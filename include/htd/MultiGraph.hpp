@@ -161,6 +161,8 @@ namespace htd
 
             HTD_API htd::IMultiGraph * cloneMultiGraph(void) const HTD_OVERRIDE;
 
+            HTD_API htd::IGraphStructure * cloneGraphStructure(void) const HTD_OVERRIDE;
+
             HTD_API htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
 
             HTD_API htd::IMutableMultiGraph * cloneMutableMultiGraph(void) const HTD_OVERRIDE;

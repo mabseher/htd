@@ -27,13 +27,310 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
+
 #include <htd/GraphPreprocessor.hpp>
+
 #include <htd/PreprocessedGraph.hpp>
+#include <htd/BiconnectedComponentAlgorithm.hpp>
+#include <htd/MinFillOrderingAlgorithm.hpp>
+#include <htd/ConnectedComponentAlgorithmFactory.hpp>
+#include <htd/IConnectedComponentAlgorithm.hpp>
+#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <numeric>
 #include <unordered_map>
 #include <unordered_set>
+
+namespace htd
+{
+    /**
+     *  This class is designed to hold the information of a connected component of a preprocessed graph.
+     */
+    class PreprocessedGraphComponent : public htd::IPreprocessedGraph
+    {
+        public:
+            /**
+             *  Constructor for a new, preprocessed graph component data structure.
+             *
+             *  @param[in] preprocessedGraph    The base graph containing the component represented by the new graph component data structure.
+             *  @param[in] remainingVertices    The set of vertices which were not eliminated during the preprocessing phase.
+             *  @param[in] minTreeWidth         The lower bound for the treewidth of the preprocessed graph component.
+             */
+            PreprocessedGraphComponent(const htd::IPreprocessedGraph & preprocessedGraph,
+                                       std::vector<htd::vertex_t> && remainingVertices,
+                                       std::size_t minTreeWidth) : baseGraph_(preprocessedGraph), remainingVertices_(std::move(remainingVertices)), eliminationSequence_(), minTreeWidth_(minTreeWidth), edgeCount_(0)
+            {
+                updateEdgeCount();
+            }
+
+            /**
+             *  Copy constructor for a preprocessed graph component data structure.
+             *
+             *  @param[in] original  The original preprocessed graph component data structure.
+             */
+            PreprocessedGraphComponent(const htd::PreprocessedGraphComponent & original) : baseGraph_(original.baseGraph_), remainingVertices_(original.remainingVertices_), eliminationSequence_(original.eliminationSequence_), minTreeWidth_(original.minTreeWidth_), edgeCount_(original.edgeCount_)
+            {
+
+            }
+
+            /**
+             *  Destructor for a preprocessed graph component data structure.
+             */
+            virtual ~PreprocessedGraphComponent()
+            {
+
+            }
+
+            std::size_t vertexCount(void) const HTD_NOEXCEPT HTD_OVERRIDE
+            {
+                return remainingVertices_.size();
+            }
+
+            std::size_t inputGraphVertexCount(void) const HTD_NOEXCEPT HTD_OVERRIDE
+            {
+                return baseGraph_.inputGraphVertexCount();
+            }
+
+            std::size_t edgeCount(void) const HTD_NOEXCEPT HTD_OVERRIDE
+            {
+                return edgeCount_;
+            }
+
+            std::size_t edgeCount(htd::vertex_t vertex) const HTD_OVERRIDE
+            {
+                return neighborCount(vertex);
+            }
+
+            std::size_t inputGraphEdgeCount(void) const HTD_NOEXCEPT HTD_OVERRIDE
+            {
+                return baseGraph_.inputGraphEdgeCount();
+            }
+
+            htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE
+            {
+                return htd::ConstCollection<htd::vertex_t>::getInstance(remainingVertices_);
+            }
+
+            htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE
+            {
+                HTD_ASSERT(index < remainingVertices_.size())
+
+                return remainingVertices_[index];
+            }
+
+            bool isVertex(htd::vertex_t vertex) const HTD_OVERRIDE
+            {
+                return std::binary_search(remainingVertices_.begin(),
+                                          remainingVertices_.end(),
+                                          vertex);
+            }
+
+            std::size_t isolatedVertexCount(void) const HTD_OVERRIDE
+            {
+                std::size_t ret = 0;
+
+                for (htd::vertex_t vertex : remainingVertices_)
+                {
+                    if (baseGraph_.neighborhood(vertex).empty())
+                    {
+                        ret++;
+                    }
+                }
+
+                return ret;
+            }
+
+            htd::ConstCollection<htd::vertex_t> isolatedVertices(void) const HTD_OVERRIDE
+            {
+                htd::VectorAdapter<htd::vertex_t> ret;
+
+                auto & result = ret.container();
+
+                for (htd::vertex_t vertex : remainingVertices_)
+                {
+                    if (baseGraph_.neighborhood(vertex).empty())
+                    {
+                        result.push_back(vertex);
+                    }
+                }
+
+                return htd::ConstCollection<htd::id_t>::getInstance(ret);
+            }
+
+            htd::vertex_t isolatedVertexAtPosition(htd::index_t index) const HTD_OVERRIDE
+            {
+                const htd::ConstCollection<htd::vertex_t> & isolatedVertexCollection = isolatedVertices();
+
+                HTD_ASSERT(index < isolatedVertexCollection.size())
+
+                htd::ConstIterator<htd::vertex_t> it = isolatedVertexCollection.begin();
+
+                std::advance(it, index);
+
+                return *it;
+            }
+
+            bool isIsolatedVertex(htd::vertex_t vertex) const HTD_OVERRIDE
+            {
+                HTD_ASSERT(isVertex(vertex))
+
+                return baseGraph_.isIsolatedVertex(vertex);
+            }
+
+            std::size_t neighborCount(htd::vertex_t vertex) const HTD_OVERRIDE
+            {
+                HTD_ASSERT(isVertex(vertex))
+
+                return baseGraph_.neighborCount(vertex);
+            }
+
+            htd::ConstCollection<htd::vertex_t> neighbors(htd::vertex_t vertex) const HTD_OVERRIDE
+            {
+                HTD_ASSERT(isVertex(vertex))
+
+                return baseGraph_.neighbors(vertex);
+            }
+
+            void copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE
+            {
+                HTD_ASSERT(isVertex(vertex))
+
+                baseGraph_.copyNeighborsTo(vertex, target);
+            }
+
+            htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE
+            {
+                HTD_ASSERT(isVertex(vertex))
+
+                return baseGraph_.neighborAtPosition(vertex, index);
+            }
+
+            bool isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const HTD_OVERRIDE
+            {
+                HTD_ASSERT(isVertex(vertex) && isVertex(neighbor))
+
+                return baseGraph_.isNeighbor(vertex, neighbor);
+            }
+
+            bool isConnected(void) const HTD_OVERRIDE
+            {
+                return true;
+            }
+
+            bool isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE
+            {
+                HTD_UNUSED(vertex1)
+                HTD_UNUSED(vertex2)
+
+                HTD_ASSERT(isVertex(vertex1) && isVertex(vertex2))
+
+                return true;
+            }
+
+            const std::vector<htd::vertex_t> & vertexNames(void) const HTD_NOEXCEPT HTD_OVERRIDE
+            {
+                return baseGraph_.vertexNames();
+            }
+
+            htd::vertex_t vertexName(htd::vertex_t vertex) const HTD_OVERRIDE
+            {
+                HTD_ASSERT(isVertex(vertex))
+
+                return baseGraph_.vertexName(vertex);
+            }
+
+            const std::vector<std::vector<htd::vertex_t>> & neighborhood(void) const HTD_NOEXCEPT HTD_OVERRIDE
+            {
+                return baseGraph_.neighborhood();
+            }
+
+            const std::vector<htd::vertex_t> & neighborhood(htd::vertex_t vertex) const HTD_OVERRIDE
+            {
+                HTD_ASSERT(isVertex(vertex))
+
+                return baseGraph_.neighborhood(vertex);
+            }
+
+            const std::vector<htd::vertex_t> & eliminationSequence(void) const HTD_NOEXCEPT HTD_OVERRIDE
+            {
+                return eliminationSequence_;
+            }
+
+            const std::vector<htd::vertex_t> & remainingVertices(void) const HTD_NOEXCEPT HTD_OVERRIDE
+            {
+                return remainingVertices_;
+            }
+
+            std::size_t minTreeWidth(void) const HTD_NOEXCEPT HTD_OVERRIDE
+            {
+                return minTreeWidth_;
+            }
+
+    #ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            PreprocessedGraphComponent * clone(void) const HTD_OVERRIDE
+            {
+                return new htd::PreprocessedGraphComponent(*this);
+            }
+    #else
+            /**
+             *  Create a deep copy of the current preprocessed graph component.
+             *
+             *  @return A new PreprocessedGraphComponent object identical to the current preprocessed graph component.
+             */
+            PreprocessedGraphComponent * clone(void) const
+            {
+                return new htd::PreprocessedGraphComponent(*this);
+            }
+
+            htd::IGraphStructure * cloneGraphStructure(void) const HTD_OVERRIDE
+            {
+                return clone();
+            }
+    #endif
+
+        private:
+            /**
+             *  The base graph containing the component represented by this graph component data structure.
+             */
+            const htd::IPreprocessedGraph & baseGraph_;
+
+            /**
+             *  The set of vertices which were not eliminated during the preprocessing phase.
+             */
+            std::vector<htd::vertex_t> remainingVertices_;
+
+            /**
+             *  A partial vertex elimination ordering computed during the preprocessing phase.
+             */
+            std::vector<htd::vertex_t> eliminationSequence_;
+
+            /**
+             *  The lower bound of the treewidth of the input graph.
+             */
+            std::size_t minTreeWidth_;
+
+            /**
+             *  The number of edges in the preprocessed graph.
+             */
+            std::size_t edgeCount_;
+
+            /**
+             *  Recompute the number of edges in the graph to update the result of the function edgeCount().
+             */
+            void updateEdgeCount(void)
+            {
+                edgeCount_ = 0;
+
+                for (htd::vertex_t vertex : remainingVertices_)
+                {
+                    edgeCount_ += baseGraph_.neighborhood(vertex).size();
+                }
+
+                edgeCount_ = edgeCount_ >> 1;
+            }
+    };
+}
 
 /**
  *  Private implementation details of class htd::GraphPreprocessor.
@@ -49,14 +346,17 @@ struct htd::GraphPreprocessor::Implementation
                                                                  applyPreprocessing1_(false),
                                                                  applyPreprocessing2_(false),
                                                                  applyPreprocessing3_(false),
-                                                                 applyPreprocessing4_(false)
+                                                                 applyPreprocessing4_(false),
+                                                                 iterationCount_(1),
+                                                                 nonImprovementLimit_(0),
+                                                                 orderingAlgorithm_(new htd::MinFillOrderingAlgorithm(manager))
     {
 
     }
 
     virtual ~Implementation()
     {
-
+        delete orderingAlgorithm_;
     }
 
     /**
@@ -94,6 +394,21 @@ struct htd::GraphPreprocessor::Implementation
     bool applyPreprocessing4_;
 
     /**
+     *  The number of iterations of the base ordering algorithm which shall be performed for each component.
+     */
+    std::size_t iterationCount_;
+
+    /**
+     *  The maximum number of iterations of the base ordering algorithm without improvement after which the algorithm shall terminate.
+     */
+    std::size_t nonImprovementLimit_;
+
+    /**
+     *  The base ordering algorithm which shall be used to eliminate all but the largest biconnected component.
+     */
+    htd::IWidthLimitableOrderingAlgorithm * orderingAlgorithm_;
+
+    /**
      *  Structure representing the preprocessed input for the algorithm.
      *
      *  The preprocessing step consists of replacing the vertex identifiers by indices starting
@@ -129,7 +444,7 @@ struct htd::GraphPreprocessor::Implementation
          *  @param[in,out] vertexNames  A vector which holds the vertex identifier corresponding to an index. This information is initialized by the function.
          *  @param[in,out] neighborhood The neighborhood relation of the input graph where the vertex identifiers are replaced by their zero-based indices. This information is initialized by the function.
          */
-        void initialize(const htd::IMultiHypergraph & graph,
+        void initialize(const htd::IGraphStructure & graph,
                         std::vector<htd::vertex_t> & vertexNames,
                         std::vector<std::vector<htd::vertex_t>> & neighborhood)
         {
@@ -159,6 +474,17 @@ struct htd::GraphPreprocessor::Implementation
                         }
 
                         std::for_each(currentNeighborhood.begin(), currentNeighborhood.end(), [](htd::vertex_t & neighbor){ --neighbor; });
+                    }
+                }
+                else if (graph.vertexAtPosition(size - 1) == static_cast<htd::vertex_t>(size - 1))
+                {
+                    for (htd::index_t index = 0; index < size; ++index)
+                    {
+                        htd::vertex_t vertex = static_cast<htd::vertex_t>(index);
+
+                        vertexNames.push_back(vertex);
+
+                        graph.copyNeighborsTo(vertex, neighborhood[vertex]);
                     }
                 }
                 else
@@ -211,7 +537,7 @@ struct htd::GraphPreprocessor::Implementation
          *  @param[in] managementInstance   The management instance to which the new algorithm belongs.
          *  @param[in] graph                The input graph which shall be preprocessed.
          */
-        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::IMultiHypergraph & graph) : vertexNames(), neighborhood()
+        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::IGraphStructure & graph) : vertexNames(), neighborhood()
         {
             HTD_UNUSED(managementInstance)
 
@@ -365,6 +691,43 @@ struct htd::GraphPreprocessor::Implementation
     static void assignVertexToGroup(htd::vertex_t vertex,
                                     std::vector<std::unordered_set<htd::vertex_t>> & verticesByDegree,
                                     std::size_t newDegree);
+
+    /**
+     *  Decompose two sets of vertices into vertices only in the first set and vertices in both sets.
+     *
+     *  @param[in] set1                 The first set of vertices, sorted in ascending order.
+     *  @param[in] set2                 The second set of vertices, sorted in ascending order.
+     *  @param[out] resultOnlySet1      The set of vertices which are found only in the first set, sorted in ascending order.
+     *  @param[out] resultIntersection  The set of vertices which are found in both sets, sorted in ascending order.
+     */
+    void splitSets(const std::vector<htd::vertex_t> & set1,
+                   const std::vector<htd::vertex_t> & set2,
+                   std::vector<htd::vertex_t> & resultOnlySet1,
+                   std::vector<htd::vertex_t> & resultIntersection) const HTD_NOEXCEPT;
+
+    /**
+     *  Compute largest biconnected component of the given graph and eliminate all vertices contained in the remainder.
+     *
+     *  @param[in] graph                The graph which shall be preprocessed.
+     *  @param[in] preprocessedGraph    The preprocessed graph which shall be updated.
+     *  @param[in] vertices             The set of all available vertices.
+     */
+    void applyBiconnectedComponentPreprocessing(const htd::IMultiHypergraph & graph,
+                                                htd::PreprocessedGraph & preprocessedGraph,
+                                                std::unordered_set<htd::vertex_t> & vertices) const;
+
+    /**
+     *  Eliminate a connected component from the given preprocessed graph and update the preprocessed graph's elimination sequence.
+     *
+     *  @param[in] graph                The graph underlying the operation.
+     *  @param[in] vertices             The vertices which shall be eliminated.
+     *  @param[in] preprocessedGraph    The preprocessed graph which shall be updated.
+     *  @param[in,out] minTreeWidth     The lower bound for the treewidth of the given graph component.
+     */
+    void eliminateVertices(const htd::IMultiHypergraph & graph,
+                           const std::unordered_set<htd::vertex_t> & vertices,
+                           htd::PreprocessedGraph & preprocessedGraph,
+                           std::size_t & minTreeWidth) const;
 };
 
 htd::GraphPreprocessor::GraphPreprocessor(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -379,7 +742,7 @@ htd::GraphPreprocessor::~GraphPreprocessor()
 
 htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
-    htd::IPreprocessedGraph * ret = nullptr;
+    htd::PreprocessedGraph * ret = nullptr;
 
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
@@ -512,6 +875,11 @@ htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHyper
         std::sort(remainingVertices.begin(), remainingVertices.end());
 
         ret = new htd::PreprocessedGraph(std::move(vertexNames), std::move(neighborhood), std::move(ordering), std::move(remainingVertices), graph.edgeCount(), minTreeWidth);
+
+        if (implementation_->applyPreprocessing4_)
+        {
+            implementation_->applyBiconnectedComponentPreprocessing(graph, *ret, vertices);
+        }
     }
     else
     {
@@ -567,6 +935,35 @@ void htd::GraphPreprocessor::setManagementInstance(const htd::LibraryInstance * 
     HTD_ASSERT(manager != nullptr)
 
     implementation_->managementInstance_ = manager;
+}
+
+std::size_t htd::GraphPreprocessor::iterationCount(void) const
+{
+    return implementation_->iterationCount_;
+}
+
+void htd::GraphPreprocessor::setIterationCount(std::size_t iterationCount)
+{
+    implementation_->iterationCount_ = iterationCount;
+}
+
+std::size_t htd::GraphPreprocessor::nonImprovementLimit(void) const
+{
+    return implementation_->nonImprovementLimit_;
+}
+
+void htd::GraphPreprocessor::setNonImprovementLimit(std::size_t nonImprovementLimit)
+{
+    implementation_->nonImprovementLimit_ = nonImprovementLimit;
+}
+
+void htd::GraphPreprocessor::setOrderingAlgorithm(htd::IWidthLimitableOrderingAlgorithm * algorithm)
+{
+    HTD_ASSERT(algorithm != nullptr)
+
+    delete implementation_->orderingAlgorithm_;
+
+    implementation_->orderingAlgorithm_ = algorithm;
 }
 
 htd::GraphPreprocessor * htd::GraphPreprocessor::clone(void) const
@@ -1134,6 +1531,346 @@ bool htd::GraphPreprocessor::Implementation::eliminateAlmostSimplicialVertices(s
     }
 
     return ordering.size() > oldOrderingSize;
+}
+
+void htd::GraphPreprocessor::Implementation::splitSets(const std::vector<htd::vertex_t> & set1,
+                                                       const std::vector<htd::vertex_t> & set2,
+                                                       std::vector<htd::vertex_t> & resultOnlySet1,
+                                                       std::vector<htd::vertex_t> & resultIntersection) const HTD_NOEXCEPT
+{
+    auto first1 = set1.begin();
+    auto first2 = set2.begin();
+
+    auto last1 = set1.end();
+    auto last2 = set2.end();
+
+    while (first1 != last1 && first2 != last2)
+    {
+        if (*first1 < *first2)
+        {
+            resultOnlySet1.push_back(*first1);
+
+            ++first1;
+        }
+        else if (*first2 < *first1)
+        {
+            ++first2;
+        }
+        else
+        {
+            resultIntersection.push_back(*first1);
+
+            ++first1;
+
+            //Skip common value in set 2.
+            ++first2;
+        }
+    }
+
+    if (first1 != last1)
+    {
+        resultOnlySet1.insert(resultOnlySet1.end(), first1, last1);
+    }
+}
+
+void htd::GraphPreprocessor::Implementation::applyBiconnectedComponentPreprocessing(const htd::IMultiHypergraph & graph,
+                                                                                    htd::PreprocessedGraph & preprocessedGraph,
+                                                                                    std::unordered_set<htd::vertex_t> & vertices) const
+{
+    htd::BiconnectedComponentAlgorithm biconnectedComponentAlgorithm(managementInstance_);
+
+    std::vector<htd::vertex_t> articulationPoints;
+
+    std::vector<std::vector<htd::vertex_t>> components;
+
+    biconnectedComponentAlgorithm.determineComponents(preprocessedGraph, components, articulationPoints);
+
+    if (components.size() > 1)
+    {
+        std::vector<htd::index_t> pool;
+        htd::index_t index = 0;
+        std::size_t max = 0;
+        for (const std::vector<htd::vertex_t> & component : components)
+        {
+            std::size_t size = component.size();
+
+            if (size >= max)
+            {
+                if (size > max)
+                {
+                    max = size;
+
+                    pool.clear();
+                }
+
+                pool.push_back(index);
+            }
+
+            ++index;
+        }
+
+        const std::vector<htd::vertex_t> & selectedComponent = components[htd::selectRandomElement<htd::index_t>(pool)];
+
+        std::vector<htd::vertex_t> relevantArticulationPoints;
+
+        std::set_intersection(selectedComponent.begin(), selectedComponent.end(),
+                              articulationPoints.begin(), articulationPoints.end(),
+                              std::back_inserter(relevantArticulationPoints));
+
+        for (htd::vertex_t vertex : relevantArticulationPoints)
+        {
+            std::vector<htd::vertex_t> & currentNeighborhood = preprocessedGraph.neighborhood(vertex);
+
+            std::vector<htd::vertex_t> newNeighborhood;
+            std::vector<htd::vertex_t> otherNeighbors;
+
+            splitSets(currentNeighborhood, selectedComponent, otherNeighbors, newNeighborhood);
+
+            currentNeighborhood.swap(newNeighborhood);
+
+            for (htd::vertex_t neighbor : otherNeighbors)
+            {
+                std::vector<htd::vertex_t> & otherNeighborhood = preprocessedGraph.neighborhood(neighbor);
+
+                otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
+            }
+        }
+
+        preprocessedGraph.updateEdgeCount();
+
+        htd::IConnectedComponentAlgorithm * connectedComponentAlgorithm = managementInstance_->connectedComponentAlgorithmFactory().createInstance();
+
+        std::vector<std::vector<htd::vertex_t>> connectedComponents;
+
+        connectedComponentAlgorithm->determineComponents(preprocessedGraph, connectedComponents);
+
+        delete connectedComponentAlgorithm;
+
+        auto position = std::find_if(connectedComponents.begin(), connectedComponents.end(),
+                                     [&](const std::vector<htd::vertex_t> & component)
+        {
+            return std::binary_search(component.begin(), component.end(), selectedComponent[0]);
+        });
+
+        position->swap(*(connectedComponents.rbegin()));
+
+        std::sort(connectedComponents.begin(), connectedComponents.end() - 1,
+                  [](const std::vector<htd::vertex_t> & component1, const std::vector<htd::vertex_t> & component2)
+        {
+           return component1.size() < component2.size();
+        });
+
+        for (const std::vector<htd::vertex_t> & component : connectedComponents)
+        {
+            std::vector<std::unordered_set<htd::vertex_t>> verticesByDegree(4);
+
+            std::size_t oldOrderingSize = preprocessedGraph.eliminationSequence().size();
+
+            std::unordered_set<htd::vertex_t> componentVertices(component.begin(), component.end());
+
+            std::size_t minTreeWidth = 0;
+
+            for (htd::vertex_t vertex : component)
+            {
+                assignVertexToGroup(vertex, verticesByDegree, preprocessedGraph.neighborhood(vertex).size());
+            }
+
+            while (eliminateVerticesOfDegreeLessThanTwo(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+            {
+
+            }
+
+            bool ok = false;
+
+            if (!componentVertices.empty())
+            {
+                minTreeWidth = 2;
+
+                while (contractPaths(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                {
+                    ok = true;
+                }
+
+                if (ok)
+                {
+                    while (eliminateVerticesOfDegreeLessThanTwo(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                    {
+
+                    }
+                }
+            }
+
+            if (!componentVertices.empty())
+            {
+                minTreeWidth = 3;
+
+                while (shrinkTriangles(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                {
+                    ok = false;
+
+                    while (contractPaths(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                    {
+                        ok = true;
+                    }
+
+                    if (ok)
+                    {
+                        while (eliminateVerticesOfDegreeLessThanTwo(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                        {
+
+                        }
+                    }
+                }
+            }
+
+            if (!componentVertices.empty())
+            {
+                if (eliminateSimplicialVertices(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence(), 64, minTreeWidth))
+                {
+                    while (shrinkTriangles(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                    {
+                        ok = false;
+
+                        while (contractPaths(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                        {
+                            ok = true;
+                        }
+
+                        if (ok)
+                        {
+                            while (eliminateVerticesOfDegreeLessThanTwo(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                            {
+
+                            }
+                        }
+                    }
+
+                    while (eliminateAlmostSimplicialVertices(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence(), minTreeWidth))
+                    {
+                        while (shrinkTriangles(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                        {
+                            ok = false;
+
+                            while (contractPaths(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                            {
+                                ok = true;
+                            }
+
+                            if (ok)
+                            {
+                                while (eliminateVerticesOfDegreeLessThanTwo(componentVertices, verticesByDegree, preprocessedGraph.neighborhood(), preprocessedGraph.eliminationSequence()))
+                                {
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (auto it = preprocessedGraph.eliminationSequence().begin() + oldOrderingSize; it != preprocessedGraph.eliminationSequence().end(); ++it)
+            {
+                vertices.erase(*it);
+
+                *it = preprocessedGraph.vertexName(*it);
+            }
+
+            if (!std::binary_search(component.begin(), component.end(), selectedComponent[0]))
+            {
+                oldOrderingSize = preprocessedGraph.eliminationSequence().size();
+
+                eliminateVertices(graph, componentVertices, preprocessedGraph, minTreeWidth);
+
+                for (auto it = componentVertices.begin(); it != componentVertices.end(); ++it)
+                {
+                    vertices.erase(*it);
+                }
+            }
+            else
+            {
+                std::vector<htd::vertex_t> remainingVertices(componentVertices.begin(), componentVertices.end());
+
+                std::sort(remainingVertices.begin(), remainingVertices.end());
+
+                preprocessedGraph.setRemainingVertices(std::move(remainingVertices));
+            }
+
+            preprocessedGraph.minTreeWidth() = std::max(preprocessedGraph.minTreeWidth(), minTreeWidth);
+        }
+    }
+}
+
+void htd::GraphPreprocessor::Implementation::eliminateVertices(const htd::IMultiHypergraph & graph,
+                                                               const std::unordered_set<htd::vertex_t> & vertices,
+                                                               htd::PreprocessedGraph & preprocessedGraph,
+                                                               std::size_t & minTreeWidth) const
+{
+    std::vector<htd::vertex_t> remainingComponentVertices(vertices.begin(), vertices.end());
+
+    std::sort(remainingComponentVertices.begin(), remainingComponentVertices.end());
+
+    htd::PreprocessedGraphComponent component(preprocessedGraph, std::move(remainingComponentVertices), minTreeWidth);
+
+    htd::IWidthLimitedVertexOrdering * optimalOrdering = nullptr;
+
+    std::size_t bestMaxBagSize = 0;
+
+    htd::index_t iteration = 0;
+
+    while ((iteration == 0 || iterationCount_ == 0 || iteration < iterationCount_) && !managementInstance_->isTerminated())
+    {
+        std::size_t remainingIterations = iterationCount_ - iteration;
+
+        if (nonImprovementLimit_ < (std::size_t)-1)
+        {
+            remainingIterations = std::min(remainingIterations, nonImprovementLimit_);
+        }
+
+        htd::IWidthLimitedVertexOrdering * currentOrdering = orderingAlgorithm_->computeOrdering(graph, component, bestMaxBagSize - 1, remainingIterations);
+
+        if (currentOrdering->requiredIterations() < nonImprovementLimit_)
+        {
+            iteration += currentOrdering->requiredIterations();
+        }
+        else
+        {
+            iteration = (std::size_t)-1;
+        }
+
+        std::size_t currentMaxBagSize = currentOrdering->maximumBagSize();
+
+        if (!managementInstance_->isTerminated())
+        {
+            if ((iteration == 1 && bestMaxBagSize == 0) || currentMaxBagSize < bestMaxBagSize)
+            {
+                if (iteration > 1)
+                {
+                    delete optimalOrdering;
+                }
+
+                optimalOrdering = currentOrdering;
+
+                bestMaxBagSize = currentMaxBagSize;
+            }
+            else
+            {
+                delete currentOrdering;
+            }
+        }
+        else
+        {
+            delete currentOrdering;
+        }
+    }
+
+    if (optimalOrdering != nullptr)
+    {
+        preprocessedGraph.eliminationSequence().insert(preprocessedGraph.eliminationSequence().end(), optimalOrdering->sequence().begin(), optimalOrdering->sequence().end());
+
+        preprocessedGraph.minTreeWidth() = std::max(preprocessedGraph.minTreeWidth(), optimalOrdering->maximumBagSize() - 1);
+
+        delete optimalOrdering;
+    }
 }
 
 #endif /* HTD_HTD_GRAPHPREPROCESSOR_CPP */

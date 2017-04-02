@@ -139,7 +139,7 @@ TEST(MinDegreeOrderingAlgorithmTest, CheckEmptyGraph)
 
     htd::MinDegreeOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_TRUE(ordering->sequence().empty());
     ASSERT_EQ((std::size_t)1, ordering->requiredIterations());
@@ -156,7 +156,7 @@ TEST(MinDegreeOrderingAlgorithmTest, CheckSize1Graph)
 
     htd::MinDegreeOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ((std::size_t)1, ordering->sequence().size());
     ASSERT_EQ((htd::vertex_t)1, ordering->sequence()[0]);
@@ -172,7 +172,7 @@ TEST(MinDegreeOrderingAlgorithmTest, CheckSize2Graph)
 
     htd::MinDegreeOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ((std::size_t)2, ordering->sequence().size());
 
@@ -197,7 +197,7 @@ TEST(MinDegreeOrderingAlgorithmTest, CheckSimpleGraph1)
 
     htd::MinDegreeOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -223,7 +223,7 @@ TEST(MinDegreeOrderingAlgorithmTest, CheckSimpleGraph2)
 
     htd::MinDegreeOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -255,7 +255,7 @@ TEST(MinDegreeOrderingAlgorithmTest, CheckSimpleGraph3)
 
     htd::MinDegreeOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -287,7 +287,7 @@ TEST(MinDegreeOrderingAlgorithmTest, CheckSimpleGraph4)
 
     htd::MinDegreeOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -319,7 +319,7 @@ TEST(MinDegreeOrderingAlgorithmTest, CheckSimpleGraph5)
 
     htd::MinDegreeOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -796,7 +796,7 @@ TEST(MinDegreeOrderingAlgorithmTest, CheckSize50Graph1)
 
     htd::MinDegreeOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -1269,7 +1269,7 @@ TEST(MinDegreeOrderingAlgorithmTest, CheckSize50Graph2)
 
     htd::MinDegreeOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 

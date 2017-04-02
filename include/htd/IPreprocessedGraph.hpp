@@ -27,7 +27,7 @@
 
 #include <htd/Globals.hpp>
 
-#include <vector>
+#include <htd/IGraphStructure.hpp>
 
 namespace htd
 {
@@ -43,17 +43,10 @@ namespace htd
      *  vertex is assigned the ID 0. This allows for efficient storage and data handling
      *  based on arrays and vectors.
      */
-    class IPreprocessedGraph
+    class IPreprocessedGraph : public virtual htd::IGraphStructure
     {
         public:
             virtual ~IPreprocessedGraph() = 0;
-
-            /**
-             *  Getter for the vertex count of the preprocessed graph.
-             *
-             *  @return The vertex count of the preprocessed graph.
-             */
-            virtual std::size_t vertexCount(void) const HTD_NOEXCEPT = 0;
 
             /**
              *  Getter for the vertex count of the input graph.
@@ -61,13 +54,6 @@ namespace htd
              *  @return The vertex count of the input graph.
              */
             virtual std::size_t inputGraphVertexCount(void) const HTD_NOEXCEPT = 0;
-
-            /**
-             *  Getter for the edge count of the preprocessed graph.
-             *
-             *  @return The edge count of the preprocessed graph.
-             */
-            virtual std::size_t edgeCount(void) const HTD_NOEXCEPT = 0;
 
             /**
              *  Getter for the edge count of the input graph.

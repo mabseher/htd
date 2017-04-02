@@ -157,7 +157,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckEmptyGraph)
 
     htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_TRUE(ordering->sequence().empty());
     ASSERT_EQ((std::size_t)1, ordering->requiredIterations());
@@ -174,7 +174,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckSize1Graph)
 
     htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ((std::size_t)1, ordering->sequence().size());
     ASSERT_EQ((htd::vertex_t)1, ordering->sequence()[0]);
@@ -190,7 +190,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckSize2Graph)
 
     htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ((std::size_t)2, ordering->sequence().size());
 
@@ -215,7 +215,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph1)
 
     htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -241,7 +241,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph2)
 
     htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -273,7 +273,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph3)
 
     htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -305,7 +305,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph4)
 
     htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -337,7 +337,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckSimpleGraph5)
 
     htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -814,7 +814,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckSize50Graph1)
 
     htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 
@@ -1287,7 +1287,7 @@ TEST(MinFillOrderingAlgorithmTest, CheckSize50Graph2)
 
     htd::MinFillOrderingAlgorithm algorithm(libraryInstance);
 
-    const htd::VertexOrdering * ordering = algorithm.computeOrdering(graph);
+    const htd::IVertexOrdering * ordering = algorithm.computeOrdering(graph);
 
     ASSERT_EQ(graph.vertexCount(), ordering->sequence().size());
 

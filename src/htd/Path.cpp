@@ -1261,6 +1261,11 @@ htd::IMultiHypergraph * htd::Path::cloneMultiHypergraph(void) const
     return clone();
 }
 
+htd::IGraphStructure * htd::Path::cloneGraphStructure(void) const
+{
+    return clone();
+}
+
 htd::IMutablePath * htd::Path::cloneMutablePath(void) const
 {
     return clone();

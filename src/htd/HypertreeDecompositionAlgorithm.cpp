@@ -34,7 +34,8 @@
 #include <htd/HypertreeDecompositionFactory.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/PostOrderTreeTraversal.hpp>
-#include <htd/GraphPreprocessor.hpp>
+#include <htd/GraphPreprocessorFactory.hpp>
+#include <htd/IGraphPreprocessor.hpp>
 
 #include <cstdarg>
 #include <stdexcept>
@@ -115,13 +116,11 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
 
 htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) const
 {
-    htd::IHypertreeDecomposition * ret = nullptr;
+    htd::IGraphPreprocessor * preprocessor = implementation_->managementInstance_->graphPreprocessorFactory().createInstance();
 
-    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor->prepare(graph);
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
-
-    ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations);
+    htd::IHypertreeDecomposition * ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations);
 
     delete preprocessedGraph;
 

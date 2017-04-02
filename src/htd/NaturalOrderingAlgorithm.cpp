@@ -27,7 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/NaturalOrderingAlgorithm.hpp>
-#include <htd/VectorAdapter.hpp>
+#include <htd/VertexOrdering.hpp>
 
 #include <algorithm>
 
@@ -67,16 +67,16 @@ htd::NaturalOrderingAlgorithm::~NaturalOrderingAlgorithm()
     
 }
 
-htd::VertexOrdering * htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
+htd::IVertexOrdering * htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
-    return new htd::VertexOrdering(std::vector<htd::vertex_t>(graph.vertices().begin(), graph.vertices().end()));
+    return new htd::VertexOrdering(std::vector<htd::vertex_t>(graph.vertices().begin(), graph.vertices().end()), 1);
 }
 
-htd::VertexOrdering * htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
+htd::IVertexOrdering * htd::NaturalOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
 {
     HTD_UNUSED(preprocessedGraph)
 
-    return new htd::VertexOrdering(std::vector<htd::vertex_t>(graph.vertices().begin(), graph.vertices().end()));
+    return new htd::VertexOrdering(std::vector<htd::vertex_t>(graph.vertices().begin(), graph.vertices().end()), 1);
 }
 
 const htd::LibraryInstance * htd::NaturalOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT

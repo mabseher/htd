@@ -92,6 +92,15 @@ namespace htd
 
             HTD_API htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
+            HTD_API htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
+
+            /**
+             *  Access the vector of all vertices in the tree.
+             *
+             *  @return The vector of all vertices in the tree sorted in ascending order.
+             */
+            HTD_API const std::vector<htd::vertex_t> & vertexVector(void) const;
+
             HTD_API htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
             
             HTD_API bool isConnected(void) const HTD_OVERRIDE;
@@ -107,15 +116,6 @@ namespace htd
             HTD_API void copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
             HTD_API htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
-
-            HTD_API htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
-
-            /**
-             *  Access the vector of all vertices in the tree.
-             *
-             *  @return The vector of all vertices in the tree sorted in ascending order.
-             */
-            HTD_API const std::vector<htd::vertex_t> & vertexVector(void) const;
 
             HTD_API std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 
@@ -176,6 +176,8 @@ namespace htd
              *  @return A new MultiHypergraph object identical to the current mutable multi-hypergraph.
              */
             HTD_API MultiHypergraph * clone(void) const;
+
+            HTD_API htd::IGraphStructure * cloneGraphStructure(void) const HTD_OVERRIDE;
 
             HTD_API htd::IMultiHypergraph * cloneMultiHypergraph(void) const HTD_OVERRIDE;
 

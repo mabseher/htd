@@ -70,7 +70,7 @@ htd::BreadthFirstGraphTraversal::~BreadthFirstGraphTraversal()
 
 }
 
-void htd::BreadthFirstGraphTraversal::traverse(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const
+void htd::BreadthFirstGraphTraversal::traverse(const htd::IGraphStructure & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const
 {
     HTD_ASSERT(graph.isVertex(startingVertex))
 

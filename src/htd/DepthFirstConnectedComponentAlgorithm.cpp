@@ -29,7 +29,6 @@
 #include <htd/Helpers.hpp>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
 #include <htd/DepthFirstGraphTraversal.hpp>
-#include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
 #include <stack>
@@ -71,7 +70,7 @@ htd::DepthFirstConnectedComponentAlgorithm::~DepthFirstConnectedComponentAlgorit
 
 }
 
-void htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const
+void htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::IGraphStructure & graph, std::vector<std::vector<htd::vertex_t>> & target) const
 {
     const htd::ConstCollection<htd::vertex_t> & vertexCollection = graph.vertices();
 
@@ -97,7 +96,7 @@ void htd::DepthFirstConnectedComponentAlgorithm::determineComponents(const htd::
     }
 }
 
-void htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const
+void htd::DepthFirstConnectedComponentAlgorithm::determineComponent(const htd::IGraphStructure & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const
 {
     HTD_ASSERT(graph.isVertex(startingVertex))
 

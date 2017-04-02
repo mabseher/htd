@@ -319,6 +319,11 @@ htd::IMultiGraph * htd::MultiGraph::cloneMultiGraph(void) const
     return clone();
 }
 
+htd::IGraphStructure * htd::MultiGraph::cloneGraphStructure(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::MultiGraph::cloneMultiHypergraph(void) const
 {
     return clone();

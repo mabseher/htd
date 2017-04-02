@@ -1422,6 +1422,11 @@ htd::IHypergraph * htd::Tree::cloneHypergraph(void) const
     return clone();
 }
 
+htd::IGraphStructure * htd::Tree::cloneGraphStructure(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::Tree::cloneMultiHypergraph(void) const
 {
     return clone();

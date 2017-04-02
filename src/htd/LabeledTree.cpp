@@ -178,6 +178,11 @@ htd::IHypergraph * htd::LabeledTree::cloneHypergraph(void) const
     return clone();
 }
 
+htd::IGraphStructure * htd::LabeledTree::cloneGraphStructure(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::LabeledTree::cloneMultiHypergraph(void) const
 {
     return clone();

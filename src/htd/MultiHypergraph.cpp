@@ -317,7 +317,7 @@ bool htd::MultiHypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighb
 
     if (vertex != neighbor)
     {
-        const std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_.at(vertex - htd::Vertex::FIRST);
+        const std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
 
         ret = std::binary_search(currentNeighborhood.begin(), currentNeighborhood.end(), neighbor);
     }
@@ -354,7 +354,7 @@ bool htd::MultiHypergraph::isConnected(void) const
 
         std::unordered_set<htd::vertex_t> visitedVertices;
 
-        htd::vertex_t currentVertex = implementation_->vertices_.at(0);
+        htd::vertex_t currentVertex = implementation_->vertices_[0];
 
         originStack.push(currentVertex);
 
@@ -368,7 +368,7 @@ bool htd::MultiHypergraph::isConnected(void) const
 
                 originStack.pop();
 
-                for (htd::vertex_t neighbor : implementation_->neighborhood_.at(currentVertex - htd::Vertex::FIRST))
+                for (htd::vertex_t neighbor : implementation_->neighborhood_[currentVertex - htd::Vertex::FIRST])
                 {
                     if (visitedVertices.count(neighbor) == 0)
                     {
@@ -421,23 +421,23 @@ bool htd::MultiHypergraph::isConnected(htd::vertex_t vertex1, htd::vertex_t vert
 
             for (auto it = tmpVertices.begin(); !ret && it != tmpVertices.end(); it++)
             {
-                for (auto it2 = implementation_->edges_->begin(); !ret && it2 != implementation_->edges_->end(); it2++)
+                htd::vertex_t vertex = *it;
+
+                const std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_[vertex - htd::Vertex::FIRST];
+
+                for (auto it2 = currentNeighborhood.begin(); !ret && it2 != currentNeighborhood.end(); ++it2)
                 {
-                    if (std::find((*it2).begin(), (*it2).end(), *it) != (*it2).end())
+                    htd::vertex_t neighbor = *it2;
+
+                    if (neighbor != vertex && !reachableVertices[neighbor - htd::Vertex::FIRST])
                     {
-                        for (auto it3 = (*it2).begin(); !ret && it3 != (*it2).end(); it3++)
+                        reachableVertices[neighbor - htd::Vertex::FIRST] = true;
+
+                        newVertices.push_back(neighbor);
+
+                        if (neighbor == vertex2)
                         {
-                            if (*it3 != *it && !reachableVertices[*it3 - htd::Vertex::FIRST])
-                            {
-                                reachableVertices[*it3 - htd::Vertex::FIRST] = true;
-
-                                newVertices.push_back(*it3);
-
-                                if (*it3 == vertex2)
-                                {
-                                    ret = true;
-                                }
-                            }
+                            ret = true;
                         }
                     }
                 }
@@ -1101,6 +1101,11 @@ htd::MultiHypergraph * htd::MultiHypergraph::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+htd::IGraphStructure * htd::MultiHypergraph::cloneGraphStructure(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::MultiHypergraph::cloneMultiHypergraph(void) const
 {
     return clone();

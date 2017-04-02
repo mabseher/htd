@@ -36,32 +36,6 @@
 #include <unordered_map>
 
 /**
- *  Private implementation details of class htd::TarjanStronglyConnectedComponentAlgorithm.
- */
-struct htd::TarjanStronglyConnectedComponentAlgorithm::Implementation
-{
-    /**
-     *  Constructor for the implementation details structure.
-     *
-     *  @param[in] manager   The management instance to which the current object instance belongs.
-     */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
-    {
-
-    }
-
-    virtual ~Implementation()
-    {
-
-    }
-
-    /**
-     *  The management instance to which the current object instance belongs.
-     */
-    const htd::LibraryInstance * managementInstance_;
-};
-
-/**
  *  Internal data structure used to store relevant vertex information needed by Tarjan's algorithm.
  */
 struct Node {
@@ -93,7 +67,7 @@ struct Node {
     /**
      *  A vector of all outgoing neighbors from this node.
      */
-    std::vector<Node *> *neighbors;
+    std::vector<Node *> * neighbors;
 
     /**
      *  Constructor of a new object of type Node.
@@ -115,76 +89,89 @@ struct Node {
 };
 
 /**
- *  Determine the strongly connected components of a given graph.
- *
- *  @param[in] node         The node from which the algorithm shall start.
- *  @param[in] stack        The stack needed for simulating the recursion of depth-first search.
- *  @param[in] stackMembers A set containing all vertices which are currently members of the stack.
- *  @param[in] time         A number for keeping track of the time when a vertex was first discovered and which is incremented after discovering a new vertex.
- *  @param[out] target      The target vector to which the determined components shall be appended.
+ *  Private implementation details of class htd::TarjanStronglyConnectedComponentAlgorithm.
  */
-void determineComponents(Node * node, std::stack<Node *> & stack, std::unordered_set<htd::vertex_t> & stackMembers, htd::index_t & time, std::vector<std::vector<htd::vertex_t>> & target)
+struct htd::TarjanStronglyConnectedComponentAlgorithm::Implementation
 {
-    node->discovery = time;
-    node->low = time;
-
-    time++;
-
-    stack.push(node);
-
-    stackMembers.insert(node->vertex);
-
-    Node * last = node;
-
-    bool finished = false;
-
-    while (!finished)
+    /**
+     *  Constructor for the implementation details structure.
+     *
+     *  @param[in] manager   The management instance to which the current object instance belongs.
+     */
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager)
     {
-       if (last->index < last->neighbors->size())
-       {
-           Node *w = (*(last->neighbors))[last->index];
 
-           last->index++;
+    }
 
-           if(w->discovery == 0)
+    virtual ~Implementation()
+    {
+
+    }
+
+    /**
+     *  The management instance to which the current object instance belongs.
+     */
+    const htd::LibraryInstance * managementInstance_;
+
+    /**
+     *  Determine the strongly connected components of a given graph.
+     *
+     *  @param[in] node         The node from which the algorithm shall start.
+     *  @param[in] stack        The stack needed for simulating the recursion of depth-first search.
+     *  @param[in] stackMembers A set containing all vertices which are currently members of the stack.
+     *  @param[in] time         A number for keeping track of the time when a vertex was first discovered and which is incremented after discovering a new vertex.
+     *  @param[out] target      The target vector to which the determined components shall be appended.
+     */
+    void determineComponents(Node * node, std::stack<Node *> & stack, std::unordered_set<htd::vertex_t> & stackMembers, htd::index_t & time, std::vector<std::vector<htd::vertex_t>> & target) const
+    {
+        node->discovery = time;
+        node->low = time;
+
+        time++;
+
+        stack.push(node);
+
+        stackMembers.insert(node->vertex);
+
+        Node * last = node;
+
+        bool finished = false;
+
+        while (!finished)
+        {
+           if (last->index < last->neighbors->size())
            {
-               w->predecessor = last;
-               w->index = 0;
-               w->discovery = time;
-               w->low = time;
+               Node * w = (*(last->neighbors))[last->index];
 
-               ++time;
+               last->index++;
 
-               stack.push(w);
-
-               stackMembers.insert(w->vertex);
-
-               last = w;
-           }
-           else if (stackMembers.count(w->vertex) == 1)
-           {
-               last->low = std::min(last->low, w->discovery);
-           }
-       }
-       else
-       {
-           if(last->low == last->discovery)
-           {
-               std::vector<htd::vertex_t> component;
-
-               Node *top = stack.top();
-
-               component.emplace_back(top->vertex);
-
-               stack.pop();
-
-               stackMembers.erase(top->vertex);
-
-               int size = 1;
-
-               while(top->vertex != last->vertex)
+               if(w->discovery == 0)
                {
-                   top = stack.top();
+                   w->predecessor = last;
+                   w->index = 0;
+                   w->discovery = time;
+                   w->low = time;
+
+                   ++time;
+
+                   stack.push(w);
+
+                   stackMembers.insert(w->vertex);
+
+                   last = w;
+               }
+               else if (stackMembers.count(w->vertex) == 1)
+               {
+                   last->low = std::min(last->low, w->discovery);
+               }
+           }
+           else
+           {
+               if(last->low == last->discovery)
+               {
+                   std::vector<htd::vertex_t> component;
+
+                   Node * top = stack.top();
 
                    component.emplace_back(top->vertex);
 
@@ -192,29 +179,42 @@ void determineComponents(Node * node, std::stack<Node *> & stack, std::unordered
 
                    stackMembers.erase(top->vertex);
 
-                   size++;
+                   int size = 1;
+
+                   while(top->vertex != last->vertex)
+                   {
+                       top = stack.top();
+
+                       component.emplace_back(top->vertex);
+
+                       stack.pop();
+
+                       stackMembers.erase(top->vertex);
+
+                       size++;
+                   }
+
+                   std::sort(component.begin(), component.end());
+
+                   target.emplace_back(std::move(component));
                }
 
-               std::sort(component.begin(), component.end());
+               Node * newLast = last->predecessor;
 
-               target.emplace_back(std::move(component));
-           }
+               if(newLast != nullptr)
+               {
+                   newLast->low = std::min(newLast->low, last->low);
 
-           Node *newLast = last->predecessor;
-
-           if(newLast != nullptr)
-           {
-               newLast->low = std::min(newLast->low, last->low);
-
-               last = newLast;
-           }
-           else
-           {
-               finished = true;
+                   last = newLast;
+               }
+               else
+               {
+                   finished = true;
+               }
            }
        }
-   }
-}
+    }
+};
 
 htd::TarjanStronglyConnectedComponentAlgorithm::TarjanStronglyConnectedComponentAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
@@ -226,7 +226,7 @@ htd::TarjanStronglyConnectedComponentAlgorithm::~TarjanStronglyConnectedComponen
 
 }
 
-void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const
+void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const htd::IGraphStructure & graph, std::vector<std::vector<htd::vertex_t>> & target) const
 {
     /**
      *  Hypergraphs are assumed to be undirected, therefore the strongly connected components are identical to the connected components.
@@ -296,7 +296,7 @@ void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const h
 
         if (nodes[vertex]->discovery == 0)
         {
-            ::determineComponents(nodes.at(vertex), stack, stackMembers, time, target);
+            implementation_->determineComponents(nodes.at(vertex), stack, stackMembers, time, target);
         }
 
         ++it;
@@ -312,7 +312,7 @@ void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponents(const h
     }
 }
 
-void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const
+void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const htd::IGraphStructure & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const
 {
     /**
      *  Hypergraphs are assumed to be undirected, therefore the strongly connected components are identical to the connected components.
@@ -376,7 +376,7 @@ void htd::TarjanStronglyConnectedComponentAlgorithm::determineComponent(const ht
 
     std::vector<std::vector<htd::vertex_t>> components;
 
-    ::determineComponents(nodes.at(startingVertex), stack, stackMembers, time, components);
+    implementation_->determineComponents(nodes.at(startingVertex), stack, stackMembers, time, components);
 
     bool found = false;
 

@@ -162,6 +162,11 @@ namespace htd
     class TreeDecompositionFactory;
 
     /**
+     *  Forward declaration of factory class htd::GraphPreprocessorFactory.
+     */
+    class GraphPreprocessorFactory;
+
+    /**
      *  Central management class of a library instance.
      */
     class LibraryInstance
@@ -480,6 +485,16 @@ namespace htd
              *  Access the factory class for the default implementation of the htd::ITreeDecomposition interface.
              */
             HTD_API const htd::TreeDecompositionFactory & treeDecompositionFactory(void) const;
+
+            /**
+             *  Access the factory class for the default implementation of the htd::IGraphPreprocessor interface.
+             */
+            HTD_API htd::GraphPreprocessorFactory & graphPreprocessorFactory(void);
+
+            /**
+             *  Access the factory class for the default implementation of the htd::IGraphPreprocessor interface.
+             */
+            HTD_API const htd::GraphPreprocessorFactory & graphPreprocessorFactory(void) const;
 
         private:
             struct Implementation;

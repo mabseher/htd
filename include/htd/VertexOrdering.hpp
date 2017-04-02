@@ -26,16 +26,14 @@
 #define HTD_HTD_VERTEXORDERING_HPP
 
 #include <htd/Globals.hpp>
-
-#include <memory>
-#include <vector>
+#include <htd/IWidthLimitedVertexOrdering.hpp>
 
 namespace htd
 {
     /**
-     * Storage class for orderings of graph vertices.
+     *  Storage class for orderings of graph vertices.
      */
-    class VertexOrdering
+    class VertexOrdering : public htd::IWidthLimitedVertexOrdering
     {
         public:
             /**
@@ -44,7 +42,7 @@ namespace htd
              *  @param[in] sequence     The sequence of vertices.
              *  @param[in] iterations   The number of iterations which was needed to find the sequence of vertices at hand.
              */
-            HTD_API VertexOrdering(const std::vector<htd::vertex_t> & sequence, std::size_t iterations = 1);
+            HTD_API VertexOrdering(const std::vector<htd::vertex_t> & sequence, std::size_t iterations);
 
             /**
              *  Create a new vertex ordering.
@@ -52,7 +50,25 @@ namespace htd
              *  @param[in] sequence     The sequence of vertices.
              *  @param[in] iterations   The number of iterations which was needed to find the sequence of vertices at hand.
              */
-            HTD_API VertexOrdering(std::vector<htd::vertex_t> && sequence, std::size_t iterations = 1);
+            HTD_API VertexOrdering(std::vector<htd::vertex_t> && sequence, std::size_t iterations);
+
+            /**
+             *  Create a new vertex ordering.
+             *
+             *  @param[in] sequence     The sequence of vertices.
+             *  @param[in] iterations   The number of iterations which was needed to find the sequence of vertices at hand.
+             *  @param[in] maxBagSize   The maximum bag size a decomposition based on bucket elimination and the computed ordering will have.
+             */
+            HTD_API VertexOrdering(const std::vector<htd::vertex_t> & sequence, std::size_t iterations, std::size_t maxBagSize);
+
+            /**
+             *  Create a new vertex ordering.
+             *
+             *  @param[in] sequence     The sequence of vertices.
+             *  @param[in] iterations   The number of iterations which was needed to find the sequence of vertices at hand.
+             *  @param[in] maxBagSize   The maximum bag size a decomposition based on bucket elimination and the computed ordering will have.
+             */
+            HTD_API VertexOrdering(std::vector<htd::vertex_t> && sequence, std::size_t iterations, std::size_t maxBagSize);
 
             /**
              *  Copy constructor for a VertexOrdering object.
@@ -73,19 +89,18 @@ namespace htd
              */
             HTD_API virtual ~VertexOrdering();
 
-            /**
-             *  Getter for the sequence of vertices.
-             *
-             *  @return The sequence of vertices.
-             */
-            HTD_API const std::vector<htd::vertex_t> & sequence(void) const;
+            HTD_API const std::vector<htd::vertex_t> & sequence(void) const HTD_OVERRIDE;
+
+            HTD_API std::size_t requiredIterations(void) const HTD_OVERRIDE;
+
+            HTD_API std::size_t maximumBagSize(void) const HTD_OVERRIDE;
 
             /**
-             *  Getter for the number of iterations which was needed to find the sequence of vertices at hand.
+             *  Set the maximum bag size a decomposition based on bucket elimination and the computed ordering will have.
              *
-             *  @return The number of iterations which was needed to find the sequence of vertices at hand.
+             *  @param[in] maxBagSize   The maximum bag size a decomposition based on bucket elimination and the computed ordering will have.
              */
-            HTD_API std::size_t requiredIterations(void) const;
+            HTD_API void setMaximumBagSize(std::size_t maxBagSize);
 
         private:
             struct Implementation;

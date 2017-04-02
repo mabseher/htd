@@ -32,7 +32,8 @@
 #include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/GraphDecompositionFactory.hpp>
 #include <htd/IWidthLimitableOrderingAlgorithm.hpp>
-#include <htd/GraphPreprocessor.hpp>
+#include <htd/GraphPreprocessorFactory.hpp>
+#include <htd/IGraphPreprocessor.hpp>
 
 #include <algorithm>
 #include <cstdarg>
@@ -355,14 +356,15 @@ std::pair<htd::IGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDe
 
 std::pair<htd::IGraphDecomposition *, std::size_t> htd::BucketEliminationGraphDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const
 {
-    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::IGraphPreprocessor * preprocessor = implementation_->managementInstance_->graphPreprocessorFactory().createInstance();
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor->prepare(graph);
 
     std::pair<htd::IGraphDecomposition *, std::size_t> ret =
         computeDecomposition(graph, *preprocessedGraph, manipulationOperations, maxBagSize, maxIterationCount);
 
     delete preprocessedGraph;
+    delete preprocessor;
 
     return ret;
 }
@@ -632,7 +634,11 @@ htd::BucketEliminationGraphDecompositionAlgorithm * htd::BucketEliminationGraphD
 #endif
     }
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     ret->setOrderingAlgorithm(implementation_->orderingAlgorithm_->clone());
+#else
+    ret->setOrderingAlgorithm(implementation_->orderingAlgorithm_->cloneOrderingAlgorithm());
+#endif
 
     return ret;
 }
@@ -647,7 +653,7 @@ std::pair<htd::IMutableGraphDecomposition *, std::size_t> htd::BucketElimination
 
     if (widthLimitableAlgorithm == nullptr)
     {
-        htd::VertexOrdering * ordering = nullptr;
+        htd::IVertexOrdering * ordering = nullptr;
 
         do
         {
@@ -678,7 +684,7 @@ std::pair<htd::IMutableGraphDecomposition *, std::size_t> htd::BucketElimination
     }
     else
     {
-        htd::VertexOrdering * ordering = widthLimitableAlgorithm->computeOrdering(graph, preprocessedGraph, maxBagSize, maxIterationCount);
+        htd::IWidthLimitedVertexOrdering * ordering = widthLimitableAlgorithm->computeOrdering(graph, preprocessedGraph, maxBagSize, maxIterationCount);
 
         if (ordering != nullptr)
         {

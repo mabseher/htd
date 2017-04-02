@@ -183,6 +183,11 @@ htd::IHypergraph * htd::LabeledGraph::cloneHypergraph(void) const
     return clone();
 }
 
+htd::IGraphStructure * htd::LabeledGraph::cloneGraphStructure(void) const
+{
+    return clone();
+}
+
 htd::IMultiHypergraph * htd::LabeledGraph::cloneMultiHypergraph(void) const
 {
     return clone();

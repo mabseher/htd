@@ -1,5 +1,5 @@
 /*
- * File:   DepthFirstConnectedComponentAlgorithm.hpp
+ * File:   BiconnectedComponentAlgorithm.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  * 
@@ -22,19 +22,19 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_DEPTHFIRSTCONNECTEDCOMPONENTALGORITHM_HPP
-#define HTD_HTD_DEPTHFIRSTCONNECTEDCOMPONENTALGORITHM_HPP
+#ifndef HTD_HTD_BICONNECTEDCOMPONENTALGORITHM_HPP
+#define HTD_HTD_BICONNECTEDCOMPONENTALGORITHM_HPP
 
 #include <htd/Globals.hpp>
 
-#include <htd/IConnectedComponentAlgorithm.hpp>
+#include <htd/IBiconnectedComponentAlgorithm.hpp>
 
 namespace htd
 {
     /**
-     * Implementation of the IConnectedComponentAlgorithm interface based on depth-first traversal.
+     * Implementation of the IBiconnectedComponentAlgorithm interface.
      */
-    class DepthFirstConnectedComponentAlgorithm : public htd::IConnectedComponentAlgorithm
+    class BiconnectedComponentAlgorithm : public htd::IBiconnectedComponentAlgorithm
     {
         public:
             /**
@@ -42,19 +42,19 @@ namespace htd
              *
              *  @param[in] manager   The management instance to which the new algorithm belongs.
              */
-            HTD_API DepthFirstConnectedComponentAlgorithm(const htd::LibraryInstance * const manager);
+            HTD_API BiconnectedComponentAlgorithm(const htd::LibraryInstance * const manager);
 
-            HTD_API virtual ~DepthFirstConnectedComponentAlgorithm();
+            HTD_API virtual ~BiconnectedComponentAlgorithm();
 
-            HTD_API void determineComponents(const htd::IGraphStructure & graph, std::vector<std::vector<htd::vertex_t>> & target) const HTD_OVERRIDE;
+            HTD_API void determineComponents(const htd::IGraphStructure & graph, std::vector<std::vector<htd::vertex_t>> & target, std::vector<htd::vertex_t> & articulationPoints) const HTD_OVERRIDE;
 
-            HTD_API void determineComponent(const htd::IGraphStructure & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+            HTD_API void determineComponent(const htd::IGraphStructure & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target, std::vector<htd::vertex_t> & articulationPoints) const HTD_OVERRIDE;
 
             HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
 
-            HTD_API DepthFirstConnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
+            HTD_API BiconnectedComponentAlgorithm * clone(void) const HTD_OVERRIDE;
 
         private:
             struct Implementation;
@@ -63,4 +63,4 @@ namespace htd
     };
 }
 
-#endif /* HTD_HTD_DEPTHFIRSTCONNECTEDCOMPONENTALGORITHM_HPP */
+#endif /* HTD_HTD_BICONNECTEDCOMPONENTALGORITHM_HPP */

@@ -26,7 +26,8 @@
 #define HTD_HTD_IGRAPHTRAVERSAL_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/IMultiHypergraph.hpp>
+
+#include <htd/IGraphStructure.hpp>
 
 #include <functional>
 
@@ -50,7 +51,7 @@ namespace htd
              *                                  -# The immediate predecessor of the current vertex in the traversal process.
              *                                  -# The distance between the current vertex and the starting vertex of the traversal.
              */
-            virtual void traverse(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const = 0;
+            virtual void traverse(const htd::IGraphStructure & graph, htd::vertex_t startingVertex, const std::function<void(htd::vertex_t, htd::vertex_t, std::size_t)> & targetFunction) const = 0;
     };
 
     inline htd::IGraphTraversal::~IGraphTraversal() { }

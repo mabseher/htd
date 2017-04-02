@@ -28,8 +28,9 @@
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/MaximumCardinalitySearchOrderingAlgorithm.hpp>
-#include <htd/VectorAdapter.hpp>
-#include <htd/GraphPreprocessor.hpp>
+#include <htd/GraphPreprocessorFactory.hpp>
+#include <htd/IGraphPreprocessor.hpp>
+#include <htd/VertexOrdering.hpp>
 
 #include <algorithm>
 #include <unordered_map>
@@ -102,20 +103,21 @@ htd::MaximumCardinalitySearchOrderingAlgorithm::~MaximumCardinalitySearchOrderin
     
 }
 
-htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
+htd::IVertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph) const HTD_NOEXCEPT
 {
-    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::IGraphPreprocessor * preprocessor = implementation_->managementInstance_->graphPreprocessorFactory().createInstance();
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor->prepare(graph);
 
-    htd::VertexOrdering * ret = computeOrdering(graph, *preprocessedGraph);
+    htd::IVertexOrdering * ret = computeOrdering(graph, *preprocessedGraph);
 
     delete preprocessedGraph;
+    delete preprocessor;
 
     return ret;
 }
 
-htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
+htd::IVertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrdering(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph) const HTD_NOEXCEPT
 {
     HTD_UNUSED(graph)
 
@@ -170,7 +172,7 @@ htd::VertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOrd
 
     std::reverse(ordering.begin() + preprocessedGraph.eliminationSequence().size(), ordering.end());
 
-    return new htd::VertexOrdering(std::move(ordering));
+    return new htd::VertexOrdering(std::move(ordering), 1);
 }
 
 const htd::LibraryInstance * htd::MaximumCardinalitySearchOrderingAlgorithm::managementInstance(void) const HTD_NOEXCEPT

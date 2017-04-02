@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 #include <htd/Helpers.hpp>
+
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 #include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>
 #include <htd/ConnectedComponentAlgorithmFactory.hpp>
@@ -36,9 +37,9 @@
 #include <htd/ILabelingFunction.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
 #include <htd/CompressionOperation.hpp>
-#include <htd/OrderingAlgorithmFactory.hpp>
 #include <htd/BreadthFirstGraphTraversal.hpp>
-#include <htd/GraphPreprocessor.hpp>
+#include <htd/GraphPreprocessorFactory.hpp>
+#include <htd/IGraphPreprocessor.hpp>
 
 #include <algorithm>
 #include <cstdarg>
@@ -173,14 +174,15 @@ std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDeco
 
 std::pair<htd::ITreeDecomposition *, std::size_t> htd::BucketEliminationTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize, std::size_t maxIterationCount) const
 {
-    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::IGraphPreprocessor * preprocessor = implementation_->managementInstance_->graphPreprocessorFactory().createInstance();
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor->prepare(graph);
 
     std::pair<htd::ITreeDecomposition *, std::size_t> ret =
         computeDecomposition(graph, *preprocessedGraph, manipulationOperations, maxBagSize, maxIterationCount);
 
     delete preprocessedGraph;
+    delete preprocessor;
 
     return ret;
 }

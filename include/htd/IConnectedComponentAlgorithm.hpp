@@ -27,7 +27,8 @@
 
 #include <htd/Globals.hpp>
 
-#include <htd/IHypergraph.hpp>
+#include <htd/IGraphStructure.hpp>
+#include <htd/LibraryInstance.hpp>
 
 namespace htd
 {
@@ -59,7 +60,7 @@ namespace htd
              *  @param[in] graph     The graph which's components shall be determinded.
              *  @param[out] target   The target vector to which the determined components shall be appended.
              */
-            virtual void determineComponents(const htd::IMultiHypergraph & graph, std::vector<std::vector<htd::vertex_t>> & target) const = 0;
+            virtual void determineComponents(const htd::IGraphStructure & graph, std::vector<std::vector<htd::vertex_t>> & target) const = 0;
 
             /**
              *  Determine the connected component of the given graph where a given vertex resides.
@@ -68,7 +69,7 @@ namespace htd
              *  @param[in] startingVertex   The specific vertex from which the algorithm shall start.
              *  @param[out] target          The target vector to which the determined component shall be appended.
              */
-            virtual void determineComponent(const htd::IMultiHypergraph & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const = 0;
+            virtual void determineComponent(const htd::IGraphStructure & graph, htd::vertex_t startingVertex, std::vector<htd::vertex_t> & target) const = 0;
 
             /**
              *  Create a deep copy of the current connected component algorithm.

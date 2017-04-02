@@ -28,7 +28,8 @@
 #include <htd/WidthMinimizingTreeDecompositionAlgorithm.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
 
-#include <htd/GraphPreprocessor.hpp>
+#include <htd/GraphPreprocessorFactory.hpp>
+#include <htd/IGraphPreprocessor.hpp>
 
 #include <cstdarg>
 #include <algorithm>
@@ -138,15 +139,14 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
                                                                                                const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
                                                                                                const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback) const
 {
-    htd::ITreeDecomposition * ret = nullptr;
+    htd::IGraphPreprocessor * preprocessor = implementation_->managementInstance_->graphPreprocessorFactory().createInstance();
 
-    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor->prepare(graph);
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
-
-    ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations, progressCallback);
+    htd::ITreeDecomposition * ret = computeDecomposition(graph, *preprocessedGraph, manipulationOperations, progressCallback);
 
     delete preprocessedGraph;
+    delete preprocessor;
 
     return ret;
 }
@@ -235,15 +235,14 @@ htd::ITreeDecomposition * htd::WidthMinimizingTreeDecompositionAlgorithm::comput
                                                                                                        const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
                                                                                                        const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback, std::size_t maxBagSize) const
 {
-    htd::ITreeDecomposition * ret = nullptr;
+    htd::IGraphPreprocessor * preprocessor = implementation_->managementInstance_->graphPreprocessorFactory().createInstance();
 
-    htd::GraphPreprocessor preprocessor(implementation_->managementInstance_);
+    htd::IPreprocessedGraph * preprocessedGraph = preprocessor->prepare(graph);
 
-    htd::IPreprocessedGraph * preprocessedGraph = preprocessor.prepare(graph);
-
-    ret = computeImprovedDecomposition(graph, *preprocessedGraph, manipulationOperations, progressCallback, maxBagSize);
+    htd::ITreeDecomposition * ret = computeImprovedDecomposition(graph, *preprocessedGraph, manipulationOperations, progressCallback, maxBagSize);
 
     delete preprocessedGraph;
+    delete preprocessor;
 
     return ret;
 }

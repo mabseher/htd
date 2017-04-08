@@ -53,7 +53,14 @@ namespace htd
              *  @return The collection of all vertices in the graph sorted in ascending order.
              */
             virtual htd::ConstCollection<htd::vertex_t> vertices(void) const = 0;
-            
+
+            /**
+             *  Write the collection of all vertices in the graph to the end of a given vector. The result is sorted in ascending order.
+             *
+             *  @param[out] target  The target vector to which the vertices shall be appended.
+             */
+            virtual void copyVerticesTo(std::vector<htd::vertex_t> & target) const = 0;
+
             /**
              *  Access the vertex at the specific position.
              *

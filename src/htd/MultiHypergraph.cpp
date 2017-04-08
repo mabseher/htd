@@ -302,13 +302,6 @@ htd::ConstCollection<htd::id_t> htd::MultiHypergraph::associatedEdgeIds(const ht
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::MultiHypergraph::vertexAtPosition(htd::index_t index) const
-{
-    HTD_ASSERT(index < implementation_->vertices_.size())
-
-    return implementation_->vertices_[index];
-}
-
 bool htd::MultiHypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
     HTD_ASSERT(isVertex(vertex) && isVertex(neighbor))
@@ -478,6 +471,20 @@ htd::vertex_t htd::MultiHypergraph::neighborAtPosition(htd::vertex_t vertex, htd
 htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::vertices(void) const
 {
     return htd::ConstCollection<htd::vertex_t>::getInstance(implementation_->vertices_);
+}
+
+void htd::MultiHypergraph::copyVerticesTo(std::vector<htd::vertex_t> & target) const
+{
+    target.insert(target.end(),
+                  implementation_->vertices_.begin(),
+                  implementation_->vertices_.end());
+}
+
+htd::vertex_t htd::MultiHypergraph::vertexAtPosition(htd::index_t index) const
+{
+    HTD_ASSERT(index < implementation_->vertices_.size())
+
+    return implementation_->vertices_[index];
 }
 
 const std::vector<htd::vertex_t> & htd::MultiHypergraph::vertexVector(void) const

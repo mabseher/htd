@@ -185,6 +185,13 @@ htd::ConstCollection<htd::vertex_t> htd::PreprocessedGraph::vertices(void) const
     return htd::ConstCollection<htd::vertex_t>::getInstance(implementation_->remainingVertices_);
 }
 
+void htd::PreprocessedGraph::copyVerticesTo(std::vector<htd::vertex_t> & target) const
+{
+    target.insert(target.end(),
+                  implementation_->remainingVertices_.begin(),
+                  implementation_->remainingVertices_.end());
+}
+
 htd::vertex_t htd::PreprocessedGraph::vertexAtPosition(htd::index_t index) const
 {
     HTD_ASSERT(index < implementation_->remainingVertices_.size())

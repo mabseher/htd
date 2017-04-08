@@ -86,8 +86,6 @@ namespace htd
 
             HTD_API htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
-            HTD_API htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
-
             HTD_API bool isConnected(void) const HTD_OVERRIDE;
             
             HTD_API bool isConnected(htd::vertex_t vertex1, htd::vertex_t vertex2) const HTD_OVERRIDE;
@@ -110,6 +108,10 @@ namespace htd
              *  @return The vector of all vertices in the tree sorted in ascending order.
              */
             HTD_API const std::vector<htd::vertex_t> & vertexVector(void) const;
+
+            HTD_API void copyVerticesTo(std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+
+            HTD_API htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
 
             HTD_API std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 

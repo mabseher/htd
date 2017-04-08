@@ -366,13 +366,6 @@ htd::ConstCollection<htd::id_t> htd::Path::associatedEdgeIds(const htd::ConstCol
     return htd::ConstCollection<htd::id_t>::getInstance(ret);
 }
 
-htd::vertex_t htd::Path::vertexAtPosition(htd::index_t index) const
-{
-    HTD_ASSERT(index < implementation_->vertices_.size())
-
-    return implementation_->vertices_[index];
-}
-
 bool htd::Path::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
     bool ret = false;
@@ -484,6 +477,20 @@ htd::ConstCollection<htd::vertex_t> htd::Path::vertices(void) const
 const std::vector<htd::vertex_t> & htd::Path::vertexVector(void) const
 {
     return implementation_->vertices_;
+}
+
+void htd::Path::copyVerticesTo(std::vector<htd::vertex_t> & target) const
+{
+    target.insert(target.end(),
+                  implementation_->vertices_.begin(),
+                  implementation_->vertices_.end());
+}
+
+htd::vertex_t htd::Path::vertexAtPosition(htd::index_t index) const
+{
+    HTD_ASSERT(index < implementation_->vertices_.size())
+
+    return implementation_->vertices_[index];
 }
 
 std::size_t htd::Path::isolatedVertexCount(void) const

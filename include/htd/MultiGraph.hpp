@@ -91,6 +91,10 @@ namespace htd
 
             HTD_API htd::ConstCollection<htd::id_t> associatedEdgeIds(const htd::ConstCollection<htd::vertex_t> & elements) const HTD_OVERRIDE;
 
+            HTD_API htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
+
+            HTD_API void copyVerticesTo(std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+
             HTD_API htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
             
             HTD_API bool isConnected(void) const HTD_OVERRIDE;
@@ -106,8 +110,6 @@ namespace htd
             HTD_API void copyNeighborsTo(htd::vertex_t vertex, std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
 
             HTD_API htd::vertex_t neighborAtPosition(htd::vertex_t vertex, htd::index_t index) const HTD_OVERRIDE;
-
-            HTD_API htd::ConstCollection<htd::vertex_t> vertices(void) const HTD_OVERRIDE;
 
             HTD_API std::size_t isolatedVertexCount(void) const HTD_OVERRIDE;
 

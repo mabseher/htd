@@ -101,6 +101,8 @@ namespace htd
              */
             HTD_API const std::vector<htd::vertex_t> & vertexVector(void) const;
 
+            HTD_API void copyVerticesTo(std::vector<htd::vertex_t> & target) const HTD_OVERRIDE;
+
             HTD_API htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE;
             
             HTD_API bool isConnected(void) const HTD_OVERRIDE;

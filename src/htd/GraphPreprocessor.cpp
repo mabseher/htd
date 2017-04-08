@@ -112,6 +112,11 @@ namespace htd
                 return htd::ConstCollection<htd::vertex_t>::getInstance(remainingVertices_);
             }
 
+            void copyVerticesTo(std::vector<htd::vertex_t> & target) const
+            {
+                target.insert(target.end(), remainingVertices_.begin(), remainingVertices_.end());
+            }
+
             htd::vertex_t vertexAtPosition(htd::index_t index) const HTD_OVERRIDE
             {
                 HTD_ASSERT(index < remainingVertices_.size())

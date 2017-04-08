@@ -172,11 +172,6 @@ htd::ConstCollection<htd::id_t> htd::DirectedMultiGraph::associatedEdgeIds(const
     return implementation_->base_->associatedEdgeIds(elements);
 }
 
-htd::vertex_t htd::DirectedMultiGraph::vertexAtPosition(htd::index_t index) const
-{
-    return implementation_->base_->vertexAtPosition(index);
-}
-
 bool htd::DirectedMultiGraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
     return implementation_->base_->isNeighbor(vertex, neighbor);
@@ -355,6 +350,16 @@ htd::vertex_t htd::DirectedMultiGraph::outgoingNeighborAtPosition(htd::vertex_t 
 htd::ConstCollection<htd::vertex_t> htd::DirectedMultiGraph::vertices(void) const
 {
     return implementation_->base_->vertices();
+}
+
+void htd::DirectedMultiGraph::copyVerticesTo(std::vector<htd::vertex_t> & target) const
+{
+    implementation_->base_->copyVerticesTo(target);
+}
+
+htd::vertex_t htd::DirectedMultiGraph::vertexAtPosition(htd::index_t index) const
+{
+    return implementation_->base_->vertexAtPosition(index);
 }
 
 std::size_t htd::DirectedMultiGraph::isolatedVertexCount(void) const

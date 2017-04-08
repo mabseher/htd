@@ -163,11 +163,6 @@ htd::ConstCollection<htd::id_t> htd::MultiGraph::associatedEdgeIds(const htd::Co
     return implementation_->base_->associatedEdgeIds(elements);
 }
 
-htd::vertex_t htd::MultiGraph::vertexAtPosition(htd::index_t index) const
-{
-    return implementation_->base_->vertexAtPosition(index);
-}
-            
 bool htd::MultiGraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
     return implementation_->base_->isNeighbor(vertex, neighbor);
@@ -206,6 +201,16 @@ htd::vertex_t htd::MultiGraph::neighborAtPosition(htd::vertex_t vertex, htd::ind
 htd::ConstCollection<htd::vertex_t> htd::MultiGraph::vertices(void) const
 {
     return implementation_->base_->vertices();
+}
+
+void htd::MultiGraph::copyVerticesTo(std::vector<htd::vertex_t> & target) const
+{
+    implementation_->base_->copyVerticesTo(target);
+}
+
+htd::vertex_t htd::MultiGraph::vertexAtPosition(htd::index_t index) const
+{
+    return implementation_->base_->vertexAtPosition(index);
 }
 
 std::size_t htd::MultiGraph::isolatedVertexCount(void) const

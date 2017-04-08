@@ -128,11 +128,6 @@ htd::ConstCollection<htd::id_t> htd::Hypergraph::associatedEdgeIds(const htd::Co
     return base_->associatedEdgeIds(elements);
 }
 
-htd::vertex_t htd::Hypergraph::vertexAtPosition(htd::index_t index) const
-{
-    return base_->vertexAtPosition(index);
-}
-
 bool htd::Hypergraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
     return base_->isNeighbor(vertex, neighbor);
@@ -175,6 +170,16 @@ htd::vertex_t htd::Hypergraph::neighborAtPosition(htd::vertex_t vertex, htd::ind
 htd::ConstCollection<htd::vertex_t> htd::Hypergraph::vertices(void) const
 {
     return base_->vertices();
+}
+
+void htd::Hypergraph::copyVerticesTo(std::vector<htd::vertex_t> & target) const
+{
+    base_->copyVerticesTo(target);
+}
+
+htd::vertex_t htd::Hypergraph::vertexAtPosition(htd::index_t index) const
+{
+    return base_->vertexAtPosition(index);
 }
 
 std::size_t htd::Hypergraph::isolatedVertexCount(void) const

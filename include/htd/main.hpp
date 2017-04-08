@@ -46,6 +46,7 @@
 #include <htd/ConstPointerIteratorWrapper.hpp>
 #include <htd/DepthFirstConnectedComponentAlgorithm.hpp>
 #include <htd/DepthFirstGraphTraversal.hpp>
+#include <htd/DinitzMaxFlowAlgorithm.hpp>
 #include <htd/DirectedGraphFactory.hpp>
 #include <htd/DirectedGraph.hpp>
 #include <htd/DirectedMultiGraphFactory.hpp>
@@ -54,6 +55,7 @@
 #include <htd/ExhaustiveVertexSelectionStrategy.hpp>
 #include <htd/FilteredHyperedgeCollection.hpp>
 #include <htd/FitnessEvaluation.hpp>
+#include <htd/FlowNetworkStructure.hpp>
 #include <htd/Globals.hpp>
 #include <htd/GraphDecompositionAlgorithmFactory.hpp>
 #include <htd/GraphDecompositionFactory.hpp>
@@ -83,6 +85,8 @@
 #include <htd/Id.hpp>
 #include <htd/IDirectedGraph.hpp>
 #include <htd/IDirectedMultiGraph.hpp>
+#include <htd/IFlow.hpp>
+#include <htd/IFlowNetworkStructure.hpp>
 #include <htd/IGraphDecompositionAlgorithm.hpp>
 #include <htd/IGraphDecomposition.hpp>
 #include <htd/IGraphDecompositionManipulationOperation.hpp>
@@ -107,6 +111,8 @@
 #include <htd/ILabel.hpp>
 #include <htd/ILabelingCollection.hpp>
 #include <htd/ILabelingFunction.hpp>
+#include <htd/IMaxFlowAlgorithm.hpp>
+#include <htd/IMinimumSeparatorAlgorithm.hpp>
 #include <htd/IMultiGraph.hpp>
 #include <htd/IMultiHypergraph.hpp>
 #include <htd/IMutableDirectedGraph.hpp>
@@ -183,6 +189,7 @@
 #include <htd/MaximumCardinalitySearchOrderingAlgorithm.hpp>
 #include <htd/MinDegreeOrderingAlgorithm.hpp>
 #include <htd/MinFillOrderingAlgorithm.hpp>
+#include <htd/MinimumSeparatorAlgorithm.hpp>
 #include <htd/MultiGraphFactory.hpp>
 #include <htd/MultiGraph.hpp>
 #include <htd/MultiHypergraphFactory.hpp>

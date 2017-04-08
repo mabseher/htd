@@ -128,11 +128,6 @@ htd::ConstCollection<htd::id_t> htd::DirectedGraph::associatedEdgeIds(const htd:
     return base_->associatedEdgeIds(elements);
 }
 
-htd::vertex_t htd::DirectedGraph::vertexAtPosition(htd::index_t index) const
-{
-    return base_->vertexAtPosition(index);
-}
-
 bool htd::DirectedGraph::isNeighbor(htd::vertex_t vertex, htd::vertex_t neighbor) const
 {
     return base_->isNeighbor(vertex, neighbor);
@@ -216,6 +211,16 @@ htd::vertex_t htd::DirectedGraph::outgoingNeighborAtPosition(htd::vertex_t verte
 htd::ConstCollection<htd::vertex_t> htd::DirectedGraph::vertices(void) const
 {
     return base_->vertices();
+}
+
+void htd::DirectedGraph::copyVerticesTo(std::vector<htd::vertex_t> & target) const
+{
+    base_->copyVerticesTo(target);
+}
+
+htd::vertex_t htd::DirectedGraph::vertexAtPosition(htd::index_t index) const
+{
+    return base_->vertexAtPosition(index);
 }
 
 std::size_t htd::DirectedGraph::isolatedVertexCount(void) const

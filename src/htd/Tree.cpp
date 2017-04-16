@@ -1202,62 +1202,107 @@ void htd::Tree::setParent(htd::vertex_t vertex, htd::vertex_t newParent)
     HTD_ASSERT(isVertex(newParent))
     HTD_ASSERT(vertex != newParent)
 
-    auto & node = implementation_->nodes_.at(vertex);
+    auto & node = *(implementation_->nodes_.at(vertex));
 
-    htd::vertex_t oldParent = node->parent;
+    htd::vertex_t oldParent = node.parent;
 
     if (oldParent != newParent)
     {
-        auto & oldParentNode = implementation_->nodes_.at(node->parent);
-        auto & newParentNode = implementation_->nodes_.at(newParent);
+        auto & newParentNode = *(implementation_->nodes_.at(newParent));
 
-        if (isRoot(vertex))
+        if (oldParent != htd::Vertex::UNKNOWN)
         {
-            implementation_->root_ = newParent;
+            auto & oldParentNode = *(implementation_->nodes_.at(oldParent));
+
+            oldParentNode.children.erase(std::find(oldParentNode.children.begin(), oldParentNode.children.end(), vertex));
+
+            htd::id_t oldHyperedge = htd::Id::UNKNOWN;
+
+            auto it = oldParentNode.edges.begin();
+
+            while (it != oldParentNode.edges.end())
+            {
+                auto position = htd::hyperedgePointerPosition(implementation_->edges_->begin(), implementation_->edges_->end(), *it);
+
+                HTD_ASSERT(position != implementation_->edges_->end())
+
+                if ((*position)->contains(vertex))
+                {
+                    oldHyperedge = (*position)->id();
+
+                    delete *position;
+
+                    implementation_->edges_->erase(position);
+
+                    it = oldParentNode.edges.end();
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+
+            node.edges.erase(std::lower_bound(node.edges.begin(), node.edges.end(), oldHyperedge));
+            oldParentNode.edges.erase(std::lower_bound(oldParentNode.edges.begin(), oldParentNode.edges.end(), oldHyperedge));
         }
         else
         {
-            oldParentNode->children.erase(std::find(oldParentNode->children.begin(), oldParentNode->children.end(), vertex));
+            htd::vertex_t relevantVertex = newParent;
+
+            while (implementation_->nodes_.at(relevantVertex)->parent != vertex)
+            {
+                relevantVertex = implementation_->nodes_.at(relevantVertex)->parent;
+            }
+
+            std::cout << "RELEVANT: " << relevantVertex << std::endl;
+
+            implementation_->root_ = relevantVertex;
+
+            auto & relevantNode = *(implementation_->nodes_.at(relevantVertex));
+
+            relevantNode.parent = htd::Vertex::UNKNOWN;
+
+            node.children.erase(std::find(node.children.begin(), node.children.end(), relevantVertex));
+
+            htd::id_t oldHyperedge = htd::Id::UNKNOWN;
+
+            auto it = relevantNode.edges.begin();
+
+            while (it != relevantNode.edges.end())
+            {
+                auto position = htd::hyperedgePointerPosition(implementation_->edges_->begin(), implementation_->edges_->end(), *it);
+
+                HTD_ASSERT(position != implementation_->edges_->end())
+
+                if ((*position)->contains(vertex))
+                {
+                    oldHyperedge = (*position)->id();
+
+                    delete *position;
+
+                    implementation_->edges_->erase(position);
+
+                    it = relevantNode.edges.end();
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+
+            node.edges.erase(std::lower_bound(node.edges.begin(), node.edges.end(), oldHyperedge));
+            relevantNode.edges.erase(std::lower_bound(relevantNode.edges.begin(), relevantNode.edges.end(), oldHyperedge));
         }
 
-        htd::id_t oldHyperedge = htd::Id::UNKNOWN;
+        auto position = std::lower_bound(newParentNode.children.begin(), newParentNode.children.end(), vertex);
 
-        auto it = oldParentNode->edges.begin();
+        newParentNode.children.insert(position, vertex);
 
-        while (it != oldParentNode->edges.end())
-        {
-            auto position = htd::hyperedgePointerPosition(implementation_->edges_->begin(), implementation_->edges_->end(), *it);
+        newParentNode.edges.emplace_back(implementation_->next_edge_);
 
-            HTD_ASSERT(position != implementation_->edges_->end())
+        node.edges.emplace_back(implementation_->next_edge_);
 
-            if ((*position)->contains(vertex))
-            {
-                oldHyperedge = (*position)->id();
-
-                delete *position;
-
-                implementation_->edges_->erase(position);
-
-                it = oldParentNode->edges.end();
-            }
-            else
-            {
-                ++it;
-            }
-        }
-
-        node->edges.erase(std::lower_bound(node->edges.begin(), node->edges.end(), oldHyperedge));
-        oldParentNode->edges.erase(std::lower_bound(oldParentNode->edges.begin(), oldParentNode->edges.end(), oldHyperedge));
-
-        auto position = std::lower_bound(newParentNode->children.begin(), newParentNode->children.end(), vertex);
-
-        newParentNode->children.insert(position, vertex);
-
-        newParentNode->edges.emplace_back(implementation_->next_edge_);
-
-        node->edges.emplace_back(implementation_->next_edge_);
-
-        node->parent = newParent;
+        node.parent = newParent;
 
         if (vertex < newParent)
         {

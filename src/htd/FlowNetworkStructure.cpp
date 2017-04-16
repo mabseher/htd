@@ -377,12 +377,12 @@ htd::FlowNetworkStructure * htd::FlowNetworkStructure::clone(void) const
 }
 
 #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
-htd::IGraphStructure * htd::MultiGraph::cloneGraphStructure(void) const
+htd::IGraphStructure * htd::FlowNetworkStructure::cloneGraphStructure(void) const
 {
     return clone();
 }
 
-htd::IFlowNetworkStructure * htd::MultiGraph::cloneFlowNetworkStructure(void) const
+htd::IFlowNetworkStructure * htd::FlowNetworkStructure::cloneFlowNetworkStructure(void) const
 {
     return clone();
 }

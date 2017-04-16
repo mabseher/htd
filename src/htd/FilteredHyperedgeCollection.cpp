@@ -49,6 +49,16 @@ htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(htd::IHyperedgeCol
 
 }
 
+htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(std::shared_ptr<htd::IHyperedgeCollection> baseCollection, const std::vector<htd::index_t> & relevantIndices) : baseCollection_(baseCollection), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(relevantIndices))
+{
+
+}
+
+htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(std::shared_ptr<htd::IHyperedgeCollection> baseCollection, std::vector<htd::index_t> && relevantIndices) : baseCollection_(baseCollection), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(std::move(relevantIndices)))
+{
+
+}
+
 htd::FilteredHyperedgeCollection::FilteredHyperedgeCollection(const htd::FilteredHyperedgeCollection & original) HTD_NOEXCEPT : baseCollection_(original.baseCollection_), relevantIndices_(std::make_shared<std::vector<htd::index_t>>(*(original.relevantIndices_)))
 {
 
@@ -113,6 +123,28 @@ void htd::FilteredHyperedgeCollection::restrictTo(const std::vector<htd::vertex_
 
         return htd::has_non_empty_set_difference(sortedElements.begin(), sortedElements.end(), sortedVertices.begin(), sortedVertices.end());
     }), relevantIndices_->end());
+}
+
+htd::FilteredHyperedgeCollection * htd::FilteredHyperedgeCollection::clone(void) const
+{
+    return new htd::FilteredHyperedgeCollection(*this);
+}
+
+htd::FilteredHyperedgeCollection * htd::FilteredHyperedgeCollection::clone(const std::vector<htd::vertex_t> & relevantVertices) const
+{
+    std::vector<htd::index_t> relevantIndices;
+
+    for (htd::index_t index : *relevantIndices_)
+    {
+        const std::vector<htd::vertex_t> & sortedElements = baseCollection_->at(index).sortedElements();
+
+        if (std::includes(relevantVertices.begin(), relevantVertices.end(), sortedElements.begin(), sortedElements.end()))
+        {
+            relevantIndices.push_back(index);
+        }
+    }
+
+    return new htd::FilteredHyperedgeCollection(baseCollection_, relevantIndices);
 }
 
 void htd::FilteredHyperedgeCollection::swap(FilteredHyperedgeCollection & other)

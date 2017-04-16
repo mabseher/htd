@@ -480,14 +480,14 @@ std::pair<htd::IMutableTreeDecomposition *, std::size_t> htd::BucketEliminationT
 
                     if (predecessor == htd::Vertex::UNKNOWN)
                     {
-                        node = ret->insertRoot(std::move(mutableGraphDecomposition.bagContent(vertex)),
-                                               std::move(mutableGraphDecomposition.inducedHyperedges(vertex)));
+                        node = ret->insertRoot(std::move(mutableGraphDecomposition.mutableBagContent(vertex)),
+                                               std::move(mutableGraphDecomposition.mutableInducedHyperedges(vertex)));
                     }
                     else
                     {
                         node = ret->addChild(vertexMapping.at(predecessor),
-                                             std::move(mutableGraphDecomposition.bagContent(vertex)),
-                                             std::move(mutableGraphDecomposition.inducedHyperedges(vertex)));
+                                             std::move(mutableGraphDecomposition.mutableBagContent(vertex)),
+                                             std::move(mutableGraphDecomposition.mutableInducedHyperedges(vertex)));
                     }
 
                     vertexMapping.emplace(vertex, node);

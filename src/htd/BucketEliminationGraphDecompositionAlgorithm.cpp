@@ -1378,7 +1378,7 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::updateDe
         {
             if (currentIndex == 0)
             {
-                htd::vertex_t decompositionVertex = decomposition.addVertex(bagContent[currentNode], graph.hyperedgesAtPositions(inducedEdges[currentNode]));
+                htd::vertex_t decompositionVertex = decomposition.addVertex(std::vector<htd::vertex_t>(bagContent[currentNode]), graph.hyperedgesAtPositions(inducedEdges[currentNode]));
 
                 decompositionVertices.emplace(currentNode, decompositionVertex);
 

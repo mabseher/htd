@@ -65,6 +65,7 @@
 #include <htd/GraphLabeling.hpp>
 #include <htd/GraphPreprocessor.hpp>
 #include <htd/GraphPreprocessorFactory.hpp>
+#include <htd/GraphSeparatorAlgorithmFactory.hpp>
 #include <htd/GreedySetCoverAlgorithm.hpp>
 #include <htd/Helpers.hpp>
 #include <htd/HyperedgeDeque.hpp>
@@ -93,6 +94,7 @@
 #include <htd/IGraph.hpp>
 #include <htd/IGraphLabeling.hpp>
 #include <htd/IGraphPreprocessor.hpp>
+#include <htd/IGraphSeparatorAlgorithm.hpp>
 #include <htd/IGraphStructure.hpp>
 #include <htd/IGraphTraversal.hpp>
 #include <htd/IHyperedgeCollection.hpp>
@@ -112,7 +114,6 @@
 #include <htd/ILabelingCollection.hpp>
 #include <htd/ILabelingFunction.hpp>
 #include <htd/IMaxFlowAlgorithm.hpp>
-#include <htd/IMinimumSeparatorAlgorithm.hpp>
 #include <htd/IMultiGraph.hpp>
 #include <htd/IMultiHypergraph.hpp>
 #include <htd/IMutableDirectedGraph.hpp>
@@ -218,6 +219,7 @@
 #include <htd/RandomOrderingAlgorithm.hpp>
 #include <htd/RandomVertexSelectionStrategy.hpp>
 #include <htd/SemiNormalizationOperation.hpp>
+#include <htd/SeparatorBasedTreeDecompositionAlgorithm.hpp>
 #include <htd/SetCoverAlgorithmFactory.hpp>
 #include <htd/SetCoverAlgorithm.hpp>
 #include <htd/SingleNeighborVertexSelectionStrategy.hpp>
@@ -230,6 +232,7 @@
 #include <htd/TreeDecompositionOptimizationOperation.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
 #include <htd/Tree.hpp>
+#include <htd/TrivialTreeDecompositionAlgorithm.hpp>
 #include <htd/VectorAdapterConstIteratorWrapper.hpp>
 #include <htd/VectorAdapter.hpp>
 #include <htd/VectorAdapterIteratorWrapper.hpp>
@@ -237,5 +240,6 @@
 #include <htd/VertexOrdering.hpp>
 #include <htd/WeakNormalizationOperation.hpp>
 #include <htd/WidthMinimizingTreeDecompositionAlgorithm.hpp>
+#include <htd/WidthReductionOperation.hpp>
 
 #endif /* HTD_HTD_MAIN_HPP */

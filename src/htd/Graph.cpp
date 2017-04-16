@@ -261,6 +261,21 @@ htd::vertex_t htd::Graph::addVertices(std::size_t count)
 void htd::Graph::removeVertex(htd::vertex_t vertex)
 {
     base_->removeVertex(vertex);
+
+    std::vector<htd::id_t> erasableEdges;
+
+    for (const htd::Hyperedge & edge : hyperedges())
+    {
+        if (edge.size() != 2)
+        {
+            erasableEdges.push_back(edge.id());
+        }
+    }
+
+    for (htd::id_t id : erasableEdges)
+    {
+        removeEdge(id);
+    }
 }
 
 htd::id_t htd::Graph::addEdge(htd::vertex_t vertex1, htd::vertex_t vertex2)

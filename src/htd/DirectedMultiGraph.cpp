@@ -462,6 +462,21 @@ void htd::DirectedMultiGraph::removeVertex(htd::vertex_t vertex)
         }
 
         implementation_->base_->removeVertex(vertex);
+
+        std::vector<htd::id_t> erasableEdges;
+
+        for (const htd::Hyperedge & edge : hyperedges())
+        {
+            if (edge.size() != 2)
+            {
+                erasableEdges.push_back(edge.id());
+            }
+        }
+
+        for (htd::id_t id : erasableEdges)
+        {
+            removeEdge(id);
+        }
     }
 }
 

@@ -25,14 +25,14 @@
 #ifndef HTD_HTD_MINIMUMSEPARATORALGORITHM_HPP
 #define HTD_HTD_MINIMUMSEPARATORALGORITHM_HPP
 
-#include <htd/IMinimumSeparatorAlgorithm.hpp>
+#include <htd/IGraphSeparatorAlgorithm.hpp>
 
 namespace htd
 {
     /**
-     *  Implementation of the IMinimumSeparatorAlgorithm interface.
+     *  Implementation of the IGraphSeparatorAlgorithm interface which computes minimimal separating vertex sets.
      */
-    class MinimumSeparatorAlgorithm : public htd::IMinimumSeparatorAlgorithm
+    class MinimumSeparatorAlgorithm : public htd::IGraphSeparatorAlgorithm
     {
         public:
             /**

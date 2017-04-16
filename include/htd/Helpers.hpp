@@ -491,74 +491,56 @@ namespace htd
 
     template <class InputIterator1,
               class InputIterator2>
-    bool has_non_empty_set_difference(InputIterator1 firstSet1, InputIterator1 lastSet1,
-                                      InputIterator2 firstSet2, InputIterator2 lastSet2)
+    bool has_non_empty_set_difference(InputIterator1 first1, InputIterator1 last1,
+                                      InputIterator2 first2, InputIterator2 last2)
     {
         bool ret = false;
 
-        std::size_t remainder1 = std::distance(firstSet1, lastSet1);
-        std::size_t remainder2 = std::distance(firstSet2, lastSet2);
-
-        while (remainder1 > 0 && remainder2 > 0 && !ret)
+        while (first1 != last1 && first2 != last2 && !ret)
         {
-            auto value1 = *firstSet1;
-            auto value2 = *firstSet2;
-
-            if (value1 < value2)
+            if (*first1 < *first2)
             {
                 ret = true;
 
-                --remainder1;
-                ++firstSet1;
+                ++first1;
             }
             else
             {
-                if (!(value2 < value1))
+                if (*first1 == *first2)
                 {
-                    --remainder1;
-                    ++firstSet1;
+                    ++first1;
                 }
 
-                --remainder2;
-                ++firstSet2;
+                ++first2;
             }
         }
 
-        return ret || remainder1 > 0;
+        return ret || first1 != last1;
     }
     
     template <class InputIterator1, 
               class InputIterator2>
-    bool has_non_empty_set_intersection(InputIterator1 firstSet1, InputIterator1 lastSet1,
-                                        InputIterator2 firstSet2, InputIterator2 lastSet2)
+    bool has_non_empty_set_intersection(InputIterator1 first1, InputIterator1 last1,
+                                        InputIterator2 first2, InputIterator2 last2)
     {
         bool ret = false;
 
-        std::size_t remainder1 = std::distance(firstSet1, lastSet1);
-        std::size_t remainder2 = std::distance(firstSet2, lastSet2);
-
-        while (remainder1 > 0 && remainder2 > 0 && !ret)
+        while (first1 != last1 && first2 != last2 && !ret)
         {
-            auto value1 = *firstSet1;
-            auto value2 = *firstSet2;
-
-            if (value1 < value2) 
+            if (*first1 < *first2)
             {
-                --remainder1;
-                ++firstSet1;
+                ++first1;
             } 
             else
             {
-                if (!(value2 < value1)) 
+                if (*first1 == *first2)
                 {
                     ret = true;
 
-                    --remainder1;
-                    ++firstSet1;
+                    ++first1;
                 }
 
-                --remainder2;
-                ++firstSet2;
+                ++first2;
             }
         }
         

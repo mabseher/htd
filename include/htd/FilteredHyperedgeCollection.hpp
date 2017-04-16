@@ -259,6 +259,30 @@ namespace htd
             HTD_API FilteredHyperedgeCollection(htd::IHyperedgeCollection * baseCollection, std::vector<htd::index_t> && relevantIndices);
 
             /**
+             *  Constructor for a FilteredHyperedgeCollection.
+             *
+             *  @param[in] baseCollection   A pointer to a wrapper of the underlying hyperedge collection.
+             *  @param[in] relevantIndices  The relevant indices within the hyperedge collection.
+             *
+             *  @note When calling this constructor the control over the pointer to the wrapper of the base collection
+             *  is taken over by the hyperedge collection. The pointer of the provided wrapper of the base collection
+             *  must not be freed outside the context of the hyperedge collection.
+             */
+            HTD_API FilteredHyperedgeCollection(std::shared_ptr<htd::IHyperedgeCollection> baseCollection, const std::vector<htd::index_t> & relevantIndices);
+
+            /**
+             *  Constructor for a FilteredHyperedgeCollection.
+             *
+             *  @param[in] baseCollection   A pointer to a wrapper of the underlying hyperedge collection.
+             *  @param[in] relevantIndices  The relevant indices within the hyperedge collection.
+             *
+             *  @note When calling this constructor the control over the pointer to the wrapper of the base collection
+             *  is taken over by the hyperedge collection. The pointer of the provided wrapper of the base collection
+             *  must not be freed outside the context of the hyperedge collection.
+             */
+            HTD_API FilteredHyperedgeCollection(std::shared_ptr<htd::IHyperedgeCollection> baseCollection, std::vector<htd::index_t> && relevantIndices);
+
+            /**
              *  Copy constructor for a FilteredHyperedgeCollection object.
              *
              *  @param[in] original  The original FilteredHyperedgeCollection object.
@@ -333,9 +357,29 @@ namespace htd
             /**
              *  Remove all hyperedges from the collection which contain also other vertices than those provided to this method.
              *
+             *  @note The copy will contain only those hyperedges whose endpoints are a subset of the relevant vertices.
+             *
              *  @param[in] vertices The vertices which act as a filter for the hyperedges in the collection.
              */
             HTD_API void restrictTo(const std::vector<htd::vertex_t> & vertices);
+
+            /**
+             *  Create a deep copy of the current hyperedge collection.
+             *
+             *  @return A new FilteredHyperedgeCollection object identical to the current hyperedge collection.
+             */
+            HTD_API FilteredHyperedgeCollection * clone(void) const;
+
+            /**
+             *  Create a deep copy of the current hyperedge collection.
+             *
+             *  @note The copy will contain only those hyperedges whose endpoints are a subset of the relevant vertices.
+             *
+             *  @param[in] relevantVertices The set of relevant vertices, sorted in strictly ascending order.
+             *
+             *  @return A new FilteredHyperedgeCollection object whose content is restricted to the relevant vertices.
+             */
+            HTD_API FilteredHyperedgeCollection * clone(const std::vector<htd::vertex_t> & relevantVertices) const;
 
             /**
              *  Swap the contents of a FilteredHyperedgeCollection object and another.

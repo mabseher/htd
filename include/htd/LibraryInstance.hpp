@@ -167,6 +167,11 @@ namespace htd
     class GraphPreprocessorFactory;
 
     /**
+     *  Forward declaration of factory class htd::GraphSeparatorAlgorithmFactory.
+     */
+    class GraphSeparatorAlgorithmFactory;
+
+    /**
      *  Central management class of a library instance.
      */
     class LibraryInstance
@@ -495,6 +500,16 @@ namespace htd
              *  Access the factory class for the default implementation of the htd::IGraphPreprocessor interface.
              */
             HTD_API const htd::GraphPreprocessorFactory & graphPreprocessorFactory(void) const;
+
+            /**
+             *  Access the factory class for the default implementation of the htd::IGraphSeparatorAlgorithm interface.
+             */
+            HTD_API htd::GraphSeparatorAlgorithmFactory & graphSeparatorAlgorithmFactory(void);
+
+            /**
+             *  Access the factory class for the default implementation of the htd::IGraphSeparatorAlgorithm interface.
+             */
+            HTD_API const htd::GraphSeparatorAlgorithmFactory & graphSeparatorAlgorithmFactory(void) const;
 
         private:
             struct Implementation;

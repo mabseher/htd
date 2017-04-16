@@ -1,5 +1,5 @@
 /*
- * File:   IMinimumSeparatorAlgorithm.hpp
+ * File:   IGraphSeparatorAlgorithm.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_HTD_IMINIMUMSEPARATORALGORITHM_HPP
-#define HTD_HTD_IMINIMUMSEPARATORALGORITHM_HPP
+#ifndef HTD_HTD_IGRAPHSEPARATORALGORITHM_HPP
+#define HTD_HTD_IGRAPHSEPARATORALGORITHM_HPP
 
 #include <htd/IGraphStructure.hpp>
 #include <htd/LibraryInstance.hpp>
@@ -31,22 +31,22 @@
 namespace htd
 {
     /**
-     *  Interface for algorithms which determine the minimum separating vertex sets of a given graph.
+     *  Interface for algorithms which determine separating vertex sets of a given graph.
      */
-    class IMinimumSeparatorAlgorithm
+    class IGraphSeparatorAlgorithm
     {
         public:
             /**
-             *  Destructor of a minimum separator algorithm.
+             *  Destructor of a graph separator algorithm.
              */
-            virtual ~IMinimumSeparatorAlgorithm() = 0;
+            virtual ~IGraphSeparatorAlgorithm() = 0;
 
             /**
-             *  Compute a minimum separating vertex set of the given graph.
+             *  Compute a separating vertex set of the given graph.
              *
-             *  @param[in] graph    The graph whose minimum separating vertex set shall be computed.
+             *  @param[in] graph    The graph for which the separating vertex set shall be computed.
              *
-             *  @return A vector containing a minimum separating vertex set of the given graph in ascending order.
+             *  @return A vector containing a separating vertex set of the given graph. The vertices in the set are sorted in ascending order.
              */
             virtual std::vector<htd::vertex_t> * computeSeparator(const htd::IGraphStructure & graph) const = 0;
 
@@ -65,14 +65,14 @@ namespace htd
             virtual void setManagementInstance(const htd::LibraryInstance * const manager) = 0;
 
             /**
-             *  Create a deep copy of the current minimum separator algorithm.
+             *  Create a deep copy of the current separator algorithm.
              *
-             *  @return A new IMinimumSeparatorAlgorithm object identical to the current minimum separator algorithm.
+             *  @return A new IGraphSeparatorAlgorithm object identical to the current separator algorithm.
              */
-            virtual IMinimumSeparatorAlgorithm * clone(void) const = 0;
+            virtual IGraphSeparatorAlgorithm * clone(void) const = 0;
     };
 
-    inline htd::IMinimumSeparatorAlgorithm::~IMinimumSeparatorAlgorithm() { }
+    inline htd::IGraphSeparatorAlgorithm::~IGraphSeparatorAlgorithm() { }
 }
 
-#endif /* HTD_HTD_IMINIMUMSEPARATORALGORITHM_HPP */
+#endif /* HTD_HTD_IGRAPHSEPARATORALGORITHM_HPP */

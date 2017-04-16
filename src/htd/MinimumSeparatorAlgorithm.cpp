@@ -143,6 +143,8 @@ std::vector<htd::vertex_t> * htd::MinimumSeparatorAlgorithm::computeSeparator(co
 
                     std::sort(ret->begin(), ret->end());
                 }
+
+                delete flow;
             }
         }
     }

@@ -28,8 +28,6 @@
 #include <htd/Globals.hpp>
 #include <htd/IOrderingAlgorithm.hpp>
 
-#include <vector>
-
 namespace htd
 {
     /**

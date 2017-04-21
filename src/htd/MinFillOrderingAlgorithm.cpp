@@ -33,7 +33,6 @@
 #include <htd/VertexOrdering.hpp>
 
 #include <algorithm>
-#include <unordered_map>
 #include <unordered_set>
 
 /**
@@ -64,10 +63,10 @@ struct htd::MinFillOrderingAlgorithm::Implementation
     /**
      *  Update the pool of vertices with minimum fill value.
      *
-     *  @param[in] vertex           The vertex whose fill value shall be updated.
-     *  @param[in] fillValue        The new fill value of the given vertex.
-     *  @param[in] pool             The pool of vertices with minimum fill value.
-     *  @param[in,out] minFill    A reference to a variable representing the minimum fill value. This information is updated if fillValue < minFill.
+     *  @param[in] vertex       The vertex whose fill value shall be updated.
+     *  @param[in] fillValue    The new fill value of the given vertex.
+     *  @param[in] pool         The pool of vertices with minimum fill value.
+     *  @param[in,out] minFill  A reference to a variable representing the minimum fill value. This information is updated if fillValue < minFill.
      */
     static void updatePool(htd::vertex_t vertex, std::size_t fillValue, std::unordered_set<htd::vertex_t> & pool, std::size_t & minFill);
 

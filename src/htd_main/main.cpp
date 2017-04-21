@@ -105,7 +105,9 @@ htd_cli::OptionManager * createOptionManager(void)
         strategyChoice->addPossibility("random", "Use a random vertex ordering.");
         strategyChoice->addPossibility("min-fill", "Minimum fill ordering algorithm");
         strategyChoice->addPossibility("min-degree", "Minimum degree ordering algorithm");
+        strategyChoice->addPossibility("min-separator", "Minimum separating vertex set heuristic");
         strategyChoice->addPossibility("max-cardinality", "Maximum cardinality search ordering algorithm");
+        strategyChoice->addPossibility("max-cardinality-enhanced", "Enhanced maximum cardinality search ordering algorithm (MCS-M)");
         strategyChoice->addPossibility("challenge", "Use min-degree heuristic for first decomposition and min-fill afterwards.");
 
         strategyChoice->setDefaultValue("min-fill");
@@ -269,9 +271,22 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
         {
             manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::MinDegreeOrderingAlgorithm(manager));
         }
+        else if (value == "min-separator")
+        {
+            if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
+            {
+                std::cerr << "INVALID DECOMPOSITION STRATEGY: Strategy \"min-separator\" may only be used when option --opt is set to \"none\"!" << std::endl;
+
+                ret = false;
+            }
+        }
         else if (value == "max-cardinality")
         {
             manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::MaximumCardinalitySearchOrderingAlgorithm(manager));
+        }
+        else if (value == "max-cardinality-enhanced")
+        {
+            manager->orderingAlgorithmFactory().setConstructionTemplate(new htd::EnhancedMaximumCardinalitySearchOrderingAlgorithm(manager));
         }
         else if (value == "challenge")
         {
@@ -597,11 +612,22 @@ int main(int argc, const char * const * const argv)
 
         bool hypertreeDecompositionRequested = decompositionTypeChoice.used() && std::string(decompositionTypeChoice.value()) == "hypertree";
 
-        htd::BucketEliminationTreeDecompositionAlgorithm * treeDecompositionAlgorithm = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
+        if (std::string(strategyChoice.value()) == "min-separator")
+        {
+            htd::SeparatorBasedTreeDecompositionAlgorithm * treeDecompositionAlgorithm = new htd::SeparatorBasedTreeDecompositionAlgorithm(libraryInstance);
 
-        treeDecompositionAlgorithm->setComputeInducedEdgesEnabled(false);
+            treeDecompositionAlgorithm->setComputeInducedEdgesEnabled(false);
 
-        libraryInstance->treeDecompositionAlgorithmFactory().setConstructionTemplate(treeDecompositionAlgorithm);
+            libraryInstance->treeDecompositionAlgorithmFactory().setConstructionTemplate(treeDecompositionAlgorithm);
+        }
+        else
+        {
+            htd::BucketEliminationTreeDecompositionAlgorithm * treeDecompositionAlgorithm = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
+
+            treeDecompositionAlgorithm->setComputeInducedEdgesEnabled(false);
+
+            libraryInstance->treeDecompositionAlgorithmFactory().setConstructionTemplate(treeDecompositionAlgorithm);
+        }
 
         if (hypertreeDecompositionRequested)
         {

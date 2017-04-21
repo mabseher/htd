@@ -51,6 +51,7 @@
 #include <htd/DirectedGraph.hpp>
 #include <htd/DirectedMultiGraphFactory.hpp>
 #include <htd/DirectedMultiGraph.hpp>
+#include <htd/EnhancedMaximumCardinalitySearchOrderingAlgorithm.hpp>
 #include <htd/ExchangeNodeReplacementOperation.hpp>
 #include <htd/ExhaustiveVertexSelectionStrategy.hpp>
 #include <htd/FilteredHyperedgeCollection.hpp>

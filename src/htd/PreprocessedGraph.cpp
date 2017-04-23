@@ -235,7 +235,7 @@ htd::ConstCollection<htd::vertex_t> htd::PreprocessedGraph::isolatedVertices(voi
         }
     }
 
-    return htd::ConstCollection<htd::id_t>::getInstance(ret);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::PreprocessedGraph::isolatedVertexAtPosition(htd::index_t index) const

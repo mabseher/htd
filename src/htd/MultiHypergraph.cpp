@@ -528,7 +528,7 @@ htd::ConstCollection<htd::vertex_t> htd::MultiHypergraph::isolatedVertices(void)
         }
     }
 
-    return htd::ConstCollection<htd::id_t>::getInstance(ret);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::MultiHypergraph::isolatedVertexAtPosition(htd::index_t index) const

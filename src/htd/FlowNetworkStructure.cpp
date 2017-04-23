@@ -313,7 +313,7 @@ htd::ConstCollection<htd::vertex_t> htd::FlowNetworkStructure::isolatedVertices(
         }
     }
 
-    return htd::ConstCollection<htd::id_t>::getInstance(ret);
+    return htd::ConstCollection<htd::vertex_t>::getInstance(ret);
 }
 
 htd::vertex_t htd::FlowNetworkStructure::isolatedVertexAtPosition(htd::index_t index) const

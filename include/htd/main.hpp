@@ -233,6 +233,7 @@
 #include <htd/TreeDecompositionOptimizationOperation.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
 #include <htd/Tree.hpp>
+#include <htd/TriangulationMinimizationOrderingAlgorithm.hpp>
 #include <htd/TrivialTreeDecompositionAlgorithm.hpp>
 #include <htd/VectorAdapterConstIteratorWrapper.hpp>
 #include <htd/VectorAdapter.hpp>

@@ -125,6 +125,10 @@ htd_cli::OptionManager * createOptionManager(void)
 
         manager->registerOption(preprocessingChoice, "Algorithm Options");
 
+        htd_cli::Option * triangulationMinimizationOption = new htd_cli::Option("triangulation-minimization", "Apply triangulation minimization approach.");
+
+        manager->registerOption(triangulationMinimizationOption, "Algorithm Options");
+
         htd_cli::Choice * optimizationChoice = new htd_cli::Choice("opt", "Iteratively compute a decomposition which optimizes <criterion>.", "criterion");
 
         optimizationChoice->addPossibility("none", "Do not perform any optimization.");
@@ -188,6 +192,8 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
     const htd_cli::SingleValueOption & iterationOption = optionManager.accessSingleValueOption("iterations");
 
     const htd_cli::SingleValueOption & patienceOption = optionManager.accessSingleValueOption("patience");
+
+    const htd_cli::Option & triangulationMinimizationOption = optionManager.accessOption("triangulation-minimization");
 
     if (ret && helpOption.used())
     {
@@ -276,6 +282,13 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
             if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
             {
                 std::cerr << "INVALID DECOMPOSITION STRATEGY: Strategy \"min-separator\" may only be used when option --opt is set to \"none\"!" << std::endl;
+
+                ret = false;
+            }
+
+            if (ret && triangulationMinimizationOption.used())
+            {
+                std::cerr << "INVALID USE OF PROGRAM OPTION: Triangulation minimization may only be applied when using a decomposition strategy based on vertex elimination orderings!" << std::endl;
 
                 ret = false;
             }
@@ -400,6 +413,16 @@ bool handleOptions(int argc, const char * const * const argv, htd_cli::OptionMan
                 ret = false;
             }
         }
+    }
+
+    if (ret && triangulationMinimizationOption.used())
+    {
+        htd::TriangulationMinimizationOrderingAlgorithm * algorithm =
+            new htd::TriangulationMinimizationOrderingAlgorithm(libraryInstance);
+
+        algorithm->setOrderingAlgorithm(manager->orderingAlgorithmFactory().createInstance());
+
+        manager->orderingAlgorithmFactory().setConstructionTemplate(algorithm);
     }
 
     return ret;

@@ -1396,7 +1396,7 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::updateDe
 
                 if (!parentStack.empty())
                 {
-                    parent = std::get<0>(parentStack.top());
+                    parent = parentStack.top().first;
                 }
 
                 htd::vertex_t nextNode = neighbors[currentNode][currentIndex];
@@ -1407,7 +1407,7 @@ void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::updateDe
                     {
                         parentStack.emplace(currentNode, currentIndex + 1);
 
-                        currentNode = neighbors[currentNode][currentIndex];
+                        currentNode = nextNode;
 
                         currentIndex = 0;
                     }

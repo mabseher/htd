@@ -44,9 +44,9 @@ namespace htd
             /**
              *  Compute a separating vertex set of the given graph.
              *
-             *  @param[in] graph    The graph for which the separating vertex set shall be computed.
+             *  @param[in] graph    The graph for which a separating vertex set shall be computed.
              *
-             *  @return A vector containing a separating vertex set of the given graph. The vertices in the set are sorted in ascending order.
+             *  @return A vector containing a separating vertex set of the given graph in ascending order.
              */
             virtual std::vector<htd::vertex_t> * computeSeparator(const htd::IGraphStructure & graph) const = 0;
 
@@ -65,9 +65,9 @@ namespace htd
             virtual void setManagementInstance(const htd::LibraryInstance * const manager) = 0;
 
             /**
-             *  Create a deep copy of the current separator algorithm.
+             *  Create a deep copy of the current graph separator algorithm.
              *
-             *  @return A new IGraphSeparatorAlgorithm object identical to the current separator algorithm.
+             *  @return A new IGraphSeparatorAlgorithm object identical to the current graph separator algorithm.
              */
             virtual IGraphSeparatorAlgorithm * clone(void) const = 0;
     };

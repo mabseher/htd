@@ -716,6 +716,18 @@ namespace htd
     }
 
     /**
+     *  Insert a new element into the given vector such that sortedness is preserved.
+     *
+     *  @param[in] collection   The collection which shall be updated.
+     *  @param[in] element      The element which shall be inserted.
+     */
+    template <typename T>
+    void insertSorted(std::vector<T> & collection, const T & element)
+    {
+        collection.insert(std::lower_bound(collection.begin(), collection.end(), element), element);
+    }
+
+    /**
      *  Compute the collection of all vertices which are present at least two child bags.
      *
      *  @param[in] decomposition    The tree decomposition to which the given vertex belongs.

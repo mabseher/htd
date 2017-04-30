@@ -25,6 +25,7 @@
 #ifndef HTD_HTD_MAIN_HPP
 #define HTD_HTD_MAIN_HPP
 
+#include <htd/AdaptiveWidthMinimizingTreeDecompositionAlgorithm.hpp>
 #include <htd/AddEmptyLeavesOperation.hpp>
 #include <htd/AddEmptyRootOperation.hpp>
 #include <htd/AddIdenticalJoinNodeParentOperation.hpp>

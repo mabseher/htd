@@ -718,45 +718,86 @@ int main(int argc, const char * const * const argv)
 
                 if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
                 {
-                    htd::CombinedWidthMinimizingTreeDecompositionAlgorithm * algorithm = new htd::CombinedWidthMinimizingTreeDecompositionAlgorithm(libraryInstance);
+                    htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm * algorithm = new htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm(libraryInstance);
 
                     if (std::string(strategyChoice.value()) == "challenge")
                     {
-                        htd::BucketEliminationTreeDecompositionAlgorithm * initialAlgorithm = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
+                        htd::BucketEliminationTreeDecompositionAlgorithm * algorithm1 = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
 
-                        initialAlgorithm->setComputeInducedEdgesEnabled(false);
+                        algorithm1->setComputeInducedEdgesEnabled(false);
 
-                        initialAlgorithm->setOrderingAlgorithm(new htd::MinDegreeOrderingAlgorithm(libraryInstance));
+                        algorithm1->setOrderingAlgorithm(new htd::MinDegreeOrderingAlgorithm(libraryInstance));
 
-                        algorithm->addDecompositionAlgorithm(initialAlgorithm);
-                    }
+                        algorithm->addDecompositionAlgorithm(algorithm1);
 
-                    htd::WidthMinimizingTreeDecompositionAlgorithm * baseAlgorithm = new htd::WidthMinimizingTreeDecompositionAlgorithm(libraryInstance);
+                        htd::BucketEliminationTreeDecompositionAlgorithm * algorithm2 = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
 
-                    baseAlgorithm->setComputeInducedEdgesEnabled(false);
+                        algorithm2->setComputeInducedEdgesEnabled(false);
 
-                    if (iterationOption.used())
-                    {
-                        baseAlgorithm->setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
-                    }
-                    else
-                    {
-                        baseAlgorithm->setIterationCount(10);
-                    }
+                        algorithm2->setOrderingAlgorithm(new htd::MinFillOrderingAlgorithm(libraryInstance));
 
-                    if (patienceOption.used())
-                    {
-                        if (std::string(patienceOption.value()) == "-1")
+                        algorithm->addDecompositionAlgorithm(algorithm2);
+
+                        htd::BucketEliminationTreeDecompositionAlgorithm * algorithm3 = new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
+
+                        algorithm3->setComputeInducedEdgesEnabled(false);
+
+                        algorithm3->setOrderingAlgorithm(new htd::MaximumCardinalitySearchOrderingAlgorithm(libraryInstance));
+
+                        algorithm->addDecompositionAlgorithm(algorithm3);
+
+                        if (iterationOption.used())
                         {
-                            baseAlgorithm->setNonImprovementLimit((std::size_t)-1);
+                            algorithm->setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
                         }
                         else
                         {
-                            baseAlgorithm->setNonImprovementLimit(std::stoul(patienceOption.value(), nullptr, 10));
+                            algorithm->setIterationCount(10);
                         }
-                    }
 
-                    algorithm->addDecompositionAlgorithm(baseAlgorithm);
+                        if (patienceOption.used())
+                        {
+                            if (std::string(patienceOption.value()) == "-1")
+                            {
+                                algorithm->setNonImprovementLimit((std::size_t)-1);
+                            }
+                            else
+                            {
+                                algorithm->setNonImprovementLimit(std::stoul(patienceOption.value(), nullptr, 10));
+                            }
+                        }
+
+                        algorithm->setDecisionRounds(5);
+                    }
+                    else
+                    {
+                        htd::WidthMinimizingTreeDecompositionAlgorithm * baseAlgorithm = new htd::WidthMinimizingTreeDecompositionAlgorithm(libraryInstance);
+
+                        baseAlgorithm->setComputeInducedEdgesEnabled(false);
+
+                        if (iterationOption.used())
+                        {
+                            baseAlgorithm->setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
+                        }
+                        else
+                        {
+                            baseAlgorithm->setIterationCount(10);
+                        }
+
+                        if (patienceOption.used())
+                        {
+                            if (std::string(patienceOption.value()) == "-1")
+                            {
+                                baseAlgorithm->setNonImprovementLimit((std::size_t)-1);
+                            }
+                            else
+                            {
+                                baseAlgorithm->setNonImprovementLimit(std::stoul(patienceOption.value(), nullptr, 10));
+                            }
+                        }
+
+                        algorithm->addDecompositionAlgorithm(baseAlgorithm);
+                    }
 
                     libraryInstance->treeDecompositionAlgorithmFactory().setConstructionTemplate(algorithm);
                 }

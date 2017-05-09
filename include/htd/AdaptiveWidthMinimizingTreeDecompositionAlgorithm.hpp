@@ -86,6 +86,18 @@ namespace htd
              */
             HTD_API void addDecompositionAlgorithm(htd::ITreeDecompositionAlgorithm * algorithm);
 
+            /**
+             *  Add a new decomposition algorithm to the list of base algorithms which shall be used.
+             *
+             *  @param[in] algorithm    The new decomposition algorithm which will be added to the list of base algorithms.
+             *  @param[in] filter       A function returning true if the decomposition algorithm shall be considered for a given graph and false otherwise.
+             *
+             *  @note When calling this method the control over the memory region of the provided algorithm is transferred to the
+             *  decomposition algorithm. Deleting the algorithm provided to this method outside the decomposition algorithm or
+             *  assigning the same base algorithm multiple times will lead to undefined behavior.
+             */
+            HTD_API void addDecompositionAlgorithm(htd::ITreeDecompositionAlgorithm * algorithm, const std::function<bool(const htd::IMultiHypergraph &, const htd::IPreprocessedGraph &)> & filter);
+
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph) const HTD_OVERRIDE;
 
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph,

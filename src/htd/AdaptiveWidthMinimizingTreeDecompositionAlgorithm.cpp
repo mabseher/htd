@@ -44,7 +44,7 @@ struct htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm::Implementation
      *  @param[in] manager  The management instance to which the current object instance belongs.
      */
     Implementation(const htd::LibraryInstance * const manager)
-        : managementInstance_(manager), algorithms_(), decisionRounds_(1), iterationCount_(1), nonImprovementLimit_(-1)
+        : managementInstance_(manager), algorithms_(), filters_(), decisionRounds_(1), iterationCount_(1), nonImprovementLimit_(-1)
     {
 
     }
@@ -54,7 +54,7 @@ struct htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm::Implementation
      *
      *  @param[in] original The original implementation details structure.
      */
-    Implementation(const Implementation & original) : managementInstance_(original.managementInstance_), algorithms_(), decisionRounds_(original.decisionRounds_), iterationCount_(original.iterationCount_), nonImprovementLimit_(original.nonImprovementLimit_)
+    Implementation(const Implementation & original) : managementInstance_(original.managementInstance_), algorithms_(), filters_(original.filters_), decisionRounds_(original.decisionRounds_), iterationCount_(original.iterationCount_), nonImprovementLimit_(original.nonImprovementLimit_)
     {
         for (const htd::ITreeDecompositionAlgorithm * algorithm : original.algorithms_)
         {
@@ -79,6 +79,11 @@ struct htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm::Implementation
      *  The decomposition algorithms which will be called.
      */
     std::vector<htd::ITreeDecompositionAlgorithm *> algorithms_;
+
+    /**
+     *  The filters for the decomposition algorithms together with the indices of the algorithms on which they apply.
+     */
+    std::vector<std::pair<std::function<bool(const htd::IMultiHypergraph &, const htd::IPreprocessedGraph &)>, htd::index_t>> filters_;
 
     /**
      *  The number of decision rounds which shall be performed.
@@ -170,6 +175,15 @@ void htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm::addDecompositionAlg
     implementation_->algorithms_.push_back(algorithm);
 }
 
+void htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm::addDecompositionAlgorithm(htd::ITreeDecompositionAlgorithm * algorithm, const std::function<bool(const htd::IMultiHypergraph &, const htd::IPreprocessedGraph &)> & filter)
+{
+    HTD_ASSERT(algorithm != nullptr)
+
+    implementation_->filters_.emplace_back(filter, implementation_->algorithms_.size());
+
+    implementation_->algorithms_.push_back(algorithm);
+}
+
 htd::ITreeDecomposition * htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm::computeDecomposition(const htd::IMultiHypergraph & graph) const
 {
     return computeDecomposition(graph, std::vector<htd::IDecompositionManipulationOperation *>(), [](const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &){});
@@ -237,6 +251,14 @@ htd::ITreeDecomposition * htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm
     std::vector<std::size_t> accumulatedWidths(implementation_->algorithms_.size());
 
     std::unordered_set<htd::index_t> disqualifiedAlgorithms;
+
+    for (const std::pair<std::function<bool(const htd::IMultiHypergraph &, const htd::IPreprocessedGraph &)>, htd::index_t> & filter : implementation_->filters_)
+    {
+        if (!filter.first(graph, preprocessedGraph))
+        {
+            disqualifiedAlgorithms.insert(filter.second);
+        }
+    }
 
     for (htd::index_t round = 0; round < implementation_->decisionRounds_ && !managementInstance.isTerminated(); ++round)
     {

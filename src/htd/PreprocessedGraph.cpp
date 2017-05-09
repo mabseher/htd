@@ -403,6 +403,28 @@ bool htd::PreprocessedGraph::isConnected(htd::vertex_t vertex1, htd::vertex_t ve
     return ret;
 }
 
+void htd::PreprocessedGraph::removeVertex(htd::vertex_t vertex)
+{
+    HTD_ASSERT(isVertex(vertex));
+
+    std::vector<htd::vertex_t> & selectedNeighborhood = implementation_->neighborhood_[vertex];
+
+    implementation_->edgeCount_ -= selectedNeighborhood.size();
+
+    for (htd::vertex_t neighbor : selectedNeighborhood)
+    {
+        std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_[neighbor];
+
+        currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex));
+    }
+
+    implementation_->remainingVertices_.erase(std::lower_bound(implementation_->remainingVertices_.begin(),
+                                                               implementation_->remainingVertices_.end(),
+                                                               vertex));
+
+    std::vector<htd::vertex_t>().swap(selectedNeighborhood);
+}
+
 const std::vector<htd::vertex_t> & htd::PreprocessedGraph::vertexNames(void) const HTD_NOEXCEPT
 {
     return implementation_->names_;

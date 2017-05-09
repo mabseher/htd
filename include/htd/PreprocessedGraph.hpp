@@ -146,6 +146,13 @@ namespace htd
             HTD_API const std::vector<htd::vertex_t> & neighborhood(htd::vertex_t vertex) const HTD_OVERRIDE;
 
             /**
+             *  Remove a vertex from the graph.
+             *
+             *  @param[in] vertex   The ID of the vertex which shall be removed.
+             */
+            HTD_API void removeVertex(htd::vertex_t vertex);
+
+            /**
              *  Recompute the number of edges in the graph to update the result of the function edgeCount().
              */
             HTD_API void updateEdgeCount(void);

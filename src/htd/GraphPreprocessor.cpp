@@ -36,6 +36,7 @@
 #include <htd/ConnectedComponentAlgorithmFactory.hpp>
 #include <htd/IConnectedComponentAlgorithm.hpp>
 #include <htd/VectorAdapter.hpp>
+#include <htd/CliqueMinimalSeparatorAlgorithm.hpp>
 
 #include <algorithm>
 #include <numeric>
@@ -733,6 +734,15 @@ struct htd::GraphPreprocessor::Implementation
                            const std::unordered_set<htd::vertex_t> & vertices,
                            htd::PreprocessedGraph & preprocessedGraph,
                            std::size_t & minTreeWidth) const;
+
+    /**
+     *  Iteratively compute the clique minimal separators of the given graph and remove them from the graph.
+     *
+     *  @param[in] preprocessedGraph    The preprocessed graph which shall be updated.
+     *  @param[in] vertices             The set of all available vertices.
+     */
+    void applyCliqueSeparatorPreprocessing(htd::PreprocessedGraph & preprocessedGraph,
+                                           std::unordered_set<htd::vertex_t> & vertices) const;
 };
 
 htd::GraphPreprocessor::GraphPreprocessor(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -883,7 +893,11 @@ htd::IPreprocessedGraph * htd::GraphPreprocessor::prepare(const htd::IMultiHyper
 
         if (implementation_->applyPreprocessing4_)
         {
-            implementation_->applyBiconnectedComponentPreprocessing(graph, *ret, vertices);
+            //TODO
+            //implementation_->applyBiconnectedComponentPreprocessing(graph, *ret, vertices);
+
+            //TODO
+            //implementation_->applyCliqueSeparatorPreprocessing(*ret, vertices);
         }
     }
     else
@@ -1875,6 +1889,28 @@ void htd::GraphPreprocessor::Implementation::eliminateVertices(const htd::IMulti
         preprocessedGraph.minTreeWidth() = std::max(preprocessedGraph.minTreeWidth(), optimalOrdering->maximumBagSize() - 1);
 
         delete optimalOrdering;
+    }
+}
+
+void htd::GraphPreprocessor::Implementation::applyCliqueSeparatorPreprocessing(htd::PreprocessedGraph & preprocessedGraph,
+                                                                               std::unordered_set<htd::vertex_t> & vertices) const
+{
+    htd::CliqueMinimalSeparatorAlgorithm algorithm(managementInstance_);
+
+    std::vector<htd::vertex_t> * separator = algorithm.computeSeparator(preprocessedGraph);
+
+    while (separator != nullptr && !separator->empty())
+    {
+        for (htd::vertex_t vertex : *separator)
+        {
+            preprocessedGraph.removeVertex(vertex);
+
+            vertices.erase(vertex);
+        }
+
+        delete separator;
+
+        separator = algorithm.computeSeparator(preprocessedGraph);
     }
 }
 

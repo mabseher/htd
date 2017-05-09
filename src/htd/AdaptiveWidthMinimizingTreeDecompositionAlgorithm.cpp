@@ -600,6 +600,10 @@ htd::ITreeDecomposition * htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm
         {
             remainingIterations = 0;
         }
+        else
+        {
+            --remainingIterations;
+        }
     }
 
     for (htd::IDecompositionManipulationOperation * operation : manipulationOperations)

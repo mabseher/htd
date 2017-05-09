@@ -36,6 +36,7 @@
 #include <htd/BreadthFirstGraphTraversal.hpp>
 #include <htd/BucketEliminationGraphDecompositionAlgorithm.hpp>
 #include <htd/BucketEliminationTreeDecompositionAlgorithm.hpp>
+#include <htd/CliqueMinimalSeparatorAlgorithm.hpp>
 #include <htd/Collection.hpp>
 #include <htd/CombinedWidthMinimizingTreeDecompositionAlgorithm.hpp>
 #include <htd/CompressionOperation.hpp>
@@ -218,6 +219,7 @@
 #include <htd/PreOrderTreeTraversal.hpp>
 #include <htd/PreprocessedGraph.hpp>
 #include <htd/PreprocessorDefinitions.hpp>
+#include <htd/PriorityQueue.hpp>
 #include <htd/RandomOrderingAlgorithm.hpp>
 #include <htd/RandomVertexSelectionStrategy.hpp>
 #include <htd/SemiNormalizationOperation.hpp>

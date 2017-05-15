@@ -31,6 +31,7 @@
 #include <htd/GraphPreprocessorFactory.hpp>
 #include <htd/IGraphPreprocessor.hpp>
 #include <htd/VertexOrdering.hpp>
+#include <htd/PriorityQueue.hpp>
 
 #include <algorithm>
 #include <unordered_set>
@@ -70,37 +71,6 @@ struct htd::MinDegreeOrderingAlgorithm::Implementation
      *  @return The maximum bag size of the decomposition which is obtained via bucket elimination using the input graph and the resulting ordering.
      */
     std::size_t writeOrderingTo(const htd::IPreprocessedGraph & preprocessedGraph, std::vector<htd::vertex_t> & target, std::size_t maxBagSize) const HTD_NOEXCEPT;
-
-    /**
-     *  Fill the pool of vertices having minimum degree.
-     *
-     *  @param[in] vertices     The set of vertices which shall be considered.
-     *  @param[in] neighborhood A vector containing the neighborhood of each of the vertices.
-     *  @param[out] pool        The vertex pool which shall be filled with all vertices of minimum degree.
-     */
-    void fillMinDegreePool(const std::unordered_set<htd::vertex_t> & vertices, const std::vector<std::vector<htd::vertex_t>> & neighborhood, std::vector<htd::vertex_t> & pool) const HTD_NOEXCEPT
-    {
-        std::size_t min = (std::size_t)-1;
-
-        pool.clear();
-
-        for (htd::vertex_t vertex : vertices)
-        {
-            std::size_t degree = neighborhood[vertex].size();
-
-            if (degree <= min)
-            {
-                if (degree < min)
-                {
-                    min = degree;
-
-                    pool.clear();
-                }
-
-                pool.push_back(vertex);
-            }
-        }
-    }
 };
 
 htd::MinDegreeOrderingAlgorithm::MinDegreeOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -182,7 +152,7 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
     std::vector<htd::vertex_t> difference;
 
-    std::vector<htd::vertex_t> pool;
+    htd::PriorityQueue<htd::vertex_t, std::size_t, std::greater<std::size_t>> priorityQueue;
 
     target.insert(target.end(),
                   preprocessedGraph.eliminationSequence().begin(),
@@ -195,13 +165,15 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
         std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
 
         currentNeighborhood.insert(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), vertex);
+
+        priorityQueue.push(vertex, currentNeighborhood.size());
     }
 
     while (size > 0 && ret <= maxBagSize && !managementInstance_->isTerminated())
     {
-        fillMinDegreePool(vertices, neighborhood, pool);
+        htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(priorityQueue.topCollection());
 
-        htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(pool);
+        priorityQueue.eraseFromTopCollection(selectedVertex);
 
         std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood[selectedVertex];
 
@@ -218,6 +190,8 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
         {
             std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[neighbor];
 
+            std::size_t oldNeighborhoodSize = currentNeighborhood.size();
+
             currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
 
             std::set_difference(selectedNeighborhood.begin(), selectedNeighborhood.end(),
@@ -230,6 +204,8 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
                 difference.clear();
             }
+
+            priorityQueue.updatePriority(neighbor, oldNeighborhoodSize, currentNeighborhood.size());
         }
 
         std::vector<htd::vertex_t>().swap(selectedNeighborhood);

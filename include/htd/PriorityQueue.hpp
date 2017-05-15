@@ -37,14 +37,14 @@ namespace htd
     /**
      *  Flexible priority queue allowing to efficiently access values of identical priority.
      */
-    template < typename ValueType, typename PriorityType, typename Compare = std::less<PriorityType> >
+    template < typename ValueType, typename PriorityType, typename Compare = std::less<PriorityType>, typename Equality = std::equal_to<PriorityType> >
     class PriorityQueue
     {
         public:
             /**
              *  Constructor of a new priority queue.
              */
-            PriorityQueue(void) : compare_(), heap_(), priorityMap_(), size_(0)
+            PriorityQueue(void) : compare_(), equals_(), heap_(), priorityMap_(), size_(0)
             {
 
             }
@@ -224,39 +224,11 @@ namespace htd
             {
                 bool ret = false;
 
-                auto position = locate(priority);
+                auto priorityPosition = priorityMap_.find(priority);
 
-                if (position != heap_.end())
+                if (priorityPosition != priorityMap_.end())
                 {
-                    std::vector<ValueType> & collection = *(position->second);
-
-                    auto currentPosition = collection.begin();
-
-                    while (!ret && currentPosition != collection.end())
-                    {
-                       if (compare_(value, *currentPosition) || compare_(*currentPosition, value))
-                       {
-                           ++currentPosition;
-                       }
-                       else
-                       {
-                           ret = true;
-                       }
-                    }
-
-                    if (ret)
-                    {
-                        if (collection.size() > 1)
-                        {
-                            collection.erase(currentPosition);
-                        }
-                        else
-                        {
-                            eraseCollection(std::distance(heap_.begin(), position));
-                        }
-
-                        --size_;
-                    }
+                    ret = eraseFromCollection(value, priorityPosition->second);
                 }
 
                 return ret;
@@ -271,42 +243,74 @@ namespace htd
              */
             bool eraseFromTopCollection(const ValueType & value)
             {
-                bool ret = false;
+                return eraseFromCollection(value, 0);
+            }
 
-                if (size_ > 0)
+            /**
+             *  Update the priority of a specific, existing element.
+             *
+             *  @param[in] value        The element which shall be updated.
+             *  @param[in] oldPriority  The old priority of the element which shall be updated.
+             *  @param[in] newPriority  The new priority of the element which shall be updated.
+             */
+            void updatePriority(const ValueType & value, const PriorityType & oldPriority, const PriorityType & newPriority)
+            {
+                HTD_ASSERT(priorityMap_.count(oldPriority) == 1)
+
+                if (!equals_(oldPriority, newPriority))
                 {
-                    std::vector<ValueType> & currentCollection = *(heap_[0].second);
+                    auto oldPosition = heap_.begin() + priorityMap_.at(oldPriority);
 
-                    auto position = currentCollection.begin();
+                    std::vector<ValueType> * oldCollection = oldPosition->second;
 
-                    while (!ret && position != currentCollection.end())
+                    auto elementPosition = std::find(oldCollection->begin(), oldCollection->end(), value);
+
+                    HTD_ASSERT(elementPosition != oldCollection->end())
+
+                    auto priorityPosition = priorityMap_.find(newPriority);
+
+                    if (priorityPosition != priorityMap_.end())
                     {
-                       if (compare_(value, *position) || compare_(*position, value))
-                       {
-                           ++position;
-                       }
-                       else
-                       {
-                           ret = true;
-                       }
-                    }
+                        std::vector<ValueType> & newCollection = *(heap_[priorityPosition->second].second);
 
-                    if (ret)
-                    {
-                        if (currentCollection.size() > 1)
+                        oldCollection->erase(elementPosition);
+
+                        newCollection.push_back(value);
+
+                        if (oldCollection->empty())
                         {
-                            currentCollection.erase(position);
+                            eraseCollection(std::distance(heap_.begin(), oldPosition));
+                        }
+                    }
+                    else
+                    {
+                        if (oldCollection->size() > 1)
+                        {
+                            oldCollection->erase(elementPosition);
+
+                            htd::index_t currentPosition = heap_.size();
+
+                            heap_.emplace_back(newPriority, new std::vector<ValueType>());
+
+                            priorityMap_.emplace(newPriority, currentPosition);
+
+                            siftUp(currentPosition, value, newPriority);
                         }
                         else
                         {
-                            eraseCollection(0);
-                        }
+                            if (compare_(oldPriority, newPriority))
+                            {
+                                siftUp(std::distance(heap_.begin(), oldPosition), oldCollection, newPriority);
+                            }
+                            else
+                            {
+                                siftDown(std::distance(heap_.begin(), oldPosition), oldCollection, newPriority);
+                            }
 
-                        --size_;
+                            priorityMap_.erase(oldPriority);
+                        }
                     }
                 }
-
-                return ret;
             }
 
         private:
@@ -314,6 +318,11 @@ namespace htd
              *  A comparison operator on which the heap is based.
              */
             Compare compare_;
+
+            /**
+             *  An operator to check for equality of two priorities.
+             */
+            Equality equals_;
 
             /**
              *  The data structure underlying the priority queue.
@@ -331,29 +340,6 @@ namespace htd
             std::size_t size_;
 
             /**
-             *  Try to locate the position of the collection of elements with a specific priority on the heap.
-             *
-             *  @note If the specific priority is not yet present on the heap, the result of calling this function is equal to heap_.end().
-             *
-             *  @param[in] priority The priority of the collection of elements which shall be located.
-             *
-             *  @return An iterator to the collection of elements with the specific priority on the heap.
-             */
-            typename std::vector<std::pair<PriorityType, std::vector<ValueType> *>>::iterator locate(const PriorityType & priority)
-            {
-                typename std::vector<std::pair<PriorityType, std::vector<ValueType> *>>::iterator ret = heap_.end();
-
-                auto position = priorityMap_.find(priority);
-
-                if (position != priorityMap_.end())
-                {
-                    ret = heap_.begin() + position->second;
-                }
-
-                return ret;
-            }
-
-            /**
              *  Try to insert a new element with a specific priority.
              *
              *  @param[in] value    The element which shall be inserted.
@@ -365,11 +351,11 @@ namespace htd
             {
                 bool ret = false;
 
-                auto position = locate(priority);
+                auto priorityPosition = priorityMap_.find(priority);
 
-                if (position != heap_.end())
+                if (priorityPosition != priorityMap_.end())
                 {
-                    position->second->push_back(value);
+                    heap_[priorityPosition->second].second->push_back(value);
 
                     ret = true;
                 }
@@ -386,31 +372,31 @@ namespace htd
             {
                 HTD_ASSERT(position < heap_.size())
 
-                ValueType value = heap_[position].first;
-
-                std::size_t heapSize = heap_.size() - 1;
+                PriorityType priority = heap_[position].first;
 
                 delete heap_[position].second;
 
-                if (position == heapSize)
+                if (position == heap_.size() - 1)
                 {
-                    heap_.erase(heap_.begin() + position);
+                    heap_.pop_back();
                 }
                 else
                 {
-                    std::pair<PriorityType, std::vector<ValueType> *> movedElement(std::move(heap_[heapSize]));
+                    std::pair<PriorityType, std::vector<ValueType> *> movedElement(std::move(heap_.back()));
 
-                    heap_.erase(heap_.begin() + heapSize);
+                    heap_.pop_back();
 
-                    siftDown(position, movedElement.second, movedElement.first);
-
-                    if (!compare_(heap_[position].first, movedElement.first) && !compare_(movedElement.first, heap_[position].first))
+                    if (compare_(priority, movedElement.first))
                     {
                         siftUp(position, movedElement.second, movedElement.first);
                     }
+                    else
+                    {
+                        siftDown(position, movedElement.second, movedElement.first);
+                    }
                 }
 
-                priorityMap_.erase(value);
+                priorityMap_.erase(priority);
             }
 
             /**
@@ -440,7 +426,7 @@ namespace htd
                     }
                     else
                     {
-                        std::swap(priorityMap_[heap_[position].first], priorityMap_[heap_[parent].first]);
+                        std::swap(priorityMap_[heap_[position].first], priorityMap_[parentPriority]);
 
                         heap_[position].swap(heap_[parent]);
 
@@ -478,7 +464,7 @@ namespace htd
                     }
                     else
                     {
-                        std::swap(priorityMap_[heap_[position].first], priorityMap_[heap_[parent].first]);
+                        std::swap(priorityMap_[heap_[position].first], priorityMap_[parentPriority]);
 
                         heap_[position].swap(heap_[parent]);
 
@@ -486,7 +472,9 @@ namespace htd
                     }
                 }
 
-                heap_[position].second = values;
+                heap_[position] = std::make_pair(priority, values);
+
+                priorityMap_[priority] = position;
             }
 
             /**
@@ -512,24 +500,20 @@ namespace htd
                 {
                     htd::index_t child = (position << 1) + 1;
 
-                    PriorityType * childPriority = &(heap_[child].first);
-
-                    htd::index_t rightChild = child + 1;
-
-                    if (rightChild < heapSize && compare_(*childPriority, heap_[rightChild].first))
+                    if (child + 1 < heapSize && compare_(heap_[child].first, heap_[child + 1].first))
                     {
-                        child = rightChild;
-
-                        childPriority = &(heap_[rightChild].first);
+                        ++child;
                     }
 
-                    if (!compare_(priority, *childPriority))
+                    const PriorityType & childPriority = heap_[child].first;
+
+                    if (!compare_(priority, childPriority))
                     {
                         found = true;
                     }
                     else
                     {
-                        std::swap(priorityMap_[heap_[position].first], priorityMap_[heap_[child].first]);
+                        std::swap(priorityMap_[heap_[position].first], priorityMap_[childPriority]);
 
                         heap_[position].swap(heap_[child]);
 
@@ -537,10 +521,56 @@ namespace htd
                     }
                 }
 
-                heap_[position].first = priority;
-                heap_[position].second = values;
+                heap_[position] = std::make_pair(priority, values);
 
                 priorityMap_[priority] = position;
+            }
+
+            /**
+             *  Erase the specific element from the given collection.
+             *
+             *  @param[in] value        The element which shall be deleted.
+             *  @param[in] collection   The index of the collection from which the element shall be deleted within the heap data structure.
+             *
+             *  @return True if the element was successfully erased from the given collection, false otherwise.
+             */
+            bool eraseFromCollection(const ValueType & value, htd::index_t index)
+            {
+                HTD_ASSERT(index < heap_.size())
+
+                bool ret = false;
+
+                std::vector<ValueType> & collection = *(heap_[index].second);
+
+                auto position = collection.begin();
+
+                while (!ret && position != collection.end())
+                {
+                    if (!equals_(value, *position))
+                    {
+                        ++position;
+                    }
+                    else
+                    {
+                        ret = true;
+                    }
+                }
+
+                if (ret)
+                {
+                    if (collection.size() > 1)
+                    {
+                        collection.erase(position);
+                    }
+                    else
+                    {
+                        eraseCollection(index);
+                    }
+
+                    --size_;
+                }
+
+                return ret;
             }
     };
 }

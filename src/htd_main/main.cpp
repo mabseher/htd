@@ -744,7 +744,13 @@ int main(int argc, const char * const * const argv)
 
                         algorithm3->setOrderingAlgorithm(new htd::MaximumCardinalitySearchOrderingAlgorithm(libraryInstance));
 
-                        algorithm->addDecompositionAlgorithm(algorithm3);
+                        algorithm->addDecompositionAlgorithm(algorithm3,
+                                                             [](const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph)
+                        {
+                            HTD_UNUSED(graph)
+
+                            return preprocessedGraph.vertexCount() <= 10240;
+                        });
 
                         if (iterationOption.used())
                         {

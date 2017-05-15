@@ -31,6 +31,7 @@
 #include <htd/GraphPreprocessorFactory.hpp>
 #include <htd/IGraphPreprocessor.hpp>
 #include <htd/VertexOrdering.hpp>
+#include <htd/PriorityQueue.hpp>
 
 #include <algorithm>
 #include <unordered_set>
@@ -59,37 +60,6 @@ struct htd::MaximumCardinalitySearchOrderingAlgorithm::Implementation
      *  The management instance to which the current object instance belongs.
      */
     const htd::LibraryInstance * managementInstance_;
-
-    /**
-     *  Fill the pool of vertices having maximum weight.
-     *
-     *  @param[in] vertices The set of vertices which shall be considered.
-     *  @param[in] weights  A vector containing the weights associated with each of the vertices.
-     *  @param[out] pool    The vertex pool which shall be filled with all vertices of maximum weight.
-     */
-    void fillMaxCardinalityPool(const std::unordered_set<htd::vertex_t> & vertices, const std::vector<std::size_t> & weights, std::vector<htd::vertex_t> & pool) const HTD_NOEXCEPT
-    {
-        std::size_t max = 0;
-
-        pool.clear();
-
-        for (htd::vertex_t vertex : vertices)
-        {
-            std::size_t tmp = weights[vertex];
-
-            if (tmp >= max)
-            {
-                if (tmp > max)
-                {
-                    max = tmp;
-
-                    pool.clear();
-                }
-
-                pool.push_back(vertex);
-            }
-        }
-    }
 };
 
 htd::MaximumCardinalitySearchOrderingAlgorithm::MaximumCardinalitySearchOrderingAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -128,7 +98,7 @@ htd::IVertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOr
 
     std::vector<std::vector<htd::vertex_t>> neighborhood(preprocessedGraph.neighborhood().begin(), preprocessedGraph.neighborhood().end());
 
-    std::vector<htd::vertex_t> pool;
+    htd::PriorityQueue<htd::vertex_t, std::size_t, std::less<std::size_t>> priorityQueue;
 
     std::vector<std::size_t> weights(preprocessedGraph.inputGraphVertexCount());
 
@@ -141,15 +111,18 @@ htd::IVertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOr
                     preprocessedGraph.eliminationSequence().begin(),
                     preprocessedGraph.eliminationSequence().end());
 
+    for (htd::vertex_t vertex : preprocessedGraph.remainingVertices())
+    {
+        priorityQueue.push(vertex, 0);
+    }
+
     while (size > 0 && !managementInstance.isTerminated())
     {
-        implementation_->fillMaxCardinalityPool(vertices, weights, pool);
+        htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(priorityQueue.topCollection());
 
-        htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(pool);
+        priorityQueue.eraseFromTopCollection(selectedVertex);
 
         std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood[selectedVertex];
-
-        pool.clear();
 
         for (htd::vertex_t neighbor : selectedNeighborhood)
         {
@@ -157,7 +130,11 @@ htd::IVertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOr
 
             currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
 
-            weights[neighbor] += 1;
+            std::size_t & currentWeight = weights[neighbor];
+
+            priorityQueue.updatePriority(neighbor, currentWeight, currentWeight + 1);
+
+            ++currentWeight;
         }
 
         std::vector<htd::vertex_t>().swap(selectedNeighborhood);

@@ -31,6 +31,7 @@
 #include <htd/GraphPreprocessorFactory.hpp>
 #include <htd/IGraphPreprocessor.hpp>
 #include <htd/VertexOrdering.hpp>
+#include <htd/PriorityQueue.hpp>
 
 #include <algorithm>
 #include <unordered_set>
@@ -59,16 +60,6 @@ struct htd::MinFillOrderingAlgorithm::Implementation
      *  The management instance to which the current object instance belongs.
      */
     const htd::LibraryInstance * managementInstance_;
-
-    /**
-     *  Update the pool of vertices with minimum fill value.
-     *
-     *  @param[in] vertex       The vertex whose fill value shall be updated.
-     *  @param[in] fillValue    The new fill value of the given vertex.
-     *  @param[in] pool         The pool of vertices with minimum fill value.
-     *  @param[in,out] minFill  A reference to a variable representing the minimum fill value. This information is updated if fillValue < minFill.
-     */
-    static void updatePool(htd::vertex_t vertex, std::size_t fillValue, std::unordered_set<htd::vertex_t> & pool, std::size_t & minFill);
 
     /**
      *  Structure representing the preprocessed input for the algorithm.
@@ -113,7 +104,7 @@ struct htd::MinFillOrderingAlgorithm::Implementation
          *  @param[in] managementInstance   The management instance to which the new algorithm belongs.
          *  @param[in] preprocessedGraph    The input graph in preprocessed format.
          */
-        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::IPreprocessedGraph & preprocessedGraph) : minFill((std::size_t)-1), totalFill(0), fillValue(), pool()
+        PreparedInput(const htd::LibraryInstance & managementInstance, const htd::IPreprocessedGraph & preprocessedGraph) : minFill((std::size_t)-1), totalFill(0), fillValue()
         {
             HTD_UNUSED(managementInstance)
 
@@ -126,8 +117,6 @@ struct htd::MinFillOrderingAlgorithm::Implementation
                 const std::vector<htd::vertex_t> & currentNeighborhood = preprocessedGraph.neighborhood(vertex);
 
                 std::size_t currentFillValue = ((currentNeighborhood.size() * (currentNeighborhood.size() - 1)) / 2) - computeEdgeCount(preprocessedGraph.neighborhood(), currentNeighborhood);
-
-                updatePool(vertex, currentFillValue, pool, minFill);
 
                 fillValue[vertex] = currentFillValue;
 
@@ -154,11 +143,6 @@ struct htd::MinFillOrderingAlgorithm::Implementation
          *  A vector containing the fill value for each vertex.
          */
         std::vector<std::size_t> fillValue;
-
-        /**
-         *  The pool of vertices with minimum fill value.
-         */
-        std::unordered_set<htd::vertex_t> pool;
     };
 
     /**
@@ -247,15 +231,13 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
     std::size_t size = preprocessedGraph.inputGraphVertexCount();
 
-    std::size_t minFill = input.minFill;
-
-    std::unordered_set<htd::vertex_t> pool(input.pool.begin(), input.pool.end());
-
     std::unordered_set<htd::vertex_t> vertices(size);
 
     htd::fillSet(preprocessedGraph.remainingVertices(), vertices);
 
     std::vector<std::size_t> fillValue(input.fillValue.begin(), input.fillValue.end());
+
+    htd::PriorityQueue<htd::vertex_t, std::size_t, std::greater<std::size_t>> priorityQueue;
 
     std::vector<std::vector<htd::vertex_t>> neighborhood(preprocessedGraph.neighborhood().begin(), preprocessedGraph.neighborhood().end());
 
@@ -283,21 +265,15 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
         std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[vertex];
 
         currentNeighborhood.insert(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex), vertex);
+
+        priorityQueue.push(vertex, fillValue[vertex]);
     }
 
     while (totalFill > 0 && ret <= maxBagSize && !managementInstance_->isTerminated())
     {
-        if (pool.empty())
-        {
-            minFill = (std::size_t)-1;
+        htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(priorityQueue.topCollection());
 
-            for (htd::vertex_t vertex : vertices)
-            {
-                updatePool(vertex, fillValue[vertex], pool, minFill);
-            }
-        }
-
-        htd::vertex_t selectedVertex = htd::selectRandomElement<htd::vertex_t>(pool);
+        priorityQueue.eraseFromTopCollection(selectedVertex);
 
         std::vector<htd::vertex_t> & selectedNeighborhood = neighborhood[selectedVertex];
 
@@ -306,23 +282,11 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
             ret = selectedNeighborhood.size();
         }
 
-        pool.erase(selectedVertex);
-
         vertices.erase(selectedVertex);
 
         affectedVertices.clear();
 
-        totalFill -= minFill;
-
-        if (pool.empty())
-        {
-            minFill = (std::size_t)-1;
-
-            for (htd::vertex_t vertex : vertices)
-            {
-                updatePool(vertex, fillValue[vertex], pool, minFill);
-            }
-        }
+        totalFill -= fillValue[selectedVertex];
 
         selectedNeighborhood.erase(std::lower_bound(selectedNeighborhood.begin(), selectedNeighborhood.end(), selectedVertex));
 
@@ -349,9 +313,9 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                         totalFill -= fillReduction;
 
-                        fillValue[vertex] = tmp;
+                        priorityQueue.updatePriority(vertex, fillValue[vertex], tmp);
 
-                        updatePool(vertex, tmp, pool, minFill);
+                        fillValue[vertex] = tmp;
                     }
                 }
             }
@@ -488,35 +452,18 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                         totalFill += fillUpdate;
 
+                        priorityQueue.updatePriority(vertex, fillValue[vertex], tmp);
+
                         fillValue[vertex] = tmp;
-
-                        if (fillUpdate > 0)
-                        {
-                            pool.erase(vertex);
-
-                            if (pool.empty())
-                            {
-                                minFill = (std::size_t)-1;
-
-                                for (htd::vertex_t vertex : vertices)
-                                {
-                                    updatePool(vertex, fillValue[vertex], pool, minFill);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            updatePool(vertex, tmp, pool, minFill);
-                        }
                     }
                 }
                 else
                 {
                     totalFill -= tmp;
 
-                    fillValue[vertex] = 0;
+                    priorityQueue.updatePriority(vertex, fillValue[vertex], 0);
 
-                    updatePool(vertex, 0, pool, minFill);
+                    fillValue[vertex] = 0;
                 }
 
                 updateStatus[vertex] = 0;
@@ -569,9 +516,9 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                         totalFill -= fillReduction;
 
-                        fillValue[vertex] = tmp;
+                        priorityQueue.updatePriority(vertex, fillValue[vertex], tmp);
 
-                        updatePool(vertex, tmp, pool, minFill);
+                        fillValue[vertex] = tmp;
                     }
                 }
 
@@ -743,20 +690,5 @@ htd::IWidthLimitableOrderingAlgorithm * htd::MinFillOrderingAlgorithm::cloneWidt
     return new htd::MinFillOrderingAlgorithm(implementation_->managementInstance_);
 }
 #endif
-
-void htd::MinFillOrderingAlgorithm::Implementation::updatePool(htd::vertex_t vertex, std::size_t fillValue, std::unordered_set<htd::vertex_t> & pool, std::size_t & minFill)
-{
-    if (fillValue <= minFill)
-    {
-        if (fillValue < minFill)
-        {
-            minFill = fillValue;
-
-            pool.clear();
-        }
-
-        pool.insert(vertex);
-    }
-}
 
 #endif /* HTD_HTD_MINFILLORDERINGALGORITHM_CPP */

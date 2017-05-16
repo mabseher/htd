@@ -879,10 +879,10 @@ htd::IMutableGraphDecomposition * htd::BucketEliminationGraphDecompositionAlgori
                 inducedEdges[vertex].clear();
             }
 
-            hyperedgePosition = hyperedges.begin();
-
             if (computeInducedEdges_)
             {
+                hyperedgePosition = hyperedges.begin();
+
                 std::vector<htd::id_t> lastAssignedEdge(buckets.size() + 1, (htd::id_t)-1);
 
                 std::stack<htd::vertex_t> originStack;
@@ -957,61 +957,29 @@ htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::Implementation:
 
     for (htd::vertex_t vertex : vertices)
     {
-        htd::index_t currentIndex = vertexIndices[vertex];
-
-        if (currentIndex < minimum)
-        {
-            minimum = currentIndex;
-        }
+        minimum = std::min(minimum, vertexIndices[vertex]);
     }
+
+    HTD_ASSERT(minimum < ordering.size())
 
     return ordering[minimum];
 }
 
 htd::vertex_t htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::getMinimumVertex(const std::vector<htd::vertex_t> & vertices, const std::vector<htd::vertex_t> & ordering, const std::vector<htd::index_t> & vertexIndices, htd::vertex_t excludedVertex) const
 {
-    htd::vertex_t ret = htd::Vertex::UNKNOWN;
+    std::size_t minimum = (std::size_t)-1;
 
-    if (vertices.size() == 2)
+    for (htd::vertex_t vertex : vertices)
     {
-        if (vertices[0] == excludedVertex)
+        if (vertex != excludedVertex)
         {
-            ret = vertices[1];
-        }
-        else if (vertices[1] == excludedVertex)
-        {
-            ret = vertices[0];
-        }
-        else if (vertexIndices[vertices[0]] <= vertexIndices[vertices[1]])
-        {
-            ret = vertices[0];
-        }
-        else
-        {
-            ret = vertices[1];
+            minimum = std::min(minimum, vertexIndices[vertex]);
         }
     }
-    else
-    {
-        std::size_t minimum = (std::size_t)-1;
 
-        for (htd::vertex_t vertex : vertices)
-        {
-            if (vertex != excludedVertex)
-            {
-                htd::index_t currentIndex = vertexIndices[vertex];
+    HTD_ASSERT(minimum < ordering.size())
 
-                if (currentIndex < minimum)
-                {
-                    minimum = currentIndex;
-                }
-            }
-        }
-
-        ret = ordering[minimum];
-    }
-
-    return ret;
+    return ordering[minimum];
 }
 
 void htd::BucketEliminationGraphDecompositionAlgorithm::Implementation::compressDecomposition(htd::vertex_t startingVertex, 

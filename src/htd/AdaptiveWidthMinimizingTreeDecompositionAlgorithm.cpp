@@ -382,20 +382,13 @@ htd::ITreeDecomposition * htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm
 
         if (currentDecomposition != nullptr)
         {
-            if (!implementation_->managementInstance_->isTerminated())
-            {
-                std::size_t currentMaxBagSize = currentDecomposition->maximumBagSize();
+            std::size_t currentMaxBagSize = currentDecomposition->maximumBagSize();
 
-                delete ret;
+            delete ret;
 
-                ret = currentDecomposition;
+            ret = currentDecomposition;
 
-                bestMaxBagSize = currentMaxBagSize;
-            }
-            else
-            {
-                delete currentDecomposition;
-            }
+            bestMaxBagSize = currentMaxBagSize;
         }
     }
     else
@@ -404,20 +397,13 @@ htd::ITreeDecomposition * htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm
 
         if (currentDecomposition != nullptr)
         {
-            if (!implementation_->managementInstance_->isTerminated())
-            {
-                std::size_t currentMaxBagSize = currentDecomposition->maximumBagSize();
+            std::size_t currentMaxBagSize = currentDecomposition->maximumBagSize();
 
-                delete ret;
+            delete ret;
 
-                ret = currentDecomposition;
+            ret = currentDecomposition;
 
-                bestMaxBagSize = currentMaxBagSize;
-            }
-            else
-            {
-                delete currentDecomposition;
-            }
+            bestMaxBagSize = currentMaxBagSize;
         }
     }
 
@@ -575,11 +561,11 @@ htd::ITreeDecomposition * htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm
 
         if (currentDecomposition != nullptr)
         {
-            if (!managementInstance_->isTerminated())
+            if (!managementInstance_->isTerminated() || algorithm.isSafelyInterruptible())
             {
                 std::size_t currentMaxBagSize = currentDecomposition->maximumBagSize();
 
-                if (!managementInstance_->isTerminated())
+                if (!managementInstance_->isTerminated() || algorithm.isSafelyInterruptible())
                 {
                     if (currentMaxBagSize < bestMaxBagSize)
                     {
@@ -676,11 +662,11 @@ htd::ITreeDecomposition * htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm
 
         if (currentDecomposition != nullptr)
         {
-            if (!managementInstance_->isTerminated())
+            if (!managementInstance_->isTerminated() || algorithm.isSafelyInterruptible())
             {
                 std::size_t currentMaxBagSize = currentDecomposition->maximumBagSize();
 
-                if (!managementInstance_->isTerminated())
+                if (!managementInstance_->isTerminated() || algorithm.isSafelyInterruptible())
                 {
                     if (currentMaxBagSize < bestMaxBagSize)
                     {

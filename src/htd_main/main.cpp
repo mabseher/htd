@@ -750,7 +750,14 @@ int main(int argc, const char * const * const argv)
 
                         if (iterationOption.used())
                         {
-                            adaptiveAlgorithm->setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
+                            std::size_t iterations = std::stoul(iterationOption.value(), nullptr, 10);
+
+                            if (iterations == 0)
+                            {
+                                iterations = (std::size_t)-1;
+                            }
+
+                            adaptiveAlgorithm->setIterationCount(iterations);
                         }
                         else
                         {
@@ -781,7 +788,14 @@ int main(int argc, const char * const * const argv)
 
                         if (iterationOption.used())
                         {
-                            baseAlgorithm->setIterationCount(std::stoul(iterationOption.value(), nullptr, 10));
+                            std::size_t iterations = std::stoul(iterationOption.value(), nullptr, 10);
+
+                            if (iterations == 0)
+                            {
+                                iterations = (std::size_t)-1;
+                            }
+
+                            baseAlgorithm->setIterationCount(iterations);
                         }
                         else
                         {

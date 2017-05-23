@@ -36,23 +36,11 @@ if(UNIX)
     configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_exhaustive.sh"
                    "${CMAKE_BINARY_DIR}/bin/htd_gr2td_exhaustive.sh" COPYONLY)
 
-    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_exhaustive.sh"
-                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_minfill_exhaustive.sh" COPYONLY)
+    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_exhaustive_minfill.sh"
+                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_exhaustive_minfill.sh" COPYONLY)
 
-    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_iterative_100.sh"
-                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_minfill_iterative_100.sh" COPYONLY)
-
-    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_minfill_iterative_256.sh"
-                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_minfill_iterative_256.sh" COPYONLY)
-
-    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_mindegree_exhaustive.sh"
-                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_mindegree_exhaustive.sh" COPYONLY)
-
-    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_mindegree_iterative_100.sh"
-                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_mindegree_iterative_100.sh" COPYONLY)
-
-    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_mindegree_iterative_256.sh"
-                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_mindegree_iterative_256.sh" COPYONLY)
+    configure_file("${CMAKE_SOURCE_DIR}/scripts/htd_gr2td_exhaustive_mindegree.sh"
+                   "${CMAKE_BINARY_DIR}/bin/htd_gr2td_exhaustive_mindegree.sh" COPYONLY)
 
     configure_file("${CMAKE_SOURCE_DIR}/scripts/pace16_build_test.sh"
                    "${CMAKE_BINARY_DIR}/bin/pace16_build_test.sh" COPYONLY)

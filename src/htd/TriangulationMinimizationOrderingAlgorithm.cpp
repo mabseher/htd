@@ -61,6 +61,7 @@ struct htd::TriangulationMinimizationOrderingAlgorithm::Implementation
 
     }
 
+#ifndef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
     /**
      *  Copy constructor for the implementation details structure.
      *
@@ -70,6 +71,17 @@ struct htd::TriangulationMinimizationOrderingAlgorithm::Implementation
     {
 
     }
+#else
+    /**
+     *  Copy constructor for the implementation details structure.
+     *
+     *  @param[in] original The original implementation details structure.
+     */
+    Implementation(const Implementation & original) : managementInstance_(original.managementInstance_), orderingAlgorithm_(original.orderingAlgorithm_->cloneOrderingAlgorithm())
+    {
+
+    }
+#endif
 
     virtual ~Implementation()
     {

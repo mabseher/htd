@@ -26,7 +26,7 @@
 #define HTD_HTD_ADAPTIVEWIDTHMINIMIZINGTREEDECOMPOSITIONALGORITHM_HPP
 
 #include <htd/Globals.hpp>
-#include <htd/ICustomizedTreeDecompositionAlgorithm.hpp>
+#include <htd/IWidthMinimizingTreeDecompositionAlgorithm.hpp>
 
 #include <htd/ILabelingFunction.hpp>
 #include <htd/IMutableTreeDecomposition.hpp>
@@ -39,11 +39,11 @@
 namespace htd
 {
     /**
-     *  Implementation of the ITreeDecompositionAlgorithm interface based on repeated construction of a tree decomposition
-     *  of the same input graph with different base decomposition algorithms. After finishing the last iteration (or being
-     *  interrupted by a call to htd::LibraryInstance::terminate()), the algorithm returns the decomposition with lowest
-     *  width that was found so far. In case that this algorithm is interrupted before the first iteration is finished,
-     *  the return value of computeDecomposition() will be nullptr.
+     *  Implementation of the IWidthMinimizingTreeDecompositionAlgorithm interface based on repeated construction of a
+     *  tree decomposition of the same input graph with different base decomposition algorithms. After finishing the
+     *  last iteration (or being interrupted by a call to htd::LibraryInstance::terminate()), the algorithm returns
+     *  the decomposition with lowest width that was found so far. In case that this algorithm is interrupted before
+     *  the first iteration is finished, the return value of computeDecomposition() will be nullptr.
      *
      *  In contrast to the class htd::CombinedWidthMinimizingTreeDecompositionAlgorithm which executes each of the provided
      *  algorithms only once, this class first performs a number of decision rounds to determine the most promising
@@ -56,7 +56,7 @@ namespace htd
      *
      *  @note The base algorithms must be assigned before the optional manipulation operations!
      */
-    class AdaptiveWidthMinimizingTreeDecompositionAlgorithm : public htd::ICustomizedTreeDecompositionAlgorithm
+    class AdaptiveWidthMinimizingTreeDecompositionAlgorithm : public htd::IWidthMinimizingTreeDecompositionAlgorithm
     {
         public:
             /**
@@ -158,6 +158,72 @@ namespace htd
              */
             HTD_API htd::ITreeDecomposition * computeDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, int manipulationOperationCount, ...) const;
 
+            HTD_API htd::ITreeDecomposition * computeImprovedDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize) const HTD_OVERRIDE;
+
+            HTD_API htd::ITreeDecomposition * computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                           const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback, std::size_t maxBagSize) const HTD_OVERRIDE;
+
+            HTD_API htd::ITreeDecomposition * computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                           const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize) const HTD_OVERRIDE;
+
+            HTD_API htd::ITreeDecomposition * computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                           const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
+                                                                           const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback, std::size_t maxBagSize) const HTD_OVERRIDE;
+
+            /**
+             *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
+             *
+             *  @param[in] graph                        The input graph to decompose.
+             *  @param[in] maxBagSize                   The upper bound for the maximum bag size of the computed decomposition.
+             *  @param[in] manipulationOperationCount   The number of manipulation operations which are provided to this function.
+             *
+             *  @note The maximum bag size of the computed decomposition must be less than or equal to the provided upper bound.
+             *
+             *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
+             *
+             *  @note When calling this method the control over the memory regions of the manipulation operations is transferred to the
+             *  decomposition algorithm. Deleting a manipulation operation provided to this method outside the decomposition algorithm
+             *  or assigning the same manipulation operation multiple times will lead to undefined behavior.
+             *
+             *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
+             */
+            HTD_API htd::ITreeDecomposition * computeImprovedDecomposition(const htd::IMultiHypergraph & graph, std::size_t maxBagSize, int manipulationOperationCount, ...) const;
+
+            HTD_API htd::ITreeDecomposition * computeImprovedDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, std::size_t maxBagSize) const HTD_OVERRIDE;
+
+            HTD_API htd::ITreeDecomposition * computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                           const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                           const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback, std::size_t maxBagSize) const HTD_OVERRIDE;
+
+            HTD_API htd::ITreeDecomposition * computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                           const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                           const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations, std::size_t maxBagSize) const HTD_OVERRIDE;
+
+            HTD_API htd::ITreeDecomposition * computeImprovedDecomposition(const htd::IMultiHypergraph & graph,
+                                                                           const htd::IPreprocessedGraph & preprocessedGraph,
+                                                                           const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations,
+                                                                           const std::function<void(const htd::IMultiHypergraph &, const htd::ITreeDecomposition &, const htd::FitnessEvaluation &)> & progressCallback, std::size_t maxBagSize) const HTD_OVERRIDE;
+
+            /**
+             *  Compute a decomposition of the given graph and apply the given manipulation operations to it. The manipulation operations are applied in the given order.
+             *
+             *  @param[in] graph                        The input graph to decompose.
+             *  @param[in] preprocessedGraph            The input graph in preprocessed format.
+             *  @param[in] maxBagSize                   The upper bound for the maximum bag size of the computed decomposition.
+             *  @param[in] manipulationOperationCount   The number of manipulation operations which are provided to this function.
+             *
+             *  @note The maximum bag size of the computed decomposition must be less than or equal to the provided upper bound.
+             *
+             *  @note The manipulation operations provided to this function are applied right after the manipulation operations defined globally for the algorithm.
+             *
+             *  @note When calling this method the control over the memory regions of the manipulation operations is transferred to the
+             *  decomposition algorithm. Deleting a manipulation operation provided to this method outside the decomposition algorithm
+             *  or assigning the same manipulation operation multiple times will lead to undefined behavior.
+             *
+             *  @return A new ITreeDecomposition object representing the decomposition of the given graph.
+             */
+            HTD_API htd::ITreeDecomposition * computeImprovedDecomposition(const htd::IMultiHypergraph & graph, const htd::IPreprocessedGraph & preprocessedGraph, std::size_t maxBagSize, int manipulationOperationCount, ...) const;
+
             HTD_API void setManipulationOperations(const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) HTD_OVERRIDE;
 
             HTD_API void addManipulationOperation(htd::IDecompositionManipulationOperation * manipulationOperation) HTD_OVERRIDE;
@@ -166,19 +232,9 @@ namespace htd
 
             HTD_API bool isSafelyInterruptible(void) const HTD_OVERRIDE;
 
-            /**
-             *  Check whether the edges induced by the bag contents shall be computed.
-             *
-             *  @return A boolean flag indicating whether the edges induced by the bag contents shall be computed.
-             */
-            HTD_API bool isComputeInducedEdgesEnabled(void) const;
+            HTD_API bool isComputeInducedEdgesEnabled(void) const HTD_OVERRIDE;
 
-            /**
-             *  Set whether the edges induced by the bag contents shall be computed.
-             *
-             *  @param[in] computeInducedEdges  A boolean flag indicating whether the edges induced by the bag contents shall be computed.
-             */
-            HTD_API void setComputeInducedEdges(bool computeInducedEdges);
+            HTD_API void setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled) HTD_OVERRIDE;
 
             /**
              *  Getter for the number of decision rounds which shall be performed (0=no decision round, random selection of algorithm).

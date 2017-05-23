@@ -112,6 +112,10 @@ namespace htd
 
             HTD_API bool isSafelyInterruptible(void) const HTD_OVERRIDE;
 
+            HTD_API bool isComputeInducedEdgesEnabled(void) const HTD_OVERRIDE;
+
+            HTD_API void setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled) HTD_OVERRIDE;
+
             HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;

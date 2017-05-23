@@ -50,7 +50,7 @@ struct htd::PostProcessingPathDecompositionAlgorithm::Implementation
      *
      *  @param[in] manager   The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_()
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
     {
 
     }
@@ -82,6 +82,11 @@ struct htd::PostProcessingPathDecompositionAlgorithm::Implementation
      *  The manipuation operations which are applied after the decomposition was computed.
      */
     std::vector<htd::IPathDecompositionManipulationOperation *> postProcessingOperations_;
+
+    /**
+     *  A boolean flag indicating whether the hyperedges induced by a respective bag shall be computed.
+     */
+    bool computeInducedEdges_;
 };
 
 htd::PostProcessingPathDecompositionAlgorithm::PostProcessingPathDecompositionAlgorithm(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
@@ -128,6 +133,8 @@ htd::IPathDecomposition * htd::PostProcessingPathDecompositionAlgorithm::compute
     htd::ITreeDecompositionAlgorithm * algorithm = managementInstance()->treeDecompositionAlgorithmFactory().createInstance();
 
     HTD_ASSERT(algorithm != nullptr)
+
+    algorithm->setComputeInducedEdgesEnabled(implementation_->computeInducedEdges_);
 
     htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph, preprocessedGraph);
 
@@ -361,6 +368,16 @@ void htd::PostProcessingPathDecompositionAlgorithm::addManipulationOperations(co
 bool htd::PostProcessingPathDecompositionAlgorithm::isSafelyInterruptible(void) const
 {
     return false;
+}
+
+bool htd::PostProcessingPathDecompositionAlgorithm::isComputeInducedEdgesEnabled(void) const
+{
+    return implementation_->computeInducedEdges_;
+}
+
+void htd::PostProcessingPathDecompositionAlgorithm::setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled)
+{
+    implementation_->computeInducedEdges_ = computeInducedEdgesEnabled;
 }
 
 const htd::LibraryInstance * htd::PostProcessingPathDecompositionAlgorithm::managementInstance(void) const HTD_NOEXCEPT

@@ -52,7 +52,7 @@ struct htd::HypertreeDecompositionAlgorithm::Implementation
      *
      *  @param[in] manager   The management instance to which the current object instance belongs.
      */
-    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_()
+    Implementation(const htd::LibraryInstance * const manager) : managementInstance_(manager), labelingFunctions_(), postProcessingOperations_(), computeInducedEdges_(true)
     {
 
     }
@@ -84,6 +84,11 @@ struct htd::HypertreeDecompositionAlgorithm::Implementation
      *  The manipuation operations which are applied after the decomposition was computed.
      */
     std::vector<htd::ITreeDecompositionManipulationOperation *> postProcessingOperations_;
+
+    /**
+     *  A boolean flag indicating whether the hyperedges induced by a respective bag shall be computed.
+     */
+    bool computeInducedEdges_;
 
     /**
      *  Set the hyperedges covering the bags of the hypertree decomposition.
@@ -139,6 +144,8 @@ htd::IHypertreeDecomposition * htd::HypertreeDecompositionAlgorithm::computeDeco
     htd::ITreeDecompositionAlgorithm * algorithm = managementInstance()->treeDecompositionAlgorithmFactory().createInstance();
 
     HTD_ASSERT(algorithm != nullptr)
+
+    algorithm->setComputeInducedEdgesEnabled(implementation_->computeInducedEdges_);
 
     htd::ITreeDecomposition * treeDecomposition = algorithm->computeDecomposition(graph, preprocessedGraph);
 
@@ -318,6 +325,16 @@ void htd::HypertreeDecompositionAlgorithm::addManipulationOperations(const std::
 bool htd::HypertreeDecompositionAlgorithm::isSafelyInterruptible(void) const
 {
     return false;
+}
+
+bool htd::HypertreeDecompositionAlgorithm::isComputeInducedEdgesEnabled(void) const
+{
+    return implementation_->computeInducedEdges_;
+}
+
+void htd::HypertreeDecompositionAlgorithm::setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled)
+{
+    implementation_->computeInducedEdges_ = computeInducedEdgesEnabled;
 }
 
 const htd::LibraryInstance * htd::HypertreeDecompositionAlgorithm::managementInstance(void) const HTD_NOEXCEPT

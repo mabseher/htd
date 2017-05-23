@@ -430,6 +430,16 @@ bool htd::IterativeImprovementTreeDecompositionAlgorithm::isSafelyInterruptible(
     return true;
 }
 
+bool htd::IterativeImprovementTreeDecompositionAlgorithm::isComputeInducedEdgesEnabled(void) const
+{
+    return implementation_->algorithm_->isComputeInducedEdgesEnabled();
+}
+
+void htd::IterativeImprovementTreeDecompositionAlgorithm::setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled)
+{
+    implementation_->algorithm_->setComputeInducedEdgesEnabled(computeInducedEdgesEnabled);
+}
+
 std::size_t htd::IterativeImprovementTreeDecompositionAlgorithm::iterationCount(void) const
 {
     return implementation_->iterationCount_;

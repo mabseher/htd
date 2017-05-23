@@ -223,6 +223,10 @@ namespace htd
 
             HTD_API bool isSafelyInterruptible(void) const HTD_OVERRIDE;
 
+            HTD_API bool isComputeInducedEdgesEnabled(void) const HTD_OVERRIDE;
+
+            HTD_API void setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled) HTD_OVERRIDE;
+
             HTD_API const htd::LibraryInstance * managementInstance(void) const HTD_NOEXCEPT HTD_OVERRIDE;
 
             HTD_API void setManagementInstance(const htd::LibraryInstance * const manager) HTD_OVERRIDE;
@@ -240,20 +244,6 @@ namespace htd
              *  @param[in] compressionEnabled   A boolean flag indicating whether the computed decompositions shall contain only subset-maximal bags.
              */
             HTD_API void setCompressionEnabled(bool compressionEnabled);
-
-            /**
-             *  Check whether the edges induced by the bag contents shall be computed.
-             *
-             *  @return A boolean flag indicating whether the edges induced by the bag contents shall be computed.
-             */
-            HTD_API bool isComputeInducedEdgesEnabled(void) const;
-
-            /**
-             *  Set whether the edges induced by the bag contents shall be computed.
-             *
-             *  @param[in] computeInducedEdgesEnabled   A boolean flag indicating whether the edges induced by the bag contents shall be computed.
-             */
-            HTD_API void setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled);
 
             HTD_API BucketEliminationTreeDecompositionAlgorithm * clone(void) const HTD_OVERRIDE;
 

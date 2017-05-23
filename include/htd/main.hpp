@@ -163,6 +163,7 @@
 #include <htd/IVertexSelectionStrategy.hpp>
 #include <htd/IWidthLimitableOrderingAlgorithm.hpp>
 #include <htd/IWidthLimitedVertexOrdering.hpp>
+#include <htd/IWidthMinimizingTreeDecompositionAlgorithm.hpp>
 #include <htd/JoinNodeComplexityReductionOperation.hpp>
 #include <htd/JoinNodeNormalizationOperation.hpp>
 #include <htd/JoinNodeReplacementOperation.hpp>

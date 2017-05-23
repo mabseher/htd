@@ -150,6 +150,20 @@ namespace htd
             virtual bool isSafelyInterruptible(void) const = 0;
 
             /**
+             *  Check whether the edges induced by the bag contents shall be computed.
+             *
+             *  @return A boolean flag indicating whether the edges induced by the bag contents shall be computed.
+             */
+            virtual bool isComputeInducedEdgesEnabled(void) const = 0;
+
+            /**
+             *  Set whether the edges induced by the bag contents shall be computed.
+             *
+             *  @param[in] computeInducedEdgesEnabled   A boolean flag indicating whether the edges induced by the bag contents shall be computed.
+             */
+            virtual void setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled) = 0;
+
+            /**
              *  Create a deep copy of the current graph decomposition algorithm.
              *
              *  @return A new IGraphDecompositionAlgorithm object identical to the current graph decomposition algorithm.

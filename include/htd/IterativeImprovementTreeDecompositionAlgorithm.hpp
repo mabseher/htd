@@ -173,6 +173,10 @@ namespace htd
 
             HTD_API bool isSafelyInterruptible(void) const HTD_OVERRIDE;
 
+            HTD_API bool isComputeInducedEdgesEnabled(void) const HTD_OVERRIDE;
+
+            HTD_API void setComputeInducedEdgesEnabled(bool computeInducedEdgesEnabled) HTD_OVERRIDE;
+
             /**
              *  Getter for the number of iterations which shall be performed (0=infinite).
              *

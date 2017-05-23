@@ -33,6 +33,7 @@
 #include <htd_main/WidthExporter.hpp>
 #include <htd_main/TdFormatExporter.hpp>
 #include <htd_main/HumanReadableExporter.hpp>
+#include <htd_main/DefaultTreeDecompositionProcessor.hpp>
 #include <htd_main/GrFormatGraphToTreeDecompositionProcessor.hpp>
 #include <htd_main/HgrFormatGraphToTreeDecompositionProcessor.hpp>
 #include <htd_main/LpFormatGraphToTreeDecompositionProcessor.hpp>
@@ -716,7 +717,7 @@ int main(int argc, const char * const * const argv)
             {
                 std::size_t optimalMaximumBagSize = (std::size_t)-1;
 
-                if (optimizationChoice.used() && std::string(optimizationChoice.value()) == "width")
+                if (std::string(optimizationChoice.value()) == "width")
                 {
                     htd::CombinedWidthMinimizingTreeDecompositionAlgorithm * algorithm = new htd::CombinedWidthMinimizingTreeDecompositionAlgorithm(libraryInstance);
 
@@ -857,6 +858,10 @@ int main(int argc, const char * const * const argv)
                 else if (std::string(inputFormatChoice.value()) == "lp")
                 {
                     processor = new htd_main::LpFormatGraphToTreeDecompositionProcessor(libraryInstance);
+                }
+                else
+                {
+                    processor = new htd_main::DefaultTreeDecompositionProcessor(libraryInstance);
                 }
 
                 processor->setExporter(exporter);

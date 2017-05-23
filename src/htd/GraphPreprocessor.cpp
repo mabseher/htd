@@ -1043,6 +1043,8 @@ bool htd::GraphPreprocessor::Implementation::eliminateVerticesOfDegreeLessThanTw
 
             std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
 
+            /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'otherNeighborhood'. */
+            // coverity[use_iterator]
             otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
 
             assignVertexToGroup(neighbor, verticesByDegree, otherNeighborhood.size(), otherNeighborhood.size() + 1);
@@ -1090,7 +1092,12 @@ bool htd::GraphPreprocessor::Implementation::contractPaths(std::unordered_set<ht
             std::vector<htd::vertex_t> & otherNeighborhood1 = neighborhood[neighbor1];
             std::vector<htd::vertex_t> & otherNeighborhood2 = neighborhood[neighbor2];
 
+            /* Because 'neighbor1' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'otherNeighborhood1'. */
+            // coverity[use_iterator]
             otherNeighborhood1.erase(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), vertex));
+
+            /* Because 'neighbor2' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'otherNeighborhood2'. */
+            // coverity[use_iterator]
             otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
 
             auto position = std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), neighbor2);
@@ -1213,8 +1220,16 @@ bool htd::GraphPreprocessor::Implementation::shrinkTriangles(std::unordered_set<
 
             if (preprocessingApplicable)
             {
+                /* Because 'neighbor1' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'otherNeighborhood1'. */
+                // coverity[use_iterator]
                 otherNeighborhood1.erase(std::lower_bound(otherNeighborhood1.begin(), otherNeighborhood1.end(), vertex));
+
+                /* Because 'neighbor2' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'otherNeighborhood2'. */
+                // coverity[use_iterator]
                 otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
+
+                /* Because 'neighbor3' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'otherNeighborhood3'. */
+                // coverity[use_iterator]
                 otherNeighborhood3.erase(std::lower_bound(otherNeighborhood3.begin(), otherNeighborhood3.end(), vertex));
 
                 if (neighborDegree1 != otherNeighborhood1.size())
@@ -1297,7 +1312,12 @@ bool htd::GraphPreprocessor::Implementation::handleBuddies(std::unordered_set<ht
                             {
                                 std::vector<htd::vertex_t> & currentNeighborhood3 = neighborhood[vertex];
 
+                                /* Because 'vertex' is a neighbor of 'vertex1', std::lower_bound will always find 'vertex1' in 'currentNeighborhood3'. */
+                                // coverity[use_iterator]
                                 currentNeighborhood3.erase(std::lower_bound(currentNeighborhood3.begin(), currentNeighborhood3.end(), vertex1));
+
+                                /* Because 'vertex' is a neighbor of 'vertex2', std::lower_bound will always find 'vertex2' in 'currentNeighborhood3'. */
+                                // coverity[use_iterator]
                                 currentNeighborhood3.erase(std::lower_bound(currentNeighborhood3.begin(), currentNeighborhood3.end(), vertex2));
                             }
 
@@ -1384,6 +1404,8 @@ bool htd::GraphPreprocessor::Implementation::eliminateSimplicialVertices(std::un
                 {
                     std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
 
+                    /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'otherNeighborhood'. */
+                    // coverity[use_iterator]
                     otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
 
                     assignVertexToGroup(neighbor, verticesByDegree, otherNeighborhood.size(), otherNeighborhood.size() + 1);
@@ -1519,6 +1541,8 @@ bool htd::GraphPreprocessor::Implementation::eliminateAlmostSimplicialVertices(s
                             {
                                 std::vector<htd::vertex_t> & otherNeighborhood2 = neighborhood[neighbor];
 
+                                /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'otherNeighborhood2'. */
+                                // coverity[use_iterator]
                                 otherNeighborhood2.erase(std::lower_bound(otherNeighborhood2.begin(), otherNeighborhood2.end(), vertex));
 
                                 assignVertexToGroup(neighbor, verticesByDegree, otherNeighborhood2.size(), otherNeighborhood2.size() + 1);
@@ -1651,6 +1675,8 @@ void htd::GraphPreprocessor::Implementation::applyBiconnectedComponentPreprocess
             {
                 std::vector<htd::vertex_t> & otherNeighborhood = preprocessedGraph.neighborhood(neighbor);
 
+                /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'otherNeighborhood'. */
+                // coverity[use_iterator]
                 otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
             }
         }
@@ -1671,6 +1697,14 @@ void htd::GraphPreprocessor::Implementation::applyBiconnectedComponentPreprocess
             return std::binary_search(component.begin(), component.end(), selectedComponent[0]);
         });
 
+        HTD_ASSERT(position != connectedComponents.end())
+
+        /*
+         * After separating the largest biconnected component from the remainder of the graph,
+         * it forms a connected component of the graph, i.e., the iterator 'position' always
+         * points to a valid position within the set of connected components.
+         */
+        // coverity[deref_iterator]
         position->swap(*(connectedComponents.rbegin()));
 
         std::sort(connectedComponents.begin(), connectedComponents.end() - 1,
@@ -1911,6 +1945,11 @@ void htd::GraphPreprocessor::Implementation::applyCliqueSeparatorPreprocessing(h
         delete separator;
 
         separator = algorithm.computeSeparator(preprocessedGraph);
+    }
+
+    if (separator != nullptr)
+    {
+        delete separator;
     }
 }
 

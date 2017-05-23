@@ -415,6 +415,8 @@ void htd::PreprocessedGraph::removeVertex(htd::vertex_t vertex)
     {
         std::vector<htd::vertex_t> & currentNeighborhood = implementation_->neighborhood_[neighbor];
 
+        /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'currentNeighborhood'. */
+        // coverity[use_iterator]
         currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex));
     }
 

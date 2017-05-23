@@ -35,7 +35,7 @@
 #include <stdexcept>
 
 /**
- *  Private implementation details of class htd::HgrFormatGraphToTreeDecompositionProcessor.
+ *  Private implementation details of class htd_main::HgrFormatGraphToTreeDecompositionProcessor.
  */
 struct htd_main::HgrFormatGraphToTreeDecompositionProcessor::Implementation
 {

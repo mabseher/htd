@@ -128,6 +128,8 @@ htd::IVertexOrdering * htd::MaximumCardinalitySearchOrderingAlgorithm::computeOr
         {
             std::vector<htd::vertex_t> & currentNeighborhood = neighborhood[neighbor];
 
+            /* Because 'vertex' is a neighbor of 'selectedVertex', std::lower_bound will always find 'selectedVertex' in 'currentNeighborhood'. */
+            // coverity[use_iterator]
             currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
 
             std::size_t & currentWeight = weights[neighbor];

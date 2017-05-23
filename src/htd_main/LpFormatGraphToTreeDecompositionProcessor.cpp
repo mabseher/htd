@@ -36,7 +36,7 @@
 #include <string>
 
 /**
- *  Private implementation details of class htd::LpFormatGraphToTreeDecompositionProcessor.
+ *  Private implementation details of class htd_main::LpFormatGraphToTreeDecompositionProcessor.
  */
 struct htd_main::LpFormatGraphToTreeDecompositionProcessor::Implementation
 {

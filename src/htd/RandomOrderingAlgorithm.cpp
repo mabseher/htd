@@ -106,6 +106,8 @@ htd::IVertexOrdering * htd::RandomOrderingAlgorithm::computeOrdering(const htd::
         vertex = preprocessedGraph.vertexName(vertex);
     });
 
+    /* Coverity complains about std::rand() being not safe for security related operations. We are happy with a pseudo-random number here. */
+    // coverity[dont_call]
     std::mt19937 g(static_cast<std::mt19937::result_type>(std::rand()));
 
     std::shuffle(middle, ordering.end(), g);

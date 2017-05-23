@@ -192,6 +192,8 @@ std::size_t htd::MinDegreeOrderingAlgorithm::Implementation::writeOrderingTo(con
 
             std::size_t oldNeighborhoodSize = currentNeighborhood.size();
 
+            /* Because 'vertex' is a neighbor of 'selectedVertex', std::lower_bound will always find 'selectedVertex' in 'currentNeighborhood'. */
+            // coverity[use_iterator]
             currentNeighborhood.erase(std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), selectedVertex));
 
             std::set_difference(selectedNeighborhood.begin(), selectedNeighborhood.end(),

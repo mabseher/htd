@@ -219,7 +219,9 @@ void htd::BiconnectedComponentAlgorithm::determineComponent(const htd::IGraphStr
 
     htd::BiconnectedComponentAlgorithm::determineComponents(graph, components, tmp);
 
-    for (auto it = components.begin(); it != components.end(); ++it)
+    bool found = false;
+
+    for (auto it = components.begin(); !found && it != components.end(); ++it)
     {
         if (std::binary_search(it->begin(), it->end(), startingVertex))
         {
@@ -227,7 +229,7 @@ void htd::BiconnectedComponentAlgorithm::determineComponent(const htd::IGraphStr
 
             std::set_intersection(it->begin(), it->end(), tmp.begin(), tmp.end(), std::back_inserter(articulationPoints));
 
-            it = components.end();
+            found = true;
         }
     }
 }

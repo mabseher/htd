@@ -87,7 +87,7 @@ namespace htd
 
                 for (const std::vector<long long> & current : flow_)
                 {
-                    ret = ret + current[target_];
+                    ret = ret + static_cast<std::size_t>(current[target_]);
                 }
 
                 return ret;
@@ -256,7 +256,7 @@ std::vector<std::vector<std::size_t>> * htd::DinitzMaxFlowAlgorithm::Implementat
     {
         for (htd::index_t j = 0; j < vertexCount; j++)
         {
-            capacities[i][j] = flowNetwork.capacity(i, j) - flow.flow_[i][j];
+            capacities[i][j] = flowNetwork.capacity(i, j) - static_cast<std::size_t>(flow.flow_[i][j]);
         }
     }
 

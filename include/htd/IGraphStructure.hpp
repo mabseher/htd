@@ -194,14 +194,14 @@ namespace htd
             /**
              *  Create a deep copy of the current graph structure.
              *
-             *  @return A new IMultiHypergraph object identical to the current graph structure.
+             *  @return A new IGraphStructure object identical to the current graph structure.
              */
             virtual IGraphStructure * clone(void) const = 0;
 #else
             /**
              *  Create a deep copy of the current graph structure.
              *
-             *  @return A new IMultiHypergraph object identical to the current graph structure.
+             *  @return A new IGraphStructure object identical to the current graph structure.
              */
             virtual IGraphStructure * cloneGraphStructure(void) const = 0;
 #endif

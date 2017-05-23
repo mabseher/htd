@@ -32,6 +32,7 @@
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
+#include <numeric>
 #include <utility>
 #include <stack>
 #include <unordered_set>

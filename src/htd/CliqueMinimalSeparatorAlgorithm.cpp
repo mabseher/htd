@@ -32,6 +32,7 @@
 #include <htd/VectorAdapter.hpp>
 
 #include <algorithm>
+#include <numeric>
 #include <stack>
 #include <unordered_map>
 #include <unordered_set>
@@ -488,17 +489,27 @@ struct htd::CliqueMinimalSeparatorAlgorithm::Implementation
                 edgeCount_ = edgeCount_ >> 1;
             }
 
-            TriangulatedGraph * clone(void) const HTD_OVERRIDE
+#ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
+            /**
+             *  Create a deep copy of the current graph structure.
+             *
+             *  @return A new TriangulatedGraph object identical to the current graph structure.
+             */
+            TriangulatedGraph * clone(void) const
             {
                 return new TriangulatedGraph(*this);
             }
 
-            #ifdef HTD_USE_VISUAL_STUDIO_COMPATIBILITY_MODE
             htd::IGraphStructure * cloneGraphStructure(void) const HTD_OVERRIDE
             {
                 return clone();
             }
-            #endif
+#else
+            TriangulatedGraph * clone(void) const HTD_OVERRIDE
+            {
+                return new TriangulatedGraph(*this);
+            }
+#endif
 
         private:
             /**

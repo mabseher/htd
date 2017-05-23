@@ -40,6 +40,7 @@
 #include <algorithm>
 #include <cstdarg>
 #include <memory>
+#include <numeric>
 #include <unordered_map>
 #include <utility>
 #include <vector>

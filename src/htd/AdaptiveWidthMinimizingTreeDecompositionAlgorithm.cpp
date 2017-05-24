@@ -312,6 +312,11 @@ htd::ITreeDecomposition * htd::AdaptiveWidthMinimizingTreeDecompositionAlgorithm
 {
     std::size_t bestMaxBagSize = maxBagSize;
 
+    if (bestMaxBagSize != (std::size_t)-1)
+    {
+        ++bestMaxBagSize;
+    }
+
     const htd::LibraryInstance & managementInstance = *(implementation_->managementInstance_);
 
     htd::ITreeDecomposition * ret = nullptr;

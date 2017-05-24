@@ -50,6 +50,8 @@ namespace htd
     class ICustomizedTreeDecompositionAlgorithm : public htd::ITreeDecompositionAlgorithm
     {
         public:
+            using htd::ITreeDecompositionAlgorithm::computeDecomposition;
+
             virtual ~ICustomizedTreeDecompositionAlgorithm() = 0;
 
             /**

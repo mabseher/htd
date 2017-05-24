@@ -113,7 +113,7 @@ namespace htd
                 return htd::ConstCollection<htd::vertex_t>::getInstance(remainingVertices_);
             }
 
-            void copyVerticesTo(std::vector<htd::vertex_t> & target) const
+            void copyVerticesTo(std::vector<htd::vertex_t> & target) const HTD_OVERRIDE
             {
                 target.insert(target.end(), remainingVertices_.begin(), remainingVertices_.end());
             }

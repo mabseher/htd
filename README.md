@@ -24,7 +24,7 @@ For using **htd** via the command-line interface there is the front-end applicat
 
 A program call for **htd_main** is of the following form:
 
-`./htd_main [-h] [-v] [-s <SEED>] [--type <DECOMPOSITION_TYPE>] [--input <FORMAT>] [--output <FORMAT>] [--strategy <ALGORITHM>] [--opt <CRITERION>] [--iterations <LIMIT>] [--print-opt-progress] < $FILE`
+`./htd_main [-h] [-v] [-s <SEED>] [--type <DECOMPOSITION_TYPE>] [--input <FORMAT>] [--instance <PATH>] [--output <FORMAT>] [--print-progress] [--strategy <ALGORITHM>] [--preprocessing <STRATEGY>] [--triangulation-minimization] [--opt <CRITERION>] [--iterations <LIMIT>] [--patience <AMOUNT>] < $FILE`
 
 Options are organized in the following groups:
 
@@ -40,12 +40,12 @@ Options are organized in the following groups:
       * `.) hypertree : Compute a hypertree decomposition of the input graph.`
 
 * Input-Specific Options:
-  * `--input <format> :                Assume that the input graph is given in format <format>.` 
+  * `--input <format> :                Assume that the input graph is given in format <format>.`
     * `Permitted Values:`
       * `.) gr  : Use the input format 'gr'. (default)`
       * `.) lp  : Use the input format 'lp'.`
       * `.) hgr : Use the input format 'hgr'.`
-        
+
     (See [FORMATS](https://github.com/mabseher/htd/blob/master/FORMATS.md) for information about the available input formats.)
   * `--instance <instance> :           Read the input graph from file <instance>.`
 
@@ -55,16 +55,27 @@ Options are organized in the following groups:
       * `.) td    : Use the output format 'td'. (default)`
       * `.) human : Provide a human-readable output of the decomposition.`
       * `.) width : Provide only the maximum bag size of the decomposition.`
-  
+
     (See [FORMATS](https://github.com/mabseher/htd/blob/master/FORMATS.md) for information about the available output formats.)
+  * `--print-progress :                Print decomposition progress.`
 
 * Algorithm Options:
   * `--strategy <algorithm> :          Set the decomposition strategy which shall be used to <algorithm>.`
     * `Permitted Values:`
-      * `.) min-fill        : Minimum-fill ordering algorithm (default)`
-      * `.) min-degree      : Minimum-degree ordering algorithm`
-      * `.) max-cardinality : Maximum cardinality search ordering algorithm`
-      * `.) challenge       : Use min-degree heuristic for first decomposition and min-fill afterwards.`
+      * `.) random                   : Use a random vertex ordering.`
+      * `.) min-fill                 : Minimum fill ordering algorithm (default)`
+      * `.) min-degree               : Minimum degree ordering algorithm`
+      * `.) min-separator            : Minimum separating vertex set heuristic`
+      * `.) max-cardinality          : Maximum cardinality search ordering algorithm`
+      * `.) max-cardinality-enhanced : Enhanced maximum cardinality search ordering algorithm (MCS-M)`
+      * `.) challenge                : Use a combination of different decomposition strategies.`
+  * `--preprocessing <strategy> :      Set the preprocessing strategy which shall be used to <strategy>.`
+    * `Permitted Values:`
+      * `.) none     : Do not preprocess the input graph.`
+      * `.) simple   : Use simple preprocessing capabilities.`
+      * `.) advanced : Use advanced preprocessing capabilities.`
+      * `.) full     : Use the full set of preprocessing capabilities.`
+  * `--triangulation-minimization :    Apply triangulation minimization approach.`
 
 * Optimization Options:
   * `--opt <criterion> :               Iteratively compute a decomposition which optimizes <criterion>.`
@@ -73,7 +84,6 @@ Options are organized in the following groups:
       * `.) width : Minimize the maximum bag size of the computed decomposition.`
   * `--iterations <count> :            Set the number of iterations to be performed during optimization to <count> (0 = infinite). (Default: 10)`
   * `--patience <amount>:              Terminate the algorithm if more than <amount> iterations did not lead to an improvement (-1 = infinite). (Default: -1)`
-  * `--print-opt-progress :            Print progress whenever a new optimal decomposition is found.`
 
 ### Using htd as a developer
 

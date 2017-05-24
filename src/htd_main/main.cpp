@@ -71,10 +71,6 @@ htd_cli::OptionManager * createOptionManager(void)
 
         decompositionTypeChoice->setDefaultValue("tree");
 
-        htd_cli::Option * printProgressOption = new htd_cli::Option("print-progress", "Print progress whenever a new optimal decomposition is found.");
-
-        manager->registerOption(printProgressOption, "General Options");
-
         manager->registerOption(decompositionTypeChoice, "Decomposition Options");
 
         htd_cli::Choice * inputFormatChoice = new htd_cli::Choice("input", "Assume that the input graph is given in format <format>.\n  (See https://github.com/mabseher/htd/blob/master/FORMATS.md for information about the available input formats.)", "format");
@@ -101,6 +97,10 @@ htd_cli::OptionManager * createOptionManager(void)
 
         manager->registerOption(outputFormatChoice, "Output-Specific Options");
 
+        htd_cli::Option * printProgressOption = new htd_cli::Option("print-progress", "Print decomposition progress.");
+
+        manager->registerOption(printProgressOption, "Output-Specific Options");
+
         htd_cli::Choice * strategyChoice = new htd_cli::Choice("strategy", "Set the decomposition strategy which shall be used to <algorithm>.", "algorithm");
 
         strategyChoice->addPossibility("random", "Use a random vertex ordering.");
@@ -109,7 +109,7 @@ htd_cli::OptionManager * createOptionManager(void)
         strategyChoice->addPossibility("min-separator", "Minimum separating vertex set heuristic");
         strategyChoice->addPossibility("max-cardinality", "Maximum cardinality search ordering algorithm");
         strategyChoice->addPossibility("max-cardinality-enhanced", "Enhanced maximum cardinality search ordering algorithm (MCS-M)");
-        strategyChoice->addPossibility("challenge", "Use min-degree heuristic for first decomposition and min-fill afterwards.");
+        strategyChoice->addPossibility("challenge", "Use a combination of different decomposition strategies.");
 
         strategyChoice->setDefaultValue("min-fill");
 
@@ -117,7 +117,7 @@ htd_cli::OptionManager * createOptionManager(void)
 
         htd_cli::Choice * preprocessingChoice = new htd_cli::Choice("preprocessing", "Set the preprocessing strategy which shall be used to <strategy>.", "strategy");
 
-        preprocessingChoice->addPossibility("none", "Do not preprocess input graph.");
+        preprocessingChoice->addPossibility("none", "Do not preprocess the input graph.");
         preprocessingChoice->addPossibility("simple", "Use simple preprocessing capabilities.");
         preprocessingChoice->addPossibility("advanced", "Use advanced preprocessing capabilities.");
         preprocessingChoice->addPossibility("full", "Use the full set of preprocessing capabilities.");

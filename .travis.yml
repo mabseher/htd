@@ -23,6 +23,7 @@ install:
     mkdir -p "${DEPENDENCIES_DIRECTORY}/gcov/bin"
     export PATH=${DEPENDENCIES_DIRECTORY}/gcov/bin:${PATH}
     ln -fs /usr/bin/gcov-4.9 "${DEPENDENCIES_DIRECTORY}/gcov/bin/gcov" && gcov --version
+    pip install --user requests[security]
     pip install --user cpp-coveralls
   fi
 - cd ${TRAVIS_BUILD_DIR}
@@ -47,8 +48,8 @@ addons:
     - valgrind
     
 os:
-  - linux
-# - osx
+  #- linux
+  #- osx
 
 language: cpp
 
@@ -65,7 +66,7 @@ after_success:
   - |
     if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
       cd ${TRAVIS_BUILD_DIR}
-      coveralls --exclude "/usr" --exclude "test" --exclude "build" --exclude "dependencies" --gcov-options '\-lbp'
+      coveralls --exclude "/usr" --exclude "test" --exclude "build/htd/CMakeFiles" --exclude "dependencies" --gcov-options '\-lbp'
     fi
 
 after_failure:

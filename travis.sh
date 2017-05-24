@@ -28,9 +28,4 @@ fi
 
 make VERBOSE=1
 
-if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
-    lcov --directory .. --base-directory ../.. --zerocounters
-    lcov --directory .. --base-directory ../.. --capture --initial --output-file coverage.info
-fi
-
 make test

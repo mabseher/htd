@@ -22,12 +22,7 @@ install:
   if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
     mkdir -p "${DEPENDENCIES_DIRECTORY}/gcov/bin"
     export PATH=${DEPENDENCIES_DIRECTORY}/gcov/bin:${PATH}
-    ln -fs /usr/bin/gcov-4.9 "${DEPENDENCIES_DIRECTORY}/gcov/bin/gcov" && gcov --version    
-    #LCOV_URL="http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.13.orig.tar.gz"
-    #mkdir lcov && travis_retry wget --no-check-certificate --quiet -O - ${LCOV_URL} | tar --strip-components=1 -xz -C lcov
-    #export PATH=${DEPENDENCIES_DIRECTORY}/lcov/bin:${PATH}
-    #lcov --version
-    #gem install coveralls-lcov
+    ln -fs /usr/bin/gcov-4.9 "${DEPENDENCIES_DIRECTORY}/gcov/bin/gcov" && gcov --version
     pip install --user cpp-coveralls
   fi
 - cd ${TRAVIS_BUILD_DIR}
@@ -70,10 +65,6 @@ after_success:
   - |
     if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
       cd ${TRAVIS_BUILD_DIR}
-      #lcov --directory "build/${HTD_TARGET}" --base-directory . --capture --rc lcov_branch_coverage=1 --output-file coverage.info
-      #lcov --directory "build/${HTD_TARGET}" --base-directory . --remove coverage.info 'htd/test/*' '/usr/*' --rc lcov_branch_coverage=1 --output-file coverage.info
-      #lcov --rc lcov_branch_coverage=1 --list coverage.info
-      #coveralls-lcov --repo-token ${COVERALLS_REPO_TOKEN} coverage.info
       coveralls --exclude "/usr" --exclude "test" --exclude "build" --exclude "dependencies" --gcov-options '\-lbp'
     fi
 

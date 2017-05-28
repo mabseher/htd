@@ -21,10 +21,14 @@ bash -c "cd \"${TEST_DIRECTORY}/validator/td-validate-master\" && make && make t
 VALIDATOR="${TEST_DIRECTORY}/validator/td-validate-master/td-validate"
 VALIDATION_INSTANCE_FOLDER="${TEST_DIRECTORY}/instances"
 
-echo "Instance,Vertices,Seed,Width,Nodes,Time,Memory" > results_pace16_build_test.csv
+echo ""
+echo ""
+echo ""
 
 for HTD in "${STORAGE_DIRECTORY}/htd_gr2td_exhaustive.sh" "${STORAGE_DIRECTORY}/htd_gr2td_exhaustive_mindegree.sh" "${STORAGE_DIRECTORY}/htd_gr2td_exhaustive_minfill.sh"
 do
+    echo "Instance,Vertices,Seed,Width,Nodes,Time,Memory"
+
     for INSTANCE in `find "$VALIDATION_INSTANCE_FOLDER/" -type f -name "*.gr" -exec ls {} \; 2> /dev/null | awk -F/ '{print $(NF-2)"/"$(NF-1)"/"$(NF)}' | sort`
     do
         for ITERATION in {1..10..1}
@@ -48,7 +52,7 @@ do
                 WIDTH=`head -n1 "${TEST_DIRECTORY}/tmp.out" | cut -d' ' -f4`
                 VERTICES=`head -n1 "${TEST_DIRECTORY}/tmp.out" | cut -d' ' -f5`
 
-                echo "\"$INSTANCE\",$VERTICES,$ITERATION,$WIDTH,$NODES,$TIME,$MEMORY" >> results_pace16_build_test.csv
+                echo "\"$INSTANCE\",$VERTICES,$ITERATION,$WIDTH,$NODES,$TIME,$MEMORY"
             else
                 echo "ERROR: Decomposition for instance '${INSTANCE}' is invalid!"
 
@@ -61,9 +65,7 @@ do
         done
     done
 
-    echo "" >> results_pace16_build_test.csv
+    echo ""
 done
-
-cat results_pace16_build_test.csv
 
 rm -r "${TEST_DIRECTORY}"

@@ -61,7 +61,9 @@ do
         done
     done
 
-    echo ""
+    echo "" >> results_pace16_build_test.csv
 done
+
+cat results_pace16_build_test.csv
 
 rm -r "${TEST_DIRECTORY}"

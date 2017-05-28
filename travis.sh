@@ -29,3 +29,7 @@ fi
 make VERBOSE=1
 
 make test
+
+if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
+    eval bin/pace16_build_test.sh
+fi

@@ -30,6 +30,11 @@ do
         for ITERATION in {1..10..1}
         do
             eval "\time --format=\"%U %M\" timeout --preserve-status 5s $HTD -s ${ITERATION} < \"${STORAGE_DIRECTORY}/${INSTANCE}\"" > "${TEST_DIRECTORY}/tmp.out" 2> "${TEST_DIRECTORY}/tmp.err"
+
+            #TODO
+            cat "${TEST_DIRECTORY}/tmp.out"
+            echo ""
+            cat "${TEST_DIRECTORY}/tmp.err"
         
             eval "$VALIDATOR $INSTANCE \"${TEST_DIRECTORY}/tmp.out\"" 2> "${TEST_DIRECTORY}/tmp.res"
 

@@ -13,6 +13,7 @@ wget -O "${TEST_DIRECTORY}/instances.tar.gz" "http://bit.ly/pace16-tw-instances-
 wget -O "${TEST_DIRECTORY}/validator.zip" "https://github.com/holgerdell/td-validate/archive/master.zip"
 
 tar --directory "${TEST_DIRECTORY}/instances" --strip-components=3 -xzf "${TEST_DIRECTORY}/instances.tar.gz" "pace16-tw-instances-20160307/tw-exact/hard"
+tar --directory "${TEST_DIRECTORY}/instances" --strip-components=3 -xzf "${TEST_DIRECTORY}/instances.tar.gz" "pace16-tw-instances-20160307/tw-heuristic/easy"
 
 unzip -u -d "${TEST_DIRECTORY}/validator" "${TEST_DIRECTORY}/validator.zip"
 
@@ -31,7 +32,7 @@ do
 
     for INSTANCE in `find "$VALIDATION_INSTANCE_FOLDER/" -type f -name "*.gr" -exec ls {} \; 2> /dev/null | awk -F/ '{print $(NF-2)"/"$(NF-1)"/"$(NF)}' | sort`
     do
-        for ITERATION in {1..10..1}
+        for ITERATION in {1..5..1}
         do
             eval "/usr/bin/time --format=\"%U %M\" timeout 5s $HTD -s ${ITERATION} < \"${STORAGE_DIRECTORY}/${INSTANCE}\"" > "${TEST_DIRECTORY}/tmp.out" 2> "${TEST_DIRECTORY}/tmp.err"
 
@@ -45,9 +46,9 @@ do
 
                 mv "${TEST_DIRECTORY}/tmp2.out" "${TEST_DIRECTORY}/tmp.out"
 
-                TIME=`cut -d' ' -f1 "${TEST_DIRECTORY}/tmp.err"`
-                MEMORY=`cut -d' ' -f2 "${TEST_DIRECTORY}/tmp.err"`
-        
+                TIME=`grep -v "Command exited with non-zero status" "${TEST_DIRECTORY}/tmp.err" | cut -d' ' -f1`
+                MEMORY=`grep -v "Command exited with non-zero status" "${TEST_DIRECTORY}/tmp.err" | cut -d' ' -f2`
+
                 NODES=`head -n1 "${TEST_DIRECTORY}/tmp.out" | cut -d' ' -f3`
                 WIDTH=`head -n1 "${TEST_DIRECTORY}/tmp.out" | cut -d' ' -f4`
                 VERTICES=`head -n1 "${TEST_DIRECTORY}/tmp.out" | cut -d' ' -f5`

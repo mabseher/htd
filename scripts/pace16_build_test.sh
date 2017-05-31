@@ -13,7 +13,7 @@ wget -O "${TEST_DIRECTORY}/instances.tar.gz" "http://bit.ly/pace16-tw-instances-
 wget -O "${TEST_DIRECTORY}/validator.zip" "https://github.com/holgerdell/td-validate/archive/master.zip"
 
 tar --directory "${TEST_DIRECTORY}/instances" --strip-components=3 -xzf "${TEST_DIRECTORY}/instances.tar.gz" "pace16-tw-instances-20160307/tw-exact/hard"
-tar --directory "${TEST_DIRECTORY}/instances" --strip-components=3 -xzf "${TEST_DIRECTORY}/instances.tar.gz" "pace16-tw-instances-20160307/tw-heuristic/easy"
+tar --directory "${TEST_DIRECTORY}/instances" --strip-components=3 -xzf "${TEST_DIRECTORY}/instances.tar.gz" "pace16-tw-instances-20160307/tw-heuristic/medium"
 
 unzip -u -d "${TEST_DIRECTORY}/validator" "${TEST_DIRECTORY}/validator.zip"
 

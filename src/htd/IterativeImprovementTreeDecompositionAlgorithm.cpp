@@ -44,21 +44,8 @@ struct htd::IterativeImprovementTreeDecompositionAlgorithm::Implementation
      *  @param[in] algorithm        The decomposition algorithm which will be called repeatedly.
      *  @param[in] fitnessFunction  The fitness function which will be used to evaluate the constructed tree decompositions.
      */
-    Implementation(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction)
-        : managementInstance_(manager), iterationCount_(1), nonImprovementLimit_(-1), algorithm_(algorithm.clone()), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
-    {
-
-    }
-
-    /**
-     *  Constructor for the implementation details structure.
-     *
-     *  @param[in] manager           The management instance to which the current object instance belongs.
-     *  @param[in] algorithm        The decomposition algorithm which will be called repeatedly.
-     *  @param[in] fitnessFunction  The fitness function which will be used to evaluate the constructed tree decompositions.
-     */
-    Implementation(const htd::LibraryInstance * const manager, htd::ITreeDecompositionAlgorithm * algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction)
-        : managementInstance_(manager), iterationCount_(1), nonImprovementLimit_(-1), algorithm_(algorithm), fitnessFunction_(fitnessFunction.clone()), labelingFunctions_(), postProcessingOperations_()
+    Implementation(const htd::LibraryInstance * const manager, htd::ITreeDecompositionAlgorithm * algorithm, htd::ITreeDecompositionFitnessFunction * fitnessFunction)
+        : managementInstance_(manager), iterationCount_(1), nonImprovementLimit_(-1), algorithm_(algorithm), fitnessFunction_(fitnessFunction), labelingFunctions_(), postProcessingOperations_()
     {
 
     }
@@ -125,22 +112,12 @@ struct htd::IterativeImprovementTreeDecompositionAlgorithm::Implementation
     htd::IMutableTreeDecomposition * computeMutableDecomposition(const htd::IMultiHypergraph & graph) const;
 };
 
-htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : implementation_(new Implementation(manager, algorithm, fitnessFunction))
-{
-
-}
-
-htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, htd::ITreeDecompositionAlgorithm * algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction) : implementation_(new Implementation(manager, algorithm, fitnessFunction))
+htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, htd::ITreeDecompositionAlgorithm * algorithm, htd::ITreeDecompositionFitnessFunction * fitnessFunction) : implementation_(new Implementation(manager, algorithm, fitnessFunction))
 {
     HTD_ASSERT(algorithm != nullptr)
 }
 
-htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionAlgorithm & algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : implementation_(new Implementation(manager, algorithm, fitnessFunction))
-{
-    setManipulationOperations(manipulationOperations);
-}
-
-htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, htd::ITreeDecompositionAlgorithm * algorithm, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : implementation_(new Implementation(manager, algorithm, fitnessFunction))
+htd::IterativeImprovementTreeDecompositionAlgorithm::IterativeImprovementTreeDecompositionAlgorithm(const htd::LibraryInstance * const manager, htd::ITreeDecompositionAlgorithm * algorithm, htd::ITreeDecompositionFitnessFunction * fitnessFunction, const std::vector<htd::IDecompositionManipulationOperation *> & manipulationOperations) : implementation_(new Implementation(manager, algorithm, fitnessFunction))
 {
     HTD_ASSERT(algorithm != nullptr)
 
@@ -474,7 +451,7 @@ void htd::IterativeImprovementTreeDecompositionAlgorithm::setManagementInstance(
 
 htd::IterativeImprovementTreeDecompositionAlgorithm * htd::IterativeImprovementTreeDecompositionAlgorithm::clone(void) const
 {
-    htd::IterativeImprovementTreeDecompositionAlgorithm * ret = new htd::IterativeImprovementTreeDecompositionAlgorithm(managementInstance(), *(implementation_->algorithm_), *(implementation_->fitnessFunction_));
+    htd::IterativeImprovementTreeDecompositionAlgorithm * ret = new htd::IterativeImprovementTreeDecompositionAlgorithm(managementInstance(), implementation_->algorithm_->clone(), implementation_->fitnessFunction_->clone());
 
     for (htd::ILabelingFunction * labelingFunction : implementation_->labelingFunctions_)
     {

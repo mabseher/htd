@@ -40,7 +40,7 @@ struct htd::IterativeImprovementTreeDecompositionAlgorithm::Implementation
     /**
      *  Constructor for the implementation details structure.
      *
-     *  @param[in] manager           The management instance to which the current object instance belongs.
+     *  @param[in] manager          The management instance to which the current object instance belongs.
      *  @param[in] algorithm        The decomposition algorithm which will be called repeatedly.
      *  @param[in] fitnessFunction  The fitness function which will be used to evaluate the constructed tree decompositions.
      */

@@ -27,6 +27,7 @@
 
 #include <htd/Globals.hpp>
 
+#include <ostream>
 #include <vector>
 
 namespace htd
@@ -142,6 +143,13 @@ namespace htd
              *  @return True if the vector returned by the values() is unequal to rhs.values(), false otherwise.
              */
             HTD_API bool operator!=(const FitnessEvaluation & rhs) const HTD_NOEXCEPT;
+
+            /**
+             *  Create a deep copy of the current fitness evaluation.
+             *
+             *  @return A new FitnessEvaluation object identical to the current fitness evaluation.
+             */
+            HTD_API FitnessEvaluation * clone(void) const;
 
         private:
             /**

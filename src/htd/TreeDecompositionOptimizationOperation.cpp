@@ -43,7 +43,7 @@ struct htd::TreeDecompositionOptimizationOperation::Implementation
     /**
      *  Constructor for the implementation details structure.
      *
-     *  @param[in] manager   The management instance to which the current object instance belongs.
+     *  @param[in] manager  The management instance to which the current object instance belongs.
      */
     Implementation(const htd::LibraryInstance * const manager)
         : managementInstance_(manager), enforceNaiveOptimization_(false), strategy_(nullptr), fitnessFunction_(nullptr), manipulationOperations_()
@@ -54,12 +54,12 @@ struct htd::TreeDecompositionOptimizationOperation::Implementation
     /**
      *  Constructor for the implementation details structure.
      *
-     *  @param[in] manager                   The management instance to which the current object instance belongs.
+     *  @param[in] manager                  The management instance to which the current object instance belongs.
      *  @param[in] fitnessFunction          The fitness function which is used to determine the quality of tree decompositions.
      *  @param[in] enforceNaiveOptimization A boolean flag to enforce that each iteration of the optimization algorithm starts from scratch with a copy of the given decomposition.
      */
-    Implementation(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, bool enforceNaiveOptimization)
-        : managementInstance_(manager), enforceNaiveOptimization_(enforceNaiveOptimization), strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction.clone()), manipulationOperations_()
+    Implementation(const htd::LibraryInstance * const manager, htd::ITreeDecompositionFitnessFunction * fitnessFunction, bool enforceNaiveOptimization)
+        : managementInstance_(manager), enforceNaiveOptimization_(enforceNaiveOptimization), strategy_(new htd::ExhaustiveVertexSelectionStrategy()), fitnessFunction_(fitnessFunction), manipulationOperations_()
     {
 
     }
@@ -162,7 +162,7 @@ htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperat
 
 }
 
-htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, bool enforceNaiveOptimization) : implementation_(new Implementation(manager, fitnessFunction, enforceNaiveOptimization))
+htd::TreeDecompositionOptimizationOperation::TreeDecompositionOptimizationOperation(const htd::LibraryInstance * const manager, htd::ITreeDecompositionFitnessFunction * fitnessFunction, bool enforceNaiveOptimization) : implementation_(new Implementation(manager, fitnessFunction, enforceNaiveOptimization))
 {
 
 }
@@ -752,7 +752,7 @@ htd::TreeDecompositionOptimizationOperation * htd::TreeDecompositionOptimization
     }
     else
     {
-        ret = new htd::TreeDecompositionOptimizationOperation(managementInstance(), *(implementation_->fitnessFunction_));
+        ret = new htd::TreeDecompositionOptimizationOperation(managementInstance(), implementation_->fitnessFunction_->clone());
     }
 
     for (const htd::ITreeDecompositionManipulationOperation * manipulationOperation : implementation_->manipulationOperations_)

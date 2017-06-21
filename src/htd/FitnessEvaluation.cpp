@@ -105,6 +105,11 @@ bool htd::FitnessEvaluation::operator!=(const htd::FitnessEvaluation & rhs) cons
     return values_ != rhs.values();
 }
 
+htd::FitnessEvaluation * htd::FitnessEvaluation::clone(void) const
+{
+    return new FitnessEvaluation(values_);
+}
+
 std::ostream & std::operator<<(std::ostream & stream, const htd::FitnessEvaluation & input)
 {
     htd::index_t index = 0;

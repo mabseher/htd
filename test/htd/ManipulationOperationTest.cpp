@@ -1772,9 +1772,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation2)
 
     std::size_t heightBefore = decomposition2->height();
 
-    FitnessFunction fitnessFunction;
-
-    htd::TreeDecompositionOptimizationOperation operation(libraryInstance, fitnessFunction);
+    htd::TreeDecompositionOptimizationOperation operation(libraryInstance, new FitnessFunction());
 
     ASSERT_FALSE(operation.isLocalOperation());
     ASSERT_FALSE(operation.createsTreeNodes());
@@ -1840,9 +1838,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation3)
 
     std::size_t heightBefore = decomposition2->height();
 
-    FitnessFunction fitnessFunction;
-
-    htd::TreeDecompositionOptimizationOperation operation(libraryInstance, fitnessFunction);
+    htd::TreeDecompositionOptimizationOperation operation(libraryInstance, new FitnessFunction());
 
     ASSERT_FALSE(operation.isLocalOperation());
     ASSERT_FALSE(operation.createsTreeNodes());
@@ -1919,9 +1915,7 @@ TEST(ManipulationOperationTest, CheckTreeDecompositionOptimizationOperation4)
 
     std::size_t heightBefore = decomposition2->height();
 
-    FitnessFunction fitnessFunction;
-
-    htd::TreeDecompositionOptimizationOperation operation(libraryInstance, fitnessFunction, true);
+    htd::TreeDecompositionOptimizationOperation operation(libraryInstance, new FitnessFunction(), true);
 
     ASSERT_FALSE(operation.isLocalOperation());
     ASSERT_FALSE(operation.createsTreeNodes());

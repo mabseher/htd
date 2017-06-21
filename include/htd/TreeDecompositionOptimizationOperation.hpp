@@ -57,11 +57,15 @@ namespace htd
             /**
              *  Constructor for a new manipulation operation of type TreeDecompositionOptimizationOperation.
              *
-             *  @param[in] manager                   The management instance to which the new manipulation operation belongs.
+             *  @note When calling this method the control over the memory regions of the fitness function are transferred
+             *  to the manipulation operation. Deleting the fitness function provided to this constructor outside the
+             *  manipulation operation will lead to undefined behavior.
+             *
+             *  @param[in] manager                  The management instance to which the new manipulation operation belongs.
              *  @param[in] fitnessFunction          The fitness function which is used to determine the quality of tree decompositions.
              *  @param[in] enforceNaiveOptimization A boolean flag to enforce that each iteration of the optimization algorithm starts from scratch with a copy of the given decomposition.
              */
-            HTD_API TreeDecompositionOptimizationOperation(const htd::LibraryInstance * const manager, const htd::ITreeDecompositionFitnessFunction & fitnessFunction, bool enforceNaiveOptimization = false);
+            HTD_API TreeDecompositionOptimizationOperation(const htd::LibraryInstance * const manager, htd::ITreeDecompositionFitnessFunction * fitnessFunction, bool enforceNaiveOptimization = false);
 
             HTD_API virtual ~TreeDecompositionOptimizationOperation();
 

@@ -553,12 +553,7 @@ TEST(TreeDecompositionOptimizationTest, CheckResultEmptyGraph)
 
     htd::MultiHypergraph graph(libraryInstance);
 
-    htd::BucketEliminationTreeDecompositionAlgorithm * baseAlgorithm =
-        new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
-
-    FitnessFunction fitnessFunction;
-
-    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction);
+    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance), new FitnessFunction());
 
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -710,12 +705,7 @@ TEST(TreeDecompositionOptimizationTest, CheckResultDisconnectedGraph)
     graph.addVertex();
     graph.addVertex();
 
-    htd::BucketEliminationTreeDecompositionAlgorithm * baseAlgorithm =
-        new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
-
-    FitnessFunction fitnessFunction;
-
-    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction);
+    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance), new FitnessFunction());
 
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -833,12 +823,7 @@ TEST(TreeDecompositionOptimizationTest, CheckResultSimpleGraph)
     graph.addEdge(vertex1, vertex2);
     graph.addEdge(vertex2, vertex3);
 
-    htd::BucketEliminationTreeDecompositionAlgorithm * baseAlgorithm =
-        new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
-
-    FitnessFunction fitnessFunction;
-
-    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction);
+    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance), new FitnessFunction());
 
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph);
 
@@ -955,12 +940,7 @@ TEST(TreeDecompositionOptimizationTest, CheckResultComplexGraph)
 
     htd::IMultiHypergraph * graph = createInputGraph(libraryInstance);
 
-    htd::BucketEliminationTreeDecompositionAlgorithm * baseAlgorithm =
-        new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
-
-    FitnessFunction fitnessFunction;
-
-    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction);
+    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance), new FitnessFunction());
 
     htd::TreeDecompositionVerifier verifier;
 
@@ -1218,12 +1198,7 @@ TEST(TreeDecompositionOptimizationTest, CheckResultSimpleGraphWithLabelingFuncti
     graph.addEdge(vertex1, vertex2);
     graph.addEdge(vertex2, vertex3);
 
-    htd::BucketEliminationTreeDecompositionAlgorithm * baseAlgorithm =
-        new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
-
-    FitnessFunction fitnessFunction;
-
-    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction);
+    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance), new FitnessFunction());
 
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph, 1, new BagSizeLabelingFunction(libraryInstance));
 
@@ -1432,12 +1407,7 @@ TEST(TreeDecompositionOptimizationTest, CheckResultSimpleGraphWithLabelingFuncti
     graph.addEdge(vertex1, vertex2);
     graph.addEdge(vertex2, vertex3);
 
-    htd::BucketEliminationTreeDecompositionAlgorithm * baseAlgorithm =
-        new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
-
-    FitnessFunction fitnessFunction;
-
-    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction);
+    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance), new FitnessFunction());
 
     htd::ITreeDecomposition * decomposition = algorithm.computeDecomposition(graph, { new BagSizeLabelingFunction(libraryInstance),
                                                                                       new BagSizeLabelingFunction2(libraryInstance) });
@@ -1582,12 +1552,7 @@ TEST(TreeDecompositionOptimizationTest, CheckResultSimpleGraphWithLabelingFuncti
     graph.addEdge(vertex1, vertex2);
     graph.addEdge(vertex2, vertex3);
 
-    htd::BucketEliminationTreeDecompositionAlgorithm * baseAlgorithm =
-        new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
-
-    FitnessFunction fitnessFunction;
-
-    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction,
+    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance), new FitnessFunction(),
                                                                   { new BagSizeLabelingFunction(libraryInstance),
                                                                     new htd::JoinNodeReplacementOperation(libraryInstance) });
 
@@ -1729,12 +1694,7 @@ TEST(TreeDecompositionOptimizationTest, CheckResultComplexGraphWithLabelingFunct
 
     htd::IMultiHypergraph * graph = createInputGraph(libraryInstance);
 
-    htd::BucketEliminationTreeDecompositionAlgorithm * baseAlgorithm =
-        new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance);
-
-    FitnessFunction fitnessFunction;
-
-    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, baseAlgorithm, fitnessFunction,
+    htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(libraryInstance, new htd::BucketEliminationTreeDecompositionAlgorithm(libraryInstance), new FitnessFunction(),
                                                                   { new BagSizeLabelingFunction(libraryInstance) });
 
     htd::TreeDecompositionVerifier verifier;

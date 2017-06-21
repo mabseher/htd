@@ -43,5 +43,9 @@ if(UNIX)
     )
 endif(UNIX)
 
+if(MSVC)
+    target_link_libraries(htd_io htd)
+endif(MSVC)
+
 install(TARGETS htd_io DESTINATION lib)
 install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/htd_io" DESTINATION include)

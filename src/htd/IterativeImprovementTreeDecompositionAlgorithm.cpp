@@ -471,6 +471,9 @@ htd::IterativeImprovementTreeDecompositionAlgorithm * htd::IterativeImprovementT
 #endif
     }
 
+    ret->setIterationCount(implementation_->iterationCount_);
+    ret->setNonImprovementLimit(implementation_->nonImprovementLimit_);
+
     return ret;
 }
 

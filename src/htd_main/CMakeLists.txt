@@ -46,6 +46,6 @@ if(UNIX)
                    "${CMAKE_BINARY_DIR}/bin/pace16_build_test.sh" COPYONLY)
 endif(UNIX)
 
-target_link_libraries(htd_main htd htd_cli)
+target_link_libraries(htd_main htd htd_io htd_cli)
 
 install(TARGETS htd_main DESTINATION bin)

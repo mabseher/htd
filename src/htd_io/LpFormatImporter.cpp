@@ -22,19 +22,19 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_MAIN_LPFORMATIMPORTER_CPP
-#define HTD_MAIN_LPFORMATIMPORTER_CPP
+#ifndef HTD_IO_LPFORMATIMPORTER_CPP
+#define HTD_IO_LPFORMATIMPORTER_CPP
 
-#include <htd_main/LpFormatImporter.hpp>
+#include <htd_io/LpFormatImporter.hpp>
 
 #include <fstream>
 #include <iostream>
 #include <string>
 
 /**
- *  Private implementation details of class htd::LpFormatImporter.
+ *  Private implementation details of class htd_io::LpFormatImporter.
  */
-struct htd_main::LpFormatImporter::Implementation
+struct htd_io::LpFormatImporter::Implementation
 {
     /**
      *  Constructor for the implementation details structure.
@@ -64,24 +64,24 @@ struct htd_main::LpFormatImporter::Implementation
     void trim(std::string & value);
 };
 
-htd_main::LpFormatImporter::LpFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
+htd_io::LpFormatImporter::LpFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
 
-htd_main::LpFormatImporter::~LpFormatImporter(void)
+htd_io::LpFormatImporter::~LpFormatImporter(void)
 {
 
 }
 
-htd::NamedMultiHypergraph<std::string, std::string> * htd_main::LpFormatImporter::import(const std::string & path) const
+htd::NamedMultiHypergraph<std::string, std::string> * htd_io::LpFormatImporter::import(const std::string & path) const
 {
     std::ifstream stream(path);
 
     return import(stream);
 }
 
-htd::NamedMultiHypergraph<std::string, std::string> * htd_main::LpFormatImporter::import(std::istream & stream) const
+htd::NamedMultiHypergraph<std::string, std::string> * htd_io::LpFormatImporter::import(std::istream & stream) const
 {
     bool error = false;
 
@@ -184,10 +184,10 @@ htd::NamedMultiHypergraph<std::string, std::string> * htd_main::LpFormatImporter
     return ret;
 }
 
-void htd_main::LpFormatImporter::Implementation::trim(std::string & value)
+void htd_io::LpFormatImporter::Implementation::trim(std::string & value)
 {
     value.erase(0, value.find_first_not_of(" \t\n\r\f\v"));
     value.erase(value.find_last_not_of(" \t\n\r\f\v") + 1);
 }
 
-#endif /* HTD_MAIN_LPFORMATIMPORTER_CPP */
+#endif /* HTD_IO_LPFORMATIMPORTER_CPP */

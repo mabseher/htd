@@ -22,19 +22,19 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_MAIN_IGRAPHPROCESSOR_HPP
-#define HTD_MAIN_IGRAPHPROCESSOR_HPP
+#ifndef HTD_IO_IGRAPHPROCESSOR_HPP
+#define HTD_IO_IGRAPHPROCESSOR_HPP
 
-#include <htd_main/IGraphDecompositionExporter.hpp>
+#include <htd_io/IGraphDecompositionExporter.hpp>
 
-#include <htd_main/ParsingResult.hpp>
+#include <htd_io/ParsingResult.hpp>
 #include <htd/IGraphPreprocessor.hpp>
 
 #include <string>
 #include <iostream>
 #include <functional>
 
-namespace htd_main
+namespace htd_io
 {
     /**
      *  Common interface for classes which process graphs.
@@ -106,10 +106,10 @@ namespace htd_main
              *
              *  @param[in] callback The new callback function which is invoked after parsing the input graph is finished.
              */
-            virtual void registerParsingCallback(const std::function<void(htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount)> & callback) = 0;
+            virtual void registerParsingCallback(const std::function<void(htd_io::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount)> & callback) = 0;
     };
 
-    inline htd_main::IGraphProcessor::~IGraphProcessor() { }
+    inline htd_io::IGraphProcessor::~IGraphProcessor() { }
 }
 
-#endif /* HTD_MAIN_IGRAPHPROCESSOR_HPP */
+#endif /* HTD_IO_IGRAPHPROCESSOR_HPP */

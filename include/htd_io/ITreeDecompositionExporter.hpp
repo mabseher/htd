@@ -1,5 +1,5 @@
 /*
- * File:   IGraphDecompositionExporter.hpp
+ * File:   ITreeDecompositionExporter.hpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,45 +22,45 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_MAIN_IGRAPHDECOMPOSITIONEXPORTER_HPP
-#define HTD_MAIN_IGRAPHDECOMPOSITIONEXPORTER_HPP
+#ifndef HTD_IO_ITREEDECOMPOSITIONEXPORTER_HPP
+#define HTD_IO_ITREEDECOMPOSITIONEXPORTER_HPP
 
-#include <htd_main/ITreeDecompositionExporter.hpp>
+#include <htd/IMultiHypergraph.hpp>
+#include <htd/NamedMultiHypergraph.hpp>
+#include <htd/ITreeDecomposition.hpp>
 
 #include <iostream>
 
-namespace htd_main
+namespace htd_io
 {
     /**
-     * Interface for algorithms which can be used to export graph decompositions to streams.
+     * Interface for algorithms which can be used to export tree decompositions to streams.
      */
-    class IGraphDecompositionExporter : public htd_main::ITreeDecompositionExporter
+    class ITreeDecompositionExporter
     {
         public:
-            using htd_main::ITreeDecompositionExporter::write;
-
-            virtual ~IGraphDecompositionExporter() = 0;
+            virtual ~ITreeDecompositionExporter() = 0;
 
             /**
-             *  Write a graph decomposition to a given stream.
+             *  Write a tree decomposition to a given stream.
              *
-             *  @param[in] decomposition    The graph decomposition which shall be exported.
+             *  @param[in] decomposition    The tree decomposition which shall be exported.
              *  @param[in] graph            The graph instance from which the given decomposition was constructed.
              *  @param[out] outputStream    The output stream to which the information shall be written.
              */
-            virtual void write(const htd::IGraphDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const = 0;
+            virtual void write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const = 0;
 
             /**
-             *  Write a graph decomposition to a given stream.
+             *  Write a tree decomposition to a given stream.
              *
-             *  @param[in] decomposition    The graph decomposition which shall be exported.
+             *  @param[in] decomposition    The tree decomposition which shall be exported.
              *  @param[in] graph            The graph instance from which the given decomposition was constructed.
              *  @param[out] outputStream    The output stream to which the information shall be written.
              */
-            virtual void write(const htd::IGraphDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const = 0;
+            virtual void write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const = 0;
     };
 
-    inline htd_main::IGraphDecompositionExporter::~IGraphDecompositionExporter() { }
+    inline htd_io::ITreeDecompositionExporter::~ITreeDecompositionExporter() { }
 }
 
-#endif /* HTD_MAIN_IGRAPHDECOMPOSITIONEXPORTER_HPP */
+#endif /* HTD_IO_ITREEDECOMPOSITIONEXPORTER_HPP */

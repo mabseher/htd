@@ -25,14 +25,14 @@
 #ifndef HTD_MAIN_DEFAULTTREEDECOMPOSITIONPROCESSOR_HPP
 #define HTD_MAIN_DEFAULTTREEDECOMPOSITIONPROCESSOR_HPP
 
-#include <htd_main/IGraphToTreeDecompositionProcessor.hpp>
+#include <htd_io/IGraphToTreeDecompositionProcessor.hpp>
 
 namespace htd_main
 {
     /**
      *  Importer which does nothing.
      */
-    class DefaultTreeDecompositionProcessor : public htd_main::IGraphToTreeDecompositionProcessor
+    class DefaultTreeDecompositionProcessor : public htd_io::IGraphToTreeDecompositionProcessor
     {
         public:
             /**
@@ -53,11 +53,11 @@ namespace htd_main
 
             void process(std::istream & inputStream = std::cin, std::ostream & outputStream = std::cout) const HTD_OVERRIDE;
 
-            void setExporter(htd_main::ITreeDecompositionExporter * exporter) HTD_OVERRIDE;
+            void setExporter(htd_io::ITreeDecompositionExporter * exporter) HTD_OVERRIDE;
 
             void setPreprocessor(htd::IGraphPreprocessor * preprocessor) HTD_OVERRIDE;
 
-            void registerParsingCallback(const std::function<void(htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount)> & callback) HTD_OVERRIDE;
+            void registerParsingCallback(const std::function<void(htd_io::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount)> & callback) HTD_OVERRIDE;
 
             void registerPreprocessingCallback(const std::function<void(std::size_t vertexCount, std::size_t edgeCount)> & callback) HTD_OVERRIDE;
 

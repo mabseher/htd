@@ -69,6 +69,7 @@ if(NOT DEFINED BUILD_TESTING)
 endif()
 
 subdirs(src/htd)
+subdirs(src/htd_io)
 subdirs(src/htd_cli)
 subdirs(src/htd_main)
 

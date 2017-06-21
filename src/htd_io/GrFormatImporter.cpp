@@ -22,10 +22,10 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_MAIN_GRFORMATIMPORTER_CPP
-#define HTD_MAIN_GRFORMATIMPORTER_CPP
+#ifndef HTD_IO_GRFORMATIMPORTER_CPP
+#define HTD_IO_GRFORMATIMPORTER_CPP
 
-#include <htd_main/GrFormatImporter.hpp>
+#include <htd_io/GrFormatImporter.hpp>
 
 #include <htd/MultiGraphFactory.hpp>
 
@@ -34,9 +34,9 @@
 #include <stdexcept>
 
 /**
- *  Private implementation details of class htd::GrFormatImporter.
+ *  Private implementation details of class htd_io::GrFormatImporter.
  */
-struct htd_main::GrFormatImporter::Implementation
+struct htd_io::GrFormatImporter::Implementation
 {
     /**
      *  Constructor for the implementation details structure.
@@ -59,24 +59,24 @@ struct htd_main::GrFormatImporter::Implementation
     const htd::LibraryInstance * managementInstance_;
 };
 
-htd_main::GrFormatImporter::GrFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
+htd_io::GrFormatImporter::GrFormatImporter(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
 
-htd_main::GrFormatImporter::~GrFormatImporter(void)
+htd_io::GrFormatImporter::~GrFormatImporter(void)
 {
 
 }
 
-htd::IMultiGraph * htd_main::GrFormatImporter::import(const std::string & path) const
+htd::IMultiGraph * htd_io::GrFormatImporter::import(const std::string & path) const
 {
     std::ifstream stream(path);
 
     return import(stream);
 }
 
-htd::IMultiGraph * htd_main::GrFormatImporter::import(std::istream & stream) const
+htd::IMultiGraph * htd_io::GrFormatImporter::import(std::istream & stream) const
 {
     std::size_t vertexCount = 0;
     std::size_t edgeCount = 0;
@@ -187,4 +187,4 @@ htd::IMultiGraph * htd_main::GrFormatImporter::import(std::istream & stream) con
     return ret;
 }
 
-#endif /* HTD_MAIN_GRFORMATIMPORTER_CPP */
+#endif /* HTD_IO_GRFORMATIMPORTER_CPP */

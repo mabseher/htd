@@ -1,5 +1,5 @@
 /*
- * File:   HgrFormatGraphToTreeDecompositionProcessor.cpp
+ * File:   GrFormatGraphToTreeDecompositionProcessor.cpp
  *
  * Author: ABSEHER Michael (abseher@dbai.tuwien.ac.at)
  *
@@ -22,12 +22,12 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_MAIN_HGRFORMATGRAPHTOTREEDECOMPOSITIONPROCESSOR_CPP
-#define HTD_MAIN_HGRFORMATGRAPHTOTREEDECOMPOSITIONPROCESSOR_CPP
+#ifndef HTD_IO_GRFORMATGRAPHTOTREEDECOMPOSITIONPROCESSOR_CPP
+#define HTD_IO_GRFORMATGRAPHTOTREEDECOMPOSITIONPROCESSOR_CPP
 
-#include <htd_main/HgrFormatGraphToTreeDecompositionProcessor.hpp>
+#include <htd_io/GrFormatGraphToTreeDecompositionProcessor.hpp>
 
-#include <htd_main/HgrFormatImporter.hpp>
+#include <htd_io/GrFormatImporter.hpp>
 
 #include <htd/main.hpp>
 
@@ -35,9 +35,9 @@
 #include <stdexcept>
 
 /**
- *  Private implementation details of class htd_main::HgrFormatGraphToTreeDecompositionProcessor.
+ *  Private implementation details of class htd_io::GrFormatGraphToTreeDecompositionProcessor.
  */
-struct htd_main::HgrFormatGraphToTreeDecompositionProcessor::Implementation
+struct htd_io::GrFormatGraphToTreeDecompositionProcessor::Implementation
 {
     /**
      *  Constructor for the implementation details structure.
@@ -70,7 +70,7 @@ struct htd_main::HgrFormatGraphToTreeDecompositionProcessor::Implementation
     /**
      *  The exporter which shall be used to export the resulting decomposition.
      */
-    htd_main::ITreeDecompositionExporter * exporter_;
+    htd_io::ITreeDecompositionExporter * exporter_;
 
     /**
      *  The preprocessor which shall be used to preprocess the input graphs.
@@ -80,7 +80,7 @@ struct htd_main::HgrFormatGraphToTreeDecompositionProcessor::Implementation
     /**
      *  A vector of callback functions which are invoked after parsing the input graph is finished.
      */
-    std::vector<std::function<void(htd_main::parsing_result_t, std::size_t, std::size_t)>> parsingCallbacks_;
+    std::vector<std::function<void(htd_io::parsing_result_t, std::size_t, std::size_t)>> parsingCallbacks_;
 
     /**
      *  A vector of callback functions which are invoked after preprocessing the input graph.
@@ -99,9 +99,9 @@ struct htd_main::HgrFormatGraphToTreeDecompositionProcessor::Implementation
      *  @param[in] vertexCount  The vertex count of the input graph.
      *  @param[in] edgeCount    The edge count of the input graph.
      */
-    void invokeParsingCallbacks(htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount) const
+    void invokeParsingCallbacks(htd_io::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount) const
     {
-        for (const std::function<void(htd_main::parsing_result_t, std::size_t, std::size_t)> & callback : parsingCallbacks_)
+        for (const std::function<void(htd_io::parsing_result_t, std::size_t, std::size_t)> & callback : parsingCallbacks_)
         {
             callback(result, vertexCount, edgeCount);
         }
@@ -135,17 +135,17 @@ struct htd_main::HgrFormatGraphToTreeDecompositionProcessor::Implementation
     }
 };
 
-htd_main::HgrFormatGraphToTreeDecompositionProcessor::HgrFormatGraphToTreeDecompositionProcessor(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
+htd_io::GrFormatGraphToTreeDecompositionProcessor::GrFormatGraphToTreeDecompositionProcessor(const htd::LibraryInstance * const manager) : implementation_(new Implementation(manager))
 {
 
 }
 
-htd_main::HgrFormatGraphToTreeDecompositionProcessor::~HgrFormatGraphToTreeDecompositionProcessor(void)
+htd_io::GrFormatGraphToTreeDecompositionProcessor::~GrFormatGraphToTreeDecompositionProcessor(void)
 {
 
 }
 
-void htd_main::HgrFormatGraphToTreeDecompositionProcessor::process(const std::string & inputFile, const std::string & outputFile) const
+void htd_io::GrFormatGraphToTreeDecompositionProcessor::process(const std::string & inputFile, const std::string & outputFile) const
 {
     std::ifstream inputStream(inputFile);
     std::ofstream outputStream(outputFile);
@@ -153,29 +153,29 @@ void htd_main::HgrFormatGraphToTreeDecompositionProcessor::process(const std::st
     process(inputStream, outputStream);
 }
 
-void htd_main::HgrFormatGraphToTreeDecompositionProcessor::process(const std::string & inputFile, std::ostream & outputStream) const
+void htd_io::GrFormatGraphToTreeDecompositionProcessor::process(const std::string & inputFile, std::ostream & outputStream) const
 {
     std::ifstream inputStream(inputFile);
 
     process(inputStream, outputStream);
 }
 
-void htd_main::HgrFormatGraphToTreeDecompositionProcessor::process(std::istream & inputStream, const std::string & outputFile) const
+void htd_io::GrFormatGraphToTreeDecompositionProcessor::process(std::istream & inputStream, const std::string & outputFile) const
 {
     std::ofstream outputStream(outputFile);
 
     process(inputStream, outputStream);
 }
 
-void htd_main::HgrFormatGraphToTreeDecompositionProcessor::process(std::istream & inputStream, std::ostream & outputStream) const
+void htd_io::GrFormatGraphToTreeDecompositionProcessor::process(std::istream & inputStream, std::ostream & outputStream) const
 {
-    htd_main::HgrFormatImporter importer(implementation_->managementInstance_);
+    htd_io::GrFormatImporter importer(implementation_->managementInstance_);
 
-    htd::IMultiHypergraph * graph = importer.import(inputStream);
+    htd::IMultiGraph * graph = importer.import(inputStream);
 
     if (graph != nullptr)
     {
-        implementation_->invokeParsingCallbacks(htd_main::ParsingResult::OK, graph->vertexCount(), graph->edgeCount());
+        implementation_->invokeParsingCallbacks(htd_io::ParsingResult::OK, graph->vertexCount(), graph->edgeCount());
 
         htd::ITreeDecompositionAlgorithm * algorithm = implementation_->managementInstance_->treeDecompositionAlgorithmFactory().createInstance();
 
@@ -258,21 +258,11 @@ void htd_main::HgrFormatGraphToTreeDecompositionProcessor::process(std::istream 
     }
     else
     {
-        implementation_->invokeParsingCallbacks(htd_main::ParsingResult::ERROR, 0, 0);
+        implementation_->invokeParsingCallbacks(htd_io::ParsingResult::ERROR, 0, 0);
     }
 }
 
-void htd_main::HgrFormatGraphToTreeDecompositionProcessor::setPreprocessor(htd::IGraphPreprocessor * preprocessor)
-{
-    if (implementation_->preprocessor_ != nullptr)
-    {
-        delete implementation_->preprocessor_;
-    }
-
-    implementation_->preprocessor_ = preprocessor;
-}
-
-void htd_main::HgrFormatGraphToTreeDecompositionProcessor::setExporter(htd_main::ITreeDecompositionExporter * exporter)
+void htd_io::GrFormatGraphToTreeDecompositionProcessor::setExporter(htd_io::ITreeDecompositionExporter * exporter)
 {
     if (implementation_->exporter_ != nullptr)
     {
@@ -282,19 +272,29 @@ void htd_main::HgrFormatGraphToTreeDecompositionProcessor::setExporter(htd_main:
     implementation_->exporter_ = exporter;
 }
 
-void htd_main::HgrFormatGraphToTreeDecompositionProcessor::registerParsingCallback(const std::function<void(htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount)> & callback)
+void htd_io::GrFormatGraphToTreeDecompositionProcessor::setPreprocessor(htd::IGraphPreprocessor * preprocessor)
+{
+    if (implementation_->preprocessor_ != nullptr)
+    {
+        delete implementation_->preprocessor_;
+    }
+
+    implementation_->preprocessor_ = preprocessor;
+}
+
+void htd_io::GrFormatGraphToTreeDecompositionProcessor::registerParsingCallback(const std::function<void(htd_io::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount)> & callback)
 {
     implementation_->parsingCallbacks_.push_back(callback);
 }
 
-void htd_main::HgrFormatGraphToTreeDecompositionProcessor::registerPreprocessingCallback(const std::function<void(std::size_t vertexCount, std::size_t edgeCount)> & callback)
+void htd_io::GrFormatGraphToTreeDecompositionProcessor::registerPreprocessingCallback(const std::function<void(std::size_t vertexCount, std::size_t edgeCount)> & callback)
 {
     implementation_->preprocessingCallbacks_.push_back(callback);
 }
 
-void htd_main::HgrFormatGraphToTreeDecompositionProcessor::registerDecompositionCallback(const std::function<void(const htd::FitnessEvaluation &)> & callback)
+void htd_io::GrFormatGraphToTreeDecompositionProcessor::registerDecompositionCallback(const std::function<void(const htd::FitnessEvaluation &)> & callback)
 {
     implementation_->decompositionCallbacks_.push_back(callback);
 }
 
-#endif /* HTD_MAIN_HGRFORMATGRAPHTOTREEDECOMPOSITIONPROCESSOR_CPP */
+#endif /* HTD_IO_GRFORMATGRAPHTOTREEDECOMPOSITIONPROCESSOR_CPP */

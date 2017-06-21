@@ -68,7 +68,7 @@ struct htd_main::DefaultTreeDecompositionProcessor::Implementation
     /**
      *  The exporter which shall be used to export the resulting decomposition.
      */
-    htd_main::ITreeDecompositionExporter * exporter_;
+    htd_io::ITreeDecompositionExporter * exporter_;
 
     /**
      *  The preprocessor which shall be used to preprocess the input graphs.
@@ -78,7 +78,7 @@ struct htd_main::DefaultTreeDecompositionProcessor::Implementation
     /**
      *  A vector of callback functions which are invoked after parsing the input graph is finished.
      */
-    std::vector<std::function<void(htd_main::parsing_result_t, std::size_t, std::size_t)>> parsingCallbacks_;
+    std::vector<std::function<void(htd_io::parsing_result_t, std::size_t, std::size_t)>> parsingCallbacks_;
 
     /**
      *  A vector of callback functions which are invoked after preprocessing the input graph.
@@ -97,9 +97,9 @@ struct htd_main::DefaultTreeDecompositionProcessor::Implementation
      *  @param[in] vertexCount  The vertex count of the input graph.
      *  @param[in] edgeCount    The edge count of the input graph.
      */
-    void invokeParsingCallbacks(htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount) const
+    void invokeParsingCallbacks(htd_io::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount) const
     {
-        for (const std::function<void(htd_main::parsing_result_t, std::size_t, std::size_t)> & callback : parsingCallbacks_)
+        for (const std::function<void(htd_io::parsing_result_t, std::size_t, std::size_t)> & callback : parsingCallbacks_)
         {
             callback(result, vertexCount, edgeCount);
         }
@@ -170,10 +170,10 @@ void htd_main::DefaultTreeDecompositionProcessor::process(std::istream & inputSt
     HTD_UNUSED(inputStream)
     HTD_UNUSED(outputStream)
 
-    implementation_->invokeParsingCallbacks(htd_main::ParsingResult::ERROR, 0, 0);
+    implementation_->invokeParsingCallbacks(htd_io::ParsingResult::ERROR, 0, 0);
 }
 
-void htd_main::DefaultTreeDecompositionProcessor::setExporter(htd_main::ITreeDecompositionExporter * exporter)
+void htd_main::DefaultTreeDecompositionProcessor::setExporter(htd_io::ITreeDecompositionExporter * exporter)
 {
     if (implementation_->exporter_ != nullptr)
     {
@@ -193,7 +193,7 @@ void htd_main::DefaultTreeDecompositionProcessor::setPreprocessor(htd::IGraphPre
     implementation_->preprocessor_ = preprocessor;
 }
 
-void htd_main::DefaultTreeDecompositionProcessor::registerParsingCallback(const std::function<void(htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount)> & callback)
+void htd_main::DefaultTreeDecompositionProcessor::registerParsingCallback(const std::function<void(htd_io::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount)> & callback)
 {
     implementation_->parsingCallbacks_.push_back(callback);
 }

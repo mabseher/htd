@@ -22,10 +22,10 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_MAIN_IGRAPHTOTREEDECOMPOSITIONPROCESSOR_HPP
-#define HTD_MAIN_IGRAPHTOTREEDECOMPOSITIONPROCESSOR_HPP
+#ifndef HTD_IO_IGRAPHTOTREEDECOMPOSITIONPROCESSOR_HPP
+#define HTD_IO_IGRAPHTOTREEDECOMPOSITIONPROCESSOR_HPP
 
-#include <htd_main/IGraphProcessor.hpp>
+#include <htd_io/IGraphProcessor.hpp>
 
 #include <htd/FitnessEvaluation.hpp>
 
@@ -33,12 +33,12 @@
 #include <iostream>
 #include <functional>
 
-namespace htd_main
+namespace htd_io
 {
     /**
      *  Common interface for classes which process graphs.
      */
-    class IGraphToTreeDecompositionProcessor : public htd_main::IGraphProcessor
+    class IGraphToTreeDecompositionProcessor : public htd_io::IGraphProcessor
     {
         public:
             /**
@@ -55,7 +55,7 @@ namespace htd_main
              *  graph processor. Deleting an exporter provided to this method outside the graph processor or assigning the same
              *  exporter multiple times will lead to undefined behavior.
              */
-            virtual void setExporter(htd_main::ITreeDecompositionExporter * exporter) = 0;
+            virtual void setExporter(htd_io::ITreeDecompositionExporter * exporter) = 0;
 
             /**
              *  Register a new callback function which is invoked after preprocessing the input graph.
@@ -85,7 +85,7 @@ namespace htd_main
             virtual void registerDecompositionCallback(const std::function<void(const htd::FitnessEvaluation &)> & callback) = 0;
     };
 
-    inline htd_main::IGraphToTreeDecompositionProcessor::~IGraphToTreeDecompositionProcessor() { }
+    inline htd_io::IGraphToTreeDecompositionProcessor::~IGraphToTreeDecompositionProcessor() { }
 }
 
-#endif /* HTD_MAIN_IGRAPHTOTREEDECOMPOSITIONPROCESSOR_HPP */
+#endif /* HTD_IO_IGRAPHTOTREEDECOMPOSITIONPROCESSOR_HPP */

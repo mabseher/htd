@@ -23,20 +23,10 @@
  */
 
 #include <htd/main.hpp>
+#include <htd_io/main.hpp>
 #include <htd_cli/main.hpp>
 
-#include <htd_main/GrFormatImporter.hpp>
-#include <htd_main/LpFormatImporter.hpp>
-#include <htd_main/HgrFormatImporter.hpp>
-#include <htd_main/ITreeDecompositionExporter.hpp>
-#include <htd_main/IHypertreeDecompositionExporter.hpp>
-#include <htd_main/WidthExporter.hpp>
-#include <htd_main/TdFormatExporter.hpp>
-#include <htd_main/HumanReadableExporter.hpp>
 #include <htd_main/DefaultTreeDecompositionProcessor.hpp>
-#include <htd_main/GrFormatGraphToTreeDecompositionProcessor.hpp>
-#include <htd_main/HgrFormatGraphToTreeDecompositionProcessor.hpp>
-#include <htd_main/LpFormatGraphToTreeDecompositionProcessor.hpp>
 
 #include <csignal>
 #include <cstring>
@@ -533,19 +523,19 @@ void run(const DecompositionAlgorithm & algorithm, const Exporter & exporter, co
 {
     if (inputFormat == "gr")
     {
-        htd_main::GrFormatImporter importer(manager);
+        htd_io::GrFormatImporter importer(manager);
 
         decompose(*manager, algorithm, importer.import(std::cin), exporter);
     }
     else if (inputFormat == "lp")
     {
-        htd_main::LpFormatImporter importer(manager);
+        htd_io::LpFormatImporter importer(manager);
 
         decomposeNamed(*manager, algorithm, importer.import(std::cin), exporter);
     }
     else if (inputFormat == "hgr")
     {
-        htd_main::HgrFormatImporter importer(manager);
+        htd_io::HgrFormatImporter importer(manager);
 
         decompose(*manager, algorithm, importer.import(std::cin), exporter);
     }
@@ -556,19 +546,19 @@ void run(const DecompositionAlgorithm & algorithm, const Exporter & exporter, co
 {
     if (inputFormat == "gr")
     {
-        htd_main::GrFormatImporter importer(manager);
+        htd_io::GrFormatImporter importer(manager);
 
         decompose(*manager, algorithm, importer.import(instanceFile), exporter);
     }
     else if (inputFormat == "lp")
     {
-        htd_main::LpFormatImporter importer(manager);
+        htd_io::LpFormatImporter importer(manager);
 
         decomposeNamed(*manager, algorithm, importer.import(instanceFile), exporter);
     }
     else if (inputFormat == "hgr")
     {
-        htd_main::HgrFormatImporter importer(manager);
+        htd_io::HgrFormatImporter importer(manager);
 
         decompose(*manager, algorithm, importer.import(instanceFile), exporter);
     }
@@ -657,15 +647,15 @@ int main(int argc, const char * const * const argv)
         {
             htd::IHypertreeDecompositionAlgorithm * algorithm = libraryInstance->hypertreeDecompositionAlgorithmFactory().createInstance();
 
-            htd_main::IHypertreeDecompositionExporter * exporter = nullptr;
+            htd_io::IHypertreeDecompositionExporter * exporter = nullptr;
 
             if (outputFormat == "human")
             {
-                exporter = new htd_main::HumanReadableExporter();
+                exporter = new htd_io::HumanReadableExporter();
             }
             else if (outputFormat == "width")
             {
-                exporter = new htd_main::WidthExporter();
+                exporter = new htd_io::WidthExporter();
             }
             else
             {
@@ -692,19 +682,19 @@ int main(int argc, const char * const * const argv)
         }
         else
         {
-            htd_main::ITreeDecompositionExporter * exporter = nullptr;
+            htd_io::ITreeDecompositionExporter * exporter = nullptr;
 
             if (outputFormat == "td")
             {
-                exporter = new htd_main::TdFormatExporter();
+                exporter = new htd_io::TdFormatExporter();
             }
             else if (outputFormat == "human")
             {
-                exporter = new htd_main::HumanReadableExporter();
+                exporter = new htd_io::HumanReadableExporter();
             }
             else if (outputFormat == "width")
             {
-                exporter = new htd_main::WidthExporter();
+                exporter = new htd_io::WidthExporter();
             }
             else
             {
@@ -845,19 +835,19 @@ int main(int argc, const char * const * const argv)
                     preprocessor->setNonImprovementLimit(64);
                 }
 
-                htd_main::IGraphToTreeDecompositionProcessor * processor = nullptr;
+                htd_io::IGraphToTreeDecompositionProcessor * processor = nullptr;
 
                 if (std::string(inputFormatChoice.value()) == "gr")
                 {
-                    processor = new htd_main::GrFormatGraphToTreeDecompositionProcessor(libraryInstance);
+                    processor = new htd_io::GrFormatGraphToTreeDecompositionProcessor(libraryInstance);
                 }
                 else if (std::string(inputFormatChoice.value()) == "hgr")
                 {
-                    processor = new htd_main::HgrFormatGraphToTreeDecompositionProcessor(libraryInstance);
+                    processor = new htd_io::HgrFormatGraphToTreeDecompositionProcessor(libraryInstance);
                 }
                 else if (std::string(inputFormatChoice.value()) == "lp")
                 {
-                    processor = new htd_main::LpFormatGraphToTreeDecompositionProcessor(libraryInstance);
+                    processor = new htd_io::LpFormatGraphToTreeDecompositionProcessor(libraryInstance);
                 }
                 else
                 {
@@ -876,12 +866,12 @@ int main(int argc, const char * const * const argv)
 
                 if (printProgressOption.used())
                 {
-                    processor->registerParsingCallback([&](htd_main::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount){
+                    processor->registerParsingCallback([&](htd_io::parsing_result_t result, std::size_t vertexCount, std::size_t edgeCount){
                         lastStepFinished =
                             std::chrono::duration_cast<std::chrono::milliseconds>
                                 (std::chrono::system_clock::now().time_since_epoch()).count();
 
-                        if (result == htd_main::ParsingResult::OK)
+                        if (result == htd_io::ParsingResult::OK)
                         {
                             if (outputFormat == "td")
                             {

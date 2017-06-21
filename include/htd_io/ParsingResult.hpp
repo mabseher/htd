@@ -22,12 +22,12 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_MAIN_PARSINGRESULT_HPP
-#define HTD_MAIN_PARSINGRESULT_HPP
+#ifndef HTD_IO_PARSINGRESULT_HPP
+#define HTD_IO_PARSINGRESULT_HPP
 
 #include <htd/Id.hpp>
 
-namespace htd_main
+namespace htd_io
 {
     /**
      *  Datatype for parsing results.
@@ -43,16 +43,16 @@ namespace htd_main
             /**
              *  The parsing result returned in the case that an error occurred during the parsing process.
              */
-            static const htd_main::parsing_result_t ERROR = 0;
+            static const htd_io::parsing_result_t ERROR = 0;
 
             /**
              *  The parsing result returned if (and only if) the parsing process was successful.
              */
-            static const htd_main::parsing_result_t OK = 1;
+            static const htd_io::parsing_result_t OK = 1;
 
         private:
             ParsingResult(void);
     };
 }
 
-#endif /* HTD_MAIN_PARSINGRESULT_HPP */
+#endif /* HTD_IO_PARSINGRESULT_HPP */

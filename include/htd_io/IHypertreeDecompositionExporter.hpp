@@ -22,8 +22,8 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_MAIN_IHYPERTREEDECOMPOSITIONEXPORTER_HPP
-#define HTD_MAIN_IHYPERTREEDECOMPOSITIONEXPORTER_HPP
+#ifndef HTD_IO_IHYPERTREEDECOMPOSITIONEXPORTER_HPP
+#define HTD_IO_IHYPERTREEDECOMPOSITIONEXPORTER_HPP
 
 #include <htd/IMultiHypergraph.hpp>
 #include <htd/NamedMultiHypergraph.hpp>
@@ -31,7 +31,7 @@
 
 #include <iostream>
 
-namespace htd_main
+namespace htd_io
 {
     /**
      * Interface for algorithms which can be used to export hypertree decompositions to streams.
@@ -60,7 +60,7 @@ namespace htd_main
             virtual void write(const htd::IHypertreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const = 0;
     };
 
-    inline htd_main::IHypertreeDecompositionExporter::~IHypertreeDecompositionExporter() { }
+    inline htd_io::IHypertreeDecompositionExporter::~IHypertreeDecompositionExporter() { }
 }
 
-#endif /* HTD_MAIN_IHYPERTREEDECOMPOSITIONEXPORTER_HPP */
+#endif /* HTD_IO_IHYPERTREEDECOMPOSITIONEXPORTER_HPP */

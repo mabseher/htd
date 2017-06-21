@@ -22,31 +22,33 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HTD_MAIN_TDFORMATEXPORTER_HPP
-#define HTD_MAIN_TDFORMATEXPORTER_HPP
+#ifndef HTD_IO_TDFORMATEXPORTER_HPP
+#define HTD_IO_TDFORMATEXPORTER_HPP
 
-#include <htd_main/ITreeDecompositionExporter.hpp>
+#include <htd_io/PreprocessorDefinitions.hpp>
+
+#include <htd_io/ITreeDecompositionExporter.hpp>
 
 #include <iostream>
 
-namespace htd_main
+namespace htd_io
 {
     /**
      *  Exporter which allows to export tree decompositions in the tree decomposition format 'td'.
      *
      *  (See https://github.com/mabseher/htd/FORMATS.md for information about the available output formats.)
      */
-    class TdFormatExporter : public htd_main::ITreeDecompositionExporter
+    class TdFormatExporter : public htd_io::ITreeDecompositionExporter
     {
         public:
-            TdFormatExporter(void);
+            HTD_IO_API TdFormatExporter(void);
 
-            virtual ~TdFormatExporter();
+            HTD_IO_API virtual ~TdFormatExporter();
 
-            void write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
+            HTD_IO_API void write(const htd::ITreeDecomposition & decomposition, const htd::IMultiHypergraph & graph, std::ostream & outputStream) const HTD_OVERRIDE;
 
-            void write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const HTD_OVERRIDE;
+            HTD_IO_API void write(const htd::ITreeDecomposition & decomposition, const htd::NamedMultiHypergraph<std::string, std::string> & graph, std::ostream & outputStream) const HTD_OVERRIDE;
     };
 }
 
-#endif /* HTD_MAIN_TDFORMATEXPORTER_HPP */
+#endif /* HTD_IO_TDFORMATEXPORTER_HPP */

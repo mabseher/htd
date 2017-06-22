@@ -54,7 +54,10 @@ namespace htd
              */
             ~PriorityQueue(void)
             {
-
+                for (const std::pair<PriorityType, std::vector<ValueType> *> & entry : heap_)
+                {
+                    delete entry.second;
+                }
             }
 
             /**

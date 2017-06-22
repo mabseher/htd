@@ -74,10 +74,10 @@ namespace htd
     }
 
     template < >
-    void HTD_API print<std::string>(const std::string& input);
+    HTD_API void print<std::string>(const std::string& input);
 
     template < >
-    void HTD_API print<std::string>(const std::string& input, std::ostream & stream);
+    HTD_API void print<std::string>(const std::string& input, std::ostream & stream);
 
     template < typename T >
     void print(const htd::ConstCollection<T> & input, std::ostream & stream, bool sorted = false)
@@ -259,15 +259,15 @@ namespace htd
         print(input, std::cout);
     }
 
-    void HTD_API print(bool input);
+    HTD_API void print(bool input);
 
-    void HTD_API print(bool input, std::ostream & stream);
+    HTD_API void print(bool input, std::ostream & stream);
 
-    void HTD_API print(const htd::Hyperedge & input);
+    HTD_API void print(const htd::Hyperedge & input);
 
-    void HTD_API print(const htd::Hyperedge & input, std::ostream & stream);
+    HTD_API void print(const htd::Hyperedge & input, std::ostream & stream);
 
-    template <typename T>
+    template < typename T >
     void set_union(const std::vector<T> & set1,
                    const std::vector<T> & set2,
                    std::vector<T> & result)
@@ -325,7 +325,7 @@ namespace htd
         }
     }
 
-    template <typename T, typename Collection>
+    template < typename T, typename Collection >
     const T & selectRandomElement(const Collection & collection)
     {
         auto position = collection.begin();
@@ -345,7 +345,7 @@ namespace htd
      *
      *  @return True if the collection is sorted in ascending order and free of duplicates, false otherwise.
      */
-    template <class InputIterator>
+    template < class InputIterator >
     bool is_sorted_and_duplicate_free(InputIterator first, InputIterator last)
     {
         bool ret = true;
@@ -374,7 +374,7 @@ namespace htd
                                   const std::vector<htd::vertex_t> & set2,
                                   std::vector<htd::vertex_t> & result);
 
-    std::tuple<std::size_t, std::size_t, std::size_t> HTD_API analyze_sets(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
+    HTD_API std::tuple<std::size_t, std::size_t, std::size_t> analyze_sets(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
 
     /**
      *  Decompose two sets of vertices into vertices only in the first set, vertices only in the second set and vertices in both sets.
@@ -393,8 +393,8 @@ namespace htd
 
     HTD_API std::pair<std::size_t, std::size_t> symmetric_difference_sizes(const std::vector<htd::vertex_t> & set1, const std::vector<htd::vertex_t> & set2);
 
-    template <class InputIterator1, 
-              class InputIterator2>
+    template < class InputIterator1,
+               class InputIterator2 >
     std::size_t set_union_size(InputIterator1 first1, InputIterator1 last1,
                                InputIterator2 first2, InputIterator2 last2)
     {
@@ -431,8 +431,8 @@ namespace htd
         return ret + std::distance(first2, last2);
     }
     
-    template <class InputIterator1, 
-              class InputIterator2>
+    template < class InputIterator1,
+               class InputIterator2 >
     std::size_t set_difference_size(InputIterator1 first1, InputIterator1 last1,
                                     InputIterator2 first2, InputIterator2 last2)
     {
@@ -460,8 +460,8 @@ namespace htd
         return ret + std::distance(first1, last1);
     }
 
-    template <class InputIterator1, 
-              class InputIterator2>
+    template < class InputIterator1,
+               class InputIterator2 >
     std::size_t set_intersection_size(InputIterator1 first1, InputIterator1 last1,
                                       InputIterator2 first2, InputIterator2 last2)
     {
@@ -489,8 +489,8 @@ namespace htd
         return ret;
     }
 
-    template <class InputIterator1,
-              class InputIterator2>
+    template < class InputIterator1,
+               class InputIterator2 >
     bool has_non_empty_set_difference(InputIterator1 first1, InputIterator1 last1,
                                       InputIterator2 first2, InputIterator2 last2)
     {
@@ -518,8 +518,8 @@ namespace htd
         return ret || first1 != last1;
     }
     
-    template <class InputIterator1, 
-              class InputIterator2>
+    template < class InputIterator1,
+               class InputIterator2 >
     bool has_non_empty_set_intersection(InputIterator1 first1, InputIterator1 last1,
                                         InputIterator2 first2, InputIterator2 last2)
     {
@@ -547,7 +547,7 @@ namespace htd
         return ret;
     }
 
-    template <typename T>
+    template < typename T >
     void inplace_merge(std::vector<T> & set1, const std::vector<T> & set2)
     {
         if (set2.size() <= 4)
@@ -571,7 +571,7 @@ namespace htd
         }
     }
 
-    template <typename T>
+    template < typename T >
     void inplace_set_union(std::vector<T> & set1, const std::vector<T> & set2)
     {
         std::vector<T> tmp;
@@ -596,7 +596,7 @@ namespace htd
      *  hyperedge with the given identifier is found, the result of this function is equal to
      *  last.
      */
-    template <class InputIterator>
+    template < class InputIterator >
     InputIterator hyperedgePosition(InputIterator first, InputIterator last, htd::id_t id)
     {
         auto it = first;
@@ -644,7 +644,7 @@ namespace htd
      *  If no hyperedge with the given identifier is found, the result of this function is equal to
      *  last.
      */
-    template <class InputIterator>
+    template < class InputIterator >
     InputIterator hyperedgePointerPosition(InputIterator first, InputIterator last, htd::id_t id)
     {
         auto it = first;
@@ -681,7 +681,7 @@ namespace htd
         return first;
     }
 
-    template <class Rep, class Period = std::ratio<1> >
+    template < class Rep, class Period = std::ratio<1> >
     void printDuration(const std::chrono::duration<Rep, Period>& duration)
     {
         if (std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count() < 1000)
@@ -702,7 +702,7 @@ namespace htd
         }
     }
 
-    template <typename Set, typename Collection>
+    template < typename Set, typename Collection >
     void fillSet(const Collection & collection, Set & set)
     {
         auto it = collection.begin();
@@ -721,10 +721,37 @@ namespace htd
      *  @param[in] collection   The collection which shall be updated.
      *  @param[in] element      The element which shall be inserted.
      */
-    template <typename T>
+    template < typename T >
     void insertSorted(std::vector<T> & collection, const T & element)
     {
         collection.insert(std::lower_bound(collection.begin(), collection.end(), element), element);
+    }
+
+    /**
+     *  Execute a given unary function for each element of the provided collection.
+     *
+     *  @param[in] collection   The collection.
+     *  @param[in] f            The function.
+     *
+     *  @return The result of std::move(f).
+     */
+    template < typename T, typename UnaryFunction >
+    UnaryFunction for_each(const htd::ConstCollection<T> & collection, UnaryFunction f)
+    {
+        std::size_t remainder = collection.size();
+
+        auto it = collection.begin();
+
+        while (remainder > 0)
+        {
+            f(*it);
+
+            --remainder;
+
+            ++it;
+        }
+
+        return std::move(f);
     }
 
     /**
@@ -740,7 +767,7 @@ namespace htd
 
 namespace std
 {
-    template<typename T>
+    template < typename T >
     std::ostream & operator<<(std::ostream & stream, const std::vector<T> & input)
     {
         htd::print(input, stream);
@@ -748,7 +775,7 @@ namespace std
         return stream;
     }
 
-    template<typename T>
+    template < typename T >
     std::ostream & operator<<(std::ostream & stream, const htd::ConstCollection<T> & input)
     {
         htd::print(input, stream);
@@ -766,7 +793,7 @@ namespace std
      *
      *  @return The combined hash code.
      */
-    template<typename T>
+    template < typename T >
     void hash_combine(std::size_t & seed, const T & input)
     {
         std::hash<T> hashFunction;
@@ -777,7 +804,7 @@ namespace std
     /**
      *  Implementation of std::hash for htd::Hyperedge.
      */
-    template<>
+    template < >
     struct hash<htd::Hyperedge>
     {
         public:
@@ -804,7 +831,7 @@ namespace std
     /**
      *  Implementation of std::hash for htd::FilteredHyperedgeCollection.
      */
-    template<>
+    template < >
     struct hash<htd::FilteredHyperedgeCollection>
     {
         public:
@@ -831,7 +858,7 @@ namespace std
     /**
      *  Implementation of std::hash for htd::Collection<htd::vertex_t>.
      */
-    template<>
+    template < >
     struct hash<htd::Collection<htd::vertex_t>>
     {
         public:
@@ -858,7 +885,7 @@ namespace std
     /**
      *  Implementation of std::hash for htd::ConstCollection<htd::vertex_t>.
      */
-    template<>
+    template < >
     struct hash<htd::ConstCollection<htd::vertex_t>>
     {
         public:
@@ -885,7 +912,7 @@ namespace std
     /**
      *  Implementation of std::hash for htd::Collection<htd::Hyperedge>.
      */
-    template<>
+    template < >
     struct hash<htd::Collection<htd::Hyperedge>>
     {
         public:
@@ -914,7 +941,7 @@ namespace std
     /**
      *  Implementation of std::hash for htd::ConstCollection<htd::Hyperedge>.
      */
-    template<>
+    template < >
     struct hash<htd::ConstCollection<htd::Hyperedge>>
     {
         public:
@@ -943,7 +970,7 @@ namespace std
     /**
      *  Implementation of std::hash for std::vector<htd::vertex_t>.
      */
-    template<>
+    template < >
     struct hash<std::vector<htd::vertex_t>>
     {
         public:
@@ -970,7 +997,7 @@ namespace std
     /**
      *  Implementation of std::hash for std::vector<htd::Hyperedge>.
      */
-    template<>
+    template < >
     struct hash<std::vector<htd::Hyperedge>>
     {
         public:

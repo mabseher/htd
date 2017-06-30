@@ -87,11 +87,11 @@ env:
     #- HTD_TARGET=htd BUILD_SHARED_LIBS=False CMAKE_BUILD_TYPE=Debug HTD_USE_EXTENDED_IDENTIFIERS=True
     #- HTD_TARGET=htd BUILD_SHARED_LIBS=False CMAKE_BUILD_TYPE=Debug HTD_USE_EXTENDED_IDENTIFIERS=False
 
-matrix:
-    include:
-        - os: linux
-          compiler: gcc
-          env: HTD_TARGET=htd BUILD_SHARED_LIBS=True CMAKE_BUILD_TYPE=Debug HTD_USE_EXTENDED_IDENTIFIERS=False RUN_COVERAGE_TEST=1
+#matrix:
+#    include:
+#        - os: linux
+#          compiler: gcc
+#          env: HTD_TARGET=htd BUILD_SHARED_LIBS=True CMAKE_BUILD_TYPE=Debug HTD_USE_EXTENDED_IDENTIFIERS=False RUN_COVERAGE_TEST=1
 
 notifications:
     email: false

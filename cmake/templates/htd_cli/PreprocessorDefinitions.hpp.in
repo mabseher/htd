@@ -34,7 +34,7 @@
     #define HTD_CLI_SYMBOL_IMPORT __declspec(dllimport)
     #define HTD_CLI_LOCAL_SYMBOL
 #else
-    #if HTD_COMPILER_IS_GNU == 1 || HTD_COMPILER_IS_Clang == 1
+    #if HTD_COMPILER_IS_GNU == 1 || HTD_COMPILER_IS_Clang == 1 || HTD_COMPILER_IS_AppleClang == 1
         #define HTD_CLI_SYMBOL_EXPORT __attribute__ ((visibility ("default")))
         #define HTD_CLI_SYMBOL_IMPORT __attribute__ ((visibility ("default")))
         #define HTD_CLI_LOCAL_SYMBOL  __attribute__ ((visibility ("hidden")))

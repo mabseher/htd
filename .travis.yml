@@ -42,6 +42,7 @@ addons:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.7
         packages:
+            - cmake
             - gcc-4.9
             - g++-4.9
             - clang-3.7

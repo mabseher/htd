@@ -40,7 +40,7 @@ set(HTD_SOVERSION_REVISION 0)
 set(HTD_SOVERSION_AGE 0)
 set(HTD_SOVERSION ${HTD_SOVERSION_INTERFACE}.${HTD_SOVERSION_REVISION}.${HTD_SOVERSION_AGE})
 
-file(GLOB_RECURSE HEADER_LIST ${PROJECT_SOURCE_DIR}/include/*.hpp)
+file(GLOB_RECURSE HTD_HEADER_LIST ${PROJECT_SOURCE_DIR}/include/htd/*.hpp)
 
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden")
@@ -55,7 +55,7 @@ endif(APPLE)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 aux_source_directory(. SRC_LIST)
 
-add_library(htd ${SRC_LIST} ${HEADER_LIST})
+add_library(htd ${SRC_LIST} ${HTD_HEADER_LIST})
 
 set_property(TARGET htd PROPERTY CXX_STANDARD 11)
 set_property(TARGET htd PROPERTY CXX_STANDARD_REQUIRED ON)

@@ -15,6 +15,8 @@ set(HTD_IO_SOVERSION_REVISION 0)
 set(HTD_IO_SOVERSION_AGE 0)
 set(HTD_IO_SOVERSION ${HTD_IO_SOVERSION_INTERFACE}.${HTD_IO_SOVERSION_REVISION}.${HTD_IO_SOVERSION_AGE})
 
+file(GLOB_RECURSE HTD_IO_HEADER_LIST ${PROJECT_SOURCE_DIR}/include/htd_io/*.hpp)
+
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden")
 endif(UNIX)
@@ -27,7 +29,7 @@ if(APPLE)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
 endif(APPLE)
 
-add_library(htd_io ${HTD_IO_SRC_LIST} ${HEADER_LIST})
+add_library(htd_io ${HTD_IO_SRC_LIST} ${HTD_IO_HEADER_LIST})
 
 set_property(TARGET htd_io PROPERTY CXX_STANDARD 11)
 set_property(TARGET htd_io PROPERTY CXX_STANDARD_REQUIRED ON)

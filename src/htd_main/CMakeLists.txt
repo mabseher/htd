@@ -6,6 +6,8 @@ set(HTD_MAIN_VERSION_MINOR 1)
 set(HTD_MAIN_VERSION_PATCH 0)
 set(HTD_MAIN_VERSION ${HTD_MAIN_VERSION_MAJOR}.${HTD_MAIN_VERSION_MINOR}.${HTD_MAIN_VERSION_PATCH})
 
+file(GLOB_RECURSE HTD_MAIN_HEADER_LIST ${PROJECT_SOURCE_DIR}/include/htd_main/*.hpp)
+
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
 endif(UNIX)
@@ -16,7 +18,7 @@ if(APPLE)
     endif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif(APPLE)
 
-add_executable(htd_main ${HTD_MAIN_SRC_LIST} ${HEADER_LIST})
+add_executable(htd_main ${HTD_MAIN_SRC_LIST} ${HTD_MAIN_HEADER_LIST})
 
 set_property(TARGET htd_main PROPERTY CXX_STANDARD 11)
 set_property(TARGET htd_main PROPERTY CXX_STANDARD_REQUIRED ON)

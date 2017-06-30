@@ -17,6 +17,8 @@ set(HTD_CLI_SOVERSION_REVISION 0)
 set(HTD_CLI_SOVERSION_AGE 0)
 set(HTD_CLI_SOVERSION ${HTD_CLI_SOVERSION_INTERFACE}.${HTD_CLI_SOVERSION_REVISION}.${HTD_CLI_SOVERSION_AGE})
 
+file(GLOB_RECURSE HTD_CLI_HEADER_LIST ${PROJECT_SOURCE_DIR}/include/htd_cli/*.hpp)
+
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden")
 endif(UNIX)
@@ -25,11 +27,9 @@ if(APPLE)
     if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
     endif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
 endif(APPLE)
 
-add_library(htd_cli ${HTD_CLI_SRC_LIST} ${HEADER_LIST})
+add_library(htd_cli ${HTD_CLI_SRC_LIST} ${HTD_CLI_HEADER_LIST})
 
 set_property(TARGET htd_cli PROPERTY CXX_STANDARD 11)
 set_property(TARGET htd_cli PROPERTY CXX_STANDARD_REQUIRED ON)

@@ -5,6 +5,8 @@ if(BUILD_TESTING)
 
     set(GTEST_INCLUDE_DIR "${GTEST_ROOT}/googletest/include")
 
+    set(gtest_hide_internal_symbols ON CACHE INTERNAL "Build gtest with internal symbols hidden in shared libraries.")
+
     add_subdirectory("${GTEST_ROOT}")
 
     add_subdirectory("${PROJECT_SOURCE_DIR}/test/htd")

@@ -19,6 +19,11 @@ install:
         export PATH=${DEPENDENCIES_DIRECTORY}/cmake/bin:${PATH}
     fi
 - |
+    if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+        brew update
+        brew install cmake
+    fi
+- |
     if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
         mkdir -p "${DEPENDENCIES_DIRECTORY}/gcov/bin"
         export PATH=${DEPENDENCIES_DIRECTORY}/gcov/bin:${PATH}
@@ -42,7 +47,6 @@ addons:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.7
         packages:
-            - cmake
             - gcc-4.9
             - g++-4.9
             - clang-3.7
@@ -50,7 +54,7 @@ addons:
             - valgrind
     
 os:
-    - linux
+    #- linux
     - osx
 
 language: cpp

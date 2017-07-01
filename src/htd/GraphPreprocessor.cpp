@@ -1276,6 +1276,8 @@ bool htd::GraphPreprocessor::Implementation::handleBuddies(std::unordered_set<ht
     {
         for (auto it1 = relevantVertices.begin(); it1 != relevantVertices.end() - 1;)
         {
+            /* Because 'relevantVertices' has more than one element, 'it1' will always point to a valid element. */
+            // coverity[deref_iterator]
             htd::vertex_t vertex1 = *it1;
 
             std::vector<htd::vertex_t> & currentNeighborhood1 = neighborhood[vertex1];
@@ -1477,6 +1479,8 @@ bool htd::GraphPreprocessor::Implementation::eliminateAlmostSimplicialVertices(s
                 {
                     std::vector<htd::vertex_t> & otherNeighborhood = neighborhood[neighbor];
 
+                    /* Because 'neighbor' is a neighbor of 'vertex', std::lower_bound will always find 'vertex' in 'otherNeighborhood'. */
+                    // coverity[use_iterator]
                     otherNeighborhood.erase(std::lower_bound(otherNeighborhood.begin(), otherNeighborhood.end(), vertex));
 
                     assignVertexToGroup(neighbor, verticesByDegree, otherNeighborhood.size(), otherNeighborhood.size() + 1);

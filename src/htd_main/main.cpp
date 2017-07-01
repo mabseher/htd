@@ -26,8 +26,6 @@
 #include <htd_io/main.hpp>
 #include <htd_cli/main.hpp>
 
-#include <htd_main/DefaultTreeDecompositionProcessor.hpp>
-
 #include <csignal>
 #include <cstring>
 #include <fstream>
@@ -851,7 +849,9 @@ int main(int argc, const char * const * const argv)
                 }
                 else
                 {
-                    processor = new htd_main::DefaultTreeDecompositionProcessor(libraryInstance);
+                    std::cerr << "INVALID INPUT FORMAT: " << inputFormatChoice.value() << std::endl;
+
+                    std::exit(1);
                 }
 
                 processor->setExporter(exporter);

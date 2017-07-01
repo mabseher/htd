@@ -657,8 +657,6 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
         //std::cout << "ORDERING: " << vertexNames[vertex] << std::endl;
     }
 
-    DEBUGGING_CODE_LEVEL2(std::cout << std::endl;)
-
     return ret;
 }
 

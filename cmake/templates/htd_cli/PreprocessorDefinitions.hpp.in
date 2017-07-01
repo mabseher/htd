@@ -29,23 +29,29 @@
 
 #include <cassert>
 
+#cmakedefine HTD_CLI_SHARED_LIBRARY
+
 #if HTD_COMPILER_IS_MSVC == 1
     #define HTD_CLI_SYMBOL_EXPORT __declspec(dllexport)
     #define HTD_CLI_SYMBOL_IMPORT __declspec(dllimport)
     #define HTD_CLI_LOCAL_SYMBOL
 #else
-    #if HTD_COMPILER_IS_GNU == 1 || HTD_COMPILER_IS_Clang == 1 || HTD_COMPILER_IS_AppleClang == 1
-        #define HTD_CLI_SYMBOL_EXPORT __attribute__ ((visibility ("default")))
-        #define HTD_CLI_SYMBOL_IMPORT __attribute__ ((visibility ("default")))
-        #define HTD_CLI_LOCAL_SYMBOL  __attribute__ ((visibility ("hidden")))
+    #ifdef HTD_CLI_SHARED_LIBRARY
+        #if HTD_COMPILER_IS_GNU == 1 || HTD_COMPILER_IS_Clang == 1 || HTD_COMPILER_IS_AppleClang == 1
+            #define HTD_CLI_SYMBOL_EXPORT __attribute__ ((visibility ("default")))
+            #define HTD_CLI_SYMBOL_IMPORT __attribute__ ((visibility ("default")))
+            #define HTD_CLI_LOCAL_SYMBOL  __attribute__ ((visibility ("hidden")))
+        #else
+            #define HTD_CLI_SYMBOL_EXPORT
+            #define HTD_CLI_SYMBOL_IMPORT
+            #define HTD_CLI_LOCAL_SYMBOL
+        #endif
     #else
         #define HTD_CLI_SYMBOL_EXPORT
         #define HTD_CLI_SYMBOL_IMPORT
         #define HTD_CLI_LOCAL_SYMBOL
     #endif
 #endif
-
-#cmakedefine HTD_CLI_SHARED_LIBRARY
 
 #ifdef HTD_CLI_SHARED_LIBRARY
     #ifdef htd_cli_EXPORTS

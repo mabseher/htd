@@ -18,7 +18,11 @@ set(HTD_IO_SOVERSION ${HTD_IO_SOVERSION_INTERFACE}.${HTD_IO_SOVERSION_REVISION}.
 file(GLOB_RECURSE HTD_IO_HEADER_LIST ${PROJECT_SOURCE_DIR}/include/htd_io/*.hpp)
 
 if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
+
+    if(HTD_IO_SHARED_LIBRARY)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+    endif(HTD_IO_SHARED_LIBRARY)
 endif(UNIX)
 
 if(APPLE)

@@ -20,7 +20,11 @@ set(HTD_CLI_SOVERSION ${HTD_CLI_SOVERSION_INTERFACE}.${HTD_CLI_SOVERSION_REVISIO
 file(GLOB_RECURSE HTD_CLI_HEADER_LIST ${PROJECT_SOURCE_DIR}/include/htd_cli/*.hpp)
 
 if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -fvisibility=hidden")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra")
+
+    if(HTD_CLI_SHARED_LIBRARY)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+    endif(HTD_CLI_SHARED_LIBRARY)
 endif(UNIX)
 
 if(APPLE)

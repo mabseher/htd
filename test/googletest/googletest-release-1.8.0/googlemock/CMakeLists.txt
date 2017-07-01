@@ -7,7 +7,7 @@
 
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
 # make it prominent in the GUI.
-option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
+#option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
 option(gmock_build_tests "Build all of Google Mock's own tests." OFF)
 
@@ -39,6 +39,10 @@ endif()
 # Language "C" is required for find_package(Threads).
 project(gmock CXX C)
 cmake_minimum_required(VERSION 2.6.2)
+
+if(POLICY CMP0063)
+    cmake_policy(SET CMP0063 NEW)
+endif()
 
 if (COMMAND set_up_hermetic_build)
   set_up_hermetic_build()

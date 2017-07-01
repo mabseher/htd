@@ -7,7 +7,7 @@
 
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
 # make it prominent in the GUI.
-option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
+#option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
 # When other libraries are using a shared version of runtime libraries,
 # Google Test also has to use one.
@@ -25,7 +25,7 @@ option(gtest_disable_pthreads "Disable uses of pthreads in gtest." OFF)
 option(
   gtest_hide_internal_symbols
   "Build gtest with internal symbols hidden in shared libraries."
-  OFF)
+  ON)
 
 # Defines pre_project_set_up_hermetic_build() and set_up_hermetic_build().
 include(cmake/hermetic_build.cmake OPTIONAL)
@@ -46,6 +46,10 @@ endif()
 # Language "C" is required for find_package(Threads).
 project(gtest CXX C)
 cmake_minimum_required(VERSION 2.6.2)
+
+if(POLICY CMP0063)
+    cmake_policy(SET CMP0063 NEW)
+endif()
 
 if (COMMAND set_up_hermetic_build)
   set_up_hermetic_build()

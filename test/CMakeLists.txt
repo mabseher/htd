@@ -9,7 +9,5 @@ if(BUILD_TESTING)
 
     add_subdirectory("${PROJECT_SOURCE_DIR}/test/htd")
 
-    set(gtest_hide_internal_symbols ON CACHE INTERNAL "Build gtest with internal symbols hidden in shared libraries.")
-
     add_dependencies(gtest htd)
 endif()

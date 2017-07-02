@@ -474,7 +474,7 @@ struct htd::GraphPreprocessor::Implementation
 
                         auto position = std::lower_bound(currentNeighborhood.begin(), currentNeighborhood.end(), vertex);
 
-                        if (position != currentNeighborhood.end() && *position == mappedVertex)
+                        if (position != currentNeighborhood.end() && *position == vertex)
                         {
                             currentNeighborhood.erase(position);
                         }

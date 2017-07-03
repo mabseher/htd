@@ -352,6 +352,8 @@ std::size_t htd::MinFillOrderingAlgorithm::Implementation::writeOrderingTo(const
 
                             if (position != currentNeighborhood.end() && *position == selectedVertex)
                             {
+                                /* Iterator 'position' is no longer used after erasing the underlying element. Therefore, invalidating the iterator does no harm. */
+                                // coverity[use_iterator]
                                 currentNeighborhood.erase(position);
 
                                 htd::decompose_sets(selectedNeighborhood, currentNeighborhood,

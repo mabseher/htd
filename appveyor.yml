@@ -1,21 +1,19 @@
 version: '{build}'
 
-os: Visual Studio 2015
+image:
+  - Visual Studio 2015
+  - Visual Studio 2017
 
 environment:
   matrix:
-  - Toolset: v140
-    BUILD_SHARED_LIBS: True
-    HTD_USE_EXTENDED_IDENTIFIERS: False
-  - Toolset: v140
-    BUILD_SHARED_LIBS: False
-    HTD_USE_EXTENDED_IDENTIFIERS: False
-  - Toolset: v140
-    BUILD_SHARED_LIBS: True
+  - BUILD_SHARED_LIBS: True
     HTD_USE_EXTENDED_IDENTIFIERS: True
-  - Toolset: v140
-    BUILD_SHARED_LIBS: False
+  - BUILD_SHARED_LIBS: True
+    HTD_USE_EXTENDED_IDENTIFIERS: False
+  - BUILD_SHARED_LIBS: False
     HTD_USE_EXTENDED_IDENTIFIERS: True
+  - BUILD_SHARED_LIBS: False
+    HTD_USE_EXTENDED_IDENTIFIERS: False
 
 platform:
   - Win32
@@ -32,17 +30,19 @@ before_build:
 - ps: |
     Write-Output "Configuration: $env:CONFIGURATION"
     Write-Output "Platform: $env:PLATFORM"
-    $generator = switch ($env:TOOLSET)
+    $generator = switch ($env:APPVEYOR_BUILD_WORKER_IMAGE)
     {
-        "v140" {"Visual Studio 14 2015"}
+        "Visual Studio 2015" {"Visual Studio 14 2015"}
+        "Visual Studio 2017" {"Visual Studio 15 2017"}
     }
     if ($env:PLATFORM -eq "x64")
     {
         $generator = "$generator Win64"
     }
-    $xamarin = switch ($env:TOOLSET)
+    $xamarin = switch ($env:APPVEYOR_BUILD_WORKER_IMAGE)
     {
-        "v140" {"C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"}
+        "Visual Studio 2015" {"C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"}
+        "Visual Studio 2017" {"C:\Program Files (x86)\MSBuild\15.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"}
     }
     del "$xamarin"
 

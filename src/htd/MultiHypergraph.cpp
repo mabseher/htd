@@ -843,6 +843,10 @@ htd::id_t htd::MultiHypergraph::addEdge(std::vector<htd::vertex_t> && elements)
         {
             if (implementation_->selfLoops_.count(vertex) == 0)
             {
+                /* Because 'vertex' does not have any self-loops, the set difference between the
+                 * endpoints of the hyperedge and the neighborhood of 'vertex' always contains
+                 * 'vertex'. */
+                // coverity[use_iterator]
                 tmp.erase(std::lower_bound(tmp.begin(), tmp.end(), vertex));
             }
 
@@ -1065,6 +1069,8 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
 
                     if (position2 != currentNeighborhood.end())
                     {
+                        /* Iterator 'position2' is no longer used after erasing the underlying element. Therefore, invalidating the iterator does no harm. */
+                        // coverity[use_iterator]
                         currentNeighborhood.erase(position2);
                     }
                 }
@@ -1078,8 +1084,9 @@ void htd::MultiHypergraph::removeEdge(htd::id_t edgeId)
 
                 if (position2 != currentNeighborhood.end())
                 {
+                    /* Iterator 'position2' is no longer used after erasing the underlying element. Therefore, invalidating the iterator does no harm. */
                     // coverity[use_iterator]
-                    position2 = currentNeighborhood.erase(position2);
+                    currentNeighborhood.erase(position2);
                 }
 
                 implementation_->selfLoops_.erase(vertex);

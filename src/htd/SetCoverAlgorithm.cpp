@@ -227,8 +227,9 @@ void htd::SetCoverAlgorithm::computeSetCover(const htd::ConstCollection<htd::id_
 
                 if (position != remainder.end())
                 {
+                    /* Iterator 'position' is no longer used after erasing the underlying element. Therefore, invalidating the iterator does no harm. */
                     // coverity[use_iterator]
-                    position = remainder.erase(position);
+                    remainder.erase(position);
                 }
             }
 

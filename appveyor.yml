@@ -39,12 +39,10 @@ before_build:
     {
         $generator = "$generator Win64"
     }
-    $xamarin = switch ($env:APPVEYOR_BUILD_WORKER_IMAGE)
+    if ($env:APPVEYOR_BUILD_WORKER_IMAGE -eq "Visual Studio 2015")
     {
-        "Visual Studio 2015" {"C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"}
-        "Visual Studio 2017" {"C:\Program Files (x86)\MSBuild\15.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"}
+        del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"}
     }
-    del "$xamarin"
 
 build_script:
 - ps: |

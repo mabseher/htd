@@ -198,7 +198,7 @@ int main(int, const char * const * const)
      *  optimization and only applies provided manipulations.
      */
     htd::TreeDecompositionOptimizationOperation * operation =
-        new htd::TreeDecompositionOptimizationOperation(manager.get(), fitnessFunction);
+        new htd::TreeDecompositionOptimizationOperation(manager.get(), fitnessFunction.clone());
 
     /**
      *  Set the previously created management instance to support graceful termination.
@@ -241,7 +241,7 @@ int main(int, const char * const * const)
      */
     htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(manager.get(),
                                                                   baseAlgorithm,
-                                                                  fitnessFunction);
+                                                                  fitnessFunction.clone());
 
     /**
      *  Set the maximum number of iterations after which the best decomposition with

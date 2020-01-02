@@ -17,11 +17,6 @@ install:
         export PATH=${DEPENDENCIES_DIRECTORY}/cmake/bin:${PATH}
     fi
 - |
-    if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
-        brew update
-        brew install cmake
-    fi
-- |
     if [[ "$RUN_COVERAGE_TEST" == "1" ]]; then
         mkdir -p "${DEPENDENCIES_DIRECTORY}/gcov/bin"
         export PATH=${DEPENDENCIES_DIRECTORY}/gcov/bin:${PATH}

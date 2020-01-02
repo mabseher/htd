@@ -24,7 +24,7 @@ configuration:
   - Debug
 
 build:
-  project: htd
+  project: C:\projects\htd\_build\htd.sln
   verbosity: minimal
 
 before_build:

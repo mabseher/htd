@@ -313,6 +313,10 @@ int main(int, const char * const * const)
             
             // Print the size of the largest bag of the decomposition to stdout.
             std::cout << decomposition->maximumBagSize() << std::endl;
+            
+            // Print the whole decomposition using htd_io::HumanReadableExporter.
+            htd_io::HumanReadableExporter exporter;
+            exporter.write(*decomposition, *graph, std::cout);
         }
 
         delete decomposition;

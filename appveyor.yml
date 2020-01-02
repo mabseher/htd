@@ -24,7 +24,7 @@ configuration:
   - Debug
 
 build:
-  project: C:\projects\htd\_build\htd.sln
+  project: C:\projects\htd\_build\ALL_BUILD.vcxproj
   verbosity: minimal
 
 before_build:

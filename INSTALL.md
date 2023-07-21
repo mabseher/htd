@@ -10,7 +10,7 @@
   * [Visual Studio](https://www.visualstudio.com/)
   * or some other compiler of your choice
 * [CMake](http://cmake.org/) for generating the build scripts
-* [Doxygen](www.doxygen.org/) for generating the documentation
+* [Doxygen](https://www.doxygen.nl/) for generating the documentation
 
 **htd** was compiled and tested with the following versions of the dependencies mentioned above:
 
